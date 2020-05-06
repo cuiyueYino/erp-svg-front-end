@@ -1,0 +1,19 @@
+.active-panel {
+    border-left: 5px solid #409EFF;
+    background: #b3d8ff;
+    transition: all .5s ease;
+}
+
+.drag-panel-mark {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 0;
+    display: block;
+    z-index: 1996;
+}
+
+.text-delete-btn {
+    color: #f56c6c;
+}

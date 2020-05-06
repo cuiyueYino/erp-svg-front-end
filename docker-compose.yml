@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  workflow-designer:
+    image: workflow-designer
+    build: .
+    ports:
+      - 3000

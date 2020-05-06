@@ -1,0 +1,41 @@
+@mixin active-tabs($width: 0) {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: $width;
+    height: 4px;
+    background-color: #407EFF;
+    transition: all .5s ease;
+}
+
+@mixin btns($right-param, $bottom-param, $opacity-param, $z-index) {
+    position: absolute;
+    right: $right-param;
+    bottom: $bottom-param;
+    opacity: $opacity-param;
+    z-index: $z-index;
+    transition: all .5s ease;
+}
+
+@mixin divide($bottom-param) {
+    position: relative;
+
+    &:after {
+        content: "";
+        width: 80%;
+        height: 1px;
+        background-color: #C0C4CC;
+        position: absolute;
+        bottom: $bottom-param;
+        left: 10%;
+        z-index: 10;
+    }
+}
+
+@mixin drag-panel-delete-btn($right-param, $bottom-param) {
+    position: absolute;
+    right: $right-param;
+    bottom: $bottom-param;
+    z-index: 1997;
+}
