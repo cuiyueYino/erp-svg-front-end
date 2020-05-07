@@ -1,4 +1,5 @@
 <template>
+        <!-- 条件面板显示 -->
     <div
         :style="styleObj"
         class="drag-node"

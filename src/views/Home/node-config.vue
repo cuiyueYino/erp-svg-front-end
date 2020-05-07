@@ -1,4 +1,5 @@
 <template>
+<!-- 弹出框内容 -->
     <el-dialog
         :title="title"
         :visible.sync="dialogVisible"
@@ -104,10 +105,12 @@ export default {
             const typeConfig = {
                 Start: '端点配置',
                 End: '端点配置',
-                Task: '任务配置',
-                Condition: '条件配置',
-                Fork: '分支配置',
-                Join: '聚合配置',
+                task: '子流程配置',
+                Condition: '手工活动配置',
+                Fork: '自由活动配置',
+                Join: '审核活动配置',
+                package: '包配置',
+                router: '路由配置',
                 Line: '连接线配置'
             };
             return typeConfig[this.type] || '保存工作流';

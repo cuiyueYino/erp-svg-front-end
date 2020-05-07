@@ -36,6 +36,16 @@ export function NodeConfig () {
             height: 100,
             visible: false,
             color: '#909399'
+        },
+        package: {
+            width: 200,
+            height: 100,
+            visible: false,
+        },
+        router:{
+            width: 200,
+            height: 100,
+            visible: false,
         }
     };
 };
@@ -78,8 +88,40 @@ export function NodesData () {
     const nodeConfig = NodeConfig();
     return [
         {
+            type: 'router',
+            name: '路由',
+            icon: 'el-icon-setting',
+            options: {
+                ...nodeConfig.router,
+                x: 0,
+                y: 0,
+                draggable: true
+            },
+            data: {
+                name: 'router',
+                displayName: '新建路由',
+                type: 'NORMAL'
+            }
+        },
+        {
+            type: 'package',
+            name: '包',
+            icon: 'el-icon-suitcase',
+            options: {
+                ...nodeConfig.package,
+                x: 0,
+                y: 0,
+                draggable: true
+            },
+            data: {
+                name: 'package',
+                displayName: '新建包',
+                type: 'NORMAL'
+            }
+        },
+        {
             type: 'Task',
-            name: '任务',
+            name: '子流程',
             icon: 'el-icon-plus-workflow',
             options: {
                 ...nodeConfig.task,
@@ -88,15 +130,15 @@ export function NodesData () {
                 draggable: true
             },
             data: {
-                name: 'Task',
-                displayName: '新建任务',
+                name: 'Subprocess',
+                displayName: '新建子流程',
                 type: 'NORMAL'
             }
         },
         {
             type: 'Condition',
-            name: '条件',
-            icon: 'el-icon-plus-progress',
+            name: '手工活动',
+            icon: 'el-icon-user',
             options: {
                 ...nodeConfig.condition,
                 x: 0,
@@ -105,12 +147,12 @@ export function NodesData () {
             },
             data: {
                 name: 'Condition',
-                displayName: '新建条件'
+                displayName: '新建手工活动'
             }
         },
         {
             type: 'Fork',
-            name: '分支',
+            name: '自由活动',
             icon: 'el-icon-plus-supply-chain',
             options: {
                 ...nodeConfig.fork,
@@ -120,12 +162,12 @@ export function NodesData () {
             },
             data: {
                 name: 'Fork',
-                displayName: '新建分支'
+                displayName: '新建自由活动'
             }
         },
         {
             type: 'Join',
-            name: '聚合',
+            name: '审核活动',
             icon: 'el-icon-plus-param',
             options: {
                 ...nodeConfig.join,
@@ -135,7 +177,7 @@ export function NodesData () {
             },
             data: {
                 name: 'Join',
-                displayName: '新建聚合'
+                displayName: '新建审核活动'
             }
         }
     ];

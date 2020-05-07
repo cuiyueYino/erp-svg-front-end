@@ -1,4 +1,5 @@
 <template>
+ <!-- 任务面板显示 -->
     <div
         :style="styleObj"
         v-drag="initial"

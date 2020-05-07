@@ -30,7 +30,6 @@ Vue.use(ElementUI);
 router.beforeEach((to, from, next) => {
     document.title = `${to.meta.title} | 福佳集团`;
     const role = localStorage.getItem('ms_username');
-    debugger
     if (!role && to.path !== '/login') {
         next('/login');
     } else if (to.meta.permission) {
