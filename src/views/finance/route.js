@@ -1,4 +1,4 @@
-const creditTypepage = () => import(/* webpackChunkName: "task-context" */ './FinancingManagement/BasicData/credit-type.vue');
+const creditTypepage = () => import(/* webpackChunkName: "task-context" */ './BasicData/credit-type.vue');
 const PROJECT = [
     {
         path: 'creditType',

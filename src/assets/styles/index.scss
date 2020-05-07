@@ -10,11 +10,6 @@ body,
     overflow: hidden;
     user-select: none;
 }
-
-html,
-body,
-div,
-p,
 ul {
     margin: 0;
     padding: 0;
@@ -174,7 +169,7 @@ ul {
 }
 
 .work-flow-operate-panel .el-card__header {
-    padding: 4px 10px !important;
+    padding: 4px 4px !important;
 }
 /* cubic-bezier(.23, 1, .32, 1) */
 .zoom-in-top-enter-active,

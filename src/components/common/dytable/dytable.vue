@@ -20,8 +20,7 @@ export default {
         // 是否显示pager组件
         isShowPager: {
             type: Boolean,
-            //default: true
-            default: false
+            default: true
         },
         // 查询结果总数量
         total: null,
