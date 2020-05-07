@@ -18,14 +18,14 @@
                     @mousedown="dragPanel($event)"
                 >
                     <!-- 操作按钮 -->
-                    <el-button
+                    <!-- <el-button
                         type="text"
                         size="mini"
                         icon="el-icon-download"
                         @click="compileXMLToObj"
                     >
                         加载
-                    </el-button>
+                    </el-button> -->
                     <el-button
                         size="mini"
                         type="text"
@@ -43,6 +43,22 @@
                         @click="cleanUp"
                     >
                         清空
+                    </el-button>
+                    <el-button
+                        size="mini"
+                        type="text"
+                       icon="el-icon-zoom-in"
+                        @click="bigger"
+                    >
+                        放大
+                    </el-button>
+                    <el-button
+                        size="mini"
+                        type="text"
+                        icon="el-icon-zoom-out"
+                        @click="smaller"
+                    >
+                        缩小
                     </el-button>
                 </div>
                 <!-- 节点面板 -->
@@ -106,7 +122,8 @@
             <!-- 条件节点 -->
             <condition-node
                 :key="index"
-                v-else-if="node.type === 'Condition' || node.type === 'Fork' || node.type === 'Join'"
+                v-else-if="node.type === 'Condition' || node.type === 'Fork' ||
+                 node.type === 'Join'|| node.type === 'package'|| node.type === 'router' "
                 :width="node.options.width"
                 :height="node.options.height"
                 :color="node.options.color"
@@ -204,6 +221,7 @@ export default {
     mixins: [workflowMixin],
     data () {
         return {
+            size : 1,
             // 辅助线数据
             assistedLineStart: '',
             assistedLineEnd: '',
@@ -222,7 +240,7 @@ export default {
             styleObj: {
                 position: 'absolute',
                 left: '20px',
-                top: '20px',
+                top: '50px',
                 'z-index': '1991'
             },
             // 开始节点对象
@@ -263,6 +281,21 @@ export default {
         // document.removeEventListener('keyup');
     },
     methods: {
+        // 缩小页面
+        smaller(){
+            this.size = this.size - 0.1;  
+            this.set(); 
+        },
+        // 放大页面
+         bigger(){
+            this.size = this.size + 0.1;  
+            this.set(); 
+        },
+        // 设置页面大小
+         set() {  
+            document.body.style.zoom = this.size;
+            document.body.style.cssText += '; -moz-transform: scale(' + this.size + ');-moz-transform-origin: 0 0; ';     //
+        }, 
         // 点击背景面板执行事件
         backgroundClick (event) {
             const evt = window.event || event;
@@ -364,6 +397,7 @@ export default {
                 visible: false,
                 key: key
             });
+            // console.log(this.workflowNodes)
             // this.$set(this.workflowNodes, len, {
             //     ...item,
             //     visible: false,

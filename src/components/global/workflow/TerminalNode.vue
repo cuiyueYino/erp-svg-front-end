@@ -1,4 +1,5 @@
 <template>
+ <!-- 开始&结束面板显示 -->
     <div
         :style="styleObj"
         class="drag-node"
