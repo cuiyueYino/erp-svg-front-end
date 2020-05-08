@@ -1,8 +1,8 @@
 <template>
     <div
+        class="svgBox"
         @click="backgroundClick($event)"
         @dragover.prevent
-        style="width: 100%;height: 100%;"
     >
         <!-- 操作面板 -->
         <div :style="styleObj">
@@ -422,6 +422,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.svgBox{
+    margin: 0;
+}
 .select-nodes {
     position: relative;
     overflow: hidden;
