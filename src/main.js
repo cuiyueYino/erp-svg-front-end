@@ -3,7 +3,8 @@ import App from './App.vue';
 import router from './router';
 import store from './store';
 import ElementUI from 'element-ui';
-
+import api from './model/api/index';
+import confirmapi from './components/common/confirm/confirm';
 // `element-ui`样式
 import 'element-ui/lib/theme-chalk/index.css';
 
@@ -23,14 +24,15 @@ Vue.config.productionTip = false;
 
 // 将 `helpers` 绑定到 `Vue` 实例上
 Vue.prototype.$helpers = helpers;
-
+Vue.prototype.$api = api;
+Vue.prototype.$Uconfirm = confirmapi.installF;
 Vue.use(ElementUI);
 
 // 使用钩子函数对路由进行权限跳转
 router.beforeEach((to, from, next) => {
-    document.title = `${to.meta.title} | 福佳集团`;
-    const role = localStorage.getItem('ms_username');
-    if (!role && to.path !== '/login') {
+    document.title = `福佳集团 | ${to.meta.title} `;
+    const token = localStorage.getItem('ms_tokenId');
+    if (!token && to.path !== '/login') {
         next('/login');
     } else if (to.meta.permission) {
         // 如果是管理员权限则可进入，这里只是简单的模拟管理员权限而已

@@ -37,7 +37,16 @@ module.exports = {
     devServer: {
         port: 9004,
         open: true,
-        proxy: null,
+        proxy: {
+            '/api': {
+                target: 'http://192.168.21.199:6767', //API服务器的地址
+                ws: true, //代理websockets
+                changeOrigin: true, // 虚拟的站点需要更管origin
+                pathRewrite: { //重写路径 比如'/api/aaa/ccc'重写为'/aaa/ccc'
+                    '^/api': ''
+                }
+            }
+        },
         hotOnly: false,
         https: false
     }

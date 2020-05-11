@@ -1,23 +1,23 @@
 class perData {
     constructor() {
         this.company = [{
-                value: '0',
+                value: '_DefaultCompanyOId',
                 label: '福佳集团'
             },
             {
-                value: '1',
+                value: '1002',
                 label: '富佳开发有限公司'
             },
             {
-                value: '2',
+                value: '1003',
                 label: '大连新天地商业公司'
             },
             {
-                value: '3',
+                value: '1004',
                 label: '金州新天地商业公司'
             },
             {
-                value: '4',
+                value: '1005',
                 label: '富佳物业管理有限公司'
             },
         ],

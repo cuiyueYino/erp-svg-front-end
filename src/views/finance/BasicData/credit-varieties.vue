@@ -184,9 +184,9 @@ export default {
             disabled: false,
             editabled:false,
             showCheckBox: false,
+            checked: false,
             dialogImageUrl: '',
             dialogVisible: false,
-            checked:false,
             saveflage:'New',
             labelPosition: 'left',
             formInline: {
@@ -260,11 +260,11 @@ export default {
         };
     },
     mounted() {
-        //获取授信合同数据
+        //获取用信品种数据
         var form = new FormData();
         form.append('page', this.pageNum);
         form.append('size', this.pageSize);
-        this.$api.task.findAwardCreditBreedPage(form).then(response => {
+        this.$api.task.findUserCreditBreedPage(form).then(response => {
             let responsevalue = response;
             if (responsevalue) {
                 let returndata = responsevalue.data;
@@ -315,7 +315,7 @@ export default {
                     form.append('name', this.formInline.searchValue); 
                 }
             }
-            this.$api.task.findAwardCreditBreedPage(form).then(response => {
+            this.$api.task.findUserCreditBreedPage(form).then(response => {
                 let responsevalue = response;
                 if (responsevalue) {
                     let returndata = responsevalue.data;
@@ -354,7 +354,7 @@ export default {
             if(compvalueS && compvalueS!=''){
                 form.append('company', this.dialog.company);
             }
-            this.$api.task.findAwardCreditBreedPage(form).then(response => {
+            this.$api.task.findUserCreditBreedPage(form).then(response => {
                 let responsevalue = response;
                 if (responsevalue) {
                     let returndata = responsevalue.data;
@@ -390,7 +390,7 @@ export default {
             var form = new FormData();
             form.append('page', val);
             form.append('size', this.pageSize);
-            this.$api.task.findAwardCreditBreedPage(form).then(response => {
+            this.$api.task.findUserCreditBreedPage(form).then(response => {
                 let responsevalue = response;
                 if (responsevalue) {
                     let returndata = responsevalue.data;
@@ -435,7 +435,7 @@ export default {
                 }else{
                     let formDataA ={};
                     formDataA.id=selectOption[0].id;
-                    this.$api.task.getAwardCreditBreedVO(formDataA).then(response => {
+                    this.$api.task.getUserCreditBreedVO(formDataA).then(response => {
                         let responsevalue = response;
                         if (responsevalue) {
                             let returndata = responsevalue.data;
@@ -465,7 +465,7 @@ export default {
                 }else{
                     let formDataA ={};
                     formDataA.id=selectOption[0].id;
-                    this.$api.task.getAwardCreditBreedVO(formDataA).then(response => {
+                    this.$api.task.getUserCreditBreedVO(formDataA).then(response => {
                         let responsevalue = response;
                         if (responsevalue) {
                             let returndata = responsevalue.data;
@@ -494,11 +494,11 @@ export default {
                     this.$message.error('只能选择一行!');
                 }else{
                     let messageStr="确认删除 "+selectOption[0].code+":"+selectOption[0].name+"?";
-                    let tital="删除授信品种";
+                    let tital="删除用信品种";
                     this.$Uconfirm(tital,messageStr).then(() => {
                         let formDataA ={};
                         formDataA.id=selectOption[0].id;
-                        this.$api.task.deleteAwardCreditBreedVO(formDataA).then(response => {
+                        this.$api.task.deleteUserCreditBreedVO(formDataA).then(response => {
                             this.$message.success('删除成功!');
                             this.reload();
                         });
@@ -527,8 +527,8 @@ export default {
                 let selectOption= this.multipleSelection;
                 fromObj.id=selectOption[0].id;
               }
-              fromObj.creator=localStorage.getItem('ms_userId');
               fromObj.company=companyS;
+              fromObj.creator=localStorage.getItem('ms_userId');
               fromObj.code=codeS;
               fromObj.name=nameS;
               fromObj.remark=remarkS;
@@ -536,7 +536,7 @@ export default {
               let messageStr=codeS+":"+nameS+"?";
               let tital="提交确认:";
               this.$Uconfirm(tital,messageStr).then(() => {
-                this.$api.task.saveAwardCreditBreedVO(fromObj).then(response => {
+                this.$api.task.saveUserCreditBreedVO(fromObj).then(response => {
                     let responsevalue = response;
                     if (responsevalue) {
                         let returndata = responsevalue.data;

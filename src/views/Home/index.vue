@@ -431,6 +431,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+div
+{
+    margin: 0;
+    padding: 0;
+}
 .svgBox{
     margin: 0;
     width: 100%;

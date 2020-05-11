@@ -29,10 +29,8 @@
                             :value="item.value"
                         ></el-option>
                     </el-select>
-                    <div class="frdiv" v-show="formInline.searchName === ''"><el-input v-model="formInline.searchValue"></el-input></div>
-                    <div class="frdiv" v-show="formInline.searchName === '001'"><el-input v-model="formInline.searchValue"></el-input></div>
-                    <div class="frdiv" v-show="formInline.searchName === '002'"><el-input v-model="formInline.searchValue"></el-input></div>
-                    <div class="frdiv" v-show="formInline.searchName === '003'">
+                    <div class="frdiv" v-if="formInline.searchName === '001'"><el-input v-model="formInline.searchValue"></el-input></div>
+                    <div class="frdiv" v-else-if="formInline.searchName === '002'">
                         <el-select v-model="formInline.serchcompany" placeholder="公司" clearable>
                             <el-option
                                 v-for="item in companyData"
@@ -42,6 +40,17 @@
                             ></el-option>
                         </el-select>
                     </div>
+                    <div class="frdiv" v-else-if="formInline.searchName === '003'">
+                        <el-select v-model="formInline.serchcompany" placeholder="公司" clearable>
+                            <el-option
+                                v-for="item in companyData"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value"
+                            ></el-option>
+                        </el-select>
+                    </div>
+                    <div class="frdiv" v-else ><el-input v-model="formInline.searchValue"></el-input></div>
                 </div>
                 <div class="search-right">
                     <div class="fr">
@@ -64,7 +73,7 @@
                 element-loading-text="加载中"
             ></dynamic-table>
         </el-card>
-        <el-dialog title="用信品种"  :visible.sync="NewEditVisible" :append-to-body="true" v-if="NewEditVisible" :close-on-click-modal="false" width="50%">
+        <el-dialog title="质押物类型"  :visible.sync="NewEditVisible" :append-to-body="true" v-if="NewEditVisible" :close-on-click-modal="false" width="50%">
             <el-form
                 label-width="100px"
                 v-model="formdata"
@@ -88,8 +97,8 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="11" :offset="2">
-                        <el-form-item >
-                            <el-checkbox v-model="checked" v-if="showCheckBox">连续追加</el-checkbox>
+                        <el-form-item v-if="showCheckBox">
+                            <el-checkbox v-model="checked" >连续追加</el-checkbox>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -117,7 +126,7 @@
                 <el-button type="primary" @click="saveNewAndEdit">提交</el-button>
             </span>
         </el-dialog>
-        <el-dialog title="用信品种缺省查询方案" :visible.sync="MoreSearchVisible" :append-to-body="true" v-if="MoreSearchVisible" :close-on-click-modal="false" width="50%">
+        <el-dialog title="质押物类型缺省查询方案" :visible.sync="MoreSearchVisible" :append-to-body="true" v-if="MoreSearchVisible" :close-on-click-modal="false" width="50%">
             <el-form
                 label-width="100px"
                 v-model="dialog"
@@ -186,8 +195,8 @@ export default {
             showCheckBox: false,
             dialogImageUrl: '',
             dialogVisible: false,
-            checked:false,
             saveflage:'New',
+            checked: false,
             labelPosition: 'left',
             formInline: {
                 searchName: '001',
@@ -200,16 +209,44 @@ export default {
             address: [
                 {
                     value: '001',
-                    label: '名称'
+                    label: '单据号'
                 },
                 {
                     value: '002',
-                    label: '编码'
+                    label: '公司'
                 },
                 {
                     value: '003',
-                    label: '公司'
-                }
+                    label: '授信合同编码'
+                },
+                {
+                    value: '004',
+                    label: '合同名称'
+                },
+                {
+                    value: '005',
+                    label: '授信主体'
+                },
+                {
+                    value: '006',
+                    label: '授信银行'
+                },
+                {
+                    value: '007',
+                    label: '授信品种'
+                },
+                {
+                    value: '008',
+                    label: '授信额度'
+                },
+                {
+                    value: '009',
+                    label: '授信余额'
+                },
+                {
+                    value: '010',
+                    label: '经办人'
+                },
             ],
             columns: [
                 {
@@ -220,16 +257,44 @@ export default {
                     title: '状态'
                 },
                 {
-                    key: 'code',
-                    title: '编码'
+                    key: 'companyname',
+                    title: '公司'
                 },
                 {
-                    key: 'name',
-                    title: '名称'
+                    key: 'contractcode',
+                    title: '授信合同编码'
+                },
+                {
+                    key: 'contractname',
+                    title: '合同名称'
+                },
+                {
+                    key: 'gestordeptname',
+                    title: '授信主体'
+                },
+                {
+                    key: 'awardbank',
+                    title: '授信银行'
+                },
+                {
+                    key: 'awardcreditbreedname',
+                    title: '授信品种'
+                },
+                {
+                    key: 'awardamount',
+                    title: '授信额度'
+                },
+                {
+                    key: 'awardableamount',
+                    title: '授信余额'
+                },
+                {
+                    key: 'handler',
+                    title: '经办人'
                 },
                 {
                     key: 'remark',
-                    title: '描述'
+                    title: '备注'
                 }
             ],
             tableData: [],
@@ -260,11 +325,11 @@ export default {
         };
     },
     mounted() {
-        //获取授信合同数据
-        var form = new FormData();
-        form.append('page', this.pageNum);
-        form.append('size', this.pageSize);
-        this.$api.task.findAwardCreditBreedPage(form).then(response => {
+        //获取质押物类型数据
+        let fromdata={};
+        fromdata.page=1;
+        fromdata.size=10;
+        this.$api.task.findComplexCreditContractRegisterPage(fromdata).then(response => {
             let responsevalue = response;
             if (responsevalue) {
                 let returndata = responsevalue.data;
@@ -315,7 +380,7 @@ export default {
                     form.append('name', this.formInline.searchValue); 
                 }
             }
-            this.$api.task.findAwardCreditBreedPage(form).then(response => {
+            this.$api.task.findPledgeTypePage(form).then(response => {
                 let responsevalue = response;
                 if (responsevalue) {
                     let returndata = responsevalue.data;
@@ -354,7 +419,7 @@ export default {
             if(compvalueS && compvalueS!=''){
                 form.append('company', this.dialog.company);
             }
-            this.$api.task.findAwardCreditBreedPage(form).then(response => {
+            this.$api.task.findPledgeTypePage(form).then(response => {
                 let responsevalue = response;
                 if (responsevalue) {
                     let returndata = responsevalue.data;
@@ -387,10 +452,10 @@ export default {
         },
         //下一页
         onCurrentChange(val) {
-            var form = new FormData();
-            form.append('page', val);
-            form.append('size', this.pageSize);
-            this.$api.task.findAwardCreditBreedPage(form).then(response => {
+            let fromdata={};
+            fromdata.page=val;
+            fromdata.size=this.pageSize;
+            this.$api.task.findComplexCreditContractRegisterPage(fromdata).then(response => {
                 let responsevalue = response;
                 if (responsevalue) {
                     let returndata = responsevalue.data;
@@ -415,16 +480,16 @@ export default {
         },
         // 新建
         onRowAddButtonClick() {
-            this.formdata.company='';
-            this.formdata.code='';
-            this.formdata.remark='';
-            this.formdata.name='';
-            this.checked=false;
             this.NewEditVisible= true;
             this.showCheckBox= true;
             this.disabled = false;
             this.editabled=true;
             this.saveflage='New';
+            this.formdata.company='';
+            this.formdata.code='';
+            this.formdata.remark='';
+            this.formdata.name='';
+            this.checked=false;
         },
         // 查看
         onRowLookButtonClick() {
@@ -435,7 +500,7 @@ export default {
                 }else{
                     let formDataA ={};
                     formDataA.id=selectOption[0].id;
-                    this.$api.task.getAwardCreditBreedVO(formDataA).then(response => {
+                    this.$api.task.getPledgeTypeVO(formDataA).then(response => {
                         let responsevalue = response;
                         if (responsevalue) {
                             let returndata = responsevalue.data;
@@ -465,7 +530,7 @@ export default {
                 }else{
                     let formDataA ={};
                     formDataA.id=selectOption[0].id;
-                    this.$api.task.getAwardCreditBreedVO(formDataA).then(response => {
+                    this.$api.task.getPledgeTypeVO(formDataA).then(response => {
                         let responsevalue = response;
                         if (responsevalue) {
                             let returndata = responsevalue.data;
@@ -475,8 +540,8 @@ export default {
                             this.disabled = false;
                             this.editabled=true;
                             this.formdata=tableDataArr;
-                            this.saveflage='Update';
                             this.checked=false;
+                            this.saveflage='Update';
                         } else {
                             this.$message.success('数据库没有该条数据!');
                         }
@@ -494,11 +559,11 @@ export default {
                     this.$message.error('只能选择一行!');
                 }else{
                     let messageStr="确认删除 "+selectOption[0].code+":"+selectOption[0].name+"?";
-                    let tital="删除授信品种";
+                    let tital="删除质押物类型";
                     this.$Uconfirm(tital,messageStr).then(() => {
                         let formDataA ={};
                         formDataA.id=selectOption[0].id;
-                        this.$api.task.deleteAwardCreditBreedVO(formDataA).then(response => {
+                        this.$api.task.deletePledgeTypeVO(formDataA).then(response => {
                             this.$message.success('删除成功!');
                             this.reload();
                         });
@@ -527,8 +592,8 @@ export default {
                 let selectOption= this.multipleSelection;
                 fromObj.id=selectOption[0].id;
               }
-              fromObj.creator=localStorage.getItem('ms_userId');
               fromObj.company=companyS;
+              fromObj.creator=localStorage.getItem('ms_userId');
               fromObj.code=codeS;
               fromObj.name=nameS;
               fromObj.remark=remarkS;
@@ -536,7 +601,7 @@ export default {
               let messageStr=codeS+":"+nameS+"?";
               let tital="提交确认:";
               this.$Uconfirm(tital,messageStr).then(() => {
-                this.$api.task.saveAwardCreditBreedVO(fromObj).then(response => {
+                this.$api.task.savepledgeTypeVO(fromObj).then(response => {
                     let responsevalue = response;
                     if (responsevalue) {
                         let returndata = responsevalue.data;
