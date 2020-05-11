@@ -62,6 +62,7 @@ export default {
                 localStorage.removeItem('ms_roleId');
                 localStorage.removeItem('ms_username');
                 localStorage.removeItem('ms_name');
+                localStorage.removeItem('ms_userId');
                 this.$router.push('/login');
             } else if (command == 'change') {
                 this.dialogVisible = true;

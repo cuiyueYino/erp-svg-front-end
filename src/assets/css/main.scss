@@ -12,6 +12,10 @@ a {
     float: right;
     margin-left: 10px;
 }
+.frdiv {
+    float: right;
+    padding-left: 20px;
+}
 .result{
     height: 100%;
     display: flex;
@@ -48,7 +52,6 @@ a {
 .content {
     width: auto;
     height: 100%;
-    padding: 10px;
     overflow-y: scroll;
     box-sizing: border-box;
 }

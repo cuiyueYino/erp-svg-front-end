@@ -9,7 +9,7 @@
             :close-on-click-modal="false"
         >
         <div style="text-align: center;font-size: 15px;">
-            {{content}}
+          {{content}}
         </div>
         <span slot="footer" class="dialog-footer">
             <el-button @click="handleAction('No')">取 消</el-button>
@@ -31,7 +31,7 @@
       }
     },
     methods: {
-      confirm(title,content) {
+      confirmF(title,content) {
         let _this = this;
         _this.title=title;
         _this.content=content;
