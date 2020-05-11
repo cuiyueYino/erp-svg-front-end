@@ -1,7 +1,6 @@
 //
 import { NodeConfig } from './flow-config';
-// 解析 xml 字符模板
-import xmlStr from 'helpers/compile-xml';
+
 
 export default {
     data () {
@@ -70,9 +69,10 @@ export default {
     },
     methods: {
         // 解析节点后生成连接线
-        async compileXMLToObj () {
-            //
-            const data = await this.compileNodes();
+        async compileXMLToObj (dataObj) {console.log(dataObj)
+             // 解析成为XML格式数据
+            const dataStr = await this.compileObjToXML(dataObj) 
+            const data = await this.compileNodes(dataStr);
             this.workflowNodes.map(item => {
                 data.map(node => {
                     if (item.data.name === node.to.data.name) {
@@ -134,13 +134,13 @@ export default {
             this.saveBtnStatus = newArr.length === 2;
         },
         // 解析节点方法
-        compileNodes () {
+        compileNodes (dataStr) {
             return new Promise((resolve, reject) => {
                 const { upperCase } = this.$helpers;
                 this.workflowNodes = [];
                 // 需要解析的 xml 字符串
                 // 从后端获取
-                const str = xmlStr;
+                const str = dataStr;
                 const newArr = [];
                 // 创建文档对象
                 const parser = new DOMParser();
@@ -338,7 +338,7 @@ export default {
             };
         },
         // 配置节点 连接线 以及文件事件
-        handleSaveEvent (obj) {
+        handleSaveEvent (obj) {console.log(this)
             if (this.saveFlag === 'workflow') {
                 // 工作流文件配置
                 this.compileObjToXML(obj);
@@ -449,7 +449,7 @@ export default {
             this.linkData.splice(index, 1);
         },
         // 点击保存工作流按钮执行事件
-        saveWorkflow () {
+        saveWorkflow (workflowNodes) {console.log(workflowNodes)
             //
             this.selectedNode = {};
             // 设置保存标识

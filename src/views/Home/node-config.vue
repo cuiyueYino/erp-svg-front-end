@@ -105,11 +105,9 @@ export default {
             const typeConfig = {
                 Start: '端点配置',
                 End: '端点配置',
-                task: '子流程配置',
                 Condition: '手工活动配置',
                 Fork: '自由活动配置',
                 Join: '审核活动配置',
-                package: '包配置',
                 router: '路由配置',
                 Line: '连接线配置'
             };

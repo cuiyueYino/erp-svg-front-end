@@ -77,6 +77,7 @@ export default {
         selected: {
             handler (obj) {
                 this.selectedNode = obj;
+                console.log(this.data)
             },
             deep: true,
             immediate: true

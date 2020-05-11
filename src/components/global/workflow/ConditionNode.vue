@@ -15,16 +15,17 @@
                 :points="pointStr"
                 :style="{fill: color, 'stroke-width': 0, 'stroke': '#457CB5'}"
             />
+
             <foreignObject :x="localX" :y="localY" :width="width" :height="height">
                 <body xmlns="http://www.w3.org/1999/xhtml" :style="{'text-align': 'center'}">
                     <ul class="condition-node__wrapper">
-                        <li class="condition-node__text">
+                        <!-- <li class="condition-node__text">
                             <span class="info-label condition-info__label">英文名：</span>
                             <span class="info-item condition-info__item">{{conditionData.data.name}}</span>
-                        </li>
+                        </li> -->
                         <li class="condition-node__text">
-                            <span class="info-label condition-info__label">显示名：</span>
-                            <span class="info-item condition-info__item">{{conditionData.data.displayName}}</span>
+                            <!-- <span class="info-label condition-info__label">显示名：</span> -->
+                            <span class="info-item condition-info__item"><i :class="icon"></i>{{conditionData.data.displayName}}</span>
                         </li>
                     </ul>
                 </body>
@@ -103,10 +104,15 @@ export default {
             type: Boolean,
             default: true
         },
+         // 图标icon
+        icon: {
+            type: String,
+            default: ''
+        },
         // 节点高度配置
         height: {
             type: Number,
-            default: 100
+            default: 66
         },
         // 节点选中标识
         selected: {
@@ -126,7 +132,7 @@ export default {
         // 节点宽度
         width: {
             type: Number,
-            default: 200
+            default: 66
         }
     },
     components: {},
@@ -209,9 +215,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+i{
+        font-size: 20px;
+}
 .condition-style {
     display: inline-block;
-    width: 55px;
+    width: 80px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -221,8 +230,13 @@ export default {
     padding-left: 0;
     text-align: center;
     padding-top: 24px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     .condition-info__item {
-        text-align: left;
+        display: flex;
+        justify-content: center;
+        align-items: center;
         @extend .condition-style
     }
     .condition-node__text {

@@ -15,38 +15,30 @@ export function NodeConfig () {
             allowOut: false
         },
         task: {
-            width: 200,
-            height: 100,
+            width: 40,
+            height: 40,
+            color: '#25a3fd',
             visible: false
         },
         condition: {
-            width: 200,
-            height: 100,
+            width: 120,
+            height: 76,
             visible: false,
-            color: '#409EFF'
+            color: '#f39c43'
         },
         fork: {
-            width: 200,
-            height: 100,
+            width: 120,
+            height: 76,
             visible: false,
-            color: '#E6A23C'
+            color: '#1ab4e2'
         },
         join: {
-            width: 200,
-            height: 100,
+            width: 120,
+            height: 76,
             visible: false,
             color: '#909399'
-        },
-        package: {
-            width: 200,
-            height: 100,
-            visible: false,
-        },
-        router:{
-            width: 200,
-            height: 100,
-            visible: false,
         }
+       
     };
 };
 
@@ -88,41 +80,9 @@ export function NodesData () {
     const nodeConfig = NodeConfig();
     return [
         {
-            type: 'router',
+            type: 'Task',
             name: '路由',
             icon: 'el-icon-setting',
-            options: {
-                ...nodeConfig.router,
-                x: 0,
-                y: 0,
-                draggable: true
-            },
-            data: {
-                name: 'router',
-                displayName: '新建路由',
-                type: 'NORMAL'
-            }
-        },
-        {
-            type: 'package',
-            name: '包',
-            icon: 'el-icon-suitcase',
-            options: {
-                ...nodeConfig.package,
-                x: 0,
-                y: 0,
-                draggable: true
-            },
-            data: {
-                name: 'package',
-                displayName: '新建包',
-                type: 'NORMAL'
-            }
-        },
-        {
-            type: 'Task',
-            name: '子流程',
-            icon: 'el-icon-plus-workflow',
             options: {
                 ...nodeConfig.task,
                 x: 0,
@@ -130,9 +90,8 @@ export function NodesData () {
                 draggable: true
             },
             data: {
-                name: 'Subprocess',
-                displayName: '新建子流程',
-                type: 'NORMAL'
+                name: 'router',
+                displayName: '路由',
             }
         },
         {
@@ -147,7 +106,7 @@ export function NodesData () {
             },
             data: {
                 name: 'Condition',
-                displayName: '新建手工活动'
+                displayName: '手工活动'
             }
         },
         {
@@ -162,7 +121,7 @@ export function NodesData () {
             },
             data: {
                 name: 'Fork',
-                displayName: '新建自由活动'
+                displayName: '自由活动'
             }
         },
         {
@@ -177,7 +136,7 @@ export function NodesData () {
             },
             data: {
                 name: 'Join',
-                displayName: '新建审核活动'
+                displayName: '审核活动'
             }
         }
     ];

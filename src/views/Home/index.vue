@@ -18,20 +18,20 @@
                     @mousedown="dragPanel($event)"
                 >
                     <!-- 操作按钮 -->
-                    <!-- <el-button
+                    <el-button
                         type="text"
                         size="mini"
                         icon="el-icon-download"
-                        @click="compileXMLToObj"
+                        @click="compileXMLToObj(dataObj)"
                     >
                         加载
-                    </el-button> -->
+                    </el-button>
                     <el-button
                         size="mini"
                         type="text"
                         :disabled="saveBtnStatus"
                         icon="el-icon-upload"
-                        @click="saveWorkflow"
+                        @click="saveWorkflow(workflowNodes)"
                     >
                         保存
                     </el-button>
@@ -107,6 +107,7 @@
                 :width="node.options.width"
                 :height="node.options.height"
                 :data="node"
+                :color="node.options.color"
                 :selected="selectedNode === node"
                 :x="node.options.x"
                 :y="node.options.y"
@@ -122,8 +123,9 @@
             <!-- 条件节点 -->
             <condition-node
                 :key="index"
-                v-else-if="node.type === 'Condition' || node.type === 'Fork' ||
-                 node.type === 'Join'|| node.type === 'package'|| node.type === 'router' "
+                v-else-if="node.type === 'Condition' || node.type === 'Fork' || node.type === 'Join' "
+                 :icon="node.type === 'Condition'?'el-icon-user':node.type === 'Fork'?'el-icon-plus-supply-chain':
+                 node.type === 'Join'?'el-icon-plus-param': ''"
                 :width="node.options.width"
                 :height="node.options.height"
                 :color="node.options.color"
@@ -142,7 +144,7 @@
             </condition-node>
         </template>
         <!-- 连线区域 -->
-        <svg class="workflow-draw-panel" width="100%" height="99%" xmlns="http://www.w3.org/2000/svg" version="1.1">
+        <svg class="workflow-draw-panel" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" version="1.1">
             <defs>
                 <marker
                     id='arrow_end_active'
@@ -221,6 +223,7 @@ export default {
     mixins: [workflowMixin],
     data () {
         return {
+            dataObj:xmlJson,
             size : 1,
             // 辅助线数据
             assistedLineStart: '',
@@ -263,6 +266,7 @@ export default {
     watch: {},
     created () {},
     mounted () {
+        this.getJson()
         // // 监听键盘事件
         // document.addEventListener('keyup', (event) => {
         //     const evt = window.event || event;
@@ -281,6 +285,11 @@ export default {
         // document.removeEventListener('keyup');
     },
     methods: {
+        getJson () {
+                this.$axios.get('111.json').then(res=> {
+                console.log(res)
+                })
+            },
         // 缩小页面
         smaller(){
             this.size = this.size - 0.1;  
@@ -297,7 +306,7 @@ export default {
             document.body.style.cssText += '; -moz-transform: scale(' + this.size + ');-moz-transform-origin: 0 0; ';     //
         }, 
         // 点击背景面板执行事件
-        backgroundClick (event) {
+        backgroundClick (event) {//console.log(event)
             const evt = window.event || event;
             const target = evt.target;
             if (target.className.animVal &&
@@ -397,7 +406,7 @@ export default {
                 visible: false,
                 key: key
             });
-            // console.log(this.workflowNodes)
+            console.log(this.workflowNodes)
             // this.$set(this.workflowNodes, len, {
             //     ...item,
             //     visible: false,
@@ -424,6 +433,8 @@ export default {
 <style lang="scss" scoped>
 .svgBox{
     margin: 0;
+    width: 100%;
+    height: 100%;
 }
 .select-nodes {
     position: relative;
