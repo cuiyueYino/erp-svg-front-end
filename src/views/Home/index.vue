@@ -216,6 +216,10 @@ import workflowMixin from './workflow-mixin';
 import { NodesData, TerminalNode } from './flow-config';
 // 配置工作流组件
 import configForm from './node-config';
+//json假数据
+import dataJson from './111.json';
+// 解析 xml 字符模板
+import xmlStr from 'helpers/compile-xml';
 export default {
     name: 'WorkFlow',
     props: {},
@@ -223,7 +227,8 @@ export default {
     mixins: [workflowMixin],
     data () {
         return {
-            dataObj:xmlJson,
+            dataObj:dataJson.WfProcess,
+            // dataObj:xmlStr,
             size : 1,
             // 辅助线数据
             assistedLineStart: '',
@@ -266,7 +271,152 @@ export default {
     watch: {},
     created () {},
     mounted () {
-        this.getJson()
+       
+       this.$nextTick(()=>{
+            console.log(this.dataObj)
+            if(this.dataObj){
+            let newObj=[];
+            let newCondition=[];
+            let newRouter=[];
+            let newStart=[];
+            let newEnd=[];
+            let newLine=[];
+            // 查看/编辑 载入数据
+            for(let i in this.dataObj.nodes.wfProcessor){
+                newCondition.push(
+                     {
+                         data: {
+                        name: this.dataObj.nodes.wfProcessor[i].name,
+                        displayName: this.dataObj.nodes.wfProcessor[i].name
+                        },
+                        type: 'Condition',
+                        name: this.dataObj.nodes.wfProcessor[i].name,
+                        oid:this.dataObj.nodes.wfProcessor[i].oid,
+                        icon: 'el-icon-user',
+                        options: {
+                            width: 120,
+                            height: 76,
+                            visible: false,
+                            color: '#f39c43',
+                            x: this.dataObj.nodes.wfProcessor[i].x,
+                            y: this.dataObj.nodes.wfProcessor[i].y,
+                            draggable: true
+                        }
+                    }
+                )
+                
+            };
+             for(let i in this.dataObj.nodes.wfRouter){
+                newRouter.push(
+                     {
+                         data: {
+                        name: this.dataObj.nodes.wfRouter[i].name,
+                        displayName: this.dataObj.nodes.wfRouter[i].name
+                        },
+                        type: 'Task',
+                        name: this.dataObj.nodes.wfRouter[i].name,
+                        oid:this.dataObj.nodes.wfRouter[i].oid,
+                        icon: 'el-icon-setting',
+                        options: {
+                            width: 40,
+                            height: 40,
+                            visible: false,
+                            color: '#25a3fd',
+                            x: this.dataObj.nodes.wfRouter[i].x,
+                            y: this.dataObj.nodes.wfRouter[i].y,
+                            draggable: true
+                        }
+                    }
+                )
+                
+            };
+            newStart.push(
+                {
+                    type: 'Start',
+                    oid:this.dataObj.nodes.wfStarter.oid,
+                    options: {
+                        draggable: true,
+                        x: this.dataObj.nodes.wfStarter.x,
+                        y: this.dataObj.nodes.wfStarter.y,
+                        width: 100,
+                        height: 100,
+                        color: '#67C23A',
+                        allowIn: false,
+                        allowOut: true
+                    },
+                    data: {
+                        name: this.dataObj.nodes.wfStarter.name,
+                        displayName: this.dataObj.nodes.wfStarter.name
+                    },
+                    key: 'Start'
+                }
+            );
+             newEnd.push(
+                {
+                    type: 'End',
+                    oid:this.dataObj.nodes.wfEnder.oid,
+                    options: {
+                        draggable: true,
+                        x: this.dataObj.nodes.wfEnder.x,
+                        y: this.dataObj.nodes.wfEnder.y,
+                         width: 100,
+                         height: 100,
+                         color: '#F56C6C',
+                         allowIn: true,
+                         allowOut: false
+                    },
+                    data: {
+                        name: this.dataObj.nodes.wfEnder.name,
+                        displayName: this.dataObj.nodes.wfEnder.name
+                    },
+                    key: 'End'
+                }
+            )
+             for(let i in this.dataObj.lines.line){
+                newLine.push(
+                    {
+                        type: 'Line',
+                        oid:this.dataObj.lines.line[i].linefoid,
+                        data: {
+                            name: this.dataObj.lines.line[i].linefname,
+                            displayName: this.dataObj.lines.line[i].linefname
+                        },
+                        from:{
+                            data:{
+                                 name: this.dataObj.lines.line[i].linefrom,
+                                 displayName: this.dataObj.lines.line[i].linefrom
+                            },
+                            target:'B',
+                            // type:
+                        },
+                        to:{
+                             data:{
+                                 name: this.dataObj.lines.line[i].lineto,
+                                 displayName: this.dataObj.lines.line[i].lineto
+                            },
+                            target:'T',
+                            // type:
+                        },
+                    }
+                )
+             }
+            newObj.name = this.dataObj.name
+            newObj.displayName = this.dataObj.name
+            
+            newObj = [
+                ...newRouter,
+                ...newCondition,
+                ...newEnd,
+                ...newLine,
+                ...newStart
+            ]
+            this.dataObj = newObj
+            console.log(this.dataObj)
+        }
+
+        
+       })
+
         // // 监听键盘事件
         // document.addEventListener('keyup', (event) => {
         //     const evt = window.event || event;
@@ -285,11 +435,14 @@ export default {
         // document.removeEventListener('keyup');
     },
     methods: {
-        getJson () {
-                this.$axios.get('111.json').then(res=> {
-                console.log(res)
-                })
-            },
+        // getJson () {
+        //        this.$api.svg.getjson().then(res=>{
+        //            this.dataObj = res
+        //            console.log(res)
+        //        },error=>{
+        //            console.log(error)
+        //        })
+        //     },
         // 缩小页面
         smaller(){
             this.size = this.size - 0.1;  

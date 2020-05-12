@@ -3,10 +3,12 @@
  */
 // 文章模块接口
 import task from './task';
+import svg from './svg';
 // 其他模块的接口……
 
 // 导出接口
 export default {
-    task
+    task,
+    svg
     // ……
 };

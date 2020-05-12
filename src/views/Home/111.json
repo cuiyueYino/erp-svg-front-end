@@ -1,0 +1,624 @@
+{
+  "WfProcess": {
+    "subProcess": "0",
+    "code": "RENT04",
+    "nodes": {
+      "wfProcessor": [
+        {
+          "wfParticipator": {
+            "participator": {
+              "expression": "project.code,new String(\\\"xsjl-xm\\\")",
+              "service": {
+                "code": "findUserByProjectAndRole",
+                "name": "ͨ��������Ŀ���߽�ɫ��ѯ�û�",
+                "oid": "681305311554337501"
+              },
+              "oid": "BFPID000000MK601VM"
+            }
+          },
+          "code": "audit",
+          "dataType": {
+            "code": "BasePrice",
+            "name": "�׼۹���",
+            "oid": "890806180856436888"
+          },
+          "permission": "0",
+          "canSkip": "0",
+          "oid": "BFPID000000MK601VK",
+          "multMail": "0",
+          "autoSubmit": "0",
+          "maxWorkTime": "2",
+          "mActivity": {
+            "code": "CPDJGLXMYXJLSP",
+            "name": "��Ʒ�׼۹�����ĿӪ����������",
+            "oid": "BFPID000000MK601GX"
+          },
+          "name": "��ĿӪ������",
+          "x": "532",
+          "y": "233",
+          "decisions": {
+            "decision": [
+              {
+                "decisionText": "ͬ��",
+                "decisionType": "1"
+              },
+              {
+                "decisionText": "��ͬ��",
+                "decisionType": "2"
+              }
+            ]
+          },
+          "autoHurry": "0",
+          "mntNextJoin": "0",
+          "srcActivity": {
+            "code": "A_BasePrice",
+            "name": "�׼۹���",
+            "oid": "001703141446686001"
+          },
+          "timeUnit": "1"
+        },
+        {
+          "wfParticipator": {
+            "participator": [
+              {
+                "expression": "project.code,new String(\\\"ms-xm\\\")",
+                "service": {
+                  "code": "findUserByProjectAndRole",
+                  "name": "ͨ��������Ŀ���߽�ɫ��ѯ�û�",
+                  "oid": "681305311554337501"
+                },
+                "oid": "BFPID000000MK603JV"
+              },
+              {
+                "expression": "project.code,new String(\\\"zjl-dcyx\\\")",
+                "service": {
+                  "code": "findUserByProjectAndRole",
+                  "name": "ͨ��������Ŀ���߽�ɫ��ѯ�û�",
+                  "oid": "681305311554337501"
+                },
+                "oid": "BFPID000000MK603JU"
+              }
+            ]
+          },
+          "code": "audit",
+          "dataType": {
+            "code": "BasePrice",
+            "name": "�׼۹���",
+            "oid": "890806180856436888"
+          },
+          "permission": "0",
+          "canSkip": "0",
+          "oid": "BFPID000000MK603JS",
+          "multMail": "1",
+          "autoSubmit": "0",
+          "maxWorkTime": "2",
+          "mActivity": {
+            "code": "CPDJGLXMYXZJLSP",
+            "name": "��Ʒ�ͼ۹�����ĿӪ���ܾ�������",
+            "oid": "BFPID000000MK603FX"
+          },
+          "name": "��ĿӪ���ܾ�������Ŀ������",
+          "x": "1097",
+          "y": "229",
+          "decisions": {
+            "decision": [
+              {
+                "decisionText": "ͬ��",
+                "decisionType": "1"
+              },
+              {
+                "decisionText": "��ͬ��",
+                "decisionType": "2"
+              }
+            ]
+          },
+          "autoHurry": "0",
+          "mntNextJoin": "0",
+          "srcActivity": {
+            "code": "A_BasePrice",
+            "name": "�׼۹���",
+            "oid": "001703141446686001"
+          },
+          "timeUnit": "1"
+        },
+        {
+          "wfParticipator": {
+            "participator": [
+              {
+                "expression": "project.code,new String(\\\"cfo-xm\\\")",
+                "service": {
+                  "code": "findUserByProjectAndRole",
+                  "name": "ͨ��������Ŀ���߽�ɫ��ѯ�û�",
+                  "oid": "681305311554337501"
+                },
+                "oid": "BFPID000000MK607J0"
+              },
+              {
+                "role": {
+                  "code": "CEO-DC",
+                  "name": "�ز���˾�ܲ�",
+                  "oid": "BFPID000000LRI005K"
+                },
+                "oid": "BFPID000000MK607J1"
+              }
+            ]
+          },
+          "code": "audit",
+          "dataType": {
+            "code": "BasePrice",
+            "name": "�׼۹���",
+            "oid": "890806180856436888"
+          },
+          "permission": "0",
+          "canSkip": "0",
+          "oid": "BFPID000000MK607IY",
+          "multMail": "1",
+          "autoSubmit": "0",
+          "maxWorkTime": "2",
+          "mActivity": {
+            "code": "CPDJGLDCZCSP",
+            "name": "��Ʒ�׼۹����ز��ܲ�����",
+            "oid": "BFPID000000MK6073H"
+          },
+          "name": "�ز��ܲã���Ŀ�����ܼ�",
+          "x": "1292",
+          "y": "226",
+          "decisions": {
+            "decision": [
+              {
+                "decisionText": "ͬ��",
+                "decisionType": "1"
+              },
+              {
+                "decisionText": "��ͬ��",
+                "decisionType": "2"
+              }
+            ]
+          },
+          "autoHurry": "0",
+          "mntNextJoin": "0",
+          "srcActivity": {
+            "code": "A_BasePrice",
+            "name": "�׼۹���",
+            "oid": "001703141446686001"
+          },
+          "timeUnit": "1"
+        },
+        {
+          "wfParticipator": {
+            "participator": [
+              {
+                "role": {
+                  "code": "AVP-DC",
+                  "name": "���Ѽ��Ÿ��ܲ��������ز���",
+                  "oid": "BFPID000000LSN03RH"
+                },
+                "oid": "BFPID000000MK609A7"
+              },
+              {
+                "role": {
+                  "code": "CFO",
+                  "name": "���Ѽ��Ÿ��ܲã�����",
+                  "oid": "BFPID000000LRI004K"
+                },
+                "oid": "BFPID000000MK609A6"
+              }
+            ]
+          },
+          "code": "audit",
+          "dataType": {
+            "code": "BasePrice",
+            "name": "�׼۹���",
+            "oid": "890806180856436888"
+          },
+          "permission": "0",
+          "canSkip": "0",
+          "oid": "BFPID000000MK609A4",
+          "multMail": "1",
+          "autoSubmit": "0",
+          "maxWorkTime": "2",
+          "mActivity": {
+            "code": "CPDJGLDCJTFGFZCSP",
+            "name": "��Ʒ�׼۹����ز����ŷֹܸ��ܲ�����",
+            "oid": "BFPID000000MK60977"
+          },
+          "name": "�ز��������ŷֹܸ��ܲ�",
+          "x": "1483",
+          "y": "223",
+          "decisions": {
+            "decision": [
+              {
+                "decisionText": "ͬ��",
+                "decisionType": "1"
+              },
+              {
+                "decisionText": "��ͬ��",
+                "decisionType": "2"
+              }
+            ]
+          },
+          "autoHurry": "0",
+          "mntNextJoin": "0",
+          "srcActivity": {
+            "code": "A_BasePrice",
+            "name": "�׼۹���",
+            "oid": "001703141446686001"
+          },
+          "timeUnit": "1"
+        },
+        {
+          "wfParticipator": {
+            "participator": {
+              "role": {
+                "code": "zjlzldc-mss",
+                "name": "�������ܾ�������-�ز�",
+                "oid": "BFPID000000LSN03R5"
+              },
+              "oid": "BFPID000000MK609AA"
+            }
+          },
+          "code": "audit",
+          "dataType": {
+            "code": "BasePrice",
+            "name": "�׼۹���",
+            "oid": "890806180856436888"
+          },
+          "permission": "0",
+          "canSkip": "0",
+          "oid": "BFPID000000MK609A8",
+          "multMail": "1",
+          "autoSubmit": "0",
+          "maxWorkTime": "2",
+          "mActivity": {
+            "code": "CPDJGLDCMSSP",
+            "name": "��Ʒ�׼۹����ز���������",
+            "oid": "BFPID000000MK6098U"
+          },
+          "name": "���ŵز�����",
+          "x": "1644",
+          "y": "223",
+          "decisions": {
+            "decision": [
+              {
+                "decisionText": "ͬ��",
+                "decisionType": "1"
+              },
+              {
+                "decisionText": "��ͬ��",
+                "decisionType": "2"
+              }
+            ]
+          },
+          "autoHurry": "0",
+          "mntNextJoin": "0",
+          "srcActivity": {
+            "code": "A_BasePrice",
+            "name": "�׼۹���",
+            "oid": "001703141446686001"
+          },
+          "timeUnit": "1"
+        },
+        {
+          "wfParticipator": {
+            "participator": {
+              "role": {
+                "code": "zjlzldc-mss",
+                "name": "�������ܾ�������-�ز�",
+                "oid": "BFPID000000LSN03R5"
+              },
+              "oid": "BFPID000000MK609TC"
+            }
+          },
+          "code": "audit",
+          "dataType": {
+            "code": "BasePrice",
+            "name": "�׼۹���",
+            "oid": "890806180856436888"
+          },
+          "permission": "0",
+          "canSkip": "0",
+          "oid": "BFPID000000MK609TA",
+          "multMail": "0",
+          "autoSubmit": "0",
+          "maxWorkTime": "2",
+          "mActivity": {
+            "code": "CPDJGLDCMSSP",
+            "name": "��Ʒ�׼۹����ز���������",
+            "oid": "BFPID000000MK6098U"
+          },
+          "name": "���ŵز�����",
+          "x": "2154",
+          "y": "224",
+          "decisions": {
+            "decision": [
+              {
+                "decisionText": "ͬ��",
+                "decisionType": "1"
+              },
+              {
+                "decisionText": "��ͬ��",
+                "decisionType": "2"
+              }
+            ]
+          },
+          "autoHurry": "0",
+          "mntNextJoin": "0",
+          "srcActivity": {
+            "code": "A_BasePrice",
+            "name": "�׼۹���",
+            "oid": "001703141446686001"
+          },
+          "timeUnit": "0"
+        },
+        {
+          "wfParticipator": {
+            "participator": {
+              "role": {
+                "code": "Chairman",
+                "name": "���³����ܲ�",
+                "oid": "BFPID000000LRI004C"
+              },
+              "oid": "BFPID000000MK609TJ"
+            }
+          },
+          "code": "audit",
+          "dataType": {
+            "code": "BasePrice",
+            "name": "�׼۹���",
+            "oid": "890806180856436888"
+          },
+          "permission": "0",
+          "canSkip": "0",
+          "oid": "BFPID000000MK609TH",
+          "multMail": "0",
+          "autoSubmit": "0",
+          "maxWorkTime": "2",
+          "mActivity": {
+            "code": "CPDJGLZCSP",
+            "name": "��Ʒ�׼۹����ܲ�����",
+            "oid": "BFPID000000MK609MJ"
+          },
+          "name": "�ܲ�",
+          "x": "1856",
+          "y": "225",
+          "decisions": {
+            "decision": [
+              {
+                "decisionText": "ͬ��",
+                "decisionType": "1"
+              },
+              {
+                "decisionText": "��ͬ��",
+                "decisionType": "2"
+              },
+              {
+                "decisionText": "������",
+                "decisionType": "3"
+              },
+              {
+                "decisionText": "����",
+                "decisionType": "4"
+              }
+            ]
+          },
+          "autoHurry": "0",
+          "mntNextJoin": "0",
+          "srcActivity": {
+            "code": "A_BasePrice",
+            "name": "�׼۹���",
+            "oid": "001703141446686001"
+          },
+          "timeUnit": "0"
+        },
+        {
+          "wfParticipator": {
+            "participator": {
+              "expression": "project.code,new String(\\\"FA-DCZG\\\")",
+              "service": {
+                "code": "findUserByProjectAndRole",
+                "name": "ͨ��������Ŀ���߽�ɫ��ѯ�û�",
+                "oid": "681305311554337501"
+              },
+              "oid": "BFPID000000MT91HED"
+            }
+          },
+          "code": "audit",
+          "dataType": {
+            "code": "BasePrice",
+            "name": "�׼۹���",
+            "oid": "890806180856436888"
+          },
+          "permission": "0",
+          "canSkip": "0",
+          "oid": "BFPID000000MST2WZ5",
+          "multMail": "0",
+          "autoSubmit": "0",
+          "maxWorkTime": "2",
+          "mActivity": {
+            "code": "CPDJGLDCZGSP",
+            "name": "��Ʒ�׼۹����ز���������",
+            "oid": "BFPID000000MST2WYI"
+          },
+          "name": "��Ʒ�׼۹����ز���������",
+          "x": "925",
+          "y": "66",
+          "decisions": {
+            "decision": [
+              {
+                "decisionText": "ͬ��",
+                "decisionType": "1"
+              },
+              {
+                "decisionText": "��ͬ��",
+                "decisionType": "2"
+              }
+            ]
+          },
+          "autoHurry": "0",
+          "mntNextJoin": "0",
+          "srcActivity": {
+            "code": "A_BasePrice",
+            "name": "�׼۹���",
+            "oid": "001703141446686001"
+          },
+          "timeUnit": "1"
+        },
+        {
+          "wfParticipator": {
+            "participator": {
+              "expression": "project.code,new String(\\\"FA-DCXSKJ\\\")",
+              "service": {
+                "code": "findUserByProjectAndRole",
+                "name": "ͨ��������Ŀ���߽�ɫ��ѯ�û�",
+                "oid": "681305311554337501"
+              },
+              "oid": "BFPID000000MST2WZA"
+            }
+          },
+          "code": "audit",
+          "dataType": {
+            "code": "BasePrice",
+            "name": "�׼۹���",
+            "oid": "890806180856436888"
+          },
+          "permission": "0",
+          "canSkip": "0",
+          "oid": "BFPID000000MST2WZ8",
+          "multMail": "0",
+          "autoSubmit": "0",
+          "maxWorkTime": "2",
+          "mActivity": {
+            "code": "CPDJGLDCKJSP",
+            "name": "��Ʒ�׼۹����ز��������",
+            "oid": "BFPID000000MST2WXI"
+          },
+          "name": "��Ʒ�׼۹����ز��������",
+          "x": "706",
+          "y": "68",
+          "decisions": {
+            "decision": [
+              {
+                "decisionText": "ͬ��",
+                "decisionType": "1"
+              },
+              {
+                "decisionText": "��ͬ��",
+                "decisionType": "2"
+              }
+            ]
+          },
+          "autoHurry": "0",
+          "mntNextJoin": "0",
+          "srcActivity": {
+            "code": "A_BasePrice",
+            "name": "�׼۹���",
+            "oid": "001703141446686001"
+          },
+          "timeUnit": "1"
+        },
+        {
+          "wfParticipator": {
+            "participator": {
+              "expression": "creator",
+              "oid": "BFPID000000MK601HK"
+            }
+          },
+          "code": "manpower",
+          "dataType": {
+            "code": "BasePrice",
+            "name": "�׼۹���",
+            "oid": "890806180856436888"
+          },
+          "permission": "0",
+          "canSkip": "0",
+          "oid": "BFPID000000MK601HI",
+          "multMail": "0",
+          "autoSubmit": "0",
+          "maxWorkTime": "2",
+          "mActivity": {
+            "code": "A_BasePrice",
+            "name": "�׼۹���",
+            "oid": "001703141446686001"
+          },
+          "name": "�׼۹���",
+          "x": "243",
+          "y": "226",
+          "autoHurry": "0",
+          "mntNextJoin": "0",
+          "timeUnit": "0"
+        }
+      ],
+      "wfEnder": {
+        "code": "ender",
+        "name": "����",
+        "x": "2321",
+        "y": "217",
+        "oid": "BFPID000000MK609TK"
+      },
+      "wfStarter": {
+        "code": "starter",
+        "name": "��ʼ",
+        "x": "104",
+        "y": "228",
+        "oid": "BFPID000000MK601HL"
+      },
+      "wfRouter": [
+        {
+          "code": "router",
+          "dataType": {
+            "code": "BasePrice",
+            "name": "�׼۹���",
+            "oid": "890806180856436888"
+          },
+          "name": "·��",
+          "x": "1120",
+          "y": "440",
+          "oid": "BFPID000000MK609TD"
+        },
+        {
+          "code": "router",
+          "dataType": {
+            "code": "BasePrice",
+            "name": "�׼۹���",
+            "oid": "890806180856436888"
+          },
+          "name": "·��",
+          "x": "2002",
+          "y": "221",
+          "oid": "BFPID000000MK609TF"
+        }
+      ]
+    },
+    "name": "Save1",
+    "oid": "BFPID000000MK601F4",
+    "lines": {
+      "line": [
+        {
+          "linefcode": "link_0",
+          "lineotherwise": "0",
+          "linedecisontype": "-1",
+          "linefoid": "BFPID000000MK601HO",
+          "lineto": "BFPID000000MK601HI",
+          "linehidden": "0",
+          "linefname": "link_0",
+          "linefrom": "BFPID000000MK601HL"
+        },
+        {
+          "linefcode": "link_0",
+          "lineotherwise": "0",
+          "dataType": {
+            "code": "BasePrice",
+            "name": "�׼۹���",
+            "oid": "890806180856436888"
+          },
+          "linedecisontype": "-1",
+          "linefoid": "BFPID000000NBR05R7",
+          "lineto": "BFPID000000MK609TK",
+          "linehidden": "0",
+          "linefname": "link_0",
+          "linefrom": "BFPID000000MK609TF"
+        }
+      ]
+    }
+  }
+}

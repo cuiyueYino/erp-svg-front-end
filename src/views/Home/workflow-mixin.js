@@ -69,9 +69,11 @@ export default {
     },
     methods: {
         // 解析节点后生成连接线
-        async compileXMLToObj (dataObj) {console.log(dataObj)
+        async compileXMLToObj (dataObj) {
+            debugger
              // 解析成为XML格式数据
-            const dataStr = await this.compileObjToXML(dataObj) 
+            const dataStr = await this.compileObjToXMLLoading(dataObj)
+            console.log(dataStr)
             const data = await this.compileNodes(dataStr);
             this.workflowNodes.map(item => {
                 data.map(node => {
@@ -89,14 +91,40 @@ export default {
                 });
             });
         },
-        // 解析成为XML格式数据
+         // 解析成为XML格式数据_加载
+         compileObjToXMLLoading (obj) {debugger
+            const finalWorkflow = obj.filter(item => Object.keys(item).length > 0);
+            let compileXML = `
+                <?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+                <process name="${obj.name}" displayName="${obj.displayName}">
+            `;
+            finalWorkflow.map(item => {debugger
+                const tagName = item.type.toLowerCase();
+                let extend = '';
+                if (item.type === 'Task') {
+                    extend = ` assignee="apply.taskAssignee" performType="${item.data.type}"`;
+                }
+                compileXML += `<${tagName} layout="${item.options.x},${item.options.y}" name="${item.data.name}" displayName="${item.data.displayName}"${extend}>`;
+                if (item.type == 'Line') {
+                    item.map(link => {
+                        compileXML += `
+                            <transition offset="${link.from.target},${link.to.target}" to="${link.to.data.name}" name="${link.data.name}" displayName="${link.data.displayName}" />
+                        `;
+                    });
+                }
+                compileXML += `</${tagName}>`;
+            });
+            compileXML += '</process>';
+            return compileXML;
+        },
+        // 解析成为XML格式数据_保存
         compileObjToXML (obj) {
             const finalWorkflow = this.workflowNodes.filter(item => Object.keys(item).length > 0);
             let compileXML = `
                 <?xml version="1.0" encoding="UTF-8" standalone="no" ?>
                 <process name="${obj.name}" displayName="${obj.displayName}">
             `;
-            finalWorkflow.map(item => {
+            finalWorkflow.map(item => {debugger
                 const tagName = item.type.toLowerCase();
                 let extend = '';
                 if (item.type === 'Task') {
@@ -338,7 +366,7 @@ export default {
             };
         },
         // 配置节点 连接线 以及文件事件
-        handleSaveEvent (obj) {console.log(this)
+        handleSaveEvent (obj) {
             if (this.saveFlag === 'workflow') {
                 // 工作流文件配置
                 this.compileObjToXML(obj);
