@@ -282,17 +282,46 @@ export default {
             let newEnd=[];
             let newLine=[];
             // 查看/编辑 载入数据
+             for(let i in this.dataObj.lines.line){
+                newLine.push(
+                    {
+                        type: 'Line',
+                        oid:this.dataObj.lines.line[i].linefoid,
+                        data: {
+                            name: this.dataObj.lines.line[i].linefname,
+                            displayName: this.dataObj.lines.line[i].linefname
+                        },
+                        from:{
+                            data:{
+                                 name: this.dataObj.lines.line[i].linefrom,
+                                 displayName: this.dataObj.lines.line[i].linefrom
+                            },
+                            target:'B',
+                            // type:
+                        },
+                        to:{
+                             data:{
+                                 name: this.dataObj.lines.line[i].lineto,
+                                 displayName: this.dataObj.lines.line[i].lineto
+                             },
+                            target:'T',
+                            // type:
+                        },
+                    }
+                )
+             };
             for(let i in this.dataObj.nodes.wfProcessor){
                 newCondition.push(
                      {
                          data: {
-                        name: this.dataObj.nodes.wfProcessor[i].name,
-                        displayName: this.dataObj.nodes.wfProcessor[i].name
-                        },
+                            name: this.dataObj.nodes.wfProcessor[i].name,
+                            displayName: this.dataObj.nodes.wfProcessor[i].name
+                         },
                         type: 'Condition',
                         name: this.dataObj.nodes.wfProcessor[i].name,
                         oid:this.dataObj.nodes.wfProcessor[i].oid,
                         icon: 'el-icon-user',
+                        transition: [],
                         options: {
                             width: 120,
                             height: 76,
@@ -309,14 +338,15 @@ export default {
              for(let i in this.dataObj.nodes.wfRouter){
                 newRouter.push(
                      {
-                         data: {
-                        name: this.dataObj.nodes.wfRouter[i].name,
-                        displayName: this.dataObj.nodes.wfRouter[i].name
+                        data: {
+                            name: this.dataObj.nodes.wfRouter[i].name,
+                            displayName: this.dataObj.nodes.wfRouter[i].name
                         },
                         type: 'Task',
                         name: this.dataObj.nodes.wfRouter[i].name,
                         oid:this.dataObj.nodes.wfRouter[i].oid,
                         icon: 'el-icon-setting',
+                        transition: [],
                         options: {
                             width: 40,
                             height: 40,
@@ -334,6 +364,7 @@ export default {
                 {
                     type: 'Start',
                     oid:this.dataObj.nodes.wfStarter.oid,
+                    transition: [],
                     options: {
                         draggable: true,
                         x: this.dataObj.nodes.wfStarter.x,
@@ -372,44 +403,30 @@ export default {
                     key: 'End'
                 }
             )
-             for(let i in this.dataObj.lines.line){
-                newLine.push(
-                    {
-                        type: 'Line',
-                        oid:this.dataObj.lines.line[i].linefoid,
-                        data: {
-                            name: this.dataObj.lines.line[i].linefname,
-                            displayName: this.dataObj.lines.line[i].linefname
-                        },
-                        from:{
-                            data:{
-                                 name: this.dataObj.lines.line[i].linefrom,
-                                 displayName: this.dataObj.lines.line[i].linefrom
-                            },
-                            target:'B',
-                            // type:
-                        },
-                        to:{
-                             data:{
-                                 name: this.dataObj.lines.line[i].lineto,
-                                 displayName: this.dataObj.lines.line[i].lineto
-                            },
-                            target:'T',
-                            // type:
-                        },
-                    }
-                )
-             }
+            
+            
             newObj.name = this.dataObj.name
             newObj.displayName = this.dataObj.name
             
             newObj = [
+                ...newStart,
                 ...newRouter,
                 ...newCondition,
-                ...newEnd,
-                ...newLine,
-                ...newStart
+                ...newEnd
+                 
+               
             ]
+            // 更改节点信息 同步更新终点为当前配置节点的to属性
+            newObj.map(node => {
+                    if (node.type !== 'End') {
+                        newLine.map(item => {
+                            if (item.from.data.name === node.data.name) {
+                                node.transition.push(item);
+                            }
+                        });
+                    }
+                
+            })
             this.dataObj = newObj
             console.log(this.dataObj)
         }

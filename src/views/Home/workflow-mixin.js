@@ -70,10 +70,10 @@ export default {
     methods: {
         // 解析节点后生成连接线
         async compileXMLToObj (dataObj) {
-            debugger
+            
              // 解析成为XML格式数据
             const dataStr = await this.compileObjToXMLLoading(dataObj)
-            console.log(dataStr)
+            // console.log(dataStr)
             const data = await this.compileNodes(dataStr);
             this.workflowNodes.map(item => {
                 data.map(node => {
@@ -92,21 +92,22 @@ export default {
             });
         },
          // 解析成为XML格式数据_加载
-         compileObjToXMLLoading (obj) {debugger
+         compileObjToXMLLoading (obj) {
+            //  debugger
             const finalWorkflow = obj.filter(item => Object.keys(item).length > 0);
             let compileXML = `
                 <?xml version="1.0" encoding="UTF-8" standalone="no" ?>
                 <process name="${obj.name}" displayName="${obj.displayName}">
             `;
-            finalWorkflow.map(item => {debugger
+            finalWorkflow.map(item => {
                 const tagName = item.type.toLowerCase();
                 let extend = '';
                 if (item.type === 'Task') {
                     extend = ` assignee="apply.taskAssignee" performType="${item.data.type}"`;
                 }
                 compileXML += `<${tagName} layout="${item.options.x},${item.options.y}" name="${item.data.name}" displayName="${item.data.displayName}"${extend}>`;
-                if (item.type == 'Line') {
-                    item.map(link => {
+                if (item.type !== 'End') {
+                    item.transition.map(link => {
                         compileXML += `
                             <transition offset="${link.from.target},${link.to.target}" to="${link.to.data.name}" name="${link.data.name}" displayName="${link.data.displayName}" />
                         `;
@@ -115,6 +116,7 @@ export default {
                 compileXML += `</${tagName}>`;
             });
             compileXML += '</process>';
+            console.log(compileXML)
             return compileXML;
         },
         // 解析成为XML格式数据_保存
@@ -124,7 +126,7 @@ export default {
                 <?xml version="1.0" encoding="UTF-8" standalone="no" ?>
                 <process name="${obj.name}" displayName="${obj.displayName}">
             `;
-            finalWorkflow.map(item => {debugger
+            finalWorkflow.map(item => {
                 const tagName = item.type.toLowerCase();
                 let extend = '';
                 if (item.type === 'Task') {
@@ -169,6 +171,7 @@ export default {
                 // 需要解析的 xml 字符串
                 // 从后端获取
                 const str = dataStr;
+                // debugger
                 const newArr = [];
                 // 创建文档对象
                 const parser = new DOMParser();
