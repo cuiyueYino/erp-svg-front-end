@@ -1,48 +1,87 @@
 class perData {
     constructor() {
-        this.company = [{
+        this.company = [
+            {
+                value: '',
+                label: '--'
+            },
+            {
                 value: '_DefaultCompanyOId',
                 label: '福佳集团'
             },
             {
-                value: '1002',
+                value: 'BFPID000000LQX0036',
+                label: '福邦资本控股有限公司'
+            },
+            {
+                value: 'BFPID000000LQX003T',
+                label: '大连中佳银行（筹备期）股份有限公司'
+            },
+            {
+                value: 'BFPID000000LQX004G',
                 label: '富佳开发有限公司'
             },
             {
-                value: '1003',
-                label: '大连新天地商业公司'
-            },
-            {
-                value: '1004',
-                label: '金州新天地商业公司'
-            },
-            {
-                value: '1005',
-                label: '富佳物业管理有限公司'
+                value: 'BFPID000000LQX0053',
+                label: '博尔特大酒店'
             },
         ],
-        this.project = [{
-            value: '0',
-            label: '信息中心'
-        },
-        {
-            value: '1',
-            label: '售楼处'
-        },
-        {
-            value: '2',
-            label: '客服部'
-        },
-        {
-            value: '3',
-            label: '餐饮部'
-        },
-        {
-            value: '4',
-            label: '保卫处'
-        },
-    ],
-    this.projectName = [
+        this.project = [
+            {
+                value: '',
+                label: '--'
+            },
+            {
+                value: 'BFPID000000MKT0YVM',
+                label: '福佳集团英镑项目'
+            },
+            {
+                value: 'BFPID000000MKT0YVI',
+                label: '福佳集团港币项目'
+            },
+            {
+                value: 'BFPID000000MKT0YVK',
+                label: '福佳集团美元项目'
+            },
+            {
+                value: 'BFPID000000MKT0YVL',
+                label: '福佳集团欧元项目'
+            },
+            {
+                value: 'BFPID000000MKT0YVN',
+                label: '福佳集团新币项目'
+            },
+        ],
+        this.filestyle = [{
+                value: '001',
+                label: '前期批示'
+            },
+            {
+                value: '002',
+                label: '请款说明'
+            },
+            {
+                value: '003',
+                label: '委托函'
+            },
+            {
+                value: '004',
+                label: '经办人身份证'
+            },
+            {
+                value: '005',
+                label: '合同/协议'
+            },
+            {
+                value: '006',
+                label: '供货清单'
+            },
+            {
+                value: '009',
+                label: '档案归档资料'
+            },
+        ],
+        this.projectName = [
         {
             value: '0',
             label: '房号'

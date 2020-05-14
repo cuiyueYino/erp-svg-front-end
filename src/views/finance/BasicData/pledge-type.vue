@@ -283,7 +283,7 @@ export default {
                 this.tableData = tableDataArr;
                 this.total = returndata.total;
             } else {
-                this.$message.success('请联系Admin!');
+                this.$message.success('没有查到数据!');
             }
         });
     },
@@ -334,7 +334,7 @@ export default {
                     this.tableData = tableDataArr;
                     this.total = returndata.total;
                 } else {
-                    this.$message.success('请联系Admin!');
+                    this.$message.success('没有查到数据!');
                 }
             }); 
         },
@@ -374,7 +374,7 @@ export default {
                     this.total = returndata.total;
                     this.MoreSearchVisible = false;
                 } else {
-                    this.$message.success('请联系Admin!');
+                    this.$message.success('没有查到数据!');
                 }
             });
         },
@@ -409,7 +409,7 @@ export default {
                     this.tableData = tableDataArr;
                     this.total = returndata.total;
                 } else {
-                    this.$message.success('请联系Admin!');
+                    this.$message.success('没有查到数据!');
                 }
             });
         },

@@ -64,7 +64,7 @@
                 element-loading-text="加载中"
             ></dynamic-table>
         </el-card>
-        <el-dialog title="用信品种"  :visible.sync="NewEditVisible" :append-to-body="true" v-if="NewEditVisible" :close-on-click-modal="false" width="50%">
+        <el-dialog title="授信品种"  :visible.sync="NewEditVisible" :append-to-body="true" v-if="NewEditVisible" :close-on-click-modal="false" width="50%">
             <el-form
                 label-width="100px"
                 v-model="formdata"
@@ -117,7 +117,7 @@
                 <el-button type="primary" @click="saveNewAndEdit">提交</el-button>
             </span>
         </el-dialog>
-        <el-dialog title="用信品种缺省查询方案" :visible.sync="MoreSearchVisible" :append-to-body="true" v-if="MoreSearchVisible" :close-on-click-modal="false" width="50%">
+        <el-dialog title="授信品种缺省查询方案" :visible.sync="MoreSearchVisible" :append-to-body="true" v-if="MoreSearchVisible" :close-on-click-modal="false" width="50%">
             <el-form
                 label-width="100px"
                 v-model="dialog"
@@ -283,7 +283,7 @@ export default {
                 this.tableData = tableDataArr;
                 this.total = returndata.total;
             } else {
-                this.$message.success('请联系Admin!');
+                this.$message.success('没有查到数据!');
             }
         });
     },
@@ -334,7 +334,7 @@ export default {
                     this.tableData = tableDataArr;
                     this.total = returndata.total;
                 } else {
-                    this.$message.success('请联系Admin!');
+                    this.$message.success('没有查到数据!');
                 }
             }); 
         },
@@ -374,7 +374,7 @@ export default {
                     this.total = returndata.total;
                     this.MoreSearchVisible = false;
                 } else {
-                    this.$message.success('请联系Admin!');
+                    this.$message.success('没有查到数据!');
                 }
             });
         },
@@ -409,7 +409,7 @@ export default {
                     this.tableData = tableDataArr;
                     this.total = returndata.total;
                 } else {
-                    this.$message.success('请联系Admin!');
+                    this.$message.success('没有查到数据!');
                 }
             });
         },
