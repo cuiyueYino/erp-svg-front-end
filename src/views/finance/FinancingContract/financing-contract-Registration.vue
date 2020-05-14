@@ -40,13 +40,33 @@
                             ></el-option>
                         </el-select>
                     </div>
-                    <div class="frdiv" v-else-if="formInline.searchName === '003'">
-                        <el-select v-model="formInline.serchcompany" placeholder="公司" clearable>
+                    <div class="frdiv" v-else-if="formInline.searchName === '005'">
+                        <el-select v-model="formInline.CreditSub" placeholder="--" clearable>
                             <el-option
-                                v-for="item in companyData"
+                                v-for="item in CreditSubject"
                                 :key="item.value"
                                 :label="item.label"
                                 :value="item.value"
+                            ></el-option>
+                        </el-select>
+                    </div>
+                    <div class="frdiv" v-else-if="formInline.searchName === '006'">
+                        <el-select v-model="formInline.searchblank" placeholder="--" clearable>
+                            <el-option
+                                v-for="item in Creditblank"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value"
+                            ></el-option>
+                        </el-select>
+                    </div>
+                    <div class="frdiv" v-else-if="formInline.searchName === '007'">
+                        <el-select v-model="formInline.searchcreditType" placeholder="--" clearable>
+                            <el-option
+                                v-for="item in creditType"
+                                :key="item.code"
+                                :label="item.name"
+                                :value="item.code"
                             ></el-option>
                         </el-select>
                     </div>
@@ -73,60 +93,7 @@
                 element-loading-text="加载中"
             ></dynamic-table>
         </el-card>
-        <el-dialog title="质押物类型"  :visible.sync="NewEditVisible" :append-to-body="true" v-if="NewEditVisible" :close-on-click-modal="false" width="50%">
-            <el-form
-                label-width="100px"
-                v-model="formdata"
-                class="dataForm"
-                :rules="rules"
-                :model="formdata"
-                :label-position="labelPosition"
-            >
-            <el-card>
-                <el-row>
-                    <el-col :span="11">
-                        <el-form-item label="公司" prop="company">
-                            <el-select v-model="formdata.company" value-key="value" v-bind:disabled="disabled">
-                                <el-option
-                                    v-for="item in companyoptions"
-                                    :key="item.value"
-                                    :label="item.label"
-                                    :value="item.value"
-                                ></el-option>
-                            </el-select>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="11" :offset="2">
-                        <el-form-item v-if="showCheckBox">
-                            <el-checkbox v-model="checked" >连续追加</el-checkbox>
-                        </el-form-item>
-                    </el-col>
-                </el-row>
-                <el-row>
-                    <el-col :span="11">
-                        <el-form-item label="编码" prop="code">
-                            <el-input v-model="formdata.code" v-bind:disabled="disabled"></el-input>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="11" :offset="2">
-                        <el-form-item label="名称" prop="name">
-                            <el-input v-model="formdata.name" v-bind:disabled="disabled"></el-input>
-                        </el-form-item>
-                    </el-col>
-                    <el-col>
-                        <el-form-item label="项目描述">
-                            <el-input type="textarea" v-model="formdata.remark" :rows="8" v-bind:disabled="disabled"></el-input>
-                        </el-form-item>
-                    </el-col>
-                </el-row>
-                </el-card>
-            </el-form>
-            <span slot="footer" class="dialog-footer">
-                <el-button @click="NewEditVisible = false">取 消</el-button>
-                <el-button type="primary" @click="saveNewAndEdit">提交</el-button>
-            </span>
-        </el-dialog>
-        <el-dialog title="质押物类型缺省查询方案" :visible.sync="MoreSearchVisible" :append-to-body="true" v-if="MoreSearchVisible" :close-on-click-modal="false" width="50%">
+        <el-dialog title="综合授信合同登记缺省查询方案" :visible.sync="MoreSearchVisible" :append-to-body="true" v-if="MoreSearchVisible" :close-on-click-modal="false" width="50%">
             <el-form
                 label-width="100px"
                 v-model="dialog"
@@ -138,6 +105,13 @@
                     <el-col :span="6" class="pbackground">查询条件</el-col>
                     <el-col :span="6"  class="pbackground">操作符</el-col>
                     <el-col :span="12" class="pbackground">条件值</el-col>
+                </el-row>
+                <el-row class="elrowStyle">
+                    <el-col :span="6" class="elColCenter">单据号</el-col>
+                    <el-col :span="6"  class="elColCenter">左右匹配</el-col>
+                    <el-col :span="8">
+                       <el-input v-model="dialog.documentNo"></el-input>
+                    </el-col>
                 </el-row>
                 <el-row class="elrowStyle">
                     <el-col :span="6" class="elColCenter">公司</el-col>
@@ -154,17 +128,97 @@
                     </el-col>
                 </el-row>
                 <el-row class="elrowStyle">
-                    <el-col :span="6" class="elColCenter">编码</el-col>
+                    <el-col :span="6" class="elColCenter">单据日期</el-col>
+                    <el-col :span="6"  class="elColCenter">大于等于</el-col>
+                    <el-col :span="8">
+                       <el-input v-model="dialog.docDateStart"></el-input>
+                    </el-col>
+                </el-row>
+                <el-row class="elrowStyle">
+                    <el-col :span="6" class="elColCenter">单据日期</el-col>
+                    <el-col :span="6"  class="elColCenter">小于等于</el-col>
+                    <el-col :span="8">
+                       <el-input v-model="dialog.docDateEnd"></el-input>
+                    </el-col>
+                </el-row>
+                <el-row class="elrowStyle">
+                    <el-col :span="6" class="elColCenter">授信合同编码</el-col>
                     <el-col :span="6"  class="elColCenter">左右匹配</el-col>
                     <el-col :span="8">
                        <el-input v-model="dialog.codeNomber"></el-input>
                     </el-col>
                 </el-row>
                 <el-row class="elrowStyle">
-                    <el-col :span="6" class="elColCenter">名称</el-col>
+                    <el-col :span="6" class="elColCenter">合同名称</el-col>
                     <el-col :span="6"  class="elColCenter">左右匹配</el-col>
                     <el-col :span="8">
                        <el-input v-model="dialog.name"></el-input>
+                    </el-col>
+                </el-row>
+                <el-row class="elrowStyle">
+                    <el-col :span="6" class="elColCenter">授信主体</el-col>
+                    <el-col :span="6"  class="elColCenter">等于</el-col>
+                    <el-col :span="8">
+                       <el-select v-model="dialog.CreditSub" placeholder="--" clearable>
+                            <el-option
+                                v-for="item in CreditSubject"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value"
+                            ></el-option>
+                        </el-select>
+                    </el-col>
+                </el-row>
+                <el-row class="elrowStyle">
+                    <el-col :span="6" class="elColCenter">授信银行</el-col>
+                    <el-col :span="6"  class="elColCenter">等于</el-col>
+                    <el-col :span="8">
+                       <el-select v-model="dialog.searchblank" placeholder="--" clearable>
+                            <el-option
+                                v-for="item in Creditblank"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value"
+                            ></el-option>
+                        </el-select>
+                    </el-col>
+                </el-row>
+                <el-row class="elrowStyle">
+                    <el-col :span="6" class="elColCenter">授信品种</el-col>
+                    <el-col :span="6"  class="elColCenter">等于</el-col>
+                    <el-col :span="8">
+                       <el-select v-model="dialog.searchcreditType" placeholder="--" clearable>
+                            <el-option
+                                v-for="item in creditType"
+                                :key="item.code"
+                                :label="item.name"
+                                :value="item.code"
+                            ></el-option>
+                        </el-select>
+                    </el-col>
+                </el-row>
+                <el-row class="elrowStyle">
+                    <el-col :span="6" class="elColCenter">授信额度</el-col>
+                    <el-col :span="6"  class="elColCenter">大于等于</el-col>
+                    <el-col :span="8">
+                       <el-input v-model="dialog.Creditline"></el-input>
+                    </el-col>
+                </el-row>
+                <el-row class="elrowStyle">
+                    <el-col :span="6" class="elColCenter">授信余额</el-col>
+                    <el-col :span="6"  class="elColCenter">大于等于</el-col>
+                    <el-col :span="8">
+                       <el-input v-model="dialog.Creditbalance"></el-input>
+                    </el-col>
+                </el-row>
+                <el-row class="elrowStyle">
+                    <el-col :span="6" class="elColCenter">经办人</el-col>
+                    <el-col :span="6"  class="elColCenter">等于</el-col>
+                    <el-col :span="8">
+                       <el-input v-model="dialog.operator"></el-input>
+                    </el-col>
+                    <el-col :span="2">
+                    <el-button type="primary" icon="el-icon-search" @click="MoreSearchuserVisible = true"></el-button>
                     </el-col>
                 </el-row>
                 </el-card>
@@ -174,22 +228,39 @@
                 <el-button type="primary" @click="onHandleMoreSearch">查询</el-button>
             </span>
         </el-dialog>
+        <el-dialog title="用户缺省查询方案" :visible.sync="MoreSearchuserVisible" :append-to-body="true" v-if="MoreSearchuserVisible" :close-on-click-modal="false" width="40%">
+            <el-form
+                label-width="100px"
+                v-model="dialog"
+                class="dataForm"
+                :label-position="labelPosition"
+            ></el-form>
+        </el-dialog>
+        <NewfinancingPage  :Newfinancingtype="Newfinancingtype" @changeShow="showAddFinace"/>
+        <EditfinancingPage :saveflage="saveflage" :EditfinanrowId="EditfinanrowId" :Editfinancingtype="Editfinancingtype" @changeShow="showLookOrUpdate"/>
     </div>
 </template>
 
 <script>
 import DynamicTable from '../../../components/common/dytable/dytable.vue';
 import proData from '../../../components/common/proData/proData';
+import NewfinancingPage from './new-financing-contract-Regis.vue';
+import EditfinancingPage from './edit-financing-contract-Regis.vue';
 export default {
     name: 'basetable',
     components: {
-        DynamicTable
+        DynamicTable,
+        NewfinancingPage,
+        EditfinancingPage
     },
     inject: ['reload'],
     data() {
         return {
+            Newfinancingtype:false,
+            Editfinancingtype:false,
+            EditfinanrowId:'',
             MoreSearchVisible: false,
-            NewEditVisible: false,
+            MoreSearchuserVisible: false,
             disabled: false,
             editabled:false,
             showCheckBox: false,
@@ -202,10 +273,35 @@ export default {
                 searchName: '001',
                 searchValue: '',
                 serchcompany:'',
+                CreditSub:'',
+                searchblank:'',
+                searchcreditType:'',
                 company:''
             },
             companyoptions: new proData().company,
             companyData:new proData().company,
+            objectoptions:new proData().project,
+            CreditSubject:[
+                {
+                    value: 'BFPID000000NKF0DA2',
+                    label: '大连金新房地产开发有限公司备查爱心'
+                },
+                {
+                    value: 'BFPID000000NKF0CW4',
+                    label: '大连金新房地产开发有限公司备查'
+                }
+            ],
+            Creditblank:[
+                {
+                    value: 'BFPID000000NPI1EKT',
+                    label: '南洋商业银行'
+                },
+                {
+                    value: 'BFPID000000NRT1791',
+                    label: '瑞士信贷银行'
+                }
+            ],
+            creditType:[],
             address: [
                 {
                     value: '001',
@@ -303,6 +399,7 @@ export default {
             total: 20,
             formdata: {
                 company: '',
+                objectName:'',
                 code: '',
                 remark: '',
                 name: ''
@@ -310,6 +407,15 @@ export default {
             dialog: {
                 company: '',
                 codeNomber: '',
+                documentNo: '',
+                docDateStart:'',
+                docDateEnd:'',
+                CreditSub:'',
+                searchblank:'',
+                searchcreditType:'',
+                Creditline:'',
+                Creditbalance:'',
+                operator:'',
                 name: ''
             },
             multipleSelection: [],
@@ -325,7 +431,33 @@ export default {
         };
     },
     mounted() {
-        //获取质押物类型数据
+        //获取授信品种
+        var form = new FormData();
+        form.append('page', this.pageNum);
+        form.append('size', this.pageSize);
+        form.append('company', localStorage.getItem('ms_companyId'));
+        this.$api.task.findAwardCreditBreedPage(form).then(response => {
+            let responsevalue = response;
+            if (responsevalue) {
+                let returndata = responsevalue.data;
+                let tableDataArr=returndata.rows;
+                for(var i =0;i<tableDataArr.length;i++){
+                    if(tableDataArr[i].status === 1){
+                        tableDataArr[i].statusString="暂存";
+                    }else if(tableDataArr[i].status === 2){
+                        tableDataArr[i].statusString="提交";
+                    }else if(tableDataArr[i].status === 3){
+                        tableDataArr[i].statusString="有效";
+                    }else {
+                        tableDataArr[i].statusString="作废";
+                    }
+                }
+                this.creditType = tableDataArr;
+            } else {
+                this.$message.success('没有查到数据!');
+            }
+        });
+        //获取综合授信合同登记
         let fromdata={};
         fromdata.page=1;
         fromdata.size=10;
@@ -348,11 +480,27 @@ export default {
                 this.tableData = tableDataArr;
                 this.total = returndata.total;
             } else {
-                this.$message.success('请联系Admin!');
+                this.$message.success('没有查到数据!');
             }
         });
     },
     methods: {
+        //控制查看修改显示影藏
+        showLookOrUpdate(data){
+            if(data === false){
+                this.Editfinancingtype = false
+            }else{
+                this.Editfinancingtype = true
+            }
+        },
+        //控制添加显示影藏
+        showAddFinace(data){
+            if(data === false){
+                this.Newfinancingtype = false
+            }else{
+                this.Newfinancingtype = true
+            }
+        },
         // 搜索按钮
         onHandleSearch() {
             var form = new FormData();
@@ -380,7 +528,7 @@ export default {
                     form.append('name', this.formInline.searchValue); 
                 }
             }
-            this.$api.task.findPledgeTypePage(form).then(response => {
+            this.$api.task.findComplexCreditContractRegisterPage(form).then(response => {
                 let responsevalue = response;
                 if (responsevalue) {
                     let returndata = responsevalue.data;
@@ -399,7 +547,7 @@ export default {
                     this.tableData = tableDataArr;
                     this.total = returndata.total;
                 } else {
-                    this.$message.success('请联系Admin!');
+                    this.$message.success('没有查到数据!');
                 }
             }); 
         },
@@ -419,7 +567,7 @@ export default {
             if(compvalueS && compvalueS!=''){
                 form.append('company', this.dialog.company);
             }
-            this.$api.task.findPledgeTypePage(form).then(response => {
+            this.$api.task.findComplexCreditContractRegisterPage(form).then(response => {
                 let responsevalue = response;
                 if (responsevalue) {
                     let returndata = responsevalue.data;
@@ -439,7 +587,7 @@ export default {
                     this.total = returndata.total;
                     this.MoreSearchVisible = false;
                 } else {
-                    this.$message.success('请联系Admin!');
+                    this.$message.success('没有查到数据!');
                 }
             });
         },
@@ -474,22 +622,13 @@ export default {
                     this.tableData = tableDataArr;
                     this.total = returndata.total;
                 } else {
-                    this.$message.success('请联系Admin!');
+                    this.$message.success('没有查到数据!');
                 }
             });
         },
         // 新建
         onRowAddButtonClick() {
-            this.NewEditVisible= true;
-            this.showCheckBox= true;
-            this.disabled = false;
-            this.editabled=true;
-            this.saveflage='New';
-            this.formdata.company='';
-            this.formdata.code='';
-            this.formdata.remark='';
-            this.formdata.name='';
-            this.checked=false;
+            this.Newfinancingtype= true;
         },
         // 查看
         onRowLookButtonClick() {
@@ -498,24 +637,9 @@ export default {
                 if(selectOption.length >1){
                     this.$message.error('只能选择一行!');
                 }else{
-                    let formDataA ={};
-                    formDataA.id=selectOption[0].id;
-                    this.$api.task.getPledgeTypeVO(formDataA).then(response => {
-                        let responsevalue = response;
-                        if (responsevalue) {
-                            let returndata = responsevalue.data;
-                            let tableDataArr=returndata.data;
-                            this.disabled = true;
-                            this.editabled=false;
-                            this.formdata=tableDataArr;
-                            this.saveflage='Look';
-                            this.NewEditVisible= true;
-                            this.showCheckBox= false;
-                            this.checked=false;
-                        } else {
-                            this.$message.success('数据库没有该条数据!');
-                        }
-                    });
+                    this.Editfinancingtype=true;
+                    this.EditfinanrowId=selectOption[0].id;
+                    this.saveflage="Look";
                 }
             }else{
                 this.$message.error('请选择一行你要查看的数据!');
@@ -528,24 +652,9 @@ export default {
                 if(selectOption.length >1){
                     this.$message.error('只能选择一行!');
                 }else{
-                    let formDataA ={};
-                    formDataA.id=selectOption[0].id;
-                    this.$api.task.getPledgeTypeVO(formDataA).then(response => {
-                        let responsevalue = response;
-                        if (responsevalue) {
-                            let returndata = responsevalue.data;
-                            let tableDataArr=returndata.data;
-                            this.NewEditVisible= true;
-                            this.showCheckBox= false;
-                            this.disabled = false;
-                            this.editabled=true;
-                            this.formdata=tableDataArr;
-                            this.checked=false;
-                            this.saveflage='Update';
-                        } else {
-                            this.$message.success('数据库没有该条数据!');
-                        }
-                    });
+                    this.Editfinancingtype=true;
+                    this.EditfinanrowId=selectOption[0].id;
+                    this.saveflage="Edit";
                 }
             }else{
                 this.$message.error('请选择一行你要查看的数据!');
@@ -559,11 +668,11 @@ export default {
                     this.$message.error('只能选择一行!');
                 }else{
                     let messageStr="确认删除 "+selectOption[0].code+":"+selectOption[0].name+"?";
-                    let tital="删除质押物类型";
+                    let tital="删除综合授信合同登记";
                     this.$Uconfirm(tital,messageStr).then(() => {
                         let formDataA ={};
                         formDataA.id=selectOption[0].id;
-                        this.$api.task.deletePledgeTypeVO(formDataA).then(response => {
+                        this.$api.task.delComplexCreditContractRegisterVO(formDataA).then(response => {
                             this.$message.success('删除成功!');
                             this.reload();
                         });
@@ -575,54 +684,6 @@ export default {
                 this.$message.error('请选择一行你要删除的数据!');
             }
         },
-        //提交确认
-        saveNewAndEdit(){
-            let editflag= this.editabled;
-            if(editflag){
-              let companyS= this.formdata.company;
-              if(companyS== ''){
-                this.$message.error('请选择公司!');
-              }
-              let codeS= this.formdata.code;
-              let nameS= this.formdata.name;
-              let remarkS= this.formdata.remark;
-              let fromObj={};
-              let saceFlage=this.saveflage;
-              if(saceFlage === 'Update'){
-                let selectOption= this.multipleSelection;
-                fromObj.id=selectOption[0].id;
-              }
-              fromObj.company=companyS;
-              fromObj.creator=localStorage.getItem('ms_userId');
-              fromObj.code=codeS;
-              fromObj.name=nameS;
-              fromObj.remark=remarkS;
-              let checkedS=this.checked;
-              let messageStr=codeS+":"+nameS+"?";
-              let tital="提交确认:";
-              this.$Uconfirm(tital,messageStr).then(() => {
-                this.$api.task.savepledgeTypeVO(fromObj).then(response => {
-                    let responsevalue = response;
-                    if (responsevalue) {
-                        let returndata = responsevalue.data;
-                        let tableDataArr=returndata.data;
-                        this.NewEditVisible= false;
-                        if(checkedS ===true){
-                            this.onRowAddButtonClick();
-                        }else{
-                            this.reload();
-                        }
-                    } else {
-                        this.$message.success('数据库没有该条数据!');
-                    }
-                });
-              }).catch(() => {
-                this.$message.success('取消提交!');
-              });
-            }else{
-              this.NewEditVisible= false;  
-            }
-        }
     }
 };
 </script>

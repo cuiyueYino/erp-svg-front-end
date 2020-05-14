@@ -80,6 +80,7 @@ export default {
                 localStorage.setItem('ms_name',  usernameS);
                 localStorage.setItem('ms_roleId',  '0');
                 localStorage.setItem('ms_userId',  'BFPID000000LSN033N');
+                localStorage.setItem('ms_companyId',  '_DefaultCompanyOId');
                 localStorage.setItem('ms_tokenId',  "a66cc874-f6e4-45c4-b317-82f3d6a4fce3");
                 this.$router.push('/');
             }else{

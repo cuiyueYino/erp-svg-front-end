@@ -107,6 +107,25 @@ const task = {
     findComplexCreditContractRegisterPage(params) {
         return httpReqest.post('/api/interfaces/complexCreditContractRegister/findComplexCreditContractRegisterPage', params);
     },
+    //查询一条综合授信合同登记
+    getComplexCreditContractRegisterVO(params){
+        var valueS='?';
+        for(var item in params){
+            valueS+=item+"="+params[item]+"&";
+        }
+        if(valueS.slice(valueS.length-1,valueS.length) ==="&"){
+            valueS=valueS.slice(0,valueS.length-1);
+        }
+        return httpReqest.get('/api/interfaces/complexCreditContractRegister/getComplexCreditContractRegisterVO'+valueS);
+    },
+    //删除综合授信合同登记
+    delComplexCreditContractRegisterVO(params){
+        return httpReqest.post('/api/interfaces/complexCreditContractRegister/delComplexCreditContractRegisterVO', params);
+    },
+    //授信银行查询列表
+    findFundCustomerPage(params){
+        return httpReqest.post('/api/interfaces/fundCustomer/findFundCustomerPage', params);
+    },
 };
 
 export default task;

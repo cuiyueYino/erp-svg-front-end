@@ -1,6 +1,209 @@
 <template>
-    <div id="plan">
-        <router-view></router-view>
+    <div class="svgmian">
+        <div class="clearfloat"></div>
+        <div
+            class="svgBox"
+            @click="backgroundClick($event)"
+            @dragover.prevent
+        >
+            <!-- 操作面板 -->
+            <div :style="styleObj">
+                <el-card
+                    style="width: 260px;"
+                    class="work-flow-operate-panel"
+                    :body-style="{padding: '4px'}"
+                >
+                    <div
+                        slot="header"
+                        style="text-align: right;"
+                        class="work-flow-operate-header"
+                        @mousedown="dragPanel($event)"
+                    >
+                        <!-- 操作按钮 -->
+                        <el-button
+                            type="text"
+                            size="mini"
+                            icon="el-icon-download"
+                            @click="compileXMLToObj(dataObj)"
+                        >
+                            加载
+                        </el-button>
+                        <el-button
+                            size="mini"
+                            type="text"
+                            :disabled="saveBtnStatus"
+                            icon="el-icon-upload"
+                            @click="saveWorkflow(workflowNodes)"
+                        >
+                            保存
+                        </el-button>
+                        <el-button
+                            size="mini"
+                            type="text"
+                            :disabled="workflowNodes.filter(item => Object.keys(item).length > 0).length === 2"
+                            icon="el-icon-plus-cleanup"
+                            @click="cleanUp"
+                        >
+                            清空
+                        </el-button>
+                        <el-button
+                            size="mini"
+                            type="text"
+                        icon="el-icon-zoom-in"
+                            @click="bigger"
+                        >
+                            放大
+                        </el-button>
+                        <el-button
+                            size="mini"
+                            type="text"
+                            icon="el-icon-zoom-out"
+                            @click="smaller"
+                        >
+                            缩小
+                        </el-button>
+                    </div>
+                    <!-- 节点面板 -->
+                    <ul class="select-nodes">
+                        <li
+                            v-for="(item, index) in nodes"
+                            :key="index"
+                            class="workflow-nodes"
+                            draggable
+                            @dragstart="dragStartEvent($event)"
+                            @dragend="handlerDragEnd($event, item)"
+                        >
+                            <a class="workflow-nodes">
+                                <i :class="item.icon"></i>
+                                <span>{{item.name}}</span>
+                            </a>
+                        </li>
+                    </ul>
+                </el-card>
+            </div>
+            <!-- 画图区域 -->
+            <template v-for="(node, index) in workflowNodes">
+                <!-- 端点节点 -->
+                <terminal-node
+                    :key="index"
+                    v-if="node.type === 'Start' || node.type === 'End'"
+                    :allowIn="node.options.allowIn"
+                    :allowOut="node.options.allowOut"
+                    :node-text="node.data.displayName"
+                    :selected="selectedNode === node"
+                    :x="node.options.x"
+                    :y="node.options.y"
+                    :color="node.options.color"
+                    :drag="node.options.draggable"
+                    @click-node="clickNode(node)"
+                    @mousedown="(target, point) => handleMousedown(target, point, node)"
+                    @mouseenter="(target, point) => handleMouseEnter(target, point, node)"
+                    @dragmove="(left, top) => {node.options.x = left;node.options.y = top;}"
+                    @edit="dialogVisible = true;saveFlag = 'node'"
+                >
+                </terminal-node>
+                <!-- 任务节点 -->
+                <task-node
+                    :key="index"
+                    v-else-if="node.type === 'Task'"
+                    :width="node.options.width"
+                    :height="node.options.height"
+                    :data="node"
+                    :color="node.options.color"
+                    :selected="selectedNode === node"
+                    :x="node.options.x"
+                    :y="node.options.y"
+                    :drag="node.options.draggable"
+                    @click-node="clickNode(node)"
+                    @edit="dialogVisible = true;saveFlag = 'node'"
+                    @delete="deleteNode(index)"
+                    @dragmove="(left, top) => {node.options.x = left;node.options.y = top;}"
+                    @mousedown="(target, point) => handleMousedown(target, point, node)"
+                    @mouseenter="(target, point) => handleMouseEnter(target, point, node)"
+                >
+                </task-node>
+                <!-- 条件节点 -->
+                <condition-node
+                    :key="index"
+                    v-else-if="node.type === 'Condition' || node.type === 'Fork' || node.type === 'Join' "
+                    :icon="node.type === 'Condition'?'el-icon-user':node.type === 'Fork'?'el-icon-plus-supply-chain':
+                    node.type === 'Join'?'el-icon-plus-param': ''"
+                    :width="node.options.width"
+                    :height="node.options.height"
+                    :color="node.options.color"
+                    :selected="selectedNode === node"
+                    :x="node.options.x"
+                    :y="node.options.y"
+                    :data="node"
+                    :drag="node.options.draggable"
+                    @click-node="clickNode(node)"
+                    @edit="dialogVisible = true;saveFlag = 'node'"
+                    @delete="deleteNode(index)"
+                    @dragmove="(left, top) => {node.options.x = left;node.options.y = top;}"
+                    @mousedown="(target, point) => handleMousedown(target, point, node)"
+                    @mouseenter="(target, point) => handleMouseEnter(target, point, node)"
+                >
+                </condition-node>
+            </template>
+            <!-- 连线区域 -->
+            <svg class="workflow-draw-panel" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" version="1.1">
+                <defs>
+                    <marker
+                        id='arrow_end_active'
+                        refX='0'
+                        refY='0'
+                        markerWidth='10'
+                        markerHeight='10'
+                        orient='auto'
+                        viewBox='0, -4, 12, 12'
+                    >
+                        <path d='M0 -4 L0 4 L10 0' style='fill: #409EFF' stroke-width='0'></path>
+                    </marker>
+                    <marker
+                        id='arrow_end'
+                        refX='0'
+                        refY='0'
+                        markerWidth='10'
+                        markerHeight='10'
+                        orient='auto'
+                        viewBox='0, -4, 12, 12'
+                    >
+                        <path d='M0 -4 L0 4 L10 0' style='fill: #606266' stroke-width='0'></path>
+                    </marker>
+                </defs>
+                <!-- 辅助连接线 -->
+                <polyline
+                    :points='assistedLine'
+                    style='fill: none;stroke: #409EFF;stroke-width: 2'
+                    marker-end='url(#arrow_end_active)'
+                />
+                <!-- 节点连接线 -->
+                <polyline
+                    v-for="(line, pos) in lineData"
+                    :key="pos"
+                    :points="line.coordinate"
+                    style='fill: none;stroke: #606266;stroke-width: 2'
+                    marker-end='url(#arrow_end)'
+                />
+            </svg>
+            <!-- 连接线文字 -->
+            <link-text
+                :data="lineData"
+                :selected.sync="selectedNode"
+                @config="linkLineConfig"
+                @delete="linkLineDelete"
+            >
+            </link-text>
+            <!-- 配置节点表单 -->
+            <config-form
+                :visible.sync="dialogVisible"
+                :type="nodeType"
+                :data="selectedNode.data"
+                @save="handleSaveEvent"
+                @cancel="selectedNode = {}"
+            >
+            </config-form>
+        </div>
     </div>
 </template>
 
@@ -71,6 +274,7 @@ export default {
     watch: {},
     created () {},
     mounted () {
+       
        this.$nextTick(()=>{
             console.log(this.dataObj)
             if(this.dataObj){
@@ -404,6 +608,15 @@ div
 {
     margin: 0;
     padding: 0;
+}
+.svgmian{
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+.clearfloat{
+    clear:both;
 }
 .svgBox{
     margin: 0;

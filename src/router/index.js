@@ -18,9 +18,9 @@ export default new Router({
             children: [
                 ...Finance,
                 {
-                    path: 'Home',
-                    name: 'Home',
-                    component: () => import(/* webpackChunkName: "tabs" */ 'views/Home'),
+                    path: 'svgIndex',
+                    name: 'svgIndex',
+                    component: () => import(/* webpackChunkName: "tabs" */ 'views/Home/svgIndex.vue'),
                     meta: {
                         title: '工作流'
                     }
