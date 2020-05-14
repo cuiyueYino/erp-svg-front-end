@@ -271,7 +271,6 @@ export default {
     watch: {},
     created () {},
     mounted () {
-       
        this.$nextTick(()=>{
             console.log(this.dataObj)
             if(this.dataObj){
