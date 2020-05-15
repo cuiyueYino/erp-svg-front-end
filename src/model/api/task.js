@@ -126,6 +126,10 @@ const task = {
     findFundCustomerPage(params){
         return httpReqest.post('/api/interfaces/fundCustomer/findFundCustomerPage', params);
     },
+    //授信主体查询
+    findProjectPartnerPage(params){
+        return httpReqest.post('/api/interfaces/financial/projectPartner/findProjectPartnerPage', params);
+    },
 };
 
 export default task;

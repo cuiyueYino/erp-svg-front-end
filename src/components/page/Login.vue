@@ -76,10 +76,13 @@ export default {
                     }
                 });
                 */
-                localStorage.setItem('ms_username',  usernameS);
-                localStorage.setItem('ms_name',  usernameS);
+                localStorage.setItem('ms_username', '王世超');
+                localStorage.setItem('ms_name',  '王世超');
                 localStorage.setItem('ms_roleId',  '0');
                 localStorage.setItem('ms_userId',  'BFPID000000LSN033N');
+                //用户部门
+                localStorage.setItem('ms_userDepartId',  'BFPID12333LSN033N');
+                localStorage.setItem('ms_userDepartName',  '集团信息中心');
                 localStorage.setItem('ms_companyId',  '_DefaultCompanyOId');
                 localStorage.setItem('ms_tokenId',  "a66cc874-f6e4-45c4-b317-82f3d6a4fce3");
                 this.$router.push('/');

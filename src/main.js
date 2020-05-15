@@ -5,6 +5,7 @@ import store from './store';
 import ElementUI from 'element-ui';
 import api from './model/api/index';
 import confirmapi from './components/common/confirm/confirm';
+import formatS from './utils/formatfun';
 // `element-ui`样式
 import 'element-ui/lib/theme-chalk/index.css';
 
@@ -25,6 +26,7 @@ Vue.config.productionTip = false;
 // 将 `helpers` 绑定到 `Vue` 实例上
 Vue.prototype.$helpers = helpers;
 Vue.prototype.$api = api;
+Vue.prototype.$Uformat = formatS;
 Vue.prototype.$Uconfirm = confirmapi.installF;
 Vue.use(ElementUI);
 

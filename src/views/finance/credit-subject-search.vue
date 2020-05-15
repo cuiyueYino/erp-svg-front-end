@@ -46,7 +46,7 @@
                 <el-button type="primary" @click="savefinanceValue">提交</el-button>
             </span>
         </el-dialog>
-        <el-dialog :title="title" :visible.sync="MoreSearchVisible" :append-to-body="true" v-if="MoreSearchVisible" :close-on-click-modal="false" width="60%">
+        <el-dialog :title="title" :visible.sync="MoreSearchVisible" :append-to-body="true" v-if="MoreSearchVisible" :close-on-click-modal="false" width="50%">
             <el-form
                 label-width="100px"
                 v-model="dialog"
@@ -126,27 +126,27 @@ export default {
                     title: '编码'
                 },
                 {
-                    key: 'name1',
+                    key: 'name',
                     title: '名称'
                 },
                 {
-                    key: 'remak1',
+                    key: 'principal',
                     title: '负责人'
                 },
                 {
-                    key: 'remak2',
+                    key: 'contract',
                     title: '联系人'
                 },
                 {
-                    key: 'remak3',
+                    key: 'telephone',
                     title: '固定电话'
                 },
                 {
-                    key: 'remak4',
+                    key: 'mobile',
                     title: '移动电话'
                 },
                 {
-                    key: 'remak5',
+                    key: 'outGroupStr',
                     title: '集团外账户'
                 }
             ],
@@ -171,10 +171,7 @@ export default {
     methods: {
         //关闭当前dialog时给父组件传值
         handleClose(){
-            let formdata={};
-            formdata.name='';
-            formdata.code='';
-            this.$emit('changeShow',formdata,false);
+            this.$emit('changeShow',this.rowDataObj,false);
         },
         onSelectionChange(val) {
             this.multipleSelection = val;
@@ -185,17 +182,97 @@ export default {
         },
         //下一页
         onCurrentChange(val) {
-
+            let formDataA ={};
+            formDataA.page=val;
+            formDataA.size=this.pageSize;
+            formDataA.company=localStorage.getItem('ms_companyId');
+            this.$api.task.findProjectPartnerPage(formDataA).then(response => {
+                let responsevalue = response;
+                if (responsevalue) {
+                    let returndata = responsevalue.data;
+                    let tableDataArr=returndata.rows;
+                    for(var i =0;i<tableDataArr.length;i++){
+                        if(tableDataArr[i].status === 1){
+                            tableDataArr[i].statusString="暂存";
+                        }else if(tableDataArr[i].status === 2){
+                            tableDataArr[i].statusString="提交";
+                        }else if(tableDataArr[i].status === 3){
+                            tableDataArr[i].statusString="有效";
+                        }else {
+                            tableDataArr[i].statusString="作废";
+                        }
+                        if(tableDataArr[i].outGroup === true){
+                            tableDataArr[i].outGroupStr="是";
+                        }else{
+                            tableDataArr[i].outGroupStr="否";
+                        }
+                    }
+                    this.tableData = tableDataArr;
+                    this.total = returndata.total;
+                } else {
+                    this.$message.success('数据库没有该条数据!');
+                }
+            });
         },
         //提交授信主体值
         savefinanceValue(){
-            let formdata={};
-            formdata.name='';
-            formdata.code='';
-            this.$emit('changeShow',formdata);
+            let selectOption= this.multipleSelection;
+            if(selectOption.length >0){
+                if(selectOption.length >1){
+                    this.$message.error('只能选择一行!');
+                }else{
+                    //返回选中的父组件选中的row,并修某些改值
+                    this.rowDataObj.parta=selectOption[0].id;
+                    this.rowDataObj.partaName=selectOption[0].name;
+                    this.rowDataObj.partaCode=selectOption[0].code;
+                    this.$emit('changeShow',this.rowDataObj,false);
+                    this.ShowFinancVisible = false;
+                }
+            }else{
+                this.$message.error('请选择一行数据!');
+            }
         },
         //高级查询
         onHandleMoreSearch(){
+            let formDataA ={};
+            formDataA.page=this.pageNum;
+            formDataA.size=this.pageSize;
+            formDataA.company=localStorage.getItem('ms_companyId');
+            let namevalueS=this.dialog.name;
+            if(namevalueS && namevalueS!=''){
+                formDataA.name=this.dialog.name;
+            }
+            let codevalueS=this.dialog.codeNomber;
+            if(codevalueS && codevalueS!=''){
+                formDataA.code=this.dialog.codeNomber;
+            }
+            this.$api.task.findProjectPartnerPage(formDataA).then(response => {
+                let responsevalue = response;
+                if (responsevalue) {
+                    let returndata = responsevalue.data;
+                    let tableDataArr=returndata.rows;
+                    for(var i =0;i<tableDataArr.length;i++){
+                        if(tableDataArr[i].status === 1){
+                            tableDataArr[i].statusString="暂存";
+                        }else if(tableDataArr[i].status === 2){
+                            tableDataArr[i].statusString="提交";
+                        }else if(tableDataArr[i].status === 3){
+                            tableDataArr[i].statusString="有效";
+                        }else {
+                            tableDataArr[i].statusString="作废";
+                        }
+                        if(tableDataArr[i].outGroup === true){
+                            tableDataArr[i].outGroupStr="是";
+                        }else{
+                            tableDataArr[i].outGroupStr="否";
+                        }
+                    }
+                    this.tableData = tableDataArr;
+                    this.total = returndata.total;
+                } else {
+                    this.$message.success('数据库没有该条数据!');
+                }
+            });
             this.MoreSearchVisible = false;
         }
 
@@ -208,22 +285,36 @@ export default {
             this.formdata.searchName=rowDataObj.finanrowId;
             this.rowFincename=rowDataObj.finanrowname;
             let formDataA ={};
-            /*this.$api.task.getComplexCreditContractRegisterVO(formDataA).then(response => {
+            formDataA.page=this.pageNum;
+            formDataA.size=this.pageSize;
+            formDataA.company=localStorage.getItem('ms_companyId');
+            this.$api.task.findProjectPartnerPage(formDataA).then(response => {
                 let responsevalue = response;
                 if (responsevalue) {
                     let returndata = responsevalue.data;
-                    let tableDataArr=returndata.data;
-                    this.disabled = true;
-                    this.editabled=false;
-                    this.formdata=tableDataArr;
-                    this.saveflage='Look';
-                    this.NewEditVisible= true;
-                    this.showCheckBox= false;
-                    this.checked=false;
+                    let tableDataArr=returndata.rows;
+                    for(var i =0;i<tableDataArr.length;i++){
+                        if(tableDataArr[i].status === 1){
+                            tableDataArr[i].statusString="暂存";
+                        }else if(tableDataArr[i].status === 2){
+                            tableDataArr[i].statusString="提交";
+                        }else if(tableDataArr[i].status === 3){
+                            tableDataArr[i].statusString="有效";
+                        }else {
+                            tableDataArr[i].statusString="作废";
+                        }
+                        if(tableDataArr[i].outGroup === true){
+                            tableDataArr[i].outGroupStr="是";
+                        }else{
+                            tableDataArr[i].outGroupStr="否";
+                        }
+                    }
+                    this.tableData = tableDataArr;
+                    this.total = returndata.total;
                 } else {
                     this.$message.success('数据库没有该条数据!');
                 }
-            });*/
+            });
         }
     }
 }

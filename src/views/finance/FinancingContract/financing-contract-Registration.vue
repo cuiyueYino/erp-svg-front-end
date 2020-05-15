@@ -369,7 +369,7 @@ export default {
                     title: '授信主体'
                 },
                 {
-                    key: 'awardbank',
+                    key: 'awardbankname',
                     title: '授信银行'
                 },
                 {
@@ -431,6 +431,7 @@ export default {
         };
     },
     mounted() {
+        this.formInline.company=localStorage.getItem("ms_companyId");
         //获取授信品种
         var form = new FormData();
         form.append('page', this.pageNum);

@@ -266,7 +266,6 @@ export default {
         onHandleMoreSearch(){
             this.MoreSearchVisible = false;
         }
-
     },
     watch:{
         financingTypetype(oldVal,newVal){
