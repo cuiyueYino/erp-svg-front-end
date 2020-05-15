@@ -1,15 +1,15 @@
 export function NodeConfig () {
     return {
         start: {
-            width: 100,
-            height: 100,
+            width: 55,
+            height: 55,
             color: '#67C23A',
             allowIn: false,
             allowOut: true
         },
         end: {
-            width: 100,
-            height: 100,
+            width: 55,
+            height: 55,
             color: '#F56C6C',
             allowIn: true,
             allowOut: false
@@ -63,7 +63,7 @@ export function TerminalNode () {
             type: 'End',
             options: {
                 draggable: true,
-                x: 450,
+                x: 400,
                 y: 50,
                 ...nodeConfig.end
             },

@@ -1,6 +1,13 @@
 <template>
     <div class="svgmian">
         <div class="clearfloat"></div>
+        <!-- 弹窗 -->
+        <el-button type="text" @click="dialogTableVisible = true">打开嵌套表格的 Dialog</el-button>
+
+        <el-dialog 
+        :fullscreen="true"
+        :visible.sync="dialogTableVisible">
+
         <div
             class="svgBox"
             @click="backgroundClick($event)"
@@ -20,13 +27,21 @@
                         @mousedown="dragPanel($event)"
                     >
                         <!-- 操作按钮 -->
-                        <el-button
+                        <!-- <el-button
                             type="text"
                             size="mini"
                             icon="el-icon-download"
                             @click="compileXMLToObj(dataObj)"
                         >
                             加载
+                        </el-button> -->
+                          <el-button
+                            type="text"
+                            size="mini"
+                            icon="el-icon-circle-close"
+                            @click="dialogTableVisible = false"
+                        >
+                            关闭
                         </el-button>
                         <el-button
                             size="mini"
@@ -204,6 +219,7 @@
             >
             </config-form>
         </div>
+</el-dialog>
     </div>
 </template>
 
@@ -232,6 +248,7 @@ export default {
         return {
             dataObj:dataJson.WfProcess,
             // dataObj:xmlStr,
+            dialogTableVisible:false,
             size : 1,
             // 辅助线数据
             assistedLineStart: '',
@@ -475,7 +492,7 @@ export default {
         },
         // 设置页面大小
          set() {  
-            document.body.style.zoom = this.size;
+            document.getElementsByClassName('svgBox')[0].style.zoom = this.size;
             document.body.style.cssText += '; -moz-transform: scale(' + this.size + ');-moz-transform-origin: 0 0; ';     //
         }, 
         // 点击背景面板执行事件
@@ -604,6 +621,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+/deep/ .el-dialog__body{
+    padding:0;
+    height: 90%;
+}
+ /deep/ .el-dialog__header{
+     display: none;
+ }
 div
 {
     margin: 0;

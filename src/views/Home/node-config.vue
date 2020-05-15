@@ -3,9 +3,11 @@
     <el-dialog
         :title="title"
         :visible.sync="dialogVisible"
+        :modal="false"
         :close-on-click-modal="closeConfig"
         :close-on-press-escape="closeConfig"
         width="400px"
+        style="z-index:2007"
     >
         <el-form
             :model="formData"
@@ -108,7 +110,7 @@ export default {
                 Condition: '手工活动配置',
                 Fork: '自由活动配置',
                 Join: '审核活动配置',
-                router: '路由配置',
+                Task: '路由配置',
                 Line: '连接线配置'
             };
             return typeConfig[this.type] || '保存工作流';
@@ -155,3 +157,14 @@ export default {
     }
 };
 </script>
+<style  lang="scss" scoped>
+/deep/ .el-dialog__body{
+    padding:20px !important;
+}
+ /deep/ .el-dialog__header{
+     display: block !important;
+ }
+ /deep/ .el-dialog{
+         box-shadow: 5px 4px 50px rgba(0,0,0,.3);
+ }
+</style>

@@ -372,7 +372,7 @@ export default {
         handleSaveEvent (obj) {
             if (this.saveFlag === 'workflow') {
                 // 工作流文件配置
-                this.compileObjToXML(obj);
+                // this.compileObjToXML(obj);
             } else if (this.saveFlag === 'line') {
                 // 连接线配置
                 const index = this.lineData.findIndex(item => item.key === this.selectedNode.key);
