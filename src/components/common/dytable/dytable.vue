@@ -200,7 +200,6 @@ export default {
 }
 .table {
     width: 100%;
-    min-height: 460px;
     font-size: 14px;
 }
 .mr10 {

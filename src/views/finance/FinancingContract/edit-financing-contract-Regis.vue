@@ -6,6 +6,7 @@
                 v-model="formdata"
                 class="dataForm"
                 :rules="rules"
+                size="mini"
                 :model="formdata"
                 :label-position="labelPosition"
             >
@@ -41,7 +42,7 @@
                             </el-form-item>
                         </el-col>
                         <el-col :span="1">
-                        <el-button type="primary" icon="el-icon-search" @click="MoreSearchuserVisible = true"></el-button>
+                        <el-button type="primary" size="mini" icon="el-icon-search" @click="MoreSearchuserVisible = true"></el-button>
                         </el-col>
                     </el-row>
                     <el-row>
@@ -56,7 +57,7 @@
                             </el-form-item>
                         </el-col>
                         <el-col :span="1">
-                        <el-button type="primary" icon="el-icon-search" @click="MoreSearchuserVisible = true"></el-button>
+                        <el-button type="primary" size="mini" icon="el-icon-search" @click="MoreSearchuserVisible = true"></el-button>
                         </el-col>
                         <el-col :span="6" :offset="2">
                             <el-form-item label="授信品种">
@@ -64,7 +65,7 @@
                             </el-form-item>
                         </el-col>
                         <el-col :span="1">
-                        <el-button type="primary" icon="el-icon-search" @click="MoreSearchuserVisible = true"></el-button>
+                        <el-button type="primary" size="mini" icon="el-icon-search" @click="MoreSearchuserVisible = true"></el-button>
                         </el-col>
                     </el-row>
                     <el-row>
@@ -74,7 +75,7 @@
                             </el-form-item>
                         </el-col>
                         <el-col :span="1">
-                            <el-button type="primary" icon="el-icon-search" @click="MoreSearchuserVisible = true"></el-button>
+                            <el-button type="primary" size="mini" icon="el-icon-search" @click="MoreSearchuserVisible = true"></el-button>
                         </el-col>
                         <el-col :span="6" :offset="2">
                             <el-form-item label="授信调整额度" prop="name">

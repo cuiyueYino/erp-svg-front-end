@@ -42,8 +42,8 @@
                             </el-form-item>
                         </el-col>
                         <el-col :span="5" :offset="2">
-                            <el-form-item label="授信主体" prop="partaName">
-                                <el-input v-model="formdata.partaName" ></el-input>
+                            <el-form-item label="授信主体" prop="partaname">
+                                <el-input v-model="formdata.partaname" ></el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="1">
@@ -58,12 +58,12 @@
                         </el-col>
                         <el-col :span="6" :offset="2">
                             <el-form-item label="授信品种">
-                                <el-input v-model="formdata.awardcreditbreed" disabled></el-input>
+                                <el-input v-model="formdata.awardcreditbreedname" disabled></el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="5" :offset="2">
-                            <el-form-item label="授信银行" prop="awardbankName">
-                                <el-input v-model="formdata.awardbankName" ></el-input>
+                            <el-form-item label="授信银行" prop="awardbankname">
+                                <el-input v-model="formdata.awardbankname" ></el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="1">
@@ -127,19 +127,19 @@
                         </el-col>
                         <el-col :span="6" :offset="2">
                             <el-form-item label="经办人">
-                                <el-input v-model="formdata.handlerName" disabled></el-input>
+                                <el-input v-model="formdata.handler" disabled></el-input>
                             </el-form-item>
                         </el-col>
                     </el-row>
                     <el-row>
                         <el-col :span="6" >
                             <el-form-item label="经办部门">
-                                <el-input v-model="formdata.gestordeptStr" disabled></el-input>
+                                <el-input v-model="formdata.gestordeptname" disabled></el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="6" :offset="2">
                             <el-form-item label="经办时间">
-                                <el-input v-model="formdata.voucherdate" disabled></el-input>
+                                <el-input v-model="formdata.voucherdateStr" disabled></el-input>
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -150,208 +150,24 @@
                             </el-form-item>
                         </el-col>
                     </el-row>
-                    <el-tabs v-model="atctiveName">
+                    <el-tabs v-model="atctiveName" @tab-click="handleClick">
                         <el-tab-pane label="授信品种管理" name="first">
-                            <template>
-                                <div>
-                                    <div style="width:200px;height:40px;float:right;">
-                                        <el-button size="small" style="margin-left:50px;magin-right:5px;" @click.prevent="addFacilityRow()">新增</el-button>
-                                        <el-button size="small" @click.prevent="delFacilityData()">删除</el-button>
-                                    </div>
-                                    <div>
-                                        <el-table
-                                            :data="RegistrationtableData"
-                                            ref="table"
-                                            size="mini"
-                                            tooltip-effect="dark"
-                                            border
-                                            stripe
-                                            style="width:100%;"
-                                            @selection-change='selectFacilityRow'>
-                                            <el-table-column type="selection" width="45" align="center"></el-table-column>
-                                            <el-table-column label="序号" type="index" width="60" align="center"></el-table-column>
-                                            <el-table-column  label="授信品种" align="center">
-                                                <template slot-scope="scope">
-                                                    <el-row>
-                                                        <el-col :span="16">
-                                                            <el-input v-model="scope.row.awardcreditbreedName" size="mini" style="padding:5px"></el-input>
-                                                        </el-col>
-                                                        <el-col :span="2" style="padding:5px">
-                                                            <el-button type="primary"  icon="el-icon-search" size="mini" @click="MoreSearchTypeVisible(scope.row)"></el-button>
-                                                        </el-col>
-                                                    </el-row>
-                                                </template>
-                                            </el-table-column>
-                                            <el-table-column label="授信额度" >
-                                                <template slot-scope="scope">
-                                                    <el-input v-model="scope.row.awardamount"  @change="UpdateFacilitValue(RegistrationtableData)" size="mini" placeholder="0.00" ></el-input>
-                                                </template>
-                                            </el-table-column>
-                                            <el-table-column label="授信可用额度" >
-                                                <template slot-scope="scope">
-                                                    <el-input v-model="scope.row.awardableamount" size="mini" placeholder="0.00" disabled></el-input>
-                                                </template>
-                                            </el-table-column>
-                                            <el-table-column label="授信调整额度" >
-                                                <template slot-scope="scope">
-                                                    <el-input v-model="scope.row.awardadjamount" size="mini" placeholder="0.00" disabled></el-input>
-                                                </template>
-                                            </el-table-column>
-                                            <el-table-column label="授信占用" >
-                                                <template slot-scope="scope">
-                                                    <el-input v-model="scope.row.awardoccupy" size="mini" placeholder="0.00" disabled></el-input>
-                                                </template>
-                                            </el-table-column>
-                                            <el-table-column label="授信余额" >
-                                                <template slot-scope="scope">
-                                                    <el-input v-model="scope.row.awardover" size="mini" placeholder="0.00" disabled></el-input>
-                                                </template>
-                                            </el-table-column>
-                                            <el-table-column label="备注" >
-                                                <template slot-scope="scope">
-                                                    <el-input v-model="scope.row.remark" size="mini" ></el-input>
-                                                </template>
-                                            </el-table-column>
-                                        </el-table>
-                                    </div>
-                                </div>
-                            </template>
+                           <Newcreditvarieties :rowDatavarietObj="rowDatavarietObj" :financingCVMListtype="financingCVMListtype"  @changeShow="showvarietData"/> 
                         </el-tab-pane>
                         <el-tab-pane label="附件" name="second">
-                            <template>
-                                <div>
-                                    <div style="width:200px;height:40px;float:right;">
-                                        <el-button size="small" style="margin-left:50px;magin-right:5px;" @click.prevent="addRow()">新增</el-button>
-                                        <el-button size="small" @click.prevent="delData()">删除</el-button>
-                                    </div>
-                                    <div>
-                                        <el-table
-                                            :data="enclosuretableData"
-                                            ref="table"
-                                            size="mini"
-                                            tooltip-effect="dark"
-                                            border
-                                            stripe
-                                            style="width:100%;"
-                                            @selection-change='selectRow'>
-                                            <el-table-column type="selection" width="45" align="center"></el-table-column>
-                                            <el-table-column label="文件类型" width="150px">
-                                                <template slot-scope="scope">
-                                                   <el-select v-model="scope.row.filestyle" value-key="value" v-bind:disabled="disabled">
-                                                        <el-option
-                                                            v-for="item in filestyleoptions"
-                                                            :key="item.value"
-                                                            :label="item.label"
-                                                            :value="item.value"
-                                                        ></el-option>
-                                                    </el-select>
-                                                </template>
-                                            </el-table-column>
-                                            <el-table-column  label="文件" align="center" width="230px">
-                                                <template slot-scope="scope">
-                                                    <el-row>
-                                                        <el-col :span="16">
-                                                            <el-input v-model="scope.row.awardcreditbreed" style="padding:5px"></el-input>
-                                                        </el-col>
-                                                        <el-col :span="2" style="padding:5px">
-                                                            <el-button type="primary"  icon="el-icon-search" @click="MoreSearchuserVisible = true"></el-button>
-                                                        </el-col>
-                                                    </el-row>
-                                                </template>
-                                            </el-table-column>
-                                            <el-table-column label="必须" >
-                                                <template slot-scope="scope">
-                                                    <el-checkbox v-model="scope.row.filechecked"></el-checkbox>
-                                                </template>
-                                            </el-table-column>
-                                            <el-table-column label="编制单位" >
-                                                <template slot-scope="scope">
-                                                    <el-input v-model="scope.row.awardableamount"></el-input>
-                                                </template>
-                                            </el-table-column>
-                                            <el-table-column label="负责人" >
-                                                <template slot-scope="scope">
-                                                    <el-input v-model="scope.row.awardableamount"></el-input>
-                                                </template>
-                                            </el-table-column>
-                                            <el-table-column label="审核单位" >
-                                                <template slot-scope="scope">
-                                                    <el-input v-model="scope.row.awardableamount"></el-input>
-                                                </template>
-                                            </el-table-column>
-                                            <el-table-column label="审核人" >
-                                                <template slot-scope="scope">
-                                                    <el-input v-model="scope.row.awardableamount"></el-input>
-                                                </template>
-                                            </el-table-column>
-                                            <el-table-column label="定版日期" width="250px">
-                                                <template slot-scope="scope">
-                                                    <el-date-picker
-                                                        v-model="scope.row.value1"
-                                                        type="date"
-                                                        placeholder="选择日期">
-                                                    </el-date-picker>
-                                                </template>
-                                            </el-table-column>
-                                            <el-table-column  label="文档密级" align="center" width="220px">
-                                                <template slot-scope="scope">
-                                                    <el-row>
-                                                        <el-col :span="16">
-                                                            <el-input v-model="scope.row.awardcreditbreed" style="padding:5px"></el-input>
-                                                        </el-col>
-                                                        <el-col :span="2" style="padding:5px">
-                                                            <el-button type="primary"  icon="el-icon-search" @click="MoreSearchuserVisible = true"></el-button>
-                                                        </el-col>
-                                                    </el-row>
-                                                </template>
-                                            </el-table-column>
-                                            <el-table-column  label="保管期限" align="center" width="220px">
-                                                <template slot-scope="scope">
-                                                    <el-row>
-                                                        <el-col :span="16">
-                                                            <el-input v-model="scope.row.awardcreditbreed" style="padding:5px"></el-input>
-                                                        </el-col>
-                                                        <el-col :span="2" style="padding:5px">
-                                                            <el-button type="primary"  icon="el-icon-search" @click="MoreSearchuserVisible = true"></el-button>
-                                                        </el-col>
-                                                    </el-row>
-                                                </template>
-                                            </el-table-column>
-                                            <el-table-column label="备注" width="230px">
-                                                <template slot-scope="scope">
-                                                    <el-input type="textarea" class="remark" v-model="scope.row.remark"></el-input>
-                                                </template>
-                                            </el-table-column>
-                                        </el-table>
-                                    </div>
-                                </div>
-                            </template>
+                            <enclosurefile :rowDataFileObj="rowDataFileObj"  @changeShow="showFileData"/> 
                         </el-tab-pane>
                     </el-tabs>
-                    <dynamic-table
-                        :columns="processcolumns"
-                        :table-data="processtableData"
-                        :total="total"
-                        ref="multipleTable"
-                        :page-num="pageNum"
-                        :page-size="pageSize"
-                        @current-change="onCurrentChange"
-                        @selection-change="onSelectionChange"
-                        @size-change="onSizeChange"
-                        v-loading="false"
-                        element-loading-text="加载中"
-                    ></dynamic-table>
+                    <processnodelist :rowDataprocessObj="rowDataprocessObj"  @changeShow="showprocessData"/> 
                 </el-card>
             </el-form>
             <span slot="footer" class="dialog-footer">
-                <el-button @click="EditFinancVisible = false">查看流程图</el-button>
-                <el-button type="primary" @click="saveNewAndEdit">提交</el-button>
-                <el-button @click="ShowFinancVisible = false">暂存</el-button>
+                <el-button type="primary" @click="saveNewAndEdit()">提交</el-button>
+                <el-button @click="ZancunNewAndEdit()">暂存</el-button>
             </span>
         </el-dialog>
         <creditSubjectSearch :rowDataObj="rowDataObj" :financingtype="financingtype" @changeShow="showfinancingData"/>
         <creditBankSearch :rowBankDataObj="rowBankDataObj" :financingBanktype="financingBanktype" @changeShow="showfinancingBankData"/>
-        <credittypeSearch :rowTypeDataObj="rowTypeDataObj" :financingTypetype="financingTypetype" @changeShow="showfinancingTypeData"/>
     </div>
 </template>
 
@@ -360,17 +176,22 @@ import DynamicTable from '../../../components/common/dytable/dytable.vue';
 import proData from '../../../components/common/proData/proData';
 import creditSubjectSearch from '../credit-subject-search.vue';
 import creditBankSearch from '../credit-bank-search.vue';
-import credittypeSearch from '../credit-type-search.vue';
+import Newcreditvarieties from '../New-credit-varieties-management.vue';
+import enclosurefile from '../enclosure-file.vue';
+import processnodelist from '../process-node-list.vue';
 export default {
     props: {
-        Newfinancingtype: Boolean
+        Newfinancingtype: Boolean,
+        rowNewDataObj:Object
     },
     name: 'basetable',
     components: {
         DynamicTable,
         creditSubjectSearch,
         creditBankSearch,
-        credittypeSearch
+        Newcreditvarieties,
+        enclosurefile,
+        processnodelist
     },
     inject: ['reload'],
     data: function() {   
@@ -378,48 +199,38 @@ export default {
             sdddd:[],
             rowDataObj:{},
             rowBankDataObj:{},
-            rowTypeDataObj:{},
+            rowDatavarietObj:{},
+            rowDataFileObj:{},
+            rowDataprocessObj:{},
+            FiletableData: [],
+            RegistrationtableData: [],
             nametitle:'综合授信合同登记',
             financingtype:false,
             financingBanktype:false,
-            financingTypetype:false,
+            financingCVMListtype:false,
+            newOrEdit:'New',
             finanrowId:'',
             finanrowname:'',
-            financingformdata:{
-                name:'',
-                code:''
-            },
-            financingBankformdata:{
-                name:'',
-                code:''
-            },
-            financingTypeformdata:{
-                name:'',
-                code:''
-            },
+            financingformdata:{},
+            financingBankformdata:{},
             atctiveName: 'first',
             ShowFinancVisible:false,
             labelPosition: 'left',
             disabled:false,
             checked:false,
-            pageNum: 1,
-            pageSize: 10,
-            total: 20,
-            rowNum: 1,
-            selectlistRow:[],
-            rowFacilityNum: 0,
-            selectFacilitylistRow:[],
             companyoptions:new proData().company,
             objectoptions:new proData().project,
-            filestyleoptions:new proData().filestyle,
             formdata: {
                 company: '',
                 contractcode:'',
                 contractname: '',
-                partaName: '',
+                parta: '',
+                partaname: '',
                 awardamount: 0.00,
                 awardcreditbreed: '',
-                awardbankName: '',
+                awardcreditbreedname: '',
+                awardbank: '',
+                awardbankname: '',
                 awardadjamount: 0.00,
                 awardoccupy: 0.00,
                 awarddays: 0,
@@ -431,131 +242,17 @@ export default {
                 handler: '',
                 handlerName: '',
                 voucherdate: '',
+                voucherdateStr: '',
                 gestordept: '',
-                gestordeptStr: '',
+                gestordeptname: '',
                 remark: '',
             },
-            Registrationcolumns:[
-                {
-                    key: 'Cnumber',
-                    title: '序号'
-                },
-                {
-                    key: 'awardcreditbreedName',
-                    title: '授信品种'
-                },
-                {
-                    key: 'awardamount',
-                    title: '授信额度'
-                },
-                {
-                    key: 'awardableamount',
-                    title: '授信可用额度'
-                },
-                {
-                    key: 'awardadjamount',
-                    title: '授信调整额度'
-                },
-                {
-                    key: 'awardoccupy',
-                    title: '授信占用'
-                },
-            ],
-            enclosurecolumns:[
-                {
-                    key: 'Cnumber',
-                    title: '文件类型'
-                },
-                {
-                    key: 'Cnumber',
-                    title: '文件'
-                },
-                {
-                    key: 'Cnumber',
-                    type: 'selection',
-                    title: '必须'
-                },
-                {
-                    key: 'Cnumber',
-                    title: '编制单位'
-                },
-                {
-                    key: 'Cnumber',
-                    title: '负责人'
-                },
-                {
-                    key: 'Cnumber',
-                    title: '审核单位'
-                },
-                {
-                    key: 'Cnumber',
-                    title: '审核人'
-                },
-                {
-                    key: 'Cnumber',
-                    title: '定版日期'
-                },
-                {
-                    key: 'Cnumber',
-                    title: '文档等级'
-                },
-                {
-                    key: 'Cnumber',
-                    title: '保管期限'
-                },
-                {
-                    key: 'Cnumber',
-                    title: '备注'
-                },
-            ],
-            processcolumns:[
-                {
-                    key: 'Cnumber',
-                    title: '流程节点'
-                },
-                {
-                    key: 'Cnumber',
-                    title: '审批人'
-                },
-                {
-                    key: 'Cnumber',
-                    title: '审批结论'
-                },
-                {
-                    key: 'Cnumber',
-                    title: '审批说明'
-                },
-                {
-                    key: 'Cnumber',
-                    title: '审批时间'
-                },
-                {
-                    key: 'Cnumber',
-                    title: '标准时间'
-                },
-                {
-                    key: 'Cnumber',
-                    title: '耗时'
-                },
-                {
-                    key: 'Cnumber',
-                    title: '回复'
-                },
-                {
-                    key: 'Cnumber',
-                    title: '纸质签收日期'
-                },
-            ],
-            RegistrationtableData: [
-            ],
-            enclosuretableData: [],
-            processtableData: [],
             rules: {
-                partaName:[{ required: true, message: '请选择授信主体', trigger: 'blur' }],
+                partaname:[{ required: true, message: '请选择授信主体', trigger: 'blur' }],
                 company:[{ required: true, message: '请选择公司', trigger: 'blur' }],
                 contractcode:[{ required: true, message: '请输入授信合同编码', trigger: 'blur' }],
                 awardamount:[{ required: true, message: '请输入授信额度', trigger: 'blur' }],
-                awardbankName:[{ required: true, message: '请选择授信银行', trigger: 'blur' }],
+                awardbankname:[{ required: true, message: '请选择授信银行', trigger: 'blur' }],
                 awarddays:[{ required: true, message: '授信天数', trigger: 'blur' }],
                 startdate:[{ required: true, message: '请输入授信起始日', trigger: 'blur' }],
                 enddate:[{ required: true, message: '请输入授信到期日', trigger: 'blur' }],
@@ -563,133 +260,197 @@ export default {
         };
     },
     methods: {
-        //获取选中的授信行
-        selectFacilityRow(val){
-            this.selectFacilitylistRow= val;
-        },
-        // 增加授信行
-        addFacilityRow () {
-            var list = {
-                rowFacilityNum:this.rowFacilityNum,
-                awardamount:this.RegistrationtableData.awardamount,
-                awardableamount:this.RegistrationtableData.awardableamount,
-                awardadjamount:this.RegistrationtableData.awardadjamount,
-                awardoccupy:this.RegistrationtableData.awardoccupy,
-                awardcreditbreed:this.RegistrationtableData.awardcreditbreed,
-                awardcreditbreedName:this.RegistrationtableData.awardcreditbreedName,
-                awardcreditbreedId:this.RegistrationtableData.awardcreditbreedId,
-                awardover:this.RegistrationtableData.awardover,
-                remark:this.RegistrationtableData.remark,
-            };
-            this.RegistrationtableData.unshift(list)
-            this.rowFacilityNum += 1;
-        },
-        // 删除选中行
-        delFacilityData () {
-            for (let i = 0; i < this.selectFacilitylistRow.length; i++) {
-            let val = this.selectFacilitylistRow
-            val.forEach((val, index) => {
-                this.RegistrationtableData.forEach((v, i) => {
-                if (val.rowFacilityNum === v.rowFacilityNum) {
-                    // i 为选中的索引
-                    this.RegistrationtableData.splice(i, 1)
-                }
-                })
-            })
-            }
-            // 删除完数据之后清除勾选框
-            this.$refs.table.clearSelection()
-        },
-        // 获取附件表格选中时的数据
-        selectRow (val) {
-            this.selectlistRow = val
-        },
-        // 增加附件行
-        addRow () {
-            var list = {
-            rowNum:this.rowNum,
-            post_id:[],
-            require_des: '',
-            remark:''
-            };
-            this.enclosuretableData.unshift(list)
-            this.rowNum += 1;
-        },
-        // 删除选中附件行
-        delData () {
-            for (let i = 0; i < this.selectlistRow.length; i++) {
-            let val = this.selectlistRow;
-            val.forEach((val, index) => {
-                this.enclosuretableData.forEach((v, i) => {
-                if (val.rowNum === v.rowNum) {
-                    // i 为选中的索引
-                    this.enclosuretableData.splice(i, 1)
-                }
-                })
-            })
-            }
-            // 删除完数据之后清除勾选框
-            this.$refs.table.clearSelection()
-        },
         //关闭当前dialog时给父组件传值
         handleClose(){
+            this.reload();
             this.$emit('changeShow',false);
         },
-        onSelectionChange(val) {
-            this.multipleSelection = val;
+        //滑块切换
+        handleClick(tab){
+            var tabsname =tab.paneName;
+            if(tabsname){
+                if(tabsname ==="first"){
+                    //授信品种管理
+                    this.financingCVMListtype=true;
+                }else{
+                    //附件列表
+                    this.financingCVMListtype=false;
+                }
+            }
         },
-        //分页
-        onSizeChange(val) {
-            this.pageSize = val;
-        },
-        //下一页
-        onCurrentChange(val) {},
         //提交确认
         saveNewAndEdit(){
-            let editflag= this.editabled;
-            if(editflag){
-              let companyS= this.formdata.company;
-              if(companyS== ''){
+            let savreFlag=true;
+            let companyS= this.formdata.company;
+            if(companyS== ''){
+                savreFlag=false;
                 this.$message.error('请选择公司!');
-              }
-              let codeS= this.formdata.code;
-              let nameS= this.formdata.name;
-              let remarkS= this.formdata.remark;
-              let fromObj={};
-              let saceFlage=this.saveflage;
-              if(saceFlage === 'Update'){
-                let selectOption= this.multipleSelection;
-                fromObj.id=selectOption[0].id;
-              }
-              fromObj.company=companyS;
-              fromObj.creator=localStorage.getItem('ms_userId');
-              fromObj.code=codeS;
-              fromObj.name=nameS;
-              fromObj.remark=remarkS;
-              let checkedS=this.checked;
-              let messageStr=codeS+":"+nameS+"?";
-              let tital="提交确认:";
-              this.$Uconfirm(tital,messageStr).then(() => {
-                this.$api.task.savepledgeTypeVO(fromObj).then(response => {
-                    let responsevalue = response;
-                    if (responsevalue) {
-                        let returndata = responsevalue.data;
-                        let tableDataArr=returndata.data;
-                        this.NewEditVisible= false;
-                        if(checkedS ===true){
-                            this.onRowAddButtonClick();
-                        }else{
-                            this.reload();
-                        }
-                    } else {
-                        this.$message.success('数据库没有该条数据!');
-                    }
-                });
-              }).catch(() => {
-                this.$message.success('取消提交!');
-              });
             }else{
-              this.NewEditVisible= false;  
+                let RegistrData=this.RegistrationtableData;
+                for(var k=0;k<RegistrData.length;k++){
+                    RegistrData[k].company=companyS;
+                }
+                this.RegistrationtableData=RegistrData;
+            }
+            let codeS= this.formdata.contractcode;
+            if(codeS== ''){
+                savreFlag=false;
+                this.$message.error('请输入授信合同编码!');
+            }
+            let partaS= this.formdata.partaname;
+            if(partaS== ''){
+                savreFlag=false;
+                this.$message.error('请选择授信主体!');
+            }
+            let awardamountS= this.formdata.awardamount;
+            if(awardamountS== ''){
+                savreFlag=false;
+                this.$message.error('请输入授信额度!');
+            }
+            let awardbankNameS= this.formdata.awardbankname;
+            if(awardbankNameS== ''){
+                savreFlag=false;
+                this.$message.error('请选择授信银行!');
+            }
+            let awarddaysS= this.formdata.awarddays;
+            if(awarddaysS== ''){
+                savreFlag=false;
+                this.$message.error('授信天数不能为空!');
+            }
+            let startdateS= this.formdata.startdate;
+            if(startdateS== ''){
+                savreFlag=false;
+                this.$message.error('请输入授信起始日!');
+            }
+            let enddateS= this.formdata.enddate;
+            if(enddateS== ''){
+                savreFlag=false;
+                this.$message.error('请输入授信到期日!');
+            }
+            let remarkS= this.formdata.remark;
+            let fromObj={};
+            fromObj=this.formdata;
+            fromObj.creator=localStorage.getItem('ms_userId');
+            if(this.newOrEdit == 'New'){
+                fromObj.oprStatus=1;
+            }else if(this.newOrEdit == 'Edit'){
+                fromObj.oprStatus=2;
+            }else{
+                fromObj.oprStatus=0;    
+            }
+            fromObj.complexCreditContractRegisterLineSaveVos=this.RegistrationtableData;
+            let checkedS = this.checked; 
+            let nameS= this.formdata.contractname;
+            let messageStr=codeS+":"+nameS+"?";
+            let tital="提交确认:";
+            if(savreFlag){
+                this.$Uconfirm(tital,messageStr).then(() => {
+                    this.$api.task.insertComplexCreditContractRegisterVO(fromObj).then(response => {
+                        let responsevalue = response;
+                        if (responsevalue) {
+                            let returndata = responsevalue.data;
+                            if(checkedS ===true){
+                                this.reload();
+                                this.$emit('changeShow',true);
+                                //this.onRowAddButtonClick();
+                            }else{
+                                this.reload();
+                                this.$emit('changeShow',false);
+                            }
+                        } else {
+                            this.$message.success('数据库没有该条数据!');
+                        }
+                    });
+                }).catch(() => {
+                    this.$message.success('取消提交!');
+                });
+            }
+        },
+        ZancunNewAndEdit(){
+            let savreFlag=true;
+            let companyS= this.formdata.company;
+            if(companyS== ''){
+                savreFlag=false;
+                this.$message.error('请选择公司!');
+            }else{
+                let RegistrData=this.RegistrationtableData;
+                for(var k=0;k<RegistrData.length;k++){
+                    RegistrData[k].company=companyS;
+                }
+                this.RegistrationtableData=RegistrData;
+            }
+            let codeS= this.formdata.contractcode;
+            if(codeS== ''){
+                savreFlag=false;
+                this.$message.error('请输入授信合同编码!');
+            }
+            let partaS= this.formdata.partaname;
+            if(partaS== ''){
+                savreFlag=false;
+                this.$message.error('请选择授信主体!');
+            }
+            let awardamountS= this.formdata.awardamount;
+            if(awardamountS== ''){
+                savreFlag=false;
+                this.$message.error('请输入授信额度!');
+            }
+            let awardbankNameS= this.formdata.awardbankname;
+            if(awardbankNameS== ''){
+                savreFlag=false;
+                this.$message.error('请选择授信银行!');
+            }
+            let awarddaysS= this.formdata.awarddays;
+            if(awarddaysS== ''){
+                savreFlag=false;
+                this.$message.error('授信天数不能为空!');
+            }
+            let startdateS= this.formdata.startdate;
+            if(startdateS== ''){
+                savreFlag=false;
+                this.$message.error('请输入授信起始日!');
+            }
+            let enddateS= this.formdata.enddate;
+            if(enddateS== ''){
+                savreFlag=false;
+                this.$message.error('请输入授信到期日!');
+            }
+            let remarkS= this.formdata.remark;
+            let fromObj={};
+            fromObj=this.formdata;
+            fromObj.creator=localStorage.getItem('ms_userId');
+            if(this.newOrEdit == 'New'){
+                fromObj.oprStatus=1;
+            }else if(this.newOrEdit == 'Edit'){
+                fromObj.oprStatus=2;
+            }else{
+                fromObj.oprStatus=0;    
+            }
+            fromObj.complexCreditContractRegisterLineSaveVos=this.RegistrationtableData;
+            let checkedS = this.checked; 
+            let nameS= this.formdata.contractname;
+            let messageStr=codeS+":"+nameS+"?";
+            let tital="提交确认:";
+            if(savreFlag){
+                this.$Uconfirm(tital,messageStr).then(() => {
+                    this.$api.task.insertZCComplexCreditContractRegisterVO(fromObj).then(response => {
+                        let responsevalue = response;
+                        if (responsevalue) {
+                            let returndata = responsevalue.data;
+                            if(checkedS ===true){
+                                this.reload();
+                                this.$emit('changeShow',true);
+                                //this.onRowAddButtonClick();
+                            }else{
+                                this.reload();
+                                this.$emit('changeShow',false);
+                            }
+                        } else {
+                            this.$message.success('数据库没有该条数据!');
+                        }
+                    });
+                }).catch(() => {
+                    this.$message.success('取消提交!');
+                });
             }
         },
         //查询授信主体
@@ -728,119 +489,35 @@ export default {
                 this.financingBanktype = true
             }
         },
-        //查询授信品种
-        MoreSearchTypeVisible(row){
-            let finandata=row;
-            finandata.finanrowname="授信品种缺省查询方案";
-            finandata.finanrowId="4F1903301337716602";
-            finandata.nametitle="综合授信合同登记";
-            this.rowTypeDataObj=finandata;
-            this.financingTypetype=true;
-        },
-        //获取授信品种
-        showfinancingTypeData(data,type){
-            this.financingTypeformdata=data;
-            let RegistraData = this.RegistrationtableData;
-            let removeflag=false;
-            let index=0;
-            let DoubleArr=[];
-            if(data.awardcreditbreed && data.awardcreditbreed!=""){
-                if(RegistraData.length >1){
-                    let awbreed=data.awardcreditbreed;
-                    for(var i=0;i<RegistraData.length;i++){
-                        if(RegistraData[i].awardcreditbreed === awbreed){
-                            //获取相同的授信品种
-                            let valueobj={};
-                            valueobj.awardcreditbreed=RegistraData[i].awardcreditbreed;
-                            valueobj.Ivalue=i;
-                            valueobj.rowFacilityNum=RegistraData[i].rowFacilityNum;
-                            DoubleArr.push(valueobj);
-                        }
-                    }
-                    //确认要删除的数据
-                    let rowNum = data.rowFacilityNum;
-                    if(DoubleArr.length >1){
-                        for(var j=0;j<DoubleArr.length;j++){
-                            if(rowNum === DoubleArr[j].rowFacilityNum){
-                                removeflag=true;
-                                index=DoubleArr[j].Ivalue;
-                            }
-                        }
-                    }
-                    //删除重复的授信品种数据
-                    if(removeflag){
-                        RegistraData.splice(index,1);
-                    }
-                    this.RegistrationtableData=RegistraData;
-                    //重新计算页面表头数据
-                    let totalValue=0;
-                    let FinNameS='';
-                    for(var k=0;k<RegistraData.length;k++){
-                        if(RegistraData[k].awardamount){
-                            totalValue=totalValue+Number(RegistraData[k].awardamount);
-                        }
-                        if(RegistraData[k].awardcreditbreedName){
-                            FinNameS+=RegistraData[k].awardcreditbreedName+",";
-                        }
-                    }
-                    if(FinNameS.indexOf(",")>-1){
-                        FinNameS=FinNameS.slice(0,FinNameS.length-1);
-                    }
-                    this.formdata.awardamount=totalValue;
-                    this.formdata.awardableamount=totalValue;
-                    this.formdata.awardover=totalValue;
-                    this.formdata.awardcreditbreed=FinNameS;
-                    if(removeflag){
-                        this.$message.error('不能有两个相同的授信品种,请重新添加');
-                    }
-                }else{
-                    let FinNameS="";
-                    if(data.awardcreditbreedName){
-                        FinNameS=data.awardcreditbreedName;
-                    }
-                    this.formdata.awardcreditbreed=FinNameS;
-                }
-            }
-            if(type === false){
-                this.financingTypetype = false
-            }else{
-                this.financingTypetype = true
+        //授信品种管理
+        showvarietData(data){
+            if(data){
+                this.formdata.awardamount=data.totalValue;
+                this.formdata.awardableamount=data.totalValue;
+                this.formdata.awardover=data.totalValue;
+                this.formdata.awardcreditbreedname=data.FinNameS;
+                this.formdata.awardcreditbreedoid=data.FinIDS;
+                this.RegistrationtableData=data.RegistrationtableData;
             }
         },
-        //更改授信额度
-        UpdateFacilitValue(data){
-            let FormData=data;
-            let totalValue=0;
-            let FinNameS='';
-            if(FormData.length >0){
-                for(var i=0;i<FormData.length;i++){
-                    FormData[i].awardableamount=FormData[i].awardamount;
-                    FormData[i].awardover=FormData[i].awardamount;
-                    if(FormData[i].awardamount){
-                        totalValue=totalValue+Number(FormData[i].awardamount);
-                    }
-                    if(FormData[i].awardcreditbreedName){
-                        FinNameS+=FormData[i].awardcreditbreedName+",";
-                    }
-                }
-            }
-            if(FinNameS.indexOf(",")>-1){
-                FinNameS=FinNameS.slice(0,FinNameS.length-1);
-            }
-            this.RegistrationtableData=FormData;
-            this.formdata.awardamount=totalValue;
-            this.formdata.awardableamount=totalValue;
-            this.formdata.awardover=totalValue;
-            this.formdata.awardcreditbreed=FinNameS;
+        //附件
+        showFileData(data){
+            this.FiletableData=data;
+        },
+        //流程图
+        showprocessData(data){
+            console.log(data)
         },
         //授信起始日期
         updateShouxinStartDate(data){
+            console.log(data)
             if(data.startdate){
                 if(data.enddate){
                     let DateS=new Date();
+                    let endDateS= this.$Uformat.formatedateforT(data.enddate);
                     let TodayS=this.$Uformat.formatDateTime(DateS);
                     let stratdate=this.$Uformat.formatDateTime(data.startdate);
-                    let enddate=this.$Uformat.formatDateTime(data.enddate);
+                    let enddate=this.$Uformat.formatDateTime(endDateS);
                     let checkDate=this.$Uformat.compareTime(stratdate,enddate);
                     if(checkDate){
                         let days=this.$Uformat.DateDiff(enddate,stratdate);
@@ -874,7 +551,8 @@ export default {
                     this.$message.error('授信到期日期必须大于今天!');
                 }
                 if(data.startdate){
-                    let stratdate=this.$Uformat.formatDateTime(data.startdate);
+                    let stratDateS= this.$Uformat.formatedateforT(data.startdate);
+                    let stratdate=this.$Uformat.formatDateTime(stratDateS);
                     let checkDate=this.$Uformat.compareTime(stratdate,enddate);
                     if(checkDate){
                         let days=this.$Uformat.DateDiff(enddate,stratdate);
@@ -891,13 +569,42 @@ export default {
     watch:{
         Newfinancingtype(oldVal,newVal){
             this.ShowFinancVisible=this.Newfinancingtype;
-            this.formdata.gestordeptStr=localStorage.getItem("ms_userDepartName");
-            this.formdata.gestordept=localStorage.getItem("ms_userDepartId");
-            this.formdata.handlerName=localStorage.getItem("ms_username");
-            this.formdata.handler=localStorage.getItem("ms_userId");
-            let DateS=new Date();
-            let TodayS=this.$Uformat.formatDate(DateS);
-            this.formdata.voucherdate=TodayS;
+            let DataObj = this.rowNewDataObj;
+            if(DataObj.Newflag ==="Edit"){
+                let finandata=DataObj.EditfinanrowId;
+                let formDataA ={};
+                formDataA.id=finandata;
+                this.newOrEdit="Edit";
+                this.$api.task.getComplexCreditContractRegisterVO(formDataA).then(response => {
+                    let responsevalue = response;
+                    if (responsevalue) {
+                        let returndata = responsevalue.data;
+                        let tableDataArr=returndata.data;
+                        tableDataArr.startdateStr=this.$Uformat.formatDateTYMD(tableDataArr.startdate);
+                        tableDataArr.enddateStr=this.$Uformat.formatDateTYMD(tableDataArr.enddate);
+                        tableDataArr.voucherdateStr=this.$Uformat.formatDateTYMD(tableDataArr.voucherdate);
+                        this.formdata=tableDataArr;
+                        this.rowDatavarietObj.RegistrationtableData=tableDataArr.complexCreditContractRegisterLineResVos;
+                        this.rowDatavarietObj.RegisType='Edit';
+                        this.financingCVMListtype=true;
+                    } else {
+                        this.$message.success('数据库没有该条数据!');
+                    }
+                });
+            }else{
+                this.formdata.gestordeptname=localStorage.getItem("ms_userDepartName");
+                this.formdata.gestordept=localStorage.getItem("ms_userDepartId");
+                this.formdata.handler=localStorage.getItem("ms_username");
+                this.formdata.gestor=localStorage.getItem("ms_userId");
+                let DateS=new Date();
+                let TodayS=this.$Uformat.formatDate(DateS);
+                this.formdata.voucherdate=DateS;
+                this.formdata.voucherdateStr=TodayS;
+                this.rowDatavarietObj.RegistrationtableData=[];
+                this.rowDatavarietObj.RegisType='New';
+                this.financingCVMListtype=true;
+                this.newOrEdit='New';
+            }
             //this.formdata.startdate=TodayS;
         }
     }
