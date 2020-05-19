@@ -98,26 +98,27 @@
                 label-width="100px"
                 v-model="dialog"
                 class="dataForm"
+                size="mini"
                 :label-position="labelPosition"
             >
             <el-card>
-                <el-row class="elrowStyle">
+                <el-row class="elrowStyle" >
                     <el-col :span="6" class="pbackground">查询条件</el-col>
                     <el-col :span="6"  class="pbackground">操作符</el-col>
                     <el-col :span="12" class="pbackground">条件值</el-col>
                 </el-row>
-                <el-row class="elrowStyle">
+                <el-row class="elrowStyle" size="mini">
                     <el-col :span="6" class="elColCenter">单据号</el-col>
                     <el-col :span="6"  class="elColCenter">左右匹配</el-col>
                     <el-col :span="8">
-                       <el-input v-model="dialog.documentNo"></el-input>
+                       <el-input v-model="dialog.documentNo" size="mini"></el-input>
                     </el-col>
                 </el-row>
-                <el-row class="elrowStyle">
+                <el-row class="elrowStyle" >
                     <el-col :span="6" class="elColCenter">公司</el-col>
                     <el-col :span="6" class="elColCenter">等于</el-col>
                     <el-col :span="8">
-                        <el-select v-model="dialog.company">
+                        <el-select v-model="dialog.company" size="mini">
                             <el-option
                                 v-for="item in companyoptions"
                                 :key="item.value"
@@ -127,39 +128,39 @@
                         </el-select>
                     </el-col>
                 </el-row>
-                <el-row class="elrowStyle">
+                <el-row class="elrowStyle" >
                     <el-col :span="6" class="elColCenter">单据日期</el-col>
                     <el-col :span="6"  class="elColCenter">大于等于</el-col>
                     <el-col :span="8">
-                       <el-input v-model="dialog.docDateStart"></el-input>
+                       <el-input v-model="dialog.docDateStart" size="mini"></el-input>
                     </el-col>
                 </el-row>
-                <el-row class="elrowStyle">
+                <el-row class="elrowStyle" >
                     <el-col :span="6" class="elColCenter">单据日期</el-col>
                     <el-col :span="6"  class="elColCenter">小于等于</el-col>
                     <el-col :span="8">
-                       <el-input v-model="dialog.docDateEnd"></el-input>
+                       <el-input v-model="dialog.docDateEnd" size="mini"></el-input>
                     </el-col>
                 </el-row>
-                <el-row class="elrowStyle">
+                <el-row class="elrowStyle" >
                     <el-col :span="6" class="elColCenter">授信合同编码</el-col>
                     <el-col :span="6"  class="elColCenter">左右匹配</el-col>
                     <el-col :span="8">
-                       <el-input v-model="dialog.codeNomber"></el-input>
+                       <el-input v-model="dialog.codeNomber" size="mini"></el-input>
                     </el-col>
                 </el-row>
-                <el-row class="elrowStyle">
+                <el-row class="elrowStyle" >
                     <el-col :span="6" class="elColCenter">合同名称</el-col>
                     <el-col :span="6"  class="elColCenter">左右匹配</el-col>
                     <el-col :span="8">
-                       <el-input v-model="dialog.name"></el-input>
+                       <el-input v-model="dialog.name" size="mini"></el-input>
                     </el-col>
                 </el-row>
-                <el-row class="elrowStyle">
+                <el-row class="elrowStyle" >
                     <el-col :span="6" class="elColCenter">授信主体</el-col>
                     <el-col :span="6"  class="elColCenter">等于</el-col>
                     <el-col :span="8">
-                       <el-select v-model="dialog.CreditSub" placeholder="--" clearable>
+                       <el-select v-model="dialog.CreditSub" placeholder="--" clearable size="mini">
                             <el-option
                                 v-for="item in CreditSubject"
                                 :key="item.value"
@@ -169,11 +170,11 @@
                         </el-select>
                     </el-col>
                 </el-row>
-                <el-row class="elrowStyle">
+                <el-row class="elrowStyle" >
                     <el-col :span="6" class="elColCenter">授信银行</el-col>
                     <el-col :span="6"  class="elColCenter">等于</el-col>
                     <el-col :span="8">
-                       <el-select v-model="dialog.searchblank" placeholder="--" clearable>
+                       <el-select v-model="dialog.searchblank" placeholder="--" clearable size="mini">
                             <el-option
                                 v-for="item in Creditblank"
                                 :key="item.value"
@@ -183,11 +184,11 @@
                         </el-select>
                     </el-col>
                 </el-row>
-                <el-row class="elrowStyle">
+                <el-row class="elrowStyle" >
                     <el-col :span="6" class="elColCenter">授信品种</el-col>
                     <el-col :span="6"  class="elColCenter">等于</el-col>
                     <el-col :span="8">
-                       <el-select v-model="dialog.searchcreditType" placeholder="--" clearable>
+                       <el-select v-model="dialog.searchcreditType" placeholder="--" clearable size="mini">
                             <el-option
                                 v-for="item in creditType"
                                 :key="item.code"
@@ -197,28 +198,28 @@
                         </el-select>
                     </el-col>
                 </el-row>
-                <el-row class="elrowStyle">
+                <el-row class="elrowStyle" >
                     <el-col :span="6" class="elColCenter">授信额度</el-col>
                     <el-col :span="6"  class="elColCenter">大于等于</el-col>
                     <el-col :span="8">
-                       <el-input v-model="dialog.Creditline"></el-input>
+                       <el-input v-model="dialog.Creditline" size="mini"></el-input>
                     </el-col>
                 </el-row>
-                <el-row class="elrowStyle">
+                <el-row class="elrowStyle" >
                     <el-col :span="6" class="elColCenter">授信余额</el-col>
                     <el-col :span="6"  class="elColCenter">大于等于</el-col>
                     <el-col :span="8">
-                       <el-input v-model="dialog.Creditbalance"></el-input>
+                       <el-input v-model="dialog.Creditbalance" size="mini"></el-input>
                     </el-col>
                 </el-row>
-                <el-row class="elrowStyle">
+                <el-row class="elrowStyle" >
                     <el-col :span="6" class="elColCenter">经办人</el-col>
                     <el-col :span="6"  class="elColCenter">等于</el-col>
                     <el-col :span="8">
-                       <el-input v-model="dialog.operator"></el-input>
+                       <el-input v-model="dialog.operator" size="mini"></el-input>
                     </el-col>
                     <el-col :span="2">
-                    <el-button type="primary" icon="el-icon-search" @click="MoreSearchuserVisible = true"></el-button>
+                    <el-button type="primary" size="mini" icon="el-icon-search" @click="MoreSearchuserVisible = true"></el-button>
                     </el-col>
                 </el-row>
                 </el-card>
@@ -236,8 +237,8 @@
                 :label-position="labelPosition"
             ></el-form>
         </el-dialog>
-        <NewfinancingPage  :Newfinancingtype="Newfinancingtype" @changeShow="showAddFinace"/>
-        <EditfinancingPage :saveflage="saveflage" :EditfinanrowId="EditfinanrowId" :Editfinancingtype="Editfinancingtype" @changeShow="showLookOrUpdate"/>
+        <NewfinancingPage  :Newfinancingtype="Newfinancingtype" :rowNewDataObj="rowNewDataObj" @changeShow="showAddFinace"/>
+        <LookfinancingPage  :rowDataObj="rowDataObj" :Lookfinancingtype="Lookfinancingtype" @changeShow="showLookOrUpdate"/>
     </div>
 </template>
 
@@ -246,19 +247,22 @@ import DynamicTable from '../../../components/common/dytable/dytable.vue';
 import proData from '../../../components/common/proData/proData';
 import NewfinancingPage from './new-financing-contract-Regis.vue';
 import EditfinancingPage from './edit-financing-contract-Regis.vue';
+import LookfinancingPage from './look-financing-contract-Regis.vue';
 export default {
     name: 'basetable',
     components: {
         DynamicTable,
         NewfinancingPage,
-        EditfinancingPage
+        EditfinancingPage,
+        LookfinancingPage
     },
     inject: ['reload'],
     data() {
         return {
+            rowDataObj:{},
+            rowNewDataObj:{},
             Newfinancingtype:false,
-            Editfinancingtype:false,
-            EditfinanrowId:'',
+            Lookfinancingtype:false,
             MoreSearchVisible: false,
             MoreSearchuserVisible: false,
             disabled: false,
@@ -266,7 +270,6 @@ export default {
             showCheckBox: false,
             dialogImageUrl: '',
             dialogVisible: false,
-            saveflage:'New',
             checked: false,
             labelPosition: 'left',
             formInline: {
@@ -365,7 +368,7 @@ export default {
                     title: '合同名称'
                 },
                 {
-                    key: 'gestordeptname',
+                    key: 'partaname',
                     title: '授信主体'
                 },
                 {
@@ -630,6 +633,10 @@ export default {
         // 新建
         onRowAddButtonClick() {
             this.Newfinancingtype= true;
+            let dataObj = {};
+            dataObj.Newflag="New";
+            dataObj.EditfinanrowId='';
+            this.rowNewDataObj=dataObj;
         },
         // 查看
         onRowLookButtonClick() {
@@ -638,9 +645,8 @@ export default {
                 if(selectOption.length >1){
                     this.$message.error('只能选择一行!');
                 }else{
-                    this.Editfinancingtype=true;
-                    this.EditfinanrowId=selectOption[0].id;
-                    this.saveflage="Look";
+                    this.Lookfinancingtype=true;
+                    this.rowDataObj.finanrowId=selectOption[0].id;
                 }
             }else{
                 this.$message.error('请选择一行你要查看的数据!');
@@ -653,9 +659,15 @@ export default {
                 if(selectOption.length >1){
                     this.$message.error('只能选择一行!');
                 }else{
-                    this.Editfinancingtype=true;
-                    this.EditfinanrowId=selectOption[0].id;
-                    this.saveflage="Edit";
+                    if(selectOption[0].status === 1){
+                        this.Newfinancingtype= true;
+                        let dataObj = {};
+                        dataObj.Newflag="Edit";
+                        dataObj.EditfinanrowId=selectOption[0].id;
+                        this.rowNewDataObj=dataObj;
+                    }else{
+                        this.$message.error('当前记录已被其他人处理或者已处理完毕，不能回收修改!');
+                    }
                 }
             }else{
                 this.$message.error('请选择一行你要查看的数据!');

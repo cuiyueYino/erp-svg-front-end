@@ -223,7 +223,7 @@ export default {
                 }else{
                     //返回选中的父组件选中的row,并修某些改值
                     this.rowDataObj.parta=selectOption[0].id;
-                    this.rowDataObj.partaName=selectOption[0].name;
+                    this.rowDataObj.partaname=selectOption[0].name;
                     this.rowDataObj.partaCode=selectOption[0].code;
                     this.$emit('changeShow',this.rowDataObj,false);
                     this.ShowFinancVisible = false;

@@ -253,7 +253,7 @@ export default {
                 }else{
                     //返回选中的父组件选中的row,并修某些改值
                     this.rowTypeDataObj.awardcreditbreed=selectOption[0].code;
-                    this.rowTypeDataObj.awardcreditbreedName=selectOption[0].name;
+                    this.rowTypeDataObj.awardcreditbreedname=selectOption[0].name;
                     this.rowTypeDataObj.awardcreditbreedId=selectOption[0].id;
                     this.$emit('changeShow',this.rowTypeDataObj,false);
                     this.ShowFinancVisible = false;

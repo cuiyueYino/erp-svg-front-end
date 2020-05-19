@@ -290,7 +290,7 @@ export default {
                 }else{
                     //返回选中的父组件选中的row,并修某些改值
                     this.rowBankDataObj.awardbank=selectOption[0].id;
-                    this.rowBankDataObj.awardbankName=selectOption[0].name;
+                    this.rowBankDataObj.awardbankname=selectOption[0].name;
                     this.$emit('changeShow',this.rowBankDataObj,false);
                     this.ShowFinancVisible = false;
                 }

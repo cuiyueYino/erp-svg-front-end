@@ -36,7 +36,20 @@ const Utils = {
 		second = second < 10 ? ('0' + second) : second;
 		return y + '-' + m + '-' + d;
 	},
-
+	formatDateTYMD:function(dateV){
+		if (dateV == null) {
+			return dateV;
+		}
+		dateV = dateV.split("T")[0];
+		return dateV;
+	},
+	formatedateforT:function(dateV){
+		if (dateV == null) {
+			return dateV;
+		}
+		dateV =new Date(dateV);
+		return dateV;
+	},
 	'formatMinutes' : function(minutes, overdueMinutes) {
 		if (minutes == null)
 			return '';

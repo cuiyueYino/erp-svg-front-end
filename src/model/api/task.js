@@ -120,8 +120,24 @@ const task = {
     },
     //删除综合授信合同登记
     delComplexCreditContractRegisterVO(params){
-        return httpReqest.post('/api/interfaces/complexCreditContractRegister/delComplexCreditContractRegisterVO', params);
+        var valueS='?';
+        for(var item in params){
+            valueS+=item+"="+params[item]+"&";
+        }
+        if(valueS.slice(valueS.length-1,valueS.length) ==="&"){
+            valueS=valueS.slice(0,valueS.length-1);
+        }
+        return httpReqest.get('/api/interfaces/complexCreditContractRegister/delComplexCreditContractRegisterVO'+valueS);
     },
+    //综合授信合同提交和修改
+    insertComplexCreditContractRegisterVO(params) {
+        return httpReqest.post('/api/interfaces/complexCreditContractRegister/insertComplexCreditContractRegisterVO', params);
+    },
+    //综合授信合同暂存和修改
+    insertZCComplexCreditContractRegisterVO(params) {
+        return httpReqest.post('/api/interfaces/complexCreditContractRegister/insertZCComplexCreditContractRegisterVO', params);
+    },
+    
     //授信银行查询列表
     findFundCustomerPage(params){
         return httpReqest.post('/api/interfaces/fundCustomer/findFundCustomerPage', params);

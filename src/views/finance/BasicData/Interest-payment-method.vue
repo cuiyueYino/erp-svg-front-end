@@ -513,9 +513,11 @@ export default {
         //提交确认
         saveNewAndEdit(){
             let editflag= this.editabled;
+            let savreFlag=true;
             if(editflag){
               let companyS= this.formdata.company;
               if(companyS== ''){
+                savreFlag=false;
                 this.$message.error('请选择公司!');
               }
               let codeS= this.formdata.code;
@@ -535,25 +537,27 @@ export default {
               let checkedS=this.checked;
               let messageStr=codeS+":"+nameS+"?";
               let tital="提交确认:";
-              this.$Uconfirm(tital,messageStr).then(() => {
-                this.$api.task.savePayInterestMethodVO(fromObj).then(response => {
-                    let responsevalue = response;
-                    if (responsevalue) {
-                        let returndata = responsevalue.data;
-                        let tableDataArr=returndata.data;
-                        this.NewEditVisible= false;
-                        if(checkedS ===true){
-                            this.onRowAddButtonClick();
-                        }else{
-                            this.reload();
+              if(savreFlag){
+                  this.$Uconfirm(tital,messageStr).then(() => {
+                    this.$api.task.savePayInterestMethodVO(fromObj).then(response => {
+                        let responsevalue = response;
+                        if (responsevalue) {
+                            let returndata = responsevalue.data;
+                            let tableDataArr=returndata.data;
+                            this.NewEditVisible= false;
+                            if(checkedS ===true){
+                                this.onRowAddButtonClick();
+                            }else{
+                                this.reload();
+                            }
+                        } else {
+                            this.$message.success('数据库没有该条数据!');
                         }
-                    } else {
-                        this.$message.success('数据库没有该条数据!');
-                    }
+                    });
+                }).catch(() => {
+                    this.$message.success('取消提交!');
                 });
-              }).catch(() => {
-                this.$message.success('取消提交!');
-              });
+              }
             }else{
               this.NewEditVisible= false;  
             }
