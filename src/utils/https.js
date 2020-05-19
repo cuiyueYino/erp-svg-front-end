@@ -66,6 +66,7 @@ const errorHandle = (status, other) => {
 //var _axios = axios.create({ timeout: 1000 * 12, baseUrl: process.env.BASE_URL });
 var _axios = axios.create({ timeout: 1000 * 12 });
 // 设置post请求头
+// _axios.defaults.headers.post['Authorization'] = "Basic YXBwLWFkbWluOmFwcC1hZG1pbi1zZWNyZXQ=",
 _axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8';
 //_axios.defaults.headers.post['Content-Type'] = 'application/json;charset=utf-8';
 
@@ -85,7 +86,7 @@ _axios.interceptors.request.use(
         if(localStorage.getItem('ms_tokenId')){
             config.headers.Authorization = 'bearer '+localStorage.getItem('ms_tokenId');
         }else{
-            config.headers.Authorization = 'bearer ooooooooooooooooooo';
+            // config.headers.Authorization = 'bearer ooooooooooooooooooo';
         }
         //config.headers.Accept = 'application/json;charset=utf-8';
         // 登录流程控制中，根据本地是否存在token判断用户的登录情况

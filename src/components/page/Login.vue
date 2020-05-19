@@ -40,7 +40,7 @@ export default {
         };
     },
     methods: {
-        submitForm() {
+         submitForm() {
             var usernameS = this.param.username;
             var passwordS = this.param.password;
             if(!usernameS){
@@ -53,19 +53,15 @@ export default {
                 let paramdata={};
                 paramdata.username=usernameS;
                 paramdata.password=passwordS;
-                /*this.$api.task.login(paramdata).then((response)=>{
+                paramdata.grant_type = 'password';
+                this.$api.common.login(paramdata).then((response)=>{
                     var responsevalue=response;
                     if(responsevalue){
                         if(responsevalue.data && responsevalue.data !=""){
                             let returndata =responsevalue.data;
                             localStorage.setItem('ms_data', JSON.stringify(returndata));
-                            localStorage.setItem('ms_name',  returndata.name);
-                            localStorage.setItem('ms_id',  returndata.id);
-                            localStorage.setItem('ms_username',  returndata.username);
-                            localStorage.setItem('ms_roleId',  returndata.roleId);
-                            localStorage.setItem('ms_authId',  returndata.authId);
-                            this.$router.push('/');
-                            this.$message.success('登录成功');
+                            localStorage.setItem('ms_tokenId',  returndata.access_token);
+                            this.getUserInfo()
                         }else{
                             this.$message.error("请输入正确用户名和密码!");
                             return false;
@@ -75,22 +71,40 @@ export default {
                         return false;
                     }
                 });
-                */
-                localStorage.setItem('ms_username', '王世超');
-                localStorage.setItem('ms_name',  '王世超');
-                localStorage.setItem('ms_roleId',  '0');
-                localStorage.setItem('ms_userId',  'BFPID000000LSN033N');
+                
+                // localStorage.setItem('ms_username', '王世超');
+                // localStorage.setItem('ms_name',  '王世超');
+                // localStorage.setItem('ms_roleId',  '0');
+                // localStorage.setItem('ms_userId',  'BFPID000000LSN033N');
                 //用户部门
-                localStorage.setItem('ms_userDepartId',  'BFPID12333LSN033N');
-                localStorage.setItem('ms_userDepartName',  '集团信息中心');
-                localStorage.setItem('ms_companyId',  '_DefaultCompanyOId');
-                localStorage.setItem('ms_tokenId',  "a66cc874-f6e4-45c4-b317-82f3d6a4fce3");
-                this.$router.push('/');
+                // localStorage.setItem('ms_userDepartId',  'BFPID12333LSN033N');
+                // localStorage.setItem('ms_userDepartName',  '集团信息中心');
+                // localStorage.setItem('ms_companyId',  '_DefaultCompanyOId');
+                
+                // this.$router.push('/');
             }else{
                 this.$message.error("请输入用户名和密码!");
                 return false;
             }
-        }
+        },
+         // 获取登录人信息
+         getUserInfo(){
+            let data = {
+                tel: this.param.username,
+                password: this.param.password
+            }
+             this.$api.common.getUserInfo(data).then(res=>{
+                  localStorage.setItem('ms_name',  returndata.name);
+                  localStorage.setItem('ms_id',  returndata.id);
+                  localStorage.setItem('ms_username',  returndata.username);
+                  localStorage.setItem('ms_roleId',  returndata.roleId);
+                  localStorage.setItem('ms_authId',  returndata.authId);
+                  this.$router.push('/');
+                  this.$message.success('登录成功');
+             }).error(err=>{
+
+             })
+        },
     }
 };
 </script>
