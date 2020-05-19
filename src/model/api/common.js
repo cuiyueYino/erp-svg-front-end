@@ -6,13 +6,14 @@ import QS from 'qs';
 //const testV = base.test;
 const common = {
     // 获取token
-    login:(params) =>{
+    getToken:(params) =>{
     return httpReqest({
         headers:{
-            "Authorization":"Basic ZXJwLWFkbWluOmVycC1hZG1pbi1zZWNyZXQ=",
+            "Authorization":"Basic YXBwLWFkbWluJTNBYXBwLWFkbWluLXNlY3JldA==",
+            // "Authorization":'Basic YXBwLWFkbWluOmFwcC1hZG1pbi1zZWNyZXQ=',
             'Content-Type' : 'application/x-www-form-urlencoded;charset=UTF-8'
         },
-        url: '/api/uaa/oauth/token',
+        url: '/uaa/oauth/token',
         method: 'POST',
         data: QS.stringify(params)
     })
@@ -20,7 +21,14 @@ const common = {
 
    // 获取登录人信息
    getUserInfo:(params) =>{
-        return httpReqest.post('/api/user/getUserInfo', QS.stringify(params));
+    return httpReqest({
+        headers:{
+            'Content-Type' : 'application/json'
+        },
+        url: '/user/getUserInfo',
+        method: 'POST',
+        data: params
+    })
    }
    
    

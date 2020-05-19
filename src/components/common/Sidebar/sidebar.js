@@ -1,8 +1,15 @@
 class ITEMData {
     constructor() {
-        this.ITEMAdmin = [{
-                index: 'svgIndex',
-                title: '工作流'
+        this.ITEMAdmin = [
+            {
+                index: 'Process',
+                title: '流程设置',
+                subs: [
+                    {
+                        index: 'workProcess',
+                        title: '工作流程维护',
+                    },
+                ]
             },
             {
                 index: 'Finance',

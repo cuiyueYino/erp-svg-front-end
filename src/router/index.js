@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 import Finance from '../views/finance/route';
+import Process from '../views/process-set/route';
 
 Vue.use(Router);
 
@@ -17,6 +18,7 @@ export default new Router({
             },
             children: [
                 ...Finance,
+                ...Process,
                 {
                     path: 'svgIndex',
                     name: 'svgIndex',

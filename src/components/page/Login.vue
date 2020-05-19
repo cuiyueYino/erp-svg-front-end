@@ -43,45 +43,45 @@ export default {
          submitForm() {
             var usernameS = this.param.username;
             var passwordS = this.param.password;
-            if(!usernameS){
-                this.$message.error("请输入用户名!");
-            }
-            if(!passwordS){
-                this.$message.error("请输入密码!");
-            }
+            // if(!usernameS){
+            //     this.$message.error("请输入用户名!");
+            // }
+            // if(!passwordS){
+            //     this.$message.error("请输入密码!");
+            // }
             if(usernameS && passwordS){
-                let paramdata={};
-                paramdata.username=usernameS;
-                paramdata.password=passwordS;
-                paramdata.grant_type = 'password';
-                this.$api.common.login(paramdata).then((response)=>{
-                    var responsevalue=response;
-                    if(responsevalue){
-                        if(responsevalue.data && responsevalue.data !=""){
-                            let returndata =responsevalue.data;
-                            localStorage.setItem('ms_data', JSON.stringify(returndata));
-                            localStorage.setItem('ms_tokenId',  returndata.access_token);
-                            this.getUserInfo()
-                        }else{
-                            this.$message.error("请输入正确用户名和密码!");
-                            return false;
-                        }
-                    }else{
-                        this.$message.error("请输入正确用户名和密码!");
-                        return false;
-                    }
-                });
+            //     let paramdata={};
+            //     paramdata.username=usernameS;
+            //     paramdata.password=passwordS;
+            //     paramdata.grant_type = 'password';
+            //     this.$api.common.getToken(paramdata).then((response)=>{
+            //         var responsevalue=response;
+            //         if(responsevalue){
+            //             if(responsevalue.data && responsevalue.data !=""){
+            //                 let returndata =responsevalue.data;
+            //                 localStorage.setItem('ms_tokenId',  returndata.access_token);
+                            // this.getUserInfo()
+            //             }else{
+            //                 this.$message.error("请输入正确用户名和密码!");
+            //                 return false;
+            //             }
+            //         }else{
+            //             this.$message.error("请输入正确用户名和密码!");
+            //             return false;
+            //         }
+            //     });
                 
-                // localStorage.setItem('ms_username', '王世超');
-                // localStorage.setItem('ms_name',  '王世超');
-                // localStorage.setItem('ms_roleId',  '0');
-                // localStorage.setItem('ms_userId',  'BFPID000000LSN033N');
+                localStorage.setItem('ms_username', '王世超');
+                localStorage.setItem('ms_name',  '王世超');
+                localStorage.setItem('ms_roleId',  '0');
+                localStorage.setItem('ms_userId',  'BFPID000000LQW0007');
                 //用户部门
-                // localStorage.setItem('ms_userDepartId',  'BFPID12333LSN033N');
-                // localStorage.setItem('ms_userDepartName',  '集团信息中心');
-                // localStorage.setItem('ms_companyId',  '_DefaultCompanyOId');
+                localStorage.setItem('ms_userDepartId',  'BFPID12333LSN033N');
+                localStorage.setItem('ms_userDepartName',  '集团信息中心');
+                localStorage.setItem('ms_companyId',  '_DefaultCompanyOId');
+                localStorage.setItem('ms_tokenId',  "19aab783-0c8f-4c07-84e7-86f276648521");
                 
-                // this.$router.push('/');
+                this.$router.push('/');
             }else{
                 this.$message.error("请输入用户名和密码!");
                 return false;
@@ -94,6 +94,8 @@ export default {
                 password: this.param.password
             }
              this.$api.common.getUserInfo(data).then(res=>{
+                 let returndata =res.data;
+                 localStorage.setItem('ms_data', JSON.stringify(returndata));
                   localStorage.setItem('ms_name',  returndata.name);
                   localStorage.setItem('ms_id',  returndata.id);
                   localStorage.setItem('ms_username',  returndata.username);
@@ -101,8 +103,6 @@ export default {
                   localStorage.setItem('ms_authId',  returndata.authId);
                   this.$router.push('/');
                   this.$message.success('登录成功');
-             }).error(err=>{
-
              })
         },
     }
