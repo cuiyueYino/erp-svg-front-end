@@ -16,7 +16,7 @@
             <!-- 操作面板 -->
             <div :style="styleObj">
                 <el-card
-                    style="width: 260px;"
+                    style="width: 300px;"
                     class="work-flow-operate-panel"
                     :body-style="{padding: '4px'}"
                 >
@@ -248,7 +248,7 @@ export default {
         return {
             dataObj:dataJson.WfProcess,
             // dataObj:xmlStr,
-            dialogTableVisible:false,
+            dialogTableVisible:true,
             size : 1,
             // 辅助线数据
             assistedLineStart: '',
@@ -268,7 +268,7 @@ export default {
             styleObj: {
                 position: 'absolute',
                 left: '20px',
-                top: '50px',
+                top: '30px',
                 'z-index': '1991'
             },
             // 开始节点对象
@@ -289,7 +289,11 @@ export default {
         };
     },
     watch: {},
-    created () {},
+    created () {
+        if(this.$route.params){
+            console.log(this.$route.params)
+        }
+    },
     mounted () {
        
        this.$nextTick(()=>{
@@ -656,7 +660,7 @@ div
         list-style: none;
         font-size: 12px;
         display: block;
-        width: 110px;
+        width: 130px;
         line-height: 26px;
         position: relative;
         float: left;
@@ -664,7 +668,7 @@ div
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
-        margin: 0 8px 8px 0;
+        margin: 4px 6px 8px 4px;
         color: #333;
         border: 1px solid #F4F6FC;
 

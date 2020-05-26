@@ -49,7 +49,7 @@ export function TerminalNode () {
             type: 'Start',
             options: {
                 draggable: true,
-                x: 300,
+                x: 350,
                 y: 50,
                 ...nodeConfig.start
             },
@@ -63,7 +63,7 @@ export function TerminalNode () {
             type: 'End',
             options: {
                 draggable: true,
-                x: 400,
+                x: 450,
                 y: 50,
                 ...nodeConfig.end
             },
@@ -90,7 +90,7 @@ export function NodesData () {
                 draggable: true
             },
             data: {
-                name: 'router',
+                name: 'Task',
                 displayName: '路由',
             }
         },

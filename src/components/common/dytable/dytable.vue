@@ -5,6 +5,7 @@
 export default {
     name: 'dytable',
     props: {
+        height:Number,
         columns: Array,
 
         tableRowClassName: null,
@@ -121,6 +122,7 @@ export default {
      */
     render() {
         const {
+            height,
             columns,
             pageNum,
             pageSize,
@@ -155,6 +157,7 @@ export default {
         return (
             <div class="table">
                 <ElTable
+                    height={height}
                     data={tableData}
                     border
                     header-cell-class-name="table-header"

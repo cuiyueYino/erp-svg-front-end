@@ -20,8 +20,24 @@ const processSet = {
 
      // 生效/禁用
      effectOrDisable(params){
-        return httpReqest.get('/api/wfInterfaces/workFlow/updateProcess?status='+params.status+'foid='+params.foid);
+        return httpReqest.get('/api/wfInterfaces/workFlow/updateProcess?foid='+params.foid+'&status='+params.status);
     },
+
+    /*
+    SVG图标节点信息-手工活动
+    */
+
+   // 业务工作-获取表格列表数据 
+   workSearchData(params){
+        return httpReqest.post('/api/wfInterfaces/workFlow/getProcessActivity', params);
+   },
+
+   // 业务工作-获取表格列表数据-搜索枚举项
+   getWorkSearch(){
+        return httpReqest.get('/api/wfInterfaces/workFlow/getMFunctionTypeCon');
+   },
+
+   
    
 };
 

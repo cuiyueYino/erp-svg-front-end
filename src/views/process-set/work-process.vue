@@ -20,9 +20,9 @@
                  <el-col :span="10">
                      <el-button type="success" plain @click="add">新增</el-button>
                      <el-button type="danger" plain @click="deleteMsg">删除</el-button>
-                     <el-button type="warning" plain @click="onSubmit">编辑</el-button>
-                     <el-button type="success" plain @click="onSubmit">生效</el-button>
-                     <el-button type="danger" plain @click="onSubmit">禁用</el-button>
+                     <el-button type="warning" plain @click="toEdit">编辑</el-button>
+                     <el-button type="success" plain @click="effectOrDisableMsg">生效</el-button>
+                     <el-button type="danger" plain @click="effectOrDisableMsg">禁用</el-button>
                  </el-col>
             </el-row>
         </el-card>
@@ -56,7 +56,7 @@
                     <el-checkbox v-model="checked"></el-checkbox>
                 </el-form-item>
                 <el-form-item label="描述：" :label-width="formLabelWidth">
-                    <el-input maxlength="1000"  type="textarea" v-model="form.fremark"></el-input>
+                    <el-input maxlength="1000" show-word-limit autosize type="textarea" v-model="form.fremark"></el-input>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
@@ -197,6 +197,8 @@ export default {
                 if (valid) {
                     this.$api.processSet.addSubmit(this.form).then(res=>{
                         if(res.data.data.msg = "success"){
+                            this.dialogFormVisible = false
+                            this.$message.success('新增成功');
                             //刷新表格
                             this.getTableData('')
                         }
@@ -218,6 +220,7 @@ export default {
             }
             this.$api.processSet.deleteMsg(this.multipleSelection[0].foid).then(res=>{
                     if(res.data.data.msg = "success"){
+                        this.$message.success('删除成功');
                         //刷新表格
                         this.getTableData('')
                     }
@@ -226,28 +229,64 @@ export default {
                 }
         },
          //生效/禁用
-        deleteMsg(){
+        effectOrDisableMsg(){
+            let status = this.multipleSelection[0];
             if(this.multipleSelection.length > 1){
                  this.$message.error('只能选择一个删除');
                  return;
+            }else if(this.multipleSelection.length = 0){
+                this.$message.error('请选择一项删除');
+                 return;
+            };
+            
+            switch (status.fstatus) {
+                case '生效':
+                    status.fstatus = 3
+                    break;
+                case '禁用':
+                    status.fstatus = 8
+                    break;
+                default:
+                    break;
             }
             let data = {
-                foid  : this.multipleSelection[0].foid,
-                status  : this.multipleSelection[0].status
+                foid  : status.foid,
+                status  : status.fstatus
             }
             this.$api.processSet.effectOrDisable(data).then(res=>{
                     if(res.data.data.msg = "success"){
+                        this.$message.success('操作成功');
                         //刷新表格
                         this.getTableData('')
+                       
                     }
                 }),error=>{
                     console.log(error);
                 }
         },
+        toEdit(){
+             if(this.multipleSelection.length > 1){
+                 this.$message.error('只能选择一个编辑');
+                 return;
+            }else if(this.multipleSelection.length = 0){
+                this.$message.error('请选择一项编辑');
+                 return;
+            };
+             this.$router.push({
+                name:"svgIndex",
+                params:{
+                    data: this.multipleSelection[0]
+                    }
+             })
+            
+        },
     },
 }
 </script>
 <style lang="scss" scoped>
+ /deep/ .el-textarea .el-input__count{
+     background: #fff0;
+ }
 /deep/ .el-select{
     width: 100%;
 }
