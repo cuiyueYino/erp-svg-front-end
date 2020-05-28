@@ -183,7 +183,7 @@
             </div>
             <!-- 基本信息 END-->
             <!-- 定义关系 -->
-             <el-col :span="16" style="margin-bottom: 170px;">
+             <el-col :span="16" v-show="titleStr ==='定义关系'" style="margin-bottom: 170px;">
                 <el-form-item label="关系类型" label-width="70px">
                         <el-select v-model="formData.formCtionTypeCon" clearable placeholder="请选择">
                         <el-option
@@ -249,7 +249,7 @@
             
             <!-- footer -->
             <footer>
-                <el-button   size="small"  @click="gridDataAdd">确定</el-button>
+                <el-button   size="small"   @click="gridDataAdd">确定</el-button>
                 <!-- <el-button  type="primary" size="small" plain @click="dialogTableVisible = false">关闭</el-button> -->
             </footer>
             <!-- footer END-->
@@ -556,7 +556,6 @@ export default {
             this.baseInputType = str;
         },
         closeBaseInfo(){
-            
             this.baseInputTableF = false;
         },
          //分页、下一页

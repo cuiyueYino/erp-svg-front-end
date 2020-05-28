@@ -10,11 +10,11 @@
                 </el-form-item>
                 <el-form-item label="审核工作" :label-width="formLabelWidth" prop="name">
                     <el-input v-model="formData.work" autocomplete="off"></el-input>
-                    <img class="icon-search" @click="workSearch" src="../../../assets/img/search.svg">
+                    <img class="icon-search" @click="workSearch('审核工作')" src="../../../assets/img/search.svg">
                 </el-form-item>
                 <el-form-item label="源单据业务" :label-width="formLabelWidth" >
                     <el-input v-model="formData.workData" autocomplete="off"></el-input>
-                    <img class="icon-search" src="../../../assets/img/search.svg">
+                    <img class="icon-search"  @click="workSearch('源单据业务')" src="../../../assets/img/search.svg">
                 </el-form-item>
                 <el-form-item label="业务数据" :label-width="formLabelWidth" >
                     <el-input v-model="formData.structure" autocomplete="off"></el-input>
@@ -22,7 +22,7 @@
                 </el-form-item>
                 <el-form-item label="组织结构" :label-width="formLabelWidth" >
                     <el-input v-model="formData.structure" autocomplete="off"></el-input>
-                     <img class="icon-search" src="../../../assets/img/search.svg">
+                     <img class="icon-search" @click="baseInputTable('用户','组织结构查询')" src="../../../assets/img/search.svg">
                 </el-form-item>
                 <el-form-item label="隐藏" :label-width="formLabelWidth">
                     <el-checkbox v-model="checked"></el-checkbox>
@@ -144,7 +144,7 @@
         </el-tabs>
         <!-- 弹出框 -->
         <el-dialog 
-        title="业务工作"
+        :title="titleStr"
         class="workDialog"
          :modal="false"
           :close-on-click-modal="closeConfig"
@@ -199,12 +199,14 @@
             <!-- Condition END-->
             <!-- footer -->
             <footer>
-                <el-button type="primary"  size="small" plain @click="gridDataAdd">确定</el-button>
+                <el-button   size="small" plain @click="gridDataAdd">确定</el-button>
                 <!-- <el-button  type="primary" size="small" plain @click="dialogTableVisible = false">关闭</el-button> -->
             </footer>
             <!-- footer END-->
         </el-dialog>
-       
+         <!-- 第三层弹窗 -->
+            <base-info-dialog class="children-dialog" :visible="baseInputTableF" :type="baseInputType" :title="baseInputTitle" @closeDialog="closeBaseInfo"></base-info-dialog>
+        
         </div>
          <!-- </el-form> -->
     <!-- </el-dialog> -->
@@ -217,11 +219,13 @@
 * @author liyuanquan
 */
 import DynamicTable from '../../../components/common/dytable/dytable.vue';
+import baseInfoDialog from './base-info-dialog'
 
 export default {
     name: 'NodeJoin',
      components: {
       DynamicTable,
+      baseInfoDialog,
     },
     props: {
         // 配置数据源
@@ -320,21 +324,25 @@ export default {
         gridData:[],
         multipleSelection: [],
         options: [],
+        titleStr:'',
+        baseInputTableF:false,
+        baseInputTitle:'',
+        baseInputType:'',
         };
     },
     computed: {
-        title () {
-            const typeConfig = {
-                Start: '端点配置',
-                End: '端点配置',
-                Condition: '手工活动配置',
-                Fork: '自由活动配置',
-                Join: '审核活动配置',
-                Task: '路由配置',
-                Line: '连接线配置'
-            };
-            return typeConfig[this.type] || '保存工作流';
-        }
+        // title () {
+        //     const typeConfig = {
+        //         Start: '端点配置',
+        //         End: '端点配置',
+        //         Condition: '手工活动配置',
+        //         Fork: '自由活动配置',
+        //         Join: '审核活动配置',
+        //         Task: '路由配置',
+        //         Line: '连接线配置'
+        //     };
+        //     return typeConfig[this.type] || '保存工作流';
+        // }
     },
     watch: {
         // 监听配置数据源
@@ -404,14 +412,24 @@ export default {
             this.formData = []
             this.workSearchTable()
         },
-         workSearch(){
+         baseInputTable(str,title){ 
+            this.baseInputTableF = true;
+            this.baseInputTitle= title
+            this.baseInputType = str;
+        },
+        closeBaseInfo(){
+            this.baseInputTableF = false;
+        },
+         workSearch(str){
+             this.titleStr = str;
              // 业务工作-搜索枚举项
             this.workSearchOption()
             this.workSearchTable()
+            this.dialogTableVisible = true;
         },
         // 业务工作-获取表格数据
         workSearchTable(){
-            this.dialogTableVisible = true;
+           
             this.tableLoading = true;
              let data = {
                 fcode: this.formData.formCode,
@@ -477,6 +495,29 @@ export default {
  .workDialog{
      /deep/ .el-dialog{
           min-height: 500px;
+     }
+    
+     /deep/ .el-input{
+         width: 100%;
+     }
+     /deep/ .el-form-item__label{
+         padding:0
+     }
+     button{
+         margin-bottom: 10px;
+     }
+     .workTable{
+        /deep/ .el-input{
+            width: 50% ;
+         }
+         /deep/ .el-pagination__jump{
+            margin: 0 10px;
+         }
+     }
+ }
+ .children-dialog{
+      /deep/ .el-dialog{
+          min-height: 370px;
      }
     
      /deep/ .el-input{

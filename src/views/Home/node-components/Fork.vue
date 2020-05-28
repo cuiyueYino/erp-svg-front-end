@@ -184,7 +184,7 @@
             <!-- Condition END-->
             <!-- footer -->
             <footer>
-                <el-button type="primary"  size="small" plain @click="gridDataAdd">确定</el-button>
+                <el-button   size="small" plain @click="gridDataAdd">确定</el-button>
                 <!-- <el-button  type="primary" size="small" plain @click="dialogTableVisible = false">关闭</el-button> -->
             </footer>
             <!-- footer END-->
