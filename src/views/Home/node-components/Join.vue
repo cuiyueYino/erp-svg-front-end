@@ -11,6 +11,7 @@
                 <el-form-item label="审核工作" :label-width="formLabelWidth" prop="name">
                     <el-input v-model="formData.work" autocomplete="off"></el-input>
                     <img class="icon-search" @click="workSearch('审核工作')" src="../../../assets/img/search.svg">
+                    <el-button type="primary" plain class="joinWorkBtn" @click="addJoinWork('新增审核业务')">新增审核</el-button>
                 </el-form-item>
                 <el-form-item label="源单据业务" :label-width="formLabelWidth" >
                     <el-input v-model="formData.workData" autocomplete="off"></el-input>
@@ -81,7 +82,7 @@
                         ></dynamic-table>
                     </el-col>
                     <el-col :span="3" class="joinBtnBox">
-                        <el-button type="success" size="mini" plain @click="add">新增</el-button>
+                        <el-button type="success" size="mini" plain @click="joinSearch('新增参与者')">新增</el-button>
                         <el-button type="danger" size="mini" plain @click="deleteMsg">删除</el-button>
                      
                     </el-col>
@@ -101,7 +102,7 @@
                         ></dynamic-table>
                     </el-col>
                     <el-col :span="3" class="joinBtnBox">
-                        <el-button type="success" size="mini" plain @click="add">新增</el-button>
+                        <el-button type="success" size="mini" plain @click="joinSearch('新增抄送')">新增</el-button>
                         <el-button type="danger" size="mini" plain @click="deleteMsg">删除</el-button>
                      
                     </el-col>
@@ -124,32 +125,90 @@
             <el-tab-pane label="决策类型" name="6">
                  <!-- Condition -->
                 <el-row :gutter="24" class="joinTableBox">
-                    <el-col :span="20">
+                    <el-col :span="24">
                         <dynamic-table
-                            :columns="columns"
+                            :columns="columns4"
                             :table-data="tableData"
                             @selection-change="onSelectionChange"
                             v-loading="false"
                             element-loading-text="加载中"
                         ></dynamic-table>
                     </el-col>
-                    <el-col :span="3" class="joinBtnBox">
-                        <el-button type="success" size="mini" plain @click="add">新增</el-button>
-                        <el-button type="danger" size="mini" plain @click="deleteMsg">删除</el-button>
-                     
-                    </el-col>
+                   
                 </el-row>
                  <!-- Condition END-->
             </el-tab-pane>
         </el-tabs>
-        <!-- 弹出框 -->
+       <!-- 弹出框 -->
         <el-dialog 
         :title="titleStr"
         class="workDialog"
          :modal="false"
           :close-on-click-modal="closeConfig"
           :visible.sync="dialogTableVisible">
-            <!-- Condition -->
+            <!-- 基本信息 -->
+            <div v-show="showBaseInfo && titleStr!=='定义关系'" class="base-info">
+                <el-tabs v-model="baseActiveName" @tab-click="handleClick">
+                    <el-tab-pane label="角色" name="1">
+                         <el-form-item label="角色" :label-width="formLabelWidth">
+                            <el-input placeholder="请选择" v-model="baseInput" :disabled="true"> </el-input>
+                            <img class="icon-search" src="../../../assets/img/search.svg" @click="baseInputTable('角色','角色查询')" >
+                        </el-form-item>
+                        <el-form-item label="条件表达式" :label-width="formLabelWidth">
+                            <el-input type="textarea" v-model="baseTextarea"></el-input>
+                        </el-form-item>
+                    </el-tab-pane>
+                    <el-tab-pane label="用户" name="2">
+                        <el-form-item label="用户" :label-width="formLabelWidth">
+                            <el-input placeholder="请选择" v-model="baseInput" :disabled="true"> </el-input>
+                            <img class="icon-search" src="../../../assets/img/search.svg" @click="baseInputTable('用户','用户查询')">
+                        </el-form-item>
+                        <el-form-item label="条件表达式" :label-width="formLabelWidth">
+                            <el-input type="textarea" v-model="baseTextarea"></el-input>
+                        </el-form-item>
+                    </el-tab-pane>
+                    <el-tab-pane label="服务" name="3">
+                        <el-form-item label="服务" :label-width="formLabelWidth">
+                            <el-input placeholder="请选择" v-model="baseInput" :disabled="true"> </el-input>
+                            <img class="icon-search" src="../../../assets/img/search.svg"  @click="baseInputTable('服务','服务查询')">
+                        </el-form-item>
+                        <el-form-item label="条件表达式" :label-width="formLabelWidth">
+                            <el-input type="textarea" v-model="baseTextarea"></el-input>
+                        </el-form-item>
+                    </el-tab-pane>
+                    <el-tab-pane label="表达式" name="4">
+                        <el-form-item label="条件表达式" :label-width="formLabelWidth">
+                            <el-input type="textarea" v-model="baseTextarea"></el-input>
+                        </el-form-item>
+                    </el-tab-pane>
+                    <el-tab-pane label="职务" name="5">
+                        <el-form-item label="职务" :label-width="formLabelWidth">
+                            <el-input placeholder="请选择" v-model="baseInput" :disabled="true"> </el-input>
+                            <img class="icon-search" src="../../../assets/img/search.svg"  @click="baseInputTable('职务','职务查询')">
+                        </el-form-item>
+                        <el-form-item label="条件表达式" :label-width="formLabelWidth">
+                            <el-input type="textarea" v-model="baseTextarea"></el-input>
+                        </el-form-item>
+                    </el-tab-pane>
+                </el-tabs>
+            </div>
+            <!-- 基本信息 END-->
+            <!-- 定义关系 -->
+             <el-col :span="16" v-show="titleStr ==='定义关系'" style="margin-bottom: 170px;">
+                <el-form-item label="关系类型" label-width="70px">
+                        <el-select v-model="formData.formCtionTypeCon" clearable placeholder="请选择">
+                        <el-option
+                        v-for="item in options"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+            </el-col> 
+            <!-- 定义关系 END-->
+            <!-- 角色选择 -->
+            <div v-show="showInfoCheck">
             <!-- 搜索框 -->
              <el-row :gutter="24">
                   <el-col :span="8">
@@ -196,17 +255,20 @@
                 v-loading="tableLoading"
                 element-loading-text="加载中"
             ></dynamic-table>
-            <!-- Condition END-->
+            </div>
+            <!-- 角色选择 END-->
+            
             <!-- footer -->
             <footer>
-                <el-button   size="small" plain @click="gridDataAdd">确定</el-button>
+                <el-button   size="small"   @click="gridDataAdd">确定</el-button>
                 <!-- <el-button  type="primary" size="small" plain @click="dialogTableVisible = false">关闭</el-button> -->
             </footer>
             <!-- footer END-->
-        </el-dialog>
+           </el-dialog>
          <!-- 第三层弹窗 -->
             <base-info-dialog class="children-dialog" :visible="baseInputTableF" :type="baseInputType" :title="baseInputTitle" @closeDialog="closeBaseInfo"></base-info-dialog>
-        
+         <!-- 表单弹窗 -->
+            <join-dialog :visible="baseFormF" @closeDialog="closeForm" :title="baseFormTitle"></join-dialog>
         </div>
          <!-- </el-form> -->
     <!-- </el-dialog> -->
@@ -220,12 +282,14 @@
 */
 import DynamicTable from '../../../components/common/dytable/dytable.vue';
 import baseInfoDialog from './base-info-dialog'
+import joinDialog from './Join-dialog'
 
 export default {
     name: 'NodeJoin',
      components: {
       DynamicTable,
       baseInfoDialog,
+      joinDialog,
     },
     props: {
         // 配置数据源
@@ -262,6 +326,7 @@ export default {
             pageNum: 1,
             pageSize: 10,
             total: 20,
+            baseFormTitle:'',
             activeName: '1',
             formLabelWidth: '120px',
             // 关闭对话框配置
@@ -319,6 +384,19 @@ export default {
                 title: '描述'
             }
         ],
+         columns4: [
+             {
+                type: 'selection'
+            },
+            {
+                key: 'fcode',
+                title: '功能'
+            },
+            {
+                key: 'fname',
+                title: '显示标签'
+            }
+        ],
         tableData:[],
         tableData2:[],
         gridData:[],
@@ -328,21 +406,15 @@ export default {
         baseInputTableF:false,
         baseInputTitle:'',
         baseInputType:'',
+        baseFormF :false,
+        showBaseInfo:false,
+        showInfoCheck:false,
+        baseActiveName:'1',
+        baseInput:'',
+        baseTextarea:'',
         };
     },
     computed: {
-        // title () {
-        //     const typeConfig = {
-        //         Start: '端点配置',
-        //         End: '端点配置',
-        //         Condition: '手工活动配置',
-        //         Fork: '自由活动配置',
-        //         Join: '审核活动配置',
-        //         Task: '路由配置',
-        //         Line: '连接线配置'
-        //     };
-        //     return typeConfig[this.type] || '保存工作流';
-        // }
     },
     watch: {
         // 监听配置数据源
@@ -369,6 +441,11 @@ export default {
         }
     },
     methods: {
+        // 新增审核工作
+        addJoinWork(str){
+            this.baseFormF = true;
+            this.baseFormTitle = str;
+        },
         // 取消配置操作
         cancelConfig () {
             this.dialogVisible = false;
@@ -385,6 +462,14 @@ export default {
         },
         handleClick(tab, event) {
             // console.log(tab, event);
+        },
+         // 参与人弹窗
+        joinSearch(Str){
+            this.titleStr = Str;
+            this.dialogTableVisible = true;
+            this.showInfoCheck = false;
+            this.showBaseInfo = true;
+
         },
          //业务工作-新增
         gridDataAdd(){
@@ -419,6 +504,9 @@ export default {
         },
         closeBaseInfo(){
             this.baseInputTableF = false;
+        },
+        closeForm(){
+             this.baseFormF = false;
         },
          workSearch(str){
              this.titleStr = str;
@@ -480,6 +568,9 @@ export default {
  .joinCheckBox{
     //  margin-top: 10px;
  }
+ .joinWorkBtn{
+     margin-left: 14px;
+ }
  .joinBtnBox{
      display: flex;
      align-items: center;
@@ -498,7 +589,7 @@ export default {
      }
     
      /deep/ .el-input{
-         width: 100%;
+         width: 70%;
      }
      /deep/ .el-form-item__label{
          padding:0

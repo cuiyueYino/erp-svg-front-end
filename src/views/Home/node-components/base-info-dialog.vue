@@ -23,18 +23,18 @@
         >
          <!-- 搜索框 -->
              <el-row :gutter="24">
-                  <el-col :span="8">
+                  <el-col :span="8" v-show=" type !=='审核'">
                     <el-form-item label="编码" label-width="43px">
                         <el-input clearable size="small" v-model="formData.formCode" placeholder="请输入条件值"></el-input>
                     </el-form-item>
                   </el-col> 
-                  <el-col :span="8">
+                  <el-col :span="8"  v-show=" type !=='审核'">
                     <el-form-item label="名称" label-width="43px">
                         <el-input clearable size="small" v-model="formData.formName" placeholder="请输入条件值"></el-input>
                     </el-form-item>
                   </el-col> 
-
-                  <el-col :span="8" v-show="type !=='服务'">
+                 
+                  <el-col :span="8" v-show="type !=='服务' && type !=='审核'">
                     <el-form-item label="状态" label-width="43px">
                          <el-select v-model="formData.formCtionTypeCon" clearable placeholder="请选择">
                             <el-option
@@ -53,7 +53,7 @@
                 </el-col>
              </el-row>
              <el-row :gutter="24" >
-                <el-col :span="8" v-show="type !=='服务'">
+                <el-col :span="8" v-show="type !=='服务'  && type !=='审核'">
                     <el-form-item :label="type ==='职务'?'公司':'角色类别'" :label-width="type ==='职务'?'43px':'70px'">
                          <el-select v-model="formData.formCtionTypeCon" clearable placeholder="请选择">
                             <el-option
@@ -80,6 +80,24 @@
                  </el-form-item>
                   
                 </el-col> 
+                 <!-- 审核-业务数据 -->
+                  <span v-show="type ==='审核'">
+                    <el-col :span="12">
+                    <el-form-item label="编码" label-width="56px">
+                        <el-input clearable size="small" v-model="formData.formCode" placeholder="请输入条件值"></el-input>
+                    </el-form-item>
+                  </el-col> 
+                  <el-col :span="12">
+                    <el-form-item label="名称" label-width="56px">
+                        <el-input clearable size="small" v-model="formData.formName" placeholder="请输入条件值"></el-input>
+                    </el-form-item>
+                  </el-col> 
+                  <el-col :span="12">
+                    <el-form-item label="超类编码" label-width="84px">
+                        <el-input clearable size="small" v-model="formData.formName" placeholder="请输入条件值"></el-input>
+                    </el-form-item>
+                  </el-col> 
+                  </span>
                 <el-col :span="6" v-show="type !=='服务'">
                     <el-button type="primary" size="small" plain @click="reWorkSearchTable">重置</el-button>
                     <el-button type="primary" size="small" plain @click="workSearchTable">搜索</el-button>
@@ -201,9 +219,17 @@ export default {
                     title: '名称'
                 },
                 {
+                    key: 'fname',
+                    title: '角色类别'
+                },
+                {
                     key: 'fremark',
                     title: '描述'
-                }
+                },
+                {
+                    key: 'fname',
+                    title: '缺省管理员'
+                },
             ],
             treeData:[
                 {
