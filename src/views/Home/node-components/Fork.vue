@@ -6,7 +6,7 @@
             <el-tab-pane label="基本信息" name="1">
                 <!-- Condition -->
                 <el-form-item label="名称" :label-width="formLabelWidth" prop="name">
-                    <el-input ref="nameInput" v-model="formData.name" autocomplete="off"></el-input>
+                    <el-input ref="nameInput" v-model="formData.name" autocomplete="off" clearable></el-input>
                 </el-form-item>
                 <el-form-item label="业务工作" :label-width="formLabelWidth" prop="name">
                     <el-input v-model="formData.work" autocomplete="off"></el-input>
@@ -15,117 +15,55 @@
                 <el-form-item label="业务数据" :label-width="formLabelWidth" >
                     <el-input v-model="formData.workData" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="组织结构" :label-width="formLabelWidth" >
-                    <el-input v-model="formData.structure" autocomplete="off"></el-input>
-                     <img class="icon-search" src="../../../assets/img/search.svg">
-                </el-form-item>
                 <el-form-item label="隐藏" :label-width="formLabelWidth">
                     <el-checkbox v-model="checked"></el-checkbox>
                 </el-form-item>
                 <el-form-item label="描述：" :label-width="formLabelWidth">
-                    <el-input maxlength="1000"  autosize show-word-limit type="textarea" v-model="formData.fremark"></el-input>
+                    <el-input maxlength="1000" clearable  autosize show-word-limit type="textarea" v-model="formData.fremark"></el-input>
                 </el-form-item>
                 <!-- Condition END-->
             </el-tab-pane>
-            <el-tab-pane label="基本设置" name="2">
+            <el-tab-pane label="业务服务参数列表" name="2">
                 <!-- Condition -->
-                <el-form-item label="最大工作时间" :label-width="formLabelWidth" prop="maxTime">
-                    <el-input v-model="formData.maxTime" autocomplete="off"></el-input>
+                <el-form-item label="业务服务" label-width="84px" prop="maxTime">
+                    <el-input v-model="formData.maxTime" disabled autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="时间单位" :label-width="formLabelWidth" prop="resource">
-                     <el-radio-group v-model="formData.resource">
-                        <el-radio label="小时"></el-radio>
-                        <el-radio label="天"></el-radio>
-                    </el-radio-group>
-                </el-form-item>
-                <el-form-item  :label-width="formLabelWidth" prop="autoSend">
-                    <el-checkbox v-model="autoSendChecked">超过最大时间系统自动发送催办消息</el-checkbox>
-                </el-form-item>
-                <el-form-item label="回收处理服务" :label-width="formLabelWidth" prop="recovery">
-                    <el-input v-model="formData.recovery" autocomplete="off"></el-input>
-                     <img class="icon-search" src="../../../assets/img/search.svg">
-                </el-form-item>
-                 <!-- Condition END-->
-            </el-tab-pane>
-            <el-tab-pane label="参与者" name="3">
-                <!-- Condition -->
-                <el-radio-group v-model="formData.joinCheckBox" class="joinCheckBox">
-                    <el-radio :label="1">由权限控制</el-radio>
-                    <el-radio :label="2">手工指定下一节点参与者</el-radio>
-                    <el-radio :label="3">可略过</el-radio>
-                    <el-radio :label="4">多封邮件</el-radio>
-                </el-radio-group>
-                <el-row :gutter="24" class="joinTableBox">
-                    <el-col :span="20">
-                        <dynamic-table
-                            :columns="columns"
-                            :table-data="tableData"
-                            @selection-change="onSelectionChange"
-                            v-loading="false"
-                            element-loading-text="加载中"
-                        ></dynamic-table>
-                    </el-col>
-                    <el-col :span="3" class="joinBtnBox">
-                        <el-button type="success" size="mini" plain @click="add">新增</el-button>
-                        <el-button type="danger" size="mini" plain @click="deleteMsg">删除</el-button>
-                     
-                    </el-col>
-                </el-row>
-                 <!-- Condition END-->
-            </el-tab-pane>
-            <el-tab-pane label="抄送" name="4">
-                <!-- Condition -->
-                <el-row :gutter="24" class="joinTableBox">
-                    <el-col :span="20">
-                        <dynamic-table
-                            :columns="columns"
-                            :table-data="tableData"
-                            @selection-change="onSelectionChange"
-                            v-loading="false"
-                            element-loading-text="加载中"
-                        ></dynamic-table>
-                    </el-col>
-                    <el-col :span="3" class="joinBtnBox">
-                        <el-button type="success" size="mini" plain @click="add">新增</el-button>
-                        <el-button type="danger" size="mini" plain @click="deleteMsg">删除</el-button>
-                     
-                    </el-col>
-                </el-row>
-                 <!-- Condition END-->
-            </el-tab-pane>
-            <el-tab-pane label="审核单范围" name="5">
-                 <!-- Condition -->
-                 <el-row :gutter="24" class="rangeTableBox">
-                 <dynamic-table
-                    :columns="columns2"
-                    :table-data="tableData2"
+                <!-- 表格 -->
+                <dynamic-table
+                    class="workTable"
+                    :height="310"
+                    :columns="columns3"
+                    :table-data="tableData"
+                    :total="total"
+                    :page-num="pageNum"
+                    :page-size="pageSize"
+                    @current-change="onCurrentChange"
                     @selection-change="onSelectionChange"
-                    v-loading="false"
+                    v-loading="tableLoading"
                     element-loading-text="加载中"
-                 ></dynamic-table>
-                 </el-row>
-                <!-- Condition END-->
+                ></dynamic-table>
             </el-tab-pane>
-            <el-tab-pane label="业务功能" name="6">
-                 <!-- Condition -->
-                <el-row :gutter="24" class="joinTableBox">
-                    <el-col :span="20">
-                        <dynamic-table
-                            :columns="columns"
-                            :table-data="tableData"
-                            @selection-change="onSelectionChange"
-                            v-loading="false"
-                            element-loading-text="加载中"
-                        ></dynamic-table>
-                    </el-col>
-                    <el-col :span="3" class="joinBtnBox">
-                        <el-button type="success" size="mini" plain @click="add">新增</el-button>
-                        <el-button type="danger" size="mini" plain @click="deleteMsg">删除</el-button>
-                     
-                    </el-col>
-                </el-row>
-                 <!-- Condition END-->
+            <el-tab-pane label="反向业务数据参数列表" name="3">
+                <!-- Condition -->
+                <el-form-item label="业务服务" label-width="84px" prop="maxTime">
+                    <el-input v-model="formData.maxTime" disabled autocomplete="off"></el-input>
+                </el-form-item>
+                <!-- 表格 -->
+                <dynamic-table
+                    class="workTable"
+                    :height="310"
+                    :columns="columns3"
+                    :table-data="tableData2"
+                    :total="total"
+                    :page-num="pageNum"
+                    :page-size="pageSize"
+                    @current-change="onCurrentChange"
+                    @selection-change="onSelectionChange"
+                    v-loading="tableLoading"
+                    element-loading-text="加载中"
+                ></dynamic-table>
             </el-tab-pane>
+           
         </el-tabs>
         <!-- 弹出框 -->
         <el-dialog 
@@ -405,12 +343,13 @@ export default {
         },
          workSearch(){
              // 业务工作-搜索枚举项
-            this.workSearchOption()
-            this.workSearchTable()
+            // this.workSearchOption()
+            // this.workSearchTable()
+            this.dialogTableVisible = true;
         },
         // 业务工作-获取表格数据
         workSearchTable(){
-            this.dialogTableVisible = true;
+            
             this.tableLoading = true;
              let data = {
                 fcode: this.formData.formCode,

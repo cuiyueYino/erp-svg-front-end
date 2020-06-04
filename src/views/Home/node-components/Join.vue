@@ -511,8 +511,10 @@ export default {
          workSearch(str){
              this.titleStr = str;
              // 业务工作-搜索枚举项
-            this.workSearchOption()
-            this.workSearchTable()
+            // this.workSearchOption()
+            // this.workSearchTable()
+            this.showInfoCheck = true;
+            this.showBaseInfo = false;
             this.dialogTableVisible = true;
         },
         // 业务工作-获取表格数据
