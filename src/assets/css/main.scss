@@ -52,8 +52,9 @@ a {
 .content {
     width: auto;
     height: 100%;
-    overflow-y: scroll;
     box-sizing: border-box;
+    overflow: hidden;
+    margin: 10px 6px;
 }
 
 .content-collapse {

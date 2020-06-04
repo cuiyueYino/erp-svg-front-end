@@ -9,7 +9,8 @@ const common = {
     loginAPI:(params) =>{
     return LhttpReqest({
         headers:{
-            "Authorization":"Basic ZXJwLWFkbWluOmVycC1hZG1pbi1zZWNyZXQ=",
+            "Authorization":"Basic YXBwLWFkbWluJTNBYXBwLWFkbWluLXNlY3JldA==",
+            // "Authorization":'Basic YXBwLWFkbWluOmFwcC1hZG1pbi1zZWNyZXQ=',
             'Content-Type' : 'application/x-www-form-urlencoded;charset=UTF-8'
         },
         url: '/Lapi/uaa/oauth/token',

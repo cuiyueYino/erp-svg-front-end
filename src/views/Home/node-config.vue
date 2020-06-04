@@ -6,7 +6,7 @@
         :modal="false"
         :close-on-click-modal="closeConfig"
         :close-on-press-escape="closeConfig"
-        width="400px"
+        width="600px"
         style="z-index:2007"
     >
         <el-form
@@ -19,27 +19,14 @@
             size="small"
             @submit.native.prevent
         >
-            <el-form-item label="英文名" prop="name">
-                <el-input ref="nameInput" v-model="formData.name" clearable @keyup.enter.native="saveConfig"></el-input>
-            </el-form-item>
-            <el-form-item label="显示名称" prop="displayName">
-                <el-input v-model="formData.displayName" clearable @keyup.enter.native="saveConfig"></el-input>
-            </el-form-item>
-            <el-form-item label="参与类型" prop="type" v-if="type === 'Task'">
-                <el-select v-model="formData.performType" clearable style="width: 100%;">
-                    <el-option
-                        v-for="(item, index) in typeOpt"
-                        :key="index"
-                        :label="item.label"
-                        :value="item.value"
-                    >
-                    </el-option>
-                </el-select>
-            </el-form-item>
-        </el-form>
-        <el-row :gutter="20">
+        <node-condition :visible = visible?(ConditionF?true:false):false  > </node-condition>
+        <node-fork :visible = visible?(ForkF?true:false):false></node-fork>
+        <node-join :visible = visible?(JoinF?true:false):false></node-join>
+        
+         </el-form>
+          <el-row :gutter="20">
             <el-col :span="12" style="text-align: right;">
-                <el-button type="primary" size="small" @click="saveConfig">保存</el-button>
+                <el-button  size="small" @click="saveConfig">保存</el-button>
             </el-col>
             <el-col :span="12">
                 <el-button size="small" @click="cancelConfig">取消</el-button>
@@ -54,8 +41,21 @@
 * @create 2019-04-11
 * @author liyuanquan
 */
+// 手工活动
+import NodeCondition from './node-components/Condition';
+// 审核活动
+import NodeJoin from './node-components/Join';
+// 自由活动
+import NodeFork from './node-components/Fork';
+// 路由
+
 export default {
     name: 'NodeConfig',
+     components: {
+      NodeCondition,
+      NodeFork,
+      NodeJoin,
+    },
     props: {
         // 配置数据源
         data: {
@@ -77,29 +77,22 @@ export default {
     },
     data () {
         return {
+            ConditionF:false,
+            JoinF:false,
+            ForkF:false,
+            TaskF:false,
             // 关闭对话框配置
             closeConfig: false,
-            // 配置表单校验规则
+            // 对话框显示标识
+            dialogVisible: this.visible,
+            // 配置表单数据
+            formData: this.data,
+             // 配置表单校验规则
             configRules: {
                 name: { required: true, message: '请输入英文名', trigger: 'blur' },
                 displayName: { required: true, message: '请输入名称', trigger: 'blur' },
                 performType: { required: true, message: '请选择参与类型', trigger: 'change' }
             },
-            // 对话框显示标识
-            dialogVisible: this.visible,
-            // 配置表单数据
-            formData: this.data,
-            // task参与类型
-            typeOpt: [
-                {
-                    label: '普通参与',
-                    value: 'NORMAL'
-                },
-                {
-                    label: '会签参与',
-                    value: 'ALL'
-                }
-            ]
         };
     },
     computed: {
@@ -121,6 +114,36 @@ export default {
         data: {
             handler (obj) {
                 this.formData = JSON.parse(JSON.stringify(obj));
+                switch (this.formData.name) {
+                    case "Task":
+                        this.ConditionF =false
+                        this.JoinF =false
+                        this.ForkF =false
+                        this.TaskF = true
+                        break;
+                    case "Fork":
+                        this.ConditionF =false
+                        this.JoinF =false
+                        this.ForkF =true
+                        this.TaskF = false
+                        break;
+                    case "Join":
+                        this.ConditionF =false
+                        this.JoinF =true
+                        this.ForkF =false
+                        this.TaskF = false
+                        break;
+                    case "Condition":
+                        this.ConditionF =true
+                        this.JoinF =false
+                        this.ForkF =false
+                        this.TaskF = false
+                        break;
+                
+                    default:
+                        break;
+                }
+                // console.log( this.formData.name)
             },
             deep: true,
             immediate: true
@@ -132,11 +155,7 @@ export default {
         // 对话框显示 自动聚焦name输入框
         visible (bool) {
             this.dialogVisible = bool;
-            if (bool) {
-                setTimeout(() => {
-                    this.$refs.nameInput.focus();
-                }, 100);
-            }
+           
         }
     },
     methods: {
@@ -153,18 +172,35 @@ export default {
                 this.$emit('save', this.formData);
                 this.dialogVisible = false;
             });
-        }
+        },
     }
 };
 </script>
 <style  lang="scss" scoped>
 /deep/ .el-dialog__body{
     padding:20px !important;
+    max-height: 500px !important;
 }
  /deep/ .el-dialog__header{
      display: block !important;
  }
  /deep/ .el-dialog{
          box-shadow: 5px 4px 50px rgba(0,0,0,.3);
+ }
+ /deep/ .el-input{
+         width: 70%;
+ }
+ /deep/ .el-textarea .el-input__count{
+     background: #fff0;
+ }
+ /deep/ .el-textarea{
+      width: 70%;
+ }
+ /deep/ .el-form-item__content{
+         display: flex;
+ }
+ /deep/ .el-radio-group{
+         line-height: 44px;
+    height: 32px;
  }
 </style>
