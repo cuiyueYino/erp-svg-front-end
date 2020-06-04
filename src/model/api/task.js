@@ -146,6 +146,99 @@ const task = {
     findProjectPartnerPage(params){
         return httpReqest.post('/api/interfaces/financial/projectPartner/findProjectPartnerPage', params);
     },
+    //综合授信调整
+    //查询多条综合授信调整
+    findComplexCreditContractAdjustPage(params) {
+        return httpReqest.post('/api/interfaces/complexCreditContractAdjust/findComplexCreditContractAdjustPage', params);
+    },
+    //查询一条综合授信调整
+    getComplexCreditContractAdjustVO(params){
+        var valueS='?';
+        for(var item in params){
+            valueS+=item+"="+params[item]+"&";
+        }
+        if(valueS.slice(valueS.length-1,valueS.length) ==="&"){
+            valueS=valueS.slice(0,valueS.length-1);
+        }
+        return httpReqest.get('/api/interfaces/complexCreditContractAdjust/getComplexCreditContractAdjustVO'+valueS);
+    },
+    //删除综合授信合同调整
+    delComplexCreditContractAdjustVO(params){
+        var valueS='?';
+        for(var item in params){
+            valueS+=item+"="+params[item]+"&";
+        }
+        if(valueS.slice(valueS.length-1,valueS.length) ==="&"){
+            valueS=valueS.slice(0,valueS.length-1);
+        }
+        return httpReqest.get('/api/interfaces/complexCreditContractAdjust/delComplexCreditContractAdjustVO'+valueS);
+    },
+    //综合授信合同调整提交和修改
+    insertComplexCreditContractAdjustVO(params) {
+        return httpReqest.post('/api/interfaces/complexCreditContractAdjust/insertComplexCreditContractAdjustVO', params);
+    },
+    //综合授信合同调整暂存和修改
+    insertZCComplexCreditContractAdjustVO(params) {
+        return httpReqest.post('/api/interfaces/complexCreditContractAdjust/insertZCComplexCreditContractAdjustVO', params);
+    },
+    //综合授信合同查询下拉框接口
+    findSearchList(){
+        return httpReqest.get('/api/interfaces/complexCreditContractRegister/findSearchList');
+    },
+    //授信主体查询下拉框接口
+    findprojectPartnerSearchList(){
+        return httpReqest.get('/api/interfaces/financial/projectPartner/findSearchList');
+    },
+    //授信银行查询下拉框接口
+    findBlankSearchList(){
+        return httpReqest.get('/api/interfaces/fundCustomer/findSearchList');
+    },
+    //授信品种查询下拉框接口
+    findCreditBreedSearchList(){
+        return httpReqest.get('/api/interfaces/awardCreditBreed/getSearchList');
+    },
+    //用信合同登记 查询多条用信合同
+    findUserCreditContractRegisterPage(params) {
+        return httpReqest.post('/api/interfaces/userCreditContractRegister/findUserCreditContractRegisterPage', params);
+    },
+    //查询一条用信合同登记
+    getUserCreditContractRegisterVO(params){
+        var valueS='?';
+        for(var item in params){
+            valueS+=item+"="+params[item]+"&";
+        }
+        if(valueS.slice(valueS.length-1,valueS.length) ==="&"){
+            valueS=valueS.slice(0,valueS.length-1);
+        }
+        return httpReqest.get('/api/interfaces/userCreditContractRegister/getUserCreditContractRegisterVO'+valueS);
+    },
+    //业务币种查询
+    findCurrencyPageList(params) {
+        return httpReqest.post('/api/interfaces/financial/currency/findCurrencyPageList', params);
+    },
+    //删除用信合同登记
+    delUserCreditContractRegisterVO(params){
+        var valueS='?';
+        for(var item in params){
+            valueS+=item+"="+params[item]+"&";
+        }
+        if(valueS.slice(valueS.length-1,valueS.length) ==="&"){
+            valueS=valueS.slice(0,valueS.length-1);
+        }
+        return httpReqest.get('/api/interfaces/userCreditContractRegister/delUserCreditContractRegisterVO'+valueS);
+    },
+    //用信合同登记提交和修改
+    insertUserCreditContractRegisterVO(params) {
+        return httpReqest.post('/api/interfaces/userCreditContractRegister/insertUserCreditContractRegisterVO', params);
+    },
+    //用信合同登记暂存和修改
+    insertZCUserCreditContractRegisterVO(params) {
+        return httpReqest.post('/api/interfaces/userCreditContractRegister/insertZCUserCreditContractRegisterVO', params);
+    },
+    //款项名称列表查询
+    findMoneyNamePage(params){
+        return httpReqest.post('/api/interfaces/financial/moneyName/findMoneyNamePage', params);
+    },
 };
 
 export default task;

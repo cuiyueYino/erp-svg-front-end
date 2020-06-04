@@ -40,30 +40,30 @@
                             ></el-option>
                         </el-select>
                     </div>
-                    <div class="frdiv" v-else-if="formInline.searchName === '005'">
-                        <el-select v-model="formInline.CreditSub" placeholder="--" clearable>
+                    <div class="frdiv" v-else-if="formInline.searchName === '003'">
+                        <el-select v-model="formInline.serchfcRegidst" placeholder="综合授信合同" clearable>
                             <el-option
-                                v-for="item in CreditSubject"
-                                :key="item.id"
+                                v-for="item in fcRegidstData"
+                                :key="item.contractcode"
+                                :label="item.contractname"
+                                :value="item.contractcode"
+                            ></el-option>
+                        </el-select>
+                    </div>
+                    <div class="frdiv" v-else-if="formInline.searchName === '005'">
+                        <el-select v-model="formInline.CreditSub" placeholder="授信品种调整" clearable >
+                            <el-option
+                                v-for="item in creditType"
+                                :key="item.code"
                                 :label="item.name"
-                                :value="item.id"
+                                :value="item.code"
                             ></el-option>
                         </el-select>
                     </div>
                     <div class="frdiv" v-else-if="formInline.searchName === '006'">
-                        <el-select v-model="formInline.searchblank" placeholder="--" clearable>
+                        <el-select v-model="formInline.headerS" placeholder="经办人" clearable >
                             <el-option
-                                v-for="item in Creditblank"
-                                :key="item.id"
-                                :label="item.name"
-                                :value="item.id"
-                            ></el-option>
-                        </el-select>
-                    </div>
-                    <div class="frdiv" v-else-if="formInline.searchName === '007'">
-                        <el-select v-model="formInline.searchcreditType" placeholder="--" clearable>
-                            <el-option
-                                v-for="item in creditType"
+                                v-for="item in headerSData"
                                 :key="item.code"
                                 :label="item.name"
                                 :value="item.code"
@@ -93,7 +93,7 @@
                 element-loading-text="加载中"
             ></dynamic-table>
         </el-card>
-        <el-dialog title="综合授信合同登记缺省查询方案" :visible.sync="MoreSearchVisible" :append-to-body="true" v-if="MoreSearchVisible" :close-on-click-modal="false" width="50%">
+        <el-dialog title="综合授信合同调整" :visible.sync="MoreSearchVisible" :append-to-body="true" v-if="MoreSearchVisible" :close-on-click-modal="false" width="50%">
             <el-form
                 label-width="100px"
                 v-model="dialog"
@@ -106,13 +106,6 @@
                     <el-col :span="6" class="pbackground">查询条件</el-col>
                     <el-col :span="6"  class="pbackground">操作符</el-col>
                     <el-col :span="12" class="pbackground">条件值</el-col>
-                </el-row>
-                <el-row class="elrowStyle" size="mini">
-                    <el-col :span="6" class="elColCenter">单据号</el-col>
-                    <el-col :span="6"  class="elColCenter">左右匹配</el-col>
-                    <el-col :span="8">
-                       <el-input v-model="dialog.documentNo" size="mini"></el-input>
-                    </el-col>
                 </el-row>
                 <el-row class="elrowStyle" >
                     <el-col :span="6" class="elColCenter">公司</el-col>
@@ -128,8 +121,29 @@
                         </el-select>
                     </el-col>
                 </el-row>
+                <el-row class="elrowStyle" size="mini">
+                    <el-col :span="6" class="elColCenter">调整单号</el-col>
+                    <el-col :span="6"  class="elColCenter">左右匹配</el-col>
+                    <el-col :span="8">
+                       <el-input v-model="dialog.documentNo" size="mini"></el-input>
+                    </el-col>
+                </el-row>
                 <el-row class="elrowStyle" >
-                    <el-col :span="6" class="elColCenter">单据日期</el-col>
+                    <el-col :span="6" class="elColCenter">综合授信合同</el-col>
+                    <el-col :span="6" class="elColCenter">等于</el-col>
+                    <el-col :span="8">
+                        <el-select v-model="dialog.fcRegidst" size="mini">
+                            <el-option
+                                v-for="item in fcRegidstData"
+                                :key="item.contractcode"
+                                :label="item.contractname"
+                                :value="item.contractcode"
+                            ></el-option>
+                        </el-select>
+                    </el-col>
+                </el-row>
+                <el-row class="elrowStyle" >
+                    <el-col :span="6" class="elColCenter">调整日期</el-col>
                     <el-col :span="6"  class="elColCenter">大于等于</el-col>
                     <el-col :span="8">
                         <el-date-picker
@@ -141,64 +155,17 @@
                     </el-col>
                 </el-row>
                 <el-row class="elrowStyle" >
-                    <el-col :span="6" class="elColCenter">单据日期</el-col>
-                    <el-col :span="6"  class="elColCenter">小于等于</el-col>
+                    <el-col :span="6" class="elColCenter">授信额度调整</el-col>
+                    <el-col :span="6"  class="elColCenter">大于等于</el-col>
                     <el-col :span="8">
-                        <el-date-picker
-                            v-model="dialog.docDateEnd"
-                            type="date"
-                            size="mini"
-                            placeholder="选择日期">
-                        </el-date-picker>
+                       <el-input v-model="dialog.docfcreditadjust" size="mini"></el-input>
                     </el-col>
                 </el-row>
                 <el-row class="elrowStyle" >
-                    <el-col :span="6" class="elColCenter">授信合同编码</el-col>
-                    <el-col :span="6"  class="elColCenter">左右匹配</el-col>
-                    <el-col :span="8">
-                       <el-input v-model="dialog.codeNomber" size="mini"></el-input>
-                    </el-col>
-                </el-row>
-                <el-row class="elrowStyle" >
-                    <el-col :span="6" class="elColCenter">合同名称</el-col>
-                    <el-col :span="6"  class="elColCenter">左右匹配</el-col>
-                    <el-col :span="8">
-                       <el-input v-model="dialog.name" size="mini"></el-input>
-                    </el-col>
-                </el-row>
-                <el-row class="elrowStyle" >
-                    <el-col :span="6" class="elColCenter">授信主体</el-col>
+                    <el-col :span="6" class="elColCenter">授信品种调整</el-col>
                     <el-col :span="6"  class="elColCenter">等于</el-col>
                     <el-col :span="8">
                        <el-select v-model="dialog.CreditSub" placeholder="--" clearable size="mini">
-                            <el-option
-                                v-for="item in CreditSubject"
-                                :key="item.id"
-                                :label="item.name"
-                                :value="item.id"
-                            ></el-option>
-                        </el-select>
-                    </el-col>
-                </el-row>
-                <el-row class="elrowStyle" >
-                    <el-col :span="6" class="elColCenter">授信银行</el-col>
-                    <el-col :span="6"  class="elColCenter">等于</el-col>
-                    <el-col :span="8">
-                       <el-select v-model="dialog.searchblank" placeholder="--" clearable size="mini">
-                            <el-option
-                                v-for="item in Creditblank"
-                                :key="item.id"
-                                :label="item.name"
-                                :value="item.id"
-                            ></el-option>
-                        </el-select>
-                    </el-col>
-                </el-row>
-                <el-row class="elrowStyle" >
-                    <el-col :span="6" class="elColCenter">授信品种</el-col>
-                    <el-col :span="6"  class="elColCenter">等于</el-col>
-                    <el-col :span="8">
-                       <el-select v-model="dialog.searchcreditType" placeholder="--" clearable size="mini">
                             <el-option
                                 v-for="item in creditType"
                                 :key="item.code"
@@ -209,27 +176,17 @@
                     </el-col>
                 </el-row>
                 <el-row class="elrowStyle" >
-                    <el-col :span="6" class="elColCenter">授信额度</el-col>
-                    <el-col :span="6"  class="elColCenter">大于等于</el-col>
-                    <el-col :span="8">
-                       <el-input v-model="dialog.Creditline" size="mini"></el-input>
-                    </el-col>
-                </el-row>
-                <el-row class="elrowStyle" >
-                    <el-col :span="6" class="elColCenter">授信余额</el-col>
-                    <el-col :span="6"  class="elColCenter">大于等于</el-col>
-                    <el-col :span="8">
-                       <el-input v-model="dialog.Creditbalance" size="mini"></el-input>
-                    </el-col>
-                </el-row>
-                <el-row class="elrowStyle" >
                     <el-col :span="6" class="elColCenter">经办人</el-col>
                     <el-col :span="6"  class="elColCenter">等于</el-col>
                     <el-col :span="8">
-                       <el-input v-model="dialog.operator" size="mini"></el-input>
-                    </el-col>
-                    <el-col :span="2">
-                    <el-button type="primary" size="mini" icon="el-icon-search" @click="MoreSearchuserVisible(dialog)"></el-button>
+                       <el-select v-model="dialog.headerS" placeholder="--" clearable size="mini">
+                            <el-option
+                                v-for="item in headerSData"
+                                :key="item.code"
+                                :label="item.name"
+                                :value="item.code"
+                            ></el-option>
+                        </el-select>
                     </el-col>
                 </el-row>
                 </el-card>
@@ -239,17 +196,17 @@
                 <el-button type="primary" @click="onHandleMoreSearch">查询</el-button>
             </span>
         </el-dialog>
-        <UserListPage  :userListtype="userListtype" :rowUserDataObj="rowUserDataObj" @changeShow="showAddUserFinace"/>
-        <NewfinancingPage  :NewFCRtype="NewFCRtype" :rowNewFCRDataObj="rowNewFCRDataObj" @changeShow="showAddFinace"/>
-        <LookfinancingPage  :rowLFCRDataObj="rowLFCRDataObj" :finanLFCRtype="finanLFCRtype" @changeShow="showLookOrUpdate"/>
+        <UserListPage  :userListtype="userListtype" :rowUserDataObj="rowUserDataObj" @changeShow="showAddFinace"/>
+        <NewfinancingPage  :NewFCAtype="NewFCAtype" :rowNewFCADataObj="rowNewFCADataObj" @changeShow="showAddFinace"/>
+        <LookfinancingPage  :rowLFCADataObj="rowLFCADataObj" :financingLFCAtype="financingLFCAtype" @changeShow="showLookOrUpdate"/>
     </div>
 </template>
 
 <script>
 import DynamicTable from '../../../components/common/dytable/dytable.vue';
 import proData from '../../../components/common/proData/proData';
-import NewfinancingPage from './new-financing-contract-Regis.vue';
-import LookfinancingPage from './look-financing-contract-Regis.vue';
+import NewfinancingPage from './new-finance-contract-adjust.vue';
+import LookfinancingPage from './look-financing-contract-Adjust.vue';
 import UserListPage from '../user-list.vue';
 export default {
     name: 'basetable',
@@ -262,12 +219,12 @@ export default {
     inject: ['reload'],
     data() {
         return {
-            rowLFCRDataObj:{},
-            rowNewFCRDataObj:{},
+            rowLFCADataObj:{},
+            rowNewFCADataObj:{},
             rowUserDataObj:{},
             searchuserformdata:{},
-            NewFCRtype:false,
-            finanLFCRtype:false,
+            NewFCAtype:false,
+            financingLFCAtype:false,
             MoreSearchVisible: false,
             userListtype: false,
             disabled: false,
@@ -279,23 +236,42 @@ export default {
             labelPosition: 'left',
             formInline: {
                 searchName: '001',
+                serchfcRegidst: '',
                 searchValue: '',
                 serchcompany:'',
                 CreditSub:'',
-                searchblank:'',
-                searchcreditType:'',
-                company:''
+                company:'',
+                headerS:'',
             },
             companyoptions: new proData().company,
             companyData:new proData().company,
             objectoptions:new proData().project,
-            CreditSubject:[],
-            Creditblank:[],
+            CreditSubject:[
+                {
+                    value: 'BFPID000000NKF0DA2',
+                    label: '大连金新房地产开发有限公司备查爱心'
+                },
+                {
+                    value: 'BFPID000000NKF0CW4',
+                    label: '大连金新房地产开发有限公司备查'
+                }
+            ],
+            Creditblank:[
+                {
+                    value: 'BFPID000000NPI1EKT',
+                    label: '南洋商业银行'
+                },
+                {
+                    value: 'BFPID000000NRT1791',
+                    label: '瑞士信贷银行'
+                }
+            ],
             creditType:[],
+            headerSData:[],
             searchlist: [
                 {
                     value: '001',
-                    label: '单据号'
+                    label: '调整单号'
                 },
                 {
                     value: '002',
@@ -303,34 +279,18 @@ export default {
                 },
                 {
                     value: '003',
-                    label: '授信合同编码'
+                    label: '综合授信合同'
                 },
                 {
                     value: '004',
-                    label: '合同名称'
+                    label: '授信调整额度'
                 },
                 {
                     value: '005',
-                    label: '授信主体'
+                    label: '授信品种调整'
                 },
                 {
                     value: '006',
-                    label: '授信银行'
-                },
-                {
-                    value: '007',
-                    label: '授信品种'
-                },
-                {
-                    value: '008',
-                    label: '授信额度'
-                },
-                {
-                    value: '009',
-                    label: '授信余额'
-                },
-                {
-                    value: '010',
                     label: '经办人'
                 },
             ],
@@ -347,32 +307,24 @@ export default {
                     title: '公司'
                 },
                 {
-                    key: 'contractcode',
-                    title: '授信合同编码'
+                    key: 'voucherid',
+                    title: '调整单号'
                 },
                 {
-                    key: 'contractname',
-                    title: '合同名称'
+                    key: 'creditcontractname',
+                    title: '综合授信合同'
                 },
                 {
-                    key: 'partaname',
-                    title: '授信主体'
+                    key: 'adjustdate',
+                    title: '调整日期'
                 },
                 {
-                    key: 'awardbankname',
-                    title: '授信银行'
+                    key: 'awardadjamount',
+                    title: '授信调整额度'
                 },
                 {
-                    key: 'awardcreditbreedname',
-                    title: '授信品种'
-                },
-                {
-                    key: 'awardamount',
-                    title: '授信额度'
-                },
-                {
-                    key: 'awardableamount',
-                    title: '授信余额'
+                    key: 'newawardcreditbreed',
+                    title: '授信品种调整'
                 },
                 {
                     key: 'handler',
@@ -383,6 +335,7 @@ export default {
                     title: '备注'
                 }
             ],
+            fcRegidstData:[],
             tableData: [],
             pageNum: 1,
             pageSize: 10,
@@ -396,17 +349,12 @@ export default {
             },
             dialog: {
                 company: '',
-                codeNomber: '',
+                fcRegidst: '',
                 documentNo: '',
                 docDateStart:'',
-                docDateEnd:'',
                 CreditSub:'',
-                searchblank:'',
-                searchcreditType:'',
-                Creditline:'',
-                Creditbalance:'',
-                operator:'',
-                name: ''
+                docfcreditadjust:'',
+                headerS:'',
             },
             multipleSelection: [],
             headtype: '1',
@@ -423,7 +371,6 @@ export default {
     mounted() {
         this.formInline.company=localStorage.getItem("ms_companyId");
         //获取授信品种
-        //获取授信品种
         this.$api.task.findCreditBreedSearchList().then(response => {
             let responsevalue = response;
             if (responsevalue) {
@@ -433,31 +380,21 @@ export default {
                 this.$message.success('数据库没有该条数据!');
             }
         });
-        //授信主体下拉框
-        this.$api.task.findprojectPartnerSearchList().then(response => {
-            let responsevalue = response;
-            if (responsevalue) {
-                let returndata = responsevalue.data;
-                this.CreditSubject = returndata.data;
-            } else {
-                this.$message.success('数据库没有该条数据!');
-            }
-        });
-        //授信银行查询下拉框接口
-        this.$api.task.findBlankSearchList().then(response => {
-            let responsevalue = response;
-            if (responsevalue) {
-                let returndata = responsevalue.data;
-                this.Creditblank = returndata.data;
-            } else {
-                this.$message.success('数据库没有该条数据!');
-            }
-        });
         //获取综合授信合同登记
+        this.$api.task.findSearchList().then(response => {
+            let responsevalue = response;
+            if (responsevalue) {
+                let returndata = responsevalue.data;
+                this.fcRegidstData = returndata.data;
+            } else {
+                this.$message.success('数据库没有该条数据!');
+            }
+        });
+        //获取综合授信合同调整
         let fromdata={};
         fromdata.page=1;
         fromdata.size=10;
-        this.$api.task.findComplexCreditContractRegisterPage(fromdata).then(response => {
+        this.$api.task.findComplexCreditContractAdjustPage(fromdata).then(response => {
             let responsevalue = response;
             if (responsevalue) {
                 let returndata = responsevalue.data;
@@ -481,46 +418,20 @@ export default {
         });
     },
     methods: {
-        //查询用户
-        MoreSearchuserVisible(data){
-            let finandata=data;
-            finandata.finanrowname="全集团人员架构查询方案";
-            finandata.finanrowId="4B1811281826545301";
-            finandata.nametitle="综合授信合同登记";
-            this.rowUserDataObj=finandata;
-            this.userListtype=true;
-        },
-        //获取查询用户信息
-        showAddUserListValue(data,type){
-            this.searchuserformdata=data;
-            if(type === false){
-                this.userListtype = false
-            }else{
-                this.userListtype = true
-            }
-        },
         //控制查看修改显示影藏
         showLookOrUpdate(data){
             if(data === false){
-                this.finanLFCRtype = false
+                this.financingLFCAtype = false
             }else{
-                this.finanLFCRtype = true
-            }
-        },
-        //控制添加显示影藏
-        showAddUserFinace(data){
-            if(data === false){
-                this.NewFCRtype = false
-            }else{
-                this.NewFCRtype = true
+                this.financingLFCAtype = true
             }
         },
         //控制添加显示影藏
         showAddFinace(data){
             if(data === false){
-                this.NewFCRtype = false
+                this.NewFCAtype = false
             }else{
-                this.NewFCRtype = true
+                this.NewFCAtype = true
             }
         },
         // 搜索按钮
@@ -540,47 +451,27 @@ export default {
                     fromdata.company=this.formInline.serchcompany;
                 }
             }else if(compV ==="003"){
-                let valueS=this.formInline.searchValue;
+                let valueS=this.formInline.serchfcRegidst;
                 if(valueS && valueS!=''){
-                    fromdata.contractcode=this.formInline.searchValue;
+                    fromdata.creditcontract=this.formInline.serchfcRegidst;
                 }
             }else if(compV ==="004"){
                 let valueS=this.formInline.searchValue;
                 if(valueS && valueS!=''){
-                    fromdata.contractname=this.formInline.searchValue;
+                    fromdata.awardadjamount=this.formInline.searchValue;
                 }
             }else if(compV ==="005"){
                 let valueS=this.formInline.CreditSub;
                 if(valueS && valueS!=''){
-                    fromdata.parta=this.formInline.CreditSub;
+                    fromdata.newawardcreditbreed=this.formInline.CreditSub;
                 }
             }else if(compV ==="006"){
-                let valueS=this.formInline.searchblank;
+                let valueS=this.formInline.headerS;
                 if(valueS && valueS!=''){
-                    fromdata.awardbank=this.formInline.searchblank;
-                }
-            }else if(compV ==="007"){
-                let valueS=this.formInline.searchcreditType;
-                if(valueS && valueS!=''){
-                    fromdata.awardcreditbreedoid=this.formInline.searchcreditType;
-                }
-            }else if(compV ==="008"){
-                let valueS=this.formInline.searchValue;
-                if(valueS && valueS!=''){
-                    fromdata.awardamount=this.formInline.searchValue;
-                }
-            }else if(compV ==="009"){
-                let valueS=this.formInline.searchValue;
-                if(valueS && valueS!=''){
-                    fromdata.awardover=this.formInline.searchValue;
-                }
-            }else{
-                let valueS=this.formInline.searchValue;
-                if(valueS && valueS!=''){
-                    fromdata.handler=this.formInline.searchValue;
+                    fromdata.handler=this.formInline.headerS;
                 }
             }
-            this.$api.task.findComplexCreditContractRegisterPage(fromdata).then(response => {
+            this.$api.task.findComplexCreditContractAdjustPage(fromdata).then(response => {
                 let responsevalue = response;
                 if (responsevalue) {
                     let returndata = responsevalue.data;
@@ -613,49 +504,29 @@ export default {
             }
             let novalueS=this.dialog.documentNo;
             if(novalueS && novalueS!=''){
-                fromdata.id=this.dialog.documentNo;
+                fromdata.voucherid=this.dialog.documentNo;
+            }
+            let codeS=this.dialog.fcRegidst;
+            if(codeS && codeS!=''){
+                fromdata.creditcontract=this.dialog.fcRegidst;
             }
             let DateStS=this.dialog.docDateStart;
             if(DateStS && DateStS!=''){
-                fromdata.startdate=this.dialog.docDateStart;
+                fromdata.adjustdate=this.dialog.docDateStart;
             }
-            let DateEnS=this.dialog.docDateEnd;
-            if(DateEnS && DateEnS!=''){
-                fromdata.enddate=this.dialog.docDateEnd;
-            }
-            let codeS=this.dialog.codeNomber;
-            if(codeS && codeS!=''){
-                fromdata.contractcode=this.dialog.codeNomber;
-            }
-            let nameS=this.dialog.name;
-            if(nameS && nameS!=''){
-                fromdata.contractname=this.dialog.name;
+            let fcreditadjustS=this.dialog.docfcreditadjust;
+            if(fcreditadjustS && fcreditadjustS!=''){
+                fromdata.awardadjamount=this.dialog.docfcreditadjust;
             }
             let CreditSubS=this.dialog.CreditSub;
             if(CreditSubS && CreditSubS!=''){
-                fromdata.parta=this.dialog.CreditSub;
+                fromdata.newawardcreditbreed=this.dialog.CreditSub;
             }
-            let blankS=this.dialog.searchblank;
-            if(blankS && blankS!=''){
-                fromdata.awardbank=this.dialog.searchblank;
-            }
-            let TypeS=this.dialog.searchcreditType;
-            if(TypeS && TypeS!=''){
-                fromdata.awardcreditbreedoid=this.dialog.searchcreditType;
-            }
-            let CreditlineS=this.dialog.Creditline;
-            if(CreditlineS && CreditlineS!=''){
-                fromdata.awardamount=this.dialog.Creditline;
-            }
-            let CreditBaS=this.dialog.Creditbalance;
-            if(CreditBaS && CreditBaS!=''){
-                fromdata.awardover=this.dialog.Creditbalance;
-            }
-            let operatorS=this.dialog.operator;
+            let operatorS=this.dialog.headerS;
             if(operatorS && operatorS!=''){
-                fromdata.handler=this.dialog.operator;
+                fromdata.handler=this.dialog.headerS;
             }
-            this.$api.task.findComplexCreditContractRegisterPage(fromdata).then(response => {
+            this.$api.task.findComplexCreditContractAdjustPage(fromdata).then(response => {
                 let responsevalue = response;
                 if (responsevalue) {
                     let returndata = responsevalue.data;
@@ -691,7 +562,7 @@ export default {
             let fromdata={};
             fromdata.page=val;
             fromdata.size=this.pageSize;
-            this.$api.task.findComplexCreditContractRegisterPage(fromdata).then(response => {
+            this.$api.task.findComplexCreditContractAdjustPage(fromdata).then(response => {
                 let responsevalue = response;
                 if (responsevalue) {
                     let returndata = responsevalue.data;
@@ -716,11 +587,11 @@ export default {
         },
         // 新建
         onRowAddButtonClick() {
-            this.NewFCRtype= true;
+            this.NewFCAtype= true;
             let dataObj = {};
             dataObj.Newflag="New";
             dataObj.EditfinanrowId='';
-            this.rowNewFCRDataObj=dataObj;
+            this.rowNewFCADataObj=dataObj;
         },
         // 查看
         onRowLookButtonClick() {
@@ -729,8 +600,8 @@ export default {
                 if(selectOption.length >1){
                     this.$message.error('只能选择一行!');
                 }else{
-                    this.finanLFCRtype=true;
-                    this.rowLFCRDataObj.finanrowId=selectOption[0].id;
+                    this.financingLFCAtype=true;
+                    this.rowLFCADataObj.finanrowId=selectOption[0].id;
                 }
             }else{
                 this.$message.error('请选择一行你要查看的数据!');
@@ -743,12 +614,12 @@ export default {
                 if(selectOption.length >1){
                     this.$message.error('只能选择一行!');
                 }else{
-                    if(selectOption[0].status === 1){
-                        this.NewFCRtype= true;
+                    if(selectOption[0].status === 1 || selectOption[0].status === 2 || selectOption[0].status === 3){
+                        this.NewFCAtype= true;
                         let dataObj = {};
                         dataObj.Newflag="Edit";
                         dataObj.EditfinanrowId=selectOption[0].id;
-                        this.rowNewFCRDataObj=dataObj;
+                        this.rowNewFCADataObj=dataObj;
                     }else{
                         this.$message.error('当前记录已被其他人处理或者已处理完毕，不能回收修改!');
                     }
@@ -764,18 +635,22 @@ export default {
                 if(selectOption.length >1){
                     this.$message.error('只能选择一行!');
                 }else{
-                    let messageStr="确认删除 "+selectOption[0].contractname+":"+selectOption[0].contractcode+"?";
+                    let messageStr="确认删除 "+selectOption[0].voucherid+"?";
                     let tital="删除综合授信合同登记";
-                    this.$Uconfirm(tital,messageStr).then(() => {
-                        let formDataA ={};
-                        formDataA.id=selectOption[0].id;
-                        this.$api.task.delComplexCreditContractRegisterVO(formDataA).then(response => {
-                            this.$message.success('删除成功!');
-                            this.reload();
+                    if(selectOption[0].status ==2 || selectOption[0].status ==3){
+                        this.$message.error('综合授信合同调整：'+selectOption[0].voucherid+' 不能删除!');
+                    }else{
+                        this.$Uconfirm(tital,messageStr).then(() => {
+                            let formDataA ={};
+                            formDataA.id=selectOption[0].id;
+                            this.$api.task.delComplexCreditContractAdjustVO(formDataA).then(response => {
+                                this.$message.success('删除成功!');
+                                this.reload();
+                            });
+                        }).catch(() => {
+                            this.$message.success('取消删除!');
                         });
-                    }).catch(() => {
-                        this.$message.success('取消删除!');
-                    });
+                    }
                 }
             }else{
                 this.$message.error('请选择一行你要删除的数据!');

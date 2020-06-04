@@ -181,8 +181,8 @@ import enclosurefile from '../enclosure-file.vue';
 import processnodelist from '../process-node-list.vue';
 export default {
     props: {
-        Newfinancingtype: Boolean,
-        rowNewDataObj:Object
+        NewFCRtype: Boolean,
+        rowNewFCRDataObj:Object
     },
     name: 'basetable',
     components: {
@@ -262,7 +262,6 @@ export default {
     methods: {
         //关闭当前dialog时给父组件传值
         handleClose(){
-            this.reload();
             this.$emit('changeShow',false);
         },
         //滑块切换
@@ -464,6 +463,10 @@ export default {
         },
         //获取授信主题数据
         showfinancingData(data,type){
+            if(data.searchRowCSSid){
+                this.formdata.parta=data.searchRowCSSid;
+                this.formdata.partaname=data.searchRowCSSname;
+            }
             this.financingformdata=data;
             if(type === false){
                 this.financingtype = false
@@ -483,6 +486,8 @@ export default {
         //获取授信银行
         showfinancingBankData(data,type){
             this.financingBankformdata=data;
+            this.formdata.awardbankname=data.searchRowBankname;
+            this.formdata.awardbank=data.searchRowBankid;
             if(type === false){
                 this.financingBanktype = false
             }else{
@@ -510,7 +515,6 @@ export default {
         },
         //授信起始日期
         updateShouxinStartDate(data){
-            console.log(data)
             if(data.startdate){
                 if(data.enddate){
                     let DateS=new Date();
@@ -567,9 +571,9 @@ export default {
         }
     },
     watch:{
-        Newfinancingtype(oldVal,newVal){
-            this.ShowFinancVisible=this.Newfinancingtype;
-            let DataObj = this.rowNewDataObj;
+        NewFCRtype(oldVal,newVal){
+            this.ShowFinancVisible=this.NewFCRtype;
+            let DataObj = this.rowNewFCRDataObj;
             if(DataObj.Newflag ==="Edit"){
                 let finandata=DataObj.EditfinanrowId;
                 let formDataA ={};
@@ -586,6 +590,7 @@ export default {
                         this.formdata=tableDataArr;
                         this.rowDatavarietObj.RegistrationtableData=tableDataArr.complexCreditContractRegisterLineResVos;
                         this.rowDatavarietObj.RegisType='Edit';
+                        this.rowDatavarietObj.titleStr='综合授信合同登记';
                         this.financingCVMListtype=true;
                     } else {
                         this.$message.success('数据库没有该条数据!');
@@ -602,6 +607,7 @@ export default {
                 this.formdata.voucherdateStr=TodayS;
                 this.rowDatavarietObj.RegistrationtableData=[];
                 this.rowDatavarietObj.RegisType='New';
+                this.rowDatavarietObj.titleStr='综合授信合同登记';
                 this.financingCVMListtype=true;
                 this.newOrEdit='New';
             }

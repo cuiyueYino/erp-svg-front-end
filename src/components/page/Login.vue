@@ -54,7 +54,7 @@ export default {
                 paramdata.username=usernameS;
                 paramdata.password=passwordS;
                 paramdata.grant_type = 'password';
-                this.$api.common.login(paramdata).then((response)=>{
+                /*this.$api.common.login(paramdata).then((response)=>{
                     var responsevalue=response;
                     if(responsevalue){
                         if(responsevalue.data && responsevalue.data !=""){
@@ -71,17 +71,18 @@ export default {
                         return false;
                     }
                 });
-                
-                // localStorage.setItem('ms_username', '王世超');
-                // localStorage.setItem('ms_name',  '王世超');
-                // localStorage.setItem('ms_roleId',  '0');
-                // localStorage.setItem('ms_userId',  'BFPID000000LSN033N');
+                */
+                localStorage.setItem('ms_username', '王世超');
+                localStorage.setItem('ms_name',  '王世超');
+                localStorage.setItem('ms_roleId',  '0');
+                localStorage.setItem('ms_userId',  'BFPID000000LSN033N');
                 //用户部门
-                // localStorage.setItem('ms_userDepartId',  'BFPID12333LSN033N');
-                // localStorage.setItem('ms_userDepartName',  '集团信息中心');
-                // localStorage.setItem('ms_companyId',  '_DefaultCompanyOId');
+                localStorage.setItem('ms_tokenId',  "fcb1eb0d-27e8-4029-befe-a1f3db56cc7a");
+                localStorage.setItem('ms_userDepartId',  'BFPID12333LSN033N');
+                localStorage.setItem('ms_userDepartName',  '集团信息中心');
+                localStorage.setItem('ms_companyId',  '_DefaultCompanyOId');
                 
-                // this.$router.push('/');
+                this.$router.push('/');
             }else{
                 this.$message.error("请输入用户名和密码!");
                 return false;

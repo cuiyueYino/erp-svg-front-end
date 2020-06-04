@@ -1,12 +1,15 @@
 <template>
     <div>
         <dynamic-table
-            :columns="enclosurecolumns"
-            :table-data="enclosuretableData"
+            :columns="RegRecodecolumns"
+            :table-data="RegRecodetableData"
             :total="total"
+            size="mini"
+            max-height="250"
             ref="multipleTable"
             :page-num="pageNum"
             :page-size="pageSize"
+            :isShowPager="isShowPager"
             @current-change="onCurrentChange"
             @selection-change="onSelectionChange"
             @size-change="onSizeChange"
@@ -20,8 +23,8 @@ import DynamicTable from '../../components/common/dytable/dytable.vue';
 import proData from '../../components/common/proData/proData';
 export default {
     props: {
-        rowEFListDataObj:Object,
-        financingCVMListtype: Boolean
+        rowCDLDataObj:Array,
+        financingCDLtype: Boolean
     },
     name: 'basetable',
     components: {
@@ -35,54 +38,49 @@ export default {
             pageSize: 1000,
             total: 20,
             isShowPager:false,
-            enclosurecolumns:[
+            RegRecodecolumns:[
                 {
-                    key: 'Cnumber',
-                    title: '文件类型'
+                    key: 'handledate',
+                    title: '应收日期'
                 },
                 {
-                    key: 'Cnumber',
-                    title: '文件'
+                    key: 'moneyname',
+                    title: '款项名称'
                 },
                 {
-                    key: 'Cnumber',
-                    type: 'selection',
-                    title: '必须'
+                    key: 'moneydepartment',
+                    title: '款项部门',
                 },
                 {
-                    key: 'Cnumber',
-                    title: '编制单位'
+                    key: 'companysubject',
+                    title: '公司科目'
                 },
                 {
-                    key: 'Cnumber',
-                    title: '负责人'
+                    key: 'project',
+                    title: '项目'
                 },
                 {
-                    key: 'Cnumber',
-                    title: '审核单位'
+                    key: 'projectsubject',
+                    title: '项目科目'
                 },
                 {
-                    key: 'Cnumber',
-                    title: '审核人'
+                    key: 'shouldamount',
+                    title: '应收金额'
                 },
                 {
-                    key: 'Cnumber',
-                    title: '定版日期'
+                    key: 'haveamount',
+                    title: '已收金额'
                 },
                 {
-                    key: 'Cnumber',
-                    title: '文档等级'
+                    key: 'haveapplyamount',
+                    title: '已申请金额'
                 },
                 {
-                    key: 'Cnumber',
-                    title: '保管期限'
-                },
-                {
-                    key: 'Cnumber',
+                    key: 'remark',
                     title: '备注'
                 },
             ],
-            enclosuretableData: [],
+            RegRecodetableData: [],
             labelPosition: 'left',
         }
     },
@@ -99,9 +97,8 @@ export default {
         },
     },
     watch:{
-        financingEFListtype(oldVal,newVal){
-            this.financingEFListtype=this.financingEFListtype;
-            this.enclosuretableData=this.rowEFListDataObj;
+        financingCDLtype(oldVal,newVal){
+            this.RegRecodetableData=this.rowCDLDataObj;
         }
     }
 }

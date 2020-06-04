@@ -52,7 +52,7 @@ export default {
                 },
                 {
                     key: 'lineofcredituse',
-                    title: '授信可用额度'
+                    title: '授信可用额度',
                 },
                 {
                     key: 'lineofcreditaudit',

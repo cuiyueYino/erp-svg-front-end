@@ -1,6 +1,6 @@
 <template>
     <div>
-        <el-dialog title="综合授信合同登记" @close="handleClose" :visible.sync="ShowFinancVisible" :append-to-body="true" v-if="ShowFinancVisible" :close-on-click-modal="false" width="60%">
+        <el-dialog title="综合授信合同调整" @close="handleClose" :visible.sync="ShowFinancVisible" :append-to-body="true" v-if="ShowFinancVisible" :close-on-click-modal="false" width="70%">
             <el-form
                 label-width="110px"
                 v-model="formdata"
@@ -12,7 +12,7 @@
             >
                 <el-card>
                     <el-row>
-                        <el-col :span="11">
+                        <el-col :span="12">
                             <el-form-item label="公司" prop="company">
                                 <el-select v-model="formdata.company" value-key="value" v-bind:disabled="disabled">
                                     <el-option
@@ -27,86 +27,47 @@
                     </el-row>
                     <el-row>
                         <el-col :span="6">
-                            <el-form-item label="授信合同编码" prop="code">
-                                <el-input v-model="formdata.contractcode" v-bind:disabled="disabled"></el-input>
+                            <el-form-item label="调整单号" prop="code">
+                                <el-input v-model="formdata.voucherid" v-bind:disabled="disabled"></el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="6" :offset="2">
-                            <el-form-item label="合同名称" prop="name">
-                                <el-input v-model="formdata.contractname" v-bind:disabled="disabled"></el-input>
+                            <el-form-item label="综合授信合同" prop="name">
+                                <el-input v-model="formdata.creditcontract" v-bind:disabled="disabled"></el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="6" :offset="2">
-                            <el-form-item label="用信品种">
-                                <el-input v-model="formdata.usercreditbreed" v-bind:disabled="disabled"></el-input>
+                            <el-form-item label="调整日期">
+                                <el-input v-model="formdata.adjustdateStr" v-bind:disabled="disabled"></el-input>
                             </el-form-item>
                         </el-col>
                     </el-row>
                     <el-row>
                         <el-col :span="6">
-                            <el-form-item label="授信主体" prop="code">
-                                <el-input v-model="formdata.partaname" v-bind:disabled="disabled"></el-input>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="6" :offset="2">
-                            <el-form-item label="授信额度" prop="name">
+                            <el-form-item label="授信额度" prop="code">
                                 <el-input v-model="formdata.awardamount" v-bind:disabled="disabled"></el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="6" :offset="2">
-                            <el-form-item label="授信品种">
-                                <el-input v-model="formdata.awardcreditbreedname" v-bind:disabled="disabled"></el-input>
-                            </el-form-item>
-                        </el-col>
-                    </el-row>
-                    <el-row>
-                        <el-col :span="6">
-                            <el-form-item label="授信银行" prop="code">
-                                <el-input v-model="formdata.awardbankname" v-bind:disabled="disabled"></el-input>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="6" :offset="2">
-                            <el-form-item label="授信调整额度" prop="name">
-                                <el-input v-model="formdata.awardamount" disabled></el-input>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="6" :offset="2">
-                            <el-form-item label="授信占用">
-                                <el-input v-model="formdata.awardoccupy" v-bind:disabled="disabled"></el-input>
-                            </el-form-item>
-                        </el-col>
-                    </el-row>
-                    <el-row>
-                        <el-col :span="6">
-                            <el-form-item label="授信天数" prop="code">
-                                <el-input v-model="formdata.awarddays" v-bind:disabled="disabled"></el-input>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="6" :offset="2">
-                            <el-form-item label="授信可用额度" prop="name">
-                                <el-input v-model="formdata.awardableamount" disabled></el-input>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="6" :offset="2">
-                            <el-form-item label="授信余额">
+                            <el-form-item label="授信余额" prop="name">
                                 <el-input v-model="formdata.awardover" v-bind:disabled="disabled"></el-input>
                             </el-form-item>
                         </el-col>
+                        <el-col :span="6" :offset="2">
+                            <el-form-item label="授信调整额度">
+                                <el-input v-model="formdata.awardadjamount" v-bind:disabled="disabled"></el-input>
+                            </el-form-item>
+                        </el-col>
                     </el-row>
                     <el-row>
                         <el-col :span="6">
-                            <el-form-item label="授信起始日" prop="code">
-                                <el-input v-model="formdata.startdateStr" v-bind:disabled="disabled"></el-input>
+                            <el-form-item label="授信占用" prop="code">
+                                <el-input v-model="formdata.creditoccupation" v-bind:disabled="disabled"></el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="6" :offset="2">
-                            <el-form-item label="授信到期" prop="name">
-                                <el-input v-model="formdata.enddateStr" disabled></el-input>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="7" :offset="2">
-                            <el-form-item label="剩余天数">
-                                <el-input v-model="formdata.overdays" v-bind:disabled="disabled"></el-input>
+                            <el-form-item label="授信占用调整" prop="name">
+                                <el-input v-model="formdata.creditoccadjust" disabled></el-input>
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -117,13 +78,13 @@
                             </el-form-item>
                         </el-col>
                         <el-col :span="6" :offset="2">
-                            <el-form-item label="经办时间" prop="name">
-                                <el-input v-model="formdata.voucherdateStr" disabled></el-input>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="7" :offset="2">
                             <el-form-item label="经办部门">
                                 <el-input v-model="formdata.gestordeptname" v-bind:disabled="disabled"></el-input>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="6" :offset="2">
+                            <el-form-item label="经办时间" prop="name">
+                                <el-input v-model="formdata.voucherdateStr" disabled></el-input>
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -135,13 +96,10 @@
                         </el-col>
                     </el-row>
                     <el-tabs v-model="atctiveName" @tab-click="handleClick">
-                        <el-tab-pane label="用信合同记录" name="first">
-                            <creditContractRecord :rowCCRecordDataObj="rowCCRecordDataObj" :financingCCRecordtype="financingCCRecordtype" />
+                        <el-tab-pane label="授信品种管理" name="first">
+                            <creCVAlist :rowCVAListDataObj="rowCVAListDataObj" :financingCVAListtype="financingCVAListtype" />
                         </el-tab-pane>
-                        <el-tab-pane label="授信品种管理" name="second">
-                            <creVMlist :rowCVMListDataObj="rowCVMListDataObj" :financingCVMListtype="financingCVMListtype" />
-                        </el-tab-pane>
-                        <el-tab-pane label="附件" name="third">
+                        <el-tab-pane label="附件" name="second">
                             <creditEnclFilelist :rowEFListDataObj="rowEFListDataObj" :financingEFListtype="financingEFListtype" />
                         </el-tab-pane>
                     </el-tabs>
@@ -156,20 +114,18 @@
 <script>
 import DynamicTable from '../../../components/common/dytable/dytable.vue';
 import proData from '../../../components/common/proData/proData';
-import creditContractRecord from '../credit-contract-record.vue';
-import creVMlist from '../credit-varieties-management-list.vue';
+import creCVAlist from '../credit-varieties-adjust-list.vue';
 import creditEnclFilelist from '../enclosure-file-list.vue';
 import processnodelist from '../process-node-list.vue';
 export default {
     props: {
-        rowLFCRDataObj: Object,
-        finanLFCRtype: Boolean
+        rowLFCADataObj: Object,
+        financingLFCAtype: Boolean
     },
     name: 'basetable',
     components: {
         DynamicTable,
-        creditContractRecord,
-        creVMlist,
+        creCVAlist,
         creditEnclFilelist,
         processnodelist
     },
@@ -184,11 +140,11 @@ export default {
             objectoptions:new proData().project,
             formdata: {},
             rowCCRecordDataObj: {},
-            rowCVMListDataObj: [],
+            rowCVAListDataObj: [],
             rowEFListDataObj: {},
             rowDataprocessObj:{},
             financingCCRecordtype:false,
-            financingCVMListtype:false,
+            financingCVAListtype:false,
             financingEFListtype:false,
             pageNum: 1,
             pageSize: 10,
@@ -223,14 +179,13 @@ export default {
             var tabsname =tab.paneName;
             if(tabsname){
                 if(tabsname ==="first"){
-                    //授信合同记录
-                }else if(tabsname ==="second"){
                     //授信品种管理
-                    this.financingCVMListtype=true;
+                    this.financingCVAListtype=true;
+                    this.financingEFListtype=false;
                 }else{
                     //附件列表
                     this.financingEFListtype=true;
-                    
+                    this.financingCVAListtype=false;
                 }
             }
         },
@@ -238,26 +193,28 @@ export default {
     mounted() {
     },
     watch:{
-        finanLFCRtype(oldVal,newVal){
-            this.ShowFinancVisible=this.finanLFCRtype;
-            let finandata=this.rowLFCRDataObj.finanrowId;
+        financingLFCAtype(oldVal,newVal){
+            this.ShowFinancVisible=this.financingLFCAtype;
+            let finandata=this.rowLFCADataObj.finanrowId;
             let formDataA ={};
             formDataA.id=finandata;
-            this.$api.task.getComplexCreditContractRegisterVO(formDataA).then(response => {
+            this.$api.task.getComplexCreditContractAdjustVO(formDataA).then(response => {
                 let responsevalue = response;
                 if (responsevalue) {
                     let returndata = responsevalue.data;
                     let tableDataArr=returndata.data;
                     this.disabled = true;
                     this.editabled=false; 
-                    tableDataArr.startdateStr=this.$Uformat.formatDateTYMD(tableDataArr.startdate);
-                    tableDataArr.enddateStr=this.$Uformat.formatDateTYMD(tableDataArr.enddate);
+                    tableDataArr.createtimeStr=this.$Uformat.formatDateTYMD(tableDataArr.createtime);
+                    tableDataArr.lastupdtimeStr=this.$Uformat.formatDateTYMD(tableDataArr.lastupdtime);
+                    tableDataArr.adjustdateStr=this.$Uformat.formatDateTYMD(tableDataArr.adjustdate);
                     tableDataArr.voucherdateStr=this.$Uformat.formatDateTYMD(tableDataArr.voucherdate);
                     this.formdata=tableDataArr;
-                    this.rowCVMListDataObj=tableDataArr.complexCreditContractRegisterLineResVos;
+                    this.rowCVAListDataObj=tableDataArr.awardCreditBreedLineResVos;
                     this.NewEditVisible= true;
                     this.showCheckBox= false;
                     this.checked=false;
+                    this.financingCVAListtype=true;
                 } else {
                     this.$message.success('数据库没有该条数据!');
                 }

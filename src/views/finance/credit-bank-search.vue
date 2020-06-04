@@ -289,8 +289,8 @@ export default {
                     this.$message.error('只能选择一行!');
                 }else{
                     //返回选中的父组件选中的row,并修某些改值
-                    this.rowBankDataObj.awardbank=selectOption[0].id;
-                    this.rowBankDataObj.awardbankname=selectOption[0].name;
+                    this.rowBankDataObj.searchRowBankid=selectOption[0].id;
+                    this.rowBankDataObj.searchRowBankname=selectOption[0].name;
                     this.$emit('changeShow',this.rowBankDataObj,false);
                     this.ShowFinancVisible = false;
                 }

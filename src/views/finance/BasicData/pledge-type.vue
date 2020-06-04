@@ -23,7 +23,7 @@
                 <div class="search-left">
                     <el-select v-model="formInline.searchName" placeholder="名称" clearable>
                         <el-option
-                            v-for="item in address"
+                            v-for="item in searchlist"
                             :key="item.value"
                             :label="item.label"
                             :value="item.value"
@@ -197,7 +197,7 @@ export default {
             },
             companyoptions: new proData().company,
             companyData:new proData().company,
-            address: [
+            searchlist: [
                 {
                     value: '001',
                     label: '名称'
@@ -261,10 +261,13 @@ export default {
     },
     mounted() {
         //获取质押物类型数据
-        var form = new FormData();
-        form.append('page', this.pageNum);
-        form.append('size', this.pageSize);
-        this.$api.task.findPledgeTypePage(form).then(response => {
+        let formDataA ={};
+        formDataA.page=this.pageNum;
+        formDataA.size=this.pageSize;
+        //var form = new FormData();
+        //form.append('page', this.pageNum);
+        //form.append('size', this.pageSize);
+        this.$api.task.findPledgeTypePage(formDataA).then(response => {
             let responsevalue = response;
             if (responsevalue) {
                 let returndata = responsevalue.data;
@@ -290,32 +293,36 @@ export default {
     methods: {
         // 搜索按钮
         onHandleSearch() {
-            var form = new FormData();
-            form.append('page', this.pageNum);
-            form.append('size', this.pageSize);
+            let formDataA ={};
+            formDataA.page=this.pageNum;
+            formDataA.size=this.pageSize;
             let compV  = this.formInline.searchName;
             if(compV ==="001"){
                 let valueS=this.formInline.searchValue;
                 if(valueS && valueS!=''){
-                    form.append('name', this.formInline.searchValue); 
+                    formDataA.name=this.formInline.searchValue;
+                    //form.append('name', this.formInline.searchValue); 
                 }
             }else if(compV ==="002"){
                 let valueS=this.formInline.searchValue;
                 if(valueS && valueS!=''){
-                    form.append('code', this.formInline.searchValue);
+                    formDataA.code=this.formInline.searchValue;
+                    //form.append('code', this.formInline.searchValue);
                 }
             }else if(compV ==="003"){
                 let valueS=this.formInline.serchcompany;
                 if(valueS && valueS!=''){
-                    form.append('company', this.formInline.serchcompany);
+                    //form.append('company', this.formInline.serchcompany);
+                    formDataA.company=this.formInline.serchcompany;
                 }
             }else{
                 let valueS=this.formInline.searchValue;
                 if(valueS && valueS!=''){
-                    form.append('name', this.formInline.searchValue); 
+                    formDataA.name=this.formInline.searchValue;
+                    //form.append('name', this.formInline.searchValue); 
                 }
             }
-            this.$api.task.findPledgeTypePage(form).then(response => {
+            this.$api.task.findPledgeTypePage(formDataA).then(response => {
                 let responsevalue = response;
                 if (responsevalue) {
                     let returndata = responsevalue.data;
@@ -339,22 +346,28 @@ export default {
             }); 
         },
         onHandleMoreSearch() {
-            var form = new FormData();
-            form.append('page', this.pageNum);
-            form.append('size', this.pageSize);
+            //var form = new FormData();
+            //form.append('page', this.pageNum);
+            //form.append('size', this.pageSize);
+            let formDataA ={};
+            formDataA.page=this.pageNum;
+            formDataA.size=this.pageSize;
             let namevalueS=this.dialog.name;
             if(namevalueS && namevalueS!=''){
-                form.append('name', this.dialog.name); 
+                formDataA.name=this.dialog.name;
+                //form.append('name', this.dialog.name); 
             }
             let codevalueS=this.dialog.codeNomber;
             if(codevalueS && codevalueS!=''){
-                form.append('code', this.dialog.codeNomber);
+                formDataA.code=this.dialog.codeNomber;
+                //form.append('code', this.dialog.codeNomber);
             }
             let compvalueS=this.dialog.company;
             if(compvalueS && compvalueS!=''){
-                form.append('company', this.dialog.company);
+                formDataA.company=this.dialog.company;
+                //form.append('company', this.dialog.company);
             }
-            this.$api.task.findPledgeTypePage(form).then(response => {
+            this.$api.task.findPledgeTypePage(formDataA).then(response => {
                 let responsevalue = response;
                 if (responsevalue) {
                     let returndata = responsevalue.data;
@@ -387,10 +400,13 @@ export default {
         },
         //下一页
         onCurrentChange(val) {
-            var form = new FormData();
-            form.append('page', val);
-            form.append('size', this.pageSize);
-            this.$api.task.findPledgeTypePage(form).then(response => {
+            //var form = new FormData();
+            //form.append('page', val);
+            //form.append('size', this.pageSize);
+            let formDataA ={};
+            formDataA.page=val;
+            formDataA.size=this.pageSize;
+            this.$api.task.findPledgeTypePage(formDataA).then(response => {
                 let responsevalue = response;
                 if (responsevalue) {
                     let returndata = responsevalue.data;

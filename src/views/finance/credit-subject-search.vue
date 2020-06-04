@@ -163,6 +163,10 @@ export default {
                 {
                     value: '640804022242524502',
                     label: '生效状态的项目参建方查询'
+                },
+                {
+                    value: '4F1904010848766606',
+                    label: '综合授信合同登记缺省查询方案'
                 }
             ],
             labelPosition: 'left',
@@ -222,9 +226,9 @@ export default {
                     this.$message.error('只能选择一行!');
                 }else{
                     //返回选中的父组件选中的row,并修某些改值
-                    this.rowDataObj.parta=selectOption[0].id;
-                    this.rowDataObj.partaname=selectOption[0].name;
-                    this.rowDataObj.partaCode=selectOption[0].code;
+                    this.rowDataObj.searchRowCSSid=selectOption[0].id;
+                    this.rowDataObj.searchRowCSSname=selectOption[0].name;
+                    this.rowDataObj.searchRowCSSCode=selectOption[0].code;
                     this.$emit('changeShow',this.rowDataObj,false);
                     this.ShowFinancVisible = false;
                 }

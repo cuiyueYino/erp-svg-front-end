@@ -12,98 +12,158 @@
                 tooltip-effect="dark"
                 border
                 stripe
+                :show-summary="showSummary"
                 style="width:100%;"
                 @selection-change='selectFacilityRow'>
-                <el-table-column type="selection" width="45" align="center"></el-table-column>
-                <el-table-column label="序号" type="index" width="60" align="center"></el-table-column>
-                <el-table-column  label="授信品种" align="center">
+                <el-table-column type="selection" width="65px" align="center"></el-table-column>
+                <el-table-column  label="款项名称" align="center">
                     <template slot-scope="scope">
                         <el-row>
-                            <el-col :span="16">
-                                <el-input v-model="scope.row.awardcreditbreedname" size="mini" style="padding:5px" disabled></el-input>
+                            <el-col :span="14">
+                                <el-input v-model="scope.row.moneynameName" size="mini" style="padding:5px 1px 5px 1px" disabled></el-input>
                             </el-col>
-                            <el-col :span="2" style="padding:5px">
+                            <el-col :span="1" style="padding:5px 1px 5px 1px">
+                                <el-button type="primary"  icon="el-icon-search" size="mini" @click="MoreSearchMNMVisible(scope.row)"></el-button>
+                            </el-col>
+                        </el-row>
+                    </template>
+                </el-table-column>
+                <el-table-column  label="款项部门" align="center">
+                    <template slot-scope="scope">
+                        <el-row>
+                            <el-col :span="14">
+                                <el-input v-model="scope.row.moneydepartmentName" size="mini" style="padding:5px 1px 5px 1px" disabled></el-input>
+                            </el-col>
+                            <el-col :span="1" style="padding:5px 1px 5px 1px">
                                 <el-button type="primary"  icon="el-icon-search" size="mini" @click="MoreSearchTypeVisible(scope.row)"></el-button>
                             </el-col>
                         </el-row>
                     </template>
                 </el-table-column>
-                <el-table-column label="授信额度" >
+                <el-table-column  label="公司科目" align="center">
                     <template slot-scope="scope">
-                        <el-input  v-model="scope.row.lineofcredit" oninput="value=value.replace(/[^0-9.]/g,'')" placeholder="0.00" @change="UpdateFacilitValue(RegistrationtableData)" size="mini"  ></el-input>
+                        <el-row>
+                            <el-col :span="14">
+                                <el-input v-model="scope.row.companysubjectName" size="mini" style="padding:5px 1px 5px 1px" disabled></el-input>
+                            </el-col>
+                            <el-col :span="1" style="padding:5px 1px 5px 1px">
+                                <el-button type="primary"  icon="el-icon-search" size="mini" @click="MoreSearchTypeVisible(scope.row)"></el-button>
+                            </el-col>
+                        </el-row>
                     </template>
                 </el-table-column>
-                <el-table-column label="授信可用额度" >
+                <el-table-column  label="项目科目" align="center">
                     <template slot-scope="scope">
-                        <el-input  v-model="scope.row.lineofcredituse" placeholder="0.00" size="mini"  disabled></el-input>
+                        <el-row>
+                            <el-col :span="14">
+                                <el-input v-model="scope.row.projectsubjectName" size="mini" style="padding:5px 1px 5px 1px" disabled></el-input>
+                            </el-col>
+                            <el-col :span="1" style="padding:5px 1px 5px 1px">
+                                <el-button type="primary"  icon="el-icon-search" size="mini" @click="MoreSearchTypeVisible(scope.row)"></el-button>
+                            </el-col>
+                        </el-row>
                     </template>
                 </el-table-column>
-                <el-table-column label="授信调整额度" >
+                <el-table-column  label="项目" align="center">
                     <template slot-scope="scope">
-                        <el-input  v-model="scope.row.lineofcreditaudit" placeholder="0.00" size="mini"  disabled></el-input>
+                        <el-row>
+                            <el-col :span="14">
+                                <el-input v-model="scope.row.projectName" size="mini" style="padding:5px 1px 5px 1px" disabled></el-input>
+                            </el-col>
+                            <el-col :span="1" style="padding:5px 1px 5px 1px">
+                                <el-button type="primary"  icon="el-icon-search" size="mini" @click="MoreSearchTypeVisible(scope.row)"></el-button>
+                            </el-col>
+                        </el-row>
                     </template>
                 </el-table-column>
-                <el-table-column label="授信占用" >
+                <el-table-column label="应收日期">
                     <template slot-scope="scope">
-                        <el-input  v-model="scope.row.creditaccount" placeholder="0.00" size="mini"  disabled></el-input>
+                        <el-row>
+                            <el-col :span="8">
+                                <el-date-picker
+                                    v-model="scope.row.handledate"
+                                    type="date"
+                                    size="mini"
+                                    style="width:100px"
+                                >
+                                </el-date-picker>
+                            </el-col>
+                        </el-row>
                     </template>
                 </el-table-column>
-                <el-table-column label="授信余额" >
+                <el-table-column label="应收金额" prop="shouldamount">
                     <template slot-scope="scope">
-                        <el-input v-model="scope.row.creditbalance" placeholder="0.00" size="mini"  disabled></el-input>
+                        <el-input  v-model="scope.row.shouldamount" oninput="value=value.replace(/[^0-9.]/g,'')" placeholder="0.00" @change="UpdateFacilitValue(RegistrationtableData)" size="mini"  ></el-input>
+                    </template>
+                </el-table-column>
+                <el-table-column label="已收金额" prop="haveamount">
+                    <template slot-scope="scope">
+                        <el-input  v-model="scope.row.haveamount" placeholder="0.00" size="mini"  disabled></el-input>
+                    </template>
+                </el-table-column>
+                <el-table-column label="已申请金额" prop="haveapplyamount">
+                    <template slot-scope="scope">
+                        <el-input  v-model="scope.row.haveapplyamount" placeholder="0.00" size="mini"  disabled></el-input>
                     </template>
                 </el-table-column>
                 <el-table-column label="备注" >
                     <template slot-scope="scope">
-                        <el-input v-model="scope.row.note" size="mini" ></el-input>
+                        <el-input v-model="scope.row.remark" size="mini" ></el-input>
                     </template>
                 </el-table-column>
             </el-table>
         </div>
         <credittypeSearch :rowTypeDataObj="rowTypeDataObj" :financingTypetype="financingTypetype" @changeShow="showfinancingTypeData"/>
+        <paymentnameSearch :rowPNSDataObj="rowPNSDataObj" :financingPNStype="financingPNStype" @changeShow="showPNSData"/>
     </div>
 </template>
 <script>
 import credittypeSearch from './credit-type-search.vue';
+import paymentnameSearch from './payment-name-search.vue';
 export default {
     props: {
-        rowDatavarietObj:Object,
-        financingCVMListtype:Boolean,
+        rowNCDDataObj:Object,
+        financingNCDype:Boolean,
     },
     name: 'basetable',
     components: {
         credittypeSearch,
+        paymentnameSearch,
     },
     inject: ['reload'],
     data(){
         return{
             RegistrationtableData: [],
             formdata:{
-                lineofcredit:0,
-                lineofcredituse:0,
-                lineofcreditaudit:0,
-                creditaccount:0,
-                awardcreditbreed:'',
-                awardcreditbreedname:'',
-                awardcreditbreedId:'',
-                creditbalance:0,
-                note:'',
+                moneyname:'',
+                moneydepartment:'',
+                companysubject:'',
+                projectsubject:'',
+                project:'',
+                handledate:'',
+                shouldamount:0,
+                haveamount:0,
+                haveapplyamount:0,
+                remark:'',
             },
+            showSummary:true,
             titleStr:'',
             selectFacilitylistRow:[],
             financingTypeformdata:{},
             rowTypeDataObj:{},
+            rowPNSDataObj:{},
             rowFacilityNum: 0,
             oprStatus:1,
             financingTypetype:false,
+            financingPNStype:false,
         }
     },
     methods: {
-        //获取选中的授信行
+        //获取选中的收款明细行
         selectFacilityRow(val){
             this.selectFacilitylistRow= val;
         },
-        // 增加授信行
+        // 增加收款明细行
         addFacilityRow () {
             var list = {
                 rowFacilityNum:this.rowFacilityNum,
@@ -111,20 +171,20 @@ export default {
                 status:0,
                 index:this.rowFacilityNum+1,
                 inProcess:false,
-                creator:localStorage.getItem("ms_userId"),
-                lineofcredit:this.formdata.lineofcredit,
-                lineofcredituse:this.formdata.lineofcredituse,
-                lineofcreditaudit:this.formdata.lineofcreditaudit,
-                creditaccount:this.formdata.creditaccount,
-                awardcreditbreed:this.formdata.awardcreditbreed,
-                awardcreditbreedname:this.formdata.awardcreditbreedname,
-                awardcreditbreedId:this.formdata.awardcreditbreedId,
-                creditbalance:this.formdata.creditbalance,
-                note:this.formdata.note,
+                moneyname:this.formdata.moneyname,
+                moneydepartment:this.formdata.moneydepartment,
+                companysubject:this.formdata.companysubject,
+                projectsubject:this.formdata.projectsubject,
+                project:this.formdata.project,
+                handledate:this.formdata.handledate,
+                shouldamount:this.formdata.shouldamount,
+                haveamount:this.formdata.haveamount,
+                haveapplyamount:this.formdata.haveapplyamount,
+                remark:this.formdata.remark,
             };
             this.RegistrationtableData.unshift(list)
             this.rowFacilityNum += 1;
-            this.titleStr=this.rowDatavarietObj.titleStr;
+            this.titleStr=this.rowNCDDataObj.titleStr;
         },
         // 删除选中行
         delFacilityData () {
@@ -132,15 +192,33 @@ export default {
             let val = this.selectFacilitylistRow;
             val.forEach((val, index) => {
                 this.RegistrationtableData.forEach((v, i) => {
-                if (val.rowFacilityNum === v.rowFacilityNum) {
-                    // i 为选中的索引
-                    this.RegistrationtableData.splice(i, 1)
-                }
+                    if (val.rowFacilityNum === v.rowFacilityNum) {
+                        // i 为选中的索引
+                        this.RegistrationtableData.splice(i, 1)
+                    }
                 })
             })
             }
             // 删除完数据之后清除勾选框
             this.$refs.table.clearSelection()
+        },
+        //款项名称查询
+        MoreSearchMNMVisible(row){
+            let finandata=row;
+            finandata.finanrowname="款项名称缺省查询方案";
+            finandata.finanrowId="011302220911760402";
+            finandata.nametitle=this.titleStr;
+            this.rowPNSDataObj=finandata;
+            this.financingPNStype=true;
+        },
+        //获取款项名称
+        showPNSData(data,type){
+            console.log(data)
+            if(type === false){
+                this.financingPNStype = false
+            }else{
+                this.financingPNStype = true
+            }
         },
         //查询授信品种
         MoreSearchTypeVisible(row){
@@ -223,11 +301,11 @@ export default {
                         totalValue=Number(data.lineofcredit);
                     }
                 }
-                this.rowDatavarietObj.FinNameS=FinNameS;
-                this.rowDatavarietObj.FinIDS=FinIDS;
-                this.rowDatavarietObj.totalValue=totalValue;
-                this.rowDatavarietObj.RegistrationtableData=RegistraData;
-                this.$emit('changeShow',this.rowDatavarietObj);
+                this.rowNCDDataObj.FinNameS=FinNameS;
+                this.rowNCDDataObj.FinIDS=FinIDS;
+                this.rowNCDDataObj.totalValue=totalValue;
+                this.rowNCDDataObj.RegistrationtableData=RegistraData;
+                this.$emit('changeShow',this.rowNCDDataObj);
             }
             if(type === false){
                 this.financingTypetype = false
@@ -269,20 +347,24 @@ export default {
             if(FinNameS.indexOf(",")>-1){
                 FinNameS=FinNameS.slice(0,FinNameS.length-1);
             }
-            this.rowDatavarietObj.FinNameS=FinNameS;
-            this.rowDatavarietObj.totalValue=totalValue;
-            this.rowDatavarietObj.RegistrationtableData=FormData;
-            this.$emit('changeShow',this.rowDatavarietObj);
+            this.rowNCDDataObj.FinNameS=FinNameS;
+            this.rowNCDDataObj.totalValue=totalValue;
+            this.rowNCDDataObj.RegistrationtableData=FormData;
+            this.$emit('changeShow',this.rowNCDDataObj);
         },
     },
     watch:{
-        financingCVMListtype(oldVal,newVal){
-            let DataObj = this.rowDatavarietObj;
+        financingNCDype(oldVal,newVal){
+            let DataObj = this.rowNCDDataObj;
             this.titleStr=DataObj.titleStr;
             if(DataObj.RegisType==='Edit'){
                 let Registr = DataObj.RegistrationtableData;
-                for(var i=0;i<Registr.length;i++){
-                    Registr[i].oprStatus=2;
+                if(Registr && Registr != null ){
+                    for(var i=0;i<Registr.length;i++){
+                        Registr[i].oprStatus=2;
+                    }
+                }else{
+                    Registr=[];
                 }
                 this.oprStatus=2;
                 this.RegistrationtableData=Registr;

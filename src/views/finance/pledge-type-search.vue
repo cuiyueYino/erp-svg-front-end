@@ -46,7 +46,7 @@
                 <el-button type="primary" @click="savefinanceValue">提交</el-button>
             </span>
         </el-dialog>
-        <el-dialog :title="title" :visible.sync="MoreSearchVisible" :append-to-body="true" v-if="MoreSearchVisible" :close-on-click-modal="false" width="60%">
+        <el-dialog :title="title" :visible.sync="MoreSearchVisible" :append-to-body="true" v-if="MoreSearchVisible" :close-on-click-modal="false" width="50%">
             <el-form
                 label-width="100px"
                 v-model="dialog"
@@ -101,8 +101,8 @@ import DynamicTable from '../../components/common/dytable/dytable.vue';
 import proData from '../../components/common/proData/proData';
 export default {
     props: {
-        rowTypeDataObj:Object,
-        financingTypetype: Boolean
+        rowPTSDataObj:Object,
+        financingPTStype: Boolean
     },
     name: 'basetable',
     components: {
@@ -161,7 +161,7 @@ export default {
         //关闭当前dialog时给父组件传值
         handleClose(){
             //返回选中的父组件选中的row,并修某些改值
-            this.$emit('changeShow',this.rowTypeDataObj,false);
+            this.$emit('changeShow',this.rowPTSDataObj,false);
         },
         onSelectionChange(val) {
             this.multipleSelection = val;
@@ -172,10 +172,10 @@ export default {
         },
         //下一页
         onCurrentChange(val) {
-            var form = new FormData();
-            form.append('page', val);
-            form.append('size', this.pageSize);
-            this.$api.task.findAwardCreditBreedPage(form).then(response => {
+            let formDataA ={};
+            formDataA.page=val;
+            formDataA.size=this.pageSize;
+            this.$api.task.findPledgeTypePage(formDataA).then(response => {
                 let responsevalue = response;
                 if (responsevalue) {
                     let returndata = responsevalue.data;
@@ -200,22 +200,22 @@ export default {
         },
         //获得查询结果
         onHandleMoreSearch() {
-            var form = new FormData();
-            form.append('page', this.pageNum);
-            form.append('size', this.pageSize);
+            let formDataA ={};
+            formDataA.page=this.pageNum;
+            formDataA.size=this.pageSize;
             let namevalueS=this.dialog.name;
             if(namevalueS && namevalueS!=''){
-                form.append('name', this.dialog.name); 
+                formDataA.name=this.dialog.name;
             }
             let codevalueS=this.dialog.codeNomber;
             if(codevalueS && codevalueS!=''){
-                form.append('code', this.dialog.codeNomber);
+                formDataA.code=this.dialog.codeNomber;
             }
             let compvalueS=this.dialog.company;
             if(compvalueS && compvalueS!=''){
-                form.append('company', this.dialog.company);
+                formDataA.company=this.dialog.company;
             }
-            this.$api.task.findAwardCreditBreedPage(form).then(response => {
+            this.$api.task.findPledgeTypePage(formDataA).then(response => {
                 let responsevalue = response;
                 if (responsevalue) {
                     let returndata = responsevalue.data;
@@ -247,10 +247,10 @@ export default {
                     this.$message.error('只能选择一行!');
                 }else{
                     //返回选中的父组件选中的row,并修某些改值
-                    this.rowTypeDataObj.awardcreditbreed=selectOption[0].code;
-                    this.rowTypeDataObj.awardcreditbreedname=selectOption[0].name;
-                    this.rowTypeDataObj.awardcreditbreedId=selectOption[0].id;
-                    this.$emit('changeShow',this.rowTypeDataObj,false);
+                    this.rowPTSDataObj.searchRowPTScode=selectOption[0].code;
+                    this.rowPTSDataObj.searchRowPTSname=selectOption[0].name;
+                    this.rowPTSDataObj.searchRowPTSId=selectOption[0].id;
+                    this.$emit('changeShow',this.rowPTSDataObj,false);
                     this.ShowFinancVisible = false;
                 }
             }else{
@@ -263,17 +263,17 @@ export default {
         }
     },
     watch:{
-        financingTypetype(oldVal,newVal){
-            this.ShowFinancVisible=this.financingTypetype;
-            let rowDataObj=this.rowTypeDataObj;
+        financingPTStype(oldVal,newVal){
+            this.ShowFinancVisible=this.financingPTStype;
+            let rowDataObj=this.rowPTSDataObj;
             this.title=rowDataObj.nametitle;
             this.formdata.searchName=rowDataObj.finanrowId;
             this.rowFincename=rowDataObj.finanrowname;
-            var form = new FormData();
-            form.append('page', this.pageNum);
-            form.append('size', this.pageSize);
+            let formDataA ={};
+            formDataA.page=this.pageNum;
+            formDataA.size=this.pageSize;
             //form.append('company', localStorage.getItem('ms_companyId'));
-            this.$api.task.findAwardCreditBreedPage(form).then(response => {
+            this.$api.task.findPledgeTypePage(formDataA).then(response => {
                 let responsevalue = response;
                 if (responsevalue) {
                     let returndata = responsevalue.data;

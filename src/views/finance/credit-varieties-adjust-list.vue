@@ -1,12 +1,14 @@
 <template>
     <div>
         <dynamic-table
-            :columns="enclosurecolumns"
-            :table-data="enclosuretableData"
+            :columns="RegRecodecolumns"
+            :table-data="RegRecodetableData"
             :total="total"
+            size="mini"
             ref="multipleTable"
             :page-num="pageNum"
             :page-size="pageSize"
+            :isShowPager="isShowPager"
             @current-change="onCurrentChange"
             @selection-change="onSelectionChange"
             @size-change="onSizeChange"
@@ -20,8 +22,8 @@ import DynamicTable from '../../components/common/dytable/dytable.vue';
 import proData from '../../components/common/proData/proData';
 export default {
     props: {
-        rowEFListDataObj:Object,
-        financingCVMListtype: Boolean
+        rowCVAListDataObj:Array,
+        financingCVAListtype: Boolean
     },
     name: 'basetable',
     components: {
@@ -35,54 +37,37 @@ export default {
             pageSize: 1000,
             total: 20,
             isShowPager:false,
-            enclosurecolumns:[
+            RegRecodecolumns:[
                 {
-                    key: 'Cnumber',
-                    title: '文件类型'
+                    key: 'creditvarietyname',
+                    title: '授信品种'
                 },
                 {
-                    key: 'Cnumber',
-                    title: '文件'
+                    key: 'lineofcredit',
+                    title: '授信额度'
                 },
                 {
-                    key: 'Cnumber',
-                    type: 'selection',
-                    title: '必须'
+                    key: 'lineofcredituse',
+                    title: '授信可用额度',
                 },
                 {
-                    key: 'Cnumber',
-                    title: '编制单位'
+                    key: 'lineofcreditaudit',
+                    title: '授信调整额度'
                 },
                 {
-                    key: 'Cnumber',
-                    title: '负责人'
+                    key: 'creditooccupation',
+                    title: '授信占用'
                 },
                 {
-                    key: 'Cnumber',
-                    title: '审核单位'
+                    key: 'creditbalance',
+                    title: '授信余额'
                 },
                 {
-                    key: 'Cnumber',
-                    title: '审核人'
-                },
-                {
-                    key: 'Cnumber',
-                    title: '定版日期'
-                },
-                {
-                    key: 'Cnumber',
-                    title: '文档等级'
-                },
-                {
-                    key: 'Cnumber',
-                    title: '保管期限'
-                },
-                {
-                    key: 'Cnumber',
+                    key: 'note',
                     title: '备注'
                 },
             ],
-            enclosuretableData: [],
+            RegRecodetableData: [],
             labelPosition: 'left',
         }
     },
@@ -99,9 +84,9 @@ export default {
         },
     },
     watch:{
-        financingEFListtype(oldVal,newVal){
-            this.financingEFListtype=this.financingEFListtype;
-            this.enclosuretableData=this.rowEFListDataObj;
+        financingCVAListtype(oldVal,newVal){
+            this.financingCVAListtype=this.financingCVAListtype;
+            this.RegRecodetableData=this.rowCVAListDataObj;
         }
     }
 }

@@ -101,8 +101,8 @@ import DynamicTable from '../../components/common/dytable/dytable.vue';
 import proData from '../../components/common/proData/proData';
 export default {
     props: {
-        rowTypeDataObj:Object,
-        financingTypetype: Boolean
+        rowUserDataObj:Object,
+        userListtype: Boolean
     },
     name: 'basetable',
     components: {
@@ -135,20 +135,20 @@ export default {
                     type: 'selection'
                 },
                 {
-                    key: 'statusString',
-                    title: '状态'
-                },
-                {
                     key: 'code',
                     title: '编码'
+                },
+                {
+                    key: 'departmentName',
+                    title: '部门'
                 },
                 {
                     key: 'name',
                     title: '名称'
                 },
                 {
-                    key: 'remark',
-                    title: '描述'
+                    key: 'firmPositonName',
+                    title: '职位'
                 }
             ],
             tableData:[],
@@ -160,8 +160,9 @@ export default {
     methods: {
         //关闭当前dialog时给父组件传值
         handleClose(){
+            this.reload();
             //返回选中的父组件选中的row,并修某些改值
-            this.$emit('changeShow',this.rowTypeDataObj,false);
+            this.$emit('changeShow',this.rowUserDataObj,false);
         },
         onSelectionChange(val) {
             this.multipleSelection = val;
@@ -247,10 +248,10 @@ export default {
                     this.$message.error('只能选择一行!');
                 }else{
                     //返回选中的父组件选中的row,并修某些改值
-                    this.rowTypeDataObj.awardcreditbreed=selectOption[0].code;
-                    this.rowTypeDataObj.awardcreditbreedname=selectOption[0].name;
-                    this.rowTypeDataObj.awardcreditbreedId=selectOption[0].id;
-                    this.$emit('changeShow',this.rowTypeDataObj,false);
+                    this.rowUserDataObj.awardcreditbreed=selectOption[0].code;
+                    this.rowUserDataObj.awardcreditbreedname=selectOption[0].name;
+                    this.rowUserDataObj.awardcreditbreedId=selectOption[0].id;
+                    this.$emit('changeShow',this.rowUserDataObj,false);
                     this.ShowFinancVisible = false;
                 }
             }else{
@@ -263,16 +264,16 @@ export default {
         }
     },
     watch:{
-        financingTypetype(oldVal,newVal){
-            this.ShowFinancVisible=this.financingTypetype;
-            let rowDataObj=this.rowTypeDataObj;
+        userListtype(oldVal,newVal){
+            this.ShowFinancVisible=this.userListtype;
+            let rowDataObj=this.rowUserDataObj;
             this.title=rowDataObj.nametitle;
             this.formdata.searchName=rowDataObj.finanrowId;
             this.rowFincename=rowDataObj.finanrowname;
             var form = new FormData();
             form.append('page', this.pageNum);
             form.append('size', this.pageSize);
-            //form.append('company', localStorage.getItem('ms_companyId'));
+            form.append('company', localStorage.getItem('ms_companyId'));
             this.$api.task.findAwardCreditBreedPage(form).then(response => {
                 let responsevalue = response;
                 if (responsevalue) {

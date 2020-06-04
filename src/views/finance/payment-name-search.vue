@@ -46,7 +46,7 @@
                 <el-button type="primary" @click="savefinanceValue">提交</el-button>
             </span>
         </el-dialog>
-        <el-dialog :title="title" :visible.sync="MoreSearchVisible" :append-to-body="true" v-if="MoreSearchVisible" :close-on-click-modal="false" width="60%">
+        <el-dialog :title="title" :visible.sync="MoreSearchVisible" :append-to-body="true" v-if="MoreSearchVisible" :close-on-click-modal="false" width="50%">
             <el-form
                 label-width="100px"
                 v-model="dialog"
@@ -75,19 +75,47 @@
                 </el-row>
                 <el-row class="elrowStyle">
                     <el-col :span="6" class="elColCenter">编码</el-col>
-                    <el-col :span="6"  class="elColCenter">左右匹配</el-col>
+                    <el-col :span="6" class="elColCenter">右匹配</el-col>
                     <el-col :span="8">
-                       <el-input v-model="dialog.codeNomber"></el-input>
+                        <el-input v-model="dialog.code"></el-input>
                     </el-col>
                 </el-row>
                 <el-row class="elrowStyle">
                     <el-col :span="6" class="elColCenter">名称</el-col>
-                    <el-col :span="6"  class="elColCenter">左右匹配</el-col>
+                    <el-col :span="6" class="elColCenter">左右匹配</el-col>
                     <el-col :span="8">
-                       <el-input v-model="dialog.name"></el-input>
+                        <el-input v-model="dialog.name"></el-input>
                     </el-col>
                 </el-row>
-                </el-card>
+                <el-row class="elrowStyle">
+                    <el-col :span="6" class="elColCenter">收支类型</el-col>
+                    <el-col :span="6" class="elColCenter">等于</el-col>
+                    <el-col :span="8">
+                        <el-select v-model="dialog.inExpenseProperty">
+                            <el-option
+                                v-for="item in IEPoptions"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value"
+                            ></el-option>
+                        </el-select>
+                    </el-col>
+                </el-row>
+                <el-row class="elrowStyle">
+                    <el-col :span="6" class="elColCenter">收支性质</el-col>
+                    <el-col :span="6" class="elColCenter">等于</el-col>
+                    <el-col :span="8">
+                        <el-select v-model="dialog.inExpenseType">
+                            <el-option
+                                v-for="item in IEToptions"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value"
+                            ></el-option>
+                        </el-select>
+                    </el-col>
+                </el-row>
+            </el-card>
             </el-form>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="MoreSearchVisible = false">取 消</el-button>
@@ -101,8 +129,8 @@ import DynamicTable from '../../components/common/dytable/dytable.vue';
 import proData from '../../components/common/proData/proData';
 export default {
     props: {
-        rowTypeDataObj:Object,
-        financingTypetype: Boolean
+        rowPNSDataObj:Object,
+        financingPNStype: Boolean
     },
     name: 'basetable',
     components: {
@@ -120,23 +148,139 @@ export default {
             pageSize: 10,
             total: 20,
             rowFincename:'',
-            companyoptions: new proData().company,
             formdata:{
                 searchName:'',
                 company:'',
             },
             dialog:{
                 name:'',
+                code:'',
+                inExpenseProperty:'',
                 company:'',
-                codeNomber:'',
+                inExpenseType:'',
             },
-            columns: [
+            companyoptions: new proData().company,
+            companyData:new proData().company,
+            objectoptions:new proData().project,
+            IEPoptions:[
+                {
+                value: '-1',
+                label: '--'
+                },
+                {
+                value: '-2',
+                label: '支出'
+                },
+                {
+                value: '2',
+                label: '收入'
+                }
+            ],
+            IEToptions:[
+                {
+                value: '-1',
+                label: '--'
+                },
+                {
+                value: '1',
+                label: '首付房款'
+                },
+                {
+                value: '2',
+                label: '商业贷款'
+                },
+                {
+                value: '3',
+                label: '公积金贷款'
+                },
+                {
+                value: '4',
+                label: '房款'
+                },
+                {
+                value: '5',
+                label: '面积补差款'
+                },
+                {
+                value: '6',
+                label: '代收费用'
+                },
+                {
+                value: '7',
+                label: '排号费'
+                },
+                {
+                value: '8',
+                label: '变更费'
+                },
+                {
+                value: '9',
+                label: '抵付款'
+                },
+                {
+                value: '20',
+                label: '租金'
+                },
+                {
+                value: '40',
+                label: '物业费'
+                },
+                {
+                value: '60',
+                label: '预收款'
+                },
+                {
+                value: '80',
+                label: '订金'
+                },
+                {
+                value: '81',
+                label: '定金'
+                },
+                {
+                value: '82',
+                label: '押金'
+                },
+                {
+                value: '83',
+                label: '违约金'
+                },
+                {
+                value: '84',
+                label: '质保金'
+                },
+                {
+                value: '85',
+                label: '资金调拨'
+                },
+                {
+                value: '99',
+                label: '其它'
+                },
+                {
+                value: '100',
+                label: '预付款'
+                },
+                {
+                value: '101',
+                label: '借款'
+                },
+                {
+                value: '102',
+                label: '合同款'
+                }
+            ],
+            columns:[
                 {
                     type: 'selection'
                 },
                 {
                     key: 'statusString',
                     title: '状态'
+                },
+                {
+                    key: 'companyName',
+                    title: '公司'
                 },
                 {
                     key: 'code',
@@ -147,6 +291,14 @@ export default {
                     title: '名称'
                 },
                 {
+                    key: 'inExpenseProperty',
+                    title: '收支类型'
+                },
+                {
+                    key: 'inExpenseType',
+                    title: '收支性质'
+                },
+                {
                     key: 'remark',
                     title: '描述'
                 }
@@ -154,14 +306,12 @@ export default {
             tableData:[],
             address: new proData().address,
             labelPosition: 'left',
-            multipleSelection: [],
         }
     },
     methods: {
         //关闭当前dialog时给父组件传值
         handleClose(){
-            //返回选中的父组件选中的row,并修某些改值
-            this.$emit('changeShow',this.rowTypeDataObj,false);
+            this.$emit('changeShow',this.rowPNSDataObj,false);
         },
         onSelectionChange(val) {
             this.multipleSelection = val;
@@ -172,10 +322,11 @@ export default {
         },
         //下一页
         onCurrentChange(val) {
-            var form = new FormData();
-            form.append('page', val);
-            form.append('size', this.pageSize);
-            this.$api.task.findAwardCreditBreedPage(form).then(response => {
+            let formDataA ={};
+            formDataA.page=val;
+            formDataA.size=this.pageSize;
+            formDataA.company=localStorage.getItem('ms_companyId');
+            this.$api.task.findMoneyNamePage(formDataA).then(response => {
                 let responsevalue = response;
                 if (responsevalue) {
                     let returndata = responsevalue.data;
@@ -198,24 +349,49 @@ export default {
                 }
             });
         },
-        //获得查询结果
-        onHandleMoreSearch() {
-            var form = new FormData();
-            form.append('page', this.pageNum);
-            form.append('size', this.pageSize);
+        //提交授信主体值
+        savefinanceValue(){
+            let selectOption= this.multipleSelection;
+            if(selectOption.length >0){
+                if(selectOption.length >1){
+                    this.$message.error('只能选择一行!');
+                }else{
+                    //返回选中的父组件选中的row,并修某些改值
+                    this.rowPNSDataObj.searchRowPNSid=selectOption[0].id;
+                    this.rowPNSDataObj.searchRowPNSname=selectOption[0].name;
+                    this.$emit('changeShow',this.rowPNSDataObj,false);
+                    this.ShowFinancVisible = false;
+                }
+            }else{
+                this.$message.error('请选择一行数据!');
+            }
+        },
+        //高级查询
+        onHandleMoreSearch(){
+            let formDataA ={};
+            formDataA.page=this.pageNum;
+            formDataA.size=this.pageSize;
             let namevalueS=this.dialog.name;
             if(namevalueS && namevalueS!=''){
-                form.append('name', this.dialog.name); 
+                formDataA.name=this.dialog.name;
             }
-            let codevalueS=this.dialog.codeNomber;
-            if(codevalueS && codevalueS!=''){
-                form.append('code', this.dialog.codeNomber);
+            let codeS=this.dialog.code;
+            if(codeS && codeS!=''){
+                formDataA.code=this.dialog.code;
             }
             let compvalueS=this.dialog.company;
             if(compvalueS && compvalueS!=''){
-                form.append('company', this.dialog.company);
+                formDataA.company=this.dialog.company;
             }
-            this.$api.task.findAwardCreditBreedPage(form).then(response => {
+            let IEPvalueS=this.dialog.inExpenseProperty;
+            if(IEPvalueS && IEPvalueS!=''){
+                formDataA.inExpenseProperty=this.dialog.inExpenseProperty;
+            }
+            let IETvalueS=this.dialog.inExpenseType;
+            if(IETvalueS && IETvalueS!=''){
+                formDataA.inExpenseType=this.dialog.inExpenseType;
+            }
+            this.$api.task.findMoneyNamePage(formDataA).then(response => {
                 let responsevalue = response;
                 if (responsevalue) {
                     let returndata = responsevalue.data;
@@ -234,46 +410,26 @@ export default {
                     this.tableData = tableDataArr;
                     this.total = returndata.total;
                     this.MoreSearchVisible = false;
-                } else {
+                }else {
                     this.$message.success('没有查到数据!');
                 }
             });
-        },
-        //提交
-        savefinanceValue(){
-            let selectOption= this.multipleSelection;
-            if(selectOption.length >0){
-                if(selectOption.length >1){
-                    this.$message.error('只能选择一行!');
-                }else{
-                    //返回选中的父组件选中的row,并修某些改值
-                    this.rowTypeDataObj.awardcreditbreed=selectOption[0].code;
-                    this.rowTypeDataObj.awardcreditbreedname=selectOption[0].name;
-                    this.rowTypeDataObj.awardcreditbreedId=selectOption[0].id;
-                    this.$emit('changeShow',this.rowTypeDataObj,false);
-                    this.ShowFinancVisible = false;
-                }
-            }else{
-                this.$message.error('请选择一行数据!');
-            }
-        },
-        //高级查询
-        onHandleMoreSearch(){
             this.MoreSearchVisible = false;
         }
+
     },
     watch:{
-        financingTypetype(oldVal,newVal){
-            this.ShowFinancVisible=this.financingTypetype;
-            let rowDataObj=this.rowTypeDataObj;
+        financingPNStype(oldVal,newVal){
+            this.ShowFinancVisible=this.financingPNStype;
+            let rowDataObj=this.rowPNSDataObj;
             this.title=rowDataObj.nametitle;
             this.formdata.searchName=rowDataObj.finanrowId;
             this.rowFincename=rowDataObj.finanrowname;
-            var form = new FormData();
-            form.append('page', this.pageNum);
-            form.append('size', this.pageSize);
-            //form.append('company', localStorage.getItem('ms_companyId'));
-            this.$api.task.findAwardCreditBreedPage(form).then(response => {
+            let formDataA ={};
+            formDataA.page=this.pageNum;
+            formDataA.size=this.pageSize;
+            formDataA.company=localStorage.getItem('ms_companyId');
+            this.$api.task.findMoneyNamePage(formDataA).then(response => {
                 let responsevalue = response;
                 if (responsevalue) {
                     let returndata = responsevalue.data;
@@ -292,7 +448,7 @@ export default {
                     this.tableData = tableDataArr;
                     this.total = returndata.total;
                 } else {
-                    this.$message.success('没有查到数据!');
+                    this.$message.success('数据库没有该条数据!');
                 }
             });
         }

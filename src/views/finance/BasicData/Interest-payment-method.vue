@@ -23,7 +23,7 @@
                 <div class="search-left">
                     <el-select v-model="formInline.searchName" placeholder="名称" clearable>
                         <el-option
-                            v-for="item in address"
+                            v-for="item in searchlist"
                             :key="item.value"
                             :label="item.label"
                             :value="item.value"
@@ -197,7 +197,7 @@ export default {
             },
             companyoptions: new proData().company,
             companyData:new proData().company,
-            address: [
+            searchlist: [
                 {
                     value: '001',
                     label: '名称'

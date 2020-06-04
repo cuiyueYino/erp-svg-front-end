@@ -3,6 +3,8 @@ const creditvarietiespage = () => import(/* webpackChunkName: "task-context" */ 
 const InterestPaymentMethod = () => import(/* webpackChunkName: "task-context" */ './BasicData/Interest-payment-method.vue');
 const pledgeTypepage = () => import(/* webpackChunkName: "task-context" */ './BasicData/pledge-type.vue');
 const FCRegistration = () => import(/* webpackChunkName: "task-context" */ './FinancingContract/financing-contract-Registration.vue');
+const FCadjustment = () => import(/* webpackChunkName: "task-context" */ './FinancingContract/finance-contract-adjustment.vue');
+const FCUsejustment = () => import(/* webpackChunkName: "task-context" */ './FinancingContract/credit-contract-Registration.vue');
 const PROJECT = [
     {
         path: 'creditType',
@@ -42,6 +44,22 @@ const PROJECT = [
         component: FCRegistration,
         meta: {
             title: '综合授信合同登记'
+        }
+    },
+    {
+        path: 'financingContractAdjustment',
+        name: 'financingContractAdjustment',
+        component: FCadjustment,
+        meta: {
+            title: '综合授信合同调整'
+        }
+    },
+    {
+        path: 'creditContractRegistration',
+        name: 'creditContractRegistration',
+        component: FCUsejustment,
+        meta: {
+            title: '用信合同登记'
         }
     },
 ];

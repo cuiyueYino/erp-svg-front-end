@@ -37,6 +37,14 @@ class ITEMData {
                             {
                             index: 'financingContractRegistration',
                             title: '综合授信合同登记'
+                            },
+                            {
+                            index: 'financingContractAdjustment',
+                            title: '综合授信合同调整'
+                            },
+                            {
+                            index: 'creditContractRegistration',
+                            title: '用信合同登记'
                             }
                         ]
                     }
