@@ -118,13 +118,13 @@ export default {
         }
     },
     methods: {
-         handleNodeClick(data) {
-        console.log(data);
-      },
+        handleNodeClick(data) {
+            console.log(data);
+        },
         closeDialog(){
             this.$emit('closeDialog')
         },
-         baseInputTable(str,title){ 
+        baseInputTable(str,title){ 
             this.baseInputTableF = true;
             this.baseInputTitle= title
             this.baseInputType = str;

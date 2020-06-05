@@ -9,6 +9,10 @@ class ITEMData {
                         index: 'workProcess',
                         title: '工作流程维护',
                     },
+                    {
+                        index: 'businessProcess',
+                        title: '流程业务',
+                    },
                 ]
             },
             {

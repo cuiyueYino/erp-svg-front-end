@@ -31,19 +31,19 @@
                     <el-tab-pane label="无条件" name="1">
                        
                         <el-form-item label="条件表达式" :label-width="formLabelWidth">
-                            <el-input type="textarea" v-model="baseTextarea"></el-input>
+                            <el-input type="textarea" disabled v-model="baseTextarea"></el-input>
                         </el-form-item>
                     </el-tab-pane>
                     <el-tab-pane label="有条件" name="2">
                        
                         <el-form-item label="条件表达式" :label-width="formLabelWidth">
-                            <el-input type="textarea" v-model="baseTextarea"></el-input>
+                            <el-input type="textarea"  v-model="baseTextarea"></el-input>
                         </el-form-item>
                     </el-tab-pane>
-                    <el-tab-pane label="否则条件" name="3">
+                    <el-tab-pane label="[否则]条件" name="3">
                        
                         <el-form-item label="条件表达式" :label-width="formLabelWidth">
-                            <el-input type="textarea" v-model="baseTextarea"></el-input>
+                            <el-input type="textarea" disabled v-model="baseTextarea"></el-input>
                         </el-form-item>
                     </el-tab-pane>
                     <el-tab-pane label="调用服务" name="4">
@@ -60,7 +60,55 @@
             </el-tab-pane>
            
         </el-tabs>
-      
+
+        <!-- 搜索框 -->
+         <el-dialog 
+        :title="'调用服务查询'"
+        class="workDialog"
+         :modal="false"
+          :close-on-click-modal="closeConfig"
+          :visible.sync="dialogTableVisible">
+             <el-row :gutter="24">
+                  <el-col :span="8">
+                    <el-form-item label="编码" label-width="43px">
+                        <el-input clearable size="small" v-model="formData.formCode" placeholder="请输入条件值"></el-input>
+                    </el-form-item>
+                  </el-col> 
+                  <el-col :span="8">
+                    <el-form-item label="名称" label-width="43px">
+                        <el-input clearable size="small" v-model="formData.formName" placeholder="请输入条件值"></el-input>
+                    </el-form-item>
+                  </el-col> 
+                  <el-col :span="8" >
+                    <el-button type="primary" size="small" plain @click="reWorkSearchTable">重置</el-button>
+                    <el-button type="primary" size="small" plain @click="workSearchTable">搜索</el-button>
+                </el-col>
+             </el-row>
+            
+            <!-- 表格 -->
+            <dynamic-table
+                class="workTable"
+                :height="310"
+                :columns="columns"
+                :table-data="gridData"
+                :total="total"
+                :page-num="pageNum"
+                :page-size="pageSize"
+                @current-change="onCurrentChange"
+                @selection-change="onSelectionChange"
+                v-loading="tableLoading"
+                element-loading-text="加载中"
+            ></dynamic-table>
+          
+            <!-- 角色选择 END-->
+            
+            <!-- footer -->
+            <footer>
+                <el-button   size="small"   @click="gridDataAdd">确定</el-button>
+                <!-- <el-button  type="primary" size="small" plain @click="dialogTableVisible = false">关闭</el-button> -->
+            </footer>
+            <!-- footer END-->
+           </el-dialog>
        
         </div>
 </template>
@@ -71,10 +119,12 @@
 * @create 2019-04-11
 * @author liyuanquan
 */
+import DynamicTable from '../../../components/common/dytable/dytable.vue';
 
 export default {
     name: 'NodeLine',
      components: {
+         DynamicTable,
     },
     props: {
         // 配置数据源
@@ -110,6 +160,8 @@ export default {
             pageNum: 1,
             pageSize: 10,
             total: 20,
+            baseTextarea:'',
+            baseInput:'',
             activeName: '1',
             formLabelWidth: '120px',
             // 关闭对话框配置
@@ -124,36 +176,23 @@ export default {
             dialogVisible: this.visible,
             // 配置表单数据
             formData: this.data,
-            // task参与类型
-            typeOpt: [
-                {
-                    label: '普通参与',
-                    value: 'NORMAL'
-                },
-                {
-                    label: '会签参与',
-                    value: 'ALL'
-                }
-            ],
             columns: [
             {
                 type: 'selection'
             },
             {
                 key: 'fcode',
-                title: '类别'
+                title: '编码'
             },
             {
                 key: 'fname',
-                title: '内容'
+                title: '名称'
             },
             {
                 key: 'fstatus',
                 title: '描述'
             }
         ],
-        tableData:[],
-        tableData2:[],
         gridData:[],
         multipleSelection: [],
         options: [],
@@ -214,6 +253,9 @@ export default {
         },
         handleClick(tab, event) {
             // console.log(tab, event);
+        },
+        baseInputTable(str,title){ 
+            this.dialogTableVisible = true;
         },
          //业务工作-新增
         gridDataAdd(){

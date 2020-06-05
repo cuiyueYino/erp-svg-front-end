@@ -127,24 +127,28 @@ export default {
                         this.JoinF =false
                         this.ForkF =false
                         this.TaskF = true
+                        this.LineF =false
                         break;
                     case "Fork":
                         this.ConditionF =false
                         this.JoinF =false
                         this.ForkF =true
                         this.TaskF = false
+                        this.LineF =false
                         break;
                     case "Join":
                         this.ConditionF =false
                         this.JoinF =true
                         this.ForkF =false
                         this.TaskF = false
+                        this.LineF =false
                         break;
                     case "Condition":
                         this.ConditionF =true
                         this.JoinF =false
                         this.ForkF =false
                         this.TaskF = false
+                        this.LineF =false
                         break;
                     case "Line":
                         this.LineF =true
