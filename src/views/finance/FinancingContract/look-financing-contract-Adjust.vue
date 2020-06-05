@@ -107,7 +107,6 @@
                 </el-card>
             </el-form>
         </el-dialog>
-       
     </div>
 </template>
 
@@ -194,6 +193,8 @@ export default {
     },
     watch:{
         financingLFCAtype(oldVal,newVal){
+            console.log(11111)
+            console.log(this.financingLFCAtype)
             this.ShowFinancVisible=this.financingLFCAtype;
             let finandata=this.rowLFCADataObj.finanrowId;
             let formDataA ={};

@@ -10,6 +10,14 @@ class ITEMData {
                         title: '工作流程维护',
                     },
                     {
+                        index: 'workflowMonitoring',
+                        title: '工作流监控',
+                    },
+                    {
+                        index: 'todolist',
+                        title: '待办事项',
+                    },
+                    {
                         index: 'businessProcess',
                         title: '流程业务',
                     },

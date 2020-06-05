@@ -277,9 +277,9 @@ export default {
         }
     },
     methods: {
-         handleNodeClick(data) {
-        console.log(data);
-      },
+        handleNodeClick(data) {
+            console.log(data);
+        },
         closeDialog(){
             this.$emit('closeDialog')
         },

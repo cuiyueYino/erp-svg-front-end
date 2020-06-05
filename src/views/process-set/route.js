@@ -1,6 +1,7 @@
 const workProcesspage = () => import('./work-process.vue');
 const businessProcesspage = () => import('./process-business.vue');
-
+const workflowMonitorn = () => import('./workflow-monitoring.vue');
+const todolist = () => import('./to-do-list.vue');
 const PROJECT = [
     {
         path: 'workProcess',
@@ -11,6 +12,22 @@ const PROJECT = [
         }
     },
     {
+        path: 'workflowMonitoring',
+        name: 'workflowMonitoring',
+        component: workflowMonitorn,
+        meta: {
+            title: '工作流监控'
+        }
+    },
+    {
+        path: 'todolist',
+        name: 'todolist',
+        component: todolist,
+        meta: {
+            title: '待办事项'
+        }
+    },
+    {
         path: 'businessProcess',
         name: 'businessProcess',
         component: businessProcesspage,
@@ -18,6 +35,5 @@ const PROJECT = [
             title: '流程业务'
         }
     },
-    
 ];
 export default PROJECT;
