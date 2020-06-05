@@ -439,7 +439,7 @@ export default {
                         // 添加连接线数据
                         if (!item.lineEdit) {
                             this.$set(item, 'data', {
-                                name: 'New Link',
+                                name: 'Line',
                                 displayName: '新建连接'
                             });
                         }
