@@ -22,7 +22,8 @@
         <node-condition :visible = visible?(ConditionF?true:false):false  > </node-condition>
         <node-fork :visible = visible?(ForkF?true:false):false></node-fork>
         <node-join :visible = visible?(JoinF?true:false):false></node-join>
-        
+        <node-router-task :visible = visible?(TaskF?true:false):false></node-router-task>
+        <node-line :visible = visible?(LineF?true:false):false></node-line>
          </el-form>
           <el-row :gutter="20">
             <el-col :span="12" style="text-align: right;">
@@ -48,6 +49,9 @@ import NodeJoin from './node-components/Join';
 // 自由活动
 import NodeFork from './node-components/Fork';
 // 路由
+import NodeRouterTask from './node-components/RouterTask';
+// 线
+import NodeLine from './node-components/Line';
 
 export default {
     name: 'NodeConfig',
@@ -55,6 +59,8 @@ export default {
       NodeCondition,
       NodeFork,
       NodeJoin,
+      NodeRouterTask,
+      NodeLine,
     },
     props: {
         // 配置数据源
@@ -81,6 +87,7 @@ export default {
             JoinF:false,
             ForkF:false,
             TaskF:false,
+            LineF:false,
             // 关闭对话框配置
             closeConfig: false,
             // 对话框显示标识
@@ -113,7 +120,7 @@ export default {
         // 监听配置数据源
         data: {
             handler (obj) {
-                this.formData = JSON.parse(JSON.stringify(obj));
+                this.formData = JSON.parse(JSON.stringify(obj));console.log(this.formData,11)
                 switch (this.formData.name) {
                     case "Task":
                         this.ConditionF =false
@@ -138,6 +145,13 @@ export default {
                         this.JoinF =false
                         this.ForkF =false
                         this.TaskF = false
+                        break;
+                    case "Line":
+                        this.LineF =true
+                        this.JoinF =false
+                        this.ForkF =false
+                        this.TaskF = false
+                        this.ConditionF =false
                         break;
                 
                     default:
