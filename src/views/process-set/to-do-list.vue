@@ -366,7 +366,7 @@ export default {
             if(data === false){
                 this.rowWAAtype = false
             }else{
-                this.rowWAAtype = true
+                // this.rowWAAtype = true
             }
         },
         //查询

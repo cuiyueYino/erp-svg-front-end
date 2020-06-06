@@ -119,7 +119,10 @@ import processnodelist from '../process-node-list.vue';
 export default {
     props: {
         rowLFCADataObj: Object,
-        financingLFCAtype: Boolean
+        financingLFCAtype: {
+             type: Boolean,
+             default: false
+        },
     },
     name: 'basetable',
     components: {

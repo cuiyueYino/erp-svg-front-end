@@ -40,28 +40,37 @@
             ></dynamic-table>
         </el-card>
     <!-- 弹出框 -->
-        <el-dialog title="流程维护" :visible.sync="dialogFormVisible" :close-on-click-modal="false">
+        <el-dialog title="新增业务" :visible.sync="dialogFormVisible" :close-on-click-modal="false">
             <el-form :model="form" :rules="rules" ref="form">
-                <el-form-item label="编码：" :label-width="formLabelWidth" prop="fcode">
+                <el-form-item label="部门" :label-width="formLabelWidth" prop="fcode">
                     <el-input v-model="form.fcode" autocomplete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="名称：" :label-width="formLabelWidth" prop="fname">
-                    <el-input v-model="form.fname" autocomplete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="组织结构单元：" :label-width="formLabelWidth">
-                    <el-input v-model="form.date2" autocomplete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="子流程：" :label-width="formLabelWidth">
-                    <el-checkbox v-model="checked"></el-checkbox>
-                </el-form-item>
-                <el-form-item label="描述：" :label-width="formLabelWidth">
-                    <el-input maxlength="1000" show-word-limit autosize type="textarea" v-model="form.fremark"></el-input>
+                    <img class="icon-search" @click="workSearch" src="../../assets/img/search.svg">
                 </el-form-item>
             </el-form>
-            <div slot="footer" class="dialog-footer">
-                <el-button @click="dialogFormVisible = false">取 消</el-button>
-                <el-button type="primary" @click="addSubmit('form')">确 定</el-button>
-            </div>
+             <el-row :gutter="24" class="joinTableBox">
+                    <el-col :span="20">
+                        <dynamic-table
+                            :columns="columns"
+                            :table-data="tableData"
+                            @selection-change="onSelectionChange"
+                            v-loading="false"
+                            element-loading-text="加载中"
+                        ></dynamic-table>
+                    </el-col>
+                     <el-col :span="3" class="joinBtnBox">
+                        <el-button type="success" size="mini" plain @click="joinSearch('定义关系')">新建</el-button>
+                        <el-button type="danger" size="mini" plain @click="deleteMsg">删除</el-button>
+                     
+                    </el-col>
+                </el-row>
+            <el-row :gutter="20">
+            <el-col :span="12" style="text-align: right;">
+                <el-button  size="small" @click="saveConfig">保存</el-button>
+            </el-col>
+            <el-col :span="12">
+                <el-button size="small" @click="cancelConfig">取消</el-button>
+            </el-col>
+        </el-row>
         </el-dialog>
     </div>
 </template>
@@ -83,20 +92,13 @@ export default {
             },
             {
                 key: 'fcode',
-                title: '状态'
+                title: '用户名称'
             },
             {
                 key: 'fname',
-                title: '单据号'
+                title: '角色'
             },
-            {
-                key: 'fsubprocess',
-                title: '部门'
-            },
-            {
-                key: 'fstatus',
-                title: '公司'
-            }
+           
         ],
         tableData:[],
         multipleSelection: [],
@@ -136,6 +138,21 @@ export default {
         
     },
     methods:{
+        //业务工作弹窗
+        workSearch(){
+            // this.titleStr = '业务工作'
+            //  this.showInfoCheck = true;
+            //  this.showBaseInfo = false;
+             // 业务工作-搜索枚举项
+            // this.workSearchOption()
+            // this.workSearchTable()
+        },
+        saveConfig(){
+
+        },
+        cancelConfig(){
+            
+        },
         //多选
         onSelectionChange(val) {
             this.multipleSelection = val;
@@ -289,11 +306,38 @@ export default {
 /deep/ .el-select{
     width: 100%;
 }
+ /deep/ .el-input{
+         width: 70%;
+ }
+ /deep/ .el-textarea .el-input__count{
+     background: #fff0;
+ }
+ /deep/ .el-textarea{
+      width: 70%;
+ }
 .box-card:first-child{
     margin-bottom: 16px;
 }
 .search-all{
     margin-left: 50px;
 }
+.icon-search{
+     width: 24px;
+     height: auto;
+     margin-left: 12px;
+     cursor: pointer;
+ }
+  .joinBtnBox{
+     display: flex;
+     align-items: center;
+     flex-wrap: wrap;
+     justify-content: center;
+     button{
+         margin-bottom: 10px;
+     }
+     /deep/ .el-button+.el-button{
+         margin-left: 0; 
+     }
+ }
 
 </style>

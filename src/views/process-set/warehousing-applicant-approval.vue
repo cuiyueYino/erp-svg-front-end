@@ -33,7 +33,10 @@ import LookcreditPage from '../finance/FinancingContract/look-financing-contract
 export default {
     props: {
         rowWAADataObj: Object,
-        rowWAAtype: Boolean
+        rowWAAtype:{
+             type: Boolean,
+             default: false
+        },
     },
     name: 'basetable',
     components: {
@@ -126,7 +129,7 @@ export default {
     mounted() {
     },
     watch:{
-        rowWAAtype(oldVal,newVal){
+        rowWAAtype(oldVal,newVal){ console.log(oldVal,newVal)
             this.ShowFinancVisible=this.rowWAAtype;
             let finandata=this.rowWAADataObj.finanrowId;
             let formDataA ={};
