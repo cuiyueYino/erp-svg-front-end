@@ -79,8 +79,8 @@ export default {
                 localStorage.setItem('ms_userDepartId',  'BFPID12333LSN033N');
                 localStorage.setItem('ms_userDepartName',  '集团信息中心');
                 localStorage.setItem('ms_companyId',  '_DefaultCompanyOId');
-                //localStorage.setItem('ms_tokenId',  "19aab783-0c8f-4c07-84e7-86f276648521");
-                localStorage.setItem('ms_tokenId',  "fcb1eb0d-27e8-4029-befe-a1f3db56cc7a");
+                localStorage.setItem('ms_tokenId',  "19aab783-0c8f-4c07-84e7-86f276648521");
+                //localStorage.setItem('ms_tokenId',  "fcb1eb0d-27e8-4029-befe-a1f3db56cc7a");
                 this.$router.push('/');
             }else{
                 this.$message.error("请输入用户名和密码!");

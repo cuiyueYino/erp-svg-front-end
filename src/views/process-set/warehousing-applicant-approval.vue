@@ -19,8 +19,32 @@
                             <el-button type="success" icon="el-icon-success" plain @click="effectOrDisableMsg">提交</el-button>
                         </el-col>
                     </el-row>
+                    <el-row :gutter="24">
+                        <LookcreditPage  :rowLFCADataObj="rowLFCADataObj" :financingLFCAtype="financingLFCAtype" @changeShow="showLookOrUpdate"/>
+                    </el-row>
+                    <el-tabs v-model="atctiveName" @tab-click="handleClick">
+                        <el-tab-pane label="审批意见" name="first">
+                            <el-row >
+                                <el-col :span="12" >
+                                    <el-form-item label="决策类型" prop="code">
+                                        <el-radio v-model="formdata.radio" label="1">同意</el-radio>
+                                        <el-radio v-model="formdata.radio" label="2">不同意</el-radio>
+                                    </el-form-item>
+                                </el-col>
+                            </el-row>
+                            <el-row>
+                                <el-col :span="23">
+                                    <el-form-item label="审批意见">
+                                        <el-input type="textarea" v-model="formdata.remark" :rows="5"></el-input>
+                                    </el-form-item>
+                                </el-col>
+                            </el-row>
+                        </el-tab-pane>
+                        <el-tab-pane label="附件" name="second">
+                            <creditEnclFilelist :rowEFListDataObj="rowEFListDataObj" :financingEFListtype="financingEFListtype" />
+                        </el-tab-pane>
+                    </el-tabs>
                 </el-card>
-                <LookcreditPage  :rowLFCADataObj="rowLFCADataObj" :financingLFCAtype="financingLFCAtype" @changeShow="showLookOrUpdate"/>
             </el-form>
         </el-dialog>
     </div>
@@ -29,7 +53,8 @@
 <script>
 import DynamicTable from '../../components/common/dytable/dytable.vue';
 import proData from '../../components/common/proData/proData';
-import LookcreditPage from '../finance/FinancingContract/look-financing-contract-Adjust.vue';
+import LookcreditPage from './financing-contract-Adjust-list.vue';
+import creditEnclFilelist from '../finance/enclosure-file.vue';
 export default {
     props: {
         rowWAADataObj: Object,
@@ -41,6 +66,7 @@ export default {
     name: 'basetable',
     components: {
         DynamicTable,
+        creditEnclFilelist,
         LookcreditPage
     },
     inject: ['reload'],
@@ -52,13 +78,18 @@ export default {
             disabled:false,
             finanLFCRtype:false,
             financingLFCAtype:false,
+            financingEFListtype:false,
             companyData:new proData().company,
             objectoptions:new proData().project,
-            formdata: {},
+            formdata: {
+                radio:1,
+                remark:''
+            },
             rowLFCADataObj: {},
             rowLFCRDataObj: {},
             rowCDLDataObj: [],
             rowPDLDataObj: [],
+            rowEFListDataObj: {},
             rowEFListDataObj: {},
             rowDataprocessObj:{},
             financingCDLtype:false,
@@ -112,6 +143,7 @@ export default {
             if(tabsname){
                 if(tabsname ==="first"){
                     //授信合同记录
+                    //this.financingLFCAtype=true;
                 }else if(tabsname ==="second"){
                     //授信品种管理
                     this.financingCVMListtype=true;
@@ -137,7 +169,7 @@ export default {
             this.title=this.rowWAADataObj.nametitle;
             console.log(this.financingLFCAtype)
             console.log(2222)
-            this.financingLFCAtype=true;
+            //this.financingLFCAtype=true;
             this.rowLFCADataObj.finanrowId='2160a15037e640628e135a4efd2adfd3';
             console.log(this.financingLFCAtype)
             /*this.$api.task.getUserCreditContractRegisterVO(formDataA).then(response => {
