@@ -3,6 +3,8 @@ import App from './App.vue';
 import router from './router';
 import store from './store';
 import ElementUI from 'element-ui';
+import G6UT from './model/api/G6utils';
+import G6 from './model/api/G6';
 import api from './model/api/index';
 import confirmapi from './components/common/confirm/confirm';
 import formatS from './utils/formatfun';
@@ -28,6 +30,8 @@ Vue.prototype.$helpers = helpers;
 Vue.prototype.$api = api;
 Vue.prototype.$Uformat = formatS;
 Vue.prototype.$Uconfirm = confirmapi.installF;
+Vue.prototype.$G6UT = G6UT;
+Vue.prototype.$G6 = G6;
 Vue.use(ElementUI);
 
 // 使用钩子函数对路由进行权限跳转

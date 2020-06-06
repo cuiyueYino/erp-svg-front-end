@@ -17,7 +17,7 @@
                 <el-table-column type="selection" width="45" align="center"></el-table-column>
                 <el-table-column label="文件类型" width="150px">
                     <template slot-scope="scope">
-                        <el-select v-model="scope.row.filestyle" value-key="value" v-bind:disabled="disabled">
+                        <el-select v-model="scope.row.filestyle" size="mini" value-key="value" v-bind:disabled="disabled">
                             <el-option
                                 v-for="item in filestyleoptions"
                                 :key="item.value"
@@ -31,37 +31,37 @@
                     <template slot-scope="scope">
                         <el-row>
                             <el-col :span="16">
-                                <el-input v-model="scope.row.awardfile" style="padding:5px"></el-input>
+                                <el-input v-model="scope.row.awardfile" size="mini" style="padding:5px"></el-input>
                             </el-col>
                             <el-col :span="2" style="padding:5px">
-                                <el-button type="primary"  icon="el-icon-search" @click="MoreSearchfileVisile(scope.row)"></el-button>
+                                <el-button type="primary" size="mini" icon="el-icon-search" @click="MoreSearchfileVisile(scope.row)"></el-button>
                             </el-col>
                         </el-row>
                     </template>
                 </el-table-column>
                 <el-table-column label="必须" >
                     <template slot-scope="scope">
-                        <el-checkbox v-model="scope.row.filechecked"></el-checkbox>
+                        <el-checkbox v-model="scope.row.filechecked" size="mini"></el-checkbox>
                     </template>
                 </el-table-column>
                 <el-table-column label="编制单位" >
                     <template slot-scope="scope">
-                        <el-input v-model="scope.row.awardableamount"></el-input>
+                        <el-input v-model="scope.row.awardableamount" size="mini"></el-input>
                     </template>
                 </el-table-column>
                 <el-table-column label="负责人" >
                     <template slot-scope="scope">
-                        <el-input v-model="scope.row.awardableamount"></el-input>
+                        <el-input v-model="scope.row.awardableamount" size="mini"></el-input>
                     </template>
                 </el-table-column>
                 <el-table-column label="审核单位" >
                     <template slot-scope="scope">
-                        <el-input v-model="scope.row.awardableamount"></el-input>
+                        <el-input v-model="scope.row.awardableamount" size="mini"></el-input>
                     </template>
                 </el-table-column>
                 <el-table-column label="审核人" >
                     <template slot-scope="scope">
-                        <el-input v-model="scope.row.awardableamount"></el-input>
+                        <el-input v-model="scope.row.awardableamount" size="mini"></el-input>
                     </template>
                 </el-table-column>
                 <el-table-column label="定版日期" width="250px">
@@ -69,6 +69,7 @@
                         <el-date-picker
                             v-model="scope.row.value1"
                             type="date"
+                            size="mini"
                             placeholder="选择日期">
                         </el-date-picker>
                     </template>
@@ -77,10 +78,10 @@
                     <template slot-scope="scope">
                         <el-row>
                             <el-col :span="16">
-                                <el-input v-model="scope.row.awardcreditbreed" style="padding:5px"></el-input>
+                                <el-input v-model="scope.row.awardcreditbreed" size="mini" style="padding:5px"></el-input>
                             </el-col>
                             <el-col :span="2" style="padding:5px">
-                                <el-button type="primary"  icon="el-icon-search" @click="MoreSearchuserVisible = true"></el-button>
+                                <el-button type="primary"  icon="el-icon-search"  size="mini" @click="MoreSearchuserVisible = true"></el-button>
                             </el-col>
                         </el-row>
                     </template>
@@ -89,17 +90,17 @@
                     <template slot-scope="scope">
                         <el-row>
                             <el-col :span="16">
-                                <el-input v-model="scope.row.awardcreditbreed" style="padding:5px"></el-input>
+                                <el-input v-model="scope.row.awardcreditbreed" size="mini" style="padding:5px"></el-input>
                             </el-col>
                             <el-col :span="2" style="padding:5px">
-                                <el-button type="primary"  icon="el-icon-search" @click="MoreSearchuserVisible = true"></el-button>
+                                <el-button type="primary"  icon="el-icon-search" size="mini" @click="MoreSearchuserVisible = true"></el-button>
                             </el-col>
                         </el-row>
                     </template>
                 </el-table-column>
                 <el-table-column label="备注" width="230px">
                     <template slot-scope="scope">
-                        <el-input type="textarea" class="remark" v-model="scope.row.remark"></el-input>
+                        <el-input type="textarea" class="remark" size="mini" v-model="scope.row.remark" :rows="1"></el-input>
                     </template>
                 </el-table-column>
             </el-table>

@@ -10,7 +10,7 @@
                 :label-position="labelPosition"
             >
                 <el-row>
-                    <el-col :span="12" class="tree-class">
+                    <el-col :span="10" class="tree-class">
                         <!-- 树状图 -->
                         <el-tree
                             :data="treeData"
@@ -19,7 +19,7 @@
                             @node-click="handleNodeClick">
                         </el-tree>
                     </el-col>
-                    <el-col :span="12" class="tree-class">
+                    <el-col :span="14" class="tree-class">
                         <el-row :gutter="24">
                             <el-col :span="18">
                                 <el-form-item label="搜索" >

@@ -7,7 +7,7 @@
                      <el-button type="success" icon="el-icon-more" plain @click="refresh">移除</el-button>
                      <el-button type="success" icon="el-icon-refresh" plain @click="refresh">刷新</el-button>
                      <el-button type="success" icon="el-icon-search" plain @click="search">查询</el-button>
-                     <el-button type="danger" icon="el-icon-notebook-2" plain @click="deleteMsg">流程图</el-button>
+                     <el-button type="danger" icon="el-icon-notebook-2" plain @click="flowChart()">流程图</el-button>
                      <el-button type="warning" icon="el-icon-document-checked" plain @click="handle()">处理</el-button>
                      <el-button type="success" icon="el-icon-share" plain @click="baseInputTable('用户','用户查询')">转发</el-button>
                      <el-button type="danger" icon="el-icon-s-order" plain @click="effectOrDisableMsg">委托</el-button>
@@ -181,6 +181,7 @@
         <PSpage  :rowPSDataObj="rowPSDataObj" :rowPStype="rowPStype" @changeShow="showORhideForPS"/>
         <WAApage  :rowWAADataObj="rowWAADataObj" :rowWAAtype="rowWAAtype" @changeShow="showORhideForWAA"/>
         <baseInfoDialog  :rowUTSDataObj="rowUTSDataObj" :rowUTStype="rowUTStype" @changeShow="closeBaseInfo"/>
+        <flowchart  :rowFCDDataObj="rowFCDDataObj" :rowFCDtype="rowFCDtype" @changeShow="closeflowchart"/>
     </div>
 </template>
 <style>
@@ -201,12 +202,14 @@
 import DynamicTable from '../../components/common/dytable/dytable.vue';
 import PSpage from '../comment/personnel-search.vue';
 import WAApage from './warehousing-applicant-approval.vue';
-import baseInfoDialog from './user-tree-search.vue'
+import baseInfoDialog from './user-tree-search.vue';
+import flowchart from './flow-chart-detail.vue';
 export default {
     name:'workProcess',
     components: {
       DynamicTable,
       WAApage,
+      flowchart,
       baseInfoDialog,
       PSpage
     },
@@ -216,12 +219,15 @@ export default {
             rowPStype:false,
             rowWAAtype:false,
             rowUTStype:false,
+            rowFCDtype:false,
             baseInputTableF:false,
+            financingLFCAtype:false,
             baseInputType:'',
             baseInputTitle:'',
             rowPSDataObj:{},
             rowWAADataObj:{},
             rowUTSDataObj:{},
+            rowFCDDataObj:{},
             pageNum: 1,
             pageSize: 10,
             total: 20,
@@ -361,12 +367,31 @@ export default {
             finandata.nametitle="入库申请申请人审批";
             this.rowWAADataObj=finandata;
             this.rowWAAtype=true;
+            this.financingLFCAtype=true;
         },
         showORhideForWAA(data){
             if(data === false){
                 this.rowWAAtype = false
             }else{
                 this.rowWAAtype = true
+            }
+        },
+        //流程图查看
+        flowChart(){
+            let selectData=this.multipleSelection;
+            let finandata={};
+            finandata.finanrowname="人员缺省查询方案";
+            finandata.finanrowId="QS_0056";
+            finandata.nametitle="入库申请申请人审批";
+            this.rowFCDDataObj=finandata;
+            this.rowFCDtype=true;
+        },
+        //流程图关闭
+        closeflowchart(data){
+            if(data === false){
+                this.rowFCDtype = false
+            }else{
+                this.rowFCDtype = true
             }
         },
         //查询
