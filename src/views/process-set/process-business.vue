@@ -28,7 +28,7 @@
     <!-- 表格 -->
         <el-card class="box-card">
             <dynamic-table
-                :columns="columns"
+                :columns="columns1"
                 :table-data="tableData"
                 :total="total"
                 :page-num="pageNum"
@@ -58,9 +58,8 @@
                         ></dynamic-table>
                     </el-col>
                      <el-col :span="3" class="joinBtnBox">
-                        <el-button type="success" size="mini" plain @click="joinSearch('定义关系')">新建</el-button>
+                        <el-button type="success" size="mini" plain @click="joinSearch('用户')">新建</el-button>
                         <el-button type="danger" size="mini" plain @click="deleteMsg">删除</el-button>
-                     
                     </el-col>
                 </el-row>
             <el-row :gutter="20">
@@ -72,16 +71,28 @@
             </el-col>
         </el-row>
         </el-dialog>
+        <!-- 部门弹出框 -->
+        <pro-bus-dialog :visible="proBusDialogF" :title="titleStr" :type="userType"  @closeDialog="closeBaseInfo"></pro-bus-dialog>
+
     </div>
 </template>
 
 <script>
 import DynamicTable from '../../components/common/dytable/dytable.vue';
+import proBusDialog from './proces-busines-dialog'
 export default {
     name:'businessProcess',
+    components: {
+      DynamicTable,
+      proBusDialog,
+    },
     data() {
         return {
+            userType:'',
+            proBusDialogF:false,
+            proApartDialogF:false,
             dialogFormVisible:false,
+            titleStr:'',
             formCode:'',
             pageNum: 1,
             pageSize: 10,
@@ -97,6 +108,28 @@ export default {
             {
                 key: 'fname',
                 title: '角色'
+            },
+           
+        ],
+        columns1: [
+            {
+                type: 'selection'
+            },
+            {
+                key: 'fcode',
+                title: '状态'
+            },
+            {
+                key: 'fname',
+                title: '单据号'
+            },
+             {
+                key: 'fcode',
+                title: '部门'
+            },
+            {
+                key: 'fname',
+                title: '公司'
             },
            
         ],
@@ -126,9 +159,7 @@ export default {
          },
         };
     },
-    components: {
-      DynamicTable,
-    },
+    
     created(){
         this.$nextTick(()=>{
             this.getTableData('')
@@ -140,18 +171,27 @@ export default {
     methods:{
         //业务工作弹窗
         workSearch(){
-            // this.titleStr = '业务工作'
-            //  this.showInfoCheck = true;
+            this.titleStr = '部门查询'
+             this.proBusDialogF = true;
+              this.userType = ''
             //  this.showBaseInfo = false;
              // 业务工作-搜索枚举项
             // this.workSearchOption()
             // this.workSearchTable()
+        },
+        joinSearch(Str){
+            this.titleStr = '新建用户&角色'
+             this.proBusDialogF = true;
+             this.userType = Str
         },
         saveConfig(){
 
         },
         cancelConfig(){
             
+        },
+         closeBaseInfo(){
+            this.proBusDialogF = false;
         },
         //多选
         onSelectionChange(val) {
@@ -207,6 +247,7 @@ export default {
         //新增
         add(){
             this.dialogFormVisible = true
+            
         },
         addSubmit(formName){
              this.$refs[formName].validate((valid) => {
@@ -318,6 +359,11 @@ export default {
 .box-card:first-child{
     margin-bottom: 16px;
 }
+.box-card{
+    /deep/ .el-input{
+        width: 100%;
+    }
+}
 .search-all{
     margin-left: 50px;
 }
@@ -326,6 +372,9 @@ export default {
      height: auto;
      margin-left: 12px;
      cursor: pointer;
+ }
+ .joinTableBox{
+     margin-bottom:30px;
  }
   .joinBtnBox{
      display: flex;
