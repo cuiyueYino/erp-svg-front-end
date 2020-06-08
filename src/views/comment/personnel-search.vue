@@ -1,6 +1,6 @@
 <template>
     <div>
-        <el-dialog :title="title" @close="handleClose" :visible.sync="ShowFinancVisible" :append-to-body="true" v-if="ShowFinancVisible" :close-on-click-modal="false" width="60%">
+        <el-dialog :title="title" @close="handleClose" :visible.sync="ShowFinancVisible" :append-to-body="true" v-if="ShowFinancVisible" :close-on-click-modal="false" width="45%">
             <el-form
                 label-width="110px"
                 v-model="formdata"
@@ -46,7 +46,7 @@
                 <el-button type="primary" @click="savefinanceValue">提交</el-button>
             </span>
         </el-dialog>
-        <el-dialog :title="title" :visible.sync="MoreSearchVisible" :append-to-body="true" v-if="MoreSearchVisible" :close-on-click-modal="false" width="60%">
+        <el-dialog :title="title" :visible.sync="MoreSearchVisible" :append-to-body="true" v-if="MoreSearchVisible" :close-on-click-modal="false" width="40%">
             <el-form
                 label-width="100px"
                 v-model="dialog"
@@ -63,7 +63,7 @@
                     <el-col :span="6" class="elColCenter">公司</el-col>
                     <el-col :span="6" class="elColCenter">等于</el-col>
                     <el-col :span="6">
-                        <el-select v-model="dialog.company">
+                        <el-select v-model="dialog.company" size="mini">
                             <el-option
                                 v-for="item in companyoptions"
                                 :key="item.value"
@@ -77,21 +77,21 @@
                     <el-col :span="6" class="elColCenter">编码</el-col>
                     <el-col :span="6"  class="elColCenter">左右匹配</el-col>
                     <el-col :span="6">
-                       <el-input v-model="dialog.codeNomber"></el-input>
+                       <el-input v-model="dialog.codeNomber" size="mini"></el-input>
                     </el-col>
                 </el-row>
                 <el-row class="elrowStyle">
                     <el-col :span="6" class="elColCenter">名称</el-col>
                     <el-col :span="6"  class="elColCenter">左右匹配</el-col>
                     <el-col :span="6">
-                       <el-input v-model="dialog.name"></el-input>
+                       <el-input v-model="dialog.name" size="mini"></el-input>
                     </el-col>
                 </el-row>
                 <el-row class="elrowStyle">
                     <el-col :span="6" class="elColCenter">部门</el-col>
                     <el-col :span="6"  class="elColCenter">等于</el-col>
                     <el-col :span="5">
-                       <el-input v-model="dialog.name"></el-input>
+                       <el-input v-model="dialog.name" size="mini"></el-input>
                     </el-col>
                     <el-col :span="1">
                         <el-button type="primary" size="mini" icon="el-icon-search" @click="MoreSearchDS(dialog)"></el-button>
@@ -101,7 +101,7 @@
                     <el-col :span="6" class="elColCenter">在职状态</el-col>
                     <el-col :span="6"  class="elColCenter">等于</el-col>
                     <el-col :span="6">
-                       <el-select v-model="dialog.company">
+                       <el-select v-model="dialog.company" size="mini">
                             <el-option
                                 v-for="item in usertypeoptions"
                                 :key="item.value"
@@ -206,7 +206,6 @@ export default {
     methods: {
         //关闭当前dialog时给父组件传值
         handleClose(){
-            this.reload();
             //返回选中的父组件选中的row,并修某些改值
             this.$emit('changeShow',this.rowPSDataObj,false);
         },

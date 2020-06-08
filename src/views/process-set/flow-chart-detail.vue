@@ -1,7 +1,13 @@
 <template>
     <div>
-        <el-dialog :title="title" @close="handleClose" :visible.sync="ShowFinancVisible" :append-to-body="true" v-if="ShowFinancVisible" :close-on-click-modal="false" width="60%">
+        <el-dialog :title="title" @close="handleClose" :visible.sync="ShowFinancVisible" :append-to-body="true" v-if="ShowFinancVisible" :close-on-click-modal="false"  width="60%">
             <el-card>
+                <el-row>
+                    <el-col :span="6" :offset="6">
+                        
+                    </el-col>
+                </el-row>
+                <div class="titleClass">{{titleName}}</div>
                 <div class="div-style">
                     <Prosstree  :treeData="treeData" :isChild="isChild" />
                 </div>
@@ -27,43 +33,24 @@ export default {
             pageNum: 1,
             pageSize: 10,
             total: 20,
+            titleName:'',
             labelPosition: 'left',
             treeData:[
                 {
-                    name:'节点1'
+                    name:'节点1',
+                    type:'closed'
                 },
                 {
                     name:'节点A1',
-                    children:[
-                        {name:'节点2'},
-                    ]
+                    type:'current'
                 },
                 {
-                    name:'节点B1',
-                    children:[
-                        {name:'节点B2',children:[{name:'节点B3'}]}
-                    ]
+                    name:'节点B111111111111',
+                    type:'after'
                 },
                 {
                     name:'节点C1',
-                    children:[
-                        {name:'节点C5'},
-                        {name:'节点C51',isLong:true},
-                        {name:'节点26',children:[
-                            {name:'节点C3'},
-                            {name:'节点C31'},
-                            {name:'节点33',
-                                children:[
-                                    {name:'节点C32'},
-                                    {name:'节点C33'},
-                                    {name:'节点C34'}
-                                ]
-                            }
-                        ]},
-                        {name:'节点D3',children:[{name:'节点D31'},{name:'节点D32'}]},
-                        {name:'节点D4',children:[{name:'节点D43'}]},
-                        {name:'节点E5',isLong:true},
-                    ]
+                    type:'after'
                 }
             ]
         };
@@ -92,6 +79,7 @@ export default {
             let formDataA ={};
             formDataA.id=finandata;
             this.title=this.rowFCDDataObj.nametitle;
+            this.titleName='222222';
             /*this.$api.task.getUserCreditContractRegisterVO(formDataA).then(response => {
                 let responsevalue = response;
                 if (responsevalue) {
@@ -164,6 +152,13 @@ export default {
 }
 .el-card__header{
     padding: 10px 20px;
+}
+.titleClass{
+    width: 100%;
+    height: 50px;
+    text-align: center;
+    line-height: 50px;
+    font-size: 18px;
 }
 </style>
 <style>

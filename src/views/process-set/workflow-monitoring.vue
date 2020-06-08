@@ -6,10 +6,10 @@
                  <el-col :span="10" :offset="14">
                      <el-button type="success" icon="el-icon-refresh" plain @click="refresh">刷新</el-button>
                      <el-button type="success" icon="el-icon-search" plain @click="search">查询</el-button>
-                     <el-button type="danger" icon="el-icon-more" plain @click="deleteMsg">流转</el-button>
+                     <el-button type="danger" icon="el-icon-more" plain @click="circulation">流转</el-button>
                      <el-button type="warning" icon="el-icon-edit" plain @click="toEdit">修改</el-button>
-                     <el-button type="success" icon="el-icon-delete-solid" plain @click="effectOrDisableMsg">删除</el-button>
-                     <el-button type="danger" icon="el-icon-document" plain @click="effectOrDisableMsg">查看</el-button>
+                     <el-button type="success" icon="el-icon-delete-solid" plain @click="deleteMsg">删除</el-button>
+                     <el-button type="danger" icon="el-icon-document" plain @click="Tolook">查看</el-button>
                  </el-col>
             </el-row>
         </el-card>
@@ -175,19 +175,23 @@
             </div>
         </el-dialog>
         <PSpage  :rowPSDataObj="rowPSDataObj" :rowPStype="rowPStype" @changeShow="showORhideForPS"/>
+        <LWMworkflowpage  :rowLWMDataObj="rowLWMDataObj" :rowLWMtype="rowLWMtype" @changeShow="showORhidelookpage"/>
     </div>
 </template>
 
 <script>
 import DynamicTable from '../../components/common/dytable/dytable.vue';
 import PSpage from '../comment/personnel-search.vue';
+import LWMworkflowpage from './look-workflow-monitoring'
 export default {
     name:'workProcess',
     data() {
         return {
             dialogWFMVisible:false,
             rowPStype:false,
+            rowLWMtype:false,
             rowPSDataObj:{},
+            rowLWMDataObj:{},
             pageNum: 1,
             pageSize: 10,
             total: 20,
@@ -275,7 +279,8 @@ export default {
     },
     components: {
       DynamicTable,
-      PSpage
+      PSpage,
+      LWMworkflowpage
     },
     created(){
         this.$nextTick(()=>{
@@ -297,7 +302,42 @@ export default {
         },
         //刷新
         refresh(){
-
+        },
+        //流转
+        circulation(){
+        },
+        //
+        Tolook(){
+            /*let selectOption= this.multipleSelection;
+            if(selectOption.length >0){
+                if(selectOption.length >1){
+                    this.$message.error('只能选择一行!');
+                }else{
+                    this.rowLWMtype=true;
+                    let finandata={};
+                    finandata.finanrowname="";
+                    finandata.finanrowId=selectOption[0].id;
+                    finandata.nametitle="工作流监控";
+                    this.rowLWMDataObj=finandata;
+                }
+            }else{
+                this.$message.error('请选择一行你要查看的数据!');
+            }*/
+            this.rowLWMtype = true;
+            let finandata={};
+            finandata.finanrowname="";
+            finandata.finanrowId="";
+            finandata.nametitle="工作流监控";
+            finandata.lookflag="look";
+            this.rowLWMDataObj=finandata;
+        },
+        //查看返回处理
+        showORhidelookpage(data){
+            if(data === false){
+                this.rowLWMtype = false
+            }else{
+                this.rowLWMtype = true
+            }
         },
         //查询
         search(){
@@ -317,7 +357,7 @@ export default {
                 page:this.pageNum,
                 size:this.pageSize
             };
-            this.$api.processSet.getTableData(data).then(res=>{
+            /*this.$api.processSet.getTableData(data).then(res=>{
                 this.tableData = res.data.data.rows
                 for(let i in this.tableData){
                     switch ( this.tableData[i].fstatus) {
@@ -343,99 +383,42 @@ export default {
                 }
             },error=>{
                 console.log(error)
-            })
+            })*/
         },
-        //新增
-        add(){
-            this.dialogFormVisible = true
-        },
+        //提交
         addSubmit(formName){
-             this.$refs[formName].validate((valid) => {
-                if (valid) {
-                    this.$api.processSet.addSubmit(this.form).then(res=>{
-                        if(res.data.data.msg = "success"){
-                            this.dialogFormVisible = false
-                            this.$message.success('新增成功');
-                            //刷新表格
-                            this.getTableData('')
-                        }
-                    }),error=>{
-                        console.log(error);
-                    }
-                } else {
-                    console.log('error submit!!');
-                    return false;
-                }
-             });
-
+            
         },
         //删除
         deleteMsg(){
             if(this.multipleSelection.length > 1){
-                 this.$message.error('只能选择一个删除');
-                 return;
+                this.$message.error('只能选择一个删除');
+                return;
             }
-            this.$api.processSet.deleteMsg(this.multipleSelection[0].foid).then(res=>{
-                    if(res.data.data.msg = "success"){
-                        this.$message.success('删除成功');
-                        //刷新表格
-                        this.getTableData('')
-                    }
-                }),error=>{
-                    console.log(error);
-                }
-        },
-         //生效/禁用
-        effectOrDisableMsg(){
-            let status = this.multipleSelection[0];
-            if(this.multipleSelection.length > 1){
-                 this.$message.error('只能选择一个删除');
-                 return;
-            }else if(this.multipleSelection.length = 0){
-                this.$message.error('请选择一项删除');
-                 return;
-            };
-            
-            switch (status.fstatus) {
-                case '生效':
-                    status.fstatus = 3
-                    break;
-                case '禁用':
-                    status.fstatus = 8
-                    break;
-                default:
-                    break;
-            }
-            let data = {
-                foid  : status.foid,
-                status  : status.fstatus
-            }
-            this.$api.processSet.effectOrDisable(data).then(res=>{
-                    if(res.data.data.msg = "success"){
-                        this.$message.success('操作成功');
-                        //刷新表格
-                        this.getTableData('')
-                       
-                    }
-                }),error=>{
-                    console.log(error);
-                }
         },
         toEdit(){
-             if(this.multipleSelection.length > 1){
-                 this.$message.error('只能选择一个编辑');
-                 return;
-            }else if(this.multipleSelection.length = 0){
-                this.$message.error('请选择一项编辑');
-                 return;
-            };
-             this.$router.push({
-                name:"svgIndex",
-                params:{
-                    data: this.multipleSelection[0]
-                    }
-             })
-            
+           /*let selectOption= this.multipleSelection;
+            if(selectOption.length >0){
+                if(selectOption.length >1){
+                    this.$message.error('只能选择一行!');
+                }else{
+                    this.rowLWMtype=true;
+                    let finandata={};
+                    finandata.finanrowname="";
+                    finandata.finanrowId=selectOption[0].id;
+                    finandata.nametitle="工作流监控";
+                    this.rowLWMDataObj=finandata;
+                }
+            }else{
+                this.$message.error('请选择一行你要查看的数据!');
+            }*/
+            this.rowLWMtype = true;
+            let finandata={};
+            finandata.finanrowname="";
+            finandata.finanrowId="";
+            finandata.nametitle="工作流监控";
+            finandata.lookflag="edit";
+            this.rowLWMDataObj=finandata;  
         },
         //查询发起人员
         MoreSearchPS(data){

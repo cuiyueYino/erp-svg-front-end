@@ -120,15 +120,6 @@ export default {
         showprocessData(data){
             console.log(data)
         },
-        //综合授信合同查看详情
-        MoreSearCCSubject(data){
-            if(data.creditcontract){
-                this.finanLFCRtype=true;
-                this.rowLFCRDataObj.finanrowId=data.creditcontract;
-            }else{
-                this.$message.error('请选择综合授信合同!');
-            }
-        },
          //控制查看显示影藏
         showLookOrUpdate(data){
             if(data === false){

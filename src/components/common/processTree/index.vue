@@ -6,7 +6,6 @@
             <div class="tree-tyle-after">未处理的节点</div>
         </div>
         <div class="tree-wrap">
-            
             <ProcessTree ref="tree" :isChild="isChild" :data="treeData" />
         </div>
     </div>
@@ -31,11 +30,10 @@ export default {
         }
     },
     mounted(){
-        this.$refs.tree.initDomWidth();
     },
     watch:{
         treeData(){
-            this.$nextTick(this.$refs.tree.initDomWidth)
+            
         }
     },
     components:{
@@ -74,7 +72,7 @@ export default {
     margin-left: 20px;
     text-align: center;
     border-radius: 10px;
-    background-color:red;
+    background-color:#E6A23C;
 }
 .tree-tyle-after{
     float: left;

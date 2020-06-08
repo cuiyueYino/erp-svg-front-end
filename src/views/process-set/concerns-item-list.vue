@@ -3,16 +3,13 @@
         <!-- 搜索框 -->
         <el-card class="box-card">
            <el-row :gutter="24">
-                 <el-col :span="14" :offset="10">
-                     <el-button type="success" icon="el-icon-more" plain @click="remove">移除</el-button>
-                     <el-button type="success" icon="el-icon-refresh" plain @click="refresh">刷新</el-button>
+                 <el-col :span="10" :offset="14">
+                     <el-button type="danger" icon="el-icon-refresh" plain @click="refresh">刷新</el-button>
                      <el-button type="success" icon="el-icon-search" plain @click="search">查询</el-button>
-                     <el-button type="danger" icon="el-icon-notebook-2" plain @click="flowChart()">流程图</el-button>
-                     <el-button type="warning" icon="el-icon-document-checked" plain @click="handle()">处理</el-button>
+                     <el-button type="warning" icon="el-icon-document" plain @click="Tolook">查看</el-button>
                      <el-button type="success" icon="el-icon-share" plain @click="baseInputTable()">转发</el-button>
-                     <el-button type="danger" icon="el-icon-s-order" plain @click="baseInputTable()">委托</el-button>
-                     <el-button type="danger" icon="el-icon-view" plain @click="baseInputTable()">关注</el-button>
-                     <el-button type="danger" icon="el-icon-circle-plus-outline" plain @click="baseInputTable()">加签</el-button>
+                     <el-button type="danger" icon="el-icon-circle-plus" plain @click="AddRow">添加</el-button>
+                     <el-button type="warning" icon="el-icon-delete-solid" plain @click="DisableRow">取消</el-button>
                  </el-col>
             </el-row>
         </el-card>
@@ -32,7 +29,7 @@
             ></dynamic-table>
         </el-card>
         <!-- 查询 -->
-        <el-dialog title="工作流监控" :visible.sync="dialogWFMVisible" :close-on-click-modal="false" width="50%">
+        <el-dialog title="关注事项" :visible.sync="dialogWFMVisible" :close-on-click-modal="false" width="50%">
             <el-form 
                 :model="DataForm" 
                 label-width="100px"
@@ -47,20 +44,6 @@
                     </el-row>
                     <el-row class="elrowStyle" >
                         <el-col :span="6" class="elColCenter">来源单据公司</el-col>
-                        <el-col :span="6" class="elColCenter">等于</el-col>
-                        <el-col :span="6">
-                            <el-select v-model="DataForm.WFMtype" size="mini">
-                                <el-option
-                                    v-for="item in WFMtypeoptions"
-                                    :key="item.value"
-                                    :label="item.label"
-                                    :value="item.value"
-                                ></el-option>
-                            </el-select>
-                        </el-col>
-                    </el-row>
-                    <el-row class="elrowStyle" >
-                        <el-col :span="6" class="elColCenter">常用业务数据</el-col>
                         <el-col :span="6" class="elColCenter">等于</el-col>
                         <el-col :span="6">
                             <el-select v-model="DataForm.WFMtype" size="mini">
@@ -179,9 +162,9 @@
             </div>
         </el-dialog>
         <PSpage  :rowPSDataObj="rowPSDataObj" :rowPStype="rowPStype" @changeShow="showORhideForPS"/>
-        <WAApage  :rowWAADataObj="rowWAADataObj" :rowWAAtype="rowWAAtype" @changeShow="showORhideForWAA"/>
         <baseInfoDialog  :rowUTSDataObj="rowUTSDataObj" :rowUTStype="rowUTStype" @changeShow="closeBaseInfo"/>
         <flowchart  :rowFCDDataObj="rowFCDDataObj" :rowFCDtype="rowFCDtype" @changeShow="closeflowchart"/>
+        <addConcItem  :rowACIDataObj="rowACIDataObj" :rowACItype="rowACItype" @changeShow="closeaddConcItem"/>
     </div>
 </template>
 <style>
@@ -201,33 +184,33 @@
 <script>
 import DynamicTable from '../../components/common/dytable/dytable.vue';
 import PSpage from '../comment/personnel-search.vue';
-import WAApage from './warehousing-applicant-approval.vue';
 import baseInfoDialog from './user-tree-search.vue';
 import flowchart from './flow-chart-detail.vue';
+import addConcItem from './add-concerns-item.vue';
 export default {
     name:'workProcess',
     components: {
       DynamicTable,
-      WAApage,
       flowchart,
       baseInfoDialog,
+      addConcItem,
       PSpage
     },
     data() {
         return {
             dialogWFMVisible:false,
             rowPStype:false,
-            rowWAAtype:false,
             rowUTStype:false,
             rowFCDtype:false,
             baseInputTableF:false,
             financingLFCAtype:false,
+            rowACItype:false,
             baseInputType:'',
             baseInputTitle:'',
             rowPSDataObj:{},
-            rowWAADataObj:{},
             rowUTSDataObj:{},
             rowFCDDataObj:{},
+            rowACIDataObj:{},
             pageNum: 1,
             pageSize: 10,
             total: 20,
@@ -258,11 +241,11 @@ export default {
                 },
                 {
                     key: 'fcode',
-                    title: '主题'
+                    title: '当前审批人'
                 },
                 {
                     key: 'fcode',
-                    title: '上一节点'
+                    title: '主题'
                 },
                 {
                     key: 'fcode',
@@ -311,15 +294,11 @@ export default {
     },
     
     created(){
-        this.$nextTick(()=>{
-            this.getTableData('')
-        })
     },
     computed:{
         
     },
     methods:{
-        remove(){},
         //根据状态改背景色
         tableRowClassName({ row }) {
             if (row.state === '暂停') {
@@ -359,22 +338,55 @@ export default {
         refresh(){
 
         },
-        //处理
-        handle(){
-            let selectData=this.multipleSelection;
+        //添加
+        AddRow(){
+            this.rowACItype = true;
             let finandata={};
-            finandata.finanrowname="人员缺省查询方案";
-            finandata.finanrowId="QS_0056";
-            finandata.nametitle="入库申请申请人审批";
-            this.rowWAADataObj=finandata;
-            this.rowWAAtype=true;
-            this.financingLFCAtype=true;
+            finandata.finanrowname="";
+            finandata.finanrowId="";
+            finandata.nametitle="关注事项";
+            this.rowACIDataObj=finandata;
         },
-        showORhideForWAA(data){
+        closeaddConcItem(data){
             if(data === false){
-                this.rowWAAtype = false
+                this.rowACItype = false
             }else{
-                // this.rowWAAtype = true
+                this.rowACItype = true
+            }
+        },
+        //取消
+        DisableRow(){},
+        //查看
+        Tolook(){
+            /*let selectOption= this.multipleSelection;
+            if(selectOption.length >0){
+                if(selectOption.length >1){
+                    this.$message.error('只能选择一行!');
+                }else{
+                    this.rowLWMtype=true;
+                    let finandata={};
+                    finandata.finanrowname="";
+                    finandata.finanrowId=selectOption[0].id;
+                    finandata.nametitle="工作流监控";
+                    this.rowLWMDataObj=finandata;
+                }
+            }else{
+                this.$message.error('请选择一行你要查看的数据!');
+            }*/
+            this.rowLWMtype = true;
+            let finandata={};
+            finandata.finanrowname="";
+            finandata.finanrowId="";
+            finandata.nametitle="工作流监控";
+            finandata.lookflag="look";
+            this.rowLWMDataObj=finandata;
+        },
+        //查看返回处理
+        showORhidelookpage(data){
+            if(data === false){
+                this.rowLWMtype = false
+            }else{
+                this.rowLWMtype = true
             }
         },
         //流程图查看
@@ -408,10 +420,13 @@ export default {
         },
         // 获取表格数据
         getTableData(params){
-            
         },
-        //提交
+        //新增
+        add(){
+            this.dialogFormVisible = true
+        },
         addSubmit(formName){
+            
         },
         toEdit(){
              if(this.multipleSelection.length > 1){

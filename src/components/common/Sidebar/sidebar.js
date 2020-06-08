@@ -18,6 +18,10 @@ class ITEMData {
                         title: '待办事项',
                     },
                     {
+                        index: 'concernsItemList',
+                        title: '关注事项',
+                    },
+                    {
                         index: 'businessProcess',
                         title: '流程业务',
                     },

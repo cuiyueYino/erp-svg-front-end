@@ -181,7 +181,6 @@ export default {
     methods: {
         //关闭当前dialog时给父组件传值
         handleClose(){
-            this.reload();
             //返回选中的父组件选中的row,并修某些改值
             this.$emit('changeShow',this.rowDSDataObj,false);
         },

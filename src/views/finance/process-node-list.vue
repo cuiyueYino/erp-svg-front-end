@@ -14,19 +14,22 @@
             element-loading-text="加载中"
         ></dynamic-table>
         <div><el-button @click="EditFileVisible()">查看流程图</el-button></div>
+        <flowchart  :rowFCDDataObj="rowFCDDataObj" :rowFCDtype="rowFCDtype" @changeShow="closeflowchart"/>
     </div>
 </template>
 
 <script>
 import DynamicTable from '../../components/common/dytable/dytable.vue';
 import proData from '../../components/common/proData/proData';
+import flowchart from '../process-set/flow-chart-detail';
 export default {
     props: {
         rowDataprocessObj:Object
     },
     name: 'basetable',
     components: {
-        DynamicTable
+        DynamicTable,
+        flowchart
     },
     inject: ['reload'],
     data() {
@@ -34,6 +37,8 @@ export default {
             pageNum: 1,
             pageSize: 10,
             total: 20,
+            rowFCDDataObj:{},
+            rowFCDtype:false,
             processcolumns:[
                 {
                     key: 'Cnumber',
@@ -85,10 +90,25 @@ export default {
         onSizeChange(val) {
             this.pageSize = val;
         },
+        //流程图关闭
+        closeflowchart(data){
+            if(data === false){
+                this.rowFCDtype = false
+            }else{
+                this.rowFCDtype = true
+            }
+        },
         //下一页
         onCurrentChange(val) {},
         EditFileVisible(){
-            this.$emit('changeShow',this.rowDataprocessObj);
+            let selectData=this.multipleSelection;
+            let finandata={};
+            finandata.finanrowname="";
+            finandata.finanrowId="";
+            finandata.nametitle="流程维护";
+            this.rowFCDDataObj=finandata;
+            this.rowFCDtype=true;
+            //this.$emit('changeShow',this.rowDataprocessObj);
         }
     }
 };
