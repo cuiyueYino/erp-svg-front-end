@@ -1,8 +1,11 @@
 <template>
     <div>
-        <el-dialog :title="title" @close="handleClose" :visible.sync="ShowFinancVisible" :append-to-body="true" v-if="ShowFinancVisible" :close-on-click-modal="false" width="60%">  
-        <div id="mountNode">
-        </div>
+        <el-dialog :title="title" @close="handleClose" :visible.sync="ShowFinancVisible" :append-to-body="true" v-if="ShowFinancVisible" :close-on-click-modal="false" width="60%">
+            <el-card>
+                <div class="div-style">
+                    <Prosstree  :treeData="treeData" :isChild="isChild" />
+                </div>
+            </el-card>
         </el-dialog>
     </div>
 </template>
@@ -10,6 +13,7 @@
 <script>
 import DynamicTable from '../../components/common/dytable/dytable.vue';
 import PSpage from '../comment/personnel-search.vue';
+import Prosstree from '../../components/common/processTree/index.vue'
 export default {
     name:'workProcess',
     props: {
@@ -19,207 +23,56 @@ export default {
     data() {
         return {
             ShowFinancVisible:false,
+            isChild:true,
             pageNum: 1,
             pageSize: 10,
             total: 20,
             labelPosition: 'left',
-            data:{
-                nodes: [
-                    {
-                        id: '1',
-                        dataType: 'alps',
-                        name: 'alps_file1',
-                        conf: [
-                        {
-                            label: 'conf',
-                            value: 'pai_graph.conf',
-                        },
-                        {
-                            label: 'dot',
-                            value: 'pai_graph.dot',
-                        },
-                        {
-                            label: 'init',
-                            value: 'init.rc',
-                        },
-                        ],
-                    },
-                    {
-                        id: '2',
-                        dataType: 'alps',
-                        name: 'alps_file2',
-                        conf: [
-                        {
-                            label: 'conf',
-                            value: 'pai_graph.conf',
-                        },
-                        {
-                            label: 'dot',
-                            value: 'pai_graph.dot',
-                        },
-                        {
-                            label: 'init',
-                            value: 'init.rc',
-                        },
-                        ],
-                    },
-                    {
-                        id: '3',
-                        dataType: 'alps',
-                        name: 'alps_file3',
-                        conf: [
-                        {
-                            label: 'conf',
-                            value: 'pai_graph.conf',
-                        },
-                        {
-                            label: 'dot',
-                            value: 'pai_graph.dot',
-                        },
-                        {
-                            label: 'init',
-                            value: 'init.rc',
-                        },
-                        ],
-                    },
-                    {
-                        id: '4',
-                        dataType: 'sql',
-                        name: 'sql_file1',
-                        conf: [
-                        {
-                            label: 'conf',
-                            value: 'pai_graph.conf',
-                        },
-                        {
-                            label: 'dot',
-                            value: 'pai_graph.dot',
-                        },
-                        {
-                            label: 'init',
-                            value: 'init.rc',
-                        },
-                        ],
-                    },
-                    {
-                        id: '5',
-                        dataType: 'sql',
-                        name: 'sql_file2',
-                        conf: [
-                        {
-                            label: 'conf',
-                            value: 'pai_graph.conf',
-                        },
-                        {
-                            label: 'dot',
-                            value: 'pai_graph.dot',
-                        },
-                        {
-                            label: 'init',
-                            value: 'init.rc',
-                        },
-                        ],
-                    },
-                    {
-                        id: '6',
-                        dataType: 'feature_etl',
-                        name: 'feature_etl_1',
-                        conf: [
-                        {
-                            label: 'conf',
-                            value: 'pai_graph.conf',
-                        },
-                        {
-                            label: 'dot',
-                            value: 'pai_graph.dot',
-                        },
-                        {
-                            label: 'init',
-                            value: 'init.rc',
-                        },
-                        ],
-                    },
-                    {
-                        id: '7',
-                        dataType: 'feature_etl',
-                        name: 'feature_etl_1',
-                        conf: [
-                        {
-                            label: 'conf',
-                            value: 'pai_graph.conf',
-                        },
-                        {
-                            label: 'dot',
-                            value: 'pai_graph.dot',
-                        },
-                        {
-                            label: 'init',
-                            value: 'init.rc',
-                        },
-                        ],
-                    },
-                    {
-                        id: '8',
-                        dataType: 'feature_extractor',
-                        name: 'feature_extractor',
-                        conf: [
-                        {
-                            label: 'conf',
-                            value: 'pai_graph.conf',
-                        },
-                        {
-                            label: 'dot',
-                            value: 'pai_graph.dot',
-                        },
-                        {
-                            label: 'init',
-                            value: 'init.rc',
-                        },
-                        ],
-                    },
-                ],
-                edges: [
-                    {
-                        source: '1',
-                        target: '2',
-                    },
-                    {
-                        source: '1',
-                        target: '3',
-                    },
-                    {
-                        source: '2',
-                        target: '4',
-                    },
-                    {
-                        source: '3',
-                        target: '4',
-                    },
-                    {
-                        source: '4',
-                        target: '5',
-                    },
-                    {
-                        source: '5',
-                        target: '6',
-                    },
-                    {
-                        source: '6',
-                        target: '7',
-                    },
-                    {
-                        source: '6',
-                        target: '8',
-                    },
-                ],
-            },
+            treeData:[
+                {
+                    name:'节点1'
+                },
+                {
+                    name:'节点A1',
+                    children:[
+                        {name:'节点2'},
+                    ]
+                },
+                {
+                    name:'节点B1',
+                    children:[
+                        {name:'节点B2',children:[{name:'节点B3'}]}
+                    ]
+                },
+                {
+                    name:'节点C1',
+                    children:[
+                        {name:'节点C5'},
+                        {name:'节点C51',isLong:true},
+                        {name:'节点26',children:[
+                            {name:'节点C3'},
+                            {name:'节点C31'},
+                            {name:'节点33',
+                                children:[
+                                    {name:'节点C32'},
+                                    {name:'节点C33'},
+                                    {name:'节点C34'}
+                                ]
+                            }
+                        ]},
+                        {name:'节点D3',children:[{name:'节点D31'},{name:'节点D32'}]},
+                        {name:'节点D4',children:[{name:'节点D43'}]},
+                        {name:'节点E5',isLong:true},
+                    ]
+                }
+            ]
         };
     },
     components: {
       DynamicTable,
+      Prosstree
     },
     created(){
-        this.$G6.G6init(mountNode,500,500,this.data);
     },
     computed:{
         
@@ -228,6 +81,9 @@ export default {
         handleClose(){
             this.$emit('changeShow',false);
         },
+        opentree(){
+           this.ShowFinancVisible = true; 
+        }
     },
     watch:{
         rowFCDtype(oldVal,newVal){
@@ -235,7 +91,7 @@ export default {
             let finandata=this.rowFCDDataObj.finanrowId;
             let formDataA ={};
             formDataA.id=finandata;
-            this.title=this.rowWAADataObj.nametitle;
+            this.title=this.rowFCDDataObj.nametitle;
             /*this.$api.task.getUserCreditContractRegisterVO(formDataA).then(response => {
                 let responsevalue = response;
                 if (responsevalue) {
@@ -315,5 +171,9 @@ export default {
     width: 500px;
     height:  500px;
     border:1px saddlebrown solid;
+  }
+  .div-style{
+      width: 100%;
+      height: 700px;
   }
 </style>
