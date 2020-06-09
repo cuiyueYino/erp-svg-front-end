@@ -3,6 +3,7 @@ const businessProcesspage = () => import('./process-business.vue');
 const workflowMonitorn = () => import('./workflow-monitoring.vue');
 const todolist = () => import('./to-do-list.vue');
 const concernsItemlist = () => import('./concerns-item-list.vue');
+const issuedItems =() => import('./issued-items')
 const PROJECT = [
     {
         path: 'workProcess',
@@ -34,6 +35,14 @@ const PROJECT = [
         component: concernsItemlist,
         meta: {
             title: '关注事项'
+        }
+    },
+    {
+        path: 'issuedItems',
+        name: 'issuedItems',
+        component: issuedItems,
+        meta: {
+            title: '已发事项'
         }
     },
     {

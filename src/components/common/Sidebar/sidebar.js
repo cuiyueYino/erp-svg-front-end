@@ -25,6 +25,10 @@ class ITEMData {
                         index: 'businessProcess',
                         title: '流程业务',
                     },
+                    {
+                        index: 'issuedItems',
+                        title: '已发事项',
+                    },
                 ]
             },
             {

@@ -4,24 +4,16 @@
         <el-card class="box-card">
            <el-row :gutter="24">
                <el-col :span="14">
-                    <el-form :inline="true"  class="demo-form-inline">
-                    <el-form-item >
-                        <el-input clearable v-model="formCode" placeholder="请输入任意查询内容"></el-input>
-                    </el-form-item>
-                    
-                    <el-form-item>
-                        <el-button type="primary" plain @click="onSubmit">搜索</el-button>
-                    </el-form-item>
-                    <el-form-item>
-                        <el-button type="primary" plain @click="getAll" class="search-all">重置</el-button>
-                    </el-form-item>
-                    </el-form>
+                    <el-button type="primary" plain @click="onSubmit('day')">当日</el-button>
+                    <el-button type="primary" plain @click="onSubmit('week')">本周</el-button>
+                    <el-button type="primary" plain @click="onSubmit('month')" >本月</el-button>
                 </el-col>
                  <el-col :span="10">
-                     <el-button type="success" plain @click="add('新增业务')">新增</el-button>
-                     <el-button type="danger" plain @click="deleteMsg">删除</el-button>
-                     <el-button type="warning" plain @click="add('编辑业务')">编辑</el-button>
-                     <el-button type="success" plain @click="add('查看业务')">查看</el-button>
+                     <el-button type="success" icon="el-icon-refresh" plain @click="carsh">刷新</el-button>
+                     <el-button type="danger" icon="el-icon-search" plain @click="deleteMsg">查询</el-button>
+                     <el-button type="warning" icon="el-icon-document"  plain @click="look">查看</el-button>
+                     <el-button type="success" icon="el-icon-share" plain @click="forward">转发</el-button>
+                     <el-button type="warning" icon="el-icon-view" plain @click="attention">关注</el-button>
                  </el-col>
             </el-row>
         </el-card>
@@ -90,7 +82,7 @@
 import DynamicTable from '../../components/common/dytable/dytable.vue';
 import proBusDialog from './proces-busines-dialog'
 export default {
-    name:'businessProcess',
+    name:'issuedItems',
     components: {
       DynamicTable,
       proBusDialog,
@@ -131,15 +123,51 @@ export default {
             },
             {
                 key: 'fname',
-                title: '单据号'
+                title: '单据类型'
             },
              {
                 key: 'fcode',
-                title: '部门'
+                title: '业务工作'
             },
             {
                 key: 'fname',
-                title: '公司'
+                title: '发起时间'
+            },
+             {
+                key: 'fcode',
+                title: '当前审批人'
+            },
+            {
+                key: 'fname',
+                title: '主题'
+            },
+             {
+                key: 'fcode',
+                title: '审批人接收时间'
+            },
+            {
+                key: 'fname',
+                title: '标准用时'
+            },
+             {
+                key: 'fname',
+                title: '已耗时'
+            },
+             {
+                key: 'fname',
+                title: '转发人'
+            },
+             {
+                key: 'fcode',
+                title: '转发时间'
+            },
+            {
+                key: 'fname',
+                title: '委托人'
+            },
+             {
+                key: 'fname',
+                title: '委托时间'
             },
            
         ],
@@ -213,11 +241,20 @@ export default {
             this.getTableData('')
         },
         // 搜索
-        onSubmit(){
-            this.getTableData(this.formCode);
+        onSubmit(Str){
+            
         },
-        getAll(){
-            this.getTableData('')
+        carsh(){
+            
+        },
+        look(){
+            
+        },
+        forward(){
+
+        },
+        attention(){
+
         },
         // 获取表格数据
         getTableData(params){
