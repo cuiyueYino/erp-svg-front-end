@@ -29,6 +29,10 @@ class ITEMData {
                         index: 'issuedItems',
                         title: '已发事项',
                     },
+                    {
+                        index: 'recycleBin',
+                        title: '回收站',
+                    },
                 ]
             },
             {

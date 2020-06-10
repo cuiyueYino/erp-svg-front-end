@@ -1,19 +1,10 @@
 <template>
     <div>     
     <!-- 搜索框 -->
-        <el-card class="box-table">
+        <el-card class="box-card">
            <el-row :gutter="24">
-               <el-col :span="14">
-                    <el-button type="primary" plain @click="onSubmit('day')">当日</el-button>
-                    <el-button type="primary" plain @click="onSubmit('week')">本周</el-button>
-                    <el-button type="primary" plain @click="onSubmit('month')" >本月</el-button>
-                </el-col>
-                 <el-col :span="10">
-                     <el-button type="primary" icon="el-icon-refresh" plain @click="carsh">刷新</el-button>
-                     <el-button type="primary" icon="el-icon-search" plain @click="search">查询</el-button>
-                     <el-button type="primary" icon="el-icon-document"  plain @click="look">查看</el-button>
-                     <el-button type="primary" icon="el-icon-share" plain @click="forward">转发</el-button>
-                     <el-button type="primary" icon="el-icon-view" plain @click="attention">关注</el-button>
+                 <el-col :span="2" :offset="22">
+                     <el-button type="success" icon="el-icon-more" plain @click="carsh">还原</el-button>
                  </el-col>
             </el-row>
         </el-card>
@@ -31,142 +22,29 @@
                 element-loading-text="加载中"
             ></dynamic-table>
         </el-card>
-    <!-- 弹出框 查询 -->
-        <el-dialog title="已发事项查询" :visible.sync="dialogWFMVisible" :close-on-click-modal="false" width="50%">
-            <el-form 
-                :model="DataForm" 
-                label-width="97px"
-                label-suffix="："
-                size="small"
-                @submit.native.prevent
-                label-position="right">
-                 <el-row :gutter="24" >
-                 <el-col :span="22" class="box-card" :offset="2">
-                            <el-form-item label="来源单据公司" label-width="120px">
-                                <el-select v-model="DataForm.WFMtype" clearable placeholder="请选择">
-                                    <el-option
-                                    v-for="item in options"
-                                    :key="item.value"
-                                    :label="item.label"
-                                    :value="item.value">
-                                    </el-option>
-                                </el-select>
-                            </el-form-item>
-                 </el-col>
-                   <el-col :span="22" class="box-card" :offset="2">
-                             <el-form-item label="业务数据" label-width="120px">
-                                <el-select v-model="DataForm.WFMtype" clearable placeholder="请选择">
-                                    <el-option
-                                    v-for="item in options"
-                                    :key="item.value"
-                                    :label="item.label"
-                                    :value="item.value">
-                                    </el-option>
-                                </el-select>
-                            </el-form-item>
-                   </el-col>
-                    <el-col :span="22" :offset="2">
-                            <el-form-item label="业务工作" label-width="120px">
-                                <el-input clearable v-model="DataForm.documentNo" placeholder="请输入条件值"></el-input>
-                            </el-form-item>
-                    </el-col>
-                     <el-col :span="22" :offset="2">
-                            <el-form-item label="主题" label-width="120px">
-                                <el-input clearable  v-model="DataForm.documentNo" placeholder="请输入条件值"></el-input>
-                            </el-form-item>
-                     </el-col>
-                      <el-col :span="22" :offset="2">
-                            <el-form-item label="接收时间" label-width="120px">
-                                <el-date-picker
-                                      v-model="DataForm.docDateStart"
-                                      type="datetimerange"
-                                      range-separator="至"
-                                      start-placeholder="开始日期"
-                                      end-placeholder="结束日期"
-                                      placeholder="选择日期">
-                                </el-date-picker>
-                            </el-form-item>
-                      </el-col>
-                       <el-col :span="22" :offset="2">
-                            <el-form-item label="发起人" label-width="120px">
-                                <el-input clearable  v-model="DataForm.documentNo" placeholder="请输入条件值"></el-input>
-                                 <img class="icon-search"  
-                                    @click="workSearch"
-                                    src="../../assets/img/search.svg">
-                            </el-form-item>
-                       </el-col>
-                        <el-col :span="22" :offset="2">
-                            <el-form-item label="发起时间" label-width="120px">
-                                <el-date-picker
-                                    v-model="DataForm.docDateStart"
-                                     type="datetimerange"
-                                      range-separator="至"
-                                      start-placeholder="开始日期"
-                                      end-placeholder="结束日期"
-                                      placeholder="选择日期">
-                                </el-date-picker>
-                            </el-form-item>
-                        </el-col>
-                         <el-col :span="22" :offset="2">
-                            <el-form-item label="超时" label-width="120px">
-                               <el-radio-group v-model="DataForm.radio">
-                                <el-radio :label="1">是</el-radio>
-                                <el-radio :label="0">否</el-radio>
-                            </el-radio-group>
-                            </el-form-item>
-                         </el-col>
-                 </el-row>
-            </el-form>
-            <div slot="footer" class="dialog-footer">
-                <el-button @click="dialogWFMVisible = false" size="medium">取 消</el-button>
-                <el-button type="primary" @click="addSubmit('form')" size="medium">确 定</el-button>
-            </div>
-        </el-dialog>
-        <!-- 部门弹出框 -->
-        <pro-bus-dialog :visible="proBusDialogF" :title="titleStr" :type="userType"  @closeDialog="closeBaseInfo"></pro-bus-dialog>
-       
+  
     </div>
 </template>
 
 <script>
 import DynamicTable from '../../components/common/dytable/dytable.vue';
-import proBusDialog from './proces-busines-dialog';
-
 export default {
-    name:'issuedItems',
+    name:'recycleBin',
     components: {
       DynamicTable,
-      proBusDialog,
     },
     data() {
         return {
             homeTitle:'',
             userType:'',
-            rowDStype:false,
-            rowDSDataObj:{},
             proBusDialogF:false,
             proApartDialogF:false,
             dialogFormVisible:false,
-            dialogWFMVisible:false,
             titleStr:'',
             formCode:'',
             pageNum: 1,
             pageSize: 10,
             total: 20,
-            columns: [
-            {
-                type: 'selection'
-            },
-            {
-                key: 'fcode',
-                title: '用户名称'
-            },
-            {
-                key: 'fname',
-                title: '角色'
-            },
-           
-        ],
         columns1: [
             {
                 type: 'selection'
@@ -185,15 +63,19 @@ export default {
             },
             {
                 key: 'fname',
+                title: '发起人'
+            },
+            {
+                key: 'fname',
                 title: '发起时间'
             },
              {
                 key: 'fcode',
-                title: '当前审批人'
+                title: '主题'
             },
             {
                 key: 'fname',
-                title: '主题'
+                title: '上一节点'
             },
              {
                 key: 'fcode',
@@ -219,15 +101,17 @@ export default {
                 key: 'fname',
                 title: '委托人'
             },
-             {
+            {
                 key: 'fname',
                 title: '委托时间'
+            },
+            {
+                key: 'fname',
+                title: '移除时间'
             },
            
         ],
         tableData:[],
-        options:[],
-        WFMtypeoptions:[],
         multipleSelection: [],
         checked:false,
          form: {
@@ -240,16 +124,6 @@ export default {
           resource: '',
           fremark: ''
         },
-        DataForm: {
-                WFMtype: '',
-                radio: 1,
-                date1: '',
-                date2: '',
-                delivery: false,
-                type: [],
-                resource: '',
-                fremark: ''
-            },
         formLabelWidth: '120px',
          rules: {
           fcode: [
@@ -306,16 +180,9 @@ export default {
              this.pageNum = val;
             this.getTableData('')
         },
-        workSearch(){
-
-        },
-         
         // 搜索
         onSubmit(Str){
             
-        },
-        search(){
-           this.dialogWFMVisible =true;
         },
         carsh(){
             
@@ -466,7 +333,7 @@ export default {
      background: #fff0;
  }
 /deep/ .el-select{
-    width: 70%;
+    width: 100%;
 }
  /deep/ .el-input{
          width: 70%;
@@ -477,10 +344,7 @@ export default {
  /deep/ .el-textarea{
       width: 70%;
  }
- /deep/ .el-input__inner{
-         width: 466px;
- }
-.box-table:first-child{
+.box-card:first-child{
     margin-bottom: 16px;
 }
 .box-card{
@@ -488,7 +352,6 @@ export default {
         width: 100%;
     }
 }
-
 .search-all{
     margin-left: 50px;
 }
