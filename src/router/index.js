@@ -2,6 +2,8 @@ import Vue from 'vue';
 import Router from 'vue-router';
 import Finance from '../views/finance/route';
 import Process from '../views/process-set/route';
+import Users from '../views/user-management/route';
+import Jobs from '../views/job-management/route';
 
 Vue.use(Router);
 
@@ -19,6 +21,8 @@ export default new Router({
             children: [
                 ...Finance,
                 ...Process,
+                ...Users,
+                ...Jobs,
                 {
                     path: 'svgIndex',
                     name: 'svgIndex',

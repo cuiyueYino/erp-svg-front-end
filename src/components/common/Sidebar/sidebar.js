@@ -80,7 +80,29 @@ class ITEMData {
                         ]
                     }
                 ]
-            }
+            },
+            {
+                index: 'userManagement',
+                title: '用户管理',
+                subs: [
+                    {
+                    index: 'userSet',
+                    title: '用户管理'
+                    }
+                   
+                ]
+            },
+            {
+                index: 'jobManagement',
+                title: '职务管理',
+                subs: [
+                    {
+                    index: 'jobSet',
+                    title: '职务管理'
+                    }
+                   
+                ]
+            },
         ];
         this.ITEMother = [];
     };
