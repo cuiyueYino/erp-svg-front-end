@@ -43,7 +43,8 @@ export default {
 </script>
 <style scoped>
 .tree-wrap{
-    width:100%;
+    width:80%;
+    margin: 0 auto;
     height:100%;
     top:0;
     left:0

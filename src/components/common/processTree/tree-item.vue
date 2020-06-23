@@ -69,7 +69,7 @@ export default {
     background:rgba(203,221,238,1);
     position:absolute;
     left:100%;
-    top:50%
+    top:48%
 }
 .process-tree-childNodes{
     position: relative;
@@ -87,7 +87,7 @@ export default {
     height:3px;
     background:rgba(203,221,238,1);
     left:-23px;
-    top:38%;
+    top:41%;
 }
 .process-tree-childNodes>div{
     display:flex;
@@ -101,12 +101,12 @@ export default {
     color:#333;
     display:inline-block;
     cursor: pointer;
-    min-width:80px;
+    min-width:150px;
     text-align:center;
     font-size: 12px;
     line-height: 1.8em;
     vertical-align: middle;
-    min-height:20px;
+    min-height:50px;
 }
 .leaf-node::after{
    display:none

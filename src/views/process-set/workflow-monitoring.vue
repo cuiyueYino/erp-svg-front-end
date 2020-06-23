@@ -176,13 +176,15 @@
         </el-dialog>
         <PSpage  :rowPSDataObj="rowPSDataObj" :rowPStype="rowPStype" @changeShow="showORhideForPS"/>
         <LWMworkflowpage  :rowLWMDataObj="rowLWMDataObj" :rowLWMtype="rowLWMtype" @changeShow="showORhidelookpage"/>
+        <CWMworkflowpage  :rowCWMDataObj="rowCWMDataObj" :rowCWMtype="rowCWMtype" @changeShow="showORhideCpage"/>
     </div>
 </template>
 
 <script>
 import DynamicTable from '../../components/common/dytable/dytable.vue';
 import PSpage from '../comment/personnel-search.vue';
-import LWMworkflowpage from './look-workflow-monitoring'
+import LWMworkflowpage from './look-workflow-monitoring';
+import CWMworkflowpage from './circulation-workflow-monitoring.vue'
 export default {
     name:'workProcess',
     data() {
@@ -190,8 +192,10 @@ export default {
             dialogWFMVisible:false,
             rowPStype:false,
             rowLWMtype:false,
+            rowCWMtype:false,
             rowPSDataObj:{},
             rowLWMDataObj:{},
+            rowCWMDataObj:{},
             pageNum: 1,
             pageSize: 10,
             total: 20,
@@ -280,7 +284,8 @@ export default {
     components: {
       DynamicTable,
       PSpage,
-      LWMworkflowpage
+      LWMworkflowpage,
+      CWMworkflowpage
     },
     created(){
         this.$nextTick(()=>{
@@ -303,10 +308,7 @@ export default {
         //刷新
         refresh(){
         },
-        //流转
-        circulation(){
-        },
-        //
+        //查看
         Tolook(){
             /*let selectOption= this.multipleSelection;
             if(selectOption.length >0){
@@ -337,6 +339,24 @@ export default {
                 this.rowLWMtype = false
             }else{
                 this.rowLWMtype = true
+            }
+        },
+        //流转
+        circulation(){
+            this.rowCWMtype = true;
+            let finandata={};
+            finandata.finanrowname="";
+            finandata.finanrowId="";
+            finandata.nametitle="工作流监控";
+            finandata.lookflag="update";
+            this.rowCWMDataObj=finandata;
+        },
+        //流转返回处理
+        showORhideCpage(data){
+            if(data === false){
+                this.rowCWMtype = false
+            }else{
+                this.rowCWMtype = true
             }
         },
         //查询

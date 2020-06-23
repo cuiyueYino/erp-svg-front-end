@@ -58,17 +58,16 @@
                 <el-row :gutter="24" class="joinTableBox">
                     <el-col :span="20">
                         <dynamic-table
-                            :columns="columns"
-                            :table-data="tableData"
-                            @selection-change="onSelectionChange"
+                            :columns="joinusercolumns"
+                            :table-data="joinusertableData"
+                            @selection-change="onSelectionjoinuserChange"
                             v-loading="false"
                             element-loading-text="加载中"
                         ></dynamic-table>
                     </el-col>
                     <el-col :span="3" class="joinBtnBox">
                         <el-button type="success" size="mini" plain @click="joinSearch('新增参与者')">新增</el-button>
-                        <el-button type="danger" size="mini" plain @click="deleteMsg">删除</el-button>
-                     
+                        <el-button type="danger" size="mini" plain @click="deleteMsg('新增参与者')">删除</el-button>
                     </el-col>
                 </el-row>
                  <!-- Condition END-->
@@ -78,16 +77,16 @@
                 <el-row :gutter="24" class="joinTableBox">
                     <el-col :span="20">
                         <dynamic-table
-                            :columns="columns"
-                            :table-data="tableData"
-                            @selection-change="onSelectionChange"
+                            :columns="CCcolumns"
+                            :table-data="CCtableData"
+                            @selection-change="onSelectionChangeCC"
                             v-loading="false"
                             element-loading-text="加载中"
                         ></dynamic-table>
                     </el-col>
                     <el-col :span="3" class="joinBtnBox">
                         <el-button type="success" size="mini" plain @click="joinSearch('新增抄送')">新增</el-button>
-                        <el-button type="danger" size="mini" plain @click="deleteMsg">删除</el-button>
+                        <el-button type="danger" size="mini" plain @click="deleteMsg('新增抄送')">删除</el-button>
                      
                     </el-col>
                 </el-row>
@@ -130,39 +129,41 @@
 
         <!-- 弹出框 -->
         <el-dialog 
-        :title="titleStr"
-        class="workDialog"
-         :modal="false"
-          :close-on-click-modal="closeConfig"
-          :visible.sync="dialogTableVisible">
+            :title="titleStr"
+            class="workDialog"
+            :modal="false"
+            :close-on-click-modal="closeConfig"
+            :visible.sync="dialogTableVisible"
+            v-if="dialogTableVisible"
+            >
             <!-- 基本信息 -->
             <div v-show="showBaseInfo && titleStr!=='定义关系'" class="base-info">
-                <el-tabs v-model="baseActiveName" @tab-click="handleClick">
+                <el-tabs v-model="baseActiveName" @tab-click="basehandleClick">
                     <el-tab-pane label="角色" name="1">
                          <el-form-item label="角色" :label-width="formLabelWidth">
-                            <el-input placeholder="请选择" v-model="baseInput" :disabled="true"> </el-input>
+                            <el-input placeholder="请选择" v-model="roleReq.name" :disabled="true"> </el-input>
                             <img class="icon-search" src="../../../assets/img/search.svg" @click="baseInputTable('角色','角色查询')" >
                         </el-form-item>
                         <el-form-item label="条件表达式" :label-width="formLabelWidth">
-                            <el-input type="textarea" v-model="baseTextarea"></el-input>
+                            <el-input type="textarea" v-model="roleReq.role_expression"></el-input>
                         </el-form-item>
                     </el-tab-pane>
                     <el-tab-pane label="用户" name="2">
                         <el-form-item label="用户" :label-width="formLabelWidth">
-                            <el-input placeholder="请选择" v-model="baseInput" :disabled="true"> </el-input>
+                            <el-input placeholder="请选择" v-model="UserListReq.fname" :disabled="true"> </el-input>
                             <img class="icon-search" src="../../../assets/img/search.svg" @click="baseInputTable('用户','用户查询')">
                         </el-form-item>
                         <el-form-item label="条件表达式" :label-width="formLabelWidth">
-                            <el-input type="textarea" v-model="baseTextarea"></el-input>
+                            <el-input type="textarea" v-model="UserListReq.fenglishname"></el-input>
                         </el-form-item>
                     </el-tab-pane>
                     <el-tab-pane label="服务" name="3">
                         <el-form-item label="服务" :label-width="formLabelWidth">
-                            <el-input placeholder="请选择" v-model="baseInput" :disabled="true"> </el-input>
+                            <el-input placeholder="请选择" v-model="serveReq.fname" :disabled="true"> </el-input>
                             <img class="icon-search" src="../../../assets/img/search.svg"  @click="baseInputTable('服务','服务查询')">
                         </el-form-item>
                         <el-form-item label="条件表达式" :label-width="formLabelWidth">
-                            <el-input type="textarea" v-model="baseTextarea"></el-input>
+                            <el-input type="textarea" v-model="serveReq.fenglishname"></el-input>
                         </el-form-item>
                     </el-tab-pane>
                     <el-tab-pane label="表达式" name="4">
@@ -172,11 +173,11 @@
                     </el-tab-pane>
                     <el-tab-pane label="职务" name="5">
                         <el-form-item label="职务" :label-width="formLabelWidth">
-                            <el-input placeholder="请选择" v-model="baseInput" :disabled="true"> </el-input>
+                            <el-input placeholder="请选择" v-model="posLReq.fname" :disabled="true"> </el-input>
                             <img class="icon-search" src="../../../assets/img/search.svg"  @click="baseInputTable('职务','职务查询')">
                         </el-form-item>
                         <el-form-item label="条件表达式" :label-width="formLabelWidth">
-                            <el-input type="textarea" v-model="baseTextarea"></el-input>
+                            <el-input type="textarea" v-model="posLReq.fenglishname"></el-input>
                         </el-form-item>
                     </el-tab-pane>
                 </el-tabs>
@@ -198,18 +199,18 @@
             <!-- 定义关系 END-->
             <!-- 角色选择 -->
             <div v-show="showInfoCheck">
-            <!-- 搜索框 -->
-             <el-row :gutter="24">
-                  <el-col :span="8">
+                <!-- 搜索框 -->
+                <el-row :gutter="24">
+                    <el-col :span="8">
                     <el-form-item label="编码" label-width="43px">
                         <el-input clearable size="small" v-model="formData.formCode" placeholder="请输入条件值"></el-input>
                     </el-form-item>
-                  </el-col> 
-                  <el-col :span="8">
+                    </el-col> 
+                    <el-col :span="8">
                     <el-form-item label="名称" label-width="43px">
                         <el-input clearable size="small" v-model="formData.formName" placeholder="请输入条件值"></el-input>
                     </el-form-item>
-                  </el-col> 
+                    </el-col> 
                   <el-col :span="8">
                     <el-form-item label="工作类型" label-width="70px">
                          <el-select v-model="formData.formCtionTypeCon" clearable placeholder="请选择">
@@ -240,7 +241,7 @@
                 :page-num="pageNum"
                 :page-size="pageSize"
                 @current-change="onCurrentChange"
-                @selection-change="onSelectionChange"
+                @selection-change="onSelectionWorkChange"
                 v-loading="tableLoading"
                 element-loading-text="加载中"
             ></dynamic-table>
@@ -255,7 +256,7 @@
             <!-- footer END-->
            </el-dialog>
         <!-- 第三层弹窗 -->
-            <base-info-dialog class="children-dialog" :visible="baseInputTableF" :type="baseInputType" :title="baseInputTitle" @closeDialog="closeBaseInfo"></base-info-dialog>
+        <base-info-dialog class="children-dialog" :visible="baseInputTableF" :type="baseInputType" :title="baseInputTitle" @closeDialog="closeBaseInfo"></base-info-dialog>
         
         </div>
          <!-- </el-form> -->
@@ -330,7 +331,42 @@ export default {
             formData: {
                 joinCheckBox:1
             },
-           
+            joinusercolumns: [
+                {
+                    type: 'selection'
+                },
+                {
+                    key: 'fUsercode',
+                    title: '类别'
+                },
+                {
+                    key: 'fUsername',
+                    title: '内容'
+                },
+                {
+                    key: 'fUserRemake',
+                    title: '描述'
+                }
+            ],
+            CCcolumns: [
+                {
+                    type: 'selection'
+                },
+                {
+                    key: 'fUsercode',
+                    title: '类别'
+                },
+                {
+                    key: 'fUsername',
+                    title: '内容'
+                },
+                {
+                    key: 'fUserRemake',
+                    title: '描述'
+                }
+            ],
+            joinusertableData:[],
+            CCtableData:[],
             columns: [
             {
                 type: 'selection'
@@ -400,11 +436,31 @@ export default {
         tableData2:[],
         gridData:[],
         multipleSelection: [],
+        CCmultipleSelection: [],
+        joinusermultipleSelection: [],
+        WorkmultipleSelection: [],
         options: [],
         showBaseInfo:false,
         showInfoCheck:false,
         baseActiveName:'1',
+        baseActiveNameStr:'角色',
         baseInput:'',
+        roleReq:{
+            name:'',
+            role_expression:''
+        },
+        serveReq:{
+            fname:'',
+            fenglishname:'',
+        },
+        posLReq:{
+            fname:'',
+            fenglishname:'',
+        },
+        UserListReq:{
+            fname:'',
+            fenglishname:'',
+        },
         baseTextarea:'',
         };
     },
@@ -447,34 +503,163 @@ export default {
         }
     },
     methods: {
-       
+        
         handleClick(tab, event) {
-            // console.log(tab, event);
+        },
+        basehandleClick(tab, event) {
+            this.baseActiveNameStr=tab.label;
         },
          //业务工作-新增
         gridDataAdd(){
-            if(this.titleStr = '定义关系'){
+            if(this.titleStr === '定义关系'){
                 
-            }else{
-                 if(this.multipleSelection.length == 0 || this.multipleSelection.length >1  ){
-                    this.$message.error('请正确选择');
-                    return
-                 }
-                this.formData.work = this.multipleSelection[0].fname
+            }else if(this.titleStr === '新增参与者'){
+                if(this.baseActiveNameStr=='角色'){
+                    if(this.roleReq.name){
+                        let roleObj={};
+                        roleObj=this.roleReq;
+                        roleObj.fUsername=roleObj.name;
+                        roleObj.fUsercode=this.baseActiveNameStr;
+                        roleObj.fUserRemake=roleObj.role_expression;
+                        this.joinusertableData.push(roleObj);
+                    }
+                }else if(this.baseActiveNameStr=='用户'){
+                    if(this.UserListReq.fname){
+                        let UroleObj={};
+                        UroleObj=this.UserListReq;
+                        UroleObj.fUsername=UroleObj.fname;
+                        UroleObj.fUsercode=this.baseActiveNameStr;
+                        UroleObj.fUserRemake=UroleObj.fenglishname;
+                        this.joinusertableData.push(UroleObj);
+                    }
+                }else if(this.baseActiveNameStr=='服务'){
+                    if(this.serveReq.fname){
+                        let SroleObj={};
+                        SroleObj=this.serveReq;
+                        SroleObj.fUsername=SroleObj.fname;
+                        SroleObj.fUsercode=this.baseActiveNameStr;
+                        SroleObj.fUserRemake=SroleObj.fenglishname;
+                        this.joinusertableData.push(SroleObj);
+                    }
+                }else if(this.baseActiveNameStr=='职务'){
+                    if(this.posLReq.fname){
+                        let ProleObj={};
+                        ProleObj=this.posLReq;
+                        ProleObj.fUsername=ProleObj.fname;
+                        ProleObj.fUsercode=this.baseActiveNameStr;
+                        ProleObj.fUserRemake=ProleObj.fenglishname;
+                        this.joinusertableData.push(ProleObj);
+                    }
+                }else if(this.baseActiveNameStr=='表达式'){
+                    if(this.baseTextarea){
+                        let BroleObj={};
+                        BroleObj.fUsername=this.baseTextarea;
+                        BroleObj.fUsercode=this.baseActiveNameStr;
+                        BroleObj.fUserRemake='';
+                        this.joinusertableData.push(BroleObj);
+                    }
+                }
+            }else if(this.titleStr === '新增抄送'){
+                if(this.baseActiveNameStr=='角色'){
+                    if(this.roleReq.name){
+                        let roleObj={};
+                        roleObj=this.roleReq;
+                        roleObj.fUsername=roleObj.name;
+                        roleObj.fUsercode=this.baseActiveNameStr;
+                        roleObj.fUserRemake=roleObj.role_expression;
+                        this.CCtableData.push(roleObj);
+                    }
+                }else if(this.baseActiveNameStr=='用户'){
+                    if(this.UserListReq.fname){
+                        let UroleObj={};
+                        UroleObj=this.UserListReq;
+                        UroleObj.fUsername=UroleObj.fname;
+                        UroleObj.fUsercode=this.baseActiveNameStr;
+                        UroleObj.fUserRemake=UroleObj.fenglishname;
+                        this.CCtableData.push(UroleObj);
+                    }
+                }else if(this.baseActiveNameStr=='服务'){
+                    if(this.serveReq.fname){
+                        let SroleObj={};
+                        SroleObj=this.serveReq;
+                        SroleObj.fUsername=SroleObj.fname;
+                        SroleObj.fUsercode=this.baseActiveNameStr;
+                        SroleObj.fUserRemake=SroleObj.fenglishname;
+                        this.CCtableData.push(SroleObj);
+                    }
+                }else if(this.baseActiveNameStr=='职务'){
+                    if(this.posLReq.fname){
+                        let ProleObj={};
+                        ProleObj=this.posLReq;
+                        ProleObj.fUsername=ProleObj.fname;
+                        ProleObj.fUsercode=this.baseActiveNameStr;
+                        ProleObj.fUserRemake=ProleObj.fenglishname;
+                        this.CCtableData.push(ProleObj);
+                    }
+                }else if(this.baseActiveNameStr=='表达式'){
+                    if(this.baseTextarea){
+                        let BroleObj={};
+                        BroleObj.fUsername=this.baseTextarea;
+                        BroleObj.fUsercode=this.baseActiveNameStr;
+                        BroleObj.fUserRemake='';
+                        this.CCtableData.push(BroleObj);
+                    }
+                }
+            }else if(this.titleStr === '业务工作'){
+                let selectOption= this.WorkmultipleSelection;
+                if(selectOption.length >0){
+                    if(selectOption.length >1){
+                        this.$message.error('只能选择一行!');
+                    }else{
+                        //返回选中的父组件选中的row,并修某些改值
+                        this.formData.work=selectOption[0].fname;
+                        this.formData.workCode=selectOption[0].fcode;
+                    }
+                }else{
+                    this.$message.error('请选择一行数据!');
+                }
             }
-             this.dialogTableVisible = false;
-             console.log(this.formData.work )
-        },
-        add(){
-
+            this.dialogTableVisible = false;
+            //console.log( )
         },
          //删除
-        deleteMsg(){
-            
+        deleteMsg(Str){
+            if(Str=='新增参与者'){
+                let selectData=this.joinusermultipleSelection;
+                let updateDate=this.joinusertableData;
+                for(var i=0;i<selectData.length;i++){
+                    for(var j=0;j<updateDate.length;j++){
+                        if(selectData[i].fUsername===updateDate[j].fUsername){
+                            updateDate.splice(j, 1);
+                        }
+                    }
+                }
+                this.joinusertableData=updateDate;
+            }else if(Str=='新增抄送'){
+               let selectCCData=this.CCmultipleSelection;
+                let updateCCDate=this.CCtableData;
+                for(var i=0;i<selectCCData.length;i++){
+                    for(var j=0;j<updateCCDate.length;j++){
+                        if(selectCCData[i].fUsername===updateCCDate[j].fUsername){
+                            updateCCDate.splice(j, 1);
+                        }
+                    }
+                }
+                this.CCtableData=updateCCDate; 
+            }
         },
          //多选
         onSelectionChange(val) {
             this.multipleSelection = val;
+        },
+        onSelectionjoinuserChange(val) {
+            this.joinusermultipleSelection = val;
+        },
+        onSelectionChangeCC(val) {
+            this.CCmultipleSelection = val;
+        },
+        onSelectionWorkChange(val) {
+            this.WorkmultipleSelection = val;
         },
           // 业务工作-获取表格数据-重置
         reWorkSearchTable(){
@@ -484,35 +669,42 @@ export default {
         //业务工作弹窗
         workSearch(){
             this.titleStr = '业务工作'
-             this.showInfoCheck = true;
-             this.showBaseInfo = false;
-             // 业务工作-搜索枚举项
+            this.showInfoCheck = true;
+            this.showBaseInfo = false;
+            // 业务工作-搜索枚举项
             this.workSearchOption()
             this.workSearchTable()
+            
         },
         // 业务工作-获取表格数据
         workSearchTable(){
             this.dialogTableVisible = true;
             this.tableLoading = true;
-             let data = {
-                fcode: this.formData.formCode,
-                fname: this.formData.formName,
-                fmfunctiontypecon: this.formData.formCtionTypeCon,
-                page:this.pageNum,
-                size:this.pageSize
-            };
-            this.$api.processSet.workSearchData(data).then(res=>{
+            let fromdata={};
+            if(this.formData.formCode){
+                fromdata.fcode=this.formData.formCode;
+            }
+            if(this.formData.formName){
+                fromdata.fname=this.formData.formName;
+            }
+            if(this.formData.formCtionTypeCon){
+                fromdata.fmfunctiontypecon=this.formData.formCtionTypeCon;
+            }
+            fromdata.page=this.pageNum;
+            fromdata.size=this.pageSize;
+            this.gridData=[];
+            this.$api.processSet.workSearchData(fromdata).then(res=>{
                 this.tableLoading = false;
                 this.gridData = res.data.data.rows
                 this.pageNum = res.data.data.page
                 this.total = res.data.data.total
-                
             },error=>{
                 console.log(error)
             })
         },
         // 业务工作-搜索枚举项
         workSearchOption(){
+            this.options=[];
             this.$api.processSet.getWorkSearch().then(res=>{
                 for( let i in res.data.data ){
                     this.options.push({value: i,label: res.data.data[i]})
@@ -527,7 +719,19 @@ export default {
             this.dialogTableVisible = true;
             this.showInfoCheck = false;
             this.showBaseInfo = true;
-
+            if(Str=='新增参与者'){
+                this.roleReq=[];
+                this.serveReq=[];
+                this.posLReq=[];
+                this.UserListReq=[];
+                this.baseTextarea='';
+            }else if(Str=='新增抄送'){
+                this.roleReq=[];
+                this.serveReq=[];
+                this.posLReq=[];
+                this.UserListReq=[];
+                this.baseTextarea='';
+            }
         },
         // 参与人-获取表格数据
         joinSearchTable(){
@@ -545,9 +749,8 @@ export default {
                 this.gridData = res.data.data.rows
                 this.pageNum = res.data.data.page
                 this.total = res.data.data.total
-                
             },error=>{
-                console.log(error)
+                //console.log(error)
             })
         },
         baseInputTable(str,title){ 
@@ -555,12 +758,28 @@ export default {
             this.baseInputTitle= title
             this.baseInputType = str;
         },
-        closeBaseInfo(){
+        closeBaseInfo(data,dialogtitle,type){
+            if(data.length>0){
+                if(type === '用户'){
+                    if(dialogtitle === '组织结构查询'){
+                        this.formData.structure=data[0].fname;
+                        this.formData.structurecode=data[0].fcode;
+                    }else if(dialogtitle === '用户查询'){
+                        this.UserListReq=data[0];
+                    }
+                }else if(type === '角色'){
+                    this.roleReq=data[0];
+                }else if(type === '服务'){
+                    this.serveReq=data[0];
+                }else if(type === '职务'){
+                    this.posLReq=data[0];
+                }
+            }
             this.baseInputTableF = false;
         },
          //分页、下一页
         onCurrentChange(val){
-             this.pageNum = val;
+            this.pageNum = val;
             this.workSearchTable('')
         },
     }

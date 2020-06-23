@@ -67,8 +67,8 @@ const errorHandle = (status, other) => {
 var _axios = axios.create({ timeout: 1000 * 12 });
 // 设置post请求头
 // _axios.defaults.headers.post['Authorization'] = "Basic YXBwLWFkbWluOmFwcC1hZG1pbi1zZWNyZXQ=",
-_axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8';
-//_axios.defaults.headers.post['Content-Type'] = 'application/json;charset=utf-8';
+//_axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8';
+_axios.defaults.headers.post['Content-Type'] = 'application/json;charset=utf-8';
 
 /*if(localStorage.getItem('ms_tokenId')){
     _axios.defaults.headers.post['Authorization'] = 'bearer '+localStorage.getItem('ms_tokenId');

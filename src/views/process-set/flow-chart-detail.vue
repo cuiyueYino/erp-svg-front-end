@@ -2,14 +2,14 @@
     <div>
         <el-dialog :title="title" @close="handleClose" :visible.sync="ShowFinancVisible" :append-to-body="true" v-if="ShowFinancVisible" :close-on-click-modal="false"  width="60%">
             <el-card>
-                <el-row>
-                    <el-col :span="6" :offset="6">
-                        
-                    </el-col>
-                </el-row>
                 <div class="titleClass">{{titleName}}</div>
+                <div class="tree-tyle">
+                    <div class="tree-tyle-Closed">已处理节点</div>
+                    <div class="tree-tyle-current">当前节点</div>
+                    <div class="tree-tyle-after">未处理的节点</div>
+                </div>
                 <div class="div-style">
-                    <Prosstree  :treeData="treeData" :isChild="isChild" />
+                    <Workflowtree  :convertData="treeData" />
                 </div>
             </el-card>
         </el-dialog>
@@ -20,6 +20,7 @@
 import DynamicTable from '../../components/common/dytable/dytable.vue';
 import PSpage from '../comment/personnel-search.vue';
 import Prosstree from '../../components/common/processTree/index.vue'
+import Workflowtree from '../../components/common/processTree/workflow-tree.vue'
 export default {
     name:'workProcess',
     props: {
@@ -38,18 +39,91 @@ export default {
             treeData:[
                 {
                     name:'节点1',
+                    tatile:'wqwq',
                     type:'closed'
                 },
                 {
                     name:'节点A1',
+                    tatile:'wqwq',
                     type:'current'
                 },
                 {
-                    name:'节点B111111111111',
+                    name:'节点B11111',
+                    tatile:'wqwq',
                     type:'after'
                 },
                 {
                     name:'节点C1',
+                    tatile:'wqwq',
+                    type:'after'
+                },
+                {
+                    name:'节点C12',
+                    tatile:'wqwq',
+                    type:'after'
+                },
+                {
+                    name:'节点C13',
+                    tatile:'wqwq',
+                    type:'after'
+                },
+                {
+                    name:'节点C14',
+                    tatile:'wqwq',
+                    type:'after'
+                },
+                {
+                    name:'节点C15',
+                    tatile:'wqwq',
+                    remak:'error end',
+                    type:'after'
+                },
+                {
+                    name:'节点C122',
+                    tatile:'wq22wq',
+                    remak:'error end',
+                    type:'after'
+                },
+                {
+                    name:'节点C322',
+                    tatile:'wq22wq',
+                    remak:'error end',
+                    type:'after'
+                },
+                {
+                    name:'节点C34',
+                    tatile:'wq22wq',
+                    remak:'error end',
+                    type:'after'
+                },
+                {
+                    name:'节点C344',
+                    tatile:'wq22wq',
+                    remak:'error end',
+                    type:'after'
+                },
+                {
+                    name:'节点C344',
+                    tatile:'wq22wq',
+                    remak:'error end',
+                    type:'after'
+                },
+                {
+                    name:'节点C344',
+                    tatile:'wq22wq',
+                    remak:'error end',
+                    type:'after'
+                },
+                {
+                    name:'节点C344',
+                    tatile:'wq22wq',
+                    remak:'error end',
+                    type:'after'
+                },
+                {
+                    name:'节点C344',
+                    tatile:'wq22wq',
+                    remak:'error end',
                     type:'after'
                 }
             ]
@@ -57,7 +131,8 @@ export default {
     },
     components: {
       DynamicTable,
-      Prosstree
+      Prosstree,
+      Workflowtree
     },
     created(){
     },
@@ -79,7 +154,7 @@ export default {
             let formDataA ={};
             formDataA.id=finandata;
             this.title=this.rowFCDDataObj.nametitle;
-            this.titleName='222222';
+            this.titleName='工程付款流程';
             /*this.$api.task.getUserCreditContractRegisterVO(formDataA).then(response => {
                 let responsevalue = response;
                 if (responsevalue) {
@@ -171,4 +246,40 @@ export default {
       width: 100%;
       height: 700px;
   }
+.tree-tyle{
+    width: 100%;
+    height: 100px;
+    top:0;
+    left:10px;
+}
+.tree-tyle-Closed{
+    float: left;
+    width: 100px;
+    height: 30px;
+    line-height: 30px;
+    margin-left: 20px;
+    text-align: center;
+    border-radius: 10px;
+    background-color: aquamarine;
+}
+.tree-tyle-current{
+    float: left;
+    width: 100px;
+    height: 30px;
+    line-height: 30px;
+    margin-left: 20px;
+    text-align: center;
+    border-radius: 10px;
+    background-color:#E6A23C;
+}
+.tree-tyle-after{
+    float: left;
+    width: 100px;
+    height: 30px;
+    line-height: 30px;
+    margin-left: 20px;
+    text-align: center;
+    border-radius: 10px;
+    background-color:darkgray;
+}
 </style>

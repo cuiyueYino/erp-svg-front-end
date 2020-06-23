@@ -276,7 +276,7 @@ export default {
                 name:"svgIndex",
                 params:{
                     data: this.multipleSelection[0]
-                    }
+                }
              })
             
         },

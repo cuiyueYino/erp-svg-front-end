@@ -480,7 +480,8 @@ export default {
             this.linkData.splice(index, 1);
         },
         // 点击保存工作流按钮执行事件
-        saveWorkflow (workflowNodes) {console.log(workflowNodes)
+        saveWorkflow (workflowNodes) {
+            console.log(workflowNodes)
             //
             this.selectedNode = {};
             // 设置保存标识

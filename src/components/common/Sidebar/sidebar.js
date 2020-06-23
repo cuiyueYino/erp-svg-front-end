@@ -30,6 +30,10 @@ class ITEMData {
                         title: '已发事项',
                     },
                     {
+                        index: 'workdoneItemList',
+                        title: '已办事项',
+                    },
+                    {
                         index: 'recycleBin',
                         title: '回收站',
                     },
@@ -99,6 +103,17 @@ class ITEMData {
                     {
                     index: 'jobSet',
                     title: '职务管理'
+                    }
+                   
+                ]
+            },
+            {
+                index: 'Management',
+                title: '组织机构',
+                subs: [
+                    {
+                    index: 'organizationManagement',
+                    title: '组织机构维护'
                     }
                    
                 ]

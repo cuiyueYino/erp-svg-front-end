@@ -95,7 +95,7 @@ export default {
             }
              this.$api.common.getUserInfo(data).then(res=>{
                  let returndata =res.data;
-                 localStorage.setItem('ms_data', JSON.stringify(returndata));
+                  localStorage.setItem('ms_data', JSON.stringify(returndata));
                   localStorage.setItem('ms_name',  returndata.name);
                   localStorage.setItem('ms_id',  returndata.id);
                   localStorage.setItem('ms_username',  returndata.username);

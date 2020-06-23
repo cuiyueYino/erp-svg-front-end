@@ -92,12 +92,13 @@ export default {
     color:#333;
     display:inline-block;
     cursor: pointer;
-    width:31px;
+    width:56px;
     text-align:center;
     font-size: 12px;
     line-height: 1.8em;
     vertical-align: middle;
-    height:31px;
+    height:56px;
+    line-height: 56px;
     border-radius:12px;
 }
 

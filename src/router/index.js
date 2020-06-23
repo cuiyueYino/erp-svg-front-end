@@ -4,7 +4,7 @@ import Finance from '../views/finance/route';
 import Process from '../views/process-set/route';
 import Users from '../views/user-management/route';
 import Jobs from '../views/job-management/route';
-
+import Management from '../views/management/route';
 Vue.use(Router);
 
 export default new Router({
@@ -23,6 +23,7 @@ export default new Router({
                 ...Process,
                 ...Users,
                 ...Jobs,
+                ...Management,
                 {
                     path: 'svgIndex',
                     name: 'svgIndex',

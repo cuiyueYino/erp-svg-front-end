@@ -479,7 +479,7 @@ export default {
             }
             this.formData.work = this.multipleSelection[0].fname
              this.dialogTableVisible = false;
-             console.log(this.formData.work )
+             //console.log(this.formData.work )
         },
         add(){
 

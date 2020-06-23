@@ -4,6 +4,7 @@ const workflowMonitorn = () => import('./workflow-monitoring.vue');
 const todolist = () => import('./to-do-list.vue');
 const concernsItemlist = () => import('./concerns-item-list.vue');
 const issuedItems =() => import('./issued-items')
+const workdoneItemList =() => import('./work-done-items');
 const recycleBin =()=> import('./recycle-bin')
 const PROJECT = [
     {
@@ -36,6 +37,14 @@ const PROJECT = [
         component: concernsItemlist,
         meta: {
             title: '关注事项'
+        }
+    },
+    {
+        path: 'workdoneItemList',
+        name: 'workdoneItemList',
+        component: workdoneItemList,
+        meta: {
+            title: '已办事项'
         }
     },
     {
