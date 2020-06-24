@@ -108,6 +108,17 @@ class ITEMData {
                 ]
             },
             {
+                index: 'peopleManagement',
+                title: '人员管理',
+                subs: [
+                    {
+                    index: 'peopleSet',
+                    title: '人员管理'
+                    }
+                   
+                ]
+            },
+            {
                 index: 'Management',
                 title: '组织机构',
                 subs: [
@@ -118,6 +129,7 @@ class ITEMData {
                    
                 ]
             },
+            
         ];
         this.ITEMother = [];
     };
