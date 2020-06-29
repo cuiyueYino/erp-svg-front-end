@@ -123,12 +123,16 @@ class ITEMData {
                 title: '组织机构',
                 subs: [
                     {
-                    index: 'organizationManagement',
-                    title: '组织机构维护'
+                        index: 'organizationManagement',
+                        title: '组织机构维护'
                     },
                     {
-                    index: 'rolemaintenance',
-                    title: '角色维护'
+                        index: 'rolemaintenance',
+                        title: '角色维护'
+                    },
+                    {
+                        index: 'workBusiGroup',
+                        title: '工作业务组'
                     }
                 ]
             },
