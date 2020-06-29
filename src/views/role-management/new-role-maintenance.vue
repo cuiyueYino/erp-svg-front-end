@@ -76,6 +76,10 @@
                     </el-tabs>
                 </el-card>
             </el-form>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="ShowFinancVisible = false">取 消</el-button>
+                <el-button type="primary" @click="onHandleSave">保存</el-button>
+            </span>
         </el-dialog>
         <RMDmaintenpage  :rowRMDtype="rowRMDtype" :rowRMDDataObj="rowRMDDataObj" @changeShow="showMoreRMD"/>
     </div>
@@ -225,6 +229,9 @@ export default {
             }else{
                 this.rowRMDtype = true
             }
+        },
+        onHandleSave(){
+          this.$emit('changeShow',this.rowNRMDataObj,false);  
         }
     },
     watch:{

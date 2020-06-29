@@ -143,6 +143,17 @@ class ITEMData {
                    
                 ]
             },
+            {
+                index: 'menuManage',
+                title: '系统设置',
+                subs: [
+                    {
+                    index: 'menuManagement',
+                    title: '功能菜单'
+                    }
+                   
+                ]
+            },
         ];
         this.ITEMother = [];
     };
