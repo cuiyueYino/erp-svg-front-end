@@ -125,8 +125,11 @@ class ITEMData {
                     {
                     index: 'organizationManagement',
                     title: '组织机构维护'
+                    },
+                    {
+                    index: 'rolemaintenance',
+                    title: '角色维护'
                     }
-                   
                 ]
             },
             

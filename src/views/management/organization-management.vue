@@ -13,10 +13,10 @@
                                 <el-button type="success" icon="el-icon-refresh" plain @click="createCompany">公司</el-button>
                             </el-dropdown-item>
                             <el-dropdown-item>
-                                <el-button type="success" icon="el-icon-refresh" plain @click="remove">部门</el-button>
+                                <el-button type="success" icon="el-icon-refresh" plain @click="createDepartment">部门</el-button>
                             </el-dropdown-item>
                             <el-dropdown-item>
-                                <el-button type="success" icon="el-icon-refresh" plain @click="remove">职务</el-button>
+                                <el-button type="success" icon="el-icon-refresh" plain @click="createDuties">职务</el-button>
                             </el-dropdown-item>
                         </el-dropdown-menu>
                     </el-dropdown>
@@ -34,6 +34,8 @@
                     <el-tree
                         :data="treeData"
                         :props="defaultProps"
+                        node-key="id"
+                        :render-content="renderContent"
                         accordion
                         @node-click="handleNodeClick">
                     </el-tree>
@@ -207,23 +209,29 @@ export default {
             treeData:[
                 {
                     label: '一级 1',
+                    id:'company01',
                     type:'company',
                     children: [{
                         label: '二级 1-1',
+                        id:'department01',
                         type:'department',
                         children: [{
                             label: '三级 1-1-1',
+                            id:'duties01',
                             type:'duties',
                         }]
                     }]
                 },{
                     label: '一级 1',
+                    id:'company02',
                     type:'company',
                     children: [{
                         label: '二级 1-1',
+                        id:'department02',
                         type:'department',
                         children: [{
                             label: '三级 1-1-1',
+                            id:'duties02',
                             type:'duties',
                         }]
                     }]
@@ -271,7 +279,34 @@ export default {
         
     },
     methods:{
+        renderContent(h, { node, data, store }) {
+            if(data){
+                if(data.type =="company"){
+                    return(
+                        <span class="custom-tree-node">
+                            <span><i class="el-icon-office-building"></i></span>
+                            <span style="margin-left: 5px;">{node.label}</span>
+                        </span>
+                    )
+                }else if(data.type=="department"){
+                    return(
+                        <span class="custom-tree-node">
+                            <span><i class="el-icon-s-help"></i></span>
+                            <span style="margin-left: 5px;">{node.label}</span>
+                        </span>
+                    )
+                }else if(data.type=="duties"){
+                    return(
+                        <span class="custom-tree-node">
+                            <span><i class="el-icon-s-check"></i></span>
+                            <span style="margin-left: 5px;">{node.label}</span>
+                        </span>
+                    )
+                }
+            }  
+        },
         remove(){},
+        //树结构点击事件
         handleNodeClick(data) {
             let treeType=data.type;
             this.NodeClickData=data;
@@ -279,21 +314,75 @@ export default {
                 this.Companyflag=true;
                 this.Departmentflag=false;
                 this.Dutiesflag=false;
+                this.disabled=true;
                 this.ConformData=data;
             }else if(treeType=="department"){
                 this.Companyflag=false;
                 this.Departmentflag=true;
                 this.Dutiesflag=false;
+                this.disabled=true;
                 this.DepformData=data;
             }else if(treeType=="duties"){
                 this.Companyflag=false;
                 this.Departmentflag=false;
                 this.Dutiesflag=true;
+                this.disabled=true;
                 this.DutformData=data;
             }
         },
+        //创建公司
         createCompany(){
-
+            if(this.NodeClickData){
+                if(this.NodeClickData.type){
+                    let treeType=this.NodeClickData.type;
+                    if(treeType =='company'){
+                        this.ConformData={};
+                        this.disabled=false;
+                    }else if(treeType=="department"){
+                        this.$message.error('部门下不能直接创建公司!');
+                    }else if(treeType=="duties"){
+                        this.$message.error('职务下不能直接创建公司!');
+                    }
+                }
+            }
+        },
+        //创建部门
+        createDepartment(){
+            if(this.NodeClickData){
+                if(this.NodeClickData.type){
+                    let treeType=this.NodeClickData.type;
+                    if(treeType =='company'){
+                        this.Companyflag=false;
+                        this.Departmentflag=true;
+                        this.Dutiesflag=false;
+                        this.DepformData={};
+                        this.disabled=false;
+                    }else if(treeType=="department"){
+                        this.$message.error('部门下不能直接创建部门!');
+                    }else if(treeType=="duties"){
+                       this.$message.error('职务下不能直接创建部门!');
+                    }
+                }
+            } 
+        },
+        //创建职务
+        createDuties(){
+            if(this.NodeClickData){
+                if(this.NodeClickData.type){
+                    let treeType=this.NodeClickData.type;
+                    if(treeType =='company'){
+                        this.$message.error('公司下不能直接创建职务!');
+                    }else if(treeType=="department"){
+                        this.Companyflag=false;
+                        this.Departmentflag=false;
+                        this.Dutiesflag=true;
+                        this.disabled=false;
+                        this.DutformData={};
+                    }else if(treeType=="duties"){
+                       this.$message.error('职务下不能直接创建职务!');
+                    }
+                }
+            } 
         }
     },
 }
