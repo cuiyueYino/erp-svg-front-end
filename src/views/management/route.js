@@ -1,5 +1,4 @@
 const organManage = () => import('./organization-management.vue');
-const roleManage = () => import('./role-maintenance.vue');
 const MANAGEMENT = [
     {
         path: 'organizationManagement',
@@ -7,14 +6,6 @@ const MANAGEMENT = [
         component: organManage,
         meta: {
             title: '组织机构维护'
-        }
-    },
-    {
-        path: 'rolemaintenance',
-        name: 'rolemaintenance',
-        component: roleManage,
-        meta: {
-            title: '角色维护'
         }
     },
 ];

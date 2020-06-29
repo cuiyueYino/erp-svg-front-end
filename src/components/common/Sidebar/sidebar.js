@@ -125,14 +125,20 @@ class ITEMData {
                     {
                     index: 'organizationManagement',
                     title: '组织机构维护'
-                    },
+                    }
+                ]
+            },
+            {
+                index: 'roleManagement',
+                title: '权限管理',
+                subs: [
                     {
                     index: 'rolemaintenance',
                     title: '角色维护'
                     }
+                   
                 ]
             },
-            
         ];
         this.ITEMother = [];
     };

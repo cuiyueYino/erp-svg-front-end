@@ -6,7 +6,7 @@ import Users from '../views/user-management/route';
 import Jobs from '../views/job-management/route';
 import Management from '../views/management/route';
 import Peoples from '../views/people-management/route'
-
+import RoleMen from '../views/role-management/route'
 Vue.use(Router);
 
 export default new Router({
@@ -27,6 +27,7 @@ export default new Router({
                 ...Jobs,
                 ...Management,
                 ...Peoples,
+                ...RoleMen,
                 {
                     path: 'svgIndex',
                     name: 'svgIndex',
