@@ -67,6 +67,7 @@
                     <el-form-item label="公司："  :label-width="formLabelWidth" class="pop-select" prop="formCtionTypeCon">
                         <el-select v-model="form.formCtionTypeCon"
                          size="small"
+                         :disabled="isLook"
                           clearable placeholder="请选择">
                         <el-option
                             v-for="item in options"
@@ -77,11 +78,11 @@
                         </el-select>
                     </el-form-item>
                    <el-form-item label="组名：" :label-width="formLabelWidth" >
-                    <el-input v-model="form.fname" size="small"  maxlength="50" autocomplete="off"></el-input>
+                    <el-input v-model="form.fname" :disabled="isLook" size="small"  maxlength="50" autocomplete="off"></el-input>
                     </el-form-item>
                     <el-form-item label="离职、调转人员：" label-width="134px" prop="fname">
                       <el-input
-                      :disabled="true"
+                          :disabled="true"
                           type="textarea"
                           autosize
                            size="small"
@@ -93,21 +94,22 @@
                 </el-col>
                  <el-col :span="11">
                     <el-form-item label="编码：" :label-width="formLabelWidth" prop="fcode">
-                    <el-input v-model="form.fcode" size="small"  autocomplete="off"></el-input>
+                    <el-input v-model="form.fcode" :disabled="isLook" size="small"  autocomplete="off"></el-input>
                     </el-form-item>
                     <el-form-item label="组长：" :label-width="formLabelWidth" prop="fcode">
-                      <el-input v-model="form.fcode" placeholder="请选择组长" size="small"  autocomplete="off"></el-input>
-                        <img class="icon-search" v-show="!isEdit" src="../../assets/img/search.svg" @click="baseInputTable('选择组长')" />
+                      <el-input v-model="form.fcode" :disabled="isLook" placeholder="请选择组长" size="small"  autocomplete="off"></el-input>
+                        <img class="icon-search" v-show="!isLook" src="../../assets/img/search.svg" @click="baseInputTable('选择组长')" />
                     </el-form-item>
                       <el-form-item label="组员：" :label-width="formLabelWidth" prop="fname">
                       <el-input
                           type="textarea"
                           autosize
+                          :disabled="isLook"
                            size="small"
                           placeholder="请选择组员"
                           v-model="form.fname">
                         </el-input>
-                         <img class="icon-search" v-show="!isEdit" src="../../assets/img/search.svg" @click="baseInputTable('选择组员')" />
+                         <img class="icon-search" v-show=" !isLook" src="../../assets/img/search.svg" @click="baseInputTable('选择组员')" />
                     </el-form-item>
                  </el-col>
                  <el-col :span="22">
@@ -115,6 +117,7 @@
                       <el-input
                           type="textarea"
                           autosize
+                          :disabled="isLook"
                            size="small"
                           v-model="form.fname">
                         </el-input>
