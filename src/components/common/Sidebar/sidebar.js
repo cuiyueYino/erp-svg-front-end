@@ -123,9 +123,15 @@ class ITEMData {
                 title: '组织机构',
                 subs: [
                     {
-                        index: 'organizationManagement',
-                        title: '组织机构维护'
-                    },
+                    index: 'organizationManagement',
+                    title: '组织机构维护'
+                    }
+                ]
+            },
+            {
+                index: 'roleManagement',
+                title: '权限管理',
+                subs: [
                     {
                         index: 'rolemaintenance',
                         title: '角色维护'
@@ -134,9 +140,9 @@ class ITEMData {
                         index: 'workBusiGroup',
                         title: '工作业务组'
                     }
+                   
                 ]
             },
-            
         ];
         this.ITEMother = [];
     };
