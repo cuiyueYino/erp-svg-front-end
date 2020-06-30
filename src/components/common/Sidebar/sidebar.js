@@ -139,8 +139,11 @@ class ITEMData {
                     {
                         index: 'workBusiGroup',
                         title: '工作业务组'
+                    },
+                    {
+                        index: 'userAuthorization',
+                        title: '用户授权'
                     }
-                   
                 ]
             },
             {
