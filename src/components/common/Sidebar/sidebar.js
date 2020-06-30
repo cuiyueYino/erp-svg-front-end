@@ -139,6 +139,10 @@ class ITEMData {
                     {
                         index: 'workBusiGroup',
                         title: '工作业务组'
+                    },
+                    {
+                        index: 'proBusiGroup',
+                        title: '流程业务组'
                     }
                    
                 ]
