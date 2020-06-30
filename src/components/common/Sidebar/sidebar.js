@@ -143,8 +143,11 @@ class ITEMData {
                     {
                         index: 'proBusiGroup',
                         title: '流程业务组'
-                    }
-                   
+                    },
+                    {
+                        index: 'userAuthorization',
+                        title: '用户授权'
+                    },
                 ]
             },
             {
