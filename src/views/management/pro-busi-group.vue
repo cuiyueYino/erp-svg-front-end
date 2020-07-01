@@ -391,6 +391,16 @@ export default {
             finandata.nametitle="角色维护";
             this.rowRMDDataObj=finandata;
           break;
+         case '编辑':
+            this.isDepart = false;
+            this.addRow = true;
+            this.rowRMDtype = true;
+            finandata=this.formdata;
+            finandata.finanrowname="";
+            finandata.finanrowId="";
+            finandata.nametitle="角色维护";
+            this.rowRMDDataObj=finandata;
+          break;
       
         default:
           break;
