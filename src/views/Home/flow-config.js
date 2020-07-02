@@ -4,7 +4,7 @@ export function NodeConfig () {
             width: 55,
             height: 55,
             color: '#67C23A',
-            allowIn: false,
+            allowIn: true,
             allowOut: true
         },
         end: {

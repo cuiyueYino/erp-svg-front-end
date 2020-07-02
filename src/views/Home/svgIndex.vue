@@ -610,7 +610,7 @@ export default {
             this.selectedNode = this.workflowNodes[len - 1];
         },
         // 鼠标移入连接锚点事件
-        handleMouseEnter (target, point, node) {
+        handleMouseEnter (target, point, node) {//console.log(node)
             const cx = node.options.x;
             const cy = node.options.y;
             this.endObj = {

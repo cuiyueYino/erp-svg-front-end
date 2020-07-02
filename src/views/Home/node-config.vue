@@ -120,7 +120,7 @@ export default {
         // 监听配置数据源
         data: {
             handler (obj) {
-                this.formData = JSON.parse(JSON.stringify(obj));console.log(this.formData,11)
+                this.formData = JSON.parse(JSON.stringify(obj));//console.log(this.formData,11)
                 switch (this.formData.name) {
                     case "Task":
                         this.ConditionF =false

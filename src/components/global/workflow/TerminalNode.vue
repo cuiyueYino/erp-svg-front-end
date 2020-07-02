@@ -10,15 +10,6 @@
         v-drag.circle="initial" 
     >
         <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" version="1.1"> 
-           <!-- <svg t="1589162396334" class="icon"
-            viewBox="0 0 1024 1024" version="1.1" 
-            :fill="color" stroke-width="0"
-           xmlns="http://www.w3.org/2000/svg" p-id="1162"
-            width="100%" height="100%"> -->
-           <!-- <path d="M512 810.667c-164.693 0-298.667-134.016-298.667-298.667s133.973-298.667 298.667-298.667c164.651 0 298.667 134.016 298.667 298.667s-134.016 298.667-298.667 298.667zM512 253.184c-142.72 0-258.859 116.096-258.859 258.816s116.139 258.816 258.859 258.816c142.763 0 258.816-116.181 258.816-258.816 0-142.763-116.053-258.816-258.816-258.816z" p-id="1163">
-               </path>
-            <path d="M682.667 512c0 94.257-76.41 170.667-170.667 170.667s-170.667-76.41-170.667-170.667c0-94.257 76.41-170.667 170.667-170.667s170.667 76.41 170.667 170.667z" p-id="1164">
-            </path> -->
             <circle
                 :cx="this.width / 2"
                 :cy="this.height / 2"
@@ -135,7 +126,7 @@ export default {
             linkAnchor: [
                 { x: this.width / 2, y: 0, point: 'T' },
                 { x: this.width, y: this.height / 2, point: 'R' },
-                { x: this.width / 2, y: this.height, point: 'B' },
+                // { x: this.width / 2, y: this.height, point: 'B' },
                 { x: 0, y: this.height / 2, point: 'L' }
             ],
             // 节点样式对象

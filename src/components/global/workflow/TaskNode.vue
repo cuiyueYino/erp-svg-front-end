@@ -160,7 +160,7 @@ export default {
             linkAnchor: [
                 { x: this.width / 2, y: 0, point: 'T' },
                 { x: this.width, y: this.height / 2, point: 'R' },
-                { x: this.width / 2, y: this.height, point: 'B' },
+                // { x: this.width / 2, y: this.height, point: 'B' },
                 { x: 0, y: this.height / 2, point: 'L' }
             ],
             // 节点样式对象

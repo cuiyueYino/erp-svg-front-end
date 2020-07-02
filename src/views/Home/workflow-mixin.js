@@ -35,13 +35,13 @@ export default {
         lineData: {
             get () {
                 this.linkData.map(item => {
-                    if (Object.keys(item).length > 2) {
+                    if (Object.keys(item).length > 2) {console.log(item)
                         // 添加连接线类型
                         item.type = 'Line';
                         // 获取连接线连接点坐标 以及连接线文本偏移量
                         const { coordinate, textAlign } = this.endToEndLink(item);
                         // 设置连接线连接点坐标
-                        item.coordinate = coordinate;
+                        item.coordinate = coordinate;console.log(coordinate)
                         // 设置连接线文本偏移
                         item.left = textAlign[0];
                         item.top = textAlign[1];
@@ -283,7 +283,7 @@ export default {
             }
         },
         // 点到点连接线生成事件
-        endToEndLink ({ from, to }) {
+        endToEndLink ({ from, to }) {console.log( from, to)
             if (typeof from === 'undefined' || typeof to === 'undefined') return;
             // 结构出发和到达目标对象
             const fromPoint = from.target;
@@ -379,7 +379,7 @@ export default {
                 // 设置连接线编辑标识
                 this.$set(this.linkData[index], 'lineEdit', true);
                 // 保存配置数据
-                this.selectedNode.data = obj;
+                this.selectedNode.data = obj;console.log(obj)
             } else {
                 // 节点配置
                 this.selectedNode.data = obj;
@@ -398,7 +398,7 @@ export default {
             }
         },
         // 节点连接线按下事件
-        handleMousedown (target, point, node) {
+        handleMousedown (target, point, node) {console.log(node)
             //
             this.endObj = {};
             //
@@ -420,11 +420,11 @@ export default {
                 //
                 node.transition = [];
                 //
-                this.assistedLineStart = this.assistedLineEnd = '';
+                this.assistedLineStart = this.assistedLineEnd = '';console.log(this.startObj ,this.endObj)
                 // 防止起点连接终点
                 if (this.startObj.type === 'Start' && this.endObj.type === 'End') return false;
                 // 防止节点自身连接点连接
-                if (this.startObj.key === this.endObj.key) return false;
+                if ((this.startObj.type|| this.startObj.key) === this.endObj.key) return false;
                 //
                 if (Object.keys(this.endObj).length > 0) {
                     this.linkData.push({
