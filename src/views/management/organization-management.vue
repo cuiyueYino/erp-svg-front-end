@@ -20,25 +20,28 @@
                             </el-dropdown-item>
                         </el-dropdown-menu>
                     </el-dropdown>
-                     <el-button type="success" icon="el-icon-refresh" plain @click="remove">修改</el-button>
-                     <el-button type="success" icon="el-icon-search" plain @click="remove">保存</el-button>
+                     <el-button type="success" icon="el-icon-refresh" plain @click="editCDD">修改</el-button>
+                     <el-button type="success" icon="el-icon-search" plain @click="saveCDD">保存</el-button>
                      <el-button type="danger" icon="el-icon-notebook-2" plain @click="remove">删除</el-button>
-                     <el-button type="warning" icon="el-icon-document-checked" plain @click="remove">作废</el-button>
-                     <el-button type="success" icon="el-icon-share" plain @click="remove">反作废</el-button>
+                     <el-button type="warning" icon="el-icon-document-checked" plain @click="tovoid">作废</el-button>
+                     <el-button type="success" icon="el-icon-share" plain @click="toNotvoid">反作废</el-button>
                  </el-col>
             </el-row>
         </el-card>
         <el-card>
             <el-row>
                 <el-col :span="6">
-                    <el-tree
-                        :data="treeData"
-                        :props="defaultProps"
-                        node-key="id"
-                        :render-content="renderContent"
-                        accordion
-                        @node-click="handleNodeClick">
-                    </el-tree>
+                    <div class="El-tree">
+                        <el-tree
+                            :data="treeData"
+                            :props="defaultProps"
+                            node-key="foid"
+                            :render-content="renderContent"
+                            :default-expanded-keys="defaultexpanded"
+                            accordion
+                            @node-click="handleNodeClick">
+                        </el-tree>
+                    </div>
                 </el-col>
                 <el-col :span="12" :offset="3">
                     <div v-if="Companyflag==true">
@@ -51,32 +54,20 @@
                             :label-position="labelPosition">
                             <el-row>
                                 <el-col :span="8">
-                                    <el-form-item label="公司编码" prop="formCode">
-                                        <el-input clearable size="small" v-model="ConformData.formCode" v-bind:disabled="disabled"></el-input>
+                                    <el-form-item label="公司编码" prop="fcode">
+                                        <el-input clearable size="small" v-model="ConformData.fcode" v-bind:disabled="disabled"></el-input>
                                     </el-form-item>
                                 </el-col>
                             </el-row>
                             <el-row>
                                 <el-col :span="8">
-                                    <el-form-item label="公司名称" prop="formCode">
-                                        <el-input clearable size="small" v-model="ConformData.label" v-bind:disabled="disabled"></el-input>
+                                    <el-form-item label="公司名称" prop="fname">
+                                        <el-input clearable size="small" v-model="ConformData.fname" v-bind:disabled="disabled"></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="8" :offset="3">
                                     <el-form-item label="公司简称" >
-                                        <el-input clearable size="small" v-model="ConformData.type" v-bind:disabled="disabled"></el-input>
-                                    </el-form-item>
-                                </el-col>
-                            </el-row>
-                            <el-row>
-                                <el-col :span="8">
-                                    <el-form-item label="管理员编码" prop="formCode">
-                                        <el-input clearable size="small" v-model="ConformData.formCode1" v-bind:disabled="disabled"></el-input>
-                                    </el-form-item>
-                                </el-col>
-                                <el-col :span="8" :offset="3">
-                                    <el-form-item label="管理员密码" >
-                                        <el-input clearable size="small" v-model="ConformData.formCode2" v-bind:disabled="disabled"></el-input>
+                                        <el-input clearable size="small" v-model="ConformData.fremark" v-bind:disabled="disabled"></el-input>
                                     </el-form-item>
                                 </el-col>
                             </el-row>
@@ -92,44 +83,43 @@
                             :label-position="labelPosition">
                             <el-row>
                                 <el-col :span="8">
-                                    <el-form-item label="部门编码" prop="formCode">
-                                        <el-input clearable size="small" v-model="DepformData.formCode" v-bind:disabled="disabled"></el-input>
+                                    <el-form-item label="部门编码" prop="fcode">
+                                        <el-input clearable size="small" v-model="DepformData.fcode" v-bind:disabled="disabled"></el-input>
                                     </el-form-item>
                                 </el-col>
                             </el-row>
                             <el-row>
                                 <el-col :span="8">
-                                    <el-form-item label="部门名称" prop="formCode">
-                                        <el-input clearable size="small" v-model="DepformData.label" v-bind:disabled="disabled"></el-input>
+                                    <el-form-item label="部门名称" prop="fname">
+                                        <el-input clearable size="small" v-model="DepformData.fname" v-bind:disabled="disabled"></el-input>
                                     </el-form-item>
                                 </el-col>
                             </el-row>
                             <el-row>
                                 <el-col :span="8">
                                     <el-form-item label="部门简称" >
-                                        <el-input clearable size="small" v-model="DepformData.type" v-bind:disabled="disabled"></el-input>
+                                        <el-input clearable size="small" v-model="DepformData.fremark" v-bind:disabled="disabled"></el-input>
                                     </el-form-item>
                                 </el-col>
                             </el-row>
                             <el-row>
                                 <el-col :span="8">
                                     <el-form-item label="分管领导" >
-                                        <el-input clearable size="small" v-model="DepformData.formCode1" v-bind:disabled="disabled"></el-input>
+                                        <el-input clearable size="small" v-model="DepformData.vicePresidentName" v-bind:disabled="disabled"></el-input>
                                     </el-form-item>
+                                </el-col>
+                                <el-col :span="1" v-if="disabled==false">
+                                    <el-button type="primary" size="mini" icon="el-icon-search" @click="MoreSearchPS(DepformData,'分管领导')"></el-button>
                                 </el-col>
                             </el-row>
                             <el-row>
                                 <el-col :span="8">
                                     <el-form-item label="部门负责人" >
-                                        <el-input clearable size="small" v-model="DepformData.formCode1" v-bind:disabled="disabled"></el-input>
+                                        <el-input clearable size="small" v-model="DepformData.departmentLeaderName" v-bind:disabled="disabled"></el-input>
                                     </el-form-item>
                                 </el-col>
-                            </el-row>
-                            <el-row>
-                                <el-col :span="8">
-                                    <el-form-item label="虚拟组织" >
-                                        <el-checkbox v-model="DepformData.checked" v-bind:disabled="disabled"></el-checkbox>
-                                    </el-form-item>
+                                <el-col :span="1" v-if="disabled==false">
+                                    <el-button type="primary" size="mini" icon="el-icon-search" @click="MoreSearchPS(DepformData,'部门负责人')"></el-button>
                                 </el-col>
                             </el-row>
                         </el-form>
@@ -144,43 +134,52 @@
                             :label-position="labelPosition">
                             <el-row>
                                 <el-col :span="8">
-                                    <el-form-item label="职位编码" prop="formCode">
-                                        <el-input clearable size="small" v-model="DutformData.formCode" v-bind:disabled="disabled"></el-input>
+                                    <el-form-item label="职位编码" prop="fcode">
+                                        <el-input clearable size="small" v-model="DutformData.fcode" v-bind:disabled="disabled"></el-input>
                                     </el-form-item>
                                 </el-col>
                             </el-row>
                             <el-row>
                                 <el-col :span="8">
-                                    <el-form-item label="职位名称" prop="formCode">
-                                        <el-input clearable size="small" v-model="DutformData.label" v-bind:disabled="disabled"></el-input>
+                                    <el-form-item label="职位名称" prop="fname">
+                                        <el-input clearable size="small" v-model="DutformData.fname" v-bind:disabled="disabled"></el-input>
                                     </el-form-item>
                                 </el-col>
                             </el-row>
                             <el-row>
                                 <el-col :span="8">
                                     <el-form-item label="职务" >
-                                        <el-input clearable size="small" v-model="DutformData.type" v-bind:disabled="disabled"></el-input>
+                                        <el-input clearable size="small" v-model="DutformData.positonName" v-bind:disabled="disabled"></el-input>
                                     </el-form-item>
+                                </el-col>
+                                <el-col :span="1" v-if="disabled==false">
+                                    <el-button type="primary" size="mini" icon="el-icon-search" @click="MoreSearchDUTS(DutformData,'职务')"></el-button>
                                 </el-col>
                             </el-row>
                             <el-row>
                                 <el-col :span="8">
                                     <el-form-item label="行政上级" >
-                                        <el-input clearable size="small" v-model="DutformData.formCode1" v-bind:disabled="disabled"></el-input>
+                                        <el-input clearable size="small" v-model="DutformData.directLeaderName" v-bind:disabled="disabled"></el-input>
                                     </el-form-item>
+                                </el-col>
+                                <el-col :span="1" v-if="disabled==false">
+                                    <el-button type="primary" size="mini" icon="el-icon-search" @click="MoreSearchPOSS(DutformData,'Single')"></el-button>
                                 </el-col>
                             </el-row>
                             <el-row>
                                 <el-col :span="14">
                                     <el-form-item label="业务上级" >
-                                        <el-input type="textarea" v-model="DutformData.remark" :rows="3" v-bind:disabled="disabled"></el-input>
+                                        <el-input type="textarea" v-model="DutformData.businessLeaderName" :rows="1" v-bind:disabled="disabled"></el-input>
                                     </el-form-item>
+                                </el-col>
+                                <el-col :span="1" v-if="disabled==false">
+                                    <el-button type="primary" size="mini"  icon="el-icon-search" @click="MoreSearchPOSS(DutformData,'Multiple')"></el-button>
                                 </el-col>
                             </el-row>
                             <el-row>
                                 <el-col :span="14">
                                     <el-form-item label="岗位职责" >
-                                        <el-input type="textarea" v-model="DutformData.remark" :rows="3" v-bind:disabled="disabled"></el-input>
+                                        <el-input type="textarea" v-model="DutformData.responsibility" :rows="3" v-bind:disabled="disabled"></el-input>
                                     </el-form-item>
                                 </el-col>
                             </el-row>
@@ -189,15 +188,25 @@
                 </el-col>
             </el-row>
         </el-card>
+        <PSpage  :rowPSDataObj="rowPSDataObj" :rowPStype="rowPStype" @changeShow="showORhideForPS"/>
+        <DUTSpage  :rowDUTSDataObj="rowDUTSDataObj" :rowDUTStype="rowDUTStype" @changeShow="showORhideForDUTS"/>
+        <POSserachpage  :rowPOSSDataObj="rowPOSSDataObj" :rowPOSStype="rowPOSStype" @changeShow="showORhideForPOSS"/>
     </div>
 </template>
 <script>
 import DynamicTable from '../../components/common/dytable/dytable.vue';
+import PSpage from '../comment/personnel-search.vue';
+import DUTSpage from '../comment/duties-search.vue';
+import POSserachpage from '../comment/position-search.vue'
 export default {
     name:'workProcess',
     components: {
       DynamicTable,
+      DUTSpage,
+      POSserachpage,
+      PSpage
     },
+    inject: ['reload'],
     data() {
         return {
             dialogWFMVisible:false,
@@ -206,42 +215,13 @@ export default {
             total: 20,
             labelPosition: 'left',
             disabled:true,
-            treeData:[
-                {
-                    label: '一级 1',
-                    id:'company01',
-                    type:'company',
-                    children: [{
-                        label: '二级 1-1',
-                        id:'department01',
-                        type:'department',
-                        children: [{
-                            label: '三级 1-1-1',
-                            id:'duties01',
-                            type:'duties',
-                        }]
-                    }]
-                },{
-                    label: '一级 1',
-                    id:'company02',
-                    type:'company',
-                    children: [{
-                        label: '二级 1-1',
-                        id:'department02',
-                        type:'department',
-                        children: [{
-                            label: '三级 1-1-1',
-                            id:'duties02',
-                            type:'duties',
-                        }]
-                    }]
-                },
-            ],
+            treeData:[],
             defaultProps: {
                 children: 'children',
-                label: 'label'
+                label: 'fname'
             },
             ConformData:{},
+            defaultexpanded:[],
             DepformData:{},
             DutformData:{},
             NodeClickData:{},
@@ -249,6 +229,7 @@ export default {
             Companyflag:false,
             Departmentflag:false,
             Dutiesflag:false,
+            CeateTypeflag:'',
             multipleSelection: [],
             checked:false,
             DataForm: {
@@ -263,39 +244,87 @@ export default {
             },
             WFMtypeoptions:[],
             formLabelWidth: '120px',
+            rowPStype:false,
+            rowPSDataObj:{},
+            rowDUTStype:false,
+            rowDUTSDataObj:{},
+            rowPOSStype:false,
+            rowPOSSDataObj:{},
             rules: {
-                formCode:[{ required: true, message: '请输入名称', trigger: 'blur' }],
-                company:[{ required: true, message: '请选择公司', trigger: 'blur' }],
-                code:[{ required: true, message: '请输入编码', trigger: 'blur' }],
+                fname:[{ required: true, message: '请输入名称', trigger: 'blur' }],
+                fcode:[{ required: true, message: '请输入编码', trigger: 'blur' }],
             }
         };
     },
-    
     created(){
-        this.$nextTick(()=>{
-        })
+      
+    },
+    mounted() {
+        this.$api.management.selectAllOrganizationInfo().then(response => {
+            let responsevalue = response;
+            if (responsevalue) {
+                let tabledata=eval('(' + responsevalue.data.data + ')');
+                this.treeData=tabledata;
+            }
+        }) 
     },
     computed:{
         
     },
     methods:{
+        // 查询行政上级，业务上级的返回值处理
+        showORhideForPOSS(data,type){
+            if(type === false){
+                this.rowPOSStype = false
+            }else{
+                this.rowPOSStype = true
+            }
+            if(data.SearchData){
+                let Sdata=data.SearchData;
+                if(data.Searchtype =='Multiple'){
+                    let FnameS='';
+                    let FoidS='';
+                    for(var i=0;i<Sdata.length;i++){
+                        FnameS+=Sdata[i].fname+',';
+                        FoidS+=Sdata[i].foid+',';
+                    }
+                    FnameS=FnameS.slice(0,FnameS.length-1);
+                    FoidS=FoidS.slice(0,FoidS.length-1);
+                    this.DutformData.businessLeaderName=FnameS;
+                    this.DutformData.businessLeaderId=FoidS;
+                }else{
+                    this.DutformData.directLeaderName=Sdata[0].fname;
+                    this.DutformData.directLeaderId=Sdata[0].foid;
+                }
+            }
+        },
+        //查询行政上级，业务上级
+        MoreSearchPOSS(data,type){
+            this.rowPOSStype = true;
+            let finandata={};
+            finandata.finanrowname="";
+            finandata.finanrowId="";
+            finandata.nametitle="组织机构维护";
+            finandata.Searchtype=type;
+            this.rowPOSSDataObj=finandata;
+        },
         renderContent(h, { node, data, store }) {
             if(data){
-                if(data.type =="company"){
+                if(data.ftype =="1"){
                     return(
                         <span class="custom-tree-node">
                             <span><i class="el-icon-office-building"></i></span>
                             <span style="margin-left: 5px;">{node.label}</span>
                         </span>
                     )
-                }else if(data.type=="department"){
+                }else if(data.ftype=="2"){
                     return(
                         <span class="custom-tree-node">
                             <span><i class="el-icon-s-help"></i></span>
                             <span style="margin-left: 5px;">{node.label}</span>
                         </span>
                     )
-                }else if(data.type=="duties"){
+                }else if(data.ftype=="3"){
                     return(
                         <span class="custom-tree-node">
                             <span><i class="el-icon-s-check"></i></span>
@@ -305,42 +334,150 @@ export default {
                 }
             }  
         },
-        remove(){},
+        //查询发起人员
+        MoreSearchPS(data,type){
+            this.rowPStype = true;
+            let finandata={};
+            finandata.finanrowname="人员缺省查询方案";
+            finandata.finanrowId="QS_0056";
+            finandata.nametitle="组织机构维护";
+            finandata.UserSearchtype=type;
+            this.rowPSDataObj=finandata;
+        },
+        //获取人员查询结果
+        showORhideForPS(data,type){
+            if(type === false){
+                this.rowPStype = false
+            }else{
+                this.rowPStype = true
+            }
+        },
+        //查询职务
+        MoreSearchDUTS(data,type){
+            this.rowDUTStype = true;
+            let finandata={};
+            finandata.finanrowname="职务查询方案";
+            finandata.finanrowId="QS_0032";
+            finandata.nametitle="组织机构维护";
+            finandata.UserSearchtype=type;
+            this.rowDUTSDataObj=finandata;
+        },
+        //职务查询结果
+        showORhideForDUTS(data,type){
+            if(type === false){
+                this.rowDUTStype = false
+            }else{
+                this.rowDUTStype = true
+            }
+        },
+        //删除
+        remove(){
+            let selectData=this.NodeClickData;
+            if(selectData.fstruid){
+                let fromdata={};
+                fromdata.fstruid=selectData.fstruid;
+                this.$api.management.deleteOrganizationInfo(fromdata).then(response => {
+                    let responsevalue = response;
+                    this.$message.success('删除成功!');
+                    this.reload();
+                });
+            } 
+        },
+        //作废
+        tovoid(){
+            let selectData=this.NodeClickData;
+            if(selectData.fstruid){
+                let fromdata={};
+                fromdata.fstruid=selectData.fstruid;
+                this.$api.management.cancelOrganizationInfo(fromdata).then(response => {
+                    let responsevalue = response;
+                    this.$message.success('作废成功!');
+                    this.reload();
+                });
+            } 
+        },
+        //反作废
+        toNotvoid(){
+            let selectData=this.NodeClickData;
+            if(selectData.fstruid){
+                let fromdata={};
+                fromdata.fstruid=selectData.fstruid;
+                this.$api.management.uncancelOrganizationInfo(fromdata).then(response => {
+                    let responsevalue = response;
+                    this.$message.success('反作废成功!');
+                    this.reload();
+                });
+            } 
+        },
         //树结构点击事件
         handleNodeClick(data) {
-            let treeType=data.type;
+            let treeType=data.ftype;
             this.NodeClickData=data;
-            if(treeType=="company"){
-                this.Companyflag=true;
-                this.Departmentflag=false;
-                this.Dutiesflag=false;
-                this.disabled=true;
-                this.ConformData=data;
-            }else if(treeType=="department"){
-                this.Companyflag=false;
-                this.Departmentflag=true;
-                this.Dutiesflag=false;
-                this.disabled=true;
-                this.DepformData=data;
-            }else if(treeType=="duties"){
-                this.Companyflag=false;
-                this.Departmentflag=false;
-                this.Dutiesflag=true;
-                this.disabled=true;
-                this.DutformData=data;
+            if(treeType=="1"){
+                let fromdata={};
+                fromdata.foid=data.foid;
+                this.$api.management.getselectCompanyInfo(fromdata).then(response => {
+                    let responsevalue = response;
+                    if (responsevalue) {
+                        let returndata = responsevalue.data.data;
+                        this.Companyflag=true;
+                        this.Departmentflag=false;
+                        this.Dutiesflag=false;
+                        this.disabled=true;
+                        this.ConformData=returndata;
+                    } else {
+                        this.$message.success('没有查到数据!');
+                    }
+                });
+            }else if(treeType=="2"){
+                let fromdata={};
+                fromdata.foid=data.foid;
+                this.$api.management.selectDepartmentInfo(fromdata).then(response => {
+                    let responsevalue = response;
+                    if (responsevalue) {
+                        let returndata = responsevalue.data.data;
+                        this.Companyflag=false;
+                        this.Departmentflag=true;
+                        this.Dutiesflag=false;
+                        this.disabled=true;
+                        this.DepformData=returndata;
+                    } else {
+                        this.$message.success('没有查到数据!');
+                    }
+                });
+            }else if(treeType=="3"){
+                let fromdata={};
+                fromdata.foid=data.foid;
+                this.$api.management.selectPositionInfo(fromdata).then(response => {
+                    let responsevalue = response;
+                    if (responsevalue) {
+                        let returndata = responsevalue.data.data;
+                        this.Companyflag=false;
+                        this.Departmentflag=false;
+                        this.Dutiesflag=true;
+                        this.disabled=true;
+                        this.DutformData=returndata;
+                    } else {
+                        this.$message.success('没有查到数据!');
+                    }
+                });
             }
         },
         //创建公司
         createCompany(){
             if(this.NodeClickData){
-                if(this.NodeClickData.type){
-                    let treeType=this.NodeClickData.type;
-                    if(treeType =='company'){
+                if(this.NodeClickData.ftype){
+                    let treeType=this.NodeClickData.ftype;
+                    if(treeType =='1'){
                         this.ConformData={};
+                        this.Companyflag=true;
+                        this.Departmentflag=false;
+                        this.Dutiesflag=false;
                         this.disabled=false;
-                    }else if(treeType=="department"){
+                        this.CeateTypeflag='NEW';
+                    }else if(treeType=="2"){
                         this.$message.error('部门下不能直接创建公司!');
-                    }else if(treeType=="duties"){
+                    }else if(treeType=="3"){
                         this.$message.error('职务下不能直接创建公司!');
                     }
                 }
@@ -349,17 +486,18 @@ export default {
         //创建部门
         createDepartment(){
             if(this.NodeClickData){
-                if(this.NodeClickData.type){
-                    let treeType=this.NodeClickData.type;
-                    if(treeType =='company'){
+                if(this.NodeClickData.ftype){
+                    let treeType=this.NodeClickData.ftype;
+                    if(treeType =='1'){
                         this.Companyflag=false;
                         this.Departmentflag=true;
                         this.Dutiesflag=false;
                         this.DepformData={};
                         this.disabled=false;
-                    }else if(treeType=="department"){
+                        this.CeateTypeflag='NEW';
+                    }else if(treeType=="2"){
                         this.$message.error('部门下不能直接创建部门!');
-                    }else if(treeType=="duties"){
+                    }else if(treeType=="3"){
                        this.$message.error('职务下不能直接创建部门!');
                     }
                 }
@@ -368,21 +506,201 @@ export default {
         //创建职务
         createDuties(){
             if(this.NodeClickData){
-                if(this.NodeClickData.type){
-                    let treeType=this.NodeClickData.type;
-                    if(treeType =='company'){
+                if(this.NodeClickData.ftype){
+                    let treeType=this.NodeClickData.ftype;
+                    if(treeType =='1'){
                         this.$message.error('公司下不能直接创建职务!');
-                    }else if(treeType=="department"){
+                    }else if(treeType=="2"){
                         this.Companyflag=false;
                         this.Departmentflag=false;
                         this.Dutiesflag=true;
                         this.disabled=false;
+                        this.CeateTypeflag='NEW';
                         this.DutformData={};
-                    }else if(treeType=="duties"){
+                    }else if(treeType=="3"){
                        this.$message.error('职务下不能直接创建职务!');
                     }
                 }
             } 
+        },
+        //修改公司、部门，职务
+        editCDD(){
+            this.disabled=false;
+            this.CeateTypeflag='EDIT';
+        },
+        //保存公司、部门，职务
+        saveCDD(){
+            let SelectData=this.NodeClickData;
+            if(this.disabled === false){
+                //保存公司
+                if(this.Companyflag == true){
+                    let fromdata={};
+                    if(this.CeateTypeflag=='EDIT'){
+                        fromdata=SelectData;
+                    }else{
+                        fromdata.foid='';
+                        fromdata.fcompanyOid=SelectData.foid;
+                        fromdata.pid=SelectData.foid;
+                    }
+                    let saveflag=true;
+                    if(this.ConformData.fcode){
+                        fromdata.fcode=this.ConformData.fcode;
+                    }else{
+                        this.$message.error('请输入公司编号!');
+                        saveflag=false;
+                    }
+                    if(this.ConformData.fname){
+                        fromdata.fname=this.ConformData.fname;
+                    }else{
+                        this.$message.error('请输入公司名称!');
+                        saveflag=false;
+                    }
+                    if(this.ConformData.fremark){
+                        fromdata.fremark=this.ConformData.fremark;
+                    }else{
+                        fromdata.fremark="";
+                    }
+                    fromdata.fcreator=localStorage.getItem('ms_userId');
+                    if(saveflag === true){
+                        this.$api.management.saveCompanyInfo(fromdata).then(response => {
+                            let responsevalue = response;
+                            if(responsevalue.statusText && responsevalue.statusText=='OK'){
+                                this.disabled=true;
+                                this.$api.management.selectAllOrganizationInfo().then(response => {
+                                    let responsevalue = response;
+                                    if (responsevalue) {
+                                        let tabledata=eval('(' + responsevalue.data.data + ')');
+                                        this.treeData=tabledata;
+                                        this.defaultexpanded.push(this.NodeClickData.foid);
+                                    }
+                                })
+                            }else{
+                                this.$message.error('保存公司失败!');
+                            }
+                        });
+                    }
+                }else if(this.Departmentflag == true){
+                    //保存部门
+                    let fromdata={};
+                    if(this.CeateTypeflag=='EDIT'){
+                        fromdata=SelectData;
+                    }else{
+                        fromdata.foid='';
+                        fromdata.fcompanyOid=SelectData.foid;
+                        fromdata.pid=SelectData.foid;
+                    }
+                    let saveflag=true;
+                    if(this.DepformData.fcode){
+                        fromdata.fcode=this.DepformData.fcode;
+                    }else{
+                        this.$message.error('请输入部门编号!');
+                        saveflag=false;
+                    }
+                    if(this.DepformData.fname){
+                        fromdata.fname=this.DepformData.fname;
+                    }else{
+                        this.$message.error('请输入部门名称!');
+                        saveflag=false;
+                    }
+                    if(this.DepformData.fremark){
+                        fromdata.fremark=this.DepformData.fremark;
+                    }else{
+                        fromdata.fremark="";
+                    }
+                    if(this.DepformData.vicePresidentName){
+                        fromdata.vicePresidentId=this.DepformData.vicePresidentName;
+                    }else{
+                        fromdata.vicePresidentId= 'BFPID000000OV20W6X';  
+                    }
+                    if(this.DepformData.departmentLeaderId){
+                        fromdata.departmentLeaderId=this.DepformData.departmentLeaderId;
+                    }else{
+                        fromdata.departmentLeaderId= 'BFPID000000OV20W6X';  
+                    }
+                    fromdata.fcreator=localStorage.getItem('ms_userId');
+                    if(saveflag === true){
+                        this.$api.management.saveDeptmentInfo(fromdata).then(response => {
+                            let responsevalue = response;
+                            if(responsevalue.statusText && responsevalue.statusText=='OK'){
+                                this.disabled=true;
+                                this.$api.management.selectAllOrganizationInfo().then(response => {
+                                    let responsevalue = response;
+                                    if (responsevalue) {
+                                        let tabledata=eval('(' + responsevalue.data.data + ')');
+                                        this.treeData=tabledata;
+                                        this.defaultexpanded.push(this.NodeClickData.foid);
+                                    }
+                                })
+                            }else{
+                                this.$message.error('保存部门失败!');
+                            }
+                        });
+                    }
+                }else if(this.Dutiesflag == true){
+                    //保存职务
+                    let fromdata={};
+                    if(this.CeateTypeflag=='EDIT'){
+                        fromdata=SelectData;
+                    }else{
+                        fromdata.foid='';
+                        fromdata.fcompanyOid=SelectData.foid;
+                        fromdata.pid=SelectData.foid;
+                    }
+                    let saveflag=true;
+                    if(this.DutformData.fcode){
+                        fromdata.fcode=this.DutformData.fcode;
+                    }else{
+                        this.$message.error('请输入职位编号!');
+                        saveflag=false;
+                    }
+                    if(this.DutformData.fname){
+                        fromdata.fname=this.DutformData.fname;
+                    }else{
+                        this.$message.error('请输入职位名称!');
+                        saveflag=false;
+                    }
+                    if(this.DutformData.positonName){
+                        fromdata.positonId=this.DutformData.positonId;
+                    }else{
+                        fromdata.positonId="";
+                    }
+                    if(this.DutformData.businessLeaderName){
+                        fromdata.businessLeaderId=this.DutformData.businessLeaderId;
+                    }else{
+                        fromdata.businessLeaderId= '';  
+                    }
+                    if(this.DutformData.directLeaderName){
+                        fromdata.directLeaderId=this.DutformData.directLeaderId;
+                    }else{
+                        fromdata.directLeaderId= '';  
+                    }
+                    if(this.DutformData.responsibility){
+                        fromdata.responsibility=this.DutformData.responsibility;
+                    }else{
+                        fromdata.responsibility= '';  
+                    }
+                    fromdata.fcreator=localStorage.getItem('ms_userId');
+                    if(saveflag === true){
+                        this.$api.management.savePositionInfo(fromdata).then(response => {
+                            let responsevalue = response;
+                            if(responsevalue.statusText && responsevalue.statusText=='OK'){
+                                this.disabled=true;
+                                this.$api.management.selectAllOrganizationInfo().then(response => {
+                                    let responsevalue = response;
+                                    if (responsevalue) {
+                                        let tabledata=eval('(' + responsevalue.data.data + ')');
+                                        this.treeData=tabledata;
+                                        this.defaultexpanded.push(this.NodeClickData.foid);
+                                    }
+                                })
+                            }else{
+                                this.$message.error('保存职位失败!');
+                            }
+                        });
+                    }
+                }
+            }
+            
         }
     },
 }
@@ -426,6 +744,10 @@ font-size: 12px;
     font-size: 15px;
     line-height: 30px;
     background-color: skyblue;
+}
+.El-tree{
+    height: 400px;
+    overflow-y:auto;
 }
 </style>
 <style lang='scss'>

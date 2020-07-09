@@ -78,6 +78,10 @@ class perData {
                 label: '人员缺省查询方案'
             },
             {
+                value: 'QS_0032',
+                label: '职务查询方案'
+            },
+            {
                 value: 'QS_0033',
                 label: '部门缺省查询方案'
             },

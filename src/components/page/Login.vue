@@ -79,7 +79,7 @@ export default {
                 localStorage.setItem('ms_userDepartId',  'BFPID12333LSN033N');
                 localStorage.setItem('ms_userDepartName',  '集团信息中心');
                 localStorage.setItem('ms_companyId',  '_DefaultCompanyOId');
-                localStorage.setItem('ms_tokenId',  "19aab783-0c8f-4c07-84e7-86f276648521");
+                localStorage.setItem('ms_tokenId',  "9a00a32c-c59c-471d-8638-297e7f00f7f6");
                 //localStorage.setItem('ms_tokenId',  "fcb1eb0d-27e8-4029-befe-a1f3db56cc7a");
                 this.$router.push('/');
             }else{

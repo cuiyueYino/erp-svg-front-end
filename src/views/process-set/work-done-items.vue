@@ -299,7 +299,7 @@ export default {
         },
         //分页、下一页
         onCurrentChange(val){
-             this.pageNum = val;
+            this.pageNum = val;
             this.getTableData('')
         },
         workSearch(){
