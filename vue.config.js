@@ -40,8 +40,11 @@ module.exports = {
         proxy: {
             '/api': {
                 // target: 'http://192.168.21.199:6767', //API服务器的地址
-                target: 'http://192.168.21.205:6767',
+                // target: 'http://192.168.21.205:6767',
                 //target: 'http://192.168.21.78:6767',
+                // target:'http://192.168.21.146:5050',
+                target:'http://192.168.21.18:6767',
+                // target:'http://192.168.21.78:5050',
                 ws: true, //代理websockets
                 changeOrigin: true, // 虚拟的站点需要更管origin
                 pathRewrite: { //重写路径 比如'/api/aaa/ccc'重写为'/aaa/ccc'
@@ -49,7 +52,7 @@ module.exports = {
                 }
             },
             '/Lapi': {
-                target: 'http://192.168.21.205:6767', //API服务器的地址
+                target: 'http://192.168.21.78:5050', //API服务器的地址
                 ws: true, //代理websockets
                 changeOrigin: true, // 虚拟的站点需要更管origin
                 pathRewrite: { //重写路径 比如'/api/aaa/ccc'重写为'/aaa/ccc'

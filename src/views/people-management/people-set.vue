@@ -4,28 +4,28 @@
     <el-card class="box-card">
        <el-row :gutter="24">
                <el-col :span="18">
-                    <el-form :inline="true"  class="demo-form-inline">
+                    <el-form :inline="true" :model="form" ref="form"  class="demo-form-inline">
                        <el-col :span="3">
-                       <el-form-item >
-                        <el-select v-model="form.region" placeholder="请选择">
-                          <el-option label="名称" value="shanghai"></el-option>
-                          <el-option label="编码" value="beijing"></el-option>
-                          <el-option label="描述" value="miaoshu"></el-option>
-                          <el-option label="公司" value="gongsi"></el-option>
-                          <el-option label="部门" value="bumen"></el-option>
-                          <el-option label="任职状态" value="renzhizhuangtai"></el-option>
+                       <el-form-item prop="select">
+                        <el-select v-model="form.select" placeholder="请选择">
+                          <el-option label="名称" value="tname"></el-option>
+                          <el-option label="编码" value="tcode"></el-option>
+                          <el-option label="描述" value="tdescription"></el-option>
+                          <el-option label="公司" value="tcompanyname"></el-option>
+                          <el-option label="部门" value="tdepartmentname"></el-option>
+                          <el-option label="任职状态" value="fpositionstate"></el-option>
                         </el-select>
                       </el-form-item>
                        </el-col>
-                    <el-form-item >
-                        <el-input clearable v-model="formCode" placeholder="请输入任意查询内容"></el-input>
+                    <el-form-item  prop="selectVal">
+                        <el-input clearable v-model="form.selectVal" placeholder="请输入任意查询内容"></el-input>
                     </el-form-item>
                     
                     <el-form-item>
                         <el-button type="primary" plain @click="onSubmit">搜索</el-button>
                     </el-form-item>
                     <el-form-item>
-                        <el-button type="primary" plain @click="getAll" class="search-all">显示全部信息</el-button>
+                        <el-button type="primary" plain @click="resetForm('form')" class="search-all">显示全部信息</el-button>
                     </el-form-item>
                     </el-form>
                 </el-col>
@@ -58,11 +58,18 @@
     center
      :visible.sync="dialogFormVisible"
       :close-on-click-modal="false">
-            <el-form :model="form" :rules="rules"  ref="form">
+            <el-form :model="peopleForm" :rules="rules"  ref="peopleForm">
                 <el-row :gutter="22">
                      <el-col :span="11">
-                    <el-form-item label="公司："  :label-width="formLabelWidth" class="pop-select" prop="formCtionTypeCon">
-                        <el-select v-model="form.formCtionTypeCon"
+                    <el-form-item label="公司："  :label-width="formLabelWidth" class="pop-select" prop="tcompanyoid">
+                        <el-select v-model="peopleForm.tcompanyoid"
+                         size="small" disabled
+                          clearable placeholder="请选择">
+                         <el-option label="福佳集团" value="_DefaultCompanyOId"></el-option>
+                        </el-select>
+                    </el-form-item>
+                     <el-form-item label="在职状态："  :label-width="formLabelWidth" class="pop-select" prop="fpositionstate">
+                        <el-select v-model="peopleForm.fpositionstate"
                          size="small"
                           clearable placeholder="请选择">
                         <el-option
@@ -73,32 +80,20 @@
                         ></el-option>
                         </el-select>
                     </el-form-item>
-                     <el-form-item label="在职状态："  :label-width="formLabelWidth" class="pop-select" prop="formCtionTypeCon">
-                        <el-select v-model="form.formCtionTypeCon"
-                         size="small"
-                          clearable placeholder="请选择">
-                        <el-option
-                            v-for="item in options"
-                            :key="item.value"
-                            :label="item.label"
-                            :value="item.value"
-                        ></el-option>
-                        </el-select>
-                    </el-form-item>
-                     <el-form-item label="部门：" :label-width="formLabelWidth" prop="fcode">
-                      <el-input v-model="form.fcode" size="small"  autocomplete="off"></el-input>
+                     <el-form-item label="部门：" :label-width="formLabelWidth" prop="tdepartmentoid">
+                      <el-input v-model="peopleForm.tdepartmentoid" size="small"  autocomplete="off"></el-input>
                       <img class="icon-search" v-show="!isEdit" src="../../assets/img/search.svg" @click="baseInputTable('选择部门')" />
                      </el-form-item>
                 </el-col>
                  <el-col :span="11">
-                    <el-form-item label="编码：" :label-width="formLabelWidth" prop="fcode">
-                    <el-input v-model="form.fcode" size="small"  autocomplete="off"></el-input>
+                    <el-form-item label="编码：" :label-width="formLabelWidth" prop="tcode">
+                    <el-input v-model="peopleForm.tcode" size="small"  autocomplete="off"></el-input>
                     </el-form-item>
-                   <el-form-item label="名称：" :label-width="formLabelWidth" prop="fname">
-                    <el-input v-model="form.fname" size="small"  autocomplete="off"></el-input>
+                   <el-form-item label="名称：" :label-width="formLabelWidth" prop="tname">
+                    <el-input v-model="peopleForm.tname" size="small"  autocomplete="off"></el-input>
                     </el-form-item>
-                    <el-form-item label="职位：" :label-width="formLabelWidth" prop="fcode">
-                      <el-input v-model="form.fcode" size="small"  autocomplete="off"></el-input>
+                    <el-form-item label="职位：" :label-width="formLabelWidth" prop="ffirmposition">
+                      <el-input v-model="peopleForm.ffirmposition" size="small"  autocomplete="off"></el-input>
                         <img class="icon-search" v-show="!isEdit" src="../../assets/img/search.svg" @click="baseInputTable('选择职位')" />
                     </el-form-item>
                  </el-col>
@@ -180,23 +175,23 @@ export default {
           type: "selection"
         },
         {
-          key: "fcode",
+          key: "tcode",
           title: "编码"
         },
         {
-          key: "fname",
+          key: "tname",
           title: "名称"
         },
         {
-          key: "fname",
+          key: "tdepartmentname",
           title: "部门"
         },
         {
-          key: "fname",
+          key: "ffirmpositionname",
           title: "职位"
         },
         {
-          key: "fstatus",
+          key: "tdescription",
           title: "描述"
         }
       ],
@@ -206,21 +201,31 @@ export default {
       multipleSelection: [],
       checked: false,
       form: {
-        name: "",
-        region: "",
-        date1: "",
-        date2: "",
-        delivery: false,
-        type: [],
-        resource: "",
-        fremark: ""
+        select: [],
+        selectVal: ""
       },
-      searchForm: {},
+      peopleForm: {
+          tcompanyoid:'_DefaultCompanyOId',
+          fpositionstate:'',
+          tdepartmentoid:'',
+          tcode:'',
+          tname:'',
+          ffirmposition:'',
+      },
       userForm:{},
       options: [],
       choseDepart:'',
       formLabelWidth: "120px",
       rules: {
+        tcode: [
+          { required: true, message: "请输入编码", trigger: "blur" },
+          {
+            min: 1,
+            max: 100,
+            message: "长度在 1 到 50 个字符",
+            trigger: "blur"
+          }
+        ],
         fcode: [
           { required: true, message: "请输入编码", trigger: "blur" },
           {
@@ -269,12 +274,20 @@ export default {
     searchDepart(){
 
     },
+      resetForm(formName) {
+      this.$refs[formName].resetFields();
+      this.getTableData("");
+    },
     handleNodeClick(data) {
             console.log(data);
         },
     //多选
     onSelectionChange(val) {
       this.multipleSelection = val;
+      if (this.multipleSelection.length > 1) {
+        this.$message.error("只能选择一个");
+        return;
+      }
     },
     //分页、下一页
     onCurrentChange(val) {
@@ -283,27 +296,52 @@ export default {
     },
     // 搜索
     onSubmit() {
-      this.getTableData(this.formCode);
-    },
-    getAll() {
-      this.getTableData("");
+      this.getTableData(this.form.select);
     },
     // 获取表格数据
     getTableData(params) {
-      let data = {
-        fcode: params,
-        page: this.pageNum,
-        size: this.pageSize
-      };
-      this.$api.processSet.getTableData(data).then(
+      let data;
+      switch (this.isEdit) {
+        case true:
+          data = {
+            [params]: this.multipleSelection[0].foid,
+            page: this.pageNum,
+            size: this.pageSize
+          };
+          break;
+        case false:
+          if(params == 'fpositionstate'){
+              switch (this.form.selectVal) {
+                case '在' || '在职':
+                          this.form.selectVal = '1'
+                  break;
+                case '离' || '离职':
+                          this.form.selectVal = '0'
+                  break;
+              
+                default:
+                  break;
+              }
+          }
+          data = {
+            [params]: this.form.selectVal,
+            page: this.pageNum,
+            size: this.pageSize
+          };
+          break;
+
+        default:
+          break;
+      }
+      this.$api.jobUserManagement.getPeopleTableData(data).then(
         res => {
           this.tableData = res.data.data.rows;
           for (let i in this.tableData) {
             switch (this.tableData[i].fstatus) {
-              case 3:
+              case 7:
                 this.tableData[i].fstatus = "禁用";
                 break;
-              case 8:
+              case 3:
                 this.tableData[i].fstatus = "生效";
                 break;
               default:
@@ -370,42 +408,7 @@ export default {
           console.log(error);
         };
     },
-    //生效/禁用
-    effectOrDisableMsg() {
-      let status = this.multipleSelection[0];
-      if (this.multipleSelection.length > 1) {
-        this.$message.error("只能选择一个删除");
-        return;
-      } else if ((this.multipleSelection.length = 0)) {
-        this.$message.error("请选择一项删除");
-        return;
-      }
-
-      switch (status.fstatus) {
-        case "生效":
-          status.fstatus = 3;
-          break;
-        case "禁用":
-          status.fstatus = 8;
-          break;
-        default:
-          break;
-      }
-      let data = {
-        foid: status.foid,
-        status: status.fstatus
-      };
-      this.$api.processSet.effectOrDisable(data).then(res => {
-        if ((res.data.data.msg = "success")) {
-          this.$message.success("操作成功");
-          //刷新表格
-          this.getTableData("");
-        }
-      }),
-        error => {
-          console.log(error);
-        };
-    },
+    
     toEdit(Str) {
         this.dialogFormVisible = true;
         if(Str == '编辑'){
