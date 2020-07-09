@@ -153,15 +153,7 @@ export default {
                 label: '三级 1-1-1'
                 }]
             }]
-        },{
-            label: '一级 1',
-            children: [{
-                label: '二级 1-1',
-                // children: [{
-                // label: '三级 1-1-1'
-                // }]
-            }]
-        },
+        }
             ],
         defaultProps: {
         children: 'children',
@@ -189,6 +181,14 @@ export default {
         {
           key: "ffirmpositionname",
           title: "职位"
+        },
+        {
+          key: "ffirmpositionname",
+          title: "在职状态"
+        },
+        {
+          key: "ffirmpositionname",
+          title: "是否兼职"
         },
         {
           key: "tdescription",
