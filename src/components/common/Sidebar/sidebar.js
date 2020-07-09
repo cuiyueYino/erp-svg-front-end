@@ -137,6 +137,10 @@ class ITEMData {
                         title: '角色维护'
                     },
                     {
+                        index: 'rolemaintenancecategory',
+                        title: '角色类别维护'
+                    },
+                    {
                         index: 'workBusiGroup',
                         title: '工作业务组'
                     },

@@ -8,11 +8,10 @@
                         <el-col :span="5">
                             <el-form-item >
                                 <el-select v-model="region" placeholder="请选择">
-                                <el-option label="名称" value="shanghai"></el-option>
-                                <el-option label="编码" value="beijing"></el-option>
-                                <el-option label="缺省管理角色" value="miaoshu"></el-option>
-                                <el-option label="状态" value="gongsi"></el-option>
-                                <el-option label="角色类别" value="type"></el-option>
+                                <el-option label="名称" value="name"></el-option>
+                                <el-option label="编码" value="code"></el-option>
+                                <el-option label="描述" value="remark"></el-option>
+                                <el-option label="角色类别" value="roleType"></el-option>
                                 </el-select>
                             </el-form-item>
                        </el-col>
@@ -29,24 +28,26 @@
                     </el-form>
                 </el-col>
                  <el-col :span="10" :offset="2">
-                    <el-button type="success" icon="el-icon-refresh" plain @click="createRoleMainte">新建</el-button> 
-                    <el-button type="success" icon="el-icon-refresh" plain @click="remove">修改</el-button>
-                    <el-button type="success" icon="el-icon-search" plain @click="remove">复制</el-button>
-                    <el-button type="danger" icon="el-icon-notebook-2" plain @click="remove">删除</el-button>
+                    <el-button type="success" icon="el-icon-edit" plain @click="createRoleMainte">新建</el-button> 
+                    <el-button type="success" icon="el-icon-refresh" plain @click="modifyRoleMainte">修改</el-button>
+                    <el-button type="danger" icon="el-icon-notebook-2" plain @click="removeRoleMainte">删除</el-button>
                  </el-col>
             </el-row>
         </el-card>
         <el-card>
             <el-row>
                 <el-col :span="6">
-                    <el-tree
-                        :data="treeData"
-                        :props="defaultProps"
-                        node-key="id"
-                        :render-content="renderContent"
-                        accordion
-                        @node-click="handleNodeClick">
-                    </el-tree>
+                    <div class="El-tree">
+                        <el-tree
+                            :data="treeData"
+                            :props="defaultProps"
+                            node-key="code"
+                            :render-content="renderContent"
+                            :default-expanded-keys="firstnode"
+                            accordion
+                            @node-click="handleNodeClick">
+                        </el-tree>
+                    </div>
                 </el-col>
                 <el-col :span="12" :offset="3">
                     <dynamic-table
@@ -64,7 +65,7 @@
                 </el-col>
             </el-row>
         </el-card>
-        <Nrmaintenpage  :rowNRMtype="rowNRMtype" :rowNRMDataObj="rowNRMDataObj" @changeShow="showAddUserFinace"/>
+        <Nrmaintenpage  :rowNRMtype="rowNRMtype" :rowNRMDataObj="rowNRMDataObj" @changeShow="showRoleMainte"/>
     </div>
 </template>
 <script>
@@ -76,6 +77,7 @@ export default {
       DynamicTable,
       Nrmaintenpage
     },
+    inject: ['reload'],
     data() {
         return {
             rowNRMDataObj:{},
@@ -90,7 +92,7 @@ export default {
                     type: 'selection'
                 },
                 {
-                    key: 'fcode',
+                    key: 'code',
                     title: '编码'
                 },
                 {
@@ -98,92 +100,182 @@ export default {
                     title: '名称'
                 },
                 {
-                    key: 'roletype',
+                    key: 'roleTypeName',
                     title: '角色类型'
                 },
                 {
-                    key: 'remake',
+                    key: 'remark',
                     title: '描述'
                 },
             ],
-            tableData:[
-                {
-                    fcode:'0001',
-                    name:'wqwqw',
-                    roletype:'3qqw',
-                    remake:'qww'
-                }
-            ],
-            treeData:[
-                {
-                    label: '角色类别',
-                    id:'company01',
-                    type:'company',
-                    children: [
-                        {
-                            label: '个人事务角色',
-                            id:'duties03',
-                            type:'duties',  
-                        },
-                        {
-                            label: '公司架构角色-财务',
-                            id:'department01',
-                            type:'department',
-                            children: [
-                                {
-                                label: '石化财务',
-                                id:'duties01',
-                                type:'duties',
-                                },
-                                {
-                                label: '收费员',
-                                id:'duties02',
-                                type:'duties',
-                                }
-                            ]
-                        }
-                    ]
-                }
-            ],
+            tableData:[],
+            treeData:[],
+            multipleSelection: [],
+            //默认展开id
+            firstnode:[],
+            NodeClickData:{},
             defaultProps: {
                 children: 'children',
-                label: 'label'
+                label: 'name'
             },
-            checked:''
+            checked:'',
+            company:'_DefaultCompanyOId',
         }
     },
     created(){
-        this.$nextTick(()=>{
-        })
+        this.maketree(this.company);
+        let fromdata={};
+        fromdata.page=this.pageNum;
+        fromdata.size=this.pageSize;
+        this.searchRole(fromdata);
     },
     computed:{
         
     },
+    mounted() {
+    },
     methods:{
-        remove(){},
-        onSubmit(){},
-        getAll(){},
+        // 循环生成树数据
+        toTreeData(data,id,pid,name,code) {
+        // 建立个树形结构,需要定义个最顶层的父节点，pId是1
+            let parent = [];
+            for (let i = 0; i < data.length; i++) {
+
+                if(data[i][pid] !== null){
+
+                }else{
+                    let obj = data[i];
+                    obj.children=[];
+                    obj.type=1;
+                    if(data[i].status== 3){
+                        obj.statusName='有效';
+                    }else{
+                        obj.statusName='失效';
+                    }
+                    parent.push(obj);//数组加数组值
+                    this.firstnode.push(obj.id);
+                }
+
+            }
+            let index=1;
+            children(parent,index);
+            // 调用子节点方法,参数为父节点的数组
+            function children(parent,index) {
+                index=index+1;
+                if (data.length !== 0) {
+                    for (let i = 0; i < parent.length; i++) {
+                        for (let j = 0; j < data.length; j++) {
+                            if (parent[i].id == data[j][pid]){
+                                let obj = data[j];
+                                obj.children=[];
+                                obj.type=index;
+                                if(data[j].status ==3){
+                                    obj.statusName='有效';
+                                }else{
+                                    obj.statusName='失效';
+                                }
+                                parent[i].children.push(obj);
+                            }
+                        }
+                        children(parent[i].children,index);
+                    }
+                }
+            }
+            return parent;
+        },
+        //生成树
+        maketree(company){
+            let fromdata={};
+            fromdata.company=company;
+            this.$api.RoleManagement.findRoleTypeList(fromdata).then(response => {
+                let responsevalue = response;
+                if (responsevalue) {
+                    let returndata = responsevalue.data;
+                    this.treeData = this.toTreeData(returndata.data,"id","parentId","name","code");
+                } else {
+                    this.$message.success('数据库没有该条数据!');
+                }
+            });
+        },
+        //查询角色列表
+        searchRole(data){
+            let fromdata=data;
+            this.$api.RoleManagement.findRolePage(fromdata).then(response => {
+                let responsevalue = response;
+                if (responsevalue) {
+                    let returndata = responsevalue.data;
+                    let tableDataArr=returndata.rows;
+                    this.tableData = tableDataArr;
+                    this.total=returndata.total;
+                } else {
+                    this.$message.success('数据库没有该条数据!');
+                }
+            });
+        },
+        removeRoleMainte(){
+            let SelectData=this.multipleSelection;
+            if(SelectData.length > 1){
+                this.$message.error("只能选择一个!");
+            }else{
+                if(SelectData[0]){
+                    let fromdata={};
+                    fromdata.id=SelectData[0].id;
+                    this.$api.RoleManagement.deleteRoleModel(fromdata).then(response => {
+                        let responsevalue = response;
+                        if (responsevalue.data.data=="success") {
+                            this.$message.success('删除成功!');
+                            this.reload();
+                        } else {
+                            this.$message.error(responsevalue.data.msg);
+                        }
+                    });
+                }else{
+                    this.$message.error("请选择一行数据!");
+                }
+            }
+        },
+        onSubmit(){
+            let fromdata={};
+            fromdata.page=this.pageNum;
+            fromdata.size=this.pageSize;
+            if(this.region=="name"){
+
+            }else if(this.region=="code"){
+
+            }else if(this.region=="remark"){
+
+            }else if(this.region=="roleType"){
+
+            }
+            this.searchRole(fromdata);
+        },
+        getAll(){
+            let fromdata={};
+            fromdata.page=this.pageNum;
+            fromdata.size=this.pageSize;
+            this.searchRole(fromdata);
+        },
         renderContent(h, { node, data, store }) {
             if(data){
-                if(data.type =="company"){
+                if(data.type ==1){
                     return(
                         <span class="custom-tree-node">
                             <span><i class="el-icon-folder-opened"></i></span>
-                            <span style="margin-left: 5px;">{node.label}</span>
+                            <span style="margin-left: 5px;">{node.data.name}</span>
                         </span>
                     )
-                }else if(data.type=="department"){
+                }else if(data.type==2){
                     return(
                         <span class="custom-tree-node">
                             <span><i class="el-icon-folder"></i></span>
-                            <span style="margin-left: 5px;">{node.label}</span>
+                            <span style="margin-left: 5px;">{node.data.name}</span>
                         </span>
                     )
-                }else if(data.type=="duties"){
+                }else if(data.type==3){
                     return(
                         <span class="custom-tree-node">
                             <span><i class="el-icon-document"></i></span>
-                            <span style="margin-left: 5px;">{node.label}</span>
+                            <span style="margin-left: 5px;">{node.data.name}</span>
                         </span>
                     )
                 }
@@ -191,14 +283,18 @@ export default {
         },
         //树结构点击事件
         handleNodeClick(data) {
+            this.NodeClickData=data;
             let treeType=data.type;
         },
-        onCurrentChange(){
-
+        //下一页，分页
+        onCurrentChange(val){
+            this.searchRole(val,this.pageSize)
         },
-        onSelectionChange(){
-
+        //选择，多选
+        onSelectionChange(val){
+            this.multipleSelection = val;
         },
+        //给table的行设置样式
         tableRowClassName(){
 
         },
@@ -209,14 +305,36 @@ export default {
             finandata.finanrowname="";
             finandata.finanrowId="";
             finandata.nametitle="角色维护";
+            finandata.createtype="NEW";
+            finandata.SelectData=[];
             this.rowNRMDataObj=finandata;
         },
         //角色详情页返回数据处理
-        showAddUserFinace(data,type){
+        showRoleMainte(type){
             if(type === false){
                 this.rowNRMtype = false
             }else{
                 this.rowNRMtype = true
+            }
+        },
+        //修改
+        modifyRoleMainte(){
+            let SelectData=this.multipleSelection;
+            if(SelectData.length > 1){
+                this.$message.error("只能选择一个!");
+            }else{
+                if(SelectData[0]){
+                    this.rowNRMtype = true;
+                    let finandata={};
+                    finandata.finanrowname="";
+                    finandata.finanrowId="";
+                    finandata.nametitle="角色维护";
+                    finandata.createtype="EDIT";
+                    finandata.SelectData=SelectData;
+                    this.rowNRMDataObj=finandata;
+                }else{
+                    this.$message.error("请选择一行数据!");
+                }
             }
         }
     }
@@ -261,6 +379,10 @@ font-size: 12px;
     font-size: 15px;
     line-height: 30px;
     background-color: skyblue;
+}
+.El-tree{
+    height: 500px;
+    overflow-y:auto;
 }
 </style>
 <style lang='scss'>

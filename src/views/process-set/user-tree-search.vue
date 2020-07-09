@@ -9,49 +9,78 @@
                 :model="formdata"
                 :label-position="labelPosition"
             >
-                <el-row>
-                    <el-col :span="10" class="tree-class">
-                        <!-- 树状图 -->
-                        <el-tree
-                            :data="treeData"
-                            :props="defaultProps"
-                            accordion
-                            @node-click="handleNodeClick">
-                        </el-tree>
-                    </el-col>
-                    <el-col :span="14" class="tree-class">
-                        <el-row :gutter="24">
-                            <el-col :span="18">
-                                <el-form-item label="搜索" >
-                                    <el-input v-model="formdata.searchKeyW" clearable></el-input>
-                                </el-form-item>
-                            </el-col>
-                            <el-col :span="4">
-                                <el-button type="primary" plain  size="small" @click="searchKey">查询</el-button>
-                            </el-col>
-                        </el-row>
-                        <!-- 表格 -->
-                        <dynamic-table
-                            class="workTable"
-                            :height="310"
-                            :columns="columns3"
-                            :table-data="gridData"
-                            :total="total"
-                            :page-num="pageNum"
-                            :page-size="pageSize"
-                            @current-change="onCurrentChange"
-                            @selection-change="onSelectionChange"
-                            v-loading="tableLoading"
-                            element-loading-text="加载中"
-                        ></dynamic-table>
-                    </el-col>
-                </el-row>
-                <el-row :gutter="20">
-                    <el-col :span="13" style="text-align: right;margin-top: 18px;">
-                        <el-button  size="small" @click="saveConfig">确定</el-button>
-                    </el-col>   
-                </el-row>
+                <el-card>
+                    <el-row>
+                        <el-col :span="4" class="tree-class">
+                            <!-- 树状图 -->
+                            <el-tree
+                                :data="treeData"
+                                :props="defaultProps"
+                                accordion
+                                @node-click="handleNodeClick">
+                            </el-tree>
+                        </el-col>
+                        <el-col :span="10" :offset="1">
+                            <el-row :gutter="24">
+                                <el-col :span="18">
+                                    <el-form-item label="搜索" >
+                                        <el-input v-model="formdata.searchKeyW" clearable></el-input>
+                                    </el-form-item>
+                                </el-col>
+                                <el-col :span="4">
+                                    <el-button type="primary" plain  size="small" @click="searchKey">查询</el-button>
+                                </el-col>
+                            </el-row>
+                            <!-- 表格 -->
+                            <dynamic-table
+                                class="workTable"
+                                :columns="columns3"
+                                :table-data="gridData"
+                                :total="total"
+                                :page-num="pageNum"
+                                :page-size="pageSize"
+                                @current-change="onCurrentChange"
+                                @selection-change="onSelectionChange"
+                                v-loading="tableLoading"
+                                element-loading-text="加载中"
+                            ></dynamic-table>
+                        </el-col>
+                        <el-col :span="1" :offset="1">
+                            <div style="margin-top:70px;width:60px;">
+                                <div style="margin-bottom:15px">
+                                    <el-button type="primary" icon="el-icon-arrow-left" circle  @click='AddToLeft'></el-button>
+                                </div>
+                                <div>
+                                    <el-button type="primary" icon="el-icon-arrow-right" circle @click='AddToRight'></el-button>
+                                </div>
+                            </div>
+                        </el-col>
+                        <el-col :span="5" :offset="1">
+                            <el-table
+                                :data="teldata"
+                                border
+                                size="mini"
+                                height='300'
+                                @selection-change="onUSerSelectionChange"
+                                ref='rightMultipleTable'
+                            >
+                                <el-table-column
+                                    type="selection"
+                                    width="55">
+                                </el-table-column>
+                                <el-table-column size="mini" label="所选人员">
+                                    <template slot-scope="scope">
+                                        {{scope.row.label}}
+                                    </template>
+                                </el-table-column>
+                            </el-table>      
+                        </el-col>
+                    </el-row>
+                </el-card>
             </el-form>
+            <span slot="footer" class="dialog-footer">
+                <el-button  type="primary" @click="saveConfig">确定</el-button>
+            </span>
         </el-dialog>
     </div>
 </template>
@@ -78,6 +107,26 @@ export default {
             formdata:{
                 searchKeyW:'',
             },
+            leftDisabled:true,
+            rightDisabled:true,
+            dataForm:{
+                receiver:'',
+            },
+            UsermultipleSelection:[],
+            teldata:[
+                {
+                    label:'1111',
+                    value:'0001'
+                },
+                {
+                    label:'22222',
+                    value:'0002'
+                },
+                {
+                    label:'3333',
+                    value:'0003'
+                },
+            ],
             tableLoading:false,
             ShowFinancVisible:false,
             labelPosition: 'left',
@@ -140,12 +189,16 @@ export default {
         searchKey(){
 
         },
+        handleCheckedCitiesChange(){},
         //分页
         onSizeChange(val) {
             this.pageSize = val;
         },
         //下一页
         onCurrentChange(val) {},
+        onUSerSelectionChange(val) {
+            this.UsermultipleSelection = val;
+        },
         handleNodeClick(data) {
             console.log(data);
         },
@@ -228,6 +281,10 @@ export default {
     font-size: 15px;
     line-height: 30px;
     background-color: skyblue;
+}
+.classlist{
+    width: 100%;
+    height: 300px;
 }
 </style>
 <style lang='scss'>
