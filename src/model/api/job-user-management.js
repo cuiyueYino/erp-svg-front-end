@@ -50,13 +50,44 @@ const jobUserManagement = {
 
     //  人员-根据ID查找人员
     addPeopleData(params){
-        return httpReqest.post('/Lapi/staffManage/findStaffById?id=' + params);
+        return httpReqest.post('/api/staffManage/findStaffById?id=' + params);
     },
 
      //  人员-根据公司查找人员
      addDepartData(params){
-        return httpReqest.post('/Lapi/staffManage/getStaffByCompany',params);
+        return httpReqest.post('/api/staffManage/getStaffByCompany',params);
     },
+
+    // 人员-公司查询
+    getCompanyData(){
+        return httpReqest.get('/api/organization/getCompanyData');
+    },
+
+    // 人员-职位查询
+     getPositonData(params){
+        return httpReqest.get('/api/organization/findPositionInfosByDepartmentid?departmentOid=' + params);
+    },
+
+    // 人员-部门查询
+    getDepartData(params){
+        return httpReqest.get('/api/organization/findDepartmentInfosByCompanyoid?companyOid=' + params);
+    },
+
+    //  人员-编辑
+    updatePeopleData(params){
+        return httpReqest.post('/api/staffManage/updateStaff',params);
+    },
+
+    //  人员-新增
+    addPeopleMsg(params){
+        return httpReqest.post('/api/staffManage/insertStaff',params);
+    },
+
+    //  人员-删除
+    deletePeopleMsg(params){
+        return httpReqest.post('/api/staffManage/deleteStaff?id=' + params);
+    },
+
 };
 
 export default jobUserManagement;
