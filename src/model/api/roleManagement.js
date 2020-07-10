@@ -5,19 +5,19 @@ const v = base.dev;
 const RoleManagement = {
     //新建角色类别
     insertRoleTypeModel(params){
-        return httpReqest.post('/api/roleType/insertRoleTypeModel', params);
+        return httpReqest.post('/api/interfaces/roleType/insertRoleTypeModel', params);
     },
     //修改就是类别
     updateRoleTypeModel(params){
-        return httpReqest.post('/api/roleType/updateRoleTypeModel', params);
+        return httpReqest.post('/api/interfaces/roleType/updateRoleTypeModel', params);
     },
     //查询全部角色类别
     findRoleTypeList(params){
-        return httpReqest.post('/api/roleType/findRoleTypeList', params);
+        return httpReqest.post('/api/interfaces/roleType/findRoleTypeList', params);
     },
     //分页查询角色类别
     findRoleTypePage(params){
-        return httpReqest.post('/api/roleType/findRoleTypePage', params);
+        return httpReqest.post('/api/interfaces/roleType/findRoleTypePage', params);
     },
     //用ID查询角色类别
     getRoleTypeModel(params){
@@ -28,27 +28,27 @@ const RoleManagement = {
         if(valueS.slice(valueS.length-1,valueS.length) ==="&"){
             valueS=valueS.slice(0,valueS.length-1);
         }
-        return httpReqest.get('/api/roleType/getRoleTypeModel'+valueS);
+        return httpReqest.get('/api/interfaces/roleType/getRoleTypeModel'+valueS);
     },
     //用id删除角色类别
     deleteRoleTypeModel(params){
-        return httpReqest.post('/api/roleType/deleteRoleTypeModel', params);
+        return httpReqest.post('/api/interfaces/roleType/deleteRoleTypeModel', params);
     },
     //分页查询角色
     findRolePage(params){
-        return httpReqest.post('/api/role/findRolePage', params);
+        return httpReqest.post('/api/interfaces/role/findRolePage', params);
     },
     //新增角色
     insertRoleModel(params){
-        return httpReqest.post('/api/role/insertRoleModel', params);
+        return httpReqest.post('/api/interfaces/role/insertRoleModel', params);
     },
     //修改角色
     updateRoleModel(params){
-        return httpReqest.post('/api/role/updateRoleModel', params);
+        return httpReqest.post('/api/interfaces/role/updateRoleModel', params);
     },
     //根据ID删除角色
     deleteRoleModel(params){
-        return httpReqest.post('/api/role/deleteRoleModel', params);
+        return httpReqest.post('/api/interfaces/role/deleteRoleModel', params);
     },
     //根据角色、公司查询已授权菜单
     findRMByCompany(params){
@@ -59,7 +59,7 @@ const RoleManagement = {
         if(valueS.slice(valueS.length-1,valueS.length) ==="&"){
             valueS=valueS.slice(0,valueS.length-1);
         }
-        return httpReqest.get('/api/role/findRMByCompany'+valueS);
+        return httpReqest.get('/api/interfaces/role/findRMByCompany'+valueS);
     },
     //根据ID查询角色
     getRoleModel(params){
@@ -70,7 +70,7 @@ const RoleManagement = {
         if(valueS.slice(valueS.length-1,valueS.length) ==="&"){
             valueS=valueS.slice(0,valueS.length-1);
         }
-        return httpReqest.get('/api/role/getRoleModel'+valueS);
+        return httpReqest.get('/api/interfaces/role/getRoleModel'+valueS);
     },
 }
 export default RoleManagement;

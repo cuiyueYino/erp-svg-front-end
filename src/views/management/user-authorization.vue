@@ -26,29 +26,49 @@
             <el-row>
                 <el-col :span="11">
                     <el-row>
-                        <el-col :span="6">
+                        <el-col :span="5" :offset="1">
+                            <el-select v-model="formInline.regionleft" placeholder="请选择">
+                                <el-option
+                                    v-for="item in leftData"
+                                    :key="item.value"
+                                    :label="item.label"
+                                    :value="item.value"
+                                ></el-option>
+                            </el-select>
+                        </el-col>
+                        <el-col :span="6" :offset="1">
                             <el-input v-model="formInline.searchValueleft"></el-input>
                         </el-col>
-                        <el-col :span="2" :offset="2">
-                            <el-button type="success" icon="el-icon-refresh" plain @click="remove">过滤</el-button>
+                        <el-col :span="2" :offset="1">
+                            <el-button type="success" icon="el-icon-refresh" plain @click="filterLeft">过滤</el-button>
                         </el-col>
-                        <el-col :span="2" :offset="2">
-                            <el-button type="success" icon="el-icon-refresh" plain @click="remove">全部</el-button>
+                        <el-col :span="2" :offset="1">
+                            <el-button type="success" icon="el-icon-refresh" plain @click="getALLLeft">全部</el-button>
                         </el-col>
                     </el-row>
                 </el-col>
                 <el-col :span="11" :offset="1">
                     <el-row>
-                        <el-col :span="6">
+                        <el-col :span="5" :offset="1">
+                            <el-select v-model="formInline.regionRight" placeholder="请选择">
+                                <el-option
+                                    v-for="item in rightData"
+                                    :key="item.value"
+                                    :label="item.label"
+                                    :value="item.value"
+                                ></el-option>
+                            </el-select>
+                       </el-col>
+                        <el-col :span="6" :offset="1">
                             <el-input v-model="formInline.searchValueright"></el-input>
                         </el-col>
-                        <el-col :span="2" :offset="2">
-                            <el-button type="success" icon="el-icon-refresh" plain @click="remove">过滤</el-button>
+                        <el-col :span="2" :offset="1">
+                            <el-button type="success" icon="el-icon-refresh" plain @click="filterRight">过滤</el-button>
                         </el-col>
-                        <el-col :span="2" :offset="2">
-                            <el-button type="success" icon="el-icon-refresh" plain @click="remove">全部</el-button>
+                        <el-col :span="2" :offset="1">
+                            <el-button type="success" icon="el-icon-refresh" plain @click="getALLRight">全部</el-button>
                         </el-col>
-                        <el-col :span="2" :offset="2">
+                        <el-col :span="2" :offset="1">
                             <el-button type="success" icon="el-icon-refresh" plain @click="RoleSelectData">已选中</el-button>
                         </el-col>
                     </el-row>
@@ -67,8 +87,8 @@
                             :row-style="rowClass"
                             @row-click="selectRow">
                             <el-table-column prop="fcode" size="small" label="登录账户" ></el-table-column>
-                            <el-table-column prop="name" size="small" label="用户名称" ></el-table-column>
-                            <el-table-column prop="Comname" size="small" label="公司名称" ></el-table-column>
+                            <el-table-column prop="fname" size="small" label="用户名称" ></el-table-column>
+                            <el-table-column prop="fcompanyoid" size="small" label="公司名称" ></el-table-column>
                         </el-table>
                         <div class="pagination" v-if="UsertableData.length >0">
                             <el-pagination
@@ -92,16 +112,15 @@
                             style="width: 100%"
                             :row-style="roleLrowClass"
                             @row-click="selectroleLRow">
-                            <el-table-column prop="fcode" size="small" label="角色编码" ></el-table-column>
+                            <el-table-column prop="code" size="small" label="角色编码" ></el-table-column>
                             <el-table-column prop="name" size="small" label="角色名称" ></el-table-column>
-                            <el-table-column prop="Comname" size="small" label="公司名称" ></el-table-column>
+                            <el-table-column prop="company" size="small" label="公司名称" ></el-table-column>
                         </el-table>
                         <div class="pagination" v-if="roleLtableData.length >0">
                             <el-pagination
                                 :total="roleLtotal"
                                 background
                                 layout="prev, pager, next,jumper,total"
-                                :page-size="roleLpageSize"
                                 @size-change="onroleLSizeChange"
                                 @current-change="onroleLCurrentChange"
                             >
@@ -110,7 +129,7 @@
                     </div>
                 </el-col>
                 <el-col :span="11" :offset="1">
-                    <div v-if="dimension">
+                    <div v-if="dimension" :class="disShowPager==true?'':'CheckTable'">
                         <dynamic-table
                             :columns="Rolecolumns"
                             :table-data="RoletableData"
@@ -118,19 +137,21 @@
                             :page-num="pageNum1"
                             :page-size="pageSize1"
                             ref="roleTable"
+                            :isShowPager="disShowPager"
                             @current-change="onRoleCurrentChange"
                             @selection-change="onRoleSelectionChange"
                             v-loading="false"
                             element-loading-text="加载中"
                         ></dynamic-table>
                     </div>
-                    <div v-else>
+                    <div v-else :class="disShowPager==true?'':'CheckTable'">
                         <dynamic-table
                             :columns="UserLcolumns"
                             :table-data="UserLtableData"
                             :total="totalUserL"
                             :page-num="pageNum"
                             :page-size="pageSize"
+                            :isShowPager="disShowPager"
                             ref="UserLTable"
                             @current-change="onUserLCurrentChange"
                             @selection-change="onUserLSelectionChange"
@@ -155,6 +176,7 @@ export default {
     data(){
         return{
             dimension:false,
+            disShowPager:true,
             companyData:new proData().company,
             formInline: {
                 company:'_DefaultCompanyOId'
@@ -164,27 +186,10 @@ export default {
             total: 2,
             pageNum1: 1,
             pageSize1: 10,
-            roleLpageSize: 10,
             total1: 2,
             totalUserL: 2,
             roleLtotal: 2,
-            UsertableData:[
-                {
-                    fcode:'001',
-                    name:'李敏',
-                    Comname:'福佳'
-                },
-                {
-                    fcode:'002',
-                    name:'许小树',
-                    Comname:'石化'
-                },
-                {
-                    fcode:'003',
-                    name:'徐婷婷',
-                    Comname:'芳烃'
-                },
-            ],
+            UsertableData:[],
             UserselectedList: [],
             UserselectedRow: [],
             roleLselectedList: [],
@@ -194,7 +199,7 @@ export default {
                     type: 'selection'
                 },
                 {
-                    key: 'fcode',
+                    key: 'code',
                     title: '角色编码'
                 },
                 {
@@ -202,44 +207,12 @@ export default {
                     title: '角色名称'
                 },
                 {
-                    key: 'Cname',
+                    key: 'company',
                     title: '公司名称'
                 },
             ],
-            roleLtableData:[
-                 {
-                    fcode:'001',
-                    name:'管理员',
-                    Cname:'福佳'
-                },
-                {
-                    fcode:'002',
-                    name:'资产管理',
-                    Cname:'石化'
-                },
-                {
-                    fcode:'003',
-                    name:'会计',
-                    Cname:'芳烃'
-                },
-            ],
-            RoletableData:[
-                 {
-                    fcode:'001',
-                    name:'管理员',
-                    Cname:'福佳'
-                },
-                {
-                    fcode:'002',
-                    name:'资产管理',
-                    Cname:'石化'
-                },
-                {
-                    fcode:'003',
-                    name:'会计',
-                    Cname:'芳烃'
-                },
-            ],
+            roleLtableData:[],
+            RoletableData:[],
             RoleselectData:[],
             RUserLselectData:[],
             UserLcolumns: [
@@ -251,55 +224,232 @@ export default {
                     title: '登录账户'
                 },
                 {
-                    key: 'name',
+                    key: 'fname',
                     title: '用户名称'
                 },
                 {
-                    key: 'Cname',
+                    key: 'fcompanyoid',
                     title: '公司名称'
                 },
             ],
-            UserLtableData:[
+            UserLtableData:[],
+            leftData:[],
+            rightData:[],
+            UserData:[
                 {
-                    fcode:'001',
-                    name:'李敏',
-                    Comname:'福佳'
+                value: '',
+                label: '--'
                 },
                 {
-                    fcode:'002',
-                    name:'许小树',
-                    Comname:'石化'
+                value: 'code',
+                label: '登录账户'
                 },
                 {
-                    fcode:'003',
-                    name:'徐婷婷',
-                    Comname:'芳烃'
+                value: 'name',
+                label: '用户名称'
+                },
+                {
+                value: 'company',
+                label: '公司名称'
+                },
+            ],
+            roleData:[
+                {
+                value: '',
+                label: '--'
+                },
+                {
+                value: 'name',
+                label: '角色名称'
+                },
+                {
+                value: 'code',
+                label: '角色编码'
+                },
+                {
+                value: 'company',
+                label: '公司名称'
                 },
             ],
         }
     },
+    created(){
+        this.leftData=this.roleData;
+        this.rightData=this.UserData;
+        let fromdata={};
+        fromdata.page=this.pageNum;
+        fromdata.size=this.pageSize;
+        this.searchRole(fromdata);
+        this.getUserData(fromdata);
+    },
     methods:{
+        //获取人员
+        getUserData(data){
+            let fromdata=data;
+            this.$api.management.getUserTableData(fromdata).then(response => {
+                let responsevalue = response;
+                if (responsevalue) {
+                    let returndata = responsevalue.data;
+                    let tableDataArr=returndata.data.rows;
+                    this.UserLtableData=tableDataArr;
+                    this.UsertableData=tableDataArr;
+                    this.total = responsevalue.data.data.total;
+                    this.totalUserL= responsevalue.data.data.total;
+                } else {
+                    this.$message.success('数据库没有该条数据!');
+                }
+            });
+        },
+        //获取角色
+        searchRole(data){
+            let fromdata=data;
+            this.$api.RoleManagement.findRolePage(fromdata).then(response => {
+                let responsevalue = response;
+                if (responsevalue) {
+                    let returndata = responsevalue.data;
+                    let tableDataArr=returndata.rows;
+                    this.roleLtableData=tableDataArr;
+                    this.RoletableData=tableDataArr;
+                    this.total1=returndata.total;
+                    this.roleLtotal=returndata.total;
+                } else {
+                    this.$message.success('数据库没有该条数据!');
+                }
+            });
+        },
+        //左边过滤条件
+        filterLeft(){
+            if(this.dimension ==true){
+                let  fromdata={};
+                fromdata.page=this.pageNum;
+                fromdata.size=this.pageSize;
+                if(this.formInline.regionleft=="name"){
+                    fromdata.fname=this.formInline.searchValueleft;
+                }else if(this.formInline.regionleft=="code"){
+                    fromdata.fcode=this.formInline.searchValueleft;
+                }else if(this.formInline.regionleft=="company"){
+                    fromdata.fcompanyoid=this.formInline.searchValueleft;
+                }
+                this.getUserData(fromdata);
+            }else{
+                let  fromdataU={};
+                fromdataU.page=this.pageNum;
+                fromdataU.size=this.pageSize;
+                if(this.formInline.regionleft=="name"){
+                    fromdataU.name=this.formInline.searchValueleft;
+                }else if(this.formInline.regionleft=="code"){
+                    fromdataU.code=this.formInline.searchValueleft;
+                }else if(this.formInline.regionleft=="company"){
+                    fromdataU.company=this.formInline.searchValueleft;
+                }
+                this.searchRole(fromdataU);
+            }
+        },
+        //右边过滤条件
+        filterRight(){
+            //formInline.regionRight
+            //formInline.searchValueright
+            if(this.dimension ==true){
+                let  fromdataU={};
+                fromdataU.page=this.pageNum;
+                fromdataU.size=this.pageSize;
+                if(this.formInline.regionRight=="name"){
+                    fromdataU.name=this.formInline.searchValueright;
+                }else if(this.formInline.regionRight=="code"){
+                    fromdataU.code=this.formInline.searchValueright;
+                }else if(this.formInline.regionRight=="company"){
+                    fromdataU.company=this.formInline.searchValueright;
+                }
+                this.searchRole(fromdataU);
+            }else{
+                let  fromdata={};
+                fromdata.page=this.pageNum;
+                fromdata.size=this.pageSize;
+                if(this.formInline.regionRight=="name"){
+                    fromdata.fname=this.formInline.searchValueright;
+                }else if(this.formInline.regionRight=="code"){
+                    fromdata.fcode=this.formInline.searchValueright;
+                }else if(this.formInline.regionRight=="company"){
+                    fromdata.fcompanyoid=this.formInline.searchValueright;
+                }
+                this.getUserData(fromdata);
+            }
+        },
+        //左边全部点击事件
+        getALLLeft(){
+            if(this.dimension ==true){
+                let  fromdata={};
+                fromdata.page=this.pageNum;
+                fromdata.size=this.pageSize;
+                this.getUserData(fromdata);
+            }else{
+                let  fromdataU={};
+                fromdataU.page=this.pageNum;
+                fromdataU.size=this.pageSize;
+                this.searchRole(fromdataU);
+            }
+        },
+        //右边全部点击事件
+        getALLRight(){
+            if(this.dimension ==true){
+                let  fromdataU={};
+                fromdataU.page=this.pageNum;
+                fromdataU.size=this.pageSize;
+                this.searchRole(fromdataU);
+            }else{
+                let  fromdata={};
+                fromdata.page=this.pageNum;
+                fromdata.size=this.pageSize;
+                this.getUserData(fromdata);
+            }
+        },
         remove(){},
         //切换维度
         Changedimension(){
+            //切换维度前清空搜索条件
+            this.formInline.regionleft='';
+            this.formInline.regionRight='';
+            this.formInline.searchValueleft='';
+            this.formInline.searchValueright='';
+            //切换维度
             if(this.dimension ==true){
                 this.dimension=false;
+                this.leftData=this.roleData;
+                this.rightData=this.UserData;
             }else{
                 this.dimension=true;
+                this.leftData=this.UserData;
+                this.rightData=this.roleData;
             }
         },
         selectRow(row, column, event){
             this.UserselectedList=[];
             this.UserselectedList.push(row);
+
         },
         rowClass(data){
             if(this.UserselectedRow.includes(data.rowIndex)){
                 return {"background-color":"#98F898"}
             }
         },
+        //角色table行点击事件
         selectroleLRow(row, column, event){
             this.roleLselectedList=[];
             this.roleLselectedList.push(row);
+            console.log(row)
+            //通过角色查询用户
+            let fromdata={};
+            fromdata.roleId=row.id;
+            this.$api.management.findUserByRoleId(fromdata).then(response => {
+                let responsevalue = response;
+                if (responsevalue) {
+                    let returndata = responsevalue.data;
+                    let tableDataArr=returndata.data.rows;
+                    console.log(returndata)
+                } else {
+                    this.$message.success('数据库没有该条数据!');
+                }
+            });
         },
         roleLrowClass(data){
             if(this.roleLselectedRow.includes(data.rowIndex)){
@@ -389,6 +539,10 @@ font-size: 12px;
     font-size: 15px;
     line-height: 30px;
     background-color: skyblue;
+}
+.CheckTable{
+    height: 500px;
+    overflow-y:auto;
 }
 </style>
 <style lang='scss'>
