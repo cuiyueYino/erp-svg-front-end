@@ -5,22 +5,22 @@ const v = base.dev;
 const jobUserManagement = {
     // 获取职务表格列表数据
     getTableData(params){
-        return httpReqest.post('/api/positionmnt/findPositionList', params);
+        return httpReqest.post('/api/interfaces/positionmnt/findPositionList', params);
     },
 
     // 职务列表-新增
     addTableData(params){
-        return httpReqest.post('/api/positionmnt/insertPosition', params);
+        return httpReqest.post('/api/interfaces/positionmnt/insertPosition', params);
     },
 
     // 职务列表-编辑
     updateTableData(params){
-        return httpReqest.post('/api/positionmnt/updatePosition', params);
+        return httpReqest.post('/api/interfaces/positionmnt/updatePosition', params);
     },
 
     // 职务列表-删除
     deleteTableData(params){
-        return httpReqest.get('/api/positionmnt/deletePosition?foId='+ params);
+        return httpReqest.get('/api/interfaces/positionmnt/deletePosition?foId='+ params);
     },
 
     // 用户-列表查询
@@ -45,7 +45,7 @@ const jobUserManagement = {
 
     // 人员-列表查询
     getPeopleTableData(params){
-        return httpReqest.post('/api/staffManage/findStaffByPage', params);
+        return httpReqest.post('/api/interfaces/staffManage/findStaffByPage', params);
     },
 
     //  人员-根据ID查找人员

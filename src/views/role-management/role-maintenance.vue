@@ -10,7 +10,6 @@
                                 <el-select v-model="region" placeholder="请选择">
                                 <el-option label="名称" value="name"></el-option>
                                 <el-option label="编码" value="code"></el-option>
-                                <el-option label="描述" value="remark"></el-option>
                                 <el-option label="角色类别" value="roleType"></el-option>
                                 </el-select>
                             </el-form-item>
@@ -235,21 +234,25 @@ export default {
             }
         },
         onSubmit(){
+            //清除树形默认选择
+            this.NodeClickData={};
             let fromdata={};
             fromdata.page=this.pageNum;
             fromdata.size=this.pageSize;
             if(this.region=="name"){
-
+                fromdata.name=this.formCode;
             }else if(this.region=="code"){
-
-            }else if(this.region=="remark"){
-
+                fromdata.code=this.formCode;
             }else if(this.region=="roleType"){
-
+                fromdata.roleTypeName=this.formCode;
             }
             this.searchRole(fromdata);
         },
         getAll(){
+            //清除树形默认选择，搜索条件数据
+            this.NodeClickData={};
+            this.region="";
+            this.formCode="";
             let fromdata={};
             fromdata.page=this.pageNum;
             fromdata.size=this.pageSize;
@@ -283,12 +286,40 @@ export default {
         },
         //树结构点击事件
         handleNodeClick(data) {
+            //清除树形默认选择，搜索条件数据
+            this.region="";
+            this.formCode="";
             this.NodeClickData=data;
-            let treeType=data.type;
+            let fromdata={};
+            fromdata.page=this.pageNum;
+            fromdata.size=this.pageSize;
+            fromdata.roleType=data.id;
+            this.searchRole(fromdata);
         },
         //下一页，分页
         onCurrentChange(val){
-            this.searchRole(val,this.pageSize)
+            this.NodeClickData=data;
+            let fromdata={};
+            fromdata.page=val;
+            fromdata.size=this.pageSize;
+            if(this.NodeClickData.id){
+                fromdata.roleType=data.id;
+            }
+            if(this.region=="name"){
+                if(this.formCode){
+                    fromdata.name=this.formCode;
+                }
+            }else if(this.region=="code"){
+                if(this.formCode){
+                    fromdata.code=this.formCode;
+                }
+            }else if(this.region=="roleType"){
+                if(this.formCode){
+                    fromdata.roleTypeName=this.formCode;
+                }
+            }
+            this.searchRole(fromdata);
+            
         },
         //选择，多选
         onSelectionChange(val){

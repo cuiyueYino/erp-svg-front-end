@@ -43,7 +43,7 @@ module.exports = {
                 // target: 'http://192.168.21.205:6767',
                 //target: 'http://192.168.21.78:6767',
                 // target:'http://192.168.21.146:5050',
-                target:'http://192.168.21.18:6767',
+                target:'http://192.168.85.96:6767',
                 // target:'http://192.168.21.78:5050',
                 ws: true, //代理websockets
                 changeOrigin: true, // 虚拟的站点需要更管origin

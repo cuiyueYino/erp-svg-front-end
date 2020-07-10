@@ -5,7 +5,7 @@ const v = base.dev;
 const systemSet = {
     //根据条件查询菜单
     findMenuByParam(params){
-        return httpReqest.post('/api/menu/findMenuByParam', params);
+        return httpReqest.post('/api/interfaces/menu/findMenuByParam', params);
     },
 }
 export default systemSet;
