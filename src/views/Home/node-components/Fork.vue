@@ -43,26 +43,6 @@
                     element-loading-text="加载中"
                 ></dynamic-table>
             </el-tab-pane>
-            <el-tab-pane label="反向业务数据参数列表" name="3">
-                <!-- Condition -->
-                <el-form-item label="业务服务" label-width="84px" prop="maxTime">
-                    <el-input v-model="formData.maxTime" disabled autocomplete="off"></el-input>
-                </el-form-item>
-                <!-- 表格 -->
-                <dynamic-table
-                    class="workTable"
-                    :height="310"
-                    :columns="columns3"
-                    :table-data="tableData2"
-                    :total="total"
-                    :page-num="pageNum"
-                    :page-size="pageSize"
-                    @current-change="onCurrentChange"
-                    @selection-change="onSelectionChange"
-                    v-loading="tableLoading"
-                    element-loading-text="加载中"
-                ></dynamic-table>
-            </el-tab-pane>
            
         </el-tabs>
         <!-- 弹出框 -->

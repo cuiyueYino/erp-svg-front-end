@@ -295,7 +295,6 @@ export default {
         }
     },
     mounted () {
-       
        this.$nextTick(()=>{
             console.log(this.dataObj)
             if(this.dataObj){

@@ -2,11 +2,17 @@
 <!-- 弹出框内容 -->
         <div v-show="visible">
         <!-- TAB页 -->
+          <el-form
+                label-width="110px"
+                v-model="formdata"
+                class="dataForm"
+                :model="formdata"
+            >
         <el-tabs v-model="activeName" @tab-click="handleClick">
             <el-tab-pane label="基本信息" name="1">
                 <!-- Condition -->
-                <el-form-item label="名称" :label-width="formLabelWidth" prop="name">
-                    <el-input ref="nameInput" v-model="formData.name" autocomplete="off"></el-input>
+                <el-form-item label="名称" :label-width="formLabelWidth" prop="displayName">
+                    <el-input ref="nameInput" v-model="formData.displayName" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="业务工作" :label-width="formLabelWidth" prop="name">
                     <el-input v-model="formData.work" autocomplete="off"></el-input>
@@ -20,36 +26,16 @@
                      <img class="icon-search" src="../../../assets/img/search.svg" @click="baseInputTable('用户','组织结构查询')">
                 </el-form-item>
                 <el-form-item label="隐藏" :label-width="formLabelWidth">
-                    <el-checkbox v-model="checked"></el-checkbox>
+                    <el-checkbox v-model="formData.checked"></el-checkbox>
                 </el-form-item>
                 <el-form-item label="描述：" :label-width="formLabelWidth">
                     <el-input maxlength="1000"  autosize show-word-limit type="textarea" v-model="formData.fremark"></el-input>
                 </el-form-item>
                 <!-- Condition END-->
             </el-tab-pane>
-            <el-tab-pane label="基本设置" name="2">
-                <!-- Condition -->
-                <el-form-item label="最大工作时间" :label-width="formLabelWidth" prop="maxTime">
-                    <el-input v-model="formData.maxTime" autocomplete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="时间单位" :label-width="formLabelWidth" prop="resource">
-                     <el-radio-group v-model="formData.resource">
-                        <el-radio label="小时"></el-radio>
-                        <el-radio label="天"></el-radio>
-                    </el-radio-group>
-                </el-form-item>
-                <el-form-item  :label-width="formLabelWidth" prop="autoSend">
-                    <el-checkbox v-model="autoSendChecked">超过最大时间系统自动发送催办消息</el-checkbox>
-                </el-form-item>
-                <el-form-item label="回收处理服务" :label-width="formLabelWidth" prop="recovery">
-                    <el-input v-model="formData.recovery" autocomplete="off"></el-input>
-                     <img class="icon-search" src="../../../assets/img/search.svg"  @click="baseInputTable('服务','回收处理服务查询')">
-                </el-form-item>
-                 <!-- Condition END-->
-            </el-tab-pane>
             <el-tab-pane label="参与者" name="3">
                 <!-- Condition -->
-                <el-radio-group v-model="joinCheckBox" class="joinCheckBox">
+                <el-radio-group v-model="formData.joinCheckBox" class="joinCheckBox">
                     <el-radio :label="1">由权限控制</el-radio>
                     <el-radio  :label="2">手工指定下一节点参与者</el-radio>
                     <el-radio  :label="3">可略过</el-radio>
@@ -87,39 +73,6 @@
                     <el-col :span="3" class="joinBtnBox">
                         <el-button type="success" size="mini" plain @click="joinSearch('新增抄送')">新增</el-button>
                         <el-button type="danger" size="mini" plain @click="deleteMsg('新增抄送')">删除</el-button>
-                     
-                    </el-col>
-                </el-row>
-                 <!-- Condition END-->
-            </el-tab-pane>
-            <el-tab-pane label="审核单范围" name="5">
-                 <!-- Condition -->
-                 <el-row :gutter="24" class="rangeTableBox">
-                 <dynamic-table
-                    :columns="columns2"
-                    :table-data="tableData2"
-                    @selection-change="onSelectionChange"
-                    v-loading="false"
-                    element-loading-text="加载中"
-                 ></dynamic-table>
-                 </el-row>
-                <!-- Condition END-->
-            </el-tab-pane>
-            <el-tab-pane label="业务功能" name="6">
-                 <!-- Condition -->
-                <el-row :gutter="24" class="joinTableBox">
-                    <el-col :span="20">
-                        <dynamic-table
-                            :columns="columns4"
-                            :table-data="tableData"
-                            @selection-change="onSelectionChange"
-                            v-loading="false"
-                            element-loading-text="加载中"
-                        ></dynamic-table>
-                    </el-col>
-                    <el-col :span="3" class="joinBtnBox">
-                        <el-button type="success" size="mini" plain @click="joinSearch('定义关系')">定义关系</el-button>
-                        <el-button type="danger" size="mini" plain @click="deleteMsg">删除关系</el-button>
                      
                     </el-col>
                 </el-row>
@@ -257,9 +210,9 @@
            </el-dialog>
         <!-- 第三层弹窗 -->
         <base-info-dialog class="children-dialog" :visible="baseInputTableF" :type="baseInputType" :title="baseInputTitle" @closeDialog="closeBaseInfo"></base-info-dialog>
-        
+         </el-form>
         </div>
-         <!-- </el-form> -->
+        
     <!-- </el-dialog> -->
 </template>
 
@@ -299,10 +252,82 @@ export default {
     watch:{
         visible(val){
             this.visible = val
+            if(!val){
+                 this.$emit('saveFormData', this.formData);
+            }
+        },
+         // 监听配置数据源
+        data: {
+            handler (obj) {
+                this.formData = JSON.parse(JSON.stringify(obj));
+                // console.log( this.formData,obj)
+            },
+            deep: true,
+            immediate: true
+        },
+        // 监听对话框显示标识
+        dialogVisible (bool) {
+            this.$emit('update:visible', bool);
+        },
+        // 对话框显示 自动聚焦name输入框
+        visible (bool) {
+            if (bool) {
+                setTimeout(() => {
+                    this.$refs.nameInput.focus();
+                }, 100);
+            }else{
+                 this.$emit('saveFormData', this.formData,this.joinusertableData,this.CCtableData);//console.log( this.formData)
+            }
+        },
+        checked(val){
+            switch (val) {
+                case true:
+                    this.formData.checked = 1
+                    break;
+                case false:
+                    this.formData.checked = 0
+                    break;
+            
+                default:
+                    break;
+            }
+        },
+        joinCheckBox(val){
+             switch (val) {
+                case 1:
+                    this.formData.permission = 1;
+                    this.formData.mntNextJoin = 0;
+                    this.formData.canSkip = 0;
+                    this.formData.multMail = 0;
+                   
+                    break;
+                case 2:
+                    this.formData.mntNextJoin = 1;
+                    this.formData.permission = 0;
+                    this.formData.canSkip = 0;
+                    this.formData.multMail = 0;
+                    break;
+                case 3:
+                    this.formData.canSkip = 1;
+                    this.formData.permission = 0;
+                    this.formData.mntNextJoin = 0;
+                    this.formData.multMail = 0;
+                    break;
+                case 4:
+                    this.formData.multMail = 1;
+                    this.formData.permission = 0;
+                    this.formData.mntNextJoin = 0;
+                    this.formData.canSkip = 0;
+                    break;
+            
+                default:
+                    break;
+            }
         },
     },
     data () {
         return {
+            formdata:{},
             baseInputType:'',
             baseInputTitle:'',
             titleStr:'',
@@ -331,6 +356,7 @@ export default {
             formData: {
                 joinCheckBox:1
             },
+            // formData:this.data,
             joinusercolumns: [
                 {
                     type: 'selection'
@@ -478,30 +504,6 @@ export default {
         //     return typeConfig[this.type] || '保存工作流';
         // }
     },
-    watch: {
-        // 监听配置数据源
-        data: {
-            handler (obj) {
-                this.formData = JSON.parse(JSON.stringify(obj));
-                // console.log( this.formData)
-            },
-            deep: true,
-            immediate: true
-        },
-        // 监听对话框显示标识
-        dialogVisible (bool) {
-            this.$emit('update:visible', bool);
-        },
-        // 对话框显示 自动聚焦name输入框
-        visible (bool) {
-            this.dialogVisible = bool;
-            if (bool) {
-                setTimeout(() => {
-                    this.$refs.nameInput.focus();
-                }, 100);
-            }
-        }
-    },
     methods: {
         
         handleClick(tab, event) {
@@ -518,6 +520,8 @@ export default {
                     if(this.roleReq.name){
                         let roleObj={};
                         roleObj=this.roleReq;
+                        roleObj.type = 2;
+                        roleObj.typeName = 'role';
                         roleObj.fUsername=roleObj.name;
                         roleObj.fUsercode=this.baseActiveNameStr;
                         roleObj.fUserRemake=roleObj.role_expression;
@@ -527,6 +531,8 @@ export default {
                     if(this.UserListReq.fname){
                         let UroleObj={};
                         UroleObj=this.UserListReq;
+                        UroleObj.type = 3;
+                        UroleObj.typeName = 'user';
                         UroleObj.fUsername=UroleObj.fname;
                         UroleObj.fUsercode=this.baseActiveNameStr;
                         UroleObj.fUserRemake=UroleObj.fenglishname;
@@ -536,6 +542,8 @@ export default {
                     if(this.serveReq.fname){
                         let SroleObj={};
                         SroleObj=this.serveReq;
+                        SroleObj.type = 4;
+                        SroleObj.typeName = 'service';
                         SroleObj.fUsername=SroleObj.fname;
                         SroleObj.fUsercode=this.baseActiveNameStr;
                         SroleObj.fUserRemake=SroleObj.fenglishname;
@@ -545,6 +553,8 @@ export default {
                     if(this.posLReq.fname){
                         let ProleObj={};
                         ProleObj=this.posLReq;
+                        ProleObj.type = 6;
+                        ProleObj.typeName = 'position';
                         ProleObj.fUsername=ProleObj.fname;
                         ProleObj.fUsercode=this.baseActiveNameStr;
                         ProleObj.fUserRemake=ProleObj.fenglishname;
@@ -553,6 +563,8 @@ export default {
                 }else if(this.baseActiveNameStr=='表达式'){
                     if(this.baseTextarea){
                         let BroleObj={};
+                        BroleObj.type = 5;
+                        BroleObj.typeName = 'expression';
                         BroleObj.fUsername=this.baseTextarea;
                         BroleObj.fUsercode=this.baseActiveNameStr;
                         BroleObj.fUserRemake='';
@@ -564,6 +576,8 @@ export default {
                     if(this.roleReq.name){
                         let roleObj={};
                         roleObj=this.roleReq;
+                        roleObj.type = 2;
+                        roleObj.typeName = 'role';
                         roleObj.fUsername=roleObj.name;
                         roleObj.fUsercode=this.baseActiveNameStr;
                         roleObj.fUserRemake=roleObj.role_expression;
@@ -573,6 +587,8 @@ export default {
                     if(this.UserListReq.fname){
                         let UroleObj={};
                         UroleObj=this.UserListReq;
+                        UroleObj.type = 3;
+                        UroleObj.typeName = 'user';
                         UroleObj.fUsername=UroleObj.fname;
                         UroleObj.fUsercode=this.baseActiveNameStr;
                         UroleObj.fUserRemake=UroleObj.fenglishname;
@@ -582,6 +598,8 @@ export default {
                     if(this.serveReq.fname){
                         let SroleObj={};
                         SroleObj=this.serveReq;
+                        SroleObj.type = 4;
+                        SroleObj.typeName = 'service';
                         SroleObj.fUsername=SroleObj.fname;
                         SroleObj.fUsercode=this.baseActiveNameStr;
                         SroleObj.fUserRemake=SroleObj.fenglishname;
@@ -591,6 +609,8 @@ export default {
                     if(this.posLReq.fname){
                         let ProleObj={};
                         ProleObj=this.posLReq;
+                        ProleObj.type = 6;
+                        ProleObj.typeName = 'position';
                         ProleObj.fUsername=ProleObj.fname;
                         ProleObj.fUsercode=this.baseActiveNameStr;
                         ProleObj.fUserRemake=ProleObj.fenglishname;
@@ -599,6 +619,8 @@ export default {
                 }else if(this.baseActiveNameStr=='表达式'){
                     if(this.baseTextarea){
                         let BroleObj={};
+                        BroleObj.type = 5;
+                        BroleObj.typeName = 'expression';
                         BroleObj.fUsername=this.baseTextarea;
                         BroleObj.fUsercode=this.baseActiveNameStr;
                         BroleObj.fUserRemake='';
@@ -614,6 +636,10 @@ export default {
                         //返回选中的父组件选中的row,并修某些改值
                         this.formData.work=selectOption[0].fname;
                         this.formData.workCode=selectOption[0].fcode;
+                        this.formData.workId=selectOption[0].foid;
+                        this.formData.workDataId=selectOption[0].fmclassOid;
+                        this.formData.workData=selectOption[0].fmclassName;
+                        this.formData.workDataCode=selectOption[0].fmclassCode;
                     }
                 }else{
                     this.$message.error('请选择一行数据!');
@@ -690,6 +716,7 @@ export default {
             if(this.formData.formCtionTypeCon){
                 fromdata.fmfunctiontypecon=this.formData.formCtionTypeCon;
             }
+            fromdata.fmfunctiontypecon = 1;
             fromdata.page=this.pageNum;
             fromdata.size=this.pageSize;
             this.gridData=[];
@@ -755,7 +782,7 @@ export default {
         },
         baseInputTable(str,title){ 
             this.baseInputTableF = true;
-            this.baseInputTitle= title
+            this.baseInputTitle= title;
             this.baseInputType = str;
         },
         closeBaseInfo(data,dialogtitle,type){
@@ -764,6 +791,7 @@ export default {
                     if(dialogtitle === '组织结构查询'){
                         this.formData.structure=data[0].fname;
                         this.formData.structurecode=data[0].fcode;
+                        this.formData.structureId=data[0].foid;
                     }else if(dialogtitle === '用户查询'){
                         this.UserListReq=data[0];
                     }

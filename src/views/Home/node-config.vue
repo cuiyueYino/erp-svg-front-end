@@ -19,11 +19,11 @@
             size="small"
             @submit.native.prevent
         >
-        <node-condition :visible = visible?(ConditionF?true:false):false  > </node-condition>
-        <node-fork :visible = visible?(ForkF?true:false):false></node-fork>
-        <node-join :visible = visible?(JoinF?true:false):false></node-join>
-        <node-router-task :visible = visible?(TaskF?true:false):false></node-router-task>
-        <node-line :visible = visible?(LineF?true:false):false></node-line>
+        <node-condition :visible = visibleF?(ConditionF?true:false):false @saveFormData="saveFormData" > </node-condition>
+        <node-fork :visible = visibleF?(ForkF?true:false):false></node-fork>
+        <node-join :visible = visibleF?(JoinF?true:false):false></node-join>
+        <node-router-task :visible = visibleF?(TaskF?true:false):false></node-router-task>
+        <node-line :visible = visibleF?(LineF?true:false):false></node-line>
          </el-form>
           <el-row :gutter="20">
             <el-col :span="12" style="text-align: right;">
@@ -88,17 +88,16 @@ export default {
             ForkF:false,
             TaskF:false,
             LineF:false,
+            visibleF:false,
             // 关闭对话框配置
             closeConfig: false,
             // 对话框显示标识
-            dialogVisible: this.visible,
+            dialogVisible: false,
             // 配置表单数据
             formData: this.data,
              // 配置表单校验规则
             configRules: {
-                name: { required: true, message: '请输入英文名', trigger: 'blur' },
-                displayName: { required: true, message: '请输入名称', trigger: 'blur' },
-                performType: { required: true, message: '请选择参与类型', trigger: 'change' }
+                displayName: { required: true, message: '请输入名称', trigger: 'blur' }
             },
         };
     },
@@ -119,7 +118,7 @@ export default {
     watch: {
         // 监听配置数据源
         data: {
-            handler (obj) {
+            handler (obj) {console.log(obj)
                 this.formData = JSON.parse(JSON.stringify(obj));//console.log(this.formData,11)
                 switch (this.formData.name) {
                     case "Task":
@@ -169,6 +168,9 @@ export default {
         // 监听对话框显示标识
         dialogVisible (bool) {
             this.$emit('update:visible', bool);
+            if(bool){
+                 this.visibleF = true;
+            }
         },
         // 对话框显示 自动聚焦name输入框
         visible (bool) {
@@ -186,10 +188,73 @@ export default {
         // 执行保存配置操作
         saveConfig () {
             this.$refs.workflowConfigForm.validate(valid => {
-                if (!valid) return;
-                this.$emit('save', this.formData);
-                this.dialogVisible = false;
+                if (!valid) return; 
+                this.visibleF = false;
+                // this.$emit('save', this.formData);
             });
+        },
+        //手工活动保存
+        saveFormData(e,e2,e3){console.log(e,e2,e3)
+            this.formData = e;
+            this.data.mactivity = {
+                "fcode": e.workCode,
+                "foid": e.workId,
+                "fname": e.work,
+            };
+            this.data.dataType = {
+                "fmclassCode": e.workDataCode,
+                "fmclassOid": e.workDataId,
+                "fmclassName": e.workData,
+            };
+            this.data.hidden = e.hidden;
+            this.data.fremark = e.fremark;
+            this.data.displayName = e.displayName;
+            this.data.orgUnit = {
+                "id": e.structureId,
+            };  
+            //参与者
+            this.data.permission = e.permission;
+            this.data.mntNextJoin = e.mntNextJoin;
+            this.data.canSkip = e.canSkip;
+            this.data.multMail = e.multMail;
+            //参与-表格
+            e2.forEach(item => {
+                this.data.wfParticipator = {
+                    participator:[
+                        {
+                            "oid":item.oid,
+                            //6:表示 选择的是职务
+                            "type": item.type,
+                            //表达式的值 
+                             [item.typeName]:{
+                                "oid": item.oid,
+                                "code":item.fUsercode,
+                                "name":item.fUsername
+                            },
+                            "expression":item.fUserRemake
+                        }
+                    ]
+                };
+            });
+            //抄送-表格
+            e3.forEach(item => {
+                this.data.wfCopyTo = {
+                    copyTo:[
+                        {
+                            "oid":item.oid,
+                            "type": item.type,
+                            //表达式的值 
+                            [item.typeName]:{
+                                "oid": item.oid,
+                                "code":item.fUsercode,
+                                "name":item.fUsername
+                            },
+                            "expression":item.fUserRemake
+                        }
+                    ]
+                };
+            });
+            this.dialogVisible = false;
         },
     }
 };
