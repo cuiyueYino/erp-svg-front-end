@@ -161,8 +161,7 @@ class ITEMData {
                     {
                     index: 'menuManagement',
                     title: '功能菜单'
-                    }
-                   
+                    },
                 ]
             },
         ];

@@ -35,7 +35,6 @@
                         :page-size="pageSize"
                         @current-change="onCurrentChange"
                         @selection-change="onSelectionChange"
-                        @size-change="onSizeChange"
                         v-loading="false"
                         element-loading-text="加载中"
                     ></dynamic-table>
@@ -63,7 +62,7 @@
                     <el-col :span="6" class="elColCenter">编码</el-col>
                     <el-col :span="6"  class="elColCenter">左右匹配</el-col>
                     <el-col :span="8">
-                       <el-input v-model="dialog.codeNomber"></el-input>
+                       <el-input v-model="dialog.code"></el-input>
                     </el-col>
                 </el-row>
                 <el-row class="elrowStyle">
@@ -115,38 +114,27 @@ export default {
             dialog:{
                 name:'',
                 company:'',
-                codeNomber:'',
+                code:'',
             },
             columns: [
                 {
                     type: 'selection'
                 },
                 {
-                    key: 'statusString',
-                    title: '状态'
-                },
-                {
-                    key: 'code',
+                    key: 'fcode',
                     title: '编码'
                 },
                 {
-                    key: 'name',
+                    key: 'fname',
                     title: '名称'
                 },
                 {
-                    key: 'natural',
-                    title: '本位币'
-                },
-                {
-                    key: 'symbol',
-                    title: '符号'
-                },
-                {
-                    key: 'remark',
+                    key: 'fremark',
                     title: '描述'
                 }
             ],
             tableData:[],
+            multipleSelection:[],
             address: [
                 {
                     value: 'QS_0005',
@@ -163,47 +151,60 @@ export default {
         //关闭当前dialog时给父组件传值
         handleClose(){
             //返回选中的父组件选中的row,并修某些改值
-            this.$emit('changeShow',this.rowBCSDataObj,false);
+            this.$emit('changeShow',this.rowBADataObj,false);
         },
+        //选中数据改变
         onSelectionChange(val) {
             this.multipleSelection = val;
-        },
-        //分页
-        onSizeChange(val) {
-            this.pageSize = val;
         },
         //下一页
         onCurrentChange(val) {
             let formDataA ={};
             formDataA.page=val;
             formDataA.size=this.pageSize;
-            /*this.$api.task.findCurrencyPageList(formDataA).then(response => {
+            this.getActivity(formDataA);
+        },
+        //提交
+        savefinanceValue(){
+            let SelectData=this.multipleSelection;
+            if(SelectData.length > 1){
+                this.$message.error("只能选择一个!");
+            }else{
+                if(SelectData[0]){
+                    this.rowBADataObj.selectBADataObj=SelectData[0];
+                    this.$emit('changeShow',this.rowBADataObj,false);
+                }else{
+                    this.$message.error("请选择一行数据!");
+                }
+            }
+        },
+        //高级查询
+        onHandleMoreSearch(){
+            let formDataA ={};
+            formDataA.page=this.pageNum;
+            formDataA.size=this.pageSize;
+            if(this.dialog.code){
+                formDataA.fcode=this.dialog.code;
+            }
+            if(this.dialog.name){
+                formDataA.fname=this.dialog.name;
+            }
+            this.getActivity(formDataA);
+        },
+        //获取业务活动
+        getActivity(data){
+            let formDataA =data;
+            this.$api.SystemSet.getProcessActivity(formDataA).then(response => {
                 let responsevalue = response;
                 if (responsevalue) {
                     let returndata = responsevalue.data;
-                    let tableDataArr=returndata.rows;
-                    for(var i =0;i<tableDataArr.length;i++){
-                        if(tableDataArr[i].status === 1){
-                            tableDataArr[i].statusString="暂存";
-                        }else if(tableDataArr[i].status === 2){
-                            tableDataArr[i].statusString="提交";
-                        }else if(tableDataArr[i].status === 3){
-                            tableDataArr[i].statusString="有效";
-                        }else {
-                            tableDataArr[i].statusString="作废";
-                        }
-                    }
+                    let tableDataArr=returndata.data.rows;
                     this.tableData = tableDataArr;
-                    this.total = returndata.total;
+                    this.total=returndata.data.total;
                 } else {
-                    this.$message.success('没有查到数据!');
+                    this.$message.success('查询失败!');
                 }
-            });
-            */
-        },
-        savefinanceValue(){},
-        onHandleMoreSearch(){
-
+            })
         }
     },
     watch:{
@@ -213,6 +214,10 @@ export default {
             this.title=rowDataObj.nametitle;
             this.formdata.searchName=rowDataObj.finanrowId;
             this.rowFincename=rowDataObj.finanrowname;
+            let formData ={};
+            formData.page=this.pageNum;
+            formData.size=this.pageSize;
+            this.getActivity(formData);
         }
     }
 }

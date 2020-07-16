@@ -26,12 +26,12 @@
                     <el-row>
                         <el-col :span="10">
                             <el-form-item label="显示顺序">
-                                <el-input v-model="formdata.voucherid" ></el-input>
+                                <el-input v-model="formdata.orderNum" ></el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="10" :offset="2">
                             <el-form-item label="菜单类型">
-                                <el-select v-model="formdata.company" clearable>
+                                <el-select v-model="formdata.menuType" value-key="value" clearable>
                                     <el-option
                                         v-for="item in menuData"
                                         :key="item.value"
@@ -45,7 +45,7 @@
                     <el-row>
                         <el-col :span="9">
                             <el-form-item label="业务活动">
-                                <el-input v-model="formdata.voucherid" ></el-input>
+                                <el-input v-model="formdata.activityName" ></el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="1">
@@ -53,47 +53,21 @@
                         </el-col>
                         <el-col :span="10" :offset="2">
                             <el-form-item label="是否可见">
-                                <el-checkbox v-model="checked"></el-checkbox>
+                                <el-checkbox v-model="formdata.visible"></el-checkbox>
                             </el-form-item>
                         </el-col>
                     </el-row>
                     <el-row>
                         <el-col :span="22">
                             <el-form-item label="链接">
-                                <el-input type="textarea" v-model="formdata.purpose" :rows="1" ></el-input>
-                            </el-form-item>
-                        </el-col>
-                    </el-row>
-                    <el-row>
-                        <el-col :span="10">
-                            <el-form-item label="显示位置">
-                                <el-select v-model="formdata.company" clearable>
-                                    <el-option
-                                        v-for="item in positionData"
-                                        :key="item.value"
-                                        :label="item.label"
-                                        :value="item.value"
-                                    ></el-option>
-                                </el-select>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="10" :offset="2">
-                            <el-form-item label="提示">
-                                <el-input v-model="formdata.voucherid" ></el-input>
-                            </el-form-item>
-                        </el-col>
-                    </el-row>
-                    <el-row>
-                        <el-col :span="10">
-                            <el-form-item label="图标">
-                                <el-input v-model="formdata.voucherid" ></el-input>
+                                <el-input type="textarea" v-model="formdata.url" :rows="1" ></el-input>
                             </el-form-item>
                         </el-col>
                     </el-row>
                     <el-row>
                         <el-col :span="22">
                             <el-form-item label="描述">
-                                <el-input type="textarea" v-model="formdata.purpose" :rows="3" ></el-input>
+                                <el-input type="textarea" v-model="formdata.remark" :rows="3" ></el-input>
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -123,53 +97,37 @@ export default {
             rowBAtype:false,
             rowBADataObj:{},
             formdata:{
-
+                visible:false,
             },
             checked:false,
             title:'',
             menuData:[
                 {
-                    value: '',
+                    value: 0,
                     label: '--请选择--'
                 },
                 {
-                    value: '1',
+                    value: 1,
                     label: '菜单'
                 },
                 {
-                    value: '2',
+                    value: 2,
                     label: '菜单项'
-                },
-            ],
-            positionData:[
-                {
-                    value: '',
-                    label: '--请选择--'
-                },
-                {
-                    value: '1',
-                    label: '缺省'
-                },
-                {
-                    value: '2',
-                    label: '新窗口'
-                },
-                {
-                    value: '3',
-                    label: '顶层窗口'
                 },
             ],
             labelPosition: 'left',
             rules: {
                 code:[{ required: true, message: '请输入编码', trigger: 'blur' }],
                 name:[{ required: true, message: '请输入名称', trigger: 'blur' }],
-            }
+            },
+            NewOrEditFlag:'',
         }
     },
     methods: {
         //关闭当前dialog时给父组件传值
         handleClose(){
-            this.$emit('changeShow',this.rowNRMDataObj,false);
+            this.ShowFinancVisible=false;
+            this.$emit('changeShow',false);
         },
         MoreSearchCSCSubject(){
             this.rowBAtype = true;
@@ -180,20 +138,104 @@ export default {
             this.rowBADataObj=finandata;
         },
         onHandleSave(){
-          this.$emit('changeShow',this.rowNRMDataObj,false);  
+            let fromDataS={};
+            fromDataS=this.formdata;
+            let SaveFlag=false;
+            if(this.formdata.code){
+                fromDataS.code=this.formdata.code;
+                SaveFlag=true;
+            }else{
+                this.$message.error('请输入编号!');
+                SaveFlag=false
+            }
+            if(this.formdata.name){
+                fromDataS.name=this.formdata.name;
+                SaveFlag=true;
+            }else{
+                this.$message.error('请输入名称!');
+                SaveFlag=false
+            }
+            if(this.NewOrEditFlag==="NEW"){
+                fromDataS.creator=localStorage.getItem('ms_userId');
+            }else{
+                fromDataS.handler=localStorage.getItem('ms_userId');
+            }
+            if(this.NewOrEditFlag==="NEW"){
+                this.saveNewMenu(fromDataS);
+            }else{
+                this.saveEditmenu(fromDataS);
+            }
         },
+        //查询业务活动返回处理
         showAddBusAct(data,type){
             if(type === false){
                 this.rowBAtype = false
             }else{
                 this.rowBAtype = true
             }
+            if(data.selectBADataObj){
+                this.formdata.activityName=data.selectBADataObj.fname;
+                this.formdata.activity=data.selectBADataObj.foid;
+            }
+        },
+        //根据ID查询菜单
+        getMenuByIDFunction(data){
+            let formDataA =data;
+            this.$api.SystemSet.getMenuById(formDataA).then(response => {
+                let responsevalue = response;
+                if (responsevalue) {
+                    let returndata = responsevalue.data;
+                    let tableDataArr=returndata.data;
+                    this.formdata = tableDataArr;
+                } else {
+                    this.$message.success('查询失败!');
+                }
+            })
+        },
+        //新建menu提交
+        saveNewMenu(data){
+            let formDataA =data;
+            this.$api.SystemSet.insertMenuModel(formDataA).then(response => {
+                let responsevalue = response;
+                if (responsevalue.data.data=="success") {
+                    this.$message.success('新建成功!');
+                    this.ShowFinancVisible=false;
+                    this.$emit('changeShow',false);
+                    this.reload();
+                } else {
+                    this.$message.error(responsevalue.data.msg);
+                }
+            });
+        },
+        //修改menu提交
+        saveEditmenu(data){
+            let formDataA =data;
+            this.$api.SystemSet.updateMenuModel(formDataA).then(response => {
+                let responsevalue = response;
+                if (responsevalue.data.data=="success") {
+                    this.$message.success('修改成功!');
+                    this.ShowFinancVisible=false;
+                    this.$emit('changeShow',false);
+                    this.reload();
+                } else {
+                    this.$message.error(responsevalue.data.msg);
+                }
+            });
         }
     },
     watch:{
         rowNMMtype(oldVal,newVal){
             this.ShowFinancVisible=this.rowNMMtype;
             this.title=this.rowNMMDataObj.nametitle;
+            this.NewOrEditFlag=this.rowNMMDataObj.NewOrEditFlag;
+            if(this.rowNMMDataObj.NewOrEditFlag==="NEW"){
+                this.formdata={};
+                this.formdata.company=this.rowNMMDataObj.company;   
+            }else{
+                let fromdataA={};
+                fromdataA.id=this.rowNMMDataObj.MenuID;
+                this.getMenuByIDFunction(fromdataA);
+            }
         }
     }
 }
