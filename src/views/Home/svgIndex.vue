@@ -6,6 +6,7 @@
 
         <el-dialog 
         :fullscreen="true"
+        :close-on-press-escape="false"
         :visible.sync="dialogTableVisible">
 
         <div
@@ -140,7 +141,7 @@
                 <!-- 条件节点 -->
                 <condition-node
                     :key="index"
-                    v-else-if="node.type === 'Condition' || node.type === 'Fork' || node.type === 'Join' "
+                    v-else-if="node.type === 'Condition'  || node.type === 'Process' || node.type === 'Fork' || node.type === 'Join' "
                     :icon="node.type === 'Condition'?'el-icon-user':node.type === 'Fork'?'el-icon-plus-supply-chain':
                     node.type === 'Join'?'el-icon-plus-param': ''"
                     :width="node.options.width"
@@ -220,6 +221,16 @@
             </config-form>
         </div>
 </el-dialog>
+ <!-- 保存弹出框内容 -->
+    <!-- <el-dialog
+        title="工作流保存"
+        :visible.sync="dialogSaveVisible"
+        :modal="false"
+        :close-on-click-modal="closeConfig"
+        :close-on-press-escape="closeConfig"
+        width="600px">
+            1111
+        </el-dialog> -->
     </div>
 </template>
 
@@ -246,6 +257,9 @@ export default {
     mixins: [workflowMixin],
     data () {
         return {
+             dialogSaveVisible:false,
+              // 关闭对话框配置
+            closeConfig: false,
             dataObj:dataJson.WfProcess,
             // dataObj:xmlStr,
             dialogTableVisible:true,
@@ -290,13 +304,11 @@ export default {
     },
     watch: {},
     created () {
-        if(this.$route.params){
-            console.log(this.$route.params)
-        }
+       
     },
     mounted () {
        this.$nextTick(()=>{
-            console.log(this.dataObj)
+            //console.log(this.dataObj)
             if(this.dataObj){
             let newObj=[];
             let newCondition=[];
@@ -451,7 +463,7 @@ export default {
                 
             })
             this.dataObj = newObj
-            console.log(this.dataObj)
+            // console.log(this.dataObj)
         }
 
         
@@ -599,7 +611,7 @@ export default {
                 visible: false,
                 key: key
             });
-            console.log(this.workflowNodes)
+           // console.log(this.workflowNodes)
             // this.$set(this.workflowNodes, len, {
             //     ...item,
             //     visible: false,

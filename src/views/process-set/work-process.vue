@@ -43,36 +43,58 @@
     <!-- 弹出框 -->
         <el-dialog title="流程维护" :visible.sync="dialogFormVisible" :close-on-click-modal="false">
             <el-form :model="form" :rules="rules" ref="form">
+                <el-col :span="22">
                 <el-form-item label="编码：" :label-width="formLabelWidth" prop="fcode">
                     <el-input v-model="form.fcode" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="名称：" :label-width="formLabelWidth" prop="fname">
                     <el-input v-model="form.fname" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="组织结构单元：" :label-width="formLabelWidth">
-                    <el-input v-model="form.date2" autocomplete="off"></el-input>
+                <el-form-item label="组织结构" :label-width="formLabelWidth" style="position:relative;">
+                    <el-input v-model="form.structure" autocomplete="off"></el-input>
+                    <img
+                    class="icon-search"
+                    src="../../assets/img/search.svg"
+                    @click="baseInputTable('用户','组织结构查询')"
+                    />
                 </el-form-item>
-                <el-form-item label="子流程：" :label-width="formLabelWidth">
+                <el-form-item label="子流程：" :label-width="formLabelWidth"> 
                     <el-checkbox v-model="checked"></el-checkbox>
                 </el-form-item>
                 <el-form-item label="描述：" :label-width="formLabelWidth">
                     <el-input maxlength="1000" show-word-limit autosize type="textarea" v-model="form.fremark"></el-input>
                 </el-form-item>
+                </el-col>
             </el-form>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="dialogFormVisible = false">取 消</el-button>
                 <el-button type="primary" @click="addSubmit('form')">确 定</el-button>
             </div>
         </el-dialog>
+         <el-form :model="formProcess"  ref="formProcess">
+         <!-- 第三层弹窗 -->
+            <base-info-dialog
+                class="children-dialog"
+                :visible="baseInputTableF"
+                :type="baseInputType"
+                :title="baseInputTitle"
+                @closeDialog="closeBaseInfo"
+            ></base-info-dialog>
+        </el-form>
     </div>
 </template>
 
 <script>
 import DynamicTable from '../../components/common/dytable/dytable.vue';
+import baseInfoDialog from "../Home/node-components/base-info-dialog";
 export default {
     name:'workProcess',
     data() {
         return {
+            formProcess:{},
+             baseInputType: "",
+             baseInputTitle: "",
+             baseInputTableF: false,
             dialogFormVisible:false,
             formCode:'',
             pageNum: 1,
@@ -127,6 +149,7 @@ export default {
     },
     components: {
       DynamicTable,
+       baseInfoDialog
     },
     created(){
         this.$nextTick(()=>{
@@ -138,7 +161,7 @@ export default {
     },
     methods:{
         //多选
-        onSelectionChange(val) {
+        onSelectionChange(val) {console.log(val)
             this.multipleSelection = val;
         },
         //分页、下一页
@@ -153,6 +176,19 @@ export default {
         getAll(){
             this.getTableData('')
         },
+         closeBaseInfo(data, dialogtitle, type) {
+            if (data.length > 0) {
+                this.form.structure = data[0].fname;
+                this.form.structurecode = data[0].fcode;
+                this.form.structureId = data[0].foid;
+            }
+            this.baseInputTableF = false;
+            },
+         baseInputTable(str, title) {
+            this.baseInputTableF = true;
+            this.baseInputTitle = title;
+            this.baseInputType = str;
+        },
         // 获取表格数据
         getTableData(params){
             let data = {
@@ -162,6 +198,7 @@ export default {
             };
             this.$api.processSet.getTableData(data).then(res=>{
                 this.tableData = res.data.data.rows
+                 this.total = res.data.data.total
                 for(let i in this.tableData){
                     switch ( this.tableData[i].fstatus) {
                         case 3:
@@ -195,12 +232,15 @@ export default {
         addSubmit(formName){
              this.$refs[formName].validate((valid) => {
                 if (valid) {
+                    this.form.fsubprocess = this.checked?1:0;
                     this.$api.processSet.addSubmit(this.form).then(res=>{
-                        if(res.data.data.msg = "success"){
+                        if(res.data.data.msg == "success"){
                             this.dialogFormVisible = false
                             this.$message.success('新增成功');
                             //刷新表格
                             this.getTableData('')
+                        }else{
+                            this.$message.error(res.data.data.msg );
                         }
                     }),error=>{
                         console.log(error);
@@ -217,7 +257,10 @@ export default {
             if(this.multipleSelection.length > 1){
                  this.$message.error('只能选择一个删除');
                  return;
-            }
+            }else if(this.multipleSelection.length == 0){
+                this.$message.error('请选择一项删除');
+                 return;
+            };
             this.$api.processSet.deleteMsg(this.multipleSelection[0].foid).then(res=>{
                     if(res.data.data.msg = "success"){
                         this.$message.success('删除成功');
@@ -232,10 +275,10 @@ export default {
         effectOrDisableMsg(){
             let status = this.multipleSelection[0];
             if(this.multipleSelection.length > 1){
-                 this.$message.error('只能选择一个删除');
+                 this.$message.error('只能选择一个操作');
                  return;
-            }else if(this.multipleSelection.length = 0){
-                this.$message.error('请选择一项删除');
+            }else if(this.multipleSelection.length == 0){
+                this.$message.error('请选择一项操作');
                  return;
             };
             
@@ -268,15 +311,23 @@ export default {
              if(this.multipleSelection.length > 1){
                  this.$message.error('只能选择一个编辑');
                  return;
-            }else if(this.multipleSelection.length = 0){
+            }else if(this.multipleSelection.length == 0){
                 this.$message.error('请选择一项编辑');
                  return;
             };
+            let data = {
+               0: [this.multipleSelection[0].fcode]
+            }
+                // { "code": this.multipleSelection[0].fcode},
+                //    this.multipleSelection[0].fname,
+                // this.multipleSelection[0].foid,
+            
+            
+            sessionStorage.setItem("eidtMsgcode",  this.multipleSelection[0].fcode);
+            sessionStorage.setItem("eidtMsgfname",  this.multipleSelection[0].fname);
+            sessionStorage.setItem("eidtMsgfoid",  this.multipleSelection[0].foid);
              this.$router.push({
-                name:"svgIndex",
-                params:{
-                    data: this.multipleSelection[0]
-                }
+                name:"svgIndex"
              })
             
         },
@@ -296,5 +347,11 @@ export default {
 .search-all{
     margin-left: 50px;
 }
-
+.icon-search {
+    position: absolute;
+  width: 24px;
+  height: auto;
+  margin-left: 12px;
+  cursor: pointer;
+}
 </style>

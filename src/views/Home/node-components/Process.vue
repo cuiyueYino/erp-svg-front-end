@@ -10,11 +10,18 @@
                     <el-form-item label="名称" :label-width="formLabelWidth" prop="name">
                         <el-input ref="nameInput" v-model="formData.name" autocomplete="off" clearable></el-input>
                     </el-form-item>
+                     <el-form-item label="引用流程" prop="company">
+                        <el-select v-model="formdata.company" value-key="value" >
+                            <el-option
+                                v-for="item in options"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value"
+                            ></el-option>
+                        </el-select>
+                    </el-form-item>
                     <el-form-item label="隐藏" :label-width="formLabelWidth">
                         <el-checkbox v-model="checked"></el-checkbox>
-                    </el-form-item>
-                    <el-form-item label="汇聚模式" :label-width="formLabelWidth">
-                        <el-checkbox v-model="join"></el-checkbox>
                     </el-form-item>
                     <el-form-item label="描述：" :label-width="formLabelWidth">
                         <el-input maxlength="1000" clearable  autosize show-word-limit type="textarea" v-model="formData.fremark"></el-input>
@@ -30,12 +37,10 @@
 * @create 2019-04-11
 * @author liyuanquan
 */
-import DynamicTable from '../../../components/common/dytable/dytable.vue';
 
 export default {
-    name: 'NodeRouterTask',
+    name: 'Process',
      components: {
-      DynamicTable,
     },
     props: {
         // 配置数据源
@@ -62,7 +67,6 @@ export default {
             checked:false,
             join:false,
             autoSendChecked:false,
-            dialogTableVisible:false,
             pageNum: 1,
             pageSize: 10,
             total: 20,
@@ -80,69 +84,8 @@ export default {
             dialogVisible: this.visible,
             // 配置表单数据
             formData: this.data,
-            // task参与类型
-            typeOpt: [
-                {
-                    label: '普通参与',
-                    value: 'NORMAL'
-                },
-                {
-                    label: '会签参与',
-                    value: 'ALL'
-                }
-            ],
-            columns: [
-            {
-                type: 'selection'
-            },
-            {
-                key: 'fcode',
-                title: '类别'
-            },
-            {
-                key: 'fname',
-                title: '内容'
-            },
-            {
-                key: 'fstatus',
-                title: '描述'
-            }
-        ],
-        columns2: [
-            {
-                key: 'fcode',
-                title: '节点'
-            },
-            {
-                key: 'fname',
-                title: '节点类别'
-            },
-            {
-                key: 'fstatus',
-                title: '选择'
-            }
-        ],
-        columns3: [
-             {
-                type: 'selection'
-            },
-            {
-                key: 'fcode',
-                title: '编码'
-            },
-            {
-                key: 'fname',
-                title: '名称'
-            },
-            {
-                key: 'fremark',
-                title: '描述'
-            }
-        ],
-        tableData:[],
-        tableData2:[],
         gridData:[],
-        multipleSelection: [],
+        formdata:{},
         options: [],
         };
     },

@@ -35,13 +35,13 @@ export default {
         lineData: {
             get () {
                 this.linkData.map(item => {
-                    if (Object.keys(item).length > 2) {console.log(item)
+                    if (Object.keys(item).length > 2) {//console.log(item)
                         // 添加连接线类型
                         item.type = 'Line';
                         // 获取连接线连接点坐标 以及连接线文本偏移量
                         const { coordinate, textAlign } = this.endToEndLink(item);
                         // 设置连接线连接点坐标
-                        item.coordinate = coordinate;console.log(coordinate)
+                        item.coordinate = coordinate;//console.log(coordinate)
                         // 设置连接线文本偏移
                         item.left = textAlign[0];
                         item.top = textAlign[1];
@@ -70,7 +70,6 @@ export default {
     methods: {
         // 解析节点后生成连接线
         async compileXMLToObj (dataObj) {
-            
              // 解析成为XML格式数据
             const dataStr = await this.compileObjToXMLLoading(dataObj)
             // console.log(dataStr)
@@ -283,7 +282,7 @@ export default {
             }
         },
         // 点到点连接线生成事件
-        endToEndLink ({ from, to }) {console.log( from, to)
+        endToEndLink ({ from, to }) {//console.log( from, to)
             if (typeof from === 'undefined' || typeof to === 'undefined') return;
             // 结构出发和到达目标对象
             const fromPoint = from.target;
@@ -398,7 +397,7 @@ export default {
             }
         },
         // 节点连接线按下事件
-        handleMousedown (target, point, node) {console.log(node)
+        handleMousedown (target, point, node) {//console.log(node)
             //
             this.endObj = {};
             //
@@ -420,7 +419,7 @@ export default {
                 //
                 node.transition = [];
                 //
-                this.assistedLineStart = this.assistedLineEnd = '';console.log(this.startObj ,this.endObj)
+                this.assistedLineStart = this.assistedLineEnd = '';//console.log(this.startObj ,this.endObj)
                 // 防止起点连接终点
                 if (this.startObj.type === 'Start' && this.endObj.type === 'End') return false;
                 // 防止节点自身连接点连接
@@ -431,13 +430,13 @@ export default {
                         from: this.startObj,
                         to: this.endObj,
                         lineEdit: false
-                    });
+                    });//console.log( this.lineData)
                     this.lineData.map((item, index) => {
                         if (item.from.key === node.key) {
                             node.transition.push(item);
-                        }
+                        }//debugger
                         // 添加连接线数据
-                        if (!item.lineEdit) {
+                        if (!item.lineEdit && !item.data) {
                             this.$set(item, 'data', {
                                 name: 'Line',
                                 displayName: '新建连接'
@@ -480,8 +479,14 @@ export default {
             this.linkData.splice(index, 1);
         },
         // 点击保存工作流按钮执行事件
-        saveWorkflow (workflowNodes) {
-            console.log(workflowNodes)
+        saveWorkflow (workflowNodes) { console.log( sessionStorage.getItem("eidtMsg"))
+            let data = {
+                    "code":  sessionStorage.getItem("eidtMsgcode"),
+                    "name":  sessionStorage.getItem("eidtMsgfname"),
+                    "oid":  sessionStorage.getItem("eidtMsgfoid"),
+                    "nodes": workflowNodes
+                };
+            console.log(data)
             //
             this.selectedNode = {};
             // 设置保存标识
@@ -491,7 +496,13 @@ export default {
             //
             this.$set(this.selectedNode, 'data', this.workflowData);
             // 打开配置对话框
-            this.dialogVisible = true;
+            // this.dialogSaveVisible = true;
+            this.$api.svg.addSvg(data).then(res=>{
+              console.log(res)
+              sessionStorage.setItem("eidtMsg",null)
+            },error=>{
+                console.log(error)
+            })
         }
     }
 };

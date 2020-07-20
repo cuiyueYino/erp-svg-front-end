@@ -16,7 +16,7 @@
                     <el-input v-model="formData.workData" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="隐藏" :label-width="formLabelWidth">
-                    <el-checkbox v-model="checked"></el-checkbox>
+                    <el-checkbox v-model="formData.checked"></el-checkbox>
                 </el-form-item>
                 <el-form-item label="描述：" :label-width="formLabelWidth">
                     <el-input maxlength="1000" clearable  autosize show-word-limit type="textarea" v-model="formData.fremark"></el-input>
@@ -145,11 +145,6 @@ export default {
             default: false
         }
     },
-    watch:{
-        visible(val){
-            this.visible = val
-        },
-    },
     data () {
         return {
             tableLoading:false,
@@ -271,9 +266,14 @@ export default {
         visible (bool) {
             this.dialogVisible = bool;
             if (bool) {
-                setTimeout(() => {
-                    this.$refs.nameInput.focus();
-                }, 100);
+                // setTimeout(() => {
+                //     this.$refs.nameInput.focus();
+                // }, 100);
+            }else {
+                this.$emit(
+                "saveFormData",
+                this.formData
+                ); //console.log( this.formData)
             }
         }
     },
@@ -301,8 +301,13 @@ export default {
                 this.$message.error('请正确选择');
                 return
             }
-            this.formData.work = this.multipleSelection[0].fname
-             this.dialogTableVisible = false;
+            this.formData.work = this.multipleSelection[0].fname;
+            this.formData.workCode = this.multipleSelection[0].fcode;
+            this.formData.workId = this.multipleSelection[0].foid;
+            this.formData.workDataId = this.multipleSelection[0].fmclassOid;
+            this.formData.workData = this.multipleSelection[0].fmclassName;
+            this.formData.workDataCode = this.multipleSelection[0].fmclassCode;
+            this.dialogTableVisible = false;
             // console.log(this.formData.work )
         },
         add(){
@@ -322,27 +327,26 @@ export default {
             this.workSearchTable()
         },
          workSearch(){
-             // 业务工作-搜索枚举项
-            // this.workSearchOption()
-            // this.workSearchTable()
+            // 业务工作-搜索枚举项
+            this.workSearchOption();
+            this.workSearchTable();
             this.dialogTableVisible = true;
         },
         // 业务工作-获取表格数据
         workSearchTable(){
-            
             this.tableLoading = true;
              let data = {
                 fcode: this.formData.formCode,
                 fname: this.formData.formName,
-                fmfunctiontypecon: this.formData.formCtionTypeCon,
+                fmfunctiontypecon: 5,
                 page:this.pageNum,
                 size:this.pageSize
             };
             this.$api.processSet.workSearchData(data).then(res=>{
                 this.tableLoading = false;
                 this.gridData = res.data.data.rows
-                
-                
+                this.pageNum = res.data.data.page;
+                this.total = res.data.data.total;
             },error=>{
                 console.log(error)
             })

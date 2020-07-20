@@ -7,6 +7,7 @@ const workFlowMon = {
     getTableData(params){
         return httpReqest.post('/api/wfInterfaces/workFlow/findWorkFlowProcessList', params);
     },
+    
 };
 
 export default workFlowMon;

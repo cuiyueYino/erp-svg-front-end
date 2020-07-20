@@ -229,7 +229,7 @@ export default {
     },
     watch: {
          // 对话框显示 自动聚焦name输入框
-        visible (bool) {
+        visible (bool) {//console.log(bool)
             this.dialogVisible = bool;
             //角色查询
             if(this.type ==="角色"){
@@ -385,6 +385,36 @@ export default {
                     this.gridData = resData;
                     this.total = res.data.data.total;
                     this.totalpage=true;
+                },error=>{
+                    console.log(error)
+                })
+            }
+            //审核 
+            if(this.type ==="审核"){
+                  this.columns3=[
+                    {
+                        type: 'selection'
+                    },
+                    {
+                        key: 'fcode',
+                        title: '编码'
+                    },
+                    {
+                        key: 'fname',
+                        title: '名称'
+                    },
+                    {
+                        key: 'fremark',
+                        title: '描述'
+                    }
+                ];
+                let fromdata={};
+                fromdata.page=this.pageNum;
+                fromdata.size=this.pageSize
+                this.$api.svg.getProcessData(fromdata).then(res=>{
+                    let resData=res.data.data.rows;
+                    this.gridData = resData;
+                    this.total = res.data.data.total;
                 },error=>{
                     console.log(error)
                 })

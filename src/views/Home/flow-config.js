@@ -37,6 +37,12 @@ export function NodeConfig () {
             height: 76,
             visible: false,
             color: '#909399'
+        },
+        process: {
+            width: 120,
+            height: 76,
+            visible: false,
+            color: '#9389fb'
         }
        
     };
@@ -137,6 +143,21 @@ export function NodesData () {
             data: {
                 name: 'Join',
                 displayName: '审核活动'
+            }
+        },
+        {
+            type: 'Process',
+            name: '子流程',
+            icon: 'el-icon-connection',
+            options: {
+                ...nodeConfig.process,
+                x: 0,
+                y: 0,
+                draggable: true
+            },
+            data: {
+                name: 'Process',
+                displayName: '子流程'
             }
         }
     ];

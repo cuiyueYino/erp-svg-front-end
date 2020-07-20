@@ -5,10 +5,10 @@
         <el-tabs v-model="activeName" @tab-click="handleClick">
             <el-tab-pane label="基本信息" name="1">
                  <el-form-item label="编码" :label-width="formLabelWidth" prop="name">
-                    <el-input ref="nameInput" v-model="formData.name" autocomplete="off" clearable></el-input>
+                    <el-input ref="nameInput" v-model="formData.code" autocomplete="off" clearable></el-input>
                 </el-form-item>
                 <el-form-item label="名称" :label-width="formLabelWidth" prop="name">
-                    <el-input ref="nameInput" v-model="formData.name" autocomplete="off" clearable></el-input>
+                    <el-input  v-model="formData.name" autocomplete="off" clearable></el-input>
                 </el-form-item>
                  <el-form-item label="起点" :label-width="formLabelWidth" >
                     <el-input v-model="formData.workData" autocomplete="off"></el-input>
@@ -145,11 +145,6 @@ export default {
             default: false
         }
     },
-    watch:{
-        visible(val){
-            this.visible = val
-        },
-    },
     data () {
         return {
             baseActiveName:'1',
@@ -217,7 +212,12 @@ export default {
         data: {
             handler (obj) {
                 this.formData = JSON.parse(JSON.stringify(obj));
-                // console.log( this.formData)
+                console.log( this.formData,this.data);
+                if( this.data.displayName !== '新建连接' ){
+                    this.formData.name  = this.data.displayName;
+                }else{
+                    this.formData.name  = ''
+                }
             },
             deep: true,
             immediate: true
@@ -233,8 +233,20 @@ export default {
                 setTimeout(() => {
                     this.$refs.nameInput.focus();
                 }, 100);
+            }else{
+                this.$emit(
+                    "saveLineData",
+                    this.formData,
+                    this.gridDatax
+                ); 
             }
         }
+    },
+    created(){
+        this.$nextTick(()=>{
+            
+           
+        })
     },
     methods: {
         // 取消配置操作
