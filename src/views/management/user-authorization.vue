@@ -18,7 +18,7 @@
                 </el-col>
                  <el-col :span="6" :offset="6">
                     <el-button type="success" icon="el-icon-refresh" plain @click="Changedimension">切换维度</el-button> 
-                    <el-button type="success" icon="el-icon-refresh" plain @click="remove">确定</el-button>
+                    <el-button type="success" icon="el-icon-refresh" plain @click="determineSave">确定</el-button>
                  </el-col>
             </el-row>
         </el-card>
@@ -69,7 +69,7 @@
                             <el-button type="success" icon="el-icon-refresh" plain @click="getALLRight">全部</el-button>
                         </el-col>
                         <el-col :span="2" :offset="1">
-                            <el-button type="success" icon="el-icon-refresh" plain @click="RoleSelectData">已选中</el-button>
+                            <el-button type="success" icon="el-icon-refresh" plain @click="RightSelecT">已选中</el-button>
                         </el-col>
                     </el-row>
                 </el-col>
@@ -96,7 +96,6 @@
                                 background
                                 layout="prev, pager, next,jumper,total"
                                 :page-size="pageSize"
-                                @size-change="onSizeChange"
                                 @current-change="onUserCurrentChange"
                             >
                             </el-pagination>
@@ -121,7 +120,6 @@
                                 :total="roleLtotal"
                                 background
                                 layout="prev, pager, next,jumper,total"
-                                @size-change="onroleLSizeChange"
                                 @current-change="onroleLCurrentChange"
                             >
                             </el-pagination>
@@ -129,37 +127,54 @@
                     </div>
                 </el-col>
                 <el-col :span="11" :offset="1">
-                    <div v-if="dimension" :class="disShowPager==true?'':'CheckTable'">
-                        <dynamic-table
-                            :columns="Rolecolumns"
-                            :table-data="RoletableData"
-                            :total="total1"
-                            :page-num="pageNum1"
-                            :page-size="pageSize1"
+                    <div v-if="dimension" class="CheckTable">
+                        <el-table
                             ref="roleTable"
-                            :isShowPager="disShowPager"
-                            @current-change="onRoleCurrentChange"
-                            @selection-change="onRoleSelectionChange"
-                            v-loading="false"
-                            element-loading-text="加载中"
-                        ></dynamic-table>
+                            :data="RoletableData"
+                            tooltip-effect="dark"
+                            size="small"
+                            border
+                            style="width: 100%"
+                            @select="onRoleSelectionChange">
+                            <el-table-column type="selection" min-width="5%"></el-table-column>
+                            <el-table-column prop="code" size="small" label="角色编码" ></el-table-column>
+                            <el-table-column prop="name" size="small" label="角色名称" ></el-table-column>
+                            <el-table-column prop="company" size="small" label="公司名称" ></el-table-column>
+                        </el-table>
+                        <div class="pagination" v-if="RoletableData.length >0">
+                            <el-pagination
+                                :total="total1"
+                                background
+                                layout="prev, pager, next,jumper,total"
+                                @current-change="onRoleCurrentChange"
+                            >
+                            </el-pagination>
+                        </div>
                     </div>
-                    <div v-else :class="disShowPager==true?'':'CheckTable'">
-                        <dynamic-table
-                            :columns="UserLcolumns"
-                            :table-data="UserLtableData"
-                            :total="totalUserL"
-                            :page-num="pageNum"
-                            :page-size="pageSize"
-                            :isShowPager="disShowPager"
+                    <div v-else class="CheckTable">
+                        <el-table
                             ref="UserLTable"
-                            @current-change="onUserLCurrentChange"
-                            @selection-change="onUserLSelectionChange"
-                            v-loading="false"
-                            element-loading-text="加载中"
-                        ></dynamic-table>
+                            :data="UserLtableData"
+                            tooltip-effect="dark"
+                            size="small"
+                            border
+                            style="width: 100%"
+                            @select="onUserLSelectionChange">
+                            <el-table-column type="selection" min-width="5%"></el-table-column>
+                            <el-table-column prop="fcode" size="small" label="登录账户" ></el-table-column>
+                            <el-table-column prop="fname" size="small" label="用户名称" ></el-table-column>
+                            <el-table-column prop="company" size="small" label="公司名称" ></el-table-column>
+                        </el-table>
+                        <div class="pagination" v-if="UserLtableData.length >0">
+                            <el-pagination
+                                :total="totalUserL"
+                                background
+                                layout="prev, pager, next,jumper,total"
+                                @current-change="onUserLCurrentChange"
+                            >
+                            </el-pagination>
+                        </div>
                     </div>
-                    
                 </el-col>
             </el-row>
         </el-card>
@@ -175,6 +190,7 @@ export default {
     },
     data(){
         return{
+            ALLSelectFlage:false,
             dimension:false,
             disShowPager:true,
             companyData:new proData().company,
@@ -186,6 +202,7 @@ export default {
             total: 2,
             pageNum1: 1,
             pageSize1: 10,
+            pageSize2: 10,
             total1: 2,
             totalUserL: 2,
             roleLtotal: 2,
@@ -221,7 +238,7 @@ export default {
                 },
                 {
                     key: 'fcode',
-                    title: '登录账户'
+                    title: ''
                 },
                 {
                     key: 'fname',
@@ -280,7 +297,10 @@ export default {
         fromdata.page=this.pageNum;
         fromdata.size=this.pageSize;
         this.searchRole(fromdata);
-        this.getUserData(fromdata);
+        let fromdataU={};
+        fromdataU.page=this.pageNum;
+        fromdataU.size=this.pageSize;
+        this.getUserData(fromdataU);
     },
     methods:{
         //获取人员
@@ -295,6 +315,35 @@ export default {
                     this.UsertableData=tableDataArr;
                     this.total = responsevalue.data.data.total;
                     this.totalUserL= responsevalue.data.data.total;
+                    if(this.dimension === false){
+                        this.$nextTick(() => {
+                            // 在这里面去设置人员选中
+                            this.selectRUserRow();
+                        });
+                    }
+                } else {
+                    this.$message.success('数据库没有该条数据!');
+                }
+            });
+        },
+        //通过ID字符串查用户
+        getUserDataByID(data,total){
+            let fromdata=data;
+            this.$api.management.getUserByIds(fromdata).then(response => {
+                let responsevalue = response;
+                if (responsevalue) {
+                    let returndata = responsevalue.data;
+                    let tableDataArr=returndata.data;
+                    this.UserLtableData=tableDataArr;
+                    this.UsertableData=tableDataArr;
+                    this.total = total;
+                    this.totalUserL= total;
+                    if(this.dimension === false){
+                        this.$nextTick(() => {
+                            // 在这里面去设置人员选中
+                            this.selectRUserRow();
+                        });
+                    }
                 } else {
                     this.$message.success('数据库没有该条数据!');
                 }
@@ -312,6 +361,12 @@ export default {
                     this.RoletableData=tableDataArr;
                     this.total1=returndata.total;
                     this.roleLtotal=returndata.total;
+                    if(this.dimension){
+                        this.$nextTick(() => {
+                            // 在这里面去设置角色选中
+                            this.selectRRoleRow();
+                        });
+                    }
                 } else {
                     this.$message.success('数据库没有该条数据!');
                 }
@@ -319,6 +374,7 @@ export default {
         },
         //左边过滤条件
         filterLeft(){
+            this.ALLSelectFlage=false;
             if(this.dimension ==true){
                 let  fromdata={};
                 fromdata.page=this.pageNum;
@@ -349,10 +405,12 @@ export default {
         filterRight(){
             //formInline.regionRight
             //formInline.searchValueright
+            this.disShowPager=true;
+            this.ALLSelectFlage=false;
             if(this.dimension ==true){
                 let  fromdataU={};
                 fromdataU.page=this.pageNum;
-                fromdataU.size=this.pageSize;
+                fromdataU.size=this.pageSize1;
                 if(this.formInline.regionRight=="name"){
                     fromdataU.name=this.formInline.searchValueright;
                 }else if(this.formInline.regionRight=="code"){
@@ -364,7 +422,7 @@ export default {
             }else{
                 let  fromdata={};
                 fromdata.page=this.pageNum;
-                fromdata.size=this.pageSize;
+                fromdata.size=this.pageSize2;
                 if(this.formInline.regionRight=="name"){
                     fromdata.fname=this.formInline.searchValueright;
                 }else if(this.formInline.regionRight=="code"){
@@ -377,6 +435,7 @@ export default {
         },
         //左边全部点击事件
         getALLLeft(){
+            this.ALLSelectFlage=false;
             if(this.dimension ==true){
                 let  fromdata={};
                 fromdata.page=this.pageNum;
@@ -391,26 +450,35 @@ export default {
         },
         //右边全部点击事件
         getALLRight(){
+            this.ALLSelectFlage=false;
+            this.disShowPager=true;
             if(this.dimension ==true){
                 let  fromdataU={};
                 fromdataU.page=this.pageNum;
-                fromdataU.size=this.pageSize;
+                fromdataU.size=this.pageSize1;
                 this.searchRole(fromdataU);
             }else{
                 let  fromdata={};
                 fromdata.page=this.pageNum;
-                fromdata.size=this.pageSize;
+                fromdata.size=this.pageSize2;
                 this.getUserData(fromdata);
             }
         },
-        remove(){},
         //切换维度
         Changedimension(){
+            this.disShowPager=true;
+            this.ALLSelectFlage=false;
             //切换维度前清空搜索条件
             this.formInline.regionleft='';
             this.formInline.regionRight='';
             this.formInline.searchValueleft='';
             this.formInline.searchValueright='';
+            this.UserselectedList=[];
+            this.UserselectedRow=[];
+            this.roleLselectedList=[];
+            this.roleLselectedRow=[];
+            this.RUserLselectData=[];
+            this.RoleselectData=[];
             //切换维度
             if(this.dimension ==true){
                 this.dimension=false;
@@ -421,31 +489,61 @@ export default {
                 this.leftData=this.UserData;
                 this.rightData=this.roleData;
             }
+            let fromdata={};
+            fromdata.page=this.pageNum;
+            fromdata.size=this.pageSize;
+            this.searchRole(fromdata);
+            let fromdataU={};
+            fromdataU.page=this.pageNum;
+            fromdataU.size=this.pageSize;
+            this.getUserData(fromdataU);
         },
+        //左侧人员table行点击事件
         selectRow(row, column, event){
             this.UserselectedList=[];
             this.UserselectedList.push(row);
-
+            //通过用户查询角色
+            this.RoleselectData=[];
+            let fromdata={};
+            fromdata.userId=row.foid;
+            this.$api.management.findRoleByUserId(fromdata).then(response => {
+                let responsevalue = response;
+                if (responsevalue) {
+                    let returndata = responsevalue.data;
+                    let tableDataArr=returndata.data;
+                    this.RoleselectData=tableDataArr;
+                    this.$nextTick(() => {
+                        // 在这里面去设置角色选中
+                        this.selectRRoleRow();
+                    });
+                } else {
+                    this.$message.success('数据库没有该条数据!');
+                }
+            });
         },
         rowClass(data){
             if(this.UserselectedRow.includes(data.rowIndex)){
                 return {"background-color":"#98F898"}
             }
         },
-        //角色table行点击事件
+        //左侧角色table行点击事件
         selectroleLRow(row, column, event){
             this.roleLselectedList=[];
             this.roleLselectedList.push(row);
-            console.log(row)
             //通过角色查询用户
+            this.RUserLselectData=[];
             let fromdata={};
             fromdata.roleId=row.id;
             this.$api.management.findUserByRoleId(fromdata).then(response => {
                 let responsevalue = response;
                 if (responsevalue) {
                     let returndata = responsevalue.data;
-                    let tableDataArr=returndata.data.rows;
-                    console.log(returndata)
+                    let tableDataArr=returndata.data;
+                    this.RUserLselectData=tableDataArr;
+                    this.$nextTick(() => {
+                        // 在这里面去设置人员选中
+                        this.selectRUserRow();
+                    });
                 } else {
                     this.$message.success('数据库没有该条数据!');
                 }
@@ -456,28 +554,227 @@ export default {
                 return {"background-color":"#98F898"}
             }
         },
-        onroleLSizeChange(){},
-        onroleLCurrentChange(){},
-        onSizeChange(){},
-        onUserCurrentChange(row){
-            console.log("111")
+        //左侧角色分页下一页
+        onroleLCurrentChange(val){
+            let  fromdataU={};
+            fromdataU.page=val;
+            fromdataU.size=this.pageSize;
+            if(this.formInline.regionleft=="name"){
+                fromdataU.name=this.formInline.searchValueleft;
+            }else if(this.formInline.regionleft=="code"){
+                fromdataU.code=this.formInline.searchValueleft;
+            }else if(this.formInline.regionleft=="company"){
+                fromdataU.company=this.formInline.searchValueleft;
+            }
+            if(this.ALLSelectFlage==true){
+                let RoleRSelect=this.RoleselectData;
+                fromdataU.roleIds=RoleRSelect;
+            }
+            this.searchRole(fromdataU);
         },
-        //下一页
-        onRoleCurrentChange(){
-
+        //左侧人员分页下一页
+        onUserCurrentChange(val){
+            if(this.ALLSelectFlage===true){
+                this.UserSelectDataPage(val,this.pageSize,this.RUserLselectData);
+            }else{
+                let  fromdata={};
+                fromdata.page=val;
+                fromdata.size=this.pageSize;
+                if(this.formInline.regionleft=="name"){
+                    fromdata.fname=this.formInline.searchValueleft;
+                }else if(this.formInline.regionleft=="code"){
+                    fromdata.fcode=this.formInline.searchValueleft;
+                }else if(this.formInline.regionleft=="company"){
+                    fromdata.fcompanyoid=this.formInline.searchValueleft;
+                }
+                this.getUserData(fromdata);
+            }
         },
-        onRoleSelectionChange(data){
-            this.RoleselectData=data;
+        //右侧角色下一页
+        onRoleCurrentChange(val){
+            let  fromdataU={};
+            fromdataU.page=val;
+            fromdataU.size=this.pageSize1;
+            if(this.formInline.regionRight=="name"){
+                fromdataU.name=this.formInline.searchValueright;
+            }else if(this.formInline.regionRight=="code"){
+                fromdataU.code=this.formInline.searchValueright;
+            }else if(this.formInline.regionRight=="company"){
+                fromdataU.company=this.formInline.searchValueright;
+            }
+            if(this.ALLSelectFlage==true){
+                let RoleRSelect=this.RoleselectData;
+                fromdataU.roleIds=RoleRSelect;
+            }
+            this.searchRole(fromdataU);
         },
-        //role已选中
-        RoleSelectData(){
-            this.RoletableData= this.RoleselectData;
+        //右侧角色选中事件
+        onRoleSelectionChange(data,val){
+            this.getRRoleSelectedList(val.id);
         },
-        onUserLCurrentChange(){
-
+        //右侧已选中点击事件
+        RightSelecT(){
+            this.ALLSelectFlage=true;
+            if(this.dimension ==true){
+                let  fromdataU={};
+                fromdataU.page=this.pageNum;
+                fromdataU.size=this.pageSize1;
+                let RoleRSelect=this.RoleselectData;
+                fromdataU.roleIds=RoleRSelect;
+                this.searchRole(fromdataU);
+            }else{
+                this.UserSelectDataPage(this.pageNum,this.pageSize,this.RUserLselectData);
+            }
         },
-        onUserLSelectionChange(data){
-            this.RUserLselectData=data;
+        //人员已选中处理分页
+        UserSelectDataPage(pageNum,size,data){
+            let USerSelectData=[];
+            USerSelectData=data;
+            let UserIDStr='';
+            for(var i=0;i<USerSelectData.length;i++){
+                if(i>=(pageNum-1)*size && i<(pageNum*size)){
+                    UserIDStr+=USerSelectData[i]+",";
+                }
+            }
+            UserIDStr=UserIDStr.slice(0,UserIDStr.length-1);
+            let  fromdataU={};
+            fromdataU.userIds=UserIDStr;
+            this.getUserDataByID(fromdataU,USerSelectData.length);
+        },
+        //右侧角色选中去重
+        getRRoleSelectedList(id){
+            var hasId = false;
+            for (var i = 0; i < this.RoleselectData.length; i++) {
+                var item = this.RoleselectData[i];
+                if (id == item) {
+                    this.RoleselectData[i] = '';
+                    hasId = true;
+                }
+            }
+            if (!hasId) {
+                this.RoleselectData[this.RoleselectData.length] = id;
+            }
+        },
+        //右侧角色添加默认选中
+        selectRRoleRow() {
+            this.$refs.roleTable.clearSelection();
+            this.RoletableData.forEach(row => {
+                if (this.RoleselectData.includes(row.id)) {
+                    this.$refs.roleTable.toggleRowSelection(row);
+                }
+            });
+        },
+        //右侧人员下一页
+        onUserLCurrentChange(val){
+            if(this.ALLSelectFlage===true){
+                this.UserSelectDataPage(val,this.pageSize,this.RUserLselectData);
+            }else{
+                let fromdata={};
+                fromdata.page=val;
+                fromdata.size=this.pageSize2;
+                if(this.formInline.regionRight=="name"){
+                    fromdata.fname=this.formInline.searchValueright;
+                }else if(this.formInline.regionRight=="code"){
+                    fromdata.fcode=this.formInline.searchValueright;
+                }else if(this.formInline.regionRight=="company"){
+                    fromdata.fcompanyoid=this.formInline.searchValueright;
+                }
+                this.getUserData(fromdata);
+            }
+        },
+        //右侧人员选中事件
+        onUserLSelectionChange(data,val){
+            this.getRUserSelectedList(val.foid);
+        },
+        //右侧人员选中去重
+        getRUserSelectedList(id){
+            var hasId = false;
+            for (var i = 0; i < this.RUserLselectData.length; i++) {
+                var item = this.RUserLselectData[i];
+                if (id == item) {
+                    this.RUserLselectData[i] = '';
+                    hasId = true;
+                }
+            }
+            if (!hasId) {
+                this.RUserLselectData[this.RUserLselectData.length] = id;
+            }
+        },
+        //右侧人员添加默认选中
+        selectRUserRow() {
+            this.$refs.UserLTable.clearSelection();
+            this.UserLtableData.forEach(row => {
+                if (this.RUserLselectData.includes(row.foid)) {
+                    this.$refs.UserLTable.toggleRowSelection(row);
+                }
+            });
+        },
+        //确认提交事件
+        determineSave(){
+            this.ALLSelectFlage=false;
+            if(this.dimension ==true){
+                //给人员授权角色
+                let UserSelect =this.UserselectedList;
+                let RoleRSelect=this.RoleselectData;
+                if(UserSelect.length >0){
+                    if(RoleRSelect.length >0){
+                        let UserID=UserSelect[0].foid;
+                        let RoleID=[];
+                        for(var i=0;i<RoleRSelect.length;i++){
+                            if(RoleRSelect[i]){
+                                RoleID.push(RoleRSelect[i])
+                            }
+                        }
+                        let fromdata={};
+                        fromdata.roleIds=RoleID;
+                        fromdata.userId=UserID;
+                        this.$api.management.userAuthRole(fromdata).then(response => {
+                            let responsevalue = response;
+                            if (responsevalue.data.data=="success") {
+                                this.$message.success('授权成功!');
+                                this.disShowPager=true;
+                            } else {
+                                this.$message.error(responsevalue.data.msg);
+                            }
+                        });
+                    }else{
+                        this.$message.error('请选择角色数据!');     
+                    }
+                }else{
+                    this.$message.error('请选择一行人员数据!');
+                }
+            }else{
+                //给角色授权人员
+                let RoleSelect =this.roleLselectedList;
+                let UserRSelect=this.RUserLselectData;
+                if(RoleSelect.length >0){
+                    if(UserRSelect.length >0){
+                        let roleID=RoleSelect[0].id;
+                        let UserID=[];
+                        for(var i=0;i<UserRSelect.length;i++){
+                            if(UserRSelect[i]){
+                                UserID.push(UserRSelect[i])
+                            }
+                        }
+                        let FormData={};
+                        FormData.roleId=roleID;
+                        FormData.userIds=UserID;
+                        this.$api.management.roleAuthUser(FormData).then(response => {
+                            let responsevalue = response;
+                            if (responsevalue.data.data=="success") {
+                                this.$message.success('授权成功!');
+                                this.disShowPager=true;
+                            } else {
+                                this.$message.error(responsevalue.data.msg);
+                            }
+                        });
+                    }else{
+                        this.$message.error('请选择人员数据!');     
+                    }
+                }else{
+                    this.$message.error('请选择一行角色数据!');
+                }
+            }
         }
     },
     watch:{
@@ -541,7 +838,6 @@ font-size: 12px;
     background-color: skyblue;
 }
 .CheckTable{
-    height: 500px;
     overflow-y:auto;
 }
 </style>

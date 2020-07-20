@@ -89,6 +89,17 @@ const management = {
     getUserTableData(params){
         return httpReqest.post('/api/interfaces/userManage/findUserBypage', params);
     },
+    // 用户-通过ID字符串查询
+    getUserByIds(params){
+        var valueS='?';
+        for(var item in params){
+            valueS+=item+"="+params[item]+"&";
+        }
+        if(valueS.slice(valueS.length-1,valueS.length) ==="&"){
+            valueS=valueS.slice(0,valueS.length-1);
+        }
+        return httpReqest.get('/api/interfaces/userManage/getUserByIds'+valueS);
+    },
     //通过角色查询用户
     findUserByRoleId(params){
         var valueS='?';
@@ -99,6 +110,25 @@ const management = {
             valueS=valueS.slice(0,valueS.length-1);
         }
         return httpReqest.get('/api/interfaces/role/findUserByRoleId'+valueS);
+    },
+    //通过用户查询角色
+    findRoleByUserId(params){
+        var valueS='?';
+        for(var item in params){
+            valueS+=item+"="+params[item]+"&";
+        }
+        if(valueS.slice(valueS.length-1,valueS.length) ==="&"){
+            valueS=valueS.slice(0,valueS.length-1);
+        }
+        return httpReqest.get('/api/interfaces/role/findRoleByUserId'+valueS);
+    },
+    //给角色授权用户
+    roleAuthUser(params){
+        return httpReqest.post('/api/interfaces/role/roleAuthUser', params);
+    },
+    //给用户授权角色
+    userAuthRole(params){
+        return httpReqest.post('/api/interfaces/role/userAuthRole', params);
     },
 }
 export default management;
