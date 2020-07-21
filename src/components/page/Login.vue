@@ -73,8 +73,12 @@ export default {
                 
                 localStorage.setItem('ms_username', '王世超');
                 localStorage.setItem('ms_name',  '王世超');
-                localStorage.setItem('ms_roleId',  '0');
-                localStorage.setItem('ms_userId',  'BFPID000000LQW0007');
+                if(usernameS==='OA'){
+                    localStorage.setItem('ms_roleId',  '3');
+                }else{
+                    localStorage.setItem('ms_roleId',  '0');
+                }
+                localStorage.setItem('ms_userId',  'BFPID000000LR40002');
                 //用户部门
                 localStorage.setItem('ms_userDepartId',  'BFPID12333LSN033N');
                 localStorage.setItem('ms_userDepartName',  '集团信息中心');
