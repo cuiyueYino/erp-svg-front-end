@@ -66,6 +66,14 @@
               <el-input v-model="searchForm.fname" size="small" autocomplete="off"></el-input>
             </el-form-item>
           </el-col>
+          <el-col :span="12">
+            <el-form-item label="职务类型：" :label-width="formLabelWidth" prop="fname">
+              <el-input v-model="searchForm.ftype" size="small" autocomplete="off"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="1" class="el-positionType">
+              <el-button type="primary" size="mini" icon="el-icon-search" @click="queryPositionType()"></el-button>
+          </el-col>
         </el-row>
         <el-row>
           <el-form-item label="描述：" prop="fremark" :label-width="formLabelWidth">
@@ -399,11 +407,19 @@ export default {
     },
 
     toEdit(Str) {
-      this.dialogFormVisible = true;
       if (Str == "编辑") {
+        if(this.multipleSelection.length != 1){
+          this.$message.error("请选择一条数据进行编辑");
+          return;
+        }
         this.isEdit = true; //console.log(this.multipleSelection)
         this.getTableData("foid");
       }
+      this.dialogFormVisible = true;
+    },
+
+    queryPositionType(){
+      
     }
   }
 };
@@ -414,6 +430,10 @@ export default {
 }
 /deep/ .el-select {
   width: 100%;
+}
+/deep/ .el-positionType {
+    padding-left: 0px !important;
+    padding-top: 6px;
 }
 
 .box-card:first-child {
