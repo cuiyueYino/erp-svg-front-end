@@ -33,6 +33,20 @@
         </el-col>
       </el-row>
     </el-card>
+    <!-- 表格 -->
+    <el-card class="box-card">
+      <dynamic-table
+        :columns="columns"
+        :table-data="tableData"
+        :total="total"
+        :page-num="pageNum"
+        :page-size="pageSize"
+        @current-change="onCurrentChange"
+        @selection-change="onSelectionChange"
+        v-loading="false"
+        element-loading-text="加载中"
+      ></dynamic-table>
+    </el-card>
   </div>
 </template>
 
@@ -159,7 +173,7 @@ export default {
   },
   created() {
     this.$nextTick(() => {
-      this.getTableData("");
+      this.getPositionTypeTableData("");
     });
   },
   computed: {},
@@ -169,7 +183,156 @@ export default {
     }
   },
   methods: {
-      
+    filterNode(value, data) {
+      if (!value) return true;
+      return data.label.indexOf(value) !== -1;
+    },
+    baseInputTable() {
+      this.userVisible = true;
+    },
+    searchDepart() {},
+    handleNodeClick(data) {
+      console.log(data);
+    },
+    //多选
+    onSelectionChange(val) {
+      this.multipleSelection = val;
+      if (this.multipleSelection.length > 1) {
+        this.$message.error("只能选择一个");
+        return;
+      }
+    },
+    //分页、下一页
+    onCurrentChange(val) {
+      this.pageNum = val;
+      this.getPositionTypeTableData("");
+    },
+    // 搜索
+    onSubmit() {
+      console.log(this.form.select);
+      this.getPositionTypeTableData(this.form.select);
+    },
+    resetForm(formName) {
+      this.$refs[formName].resetFields();
+      this.getPositionTypeTableData("");
+    },
+    // 获取表格数据
+    getPositionTypeTableData(params) {
+      let data;
+      switch (this.isEdit) {
+        case true:
+          data = {
+            [params]: this.multipleSelection[0].foid,
+            page: this.pageNum,
+            size: this.pageSize
+          };
+          break;
+        case false:
+          data = {
+            [params]: this.form.selectVal,
+            page: this.pageNum,
+            size: this.pageSize
+          };
+          break;
+
+        default:
+          break;
+      }
+
+      this.$api.jobUserManagement.getPositionTypeTableData(data).then(
+        res => {
+          if (this.isEdit) {
+            this.searchForm = res.data.data.rows[0];
+          } else {
+            this.tableData = res.data.data.rows;
+          }
+          for (let i in this.tableData) {
+            switch (this.tableData[i].fstatus) {
+              case 3:
+                this.tableData[i].fstatus = "禁用";
+                break;
+              case 8:
+                this.tableData[i].fstatus = "生效";
+                break;
+              default:
+                break;
+            }
+          }
+        },
+        error => {
+          console.log(error);
+        }
+      );
+    },
+
+    // 新增
+    add() {
+      this.dialogFormVisible = true;
+      this.isEdit = false;
+    },
+
+    // 编辑
+    toEdit(Str) {
+      if (Str == "编辑") {
+        if (this.multipleSelection.length != 1) {
+          this.$message.error("请选择一条数据进行编辑");
+          return;
+        }
+        this.isEdit = true; //console.log(this.multipleSelection)
+        this.getPositionTypeTableData("foid");
+      }
+      this.dialogFormVisible = true;
+    },
+
+    //删除
+    deleteMsg() {
+      if (this.multipleSelection.length > 1) {
+        this.$message.error("只能选择一个删除");
+        return;
+      }
+      this.$api.jobUserManagement
+        .getPositionTypeTableData(this.multipleSelection[0].foid)
+        .then(res => {
+          if ((res.data.data = "success")) {
+            this.$message.success("删除成功");
+            //刷新表格
+            this.getPositionTypeTableData("");
+          }
+        }),
+        error => {
+          console.log(error);
+        };
+    },
+
+    //查看
+    queryMsg() {}
   }
 };
 </script>
+<style lang="scss" scoped>
+// /deep/ .el-textarea .el-input__count {
+//   background: #fff0;
+// }
+// /deep/ .el-select {
+//   width: 100%;
+// }
+// /deep/ .el-positionType {
+//     padding-left: 0px !important;
+//     padding-top: 6px;
+// }
+
+.box-card:first-child {
+  margin-bottom: 16px;
+}
+// .search-all {
+//   margin: 0 50px;
+// }
+// .icon-search {
+//   width: 24px;
+//   height: auto;
+//   position: absolute;
+//   top: 8px;
+//   left: 230px;
+//   cursor: pointer;
+// }
+</style>
