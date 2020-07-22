@@ -294,7 +294,7 @@ export default {
         .getPositionTypeTableData(this.multipleSelection[0].foid)
         .then(res => {
           if ((res.data.data = "success")) {
-            this.$message.success("删除成功");
+            this.$message.success("删除成功!");
             //刷新表格
             this.getPositionTypeTableData("");
           }
