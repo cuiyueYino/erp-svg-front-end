@@ -165,7 +165,19 @@ class ITEMData {
                 ]
             },
         ];
-        this.ITEMother = [];
+        this.ITEMother = [
+            {
+                index: 'Business',
+                title: '业务协同',
+                subs: [
+                    {
+                        index: 'insideMailCommon',
+                        title: '内部邮件',
+                    }
+                ]
+            }
+            
+        ];
     };
 }
 export default ITEMData
