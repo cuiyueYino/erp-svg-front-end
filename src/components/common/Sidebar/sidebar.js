@@ -103,6 +103,10 @@ class ITEMData {
                     {
                     index: 'jobSet',
                     title: '职务管理'
+                    },
+                    {
+                        index: 'positionType',
+                        title: '职务类型'
                     }
                    
                 ]

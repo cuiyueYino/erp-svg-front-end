@@ -154,6 +154,10 @@ export default {
           title: "名称"
         },
         {
+          key: "fpositiontype",
+          title: "职务类型"
+        },
+        {
           key: "fremark",
           title: "描述"
         }
