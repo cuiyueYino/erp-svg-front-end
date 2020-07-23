@@ -103,6 +103,10 @@ class ITEMData {
                     {
                     index: 'jobSet',
                     title: '职务管理'
+                    },
+                    {
+                        index: 'positionType',
+                        title: '职务类型'
                     }
                    
                 ]
@@ -165,7 +169,19 @@ class ITEMData {
                 ]
             },
         ];
-        this.ITEMother = [];
+        this.ITEMother = [
+            {
+                index: 'Business',
+                title: '业务协同',
+                subs: [
+                    {
+                        index: 'insideMailCommon',
+                        title: '内部邮件',
+                    }
+                ]
+            }
+            
+        ];
     };
 }
 export default ITEMData

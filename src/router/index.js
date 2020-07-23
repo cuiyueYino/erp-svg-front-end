@@ -5,9 +5,10 @@ import Process from '../views/process-set/route';
 import Users from '../views/user-management/route';
 import Jobs from '../views/job-management/route';
 import Management from '../views/management/route';
-import Peoples from '../views/people-management/route'
+import Peoples from '../views/people-management/route';
 import RoleMen from '../views/role-management/route';
 import MenuMen from '../views/system-setting/route';
+import InsideMail from '../views/inside-mail/route';
 
 Vue.use(Router);
 
@@ -31,6 +32,7 @@ export default new Router({
                 ...Peoples,
                 ...RoleMen,
                 ...MenuMen,
+                ...InsideMail,
                 {
                     path: 'svgIndex',
                     name: 'svgIndex',

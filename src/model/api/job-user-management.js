@@ -23,6 +23,26 @@ const jobUserManagement = {
         return httpReqest.get('/api/interfaces/positionmnt/deletePosition?foId='+ params);
     },
 
+    // 获取职务类别表格列表数据
+    getPositionTypeTableData(params){
+        return httpReqest.post('/api/interfaces/positionCat/findTypeList', params);
+    },
+
+    // 职务类型列表-新增
+    addPositionTypeTableData(params){
+        return httpReqest.post('/api/interfaces/positionCat/insertType', params);
+    },
+
+    // 职务类型列表-编辑
+    updatePositionTypeTableData(params){
+        return httpReqest.post('/api/interfaces/positionCat/updateType', params);
+    },
+
+    // 职务类型列表-删除
+    deletePositionTypeTableData(params){
+        return httpReqest.get('/api/interfaces/positionCat/deleteType?foId='+ params);
+    },
+
     // 用户-列表查询
     getUserTableData(params){
         return httpReqest.post('/api/interfaces/userManage/findUserBypage', params);
