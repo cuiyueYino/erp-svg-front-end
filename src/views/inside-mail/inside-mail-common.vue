@@ -4,7 +4,7 @@
             <el-tab-pane>
                 <span slot="label" ><i class="el-icon-receiving"></i>收信</span>
                 <div>
-                    收信
+                    <mailInbox></mailInbox>
                 </div>
             </el-tab-pane>
             <el-tab-pane >
@@ -36,9 +36,11 @@
 </template>
 <script>
 import newMailPage from './new-mail-message.vue';
+import mailInbox from './inside-mail-inbox';
 export default {
     components: {
-        newMailPage
+        newMailPage,
+        mailInbox
     },
     data(){
         return{

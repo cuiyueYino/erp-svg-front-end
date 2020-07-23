@@ -9,6 +9,7 @@ import jobUserManagement from './job-user-management';
 import management from './management';
 import RoleManagement from './roleManagement';
 import SystemSet from './systemset';
+import insideMail from './inside-mail';
 
 // 其他模块的接口……
 
@@ -22,5 +23,6 @@ export default {
     RoleManagement,
     SystemSet,
     jobUserManagement,
+    insideMail,
     // ……
 };
