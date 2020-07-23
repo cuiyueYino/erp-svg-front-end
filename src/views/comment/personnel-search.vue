@@ -91,7 +91,7 @@
                     <el-col :span="6" class="elColCenter">部门</el-col>
                     <el-col :span="6"  class="elColCenter">等于</el-col>
                     <el-col :span="5">
-                       <el-input v-model="dialog.name" size="mini"></el-input>
+                       <el-input v-model="dialog.departmentName" size="mini"></el-input>
                     </el-col>
                     <el-col :span="1">
                         <el-button type="primary" size="mini" icon="el-icon-search" @click="MoreSearchDS(dialog)"></el-button>
@@ -101,7 +101,7 @@
                     <el-col :span="6" class="elColCenter">在职状态</el-col>
                     <el-col :span="6"  class="elColCenter">等于</el-col>
                     <el-col :span="6">
-                       <el-select v-model="dialog.company" size="mini">
+                       <el-select v-model="dialog.usertype" size="mini">
                             <el-option
                                 v-for="item in usertypeoptions"
                                 :key="item.value"
@@ -171,6 +171,8 @@ export default {
                 name:'',
                 company:'',
                 codeNomber:'',
+                departmentName:'',
+                usertype:'',
             },
             columns: [
                 {
@@ -181,7 +183,7 @@ export default {
                     title: '编码'
                 },
                 {
-                    key: 'departmentName',
+                    key: 'department',
                     title: '部门'
                 },
                 {
@@ -189,11 +191,11 @@ export default {
                     title: '名称'
                 },
                 {
-                    key: 'firmPositonName',
+                    key: 'firmPosition',
                     title: '职位'
                 },
                 {
-                    key: 'firmPositonName',
+                    key: 'remark',
                     title: '描述'
                 }
             ],
@@ -225,76 +227,71 @@ export default {
             this.rowDSDataObj=finandata;
         },
         //控制部门查询显示
-        showORhideForDS(data){
-            if(data === false){
+        showORhideForDS(data,type){
+            if(type === false){
                 this.rowDStype = false
             }else{
                 this.rowDStype = true
             }
+            if(data.selectOptionId){
+                this.dialog.departmentName=data.selectOptionname;
+                this.dialog.departmentid=data.selectOptionId;
+            }
         },
-        //下一页
-        onCurrentChange(val) {
-            var form = new FormData();
-            form.append('page', val);
-            form.append('size', this.pageSize);
-            this.$api.task.findAwardCreditBreedPage(form).then(response => {
+        //获取发起人详细信息
+        GetUSerData(data){
+            let fromdata=data;
+            this.$api.processSet.getaddresserSearch(fromdata).then(response => {
                 let responsevalue = response;
                 if (responsevalue) {
                     let returndata = responsevalue.data;
-                    let tableDataArr=returndata.rows;
-                    for(var i =0;i<tableDataArr.length;i++){
-                        if(tableDataArr[i].status === 1){
-                            tableDataArr[i].statusString="暂存";
-                        }else if(tableDataArr[i].status === 2){
-                            tableDataArr[i].statusString="提交";
-                        }else if(tableDataArr[i].status === 3){
-                            tableDataArr[i].statusString="有效";
-                        }else {
-                            tableDataArr[i].statusString="作废";
-                        }
-                    }
+                    let tableDataArr=returndata.data.rows;
                     this.tableData = tableDataArr;
-                    this.total = returndata.total;
+                    this.total = returndata.data.total;
                 } else {
                     this.$message.success('没有查到数据!');
                 }
             });
         },
+        //下一页
+        onCurrentChange(val) {
+            let fromdata={};
+            fromdata.page=val;
+            fromdata.size=this.pageSize;
+            this.GetUSerData(fromdata);
+        },
         //获得查询结果
         onHandleMoreSearch() {
-            var form = new FormData();
-            form.append('page', this.pageNum);
-            form.append('size', this.pageSize);
+            let fromdata={};
+            fromdata.page=this.pageNum;
+            fromdata.size=this.pageSize;
             let namevalueS=this.dialog.name;
             if(namevalueS && namevalueS!=''){
-                form.append('name', this.dialog.name); 
+                fromdata.name=this.dialog.name;
             }
             let codevalueS=this.dialog.codeNomber;
             if(codevalueS && codevalueS!=''){
-                form.append('code', this.dialog.codeNomber);
+                fromdata.code=this.dialog.codeNomber;
             }
             let compvalueS=this.dialog.company;
             if(compvalueS && compvalueS!=''){
-                form.append('company', this.dialog.company);
+                fromdata.company=this.dialog.company;
             }
-            this.$api.task.findAwardCreditBreedPage(form).then(response => {
+            let departS=this.dialog.departmentName;
+            if(departS && departS!=''){
+                fromdata.departmentId=this.dialog.departmentid;
+            }
+            let usertypeS=this.dialog.usertype;
+            if(usertypeS && usertypeS!='-1'){
+                //fromdata.usertype=this.dialog.usertype;
+            }
+            this.$api.processSet.getaddresserSearch(fromdata).then(response => {
                 let responsevalue = response;
                 if (responsevalue) {
                     let returndata = responsevalue.data;
-                    let tableDataArr=returndata.rows;
-                    for(var i =0;i<tableDataArr.length;i++){
-                        if(tableDataArr[i].status === 1){
-                            tableDataArr[i].statusString="暂存";
-                        }else if(tableDataArr[i].status === 2){
-                            tableDataArr[i].statusString="提交";
-                        }else if(tableDataArr[i].status === 3){
-                            tableDataArr[i].statusString="有效";
-                        }else {
-                            tableDataArr[i].statusString="作废";
-                        }
-                    }
+                    let tableDataArr=returndata.data.rows;
                     this.tableData = tableDataArr;
-                    this.total = returndata.total;
+                    this.total = returndata.data.total;
                     this.MoreSearchVisible = false;
                 } else {
                     this.$message.success('没有查到数据!');
@@ -309,19 +306,15 @@ export default {
                     this.$message.error('只能选择一行!');
                 }else{
                     //返回选中的父组件选中的row,并修某些改值
-                    this.rowPSDataObj.awardcreditbreed=selectOption[0].code;
-                    this.rowPSDataObj.awardcreditbreedname=selectOption[0].name;
-                    this.rowPSDataObj.awardcreditbreedId=selectOption[0].id;
+                    this.rowPSDataObj.selectOptionCode=selectOption[0].code;
+                    this.rowPSDataObj.selectOptionName=selectOption[0].name;
+                    this.rowPSDataObj.selectOptionID=selectOption[0].foid;
                     this.$emit('changeShow',this.rowPSDataObj,false);
                     this.ShowFinancVisible = false;
                 }
             }else{
                 this.$message.error('请选择一行数据!');
             }
-        },
-        //高级查询
-        onHandleMoreSearch(){
-            this.MoreSearchVisible = false;
         }
     },
     watch:{
@@ -331,32 +324,10 @@ export default {
             this.title=rowDataObj.nametitle;
             this.formdata.searchName=rowDataObj.finanrowId;
             this.rowFincename=rowDataObj.finanrowname;
-            var form = new FormData();
-            form.append('page', this.pageNum);
-            form.append('size', this.pageSize);
-            form.append('company', localStorage.getItem('ms_companyId'));
-            this.$api.task.findAwardCreditBreedPage(form).then(response => {
-                let responsevalue = response;
-                if (responsevalue) {
-                    let returndata = responsevalue.data;
-                    let tableDataArr=returndata.rows;
-                    for(var i =0;i<tableDataArr.length;i++){
-                        if(tableDataArr[i].status === 1){
-                            tableDataArr[i].statusString="暂存";
-                        }else if(tableDataArr[i].status === 2){
-                            tableDataArr[i].statusString="提交";
-                        }else if(tableDataArr[i].status === 3){
-                            tableDataArr[i].statusString="有效";
-                        }else {
-                            tableDataArr[i].statusString="作废";
-                        }
-                    }
-                    this.tableData = tableDataArr;
-                    this.total = returndata.total;
-                } else {
-                    this.$message.success('没有查到数据!');
-                }
-            });
+            let fromdata={};
+            fromdata.page=this.pageNum;
+            fromdata.size=this.pageSize;
+            this.GetUSerData(fromdata);
         }
     }
 }

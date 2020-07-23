@@ -22,6 +22,10 @@
                     <el-row :gutter="24">
                         <LookcreditPage  :rowLFCADataObj="rowLFCADataObj" :financingLFCAtype="financingLFCAtype" @changeShow="showLookOrUpdate"/>
                     </el-row>
+                    <el-row :gutter="24">
+                        <el-col :span="22">
+                        </el-col>
+                    </el-row>
                     <el-tabs v-model="atctiveName" @tab-click="handleClick">
                         <el-tab-pane label="审批意见" name="first">
                             <el-row >

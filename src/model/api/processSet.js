@@ -61,6 +61,37 @@ const processSet = {
     positionList(params){
         return httpReqest.post('/api/wfInterfaces/workFlow/positionList', params);
     },
+    //获取待办事项
+    getunhandledTask(params){
+        return httpReqest.post('/api/workFlow/unhandledTask', params);
+    },
+    //部门的详细数据查询
+    getdepaSearch(params){
+        return httpReqest.post('/api/workFlow/departmentSearch', params);
+    },
+    //发起人详细数据查询
+    getaddresserSearch(params){
+        return httpReqest.post('/api/workFlow/addresserSearch', params);
+    },
+    //查找业务数据workFlow/getProcessClass
+    getProcessClass(params){
+        return httpReqest.post('/api/workFlow/getProcessClass', params);
+    },
+    //公司部门人员树
+    getUserTreeData(params){
+        var valueS='?';
+        for(var item in params){
+            valueS+=item+"="+params[item]+"&";
+        }
+        if(valueS.slice(valueS.length-1,valueS.length) ==="&"){
+            valueS=valueS.slice(0,valueS.length-1);
+        }
+        return httpReqest.get('/api/workFlow/findCompanyDeptStaffInfoByOrgUnitIdFromRedis'+valueS);
+    },
+    //待办事项-转发
+    setencyclic(params){
+        return httpReqest.post('/api/workFlow/encyclic', params);
+    },
 };
 
 export default processSet;

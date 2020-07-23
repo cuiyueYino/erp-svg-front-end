@@ -11,16 +11,18 @@
             >
                 <el-card>
                     <el-row>
-                        <el-col :span="4" class="tree-class">
+                        <el-col :span="7" class="tree-class">
                             <!-- 树状图 -->
                             <el-tree
                                 :data="treeData"
                                 :props="defaultProps"
+                                node-key="id"
+                                :render-content="renderContent"
                                 accordion
                                 @node-click="handleNodeClick">
                             </el-tree>
                         </el-col>
-                        <el-col :span="10" :offset="1">
+                        <el-col :span="8" :offset="1">
                             <el-row :gutter="24">
                                 <el-col :span="18">
                                     <el-form-item label="搜索" >
@@ -46,7 +48,7 @@
                             ></dynamic-table>
                         </el-col>
                         <el-col :span="1" :offset="1">
-                            <div style="margin-top:70px;width:60px;">
+                            <div style="margin-top:100px;width:60px;">
                                 <div style="margin-bottom:15px">
                                     <el-button type="primary" icon="el-icon-arrow-left" circle  @click='AddToLeft'></el-button>
                                 </div>
@@ -60,7 +62,7 @@
                                 :data="teldata"
                                 border
                                 size="mini"
-                                height='300'
+                                height='500'
                                 @selection-change="onUSerSelectionChange"
                                 ref='rightMultipleTable'
                             >
@@ -70,7 +72,7 @@
                                 </el-table-column>
                                 <el-table-column size="mini" label="所选人员">
                                     <template slot-scope="scope">
-                                        {{scope.row.label}}
+                                        {{scope.row.fname}}
                                     </template>
                                 </el-table-column>
                             </el-table>      
@@ -112,21 +114,9 @@ export default {
             dataForm:{
                 receiver:'',
             },
+            multipleSelection:[],
             UsermultipleSelection:[],
-            teldata:[
-                {
-                    label:'1111',
-                    value:'0001'
-                },
-                {
-                    label:'22222',
-                    value:'0002'
-                },
-                {
-                    label:'3333',
-                    value:'0003'
-                },
-            ],
+            teldata:[],
             tableLoading:false,
             ShowFinancVisible:false,
             labelPosition: 'left',
@@ -135,76 +125,181 @@ export default {
                     type: 'selection'
                 },
                 {
-                    key: 'name',
+                    key: 'fname',
                     title: '名称'
                 },
                 {
-                    key: 'jobString',
+                    key: 'positionName',
                     title: '职位'
                 },
             ],
-            treeData:[
-                {
-                    label: '一级 1',
-                    children: [{
-                        label: '二级 1-1',
-                        children: [{
-                        label: '三级 1-1-1'
-                        }]
-                    }]
-                },{
-                    label: '一级 1',
-                    children: [{
-                        label: '二级 1-1',
-                        children: [{
-                        label: '三级 1-1-1'
-                        }]
-                    }]
-                },
-            ],
+            treeData:[],
             defaultProps: {
                 children: 'children',
                 label: 'label'
             },
-            gridData:[
-                {
-                    name:'黎明',
-                    jobString:'歌手'
-                },
-                {
-                    name:'张静',
-                    jobString:'演员'
-                }
-            ],
+            gridData:[],
+            nodeClickData:{}
         };
     },
     methods: {
+        //tree 改写样式
+        renderContent(h, { node, data, store }) {
+            if(data){
+                if(data.level =="1"){
+                    return(
+                        <span class="custom-tree-node">
+                            <span><i class="el-icon-folder-opened"></i></span>
+                            <span style="margin-left: 5px;">{node.data.fname}</span>
+                        </span>
+                    )
+                }else if(data.level=="2"){
+                    return(
+                        <span class="custom-tree-node">
+                            <span><i class="el-icon-folder"></i></span>
+                            <span style="margin-left: 5px;">{node.data.fname}</span>
+                        </span>
+                    )
+                }else if(data.level=="3"){
+                    return(
+                        <span class="custom-tree-node">
+                            <span><i class="el-icon-document"></i></span>
+                            <span style="margin-left: 5px;">{node.data.fname}</span>
+                        </span>
+                    )
+                }
+            }  
+        },
         //关闭当前dialog时给父组件传值
         handleClose(){
+            this.ShowFinancVisible=false;
             this.$emit('changeShow',false);
         },
+        //table选中事件
         onSelectionChange(val) {
             this.multipleSelection = val;
         },
+        //搜索-姓名模糊查询
         searchKey(){
-
-        },
-        handleCheckedCitiesChange(){},
-        //分页
-        onSizeChange(val) {
-            this.pageSize = val;
+            let data=this.nodeClickData;
+            let fromdata={};
+            fromdata.queryType='';
+            if(data.foid){
+                fromdata.orgUnitId=data.foid;
+            }
+            if(this.formdata.searchKeyW){
+                fromdata.queryKey=this.formdata.searchKeyW;
+            }
+            fromdata.page=this.pageNum;;
+            fromdata.size=this.pageSize;
+            this.getUserData(fromdata);
         },
         //下一页
-        onCurrentChange(val) {},
+        onCurrentChange(val) {
+            let data=this.nodeClickData;
+            let fromdata={};
+            fromdata.queryType='';
+            if(data.foid){
+                fromdata.orgUnitId=data.foid;
+            }
+            fromdata.page=val;
+            fromdata.size=this.pageSize;
+            this.getUserData(fromdata);
+        },
+        //所选人员选中改变
         onUSerSelectionChange(val) {
             this.UsermultipleSelection = val;
         },
+        // 树形控件点击事件
         handleNodeClick(data) {
-            console.log(data);
+            this.nodeClickData=data;
+            if(data.children){
+            }else{
+                let fromdata={};
+                fromdata.queryType='';
+                fromdata.orgUnitId=data.foid;
+                fromdata.page=this.pageNum;
+                fromdata.size=this.pageSize;
+                this.getUserData(fromdata)
+            }
         },
+        //转发按钮确认事件
         saveConfig(){
-            console.log(this.multipleSelection)
+            let ParentSelectData=this.rowUTSDataObj.SelectionData;
+            let selectListData=this.teldata;
+            if(selectListData.length >0){
+                let participator='';
+                for(let j=0;j<selectListData.length;j++){
+                    participator+=selectListData[j].foid+',';
+                }
+                participator=participator.slice(0,participator.length-1);
+                let form = new FormData();
+                form.append('currUserId', localStorage.getItem('ms_userId'));
+                form.append('bizMailId', ParentSelectData[0].foid);
+                form.append('participator', participator);
+                let fromdata={};
+                fromdata.currUserId=localStorage.getItem('ms_userId');
+                fromdata.bizMailId=ParentSelectData[0].foid;
+                fromdata.participator=participator;
+                this.$api.processSet.setencyclic(fromdata).then(res=>{
+                    let resData=res;
+                    console.log(resData)
+                },error=>{
+                    console.log(error)
+                })  
+            }else{
+                this.$message.error("请选择人员!");
+            }
         },
+        //所选人员移除操作
+        AddToLeft(){
+            let SelectUData=this.UsermultipleSelection;
+            if(SelectUData.length >0){
+                let selectListData=this.teldata;
+                let listData=[];
+                for(let i=0;i<SelectUData.length;i++){
+                    for(let j=0;j<selectListData.length;j++){
+                        if(SelectUData[i].foid===selectListData[j].foid){
+                            selectListData.splice(j,1);
+                        }
+                    }
+                }
+            }else{
+                this.$message.error("请选择数据!");
+            }
+        },
+        //添加选中人员到所选人员
+        AddToRight(){
+            let selectTableData =this.multipleSelection;
+            if(selectTableData){
+                if(selectTableData.length >0){
+                    let selectListData=this.teldata;
+                    for(let i=0;i<selectTableData.length;i++){
+                        for(let j=0;j<selectListData.length;j++){
+                            if(selectTableData[i].foid===selectListData[j].foid){
+                                selectListData.splice(j,1);
+                            }
+                        }
+                    }
+                    selectListData=selectListData.concat(selectTableData);
+                    this.teldata=selectListData;
+                }
+            }else{
+                this.$message.error("请选择一行数据!");
+            }
+        },
+        //获取人员数据
+        getUserData(data){
+            let fromdata = data;
+            this.$api.processSet.getUserTreeData(fromdata).then(res=>{
+                let resData=res.data.data;
+                let resDataArr= eval("("+resData+")");
+                this.gridData=resDataArr.JsonInfo;
+                this.total=resDataArr.pageInfo.total;
+            },error=>{
+                console.log(error)
+            })  
+        }
     },
     mounted() {
     },
@@ -215,33 +310,15 @@ export default {
             let formDataA ={};
             formDataA.id=finandata;
             this.title=this.rowUTSDataObj.nametitle;
-            /*this.$api.task.getUserCreditContractRegisterVO(formDataA).then(response => {
-                let responsevalue = response;
-                if (responsevalue) {
-                    let returndata = responsevalue.data;
-                    let tableDataArr=returndata.data;
-                    this.disabled = true;
-                    this.editabled=false;
-                    tableDataArr.loandateStr=this.$Uformat.formatDateTYMD(tableDataArr.loandate);
-                    tableDataArr.duedateStr=this.$Uformat.formatDateTYMD(tableDataArr.duedate);
-                    tableDataArr.depositstartdateStr=this.$Uformat.formatDateTYMD(tableDataArr.depositstartdate);
-                    tableDataArr.depositenddateStr=this.$Uformat.formatDateTYMD(tableDataArr.depositenddate);
-                    tableDataArr.voucherdateStr=this.$Uformat.formatDateTYMD(tableDataArr.voucherdate);
-                    if(tableDataArr.pre == true){
-                        this.prechecked='是';
-                    }else if(tableDataArr.pre == false){
-                        this.prechecked='否';
-                    }
-                    this.formdata=tableDataArr;
-                    this.rowPDLDataObj=[];
-                    this.rowCDLDataObj=[];
-                    this.NewEditVisible= true;
-                    this.showCheckBox= false;
-                    this.checked=false;
-                } else {
-                    this.$message.success('数据库没有该条数据!');
-                }
-            });*/
+            let fromdata={};
+            fromdata.queryType='org';
+            this.$api.processSet.getUserTreeData(fromdata).then(res=>{
+                let resData=res.data.data;
+                let resDataArr= eval("("+resData+")");
+                this.treeData = resDataArr;
+            },error=>{
+                console.log(error)
+            })
         }
     }
 };
@@ -294,7 +371,7 @@ export default {
     }
 }
 .tree-class{
-    height: 310px;
+    height: 500px;
     overflow: auto;
 }
 .el-dialog__body{

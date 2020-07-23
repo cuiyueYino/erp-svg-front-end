@@ -231,6 +231,40 @@ class perData {
                 label: '经营申请'
             }
         ]
+        this.commonMetaClass=[
+            {
+                value: '-1',
+                label: '--'
+            },
+            {
+                value: '111712011309805101',
+                label: '任务结构编制'
+            },
+            {
+                value: 'C1711211511858401',
+                label: '部门年度计划'
+            },
+            {
+                value: 'C1711231350046001',
+                label: '部门月度计划'
+            },
+            {
+                value: 'C1712021330434901',
+                label: '一人一表任务表'
+            },
+            {
+                value: '4F1801181945073103',
+                label: '非合同付款申请'
+            },
+            {
+                value: '89080407093249640A',
+                label: '合同付款申请'
+            },
+            {
+                value: '640804032141092001',
+                label: '合同'
+            }
+        ]
     }
 }
 export default perData
