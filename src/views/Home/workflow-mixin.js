@@ -69,11 +69,12 @@ export default {
     },
     methods: {
         // 解析节点后生成连接线
-        async compileXMLToObj (dataObj) {
+        async compileXMLToObj (dataObj) {//console.log(dataObj)
              // 解析成为XML格式数据
             const dataStr = await this.compileObjToXMLLoading(dataObj)
             // console.log(dataStr)
-            const data = await this.compileNodes(dataStr);
+            const data = await this.compileNodes(dataStr);//返回的line线集合
+            console.log(data, this.workflowNodes);
             this.workflowNodes.map(item => {
                 data.map(node => {
                     if (item.data.name === node.to.data.name) {
@@ -88,35 +89,34 @@ export default {
                         item.transition.push(node);
                     }
                 });
-            });
+            });console.log( this.workflowNodes)
         },
          // 解析成为XML格式数据_加载
          compileObjToXMLLoading (obj) {
-            //  debugger
-            const finalWorkflow = obj.filter(item => Object.keys(item).length > 0);
-            let compileXML = `
-                <?xml version="1.0" encoding="UTF-8" standalone="no" ?>
-                <process name="${obj.name}" displayName="${obj.displayName}">
-            `;
-            finalWorkflow.map(item => {
-                const tagName = item.type.toLowerCase();
-                let extend = '';
-                if (item.type === 'Task') {
-                    extend = ` assignee="apply.taskAssignee" performType="${item.data.type}"`;
-                }
-                compileXML += `<${tagName} layout="${item.options.x},${item.options.y}" name="${item.data.name}" displayName="${item.data.displayName}"${extend}>`;
-                if (item.type !== 'End') {
-                    item.transition.map(link => {
-                        compileXML += `
-                            <transition offset="${link.from.target},${link.to.target}" to="${link.to.data.name}" name="${link.data.name}" displayName="${link.data.displayName}" />
-                        `;
-                    });
-                }
-                compileXML += `</${tagName}>`;
-            });
-            compileXML += '</process>';
-            console.log(compileXML)
-            return compileXML;
+                //  debugger
+                const finalWorkflow = obj.filter(item => Object.keys(item).length > 0);
+                let compileXML = `
+                    <?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+                    <process name="${obj.name}" displayName="${obj.displayName}">
+                `;
+                finalWorkflow.map(item => {
+                    const tagName = item.type.toLowerCase();
+                    let extend = '';
+                    if (item.type === 'Task') {
+                        extend = ` assignee="apply.taskAssignee" performType="${item.data.type}"`;
+                    }
+                    compileXML += `<${tagName} layout="${item.options.x},${item.options.y}" name="${item.data.name}" displayName="${item.data.displayName}"${extend}>`;
+                    if (item.type !== 'End') {
+                        item.transition.map(link => {
+                            compileXML += `
+                                <transition offset="${link.from.target},${link.to.target}" to="${link.to.data.name}" name="${link.data.name}" displayName="${link.data.displayName}" ></transition>`;
+                        });
+                    }
+                    compileXML += `</${tagName}>`;
+                });
+                compileXML += '</process>';
+                console.log(compileXML)
+                return compileXML;
         },
         // 解析成为XML格式数据_保存
         compileObjToXML (obj) {
@@ -164,7 +164,7 @@ export default {
         },
         // 解析节点方法
         compileNodes (dataStr) {
-            return new Promise((resolve, reject) => {
+            return new Promise((resolve, reject) => {//debugger
                 const { upperCase } = this.$helpers;
                 this.workflowNodes = [];
                 // 需要解析的 xml 字符串
@@ -176,18 +176,19 @@ export default {
                 const parser = new DOMParser();
                 const xmlDoc = parser.parseFromString(str, 'text/html');
                 const process = xmlDoc.getElementsByTagName('process')[0];
-                const target = process.children;
+                const target = process.children;//console.log(target)
                 // 设置流程模型配置数据
                 this.$set(this.workflowData, 'name', process.attributes.name.nodeValue);
                 this.$set(this.workflowData, 'displayName', process.attributes.displayName.nodeValue);
                 // 获取节点数据
-                for (let j = 0, len = target.length; j < len; j++) {
+                for (let j = 0, len = target.length; j < len; j++) {//console.log(target[j])
                     const { attributes, children, localName } = target[j];
                     //
                     const nodeConfig = NodeConfig();
                     //
                     let nodeObj = {};
                     //
+                    let yData; 
                     nodeObj = {
                         type: upperCase(localName),
                         options: {
@@ -202,9 +203,10 @@ export default {
                         },
                         transition: [],
                         key: `${Date.parse(new Date())}_${Math.ceil(Math.random() * 99999)}`
-                    };
+                    }; 
                     if (localName === 'start') {
                         nodeObj.key = 'Start';
+                        yData = Number(attributes.layout.nodeValue.split(',')[1])
                     } else if (localName === 'end') {
                         nodeObj.key = 'End';
                     } else if (localName === 'task') {
@@ -212,16 +214,29 @@ export default {
                     }
                     this.$set(this.workflowNodes, this.workflowNodes.length, nodeObj);
                     // 获取连接线数据
-                    if (localName !== 'end') {
+                    if (localName !== 'end') {//console.log(localName, nodeObj, children)
                         const linkObj = this.compileLink(localName, nodeObj, children);
-                        newArr.push(linkObj);
+                        if(linkObj){
+                            newArr.push(...linkObj);
+                        }
                     }
+                    
+                    if(localName === 'start'){
+                        nodeObj.options.y = yData
+                    }console.log(localName, nodeObj, yData)
                 }
                 resolve(newArr);
+                // this.workflowNodes.map(item => {
+                //     if( item.type == "Start"){
+                //         item.options.y = yData
+                //     }
+                // })
+                console.log(this.workflowNodes)
             });
         },
         // 解析连接线数据
         compileLink (name, obj, arr) {
+            let lineList = [];
             for (let t = 0, tLen = arr.length; t < tLen; t++) {
                 const { attributes } = arr[t];
                 //
@@ -234,8 +249,8 @@ export default {
                 const toName = attributes.to.nodeValue;
                 //
                 const point = this.computedLinkPoint(nodeObj, target);
-                //
-                return {
+                
+                lineList.push({
                     from: {
                         ...obj,
                         target,
@@ -254,8 +269,9 @@ export default {
                     key: `${Date.parse(new Date())}_${Math.ceil(Math.random() * 99999)}`,
                     lineEdit: true,
                     visible: false
-                };
+                });
             }
+            return lineList;
         },
         // 计算连接点相对坐标
         computedLinkPoint (obj, param) {
@@ -393,11 +409,11 @@ export default {
                             });
                         }
                     }
-                });
+                });console.log(this.workflowNodes)
             }
         },
         // 节点连接线按下事件
-        handleMousedown (target, point, node) {//console.log(node)
+        handleMousedown (target, point, node) {console.log(node)
             //
             this.endObj = {};
             //
@@ -430,7 +446,7 @@ export default {
                         from: this.startObj,
                         to: this.endObj,
                         lineEdit: false
-                    });//console.log( this.lineData)
+                    });console.log( this.lineData)
                     this.lineData.map((item, index) => {
                         if (item.from.key === node.key) {
                             node.transition.push(item);
@@ -479,13 +495,24 @@ export default {
             this.linkData.splice(index, 1);
         },
         // 点击保存工作流按钮执行事件
-        saveWorkflow (workflowNodes) { console.log( sessionStorage.getItem("eidtMsg"))
+        saveWorkflow (workflowNodes) { 
+            let editMsg = JSON.parse( sessionStorage.getItem("eidtMsg") );
+            workflowNodes.forEach(item => {
+                let newTransiton = item.transition;
+                newTransiton.forEach(items => {
+                    if( items.from.transition ){
+                        delete items.from.transition;
+                        delete items.to.transition;
+                    }
+                });
+            });
             let data = {
-                    "code":  sessionStorage.getItem("eidtMsgcode"),
-                    "name":  sessionStorage.getItem("eidtMsgfname"),
-                    "oid":  sessionStorage.getItem("eidtMsgfoid"),
+                    "code": editMsg.code,
+                    "name":  editMsg.name,
+                    "oid":  editMsg.oid,
                     "nodes": workflowNodes
                 };
+            
             console.log(data)
             //
             this.selectedNode = {};
@@ -495,14 +522,15 @@ export default {
             this.nodeType = '';
             //
             this.$set(this.selectedNode, 'data', this.workflowData);
-            // 打开配置对话框
+            // 打开配置对话框   
             // this.dialogSaveVisible = true;
             this.$api.svg.addSvg(data).then(res=>{
               console.log(res)
-              sessionStorage.setItem("eidtMsg",null)
+              sessionStorage.setItem("eidtMsg",null);
             },error=>{
                 console.log(error)
             })
+
         }
     }
 };

@@ -129,7 +129,7 @@ export default {
         // 监听配置数据源
         data: {
             handler (obj) {
-                this.formData = JSON.parse(JSON.stringify(obj));console.log(this.formData,obj)
+                this.formData = JSON.parse(JSON.stringify(obj));//console.log(this.formData,obj)
                 switch (this.formData.name) {
                     case "Task":
                         this.ConditionF =false
@@ -314,6 +314,24 @@ export default {
         saveLineData(e){
             console.log(e);
             this.data.displayName = e.name;
+            switch (e.name ) {
+                case '同意':
+                        this.data.decisionType = 1
+                    break;
+                case '不同意':
+                        this.data.decisionType = 2
+                    break;
+                case '待处理':
+                        this.data.decisionType = 3
+                    break;
+                case '其他':
+                        this.data.decisionType = 4
+                    break;
+            
+                default:
+                    break;
+            }
+           
         },
          //审核活动保存
         saveJoinData(e,e1,e2,e3,e4,e5){

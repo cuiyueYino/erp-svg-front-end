@@ -161,7 +161,7 @@ export default {
     },
     methods:{
         //多选
-        onSelectionChange(val) {console.log(val)
+        onSelectionChange(val) {//console.log(val)
             this.multipleSelection = val;
         },
         //分页、下一页
@@ -315,21 +315,22 @@ export default {
                 this.$message.error('请选择一项编辑');
                  return;
             };
-            let data = {
-               0: [this.multipleSelection[0].fcode]
-            }
                 // { "code": this.multipleSelection[0].fcode},
                 //    this.multipleSelection[0].fname,
                 // this.multipleSelection[0].foid,
-            
-            
-            sessionStorage.setItem("eidtMsgcode",  this.multipleSelection[0].fcode);
-            sessionStorage.setItem("eidtMsgfname",  this.multipleSelection[0].fname);
-            sessionStorage.setItem("eidtMsgfoid",  this.multipleSelection[0].foid);
-             this.$router.push({
-                name:"svgIndex"
-             })
-            
+            this.$api.svg.getSvgSingleData(this.multipleSelection[0].foid).then(res=>{
+                if(res.data.data.msg = "success"){
+                    sessionStorage.setItem("eidtMsgcode",  res.data.data.code);
+                    sessionStorage.setItem("eidtMsgfname",   res.data.data.name);
+                    sessionStorage.setItem("eidtMsgfoid",   res.data.data.oid);
+                    sessionStorage.setItem("eidtMsg",   JSON.stringify(res.data.data));
+                    this.$router.push({
+                        name:"svgIndex"
+                    })
+                }
+            }),error=>{
+                console.log(error);
+            }
         },
     },
 }

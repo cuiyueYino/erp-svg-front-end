@@ -13,9 +13,14 @@ const svg = {
         return httpReqest.post('/api/wfInterfaces/workFlow/getProcessClass', params);
     },
 
-     //新增审核业务
+    //新增审核业务
      addProcessActivity(params){
         return httpReqest.post('/api/wfInterfaces/workFlow/addProcessActivity', params);
+    },
+
+    //查询单条数据信息
+    getSvgSingleData(params){
+        return httpReqest.get('/api/wfInterfaces/workFlow/findWfProcessInfoById?foid=' + params);
     },
 
 };

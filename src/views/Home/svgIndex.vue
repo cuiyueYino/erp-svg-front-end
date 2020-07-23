@@ -221,16 +221,6 @@
             </config-form>
         </div>
 </el-dialog>
- <!-- 保存弹出框内容 -->
-    <!-- <el-dialog
-        title="工作流保存"
-        :visible.sync="dialogSaveVisible"
-        :modal="false"
-        :close-on-click-modal="closeConfig"
-        :close-on-press-escape="closeConfig"
-        width="600px">
-            1111
-        </el-dialog> -->
     </div>
 </template>
 
@@ -247,9 +237,9 @@ import { NodesData, TerminalNode } from './flow-config';
 // 配置工作流组件
 import configForm from './node-config';
 //json假数据
-import dataJson from './111.json';
+// import dataJson from './222.json';
 // 解析 xml 字符模板
-import xmlStr from 'helpers/compile-xml';
+// import xmlStr from 'helpers/compile-xml';
 export default {
     name: 'WorkFlow',
     props: {},
@@ -260,8 +250,7 @@ export default {
              dialogSaveVisible:false,
               // 关闭对话框配置
             closeConfig: false,
-            dataObj:dataJson.WfProcess,
-            // dataObj:xmlStr,
+            dataObj:{},
             dialogTableVisible:true,
             size : 1,
             // 辅助线数据
@@ -304,13 +293,20 @@ export default {
     },
     watch: {},
     created () {
-       
+        // console.log( JSON.parse( sessionStorage.getItem("eidtMsg") )    )
+        if( JSON.parse( sessionStorage.getItem("eidtMsg") ) ){
+            this.dataObj = JSON.parse( sessionStorage.getItem("eidtMsg") );
+        }
     },
     mounted () {
-       this.$nextTick(()=>{
+       this.$nextTick(()=>{//debugger
             //console.log(this.dataObj)
             if(this.dataObj){
             let newObj=[];
+            let newFork=[];
+            let newTask=[];
+            let newJoin=[];
+            let newProcess=[];
             let newCondition=[];
             let newRouter=[];
             let newStart=[];
@@ -322,60 +318,99 @@ export default {
                     {
                         type: 'Line',
                         oid:this.dataObj.lines.line[i].linefoid,
+                        linefrom:this.dataObj.lines.line[i].linefrom,
                         data: {
-                            name: this.dataObj.lines.line[i].linefname,
-                            displayName: this.dataObj.lines.line[i].linefname
+                            ...this.dataObj.lines.line[i].data,
+                            name: this.dataObj.lines.line[i].type,
+                            displayName: this.dataObj.lines.line[i].linefname,
+                            
                         },
                         from:{
                             data:{
-                                 name: this.dataObj.lines.line[i].linefrom,
-                                 displayName: this.dataObj.lines.line[i].linefrom
+                                 name: this.dataObj.lines.line[i].from.type,
+                                 displayName: this.dataObj.lines.line[i].from.name
                             },
-                            target:'B',
+                            target: this.dataObj.lines.line[i].from.target,
                             // type:
                         },
                         to:{
                              data:{
-                                 name: this.dataObj.lines.line[i].lineto,
-                                 displayName: this.dataObj.lines.line[i].lineto
+                                 name: this.dataObj.lines.line[i].to.type,
+                                 displayName: this.dataObj.lines.line[i].to.name,
                              },
-                            target:'T',
+                            target: this.dataObj.lines.line[i].to.target,
                             // type:
                         },
                     }
                 )
              };
             for(let i in this.dataObj.nodes.wfProcessor){
-                newCondition.push(
-                     {
-                         data: {
-                            name: this.dataObj.nodes.wfProcessor[i].name,
-                            displayName: this.dataObj.nodes.wfProcessor[i].name
-                         },
-                        type: 'Condition',
-                        name: this.dataObj.nodes.wfProcessor[i].name,
-                        oid:this.dataObj.nodes.wfProcessor[i].oid,
-                        icon: 'el-icon-user',
-                        transition: [],
-                        options: {
-                            width: 120,
-                            height: 76,
-                            visible: false,
-                            color: '#f39c43',
-                            x: this.dataObj.nodes.wfProcessor[i].x,
-                            y: this.dataObj.nodes.wfProcessor[i].y,
-                            draggable: true
-                        }
-                    }
-                )
+                switch (this.dataObj.nodes.wfProcessor[i].type) {
+                    case "Join":
+                             newJoin.push(
+                                {
+                                    data: {
+                                        ...this.dataObj.nodes.wfProcessor[i].data,
+                                        name: this.dataObj.nodes.wfProcessor[i].type,
+                                        displayName: this.dataObj.nodes.wfProcessor[i].name,
+                                    },
+                                    type: 'Join',
+                                    name: this.dataObj.nodes.wfProcessor[i].name,
+                                    oid:this.dataObj.nodes.wfProcessor[i].oid,
+                                    icon: 'el-icon-plus-param',
+                                    transition: [],
+                                    options: {
+                                        width: 120,
+                                        height: 76,
+                                        visible: false,
+                                        color: '#909399',
+                                        x: this.dataObj.nodes.wfProcessor[i].x,
+                                        y: this.dataObj.nodes.wfProcessor[i].y,
+                                        draggable: true
+                                    }
+                                }
+                            )
+                        break;
+                    case "Condition":
+                             newCondition.push(
+                                {
+                                    data: {
+                                        ...this.dataObj.nodes.wfProcessor[i].data,
+                                        name: this.dataObj.nodes.wfProcessor[i].type,
+                                        displayName: this.dataObj.nodes.wfProcessor[i].name,
+                                        
+                                    },
+                                    type: 'Condition',
+                                    name: this.dataObj.nodes.wfProcessor[i].name,
+                                    oid:this.dataObj.nodes.wfProcessor[i].oid,
+                                    icon: 'el-icon-user',
+                                    transition: [],
+                                    options: {
+                                        width: 120,
+                                        height: 76,
+                                        visible: false,
+                                        color: '#f39c43',
+                                        x: this.dataObj.nodes.wfProcessor[i].x,
+                                        y: this.dataObj.nodes.wfProcessor[i].y,
+                                        draggable: true
+                                    }
+                                }
+                            )
+                        break;
+                
+                    default:
+                        break;
+                }
                 
             };
              for(let i in this.dataObj.nodes.wfRouter){
                 newRouter.push(
                      {
                         data: {
-                            name: this.dataObj.nodes.wfRouter[i].name,
-                            displayName: this.dataObj.nodes.wfRouter[i].name
+                             ...this.dataObj.nodes.wfRouter[i].data,
+                            name: this.dataObj.nodes.wfRouter[i].type,
+                            displayName: this.dataObj.nodes.wfRouter[i].name,
+                           
                         },
                         type: 'Task',
                         name: this.dataObj.nodes.wfRouter[i].name,
@@ -393,17 +428,44 @@ export default {
                         }
                     }
                 )
+            };
+            for(let i in this.dataObj.nodes.wfProcessorAuto){
+                newFork.push(
+                     {
+                        data: {
+                            ...this.dataObj.nodes.wfProcessorAuto[i].data,
+                            name: this.dataObj.nodes.wfProcessorAuto[i].type,
+                            displayName: this.dataObj.nodes.wfProcessorAuto[i].name,
+                            
+                        },
+                        type: 'Fork',
+                        name: this.dataObj.nodes.wfProcessorAuto[i].name,
+                        oid:this.dataObj.nodes.wfProcessorAuto[i].oid,
+                        icon: 'el-icon-setting',
+                        transition: [],
+                        options: {
+                            width: 40,
+                            height: 40,
+                            visible: false,
+                            color: '#25a3fd',
+                            x: this.dataObj.nodes.wfProcessorAuto[i].x,
+                            y: this.dataObj.nodes.wfProcessorAuto[i].y,
+                            draggable: true
+                        }
+                    }
+                )
                 
             };
+           
             newStart.push(
                 {
                     type: 'Start',
-                    oid:this.dataObj.nodes.wfStarter.oid,
+                    oid:this.dataObj.nodes.wfStarter[0].oid,
                     transition: [],
                     options: {
                         draggable: true,
-                        x: this.dataObj.nodes.wfStarter.x,
-                        y: this.dataObj.nodes.wfStarter.y,
+                        x: this.dataObj.nodes.wfStarter[0].x,
+                        y: this.dataObj.nodes.wfStarter[0].y,
                         width: 100,
                         height: 100,
                         color: '#67C23A',
@@ -411,8 +473,10 @@ export default {
                         allowOut: true
                     },
                     data: {
-                        name: this.dataObj.nodes.wfStarter.name,
-                        displayName: this.dataObj.nodes.wfStarter.name
+                        ...this.dataObj.nodes.wfStarter[0].data,
+                        name: this.dataObj.nodes.wfStarter[0].name,
+                        displayName: this.dataObj.nodes.wfStarter[0].name,
+                        
                     },
                     key: 'Start'
                 }
@@ -420,11 +484,11 @@ export default {
              newEnd.push(
                 {
                     type: 'End',
-                    oid:this.dataObj.nodes.wfEnder.oid,
+                    oid:this.dataObj.nodes.wfEnder[0].oid,
                     options: {
                         draggable: true,
-                        x: this.dataObj.nodes.wfEnder.x,
-                        y: this.dataObj.nodes.wfEnder.y,
+                        x: this.dataObj.nodes.wfEnder[0].x,
+                        y: this.dataObj.nodes.wfEnder[0].y,
                          width: 100,
                          height: 100,
                          color: '#F56C6C',
@@ -432,41 +496,39 @@ export default {
                          allowOut: false
                     },
                     data: {
-                        name: this.dataObj.nodes.wfEnder.name,
-                        displayName: this.dataObj.nodes.wfEnder.name
+                        ...this.dataObj.nodes.wfEnder[0].data,
+                        name: this.dataObj.nodes.wfEnder[0].type,
+                        displayName: this.dataObj.nodes.wfEnder[0].name,
+                        
                     },
                     key: 'End'
                 }
             )
             
             
-            newObj.name = this.dataObj.name
-            newObj.displayName = this.dataObj.name
             
             newObj = [
                 ...newStart,
                 ...newRouter,
                 ...newCondition,
-                ...newEnd
-                 
-               
+                ...newFork,
+                ...newJoin,
             ]
+            newObj.name = this.dataObj.name
+            newObj.displayName = this.dataObj.name;
             // 更改节点信息 同步更新终点为当前配置节点的to属性
-            newObj.map(node => {
-                    if (node.type !== 'End') {
-                        newLine.map(item => {
-                            if (item.from.data.name === node.data.name) {
-                                node.transition.push(item);
-                            }
-                        });
+                newObj.forEach(item=>{
+                    for( let i = 0; i < newLine.length; i++ ){
+                     if(item.oid === newLine[i].linefrom ){
+                                item.transition.push(newLine[i]);
+                        }
                     }
-                
-            })
-            this.dataObj = newObj
+                })
+            newObj.push(...newEnd);
+            this.dataObj = newObj;
+            this.compileXMLToObj(this.dataObj)
             // console.log(this.dataObj)
         }
-
-        
        })
 
         // // 监听键盘事件

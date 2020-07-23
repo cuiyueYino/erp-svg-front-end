@@ -44,8 +44,7 @@ export function NodeConfig () {
             visible: false,
             color: '#9389fb'
         }
-       
-    };
+    }; 
 };
 
 export function TerminalNode () {
