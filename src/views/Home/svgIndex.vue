@@ -45,11 +45,22 @@
                             关闭
                         </el-button>
                         <el-button
+                            v-show="isEditF"
                             size="mini"
                             type="text"
                             :disabled="saveBtnStatus"
                             icon="el-icon-upload"
-                            @click="saveWorkflow(workflowNodes)"
+                            @click="saveEditWorkflow(workflowNodes)"
+                        >
+                            保存
+                        </el-button>
+                         <el-button
+                            v-show="isNewF"
+                            size="mini"
+                            type="text"
+                            :disabled="saveBtnStatus"
+                            icon="el-icon-upload"
+                            @click="saveNewWorkflow(workflowNodes)"
                         >
                             保存
                         </el-button>
@@ -247,6 +258,8 @@ export default {
     mixins: [workflowMixin],
     data () {
         return {
+            isEditF:false,
+            isNewF:false,
              dialogSaveVisible:false,
               // 关闭对话框配置
             closeConfig: false,
@@ -299,9 +312,11 @@ export default {
         }
     },
     mounted () {
-       this.$nextTick(()=>{//debugger
+       this.$nextTick(()=>{
             //console.log(this.dataObj)
-            if(this.dataObj){
+            if(this.dataObj.lines.line.length >0){
+            this.isEditF = true;
+            this.isNewF = false;
             let newObj=[];
             let newFork=[];
             let newTask=[];
@@ -528,6 +543,9 @@ export default {
             this.dataObj = newObj;
             this.compileXMLToObj(this.dataObj)
             // console.log(this.dataObj)
+        }else{
+            this.isEditF = false;
+            this.isNewF = true;
         }
        })
 

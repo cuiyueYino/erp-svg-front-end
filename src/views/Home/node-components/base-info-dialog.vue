@@ -301,8 +301,8 @@ export default {
                     fromdata.queryType='';
                     this.$api.processSet.getUserTree(fromdata).then(res=>{
                         let resData=res.data.data;
-                        let resDataArr= eval("("+resData+")");
-                        this.treeData = resDataArr;
+                        let resDataArr= eval("("+resData+")");//console.log(resDataArr.JsonInfo[0])
+                        this.treeData = resDataArr.JsonInfo;
                         this.totalpage=false;
                     },error=>{
                         console.log(error)
