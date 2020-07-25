@@ -27,9 +27,9 @@
         </el-col>
         <el-col :span="6" style="text-align: right;">
           <el-button type="success" plain class="el-icon-plus" @click="add">新增</el-button>
-          <el-button type="warning" plain class="el-icon-edit" @click="toEdit('修改')">修改</el-button>
+          <el-button type="warning" plain class="el-icon-edit" @click="toEdit">修改</el-button>
           <el-button type="danger" plain class="el-icon-delete" @click="deleteMsg">删除</el-button>
-          <el-button type="danger" plain class="el-icon-delete" @click="queryMsg">查看</el-button>
+          <el-button type="primary" plain class="el-icon-search" @click="queryMsg">查看</el-button>
         </el-col>
       </el-row>
     </el-card>
@@ -47,6 +47,121 @@
         element-loading-text="加载中"
       ></dynamic-table>
     </el-card>
+    <!-- 新增弹出框 -->
+    <el-dialog
+      :title="'新建职务类型'"
+      class="add-type"
+      center
+      :visible.sync="addFormVisible"
+      :close-on-click-modal="false"
+    >
+      <el-form :model="searchForm" :rules="rules" ref="searchForm">
+        <el-row :gutter="24">
+          <el-col :span="12">
+            <el-form-item label="编码：" :label-width="formLabelWidth" prop="fcode">
+              <el-input v-model="searchForm.fcode" size="small" autocomplete="off"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="名称：" :label-width="formLabelWidth" prop="fname">
+              <el-input v-model="searchForm.fname" size="small" autocomplete="off"></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-form-item label="描述：" prop="fremark" :label-width="formLabelWidth">
+            <el-input
+              maxlength="500"
+              size="small"
+              show-word-limit
+              autosize
+              type="textarea"
+              v-model="searchForm.fremark"
+            ></el-input>
+          </el-form-item>
+        </el-row>
+      </el-form>
+
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="addFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="addSubmit('searchForm')">保 存</el-button>
+      </div>
+    </el-dialog>
+    <!-- 编辑弹出框 -->
+    <el-dialog
+      :title="'编辑职务类型'"
+      class="edit-type"
+      center
+      :visible.sync="editFormVisible"
+      :close-on-click-modal="false"
+    >
+      <el-form :model="searchForm" :rules="rules" ref="searchForm">
+        <el-row :gutter="24">
+          <el-col :span="12">
+            <el-form-item label="编码：" :label-width="formLabelWidth" prop="fcode">
+              <el-input v-model="searchForm.fcode" size="small" autocomplete="off"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="名称：" :label-width="formLabelWidth" prop="fname">
+              <el-input v-model="searchForm.fname" size="small" autocomplete="off"></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-form-item label="描述：" prop="fremark" :label-width="formLabelWidth">
+            <el-input
+              maxlength="500"
+              size="small"
+              show-word-limit
+              autosize
+              type="textarea"
+              v-model="searchForm.fremark"
+            ></el-input>
+          </el-form-item>
+        </el-row>
+      </el-form>
+
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="editFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="addSubmit('searchForm')">保 存</el-button>
+      </div>
+    </el-dialog>
+    <!-- 查看弹出框 -->
+    <el-dialog
+      :title="'查看职务类型'"
+      class="query-type"
+      center
+      :visible.sync="queryFormVisible"
+      :close-on-click-modal="false"
+    >
+      <el-form :model="searchForm" :rules="rules" ref="searchForm">
+        <el-row :gutter="24">
+          <el-col :span="12">
+            <el-form-item label="编码：" :label-width="formLabelWidth" prop="fcode">
+              <el-input v-model="searchForm.fcode" size="small" autocomplete="off"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="名称：" :label-width="formLabelWidth" prop="fname">
+              <el-input v-model="searchForm.fname" size="small" autocomplete="off"></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-form-item label="描述：" prop="fremark" :label-width="formLabelWidth">
+            <el-input
+              maxlength="500"
+              size="small"
+              show-word-limit
+              autosize
+              type="textarea"
+              v-model="searchForm.fremark"
+            ></el-input>
+          </el-form-item>
+        </el-row>
+      </el-form>
+    </el-dialog>
   </div>
 </template>
 
@@ -56,7 +171,9 @@ export default {
   name: "positionType",
   data() {
     return {
-      dialogFormVisible: false,
+      editFormVisible: false,
+      addFormVisible: false,
+      queryFormVisible: false,
       userVisible: false,
       isEdit: false,
       searchName: "",
@@ -210,10 +327,13 @@ export default {
     // 搜索
     onSubmit() {
       console.log(this.form.select);
+      this.pageNum = 1;
       this.getPositionTypeTableData(this.form.select);
     },
+    // 显示全部信息
     resetForm(formName) {
       this.$refs[formName].resetFields();
+      this.pageNum = 1;
       this.getPositionTypeTableData("");
     },
     // 获取表格数据
@@ -238,7 +358,6 @@ export default {
         default:
           break;
       }
-
       this.$api.jobUserManagement.getPositionTypeTableData(data).then(
         res => {
           if (this.isEdit) {
@@ -258,6 +377,7 @@ export default {
                 break;
             }
           }
+          this.total = res.data.data.total;
         },
         error => {
           console.log(error);
@@ -267,23 +387,76 @@ export default {
 
     // 新增
     add() {
-      this.dialogFormVisible = true;
+      this.addFormVisible = true;
+      this.pageNum = 1;
+      this.searchForm = {
+        fname: "",
+        fcode: "",
+        fpositiontype: "",
+        fremark: ""
+      };
       this.isEdit = false;
     },
-
     // 编辑
-    toEdit(Str) {
-      if (Str == "编辑") {
-        if (this.multipleSelection.length != 1) {
-          this.$message.error("请选择一条数据进行编辑");
-          return;
-        }
-        this.isEdit = true; //console.log(this.multipleSelection)
-        this.getPositionTypeTableData("foid");
+    toEdit() {
+      if (this.multipleSelection.length != 1) {
+        this.$message.error("请选择一条数据进行编辑");
+        return;
       }
-      this.dialogFormVisible = true;
+      this.isEdit = true;
+      this.getPositionTypeTableData("");
+      this.editFormVisible = true;
     },
+    // 保存
+    addSubmit(formName) {
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          switch (this.isEdit) {
+            case true:
+              this.$api.jobUserManagement
+                .updatePositionTypeTableData(this.searchForm)
+                .then(res => {
+                  if (res.data.code == 0) {
+                    this.editFormVisible = false;
+                    this.isEdit = false;
+                    this.$message.success("修改成功");
+                    //刷新表格
+                    this.getPositionTypeTableData("");
+                  } else {
+                    this.$message.error(res.data.msg);
+                  }
+                }),
+                error => {
+                  console.log(error);
+                };
+              break;
+            case false:
+              this.$api.jobUserManagement
+                .addPositionTypeTableData(this.searchForm)
+                .then(res => {
+                  if (res.data.code == 0) {
+                    this.addFormVisible = false;
+                    this.$message.success("新增成功");
+                    //刷新表格
+                    this.getPositionTypeTableData("");
+                  } else {
+                    this.$message.error(res.data.msg);
+                  }
+                }),
+                error => {
+                  console.log(error);
+                };
+              break;
 
+            default:
+              break;
+          }
+        } else {
+          console.log("error submit!!");
+          return false;
+        }
+      });
+    },
     //删除
     deleteMsg() {
       if (this.multipleSelection.length > 1) {
@@ -291,10 +464,11 @@ export default {
         return;
       }
       this.$api.jobUserManagement
-        .getPositionTypeTableData(this.multipleSelection[0].foid)
+        .deletePositionTypeTableData(this.multipleSelection[0].foid)
         .then(res => {
-          if ((res.data.data = "success")) {
+          if ((res.data.code == 0)) {
             this.$message.success("删除成功!");
+            this.isEdit = false;
             //刷新表格
             this.getPositionTypeTableData("");
           }
@@ -305,7 +479,15 @@ export default {
     },
 
     //查看
-    queryMsg() {}
+    queryMsg() {
+      if (this.multipleSelection.length != 1) {
+        this.$message.error("请选择一条数据查看详情");
+        return;
+      }
+      this.isEdit = true;
+      this.getPositionTypeTableData("foid");
+      this.queryFormVisible = true;
+    }
   }
 };
 </script>
