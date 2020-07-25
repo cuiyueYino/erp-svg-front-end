@@ -11,6 +11,7 @@ import RoleManagement from './roleManagement';
 import SystemSet from './systemset';
 import insideMail from './inside-mail';
 import confMangement from './conference';
+import collaborativeOffice from './collaborative-office';
 
 // 其他模块的接口……
 
@@ -25,6 +26,7 @@ export default {
     SystemSet,
     jobUserManagement,
     insideMail,
-    confMangement
+    confMangement,
+    collaborativeOffice,
     // ……
 };

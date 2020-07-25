@@ -191,7 +191,22 @@ class ITEMData {
                     title: '功能菜单'
                     },
                 ]
-            },
+            },{
+                index: 'collaborativeOffice',
+                title: '协同办公',
+                subs: [
+                    {
+                        index: 'workItems',
+                        title: '工作事项',
+               			subs: [
+	                    	{
+	                        index: 'templateMainTable',
+	                        title: '工作事项模板主表分类',
+	                    	}
+                		]
+                    }
+                ]
+            }
         ];
         this.ITEMother = [
             {
@@ -204,7 +219,6 @@ class ITEMData {
                     }
                 ]
             }
-            
         ];
     };
 }
