@@ -79,6 +79,22 @@ export default {
             this.$emit('selection-change', val);
         },
         /**
+         * 选择项选中时事件处理
+         * @event
+         * @param {Array} val 当前的选择项
+         */
+        onSelect(data,row) {
+            this.$emit('select',data,row);
+        },
+        /**
+         * table单列选中时事件处理
+         * @event
+         * @param {Array} val 当前的选择项
+         */
+        onRowClick(val) {
+            this.$emit('Row-Click', val);
+        },
+        /**
          * 渲染表格Column
          * @param {Object} props Column属性
          */
@@ -128,6 +144,8 @@ export default {
             pageSize,
             pageSizes,
             onCurrentChange,
+            onSelect,
+            onRowClick,
             onSelectionChange,
             tableRowClassName,
             onSizeChange,
@@ -161,6 +179,8 @@ export default {
                     data={tableData}
                     border
                     header-cell-class-name="table-header"
+                    on-select={onSelect}
+                    on-row-click={onRowClick}
                     on-selection-change={onSelectionChange}
                     size="small"
                     row-class-name={tableRowClassName}
