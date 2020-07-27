@@ -4,7 +4,7 @@
     <!-- TAB页 -->
     <el-form
       label-width="110px"
-      :rules="formdata"
+      :rules="configRules"
       ref="formData"
       class="dataForm"
       :model="formdata"
@@ -15,7 +15,7 @@
           <el-form-item label="名称" :label-width="formLabelWidth" prop="displayName">
             <el-input ref="nameInput" v-model="displayName" autocomplete="off"></el-input>
           </el-form-item>
-          <el-form-item label="业务工作" :label-width="formLabelWidth" prop="name">
+          <el-form-item label="业务工作" :label-width="formLabelWidth" prop="work">
             <el-input v-model="formData.work" autocomplete="off"></el-input>
             <img class="icon-search" @click="workSearch" src="../../../assets/img/search.svg" />
           </el-form-item>
@@ -359,7 +359,7 @@ export default {
       closeConfig: false,
       // 配置表单校验规则
       configRules: {
-        name: { required: true, message: "请输入英文名", trigger: "blur" },
+        work: { required: true, message: "请选择业务工作", trigger: "blur" },
         displayName: { required: true, message: "请输入名称", trigger: "blur" },
         performType: {
           required: true,
@@ -540,6 +540,7 @@ export default {
           if (this.UserListReq.fname) {
             let UroleObj = {};
             UroleObj = this.UserListReq;
+            UroleObj.oid = this.UserListReq.userid;
             UroleObj.type = 3;
             UroleObj.typeName = "user";
             UroleObj.fUsername = UroleObj.fname;

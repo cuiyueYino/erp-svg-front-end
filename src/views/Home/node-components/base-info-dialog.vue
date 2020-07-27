@@ -283,7 +283,7 @@ export default {
                         type: 'selection'
                     },
                     {
-                        key: 'fcode',
+                        key: 'usercode',
                         title: '编码'
                     },
                     {
@@ -308,6 +308,19 @@ export default {
                         console.log(error)
                     })
                 }else if(this.title =='组织结构查询'){
+                    this.columns3=[
+                    {
+                        type: 'selection'
+                    },
+                    {
+                        key: 'fcode',
+                        title: '编码'
+                    },
+                    {
+                        key: 'fname',
+                        title: '名称'
+                    },
+                ];
                     let fromdata={};
                     fromdata.queryType='org';
                     this.gridData =[];

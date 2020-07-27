@@ -69,11 +69,11 @@ export default {
     },
     methods: {
         // 解析节点后生成连接线
-        async compileXMLToObj (dataObj) {console.log(dataObj)
+        async compileXMLToObj (dataObj) {//console.log(dataObj)
              // 解析成为XML格式数据
             // const dataStr = await this.compileObjToXMLLoading(dataObj);
             let data;
-            let yData; 
+            let yData;
             await this.compileObjToXMLLoading(dataObj).then(res=>{
                 // console.log(res);
                 data = this.compileNodes(res);//返回的line线集合
@@ -82,16 +82,16 @@ export default {
                         yData = item.options.y
                     }
                 })
-                
             });
-            console.log(data, this.workflowNodes,yData);
-            data.then(res=>{
+            data.then(res=>{ console.log(res);
+                //遍历节点的返回值
                 this.workflowNodes.map(item => {
                     if( item.type == "Start"){
                          item.options.y = Number(yData) 
                     }
+                    //遍历线的返回值
                     res.map(node => {
-                        if (item.data.name === node.to.data.name) {
+                        if (item.data.displayName === node.to.data.displayName) {
                             node.to = {
                                 ...item,
                                 target: node.to.target,
@@ -99,13 +99,15 @@ export default {
                             };
                             this.$set(this.linkData, this.linkData.length, node);
                         }
-                        if (item.data.name === node.from.data.name) {
-                            item.transition.push(node);
+                        if (item.data.displayName === node.from.data.displayName) {
+                            item.transition.push(node);//;console.log( item )
                         }
                     });
                 });
-                console.log( this.workflowNodes)
+                // console.log( this.workflowNodes)
             });
+           
+            
         },
          // 解析成为XML格式数据_加载
          compileObjToXMLLoading (obj) {
@@ -126,13 +128,13 @@ export default {
                         if (item.type !== 'End') {
                             item.transition.map(link => {
                                 compileXML += `
-                                    <transition offset="${link.from.target},${link.to.target}" to="${link.to.data.name}" name="${link.data.name}" displayName="${link.data.displayName}" ></transition>`;
+                                    <transition offset="${link.from.target},${link.to.target}" to="${link.to.data.displayName}" name="${link.data.name}" displayName="${link.data.displayName}" ></transition>`;
                             });
                         }
                         compileXML += `</${tagName}>`;
                     });
                     compileXML += '</process>';
-                    // console.log(compileXML)
+                    console.log(compileXML)
                     resolve(compileXML); 
             });
         },
@@ -190,6 +192,7 @@ export default {
                 const str = dataStr;
                 // debugger
                 const newArr = [];
+                let getLineArr = [];
                 // 创建文档对象
                 const parser = new DOMParser();
                 const xmlDoc = parser.parseFromString(str, 'text/html');
@@ -230,20 +233,25 @@ export default {
                     }
                     this.$set(this.workflowNodes, this.workflowNodes.length, nodeObj);
                     // 获取连接线数据
-                    if (localName !== 'end') {//console.log(localName, nodeObj, children)
-                        const linkObj = this.compileLink(localName, nodeObj, children);
-                        if(linkObj){
-                            newArr.push(...linkObj);
-                        }
+                    if (localName !== 'end') {//console.log(localName, nodeObj, children,target)
+                        
+                        const linkObj = this.compileLink(localName, nodeObj, children,target);
+                        linkObj.then(res=>{
+                            for(let p = 0 ; p<res.length; p++){
+                                newArr.push(res[p]);
+                            }
+                        })
                     }
                 }
-                resolve(newArr);
-                console.log(this.workflowNodes)
+                resolve( newArr )
             });
         },
         // 解析连接线数据
-        compileLink (name, obj, arr) {
+        compileLink (name, obj, arr,allNodes) {//debugger
+            return new Promise((resolve, reject) => { 
             let lineList = [];
+            let toName;
+            
             for (let t = 0, tLen = arr.length; t < tLen; t++) {
                 const { attributes } = arr[t];
                 //
@@ -253,10 +261,14 @@ export default {
                 //
                 const target = attributes.offset.nodeValue.split(',')[0];
                 const toTarget = attributes.offset.nodeValue.split(',')[1];
-                const toName = attributes.to.nodeValue;
+                const toDisplayName = attributes.to.nodeValue;
+                allNodes.forEach(item=>{
+                    if( item.attributes.displayName.nodeValue === attributes.to.nodeValue ){
+                         toName = item.attributes.name.nodeValue;
+                    }
+                })
                 //
                 const point = this.computedLinkPoint(nodeObj, target);
-                
                 lineList.push({
                     from: {
                         ...obj,
@@ -265,7 +277,8 @@ export default {
                     },
                     to: {
                         data: {
-                            name: toName
+                            name: toName,
+                            displayName: toDisplayName,
                         },
                         target: toTarget
                     },
@@ -277,8 +290,10 @@ export default {
                     lineEdit: true,
                     visible: false
                 });
+                
             }
-            return lineList;
+            resolve( lineList ) ;
+        });
         },
         // 计算连接点相对坐标
         computedLinkPoint (obj, param) {
@@ -525,6 +540,7 @@ export default {
             this.$api.svg.addSvg(data).then(res=>{
               console.log(res)
               sessionStorage.setItem("eidtMsg",null);
+              sessionStorage.setItem('getLineArr',null)
             },error=>{
                 console.log(error)
             })
@@ -562,6 +578,7 @@ export default {
             this.$api.svg.addSvg(data).then(res=>{
               console.log(res)
               sessionStorage.setItem("eidtMsg",null);
+              sessionStorage.setItem('getLineArr',null)
             },error=>{
                 console.log(error)
             })
