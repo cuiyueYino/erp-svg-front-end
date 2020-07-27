@@ -86,6 +86,30 @@ class ITEMData {
                 ]
             },
             {
+                index: 'togetherWorking',
+                title: '协同办公',
+                subs: [
+                    {
+                        index: 'confMangement',
+                        title: '会议管理',
+                        subs: [
+                            {
+                                index: 'confOffice',
+                                title: '会议室'
+                            },
+                            {
+                                index: 'confApply',
+                                title: '会议室申请'
+                            },
+                            {
+                                index: 'confUsageDetail',
+                                title: '会议室使用详情'
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
                 index: 'userManagement',
                 title: '用户管理',
                 subs: [
@@ -167,7 +191,22 @@ class ITEMData {
                     title: '功能菜单'
                     },
                 ]
-            },
+            },{
+                index: 'collaborativeOffice',
+                title: '协同办公',
+                subs: [
+                    {
+                        index: 'workItems',
+                        title: '工作事项',
+               			subs: [
+	                    	{
+	                        index: 'templateMainTable',
+	                        title: '工作事项模板主表分类',
+	                    	}
+                		]
+                    }
+                ]
+            }
         ];
         this.ITEMother = [
             {
@@ -180,7 +219,6 @@ class ITEMData {
                     }
                 ]
             }
-            
         ];
     };
 }

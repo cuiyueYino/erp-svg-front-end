@@ -14,7 +14,7 @@ const Jobs = [
         name: 'positionType',
         component: positionType,
         meta: {
-            title: '职务管理'
+            title: '职务类型'
         }
     },
    

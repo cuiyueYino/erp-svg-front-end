@@ -9,6 +9,8 @@ import Peoples from '../views/people-management/route';
 import RoleMen from '../views/role-management/route';
 import MenuMen from '../views/system-setting/route';
 import InsideMail from '../views/inside-mail/route';
+import confMangement from '../views/conference/route';
+import collaborativeOffice from '../views/collaborative-office/route';
 
 Vue.use(Router);
 
@@ -33,6 +35,8 @@ export default new Router({
                 ...RoleMen,
                 ...MenuMen,
                 ...InsideMail,
+                ...confMangement,
+                ...collaborativeOffice,
                 {
                     path: 'svgIndex',
                     name: 'svgIndex',
