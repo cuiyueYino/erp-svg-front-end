@@ -80,7 +80,7 @@ const jobUserManagement = {
 
     // 人员-公司查询
     getCompanyData(){
-        return httpReqest.get('/api/organization/getCompanyData');
+        return httpReqest.get('/api/interfaces/organization/getCompanyData');
     },
 
     // 人员-职位查询

@@ -139,12 +139,12 @@
         <el-row :gutter="24">
           <el-col :span="12">
             <el-form-item label="编码：" :label-width="formLabelWidth" prop="fcode">
-              <el-input v-model="searchForm.fcode" size="small" autocomplete="off"></el-input>
+              <el-input :disabled="true" v-model="searchForm.fcode" size="small" autocomplete="off"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="名称：" :label-width="formLabelWidth" prop="fname">
-              <el-input v-model="searchForm.fname" size="small" autocomplete="off"></el-input>
+              <el-input :disabled="true" v-model="searchForm.fname" size="small" autocomplete="off"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
@@ -155,6 +155,7 @@
               size="small"
               show-word-limit
               autosize
+              :disabled="true"
               type="textarea"
               v-model="searchForm.fremark"
             ></el-input>
@@ -404,7 +405,7 @@ export default {
         return;
       }
       this.isEdit = true;
-      this.getPositionTypeTableData("");
+      this.getPositionTypeTableData("foid");
       this.editFormVisible = true;
     },
     // 保存
@@ -505,6 +506,10 @@ export default {
 
 .box-card:first-child {
   margin-bottom: 16px;
+}
+
+/deep/ .el-table__fixed-right::before {
+  background-color: revert;
 }
 // .search-all {
 //   margin: 0 50px;
