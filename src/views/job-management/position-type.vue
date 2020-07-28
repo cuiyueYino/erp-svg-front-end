@@ -27,7 +27,7 @@
         </el-col>
         <el-col :span="6" style="text-align: right;">
           <el-button type="success" plain class="el-icon-plus" @click="add">新增</el-button>
-          <el-button type="warning" plain class="el-icon-edit" @click="toEdit">编辑</el-button>
+          <el-button type="warning" plain class="el-icon-edit" @click="toEdit">修改</el-button>
           <el-button type="danger" plain class="el-icon-delete" @click="deleteMsg">删除</el-button>
           <el-button type="primary" plain class="el-icon-search" @click="queryMsg">查看</el-button>
         </el-col>
@@ -47,10 +47,10 @@
         element-loading-text="加载中"
       ></dynamic-table>
     </el-card>
-    <!--新增 弹出框 -->
+    <!-- 新增弹出框 -->
     <el-dialog
-      :title="'新建职务'"
-      class="add-user"
+      :title="'新建职务类型'"
+      class="add-type"
       center
       :visible.sync="addFormVisible"
       :close-on-click-modal="false"
@@ -66,19 +66,6 @@
             <el-form-item label="名称：" :label-width="formLabelWidth" prop="fname">
               <el-input v-model="searchForm.fname" size="small" autocomplete="off"></el-input>
             </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="职务类型：" :label-width="formLabelWidth" prop="positionTypeName">
-              <el-input v-model="searchForm.fpositionname" size="small" autocomplete="off"></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="1" class="el-positionType">
-            <el-button
-              type="primary"
-              size="mini"
-              icon="el-icon-search"
-              @click="queryPositionType(searchForm)"
-            ></el-button>
           </el-col>
         </el-row>
         <el-row>
@@ -100,11 +87,10 @@
         <el-button type="primary" @click="addSubmit('searchForm')">保 存</el-button>
       </div>
     </el-dialog>
-
-    <!--编辑 弹出框 -->
+    <!-- 编辑弹出框 -->
     <el-dialog
-      :title="'编辑职务'"
-      class="edit-user"
+      :title="'编辑职务类型'"
+      class="edit-type"
       center
       :visible.sync="editFormVisible"
       :close-on-click-modal="false"
@@ -120,19 +106,6 @@
             <el-form-item label="名称：" :label-width="formLabelWidth" prop="fname">
               <el-input v-model="searchForm.fname" size="small" autocomplete="off"></el-input>
             </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="职务类型：" :label-width="formLabelWidth" prop="positionTypeName">
-              <el-input v-model="searchForm.fpositionname" size="small" autocomplete="off"></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="1" class="el-positionType">
-            <el-button
-              type="primary"
-              size="mini"
-              icon="el-icon-search"
-              @click="queryPositionType(searchForm)"
-            ></el-button>
           </el-col>
         </el-row>
         <el-row>
@@ -154,7 +127,6 @@
         <el-button type="primary" @click="addSubmit('searchForm')">保 存</el-button>
       </div>
     </el-dialog>
-
     <!-- 查看弹出框 -->
     <el-dialog
       :title="'查看职务类型'"
@@ -175,11 +147,6 @@
               <el-input v-model="searchForm.fname" size="small" autocomplete="off"></el-input>
             </el-form-item>
           </el-col>
-          <el-col :span="12">
-            <el-form-item label="职务类型：" :label-width="formLabelWidth" prop="fpositiontype">
-              <el-input v-model="searchForm.fpositiontype" size="small" autocomplete="off"></el-input>
-            </el-form-item>
-          </el-col>
         </el-row>
         <el-row>
           <el-form-item label="描述：" prop="fremark" :label-width="formLabelWidth">
@@ -195,67 +162,106 @@
         </el-row>
       </el-form>
     </el-dialog>
-    <POSserachpage  :rowPOSSDataObj="rowPOSSDataObj" :rowPOSStype="rowPOSStype" @changeShow="showORhideForPOSS"/>
   </div>
 </template>
 
 <script>
 import DynamicTable from "../../components/common/dytable/dytable.vue";
-import POSserachpage from './position-type-search.vue';
 export default {
-  name: "jobSet",
-  components: {
-    DynamicTable,
-    POSserachpage
-  },
+  name: "positionType",
   data() {
     return {
       editFormVisible: false,
       addFormVisible: false,
       queryFormVisible: false,
-      rowPOSStype: false,
       userVisible: false,
       isEdit: false,
-      rowPOSSDataObj: {},
-      tableData: [],
-      multipleSelection: [],
-      form: {
-        select: [],
-        selectVal: "",
+      searchName: "",
+      filterText: "",
+      treeData: [
+        {
+          label: "一级 1",
+          children: [
+            {
+              label: "二级 1-1",
+              children: [
+                {
+                  label: "三级 1-1-1"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          label: "一级 1",
+          children: [
+            {
+              label: "二级 1-1"
+              // children: [{
+              // label: '三级 1-1-1'
+              // }]
+            }
+          ]
+        }
+      ],
+      defaultProps: {
+        children: "children",
+        label: "label"
       },
-      searchForm: {
-        fname: "",
-        fcode: "",
-        fpositiontype: "",
-        fpositionname: "",
-        fremark: "",
-      },
-      userForm: {},
-      options: [],
       pageNum: 1,
       pageSize: 10,
       total: 20,
       columns: [
         {
-          type: "selection",
+          type: "selection"
         },
         {
           key: "fcode",
-          title: "编码",
+          title: "编码"
         },
         {
           key: "fname",
-          title: "名称",
-        },
-        {
-          key: "fpositiontype",
-          title: "职务类型",
+          title: "名称"
         },
         {
           key: "fremark",
-          title: "描述",
-        },
+          title: "描述"
+        }
       ],
+
+      columns2: [
+        {
+          type: "selection"
+        },
+        {
+          key: "fstatus",
+          title: "操作时间"
+        },
+        {
+          key: "fstatus",
+          title: "操作内容"
+        },
+        {
+          key: "fstatus",
+          title: "操作原因"
+        }
+      ],
+      tableData: [],
+      tableData2: [],
+      radio: "1",
+      multipleSelection: [],
+      checked: false,
+      form: {
+        select: [],
+        selectVal: ""
+      },
+      searchForm: {
+        fname: "",
+        fcode: "",
+        fremark: ""
+      },
+      userForm: {},
+      options: [],
       formLabelWidth: "120px",
       rules: {
         fcode: [
@@ -264,8 +270,8 @@ export default {
             min: 1,
             max: 100,
             message: "长度在 1 到 50 个字符",
-            trigger: "blur",
-          },
+            trigger: "blur"
+          }
         ],
         fname: [
           { required: true, message: "请输入名称", trigger: "blur" },
@@ -273,20 +279,26 @@ export default {
             min: 1,
             max: 100,
             message: "长度在 1 到 100 个字符",
-            trigger: "blur",
-          },
-        ],
-      },
+            trigger: "blur"
+          }
+        ]
+      }
     };
+  },
+  components: {
+    DynamicTable
   },
   created() {
     this.$nextTick(() => {
-      this.getTableData("");
+      this.getPositionTypeTableData("");
     });
   },
   computed: {},
-  watch: {},
-
+  watch: {
+    filterText(val) {
+      this.$refs.tree.filter(val);
+    }
+  },
   methods: {
     filterNode(value, data) {
       if (!value) return true;
@@ -310,60 +322,46 @@ export default {
     //分页、下一页
     onCurrentChange(val) {
       this.pageNum = val;
-      this.getTableData("");
+      this.getPositionTypeTableData("");
     },
     // 搜索
     onSubmit() {
       console.log(this.form.select);
       this.pageNum = 1;
-      this.getTableData(this.form.select);
+      this.getPositionTypeTableData(this.form.select);
     },
+    // 显示全部信息
     resetForm(formName) {
       this.$refs[formName].resetFields();
       this.pageNum = 1;
-      this.getTableData("");
+      this.getPositionTypeTableData("");
     },
     // 获取表格数据
-    getTableData(params) {
+    getPositionTypeTableData(params) {
       let data;
       switch (this.isEdit) {
         case true:
           data = {
             [params]: this.multipleSelection[0].foid,
             page: this.pageNum,
-            size: this.pageSize,
+            size: this.pageSize
           };
           break;
         case false:
-          if (params == "fpositionstate") {
-            switch (this.form.selectVal) {
-              case "在" || "在职":
-                this.form.selectVal = "1";
-                break;
-              case "离" || "离职":
-                this.form.selectVal = "0";
-                break;
-
-              default:
-                break;
-            }
-          }
           data = {
             [params]: this.form.selectVal,
             page: this.pageNum,
-            size: this.pageSize,
+            size: this.pageSize
           };
           break;
 
         default:
           break;
       }
-
-      this.$api.jobUserManagement.getTableData(data).then(
-        (res) => {
+      this.$api.jobUserManagement.getPositionTypeTableData(data).then(
+        res => {
           if (this.isEdit) {
             this.searchForm = res.data.data.rows[0];
-            this.searchForm.fpositionname = this.searchForm.fpositiontype
           } else {
             this.tableData = res.data.data.rows;
           }
@@ -378,74 +376,74 @@ export default {
               default:
                 break;
             }
-            switch (this.tableData[i].fsubprocess) {
-              case 1:
-                this.tableData[i].fsubprocess = "是";
-                break;
-              case 0:
-                this.tableData[i].fsubprocess = "否";
-                break;
-              default:
-                break;
-            }
           }
           this.total = res.data.data.total;
         },
-        (error) => {
+        error => {
           console.log(error);
         }
       );
     },
-    //新增
+
+    // 新增
     add() {
       this.addFormVisible = true;
+      this.pageNum = 1;
       this.searchForm = {
         fname: "",
         fcode: "",
         fpositiontype: "",
-        fpositionname: "",
-        fremark: "",
+        fremark: ""
       };
-      this.pageNum = 1;
       this.isEdit = false;
     },
-
+    // 编辑
+    toEdit() {
+      if (this.multipleSelection.length != 1) {
+        this.$message.error("请选择一条数据进行编辑");
+        return;
+      }
+      this.isEdit = true;
+      this.getPositionTypeTableData("");
+      this.editFormVisible = true;
+    },
+    // 保存
     addSubmit(formName) {
-      this.$refs[formName].validate((valid) => {
+      this.$refs[formName].validate(valid => {
         if (valid) {
           switch (this.isEdit) {
             case true:
               this.$api.jobUserManagement
-                .updateTableData(this.searchForm)
-                .then((res) => {
+                .updatePositionTypeTableData(this.searchForm)
+                .then(res => {
                   if (res.data.code == 0) {
                     this.editFormVisible = false;
                     this.isEdit = false;
                     this.$message.success("修改成功");
                     //刷新表格
-                    this.getTableData("");
+                    this.getPositionTypeTableData("");
                   } else {
                     this.$message.error(res.data.msg);
                   }
                 }),
-                (error) => {
+                error => {
                   console.log(error);
                 };
               break;
             case false:
               this.$api.jobUserManagement
-                .addTableData(this.searchForm)
-                .then((res) => {
+                .addPositionTypeTableData(this.searchForm)
+                .then(res => {
                   if (res.data.code == 0) {
                     this.addFormVisible = false;
                     this.$message.success("新增成功");
                     //刷新表格
-                    this.getTableData("");
+                    this.getPositionTypeTableData("");
                   } else {
                     this.$message.error(res.data.msg);
                   }
                 }),
-                (error) => {
+                error => {
                   console.log(error);
                 };
               break;
@@ -466,90 +464,57 @@ export default {
         return;
       }
       this.$api.jobUserManagement
-        .deleteTableData(this.multipleSelection[0].foid)
-        .then((res) => {
-          if (res.data.code == 0) {
-            this.$message.success("删除成功");
+        .deletePositionTypeTableData(this.multipleSelection[0].foid)
+        .then(res => {
+          if ((res.data.code == 0)) {
+            this.$message.success("删除成功!");
             this.isEdit = false;
             //刷新表格
-            this.getTableData("");
-          } else {
-            this.$message.error(res.data.msg);
+            this.getPositionTypeTableData("");
           }
         }),
-        (error) => {
+        error => {
           console.log(error);
         };
     },
 
-    // 编辑
-    toEdit(Str) {
-      if (this.multipleSelection.length != 1) {
-        this.$message.error("请选择一条数据进行编辑");
-        return;
-      }
-      this.isEdit = true;
-      this.getTableData("");
-      this.editFormVisible = true;
-    },
     //查看
     queryMsg() {
       if (this.multipleSelection.length != 1) {
         this.$message.error("请选择一条数据查看详情");
         return;
       }
-      console.log(this.searchForm);
       this.isEdit = true;
-      this.getTableData("");
+      this.getPositionTypeTableData("foid");
       this.queryFormVisible = true;
-    },
-    queryPositionType(data) {
-      this.rowPOSStype = true;
-      let finandata = {};
-      finandata.finanrowname = "";
-      finandata.finanrowId = "";
-      this.rowPOSSDataObj = finandata;
-    },
-    //子组件返回值处理
-    showORhideForPOSS(data, type) {
-      if (type === false) {
-        this.rowPOSStype = false;
-      } else {
-        this.rowPOSStype = true;
-      }
-      if (data.SearchData) {
-        let Sdata = data.SearchData;
-        this.searchForm.fpositionname = Sdata[0].fname;
-        this.searchForm.fpositiontype = Sdata[0].foid;
-      }
-    },
+    }
   }
 };
 </script>
 <style lang="scss" scoped>
-/deep/ .el-textarea .el-input__count {
-  background: #fff0;
-}
-/deep/ .el-select {
-  width: 100%;
-}
-/deep/ .el-positionType {
-  padding-left: 0px !important;
-  padding-top: 6px;
-}
+// /deep/ .el-textarea .el-input__count {
+//   background: #fff0;
+// }
+// /deep/ .el-select {
+//   width: 100%;
+// }
+// /deep/ .el-positionType {
+//     padding-left: 0px !important;
+//     padding-top: 6px;
+// }
 
 .box-card:first-child {
   margin-bottom: 16px;
 }
-.search-all {
-  margin: 0 50px;
-}
-.icon-search {
-  width: 24px;
-  height: auto;
-  position: absolute;
-  top: 8px;
-  left: 230px;
-  cursor: pointer;
-}
+// .search-all {
+//   margin: 0 50px;
+// }
+// .icon-search {
+//   width: 24px;
+//   height: auto;
+//   position: absolute;
+//   top: 8px;
+//   left: 230px;
+//   cursor: pointer;
+// }
 </style>
