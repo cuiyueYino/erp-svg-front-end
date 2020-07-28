@@ -1,6 +1,13 @@
 <template>
 <!-- 弹出框内容 -->
         <div v-show="visible">
+             <el-form
+                label-width="110px"
+                :rules="configRules"
+                ref="formData"
+                class="dataForm"
+                :model="formdata"
+                >
         <!-- TAB页 -->
         <el-tabs v-model="activeName" @tab-click="handleClick">
             <el-tab-pane label="基本信息" name="1">
@@ -8,7 +15,7 @@
                 <el-form-item label="名称" :label-width="formLabelWidth" prop="name">
                     <el-input ref="nameInput" v-model="formData.name" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="审核工作" :label-width="formLabelWidth" prop="name">
+                <el-form-item label="审核工作" :label-width="formLabelWidth" prop="work">
                     <el-input v-model="formData.work" autocomplete="off"></el-input>
                     <img class="icon-search" @click="workSearch('审核工作')" src="../../../assets/img/search.svg">
                     <el-button type="primary" plain class="joinWorkBtn" @click="addJoinWork('新增审核业务')">新增审核</el-button>
@@ -283,8 +290,9 @@
             <base-info-dialog class="children-dialog" :visible="baseInputTableF" :type="baseInputType" :title="baseInputTitle" @closeDialog="closeBaseInfo"></base-info-dialog>
          <!-- 表单弹窗 -->
             <join-dialog :visible="baseFormF" @closeDialog="closeForm" :title="baseFormTitle"></join-dialog>
+             </el-form>
         </div>
-         <!-- </el-form> -->
+        
     <!-- </el-dialog> -->
 </template>
 
@@ -340,7 +348,16 @@ export default {
             formLabelWidth: '120px',
             // 关闭对话框配置
             closeConfig: false,
-           
+            // 配置表单校验规则
+            configRules: {
+                work: { required: true, message: "请选择业务工作", trigger: "blur" },
+                name: { required: true, message: "请输入名称", trigger: "blur" },
+                performType: {
+                required: true,
+                message: "请选择参与类型",
+                trigger: "change"
+                }
+            },
             // 对话框显示标识
             dialogVisible: this.visible,
             // 配置表单数据
@@ -572,6 +589,7 @@ export default {
                     UroleObj = this.UserListReq;
                     UroleObj.type = 3;
                     UroleObj.typeName = "user";
+                    UroleObj.oid = this.UserListReq.userid;
                     UroleObj.fUsername = UroleObj.fname;
                     UroleObj.fUsercode = this.baseActiveNameStr;
                     UroleObj.fUserRemake = UroleObj.fenglishname;

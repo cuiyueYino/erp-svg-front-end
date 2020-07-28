@@ -167,17 +167,17 @@
         <el-row :gutter="24">
           <el-col :span="12">
             <el-form-item label="编码：" :label-width="formLabelWidth" prop="fcode">
-              <el-input v-model="searchForm.fcode" size="small" autocomplete="off"></el-input>
+              <el-input :disabled="true" v-model="searchForm.fcode" size="small" autocomplete="off"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="名称：" :label-width="formLabelWidth" prop="fname">
-              <el-input v-model="searchForm.fname" size="small" autocomplete="off"></el-input>
+              <el-input :disabled="true" v-model="searchForm.fname" size="small" autocomplete="off"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="职务类型：" :label-width="formLabelWidth" prop="fpositiontype">
-              <el-input v-model="searchForm.fpositiontype" size="small" autocomplete="off"></el-input>
+              <el-input :disabled="true" v-model="searchForm.fpositiontype" size="small" autocomplete="off"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
@@ -189,6 +189,7 @@
               show-word-limit
               autosize
               type="textarea"
+              :disabled="true"
               v-model="searchForm.fremark"
             ></el-input>
           </el-form-item>
@@ -314,6 +315,7 @@ export default {
     },
     // 搜索
     onSubmit() {
+      this.isEdit = false;
       console.log(this.form.select);
       this.pageNum = 1;
       this.getTableData(this.form.select);
@@ -489,7 +491,7 @@ export default {
         return;
       }
       this.isEdit = true;
-      this.getTableData("");
+      this.getTableData("foid");
       this.editFormVisible = true;
     },
     //查看
@@ -536,6 +538,10 @@ export default {
 /deep/ .el-positionType {
   padding-left: 0px !important;
   padding-top: 6px;
+}
+
+/deep/ .el-table__fixed-right::before {
+  background-color: revert;
 }
 
 .box-card:first-child {

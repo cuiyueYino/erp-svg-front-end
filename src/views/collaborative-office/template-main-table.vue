@@ -1,30 +1,32 @@
 <template>
 	<div>
-		<tabViews :showFigNum="showFigNum" :is="tabViews"></tabViews>
+		<tabViews :context="context" :showFigNum="showFigNum" :is="tabViews"></tabViews>
 	</div>
 </template>
 <script>
-	import selectMainTableClassification from '../../views/collaborative-office/components/select-main-table-classification';
-	import addMainTableClassification from '../../views/collaborative-office/components/add-main-table-classification';
+	import selectMainTable from '../../views/collaborative-office/components/select-main-table';
+	import addMainTable from '../../views/collaborative-office/components/add-main-table';
 	export default {
 		components: {
-			selectMainTableClassification,
-			addMainTableClassification
+			selectMainTable,
+			addMainTable
 		},
 		data() {
 			return {
-				tabViews: "selectMainTableClassification",
-				showFigNum: 1
+				tabViews: "selectMainTable",
+				showFigNum: 1,
+				context :{}
 			}
 		},
 		created() {},
 		methods: {
-			toAdd(showFigNum) {
-				this.tabViews = "addMainTableClassification"
+			toAdd(showFigNum,context) {
+				this.tabViews = "addMainTable"
 				this.showFigNum = showFigNum
+				this.context = context
 			},
 			toSelect() {
-				this.tabViews = "selectMainTableClassification"
+				this.tabViews = "selectMainTable"
 			}
 		}
 	}
