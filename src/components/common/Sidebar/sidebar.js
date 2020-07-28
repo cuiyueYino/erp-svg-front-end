@@ -106,7 +106,7 @@ class ITEMData {
                                 title: '会议室使用详情'
                             }
                         ]
-                    }
+                    }, 
                 ]
             },
             {
@@ -191,21 +191,6 @@ class ITEMData {
                     title: '功能菜单'
                     },
                 ]
-            },{
-                index: 'collaborativeOffice',
-                title: '协同办公',
-                subs: [
-                    {
-                        index: 'workItems',
-                        title: '工作事项',
-               			subs: [
-	                    	{
-	                        index: 'templateMainTable',
-	                        title: '工作事项模板主表分类',
-	                    	}
-                		]
-                    }
-                ]
             }
         ];
         this.ITEMother = [
@@ -218,7 +203,20 @@ class ITEMData {
                         title: '内部邮件',
                     }
                 ]
-            }
+            },{
+                        index: 'workItems',
+                        title: '工作事项',
+               			subs: [
+	                    	{
+	                        index: 'templateMainTableClassification',
+	                        title: '工作事项模板主表分类',
+	                    	},
+	                    	{
+	                        index: 'templateMainTable',
+	                        title: '工作事项模板主表',
+	                    	}
+                		]
+                    }
         ];
     };
 }

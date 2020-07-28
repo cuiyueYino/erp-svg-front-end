@@ -65,7 +65,7 @@ const jobUserManagement = {
 
     // 人员-列表查询
     getPeopleTableData(params){
-        return httpReqest.post('/api/interfaces/staffManage/findStaffByPage', params);
+        return httpReqest.post('/api/staffManage/findStaffByPage', params);
     },
 
     //  人员-根据ID查找人员
