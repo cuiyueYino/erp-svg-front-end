@@ -20,7 +20,7 @@
                     </el-form-item>
                 </el-col>
                 <el-col :span="6">
-                    <el-button type="text" @click="AddToUser('ToUser')"><i class="el-icon-plus"></i>添加</el-button>
+                    <el-button type="text" @click="dialogTree=true"><i class="el-icon-plus"></i>添加</el-button>
                     <el-button type="text" @click="clearAddToUser('ToUser')"><i class="el-icon-delete"></i>清空</el-button>
                     <el-button type="text" @click="ShoWAddCCUser"><i class="el-icon-edit-outline"></i>{{ShoWAddCC==true?'隐藏抄送':'添加抄送'}}</el-button>
                 </el-col>
@@ -38,8 +38,8 @@
             </el-row>
             <el-row>
                 <el-col :span="14">
-                    <el-form-item label="主题" prop="fcode">
-                        <el-input clearable size="small" v-model="formData.fcode"></el-input>
+                    <el-form-item label="主题" prop="subject">
+                        <el-input clearable size="small" v-model="formData.subject"></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>
@@ -63,6 +63,20 @@
                 </el-col>
             </el-row>
         </el-form>
+
+        <el-dialog title="收货地址" :visible.sync="dialogTree">
+            <el-tree
+            :destroy-on-close="true"
+            :data="treeData"
+            show-checkbox
+            node-key="id"
+            :default-checked-keys="defautChecked"
+            :props="defaultProps">
+            </el-tree>
+        </el-dialog>
+
+
+
     </div>
 </template>
 <script>
@@ -102,10 +116,48 @@ export default {
             },
             formData:{},
             ShoWAddCC:false,
+            dialogTree: false,
             labelPosition: 'left',
             atctiveName:'first',
             rowDataFileObj:{},
+
+            treeData: [{
+                id: 1,
+                label: '一级 1',
+                children: [{
+                    id: 4,
+                    label: '二级 1-1',
+                    children: [{
+                    id: 9,
+                    label: '三级 1-1-1'
+                    }, {
+                    id: 10,
+                    label: '三级 1-1-2'
+                    }]
+                }]
+                }, {
+                id: 2,
+                label: '一级 2',
+                children: [{
+                    id: 5,
+                    label: '二级 2-1'
+                }, {
+                    id: 6,
+                    label: '二级 2-2'
+                }]
+                }],
+            defaultProps: {
+                children: 'children',
+                label: 'name'
+            },
+            defautChecked:[5,6],
         }
+    },
+    created(){
+        this.$nextTick(() => {
+            this.persetParam();
+        });
+        console.log("进入写信");
     },
     mounted() {
     },
@@ -114,15 +166,20 @@ export default {
             return this.$refs.myQuillEditor.quill;
         }
     },
+    props: {
+        perData:{
+            type: Object
+        }
+    }, 
     methods:{
         //滑块切换
         handleClick(tab){
             var tabsname =tab.paneName;
             if(tabsname){
                 if(tabsname ==="first"){
-                    //授信合同记录
+                    //
                 }else if(tabsname ==="second"){
-                    //授信品种管理
+                    //
                     this.financingCVMListtype=true;
                 }else{
                     //附件列表
@@ -166,6 +223,14 @@ export default {
             }
         }, // 获得焦点事件
         onEditorChange() {}, // 内容改变事件
+
+        persetParam(){
+            if(this.perData!=null){
+                this.content = this.perData.content,
+                this.formData.fcode= this.perData.subject
+            }
+           this.$parent.$parent.$parent.clearPerData();
+        }
     }
 }
 </script>
