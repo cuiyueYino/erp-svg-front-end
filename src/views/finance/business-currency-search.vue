@@ -176,7 +176,7 @@ export default {
             ],
             labelPosition: 'left',
             multipleSelection: [],
-        }
+        };
     },
     methods: {
         //关闭当前dialog时给父组件传值
@@ -279,9 +279,9 @@ export default {
             }
         },
         //高级查询
-        onHandleMoreSearch(){
-            this.MoreSearchVisible = false;
-        }
+        // onHandleMoreSearch(){
+        //     this.MoreSearchVisible = false;
+        // }
     },
     watch:{
         financingBCStype(oldVal,newVal){
@@ -318,7 +318,7 @@ export default {
             });
         }
     }
-}
+};
 </script>
 <style lang='scss' scoped>
 .el-form-item__label {
@@ -357,11 +357,7 @@ export default {
 }
 </style>
 <style lang='scss'>
-.replydiag {
-    .el-textarea__inner {
-        min-height: 300px !important;
-    }
-}
+
 .el-dialog__body{
     padding: 0;
 }

@@ -283,7 +283,7 @@ export default {
                         type: 'selection'
                     },
                     {
-                        key: 'fcode',
+                        key: 'usercode',
                         title: '编码'
                     },
                     {
@@ -301,13 +301,26 @@ export default {
                     fromdata.queryType='';
                     this.$api.processSet.getUserTree(fromdata).then(res=>{
                         let resData=res.data.data;
-                        let resDataArr= eval("("+resData+")");
-                        this.treeData = resDataArr;
+                        let resDataArr= eval("("+resData+")");//console.log(resDataArr.JsonInfo[0])
+                        this.treeData = resDataArr.JsonInfo;
                         this.totalpage=false;
                     },error=>{
                         console.log(error)
                     })
                 }else if(this.title =='组织结构查询'){
+                    this.columns3=[
+                    {
+                        type: 'selection'
+                    },
+                    {
+                        key: 'fcode',
+                        title: '编码'
+                    },
+                    {
+                        key: 'fname',
+                        title: '名称'
+                    },
+                ];
                     let fromdata={};
                     fromdata.queryType='org';
                     this.gridData =[];

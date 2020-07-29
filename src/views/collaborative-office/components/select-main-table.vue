@@ -15,17 +15,17 @@
 							</el-col>
 							<el-col :span="5">
 								<el-form-item>
-									<el-input clearable v-model="formInline.code" placeholder="主表分类编码"></el-input>
+									<el-input clearable v-model="formInline.code" placeholder="主表编码"></el-input>
 								</el-form-item>
 							</el-col>
 							<el-col :span="5">
 								<el-form-item>
-									<el-input clearable v-model="formInline.name" placeholder="主表分类名称"></el-input>
+									<el-input clearable v-model="formInline.name" placeholder="主表名称"></el-input>
 								</el-form-item>
 							</el-col>
 							<el-col :span="4">
 								<el-form-item>
-									<el-input clearable v-model="formInline.tableName" placeholder="数据库表名"></el-input>
+									<el-input clearable v-model="formInline.workItemTypeName" placeholder="主表分类"></el-input>
 								</el-form-item>
 							</el-col>
 							<el-col :span="3">
@@ -41,11 +41,11 @@
 						</el-row>
 					</el-form>
 				</el-col>
-				<el-col v-show="show != '1'" style="text-align: right;" :span="10">
+				<el-col style="text-align: right;" :span="10">
 					<el-button @click="$parent.toAdd('1')" icon="el-icon-delete" type="success">新增</el-button>
 					<el-button @click="toUpd()" icon="el-icon-delete" type="success">修改</el-button>
-					<el-button @click="updateStatus(3)" icon="el-icon-delete" type="primary">生效</el-button>
-					<el-button @click="updateStatus(7)" icon="el-icon-delete" type="danger">禁用</el-button>
+					<el-button @click="updateStatus(1)" icon="el-icon-delete" type="primary">生效</el-button>
+					<el-button @click="updateStatus(2)" icon="el-icon-delete" type="danger">禁用</el-button>
 					<el-button @click="toSee()" icon="el-icon-delete" type="primary" plain>查看</el-button>
 				</el-col>
 			</el-row>
@@ -53,9 +53,9 @@
 		<el-card class="box-card">
 			<el-table :row-class-name="tableRowClassName" @row-click="clickRow" :data="tableData" border>
 				<el-table-column :formatter="statusShow" prop="status" label="状态" width="180" align="center"></el-table-column>
-				<el-table-column prop="code" label="主表分类编码" width="180" align="center"></el-table-column>
-				<el-table-column prop="name" label="主表分类名称" width="180" align="center"></el-table-column>
-				<el-table-column prop="tableName" label="数据库表名" width="180" align="center"></el-table-column>
+				<el-table-column prop="code" label="主表编码" width="180" align="center"></el-table-column>
+				<el-table-column prop="name" label="主表名称" width="180" align="center"></el-table-column>
+				<el-table-column prop="workItemTypeName" label="主表分类" width="180" align="center"></el-table-column>
 				<el-table-column prop="remark" label="描述" align="center"></el-table-column>
 			</el-table>
 			<pageNation :total="currentTotal" ref="pageNation" @pageChange="pageChange"></pageNation>
@@ -67,9 +67,6 @@
 	export default {
 		components: {
 			pageNation
-		},
-		props: {
-			show: String,
 		},
 		data() {
 			return {
@@ -97,14 +94,13 @@
 					name: "",
 					remark: "",
 					status: "",
-					tableName: "",
+					workItemTypeName: "",
 					page: 1,
 					size: 10
 				},
 				currentTotal: 100,
 				tableData: [],
 				rowClickId: "",
-				rowClick: {},
 			}
 		},
 		created() {
@@ -127,12 +123,9 @@
 			updateStatus(status) {
 				if(this.getRowClickId()) {
 					this.$api.collaborativeOffice.updateStatus({
-						id: this.rowClickId,
-						status: status
+
 					}).then(data => {
-						if(this.dataBack(data, "修改状态成功")) {
-							this.toSelect()
-						}
+						console.log(data)
 					})
 				}
 			},
@@ -185,7 +178,7 @@
 			},
 			//搜索
 			toSelect() {
-				this.$api.collaborativeOffice.findWorkItemTypePage(this.formInline).then(data => {
+				this.$api.collaborativeOffice.findWorkItemTempPage(this.formInline).then(data => {
 					console.log(data)
 					this.tableData = data.data.data.rows
 					this.currentTotal = data.data.data.total
@@ -205,7 +198,6 @@
 			//选中行
 			clickRow(row) {
 				this.rowClickId = row.id
-				this.rowClick = row
 			},
 		}
 	}

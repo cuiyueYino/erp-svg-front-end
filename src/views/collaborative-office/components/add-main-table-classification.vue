@@ -1,36 +1,36 @@
 <template>
 	<div>
-		<el-card class="box-card">
+		<el-card class="elCard">
 			<el-row>
 				<el-col :span="23">工作事项模板主表分类</el-col>
-				<el-col :span="1">
+				<el-col style="text-align: right;" :span="1">
 					<el-button type="danger" @click="$parent.toSelect()" size="mini" icon="el-icon-close"></el-button>
 				</el-col>
 			</el-row>
 			<el-row>
 				<el-col :span="22">
 					公司：
-					<el-select size='mini' v-model="ruleForm.value" placeholder="公司">
-						<el-option v-for="item in options" :key="item.id" :label="item.label" :value="item.id">
+					<el-select :disabled="showFigAll" size='mini' v-model="ruleForm.company" placeholder="公司">
+						<el-option v-for="item in CompanyData" :key="item.id" :label="item.name" :value="item.id">
 						</el-option>
 					</el-select>
 				</el-col>
-				<el-col :span="2">
-					<el-button v-show="!showFigAll" type="success" size="mini" icon="el-icon-check">提交</el-button>
+				<el-col style="text-align: right;" :span="2">
+					<el-button @click="submitForm('ruleForm','ruleFormTable')" v-show="!showFigAll" type="success" size="mini" icon="el-icon-check">提交</el-button>
 				</el-col>
 			</el-row>
 		</el-card>
-		<el-card class="box-card">
+		<el-card>
 			<el-form size="mini" label-width="120px" :inline="true" :rules="rules" ref="ruleForm" :model="ruleForm" class="demo-form-inline">
 				<el-row>
 					<el-col :span="8">
 						<el-form-item prop="code" label="主表分类编码">
-							<el-input clearable :disabled="showFig || showFigAll" v-model="ruleForm.code" maxlength="50" placeholder="主表分类编码"></el-input>
+							<el-input clearable :disabled="showFigAll" v-model="ruleForm.code" maxlength="50" placeholder="主表分类编码"></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :span="8">
 						<el-form-item prop="name" label="主表分类名称">
-							<el-input clearable :disabled="showFig || showFigAll" v-model="ruleForm.name" maxlength="50" placeholder="主表分类名称"></el-input>
+							<el-input clearable :disabled="showFigAll" v-model="ruleForm.name" maxlength="50" placeholder="主表分类名称"></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :span="8">
@@ -46,33 +46,33 @@
 				</el-row>
 			</el-form>
 		</el-card>
-		<el-card class="box-card">
+		<el-card>
 			<el-row>
 				<el-col :span="22">工作事项模板主表分类行</el-col>
-				<el-col :span="1">
-					<el-button v-show="!showFigAll" @click="ruleFormTable.tableData.push(oneCon)" type="success" size="mini" icon="el-icon-plus">新增</el-button>
+				<el-col style="text-align: right;" :span="2">
+					<el-button v-show="!showFigAll" @click="toAddTable" type="success" icon="el-icon-plus">新增</el-button>
 				</el-col>
 			</el-row>
 
-			<el-form :model="ruleFormTable" :rules="rulesTable" ref="ruleFormTable">
-				<el-table height="400" :data="ruleFormTable.tableData" border style="width: 100%">
+			<el-form :model="ruleForm" :rules="rulesTable" ref="ruleFormTable">
+				<el-table height="400" :data="ruleForm.lines" border style="width: 100%">
 					<el-table-column prop="date" label="数据库字段名" align="center">
 						<template slot-scope="scope">
-							<el-form-item :prop="'tableData[' + scope.$index + '].field'" :rules="rulesTable.field">
+							<el-form-item :prop="'lines[' + scope.$index + '].field'" :rules="rulesTable.field">
 								<el-input clearable :disabled="scope.row.showFig || showFigAll" v-model="scope.row.field" maxlength="50" placeholder="数据库字段名"></el-input>
 							</el-form-item>
 						</template>
 					</el-table-column>
 					<el-table-column prop="name" label="字段显示名称" align="center">
 						<template slot-scope="scope">
-							<el-form-item :prop="'tableData[' + scope.$index + '].fieldName'" :rules="rulesTable.fieldName">
+							<el-form-item :prop="'lines[' + scope.$index + '].fieldName'" :rules="rulesTable.fieldName">
 								<el-input clearable :disabled="scope.row.showFig || showFigAll" v-model="scope.row.fieldName" maxlength="25" placeholder="字段显示名称"></el-input>
 							</el-form-item>
 						</template>
 					</el-table-column>
 					<el-table-column prop="date" label="字段类型" align="center">
 						<template slot-scope="scope">
-							<el-form-item :prop="'tableData[' + scope.$index + '].fieldType'" :rules="rulesTable.fieldType">
+							<el-form-item :prop="'lines[' + scope.$index + '].fieldType'" :rules="rulesTable.fieldType">
 								<el-select clearable :disabled="scope.row.showFig || showFigAll" style="width: 100%;" v-model="scope.row.fieldType" placeholder="字段类型">
 									<el-option v-for="item in options" :key="item.id" :label="item.label" :value="item.id">
 									</el-option>
@@ -84,7 +84,7 @@
 						<template slot-scope="scope">
 							<el-form-item>
 								<el-input disabled placeholder="字段显示名称" v-model="scope.row.fieldContent">
-									<el-button :disabled="(scope.row.fieldType != '11' && scope.row.fieldType != '19') || scope.row.showFig  || showFigAll" @click="toFieldContent(scope.row)" slot="append" icon="el-icon-search"></el-button>
+									<el-button :disabled="(scope.row.fieldType != '1' && scope.row.fieldType != '9') || scope.row.showFig  || showFigAll" @click="toFieldContent(scope.row)" slot="append" icon="el-icon-search"></el-button>
 								</el-input>
 							</el-form-item>
 						</template>
@@ -96,14 +96,21 @@
 							</el-form-item>
 						</template>
 					</el-table-column>
+					<el-table-column v-if="!showFigAll" prop="date" label="操作" width="120" align="center">
+						<template slot-scope="scope">
+							<el-form-item v-if="!scope.row.showFig">
+								<el-button @click="toDelTable(scope.$index)" type="error" icon="el-icon-plus">删除</el-button>
+							</el-form-item>
+						</template>
+					</el-table-column>
 				</el-table>
 			</el-form>
 		</el-card>
 		<!--弹出框-->
 		<el-dialog title="工作事项模板主表分类" center :visible.sync="dialogVisible" width="40%">
-			<el-table :row-class-name="tableRowClassName" @row-click="clickRow" :data="options" border>
-				<el-table-column prop="id" label="编码"></el-table-column>
-				<el-table-column prop="label" label="名称"></el-table-column>
+			<el-table :row-class-name="tableRowClassName" @row-click="clickRow" :data="fieldBrowseList" border>
+				<el-table-column prop="code" label="编码"></el-table-column>
+				<el-table-column prop="name" label="名称"></el-table-column>
 			</el-table>
 			<div slot="footer" class="dialog-footer">
 				<el-button @click="dialogVisible = false">取 消</el-button>
@@ -115,17 +122,18 @@
 <script>
 	export default {
 		props: {
-			showFigNum: String
+			showFigNum: String,
+			context: Object
 		},
 		data() {
 			//自定义的校验规则
-			var tableNameShow = (rule, value, callback) => {
-				if(value.substring(0, 5) != "gzsx_") {
-					callback(new Error('数据库表名必须以gzsx_为开头'));
-				} else {
-					callback();
-				}
-			};
+			//			var tableNameShow = (rule, value, callback) => {
+			//				if(value.substring(0, 5) != "gzsx_") {
+			//					callback(new Error('数据库表名必须以gzsx_为开头'));
+			//				} else {
+			//					callback();
+			//				}
+			//			};
 			return {
 				showFig: false,
 				showFigAll: false,
@@ -133,6 +141,8 @@
 				rowClickId: "",
 				//弹出框
 				dialogVisible: false,
+				//字段内容弹框
+				fieldBrowseList: [],
 				//校验规则-表单
 				rules: {
 					code: [{
@@ -156,16 +166,18 @@
 						}
 					],
 					tableName: [{
-						required: true,
-						message: '请输入数据库表名',
-						trigger: 'blur'
-					}, {
-						pattern: /^[a-z_A-Z0-9-\.!@#\$%\\\^&\*\)\(\+=\{\}\[\]\/",'<>~\·`\?:;|]+$/,
-						message: '请输入正确的数据库表名'
-					}, {
-						validator: tableNameShow,
-						trigger: 'blur'
-					}]
+							required: true,
+							message: '请输入数据库表名',
+							trigger: 'blur'
+						}, {
+							pattern: /^[a-z_A-Z0-9-\.!@#\$%\\\^&\*\)\(\+=\{\}\[\]\/",'<>~\·`\?:;|]+$/,
+							message: '请输入正确的数据库表名'
+						},
+						//					{
+						//						validator: tableNameShow,
+						//						trigger: 'blur'
+						//					}
+					]
 				},
 				//校验规则-table
 				rulesTable: {
@@ -201,71 +213,108 @@
 					checked: false,
 					showFig: false,
 				},
-				ruleFormTable: {
-					tableData: [{
-						field: "",
-						fieldName: "",
-						fieldType: "",
-						fieldContent: "",
-						checked: false,
-						showFig: false,
-					}],
-				},
+				ruleFormTable: {},
+				CompanyData: [],
 				options: [{
-					id: '11',
+					id: '1',
 					label: '浏览框'
 				}, {
-					id: '12',
+					id: '2',
 					label: '字符型'
 				}, {
-					id: '13',
+					id: '3',
 					label: '文本型'
 				}, {
-					id: '14',
+					id: '4',
 					label: '整型'
 				}, {
-					id: '15',
+					id: '5',
 					label: '浮点型'
 				}, {
-					id: '16',
+					id: '6',
 					label: '富文本'
 				}, {
-					id: '17',
+					id: '7',
 					label: '日期控件'
 				}, {
-					id: '18',
+					id: '8',
 					label: '时间控件'
 				}, {
-					id: '19',
+					id: '9',
 					label: '枚举项'
 				}, {
 					id: '10',
 					label: '复选框'
 				}, ],
 				ruleForm: {
-					value: "1",
-					user: ""
+					code: "",
+					name: "",
+					tableName: "",
+					remark: "",
+					creator: localStorage.getItem('ms_userId'),
+					company: "",
+					lines: [{
+						field: "",
+						fieldName: "",
+						fieldType: "",
+						fieldContent: "",
+						forbid: false,
+						showFig: false,
+					}],
 				},
 			}
 		},
 		created() {
 			if(this.showFigNum == "2") {
 				this.showFig = true
-				this.ruleFormTable.tableData = [{
-					field: "",
-					fieldName: "",
-					fieldType: "",
-					fieldContent: "",
-					checked: false,
-					showFig: true,
-				}]
+				this.context.lines.forEach(item => {
+					item.showFig = true
+				})
+				this.ruleForm = this.context
 			} else if(this.showFigNum == "3") {
 				this.showFigAll = true
+				this.ruleForm = this.context
 			}
+			this.$api.collaborativeOffice.getCompanyData().then(data => {
+				console.log(data.data.data.rows)
+				this.CompanyData = data.data.data.rows
+			})
 		},
 		methods: {
-			//新增
+			//新增table数据
+			toAddTable() {
+				this.ruleForm.lines.push(JSON.parse(JSON.stringify(this.oneCon)))
+			},
+			//删除table数据
+			toDelTable(index) {
+				this.ruleForm.lines.splice(index, 1)
+			},
+			//提交			
+			submitForm(formName) {
+				this.$refs.ruleForm.validate((valid) => {
+					if(valid) {
+						this.$refs.ruleFormTable.validate((valid) => {
+							if(valid) {
+								this.$api.collaborativeOffice.insertWorkItemTypeModel(this.ruleForm).then(data => {
+									if(this.dataBack(data,"新增成功")) {
+										this.$parent.toSelect()
+									}
+								})
+							}
+						});
+					}
+				});
+			},
 			toFieldContent(row) {
+				if(row.fieldType == "1") {
+					this.$api.collaborativeOffice.getFieldBrowse().then(data => {
+						this.fieldBrowseList = data.data.data
+					})
+				} else {
+					this.$api.collaborativeOffice.findList().then(data => {
+						this.fieldBrowseList = data.data.data
+					})
+				}
 				this.dialogVisible = true
 			},
 			// 选中背景色
@@ -287,6 +336,10 @@
 	}
 </script>
 <style scoped="scoped">
+	.elCard {
+		background-color: #409EFF;
+	}
+	
 	.el-icon-star-on:before {
 		color: red;
 		font-size: 20px;
@@ -297,10 +350,18 @@
 	}
 	
 	>>>.el-card {
-		margin-bottom: 10px;
+		/*margin-bottom: 10px;*/
 	}
 	
 	>>>.el-card__body {
 		padding: 10px;
+	}
+	
+	>>>.el-input.is-disabled .el-input__inner {
+		color: #000000 !important;
+	}
+	
+	>>>.el-textarea.is-disabled .el-textarea__inner {
+		color: #000000 !important;
 	}
 </style>

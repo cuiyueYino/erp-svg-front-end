@@ -9,6 +9,7 @@ import jobUserManagement from './job-user-management';
 import management from './management';
 import RoleManagement from './roleManagement';
 import SystemSet from './systemset';
+import documentManagement from './document-management';
 import insideMail from './inside-mail';
 import confMangement from './conference';
 import collaborativeOffice from './collaborative-office';
@@ -25,6 +26,7 @@ export default {
     RoleManagement,
     SystemSet,
     jobUserManagement,
+    documentManagement,
     insideMail,
     confMangement,
     collaborativeOffice,

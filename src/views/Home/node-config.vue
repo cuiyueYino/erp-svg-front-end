@@ -299,7 +299,7 @@ export default {
                             "type": item.type,
                             //表达式的值 
                             [item.typeName]:{
-                                "oid": item.oid,
+                                "oid": item.foid,
                                 "code":item.fUsercode,
                                 "name":item.fUsername
                             },

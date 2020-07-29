@@ -1,10 +1,17 @@
 <template>
 <!-- 弹出框内容 -->
         <div v-show="visible">
+            <el-form
+                label-width="110px"
+                :rules="configRules"
+                ref="formData"
+                class="dataForm"
+                :model="formdata"
+                >
         <!-- TAB页 -->
         <el-tabs v-model="activeName" @tab-click="handleClick">
             <el-tab-pane label="基本信息" name="1">
-                 <el-form-item label="编码" :label-width="formLabelWidth" prop="name">
+                 <el-form-item label="编码" :label-width="formLabelWidth" prop="code">
                     <el-input ref="nameInput" v-model="formData.code" autocomplete="off" clearable></el-input>
                 </el-form-item>
                 <el-form-item label="名称" :label-width="formLabelWidth" prop="name">
@@ -109,7 +116,7 @@
             </footer>
             <!-- footer END-->
            </el-dialog>
-       
+            </el-form>
         </div>
 </template>
 
@@ -163,8 +170,8 @@ export default {
             closeConfig: false,
             // 配置表单校验规则
             configRules: {
-                name: { required: true, message: '请输入英文名', trigger: 'blur' },
-                displayName: { required: true, message: '请输入名称', trigger: 'blur' },
+                name: { required: true, message: '请输入名称', trigger: 'blur' },
+                code: { required: true, message: '请输入编码', trigger: 'blur' },
                 performType: { required: true, message: '请选择参与类型', trigger: 'change' }
             },
             // 对话框显示标识

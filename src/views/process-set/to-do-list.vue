@@ -9,10 +9,10 @@
                      <el-button type="success" icon="el-icon-search" plain @click="search">查询</el-button>
                      <el-button type="danger" icon="el-icon-notebook-2" plain @click="flowChart()">流程图</el-button>
                      <el-button type="warning" icon="el-icon-document-checked" plain @click="handle()">处理</el-button>
-                     <el-button type="success" icon="el-icon-share" plain @click="baseInputTable()">转发</el-button>
-                     <el-button type="danger" icon="el-icon-s-order" plain @click="baseInputTable1()">委托</el-button>
-                     <el-button type="danger" icon="el-icon-view" plain @click="baseInputTable1()">关注</el-button>
-                     <el-button type="danger" icon="el-icon-circle-plus-outline" plain @click="baseInputTable1()">加签</el-button>
+                     <el-button type="success" icon="el-icon-share" plain @click="baseInputTable('转发')">转发</el-button>
+                     <el-button type="danger" icon="el-icon-s-order" plain @click="baseInputTable('委托')">委托</el-button>
+                     <el-button type="danger" icon="el-icon-view" plain @click="basefollow()">关注</el-button>
+                     <el-button type="danger" icon="el-icon-circle-plus-outline" plain @click="baseInputTable('加签')">加签</el-button>
                  </el-col>
             </el-row>
         </el-card>
@@ -203,7 +203,7 @@ import DynamicTable from '../../components/common/dytable/dytable.vue';
 import PSpage from '../comment/personnel-search.vue';
 import WAApage from './warehousing-applicant-approval.vue';
 import baseInfoDialog from './user-tree-search.vue';
-import flowchart from './flow-chart-detail.vue';
+import flowchart from '../comment/flow-chart-detail.vue';
 import proData from '../../components/common/proData/proData';
 export default {
     name:'workProcess',
@@ -215,6 +215,7 @@ export default {
       PSpage,
       proData
     },
+    inject: ['reload'],
     data() {
         return {
             dialogWFMVisible:false,
@@ -307,7 +308,7 @@ export default {
     },
     created(){
         let fromdata={};
-        fromdata.infosBeginNum=0;
+        fromdata.infosBeginNum=1;
         fromdata.infosEndNum=this.pageSize;
         fromdata.userId=localStorage.getItem("ms_userId")
         this.getHunTableData(fromdata);
@@ -336,6 +337,7 @@ export default {
                         this.tableData=[];
                         this.total=0;
                     }
+                    this.dialogWFMVisible=false;
                 } else {
                     this.$message.success('数据库没有该条数据!');
                 }
@@ -354,20 +356,40 @@ export default {
                 }
             });
         },
-        remove(){},
+        //移除
+        remove(){
+            if(this.multipleSelection.length > 1){
+                this.$message.error('只能选择一个');
+            }else if(this.multipleSelection.length == 0){
+                this.$message.error('请选择一项');
+            }else{
+                let selectData=this.multipleSelection;
+                let fromdata={};
+                fromdata.oid=selectData[0].fsrcoId;
+                this.$api.processSet.RemoveTBin(fromdata).then(res=>{
+                    let resData=res;                   
+                    this.ShowFinancVisible=false;
+                    this.reload();
+                    this.$emit('changeShow',false);
+                    
+                },error=>{
+                    console.log(error)
+                })
+            }
+        },
         //根据状态改背景色
         tableRowClassName({ row }) {
-            if (row.state === '暂停') {
+            if (row.fstatus === '暂停') {
                 return 'gray';
-            } else if (row.state === '已作废') {
+            } else if (row.fstatus === '已作废') {
                 return 'red';
-            } else if (row.state === '已完结') {
+            } else if (row.fstatus === '已完结') {
                 return 'green';
             }
             return '';
         },
         //转发按钮点击事件
-        baseInputTable(){
+        baseInputTable(data){
             if(this.multipleSelection.length > 1){
                 this.$message.error('只能选择一个');
             }else if(this.multipleSelection.length == 0){
@@ -379,6 +401,7 @@ export default {
                 finandata.finanrowId="QS_0056";
                 finandata.nametitle="待办事项";
                 finandata.SelectionData=this.multipleSelection;
+                finandata.FunctionType=data;
                 this.rowUTSDataObj=finandata;
             };
         },
@@ -389,7 +412,38 @@ export default {
                 this.rowUTStype = true
             }
         },
-        baseInputTable1(){},
+        //关注点击事件
+        basefollow(){
+            if(this.multipleSelection.length > 1){
+                this.$message.error('只能选择一个');
+            }else if(this.multipleSelection.length == 0){
+                this.$message.error('请选择一项');
+            }else{
+                let selectData=this.multipleSelection;
+                let subject=selectData[0].fsubject;
+                if(subject.indexOf('转发')>-1){
+                    this.$message.error('转发邮件不能添加关注!');
+                }else if(subject.indexOf('抄送')>-1){
+                    this.$message.error('抄送邮件不能添加关注!');
+                }else if(subject.indexOf('加签')>-1){
+                    this.$message.error('加签邮件不能添加关注!');
+                }else{
+                    let fromdata={};
+                    fromdata.fvoucherOid=selectData[0].fsrcoId;
+                    fromdata.fattentionOid=localStorage.getItem("ms_userId");
+                    this.$api.processSet.addAttention(fromdata).then(response => {
+                        let responsevalue = response;
+                        if (responsevalue) {
+                            let returndata = responsevalue.data;
+                            this.$message.success('添加关注成功!');
+                            this.reload();
+                        } else {
+                            this.$message.success('数据库没有该条数据!');
+                        }
+                    });
+                }  
+            }
+        },
         //table多选
         onSelectionChange(val) {
             this.multipleSelection = val;
@@ -404,24 +458,31 @@ export default {
         },
         //刷新
         refresh(){
-
+            this.reload();
         },
         //处理
         handle(){
-            let selectData=this.multipleSelection;
-            let finandata={};
-            finandata.finanrowname="人员缺省查询方案";
-            finandata.finanrowId="QS_0056";
-            finandata.nametitle="入库申请申请人审批";
-            this.rowWAADataObj=finandata;
-            this.rowWAAtype=true;
-            this.financingLFCAtype=true;
+            if(this.multipleSelection.length > 1){
+                this.$message.error('只能选择一个');
+            }else if(this.multipleSelection.length == 0){
+                this.$message.error('请选择一项');
+            }else{
+                let selectData=this.multipleSelection;
+                let finandata={};
+                finandata.selectData=selectData;
+                finandata.finanrowname="人员缺省查询方案";
+                finandata.finanrowId="QS_0056";
+                finandata.nametitle="入库申请申请人审批";
+                this.rowWAADataObj=finandata;
+                this.rowWAAtype=true;
+                this.financingLFCAtype=true;
+            }
         },
         showORhideForWAA(data){
             if(data === false){
                 this.rowWAAtype = false
             }else{
-                // this.rowWAAtype = true
+                this.rowWAAtype = true
             }
         },
         //流程图查看
@@ -496,32 +557,6 @@ export default {
                 fromdata.overTime=this.DataForm.overTime;
             }
             this.getHunTableData(fromdata);
-        },
-        getAll(){
-            this.getTableData('')
-        },
-        // 获取表格数据
-        getTableData(params){
-            
-        },
-        //提交
-        addSubmit(formName){
-        },
-        toEdit(){
-            if(this.multipleSelection.length > 1){
-                this.$message.error('只能选择一个编辑');
-                return;
-            }else if(this.multipleSelection.length == 0){
-                this.$message.error('请选择一项编辑');
-                return;
-            };
-             this.$router.push({
-                name:"svgIndex",
-                params:{
-                    data: this.multipleSelection[0]
-                    }
-             })
-            
         },
         //查询发起人员
         MoreSearchPS(data){
