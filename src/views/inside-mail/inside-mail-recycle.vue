@@ -251,6 +251,6 @@ export default {
 </script>
 <style lang="scss" scoped>
 /deep/ .el-table__fixed-right::before {
-  background-color: revert;
+background-color: revert;
 }
 </style>
