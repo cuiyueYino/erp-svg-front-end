@@ -92,6 +92,39 @@ const processSet = {
     setencyclic(params){
         return httpReqest.post('/api/workFlow/encyclic', params);
     },
+    //委托
+    transmit(params){
+        return httpReqest.post('/api/workFlow/transmit', params);
+    },
+    //关注
+    addAttention(params){
+        return httpReqest.post('/api/workFlow/addAttention', params);
+    },
+    //加签
+    SeTaddTag(params){
+        return httpReqest.post('/api/workFlow/addTag', params);
+    },
+    //移除
+    RemoveTBin(params){
+        return httpReqest.post('/api/workFlow/removeToRecyleBin', params);
+    },
+    //流程图
+    viewProcess(params){
+        return httpReqest.post('/api/workFlow/viewProcess', params);
+    },
+    //获取关注事项数据
+    attentionTask(params){
+        return httpReqest.post('/api/workFlow/attentionTask', params);
+    },
+    //取消关注
+    deleteAttention(params){
+        return httpReqest.post('/api/workFlow/deleteAttention', params);
+    },
+    //获取已办消息
+    handledTask(params){
+        return httpReqest.post('/api/workFlow/handledTask', params);
+    },
+    //加批
 };
 
 export default processSet;

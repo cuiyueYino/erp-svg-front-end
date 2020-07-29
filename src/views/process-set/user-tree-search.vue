@@ -1,6 +1,6 @@
 <template>
     <div>
-        <el-dialog :title="title" @close="handleClose" :visible.sync="ShowFinancVisible" :append-to-body="true" v-if="ShowFinancVisible" :close-on-click-modal="false" width="60%">
+        <el-dialog @close="handleClose" :visible.sync="ShowFinancVisible" :append-to-body="true" v-if="ShowFinancVisible" :close-on-click-modal="false" width="60%">
             <el-form
                 label-width="110px"
                 v-model="formdata"
@@ -78,6 +78,20 @@
                             </el-table>      
                         </el-col>
                     </el-row>
+                    <el-row class="remakerow">
+                        <el-col :span="22">
+                            <el-form-item label="是否可见" v-if="saveType =='加签'">
+                                <el-checkbox v-model="formdata.checked">可见</el-checkbox>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-row class="remakerow">
+                        <el-col :span="22">
+                            <el-form-item :label="saveType =='委托'?'委托意见':'加签附言'" v-if="saveType =='委托'|| saveType =='加签'">
+                                <el-input type="textarea" v-model="formdata.remark" :rows="3"></el-input>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
                 </el-card>
             </el-form>
             <span slot="footer" class="dialog-footer">
@@ -117,6 +131,7 @@ export default {
             multipleSelection:[],
             UsermultipleSelection:[],
             teldata:[],
+            saveType:'',
             tableLoading:false,
             ShowFinancVisible:false,
             labelPosition: 'left',
@@ -223,6 +238,56 @@ export default {
                 this.getUserData(fromdata)
             }
         },
+        //转发
+        setencyclic(fid,user){
+            let fromdata={};
+            fromdata.currUserId=localStorage.getItem('ms_userId');
+            fromdata.bizMailId=fid;
+            fromdata.participator=user;
+            this.$api.processSet.setencyclic(fromdata).then(res=>{
+                let resData=res;                   
+                this.ShowFinancVisible=false;
+                //this.reload();
+                this.$emit('changeShow',false);
+                
+            },error=>{
+                console.log(error)
+            })  
+        },
+        //委托
+        transmit(fid,user){
+            let fromdata={};
+            fromdata.currUserId=localStorage.getItem('ms_userId');
+            fromdata.bizMailId=fid;
+            fromdata.participator=user;
+            fromdata.advice=this.formdata.remark;;
+            this.$api.processSet.transmit(fromdata).then(res=>{
+                let resData=res;                   
+                this.ShowFinancVisible=false;
+                //this.reload();
+                this.$emit('changeShow',false);
+                
+            },error=>{
+                console.log(error)
+            })
+        },
+        //加签
+        setAddTag(fid,user){
+            let fromdata={};
+            fromdata.fmailOid=fid;
+            fromdata.fstaffOid=user;
+            fromdata.fpublicity=this.formdata.checked;
+            fromdata.fremark=this.formdata.remark;
+            this.$api.processSet.SeTaddTag(fromdata).then(res=>{
+                let resData=res;                   
+                this.ShowFinancVisible=false;
+                //this.reload();
+                this.$emit('changeShow',false);
+                
+            },error=>{
+                console.log(error)
+            })
+        },
         //转发按钮确认事件
         saveConfig(){
             let ParentSelectData=this.rowUTSDataObj.SelectionData;
@@ -233,20 +298,13 @@ export default {
                     participator+=selectListData[j].foid+',';
                 }
                 participator=participator.slice(0,participator.length-1);
-                let form = new FormData();
-                form.append('currUserId', localStorage.getItem('ms_userId'));
-                form.append('bizMailId', ParentSelectData[0].foid);
-                form.append('participator', participator);
-                let fromdata={};
-                fromdata.currUserId=localStorage.getItem('ms_userId');
-                fromdata.bizMailId=ParentSelectData[0].foid;
-                fromdata.participator=participator;
-                this.$api.processSet.setencyclic(fromdata).then(res=>{
-                    let resData=res;
-                    console.log(resData)
-                },error=>{
-                    console.log(error)
-                })  
+                if(this.saveType ==='转发'){
+                    this.setencyclic(ParentSelectData[0].foid,participator);
+                }else if(this.saveType ==='委托'){
+                    this.transmit(ParentSelectData[0].foid,participator);
+                }else if(this.saveType ==='加签'){
+                    this.setAddTag(ParentSelectData[0].foid,participator);
+                }
             }else{
                 this.$message.error("请选择人员!");
             }
@@ -310,6 +368,7 @@ export default {
             let formDataA ={};
             formDataA.id=finandata;
             this.title=this.rowUTSDataObj.nametitle;
+            this.saveType=this.rowUTSDataObj.FunctionType;
             let fromdata={};
             fromdata.queryType='org';
             this.$api.processSet.getUserTreeData(fromdata).then(res=>{
@@ -362,6 +421,9 @@ export default {
 .classlist{
     width: 100%;
     height: 300px;
+}
+.remakerow{
+    margin-top: 10px;
 }
 </style>
 <style lang='scss'>

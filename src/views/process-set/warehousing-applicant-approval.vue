@@ -12,18 +12,21 @@
                 <el-card>
                     <el-row :gutter="24">
                         <el-col :span="12" :offset="12">
-                            <el-button type="danger" icon="el-icon-circle-plus-outline" plain @click="effectOrDisableMsg">加签</el-button>
-                            <el-button type="success" icon="el-icon-share" plain @click="effectOrDisableMsg">转发</el-button>
-                            <el-button type="danger" icon="el-icon-s-order" plain @click="effectOrDisableMsg">委托</el-button>
-                            <el-button type="danger" icon="el-icon-view" plain @click="effectOrDisableMsg">关注</el-button>
+                            <el-button type="danger" icon="el-icon-circle-plus-outline" plain @click="baseInputTable('加签')">加签</el-button>
+                            <el-button type="success" icon="el-icon-share" plain @click="baseInputTable('转发')">转发</el-button>
+                            <el-button type="danger" icon="el-icon-s-order" plain @click="baseInputTable('委托')">委托</el-button>
+                            <el-button type="danger" icon="el-icon-view" plain @click="basefollow()">关注</el-button>
                             <el-button type="success" icon="el-icon-success" plain @click="effectOrDisableMsg">提交</el-button>
                         </el-col>
                     </el-row>
                     <el-row :gutter="24">
-                        <LookcreditPage  :rowLFCADataObj="rowLFCADataObj" :financingLFCAtype="financingLFCAtype" @changeShow="showLookOrUpdate"/>
+                        <COOTaskPage  :rowCOOTaskDataObj="rowCOOTaskDataObj" :rowCOOTasktype="rowCOOTasktype" @changeShow="showLookOrUpdate"/>
+                        <ComANPPage  :rowCOMAPDataObj="rowCOMAPDataObj" :rowCOMAPtype="rowCOMAPtype" @changeShow="showLookOrUpdate"/>
+                        <TempTaskPage  :rowTEMTaskDataObj="rowTEMTaskDataObj" :rowTEMTasktype="rowTEMTasktype" @changeShow="showLookOrUpdate"/>
                     </el-row>
-                    <el-row :gutter="24">
+                    <el-row>
                         <el-col :span="22">
+                            <processnodelist :rowDataprocessObj="rowDataprocessObj"  @changeShow="showprocessData"/> 
                         </el-col>
                     </el-row>
                     <el-tabs v-model="atctiveName" @tab-click="handleClick">
@@ -51,14 +54,19 @@
                 </el-card>
             </el-form>
         </el-dialog>
+        <baseInfoDialog  :rowUTSDataObj="rowUTSDataObj" :rowUTStype="rowUTStype" @changeShow="closeBaseInfo"/>
     </div>
 </template>
 
 <script>
 import DynamicTable from '../../components/common/dytable/dytable.vue';
 import proData from '../../components/common/proData/proData';
-import LookcreditPage from './financing-contract-Adjust-list.vue';
-import creditEnclFilelist from '../finance/enclosure-file.vue';
+import processnodelist from '../../views/comment/process-node-list.vue';//流程相关
+import COOTaskPage from '../plan-options/cooperate-task.vue';//配合任务
+import ComANPPage from '../plan-options/company-Annual-plan.vue';//公司年度计划汇总
+import TempTaskPage from '../plan-options/temporary-task.vue';//临时任务配发
+import creditEnclFilelist from '../comment/enclosure-file.vue';
+import baseInfoDialog from './user-tree-search.vue';//转发加签委托人员选择
 export default {
     props: {
         rowWAADataObj: Object,
@@ -71,7 +79,11 @@ export default {
     components: {
         DynamicTable,
         creditEnclFilelist,
-        LookcreditPage
+        COOTaskPage,
+        ComANPPage,
+        processnodelist,
+        baseInfoDialog,
+        TempTaskPage
     },
     inject: ['reload'],
     data: function() {   
@@ -80,25 +92,23 @@ export default {
             ShowFinancVisible:false,
             labelPosition: 'left',
             disabled:false,
-            finanLFCRtype:false,
-            financingLFCAtype:false,
-            financingEFListtype:false,
             companyData:new proData().company,
             objectoptions:new proData().project,
             formdata: {
                 radio:1,
                 remark:''
             },
-            rowLFCADataObj: {},
-            rowLFCRDataObj: {},
-            rowCDLDataObj: [],
-            rowPDLDataObj: [],
-            rowEFListDataObj: {},
-            rowEFListDataObj: {},
-            rowDataprocessObj:{},
-            financingCDLtype:false,
-            financingPDLtype:false,
+            rowUTStype:false,
+            rowCOOTasktype:false,
+            rowCOMAPtype:false,
             financingEFListtype:false,
+            rowTEMTasktype:false,
+            rowUTSDataObj:{},
+            rowDataprocessObj: {},
+            rowCOOTaskDataObj: {},
+            rowCOMAPDataObj: {},
+            rowEFListDataObj: {},
+            rowTEMTaskDataObj: {},
             pageNum: 1,
             pageSize: 10,
             total: 20,
@@ -109,6 +119,11 @@ export default {
     methods: {
         //关闭当前dialog时给父组件传值
         handleClose(){
+            this.rowCOOTasktype=false;
+            this.rowCOMAPtype=false;
+            this.financingEFListtype=false;
+            this.rowTEMTasktype=false;
+            this.reload();
             this.$emit('changeShow',false);
         },
         onSelectionChange(val) {
@@ -149,51 +164,85 @@ export default {
                 }
             }
         },
+        //提交按钮点击事件
         effectOrDisableMsg(){
 
-        }
+        },
+        showprocessData(){},
+        //判断
+        DisplayOrHide(data){
+            if(data === '显示A'){
+                this.rowCOOTasktype=true;
+            }else if(data === '显示B'){
+                this.rowCOMAPtype=true;
+            }else if(data === '显示C'){
+                this.rowTEMTasktype=true;
+            }
+        },
+        //转发按钮点击事件
+        baseInputTable(data){
+            this.rowUTStype = true;
+            let finandata={};
+            finandata.finanrowname="人员缺省查询方案";
+            finandata.finanrowId="QS_0056";
+            finandata.nametitle="待办事项";
+            finandata.SelectionData=this.rowWAADataObj.selectData;
+            finandata.FunctionType=data;
+            this.rowUTSDataObj=finandata;
+        },
+        closeBaseInfo(data){
+            if(data === false){
+                this.rowUTStype = false
+            }else{
+                this.rowUTStype = true
+            }
+        },
+        //关注点击事件
+        basefollow(){
+            let selectData=this.rowWAADataObj.selectData;
+            let subject=selectData[0].fsubject;
+            if(subject.indexOf('转发')>-1){
+                this.$message.error('转发邮件不能添加关注!');
+            }else if(subject.indexOf('抄送')>-1){
+                this.$message.error('抄送邮件不能添加关注!');
+            }else if(subject.indexOf('加签')>-1){
+                this.$message.error('加签邮件不能添加关注!');
+            }else{
+                let fromdata={};
+                fromdata.fvoucherOid=selectData[0].fsrcoId;
+                fromdata.fattentionOid=localStorage.getItem("ms_userId");
+                this.$api.processSet.addAttention(fromdata).then(response => {
+                    let responsevalue = response;
+                    if (responsevalue) {
+                        let returndata = responsevalue.data;
+                        //this.reload();
+                        this.$message.success('添加关注成功!');
+                        //this.WFMtypeoptions=returndata.data.rows;
+                    } else {
+                        this.$message.success('数据库没有该条数据!');
+                    }
+                });
+            }
+        },
     },
     mounted() {
     },
     watch:{
-        rowWAAtype(oldVal,newVal){ console.log(oldVal,newVal)
+        rowWAAtype(oldVal,newVal){
             this.ShowFinancVisible=this.rowWAAtype;
-            let finandata=this.rowWAADataObj.finanrowId;
-            let formDataA ={};
-            formDataA.id=finandata;
             this.title=this.rowWAADataObj.nametitle;
-            console.log(this.financingLFCAtype)
-            console.log(2222)
-            //this.financingLFCAtype=true;
-            this.rowLFCADataObj.finanrowId='2160a15037e640628e135a4efd2adfd3';
-            console.log(this.financingLFCAtype)
-            /*this.$api.task.getUserCreditContractRegisterVO(formDataA).then(response => {
+            let finandata=this.rowWAADataObj.selectData;
+            let formDataA ={};
+            formDataA.oid=finandata[0].foid;
+            this.$api.processSet.getunhandledTask(formDataA).then(response => {
                 let responsevalue = response;
                 if (responsevalue) {
                     let returndata = responsevalue.data;
-                    let tableDataArr=returndata.data;
-                    this.disabled = true;
-                    this.editabled=false;
-                    tableDataArr.loandateStr=this.$Uformat.formatDateTYMD(tableDataArr.loandate);
-                    tableDataArr.duedateStr=this.$Uformat.formatDateTYMD(tableDataArr.duedate);
-                    tableDataArr.depositstartdateStr=this.$Uformat.formatDateTYMD(tableDataArr.depositstartdate);
-                    tableDataArr.depositenddateStr=this.$Uformat.formatDateTYMD(tableDataArr.depositenddate);
-                    tableDataArr.voucherdateStr=this.$Uformat.formatDateTYMD(tableDataArr.voucherdate);
-                    if(tableDataArr.pre == true){
-                        this.prechecked='是';
-                    }else if(tableDataArr.pre == false){
-                        this.prechecked='否';
-                    }
-                    this.formdata=tableDataArr;
-                    this.rowPDLDataObj=[];
-                    this.rowCDLDataObj=[];
-                    this.NewEditVisible= true;
-                    this.showCheckBox= false;
-                    this.checked=false;
+                    this.DisplayOrHide("显示C")
                 } else {
                     this.$message.success('数据库没有该条数据!');
                 }
-            });*/
+            });
         }
     }
 };

@@ -21,7 +21,7 @@
 <script>
 import DynamicTable from '../../components/common/dytable/dytable.vue';
 import proData from '../../components/common/proData/proData';
-import flowchart from '../process-set/flow-chart-detail';
+import flowchart from '../comment/flow-chart-detail.vue';
 export default {
     props: {
         rowDataprocessObj:Object
