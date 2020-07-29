@@ -82,8 +82,8 @@
 					</el-table-column>
 					<el-table-column prop="date" label="字段内容" align="center">
 						<template slot-scope="scope">
-							<el-form-item>
-								<el-input disabled placeholder="字段显示名称" v-model="scope.row.fieldContent">
+							<el-form-item :prop="'lines[' + scope.$index + '].fieldContent'" :rules="rulesTable.fieldContent">
+								<el-input disabled placeholder="字段内容" v-model="scope.row.fieldContent">
 									<el-button :disabled="(scope.row.fieldType != '1' && scope.row.fieldType != '9') || scope.row.showFig  || showFigAll" @click="toFieldContent(scope.row)" slot="append" icon="el-icon-search"></el-button>
 								</el-input>
 							</el-form-item>
@@ -92,14 +92,14 @@
 					<el-table-column prop="date" label="是否禁用" width="120" align="center">
 						<template slot-scope="scope">
 							<el-form-item>
-								<el-checkbox :disabled="showFigAll" v-model="scope.row.checked"></el-checkbox>
+								<el-checkbox @change="forbidChange(scope.row)" :disabled="showFigAll" v-model="scope.row.forbid"></el-checkbox>
 							</el-form-item>
 						</template>
 					</el-table-column>
 					<el-table-column v-if="!showFigAll" prop="date" label="操作" width="120" align="center">
 						<template slot-scope="scope">
 							<el-form-item v-if="!scope.row.showFig">
-								<el-button @click="toDelTable(scope.$index)" type="error" icon="el-icon-plus">删除</el-button>
+								<el-button @click="toDelTable(scope.$index)" type="error">删除</el-button>
 							</el-form-item>
 						</template>
 					</el-table-column>
@@ -114,7 +114,7 @@
 			</el-table>
 			<div slot="footer" class="dialog-footer">
 				<el-button @click="dialogVisible = false">取 消</el-button>
-				<el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+				<el-button type="primary" @click="fieldContentSave">确 定</el-button>
 			</div>
 		</el-dialog>
 	</div>
@@ -126,19 +126,24 @@
 			context: Object
 		},
 		data() {
-			//自定义的校验规则
-			//			var tableNameShow = (rule, value, callback) => {
-			//				if(value.substring(0, 5) != "gzsx_") {
-			//					callback(new Error('数据库表名必须以gzsx_为开头'));
-			//				} else {
-			//					callback();
-			//				}
-			//			};
+			//			自定义的校验规则
+			var fieldContentShow = (rule, value, callback) => {
+				if(this.ruleForm.lines[rule.field.substring(rule.field.indexOf("[") + 1, rule.field.indexOf("]"))].fieldType == 1 ||
+					this.ruleForm.lines[rule.field.substring(rule.field.indexOf("[") + 1, rule.field.indexOf("]"))].fieldType == 9) {
+					if(this.noNull(value)) {
+						callback(new Error('请填写字段内容'));
+					} else {
+						callback();
+					}
+				} else {
+					callback();
+				}
+			};
 			return {
 				showFig: false,
 				showFigAll: false,
 				//选中行ID
-				rowClickId: "",
+				rowClick: {},
 				//弹出框
 				dialogVisible: false,
 				//字段内容弹框
@@ -166,21 +171,20 @@
 						}
 					],
 					tableName: [{
-							required: true,
-							message: '请输入数据库表名',
-							trigger: 'blur'
-						}, {
-							pattern: /^[a-z_A-Z0-9-\.!@#\$%\\\^&\*\)\(\+=\{\}\[\]\/",'<>~\·`\?:;|]+$/,
-							message: '请输入正确的数据库表名'
-						},
-						//					{
-						//						validator: tableNameShow,
-						//						trigger: 'blur'
-						//					}
-					]
+						required: true,
+						message: '请输入数据库表名',
+						trigger: 'blur'
+					}, {
+						pattern: /^[a-z_A-Z0-9-\.!@#\$%\\\^&\*\)\(\+=\{\}\[\]\/",'<>~\·`\?:;|]+$/,
+						message: '请输入正确的数据库表名'
+					}]
 				},
 				//校验规则-table
 				rulesTable: {
+					fieldContent: [{
+						validator: fieldContentShow,
+						trigger: 'blur'
+					}],
 					field: [{
 						required: true,
 						message: "请输入数据库字段名",
@@ -205,11 +209,14 @@
 						trigger: "blur"
 					}],
 				},
+				//字段内容中间变量
+				fieldContent: {},
 				oneCon: {
 					field: "",
 					fieldName: "",
 					fieldType: "",
 					fieldContent: "",
+					oprStatus: 1,
 					checked: false,
 					showFig: false,
 				},
@@ -258,6 +265,7 @@
 						fieldName: "",
 						fieldType: "",
 						fieldContent: "",
+						oprStatus: 1,
 						forbid: false,
 						showFig: false,
 					}],
@@ -278,9 +286,20 @@
 			this.$api.collaborativeOffice.getCompanyData().then(data => {
 				console.log(data.data.data.rows)
 				this.CompanyData = data.data.data.rows
+				this.CompanyData.forEach(item =>{
+					if(item.name == "福佳集团"){
+						this.ruleForm.company = item.id
+					}
+				})
 			})
 		},
 		methods: {
+			//状态改变
+			forbidChange(row) {
+				if(this.showFig) {
+					row.oprStatus = 2
+				}
+			},
 			//新增table数据
 			toAddTable() {
 				this.ruleForm.lines.push(JSON.parse(JSON.stringify(this.oneCon)))
@@ -295,17 +314,32 @@
 					if(valid) {
 						this.$refs.ruleFormTable.validate((valid) => {
 							if(valid) {
-								this.$api.collaborativeOffice.insertWorkItemTypeModel(this.ruleForm).then(data => {
-									if(this.dataBack(data,"新增成功")) {
-										this.$parent.toSelect()
-									}
-								})
+								if(this.showFig) {
+									console.log(this.ruleForm)
+									this.$api.collaborativeOffice.updateWorkItemTypeModel(this.ruleForm).then(data => {
+										if(this.dataBack(data, "修改成功")) {
+											this.$parent.toSelect()
+										}
+									})
+								} else {
+									this.$api.collaborativeOffice.insertWorkItemTypeModel(this.ruleForm).then(data => {
+										if(this.dataBack(data, "新增成功")) {
+											this.$parent.toSelect()
+										}
+									})
+								}
 							}
 						});
 					}
 				});
 			},
+			//字段类型改变
+			fieldTypeSave(row) {
+				row.fieldContent = ""
+			},
+			//打开字段内容
 			toFieldContent(row) {
+				this.fieldContent = row
 				if(row.fieldType == "1") {
 					this.$api.collaborativeOffice.getFieldBrowse().then(data => {
 						this.fieldBrowseList = data.data.data
@@ -317,20 +351,25 @@
 				}
 				this.dialogVisible = true
 			},
+			//选择字段内容
+			fieldContentSave() {
+				this.fieldContent.fieldContent = this.rowClick.name
+				this.dialogVisible = false
+			},
 			// 选中背景色
 			tableRowClassName({
 				row,
 				rowIndex
 			}) {
 				var color = ""
-				if(row.id == this.rowClickId) {
+				if(row.id == this.rowClick.id) {
 					color = "warning-row"
 				}
 				return color;
 			},
 			//选中行
 			clickRow(row) {
-				this.rowClickId = row.id
+				this.rowClick = row
 			},
 		}
 	}

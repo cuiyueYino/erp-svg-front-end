@@ -31,7 +31,7 @@ const collaborativeOffice = {
 	},
 	// 枚举查询
 	findList(params) {
-		return httpReqest.post('/api/interfaces/enumContent/findList',{});
+		return httpReqest.post('/api/interfaces/enumContent/findList', {});
 	},
 	// 分页查询工作事项模版主表
 	findWorkItemTempPage(params) {
@@ -48,6 +48,10 @@ const collaborativeOffice = {
 	// 查询公司
 	getCompanyData() {
 		return httpReqest.get('/api/interfaces/organization/getCompanyData');
+	},
+	// 修改工作事项模版主表分类
+	updateWorkItemTypeModel(params) {
+		return httpReqest.post('/api/interfaces/workItemType/updateWorkItemTypeModel',params);
 	},
 
 };

@@ -11,43 +11,43 @@
 				<el-row>
 					<el-col :span="18">
 						公司：
-						<el-select size='mini' v-model="ruleForm.value" placeholder="公司">
-							<el-option v-for="item in options" :key="item.id" :label="item.label" :value="item.id">
+						<el-select size='mini' v-model="ruleForm.company" placeholder="公司">
+							<el-option v-for="item in CompanyData" :key="item.id" :label="item.name" :value="item.id">
 							</el-option>
 						</el-select>
 					</el-col>
 					<el-col :span="6" style="text-align: right;">
-						<el-button @click="submitForm('ruleForm','ruleFormTable')" v-show="!showFigAll" type="success" size="mini" icon="el-icon-check">提交</el-button>
-						<el-button @click="submitForm('ruleForm','ruleFormTable')" v-show="!showFigAll" type="success" size="mini" icon="el-icon-check">暂存</el-button>
+						<el-button @click="submitForm()" v-show="!showFigAll" type="success" size="mini" icon="el-icon-check">提交</el-button>
+						<el-button @click="submitForm()" v-show="!showFigAll" type="success" size="mini" icon="el-icon-check">暂存</el-button>
 						<el-button @click="preview()" v-show="!showFigAll" type="success" size="mini" icon="el-icon-check">预览</el-button>
 					</el-col>
 				</el-row>
 			</el-card>
 			<el-card class="box-card">
-				<el-form size="mini" label-width="120px" :inline="true" :rules="rules" ref="ruleForm" :model="ruleForm" class="demo-form-inline">
+				<el-form size="mini" label-width="80px" :inline="true" :rules="rules" ref="ruleForm" :model="ruleForm" class="demo-form-inline">
 					<el-row>
-						<el-col :span="8">
+						<el-col :span="6">
 							<el-form-item prop="code" label="主表编码">
-								<el-input clearable :disabled="showFigAll" v-model="ruleForm.code" maxlength="50" placeholder="主表编码"></el-input>
+								<el-input style="width: 110%;" clearable :disabled="showFigAll" v-model="ruleForm.code" maxlength="50" placeholder="主表编码"></el-input>
 							</el-form-item>
 						</el-col>
-						<el-col :span="8">
+						<el-col :span="6">
 							<el-form-item prop="name" label="主表名称">
-								<el-input clearable :disabled="showFigAll" v-model="ruleForm.name" maxlength="50" placeholder="主表名称"></el-input>
+								<el-input style="width: 110%;" clearable :disabled="showFigAll" v-model="ruleForm.name" maxlength="50" placeholder="主表名称"></el-input>
 							</el-form-item>
 						</el-col>
-						<el-col :span="8">
-							<el-form-item prop="tableName" label="主表分类">
-								<el-input disabled placeholder="主表分类" v-model="ruleForm.workItemTypeName">
+						<el-col :span="6">
+							<el-form-item prop="workItemTypeName" label="主表分类">
+								<el-input style="width: 110%;" disabled placeholder="主表分类" v-model="ruleForm.workItemTypeName">
 									<el-button :disabled="showFig || showFigAll" @click="dialogVisible = true" slot="append" icon="el-icon-search"></el-button>
 								</el-input>
 							</el-form-item>
 						</el-col>
-					</el-row>
-					<el-row>
-						<el-form-item label="描述">
-							<el-input clearable :disabled="showFigAll" style="width: 1100px;" type="textarea" maxlength="1500" v-model="ruleForm.remark" placeholder="描述"></el-input>
-						</el-form-item>
+						<el-col :span="6">
+							<el-form-item label="描述">
+								<el-input clearable :disabled="showFigAll" style="width: 130%;" type="textarea" :rows="1" maxlength="1500" v-model="ruleForm.remark" placeholder="描述"></el-input>
+							</el-form-item>
+						</el-col>
 					</el-row>
 				</el-form>
 			</el-card>
@@ -56,7 +56,7 @@
 					<el-col>工作事项模板主表行</el-col>
 				</el-row>
 				<el-form :model="ruleForm" :rules="rulesTable" ref="ruleFormTable">
-					<el-table size="mini" height="400" :data="ruleForm.lines" border style="width: 100%">
+					<el-table size="small" height="400" :data="ruleForm.lines" border style="width: 100%">
 						<el-table-column prop="field" label="数据库字段名" align="center" width="100">
 							<template slot-scope="scope">
 								<el-form-item>
@@ -75,7 +75,7 @@
 							<template slot-scope="scope">
 								<el-form-item>
 									<el-select disabled style="width: 100%;" v-model="scope.row.fieldType" placeholder="字段类型">
-										<el-option v-for="item in options" :key="item.id" :label="item.label" :value="item.id">
+										<el-option v-for="item in fieldTypeList" :key="item.id" :label="item.label" :value="item.id">
 										</el-option>
 									</el-select>
 								</el-form-item>
@@ -83,58 +83,58 @@
 						</el-table-column>
 						<el-table-column prop="lengthType" label="字段长度类型" align="center" width="180">
 							<template slot-scope="scope">
-								<el-form-item :prop="'lines[' + scope.$index + '].field'" :rules="rulesTable.field">
-									<el-input disabled placeholder="字段长度类型" v-model="scope.row.lengthType">
-										<el-button @click="getFieldLength(scope.row)" slot="append" icon="el-icon-search"></el-button>
-									</el-input>
+								<el-form-item :prop="'lines[' + scope.$index + '].lengthType'" :rules="rulesTable.lengthType">
+									<el-select style="width: 100%;" v-model="scope.row.lengthType" placeholder="字段长度类型">
+										<el-option v-for="item in lengthTypeList" :key="item.id" :label="item.name" :value="item.id"></el-option>
+									</el-select>
 								</el-form-item>
 							</template>
 						</el-table-column>
 						<el-table-column prop="show" label="是否显示" align="center">
 							<template slot-scope="scope">
-								<el-form-item :prop="'lines[' + scope.$index + '].field'" :rules="rulesTable.field">
+								<el-form-item>
 									<el-checkbox v-model="scope.row.show"></el-checkbox>
 								</el-form-item>
 							</template>
 						</el-table-column>
 						<el-table-column prop="orderNum" label="显示顺序" align="center">
 							<template slot-scope="scope">
-								<el-form-item :prop="'lines[' + scope.$index + '].field'" :rules="rulesTable.field">
-									<el-input v-model="scope.row.orderNum" placeholder="显示顺序"></el-input>
+								<el-form-item :prop="'lines[' + scope.$index + '].orderNum'" :rules="rulesTable.orderNum">
+									<el-input v-model="scope.row.orderNum" placeholder=""></el-input>
 								</el-form-item>
 							</template>
 						</el-table-column>
 						<el-table-column prop="showNum" label="显示行数" align="center">
 							<template slot-scope="scope">
-								<el-form-item :prop="'lines[' + scope.$index + '].field'" :rules="rulesTable.field">
-									<el-input v-model="scope.row.showNum" placeholder="显示行数"></el-input>
+								<el-form-item :prop="'lines[' + scope.$index + '].showNum'" :rules="rulesTable.showNum">
+									<el-input v-model="scope.row.showNum" placeholder=""></el-input>
 								</el-form-item>
 							</template>
 						</el-table-column>
 						<el-table-column prop="required" label="是否必填" align="center">
 							<template slot-scope="scope">
-								<el-form-item :prop="'lines[' + scope.$index + '].field'" :rules="rulesTable.field">
+								<el-form-item>
 									<el-checkbox v-model="scope.row.required"></el-checkbox>
 								</el-form-item>
 							</template>
 						</el-table-column>
 						<el-table-column prop="choice" label="是否多选" align="center">
 							<template slot-scope="scope">
-								<el-form-item :prop="'lines[' + scope.$index + '].field'" :rules="rulesTable.field">
+								<el-form-item>
 									<el-checkbox v-model="scope.row.choice"></el-checkbox>
 								</el-form-item>
 							</template>
 						</el-table-column>
 						<el-table-column prop="edit" label="是否可编辑" align="center">
 							<template slot-scope="scope">
-								<el-form-item :prop="'lines[' + scope.$index + '].field'" :rules="rulesTable.field">
+								<el-form-item>
 									<el-checkbox v-model="scope.row.edit"></el-checkbox>
 								</el-form-item>
 							</template>
 						</el-table-column>
 						<el-table-column prop="serviceId" label="服务" align="center" width="180">
 							<template slot-scope="scope">
-								<el-form-item :prop="'lines[' + scope.$index + '].field'" :rules="rulesTable.field">
+								<el-form-item>
 									<el-input disabled v-model="scope.row.serviceCon">
 										<el-button @click="findTServiceByParams(scope.row)" slot="append" icon="el-icon-search"></el-button>
 									</el-input>
@@ -143,7 +143,7 @@
 						</el-table-column>
 						<el-table-column prop="parameter" label="参数" align="center">
 							<template slot-scope="scope">
-								<el-form-item :prop="'lines[' + scope.$index + '].field'" :rules="rulesTable.field">
+								<el-form-item>
 									<el-input v-model="scope.row.parameter" placeholder="参数"></el-input>
 								</el-form-item>
 							</template>
@@ -157,14 +157,6 @@
 				<div slot="footer" class="dialog-footer">
 					<el-button @click="dialogVisible = false">取 消</el-button>
 					<el-button type="primary" @click="getSelectMainTableClassification">确 定</el-button>
-				</div>
-			</el-dialog>
-			<!--弹出框-->
-			<el-dialog title="字段长度类型" :destroy-on-close="true" center :visible.sync="dialogVisible_fieldLength" width="20%">
-				<el-tree :data="fieldLengthList" :props="defaultProps" @node-click="handleNodeClick"></el-tree>
-				<div slot="footer" class="dialog-footer">
-					<el-button @click="dialogVisible_fieldLength = false">取 消</el-button>
-					<el-button type="primary" @click="getFieldLengthSuccess">确 定</el-button>
 				</div>
 			</el-dialog>
 			<!--弹出框-->
@@ -182,10 +174,11 @@
 			</el-dialog>
 		</div>
 		<div v-if="showFigForm">
-			<el-row style="text-align: right;">
-				<el-button @click="showFigForm = false">返回</el-button>
-			</el-row>
-			<formIcon :form-data="previewList"></formIcon>
+			<formIcon :rules="rulesChild" :form-data="previewList">
+				<el-row style="text-align: right;margin-bottom: 10px;">
+					<el-button icon="el-icon-arrow-left" size="mini" type="danger" plain @click="showFigForm = false">返回</el-button>
+				</el-row>
+			</formIcon>
 		</div>
 	</div>
 </template>
@@ -202,15 +195,18 @@
 			context: Object
 		},
 		data() {
-			//自定义的校验规则
-			var tableNameShow = (rule, value, callback) => {
-				if(value.substring(0, 5) != "gzsx_") {
-					callback(new Error('数据库表名必须以gzsx_为开头'));
-				} else {
-					callback();
-				}
-			};
 			return {
+				//字段长度类型
+				lengthTypeList: [{
+					id: "1",
+					name: "长度- 1"
+				}, {
+					id: "2",
+					name: "长度- 2"
+				}, {
+					id: "3",
+					name: "长度- 3"
+				}],
 				//服务
 				tServiceByParams: [],
 				showFigForm: false,
@@ -222,17 +218,8 @@
 				dialogVisible: false,
 				dialogVisible_fieldLength: false,
 				dialogVisible_TServiceByParams: false,
-				//字段长度类型
-				fieldLengthList: [],
-				//字段长度类型-定义子类名称
-				defaultProps: {
-					children: 'types',
-					label: 'typeName'
-				},
-				//字段长度类型 / 服务 中间值
+				//服务 中间值
 				rowCon: {},
-				//字段长度类型选中
-				fieldLengthCon: "",
 				//服务选中
 				tServiceByParamsCon: "",
 				//校验规则-表单
@@ -257,233 +244,81 @@
 							message: '请输入正确的主表分类名称'
 						}
 					],
-					tableName: [{
+					workItemTypeName: [{
 						required: true,
-						message: '请输入数据库表名',
+						message: '请选择主表分类',
 						trigger: 'blur'
-					}, {
-						pattern: /^[a-z_A-Z0-9-\.!@#\$%\\\^&\*\)\(\+=\{\}\[\]\/",'<>~\·`\?:;|]+$/,
-						message: '请输入正确的数据库表名'
-					}, {
-						validator: tableNameShow,
-						trigger: 'blur'
-					}]
+					}],
 				},
 				//校验规则-table
 				rulesTable: {
-					field: [{
+					lengthType: [{
 						required: true,
-						message: "请输入数据库字段名",
-						trigger: "blur"
-					}, {
-						pattern: /^[a-zA-Z]+$/,
-						message: '请输入正确的数据库字段名'
-					}],
-					fieldName: [{
-							required: true,
-							message: "请输入字段显示名称",
-							trigger: "blur"
-						},
-						{
-							pattern: "[\u4e00-\u9fa5]",
-							message: '请输入正确的字段显示名称'
-						}
-					],
-					fieldType: [{
-						required: true,
-						message: "请选择字段类型",
+						message: "请选择字段长度类型",
 						trigger: "blur"
 					}],
-				},
-				oneCon: {
-					field: "",
-					fieldName: "",
-					fieldType: "",
-					fieldContent: "",
-					checked: false,
-					showFig: false,
+					orderNum: [{
+						required: true,
+						message: "请输入显示顺序",
+						trigger: "blur"
+					}],
+					showNum: [{
+						required: true,
+						message: "请填写显示行数",
+						trigger: "blur"
+					}],
 				},
 				ruleFormTable: {},
-				options: [{
-					id: '11',
-					label: '浏览框'
-				}, {
-					id: 'text',
-					label: '字符型'
-				}, {
-					id: '13',
-					label: '文本型'
-				}, {
-					id: '14',
-					label: '整型'
-				}, {
-					id: '15',
-					label: '浮点型'
-				}, {
-					id: '16',
-					label: '富文本'
-				}, {
-					id: '17',
-					label: '日期控件'
-				}, {
-					id: '18',
-					label: '时间控件'
-				}, {
-					id: 'select',
-					label: '枚举项'
-				}, {
-					id: '10',
-					label: '复选框'
-				}, ],
+				fieldTypeList: this.getFieldTypeList(),
+				rowConNew: {
+					choice: false,
+					//是否多选
+					edit: true,
+					//是否可编辑
+					field: "",
+					//数据库字段
+					fieldName: "",
+					//显示名称
+					fieldType: "",
+					//字段类型： 1 浏览框、 2 字符型、 3 文本型、 4 整型、 5 浮点型、 6 富文本、 7 日期控件、 8 时间控件、 9 枚举项、 10 复选框
+					lengthType: "",
+					//字段长度类型
+					oprStatus: "",
+					//明细行操作类型： 1 新建、 2 修改、 3 删除、 0 未变
+					orderNum: "",
+					//显示顺序
+					value: "",
+					//参数
+					required: false,
+					//是否必填
+					serviceId: "",
+					//服务
+					show: true,
+					//是否显示
+					showNum: "",
+					//显示行数
+				},
 				ruleForm: {
 					code: "",
 					name: "",
 					tableName: "",
 					remark: "",
-					lines: [{
-						choice: true,
-						//是否多选
-						edit: true,
-						//是否可编辑
-						field: "aaaa",
-						//数据库字段
-						fieldName: "申请人",
-						//显示名称
-						fieldType: "text",
-						//字段类型： 1 浏览框、 2 字符型、 3 文本型、 4 整型、 5 浮点型、 6 富文本、 7 日期控件、 8 时间控件、 9 枚举项、 10 复选框
-						lengthType: "1",
-						//字段长度类型
-						//						oprStatus: "",
-						//明细行操作类型： 1 新建、 2 修改、 3 删除、 0 未变
-						orderNum: "1",
-						//显示顺序
-						parameter: "22222",
-						//参数
-						required: true,
-						//是否必填
-						serviceId: "11111",
-						//服务
-						show: true,
-						//是否显示
-						showNum: "2",
-						//显示行数
-					}, {
-						choice: true,
-						edit: true,
-						field: "ssss",
-						fieldName: "申请部门",
-						fieldType: "select",
-						lengthType: "1",
-						orderNum: "1",
-						parameter: "22222",
-						required: true,
-						serviceId: "11111",
-						show: true,
-						showNum: "1",
-						options: [{
-								id: '1',
-								label: 'Java',
-								isDisabled: false
-							},
-							{
-								id: '2',
-								label: 'Python',
-								isDisabled: false
-							}
-						]
-					}, {
-						choice: true,
-						edit: true,
-						field: "ssss",
-						fieldName: "啊啊啊啊",
-						fieldType: "select",
-						lengthType: "1",
-						orderNum: "1",
-						parameter: "22222",
-						required: true,
-						serviceId: "11111",
-						show: true,
-						showNum: "2",
-						options: [{
-								id: '1',
-								label: 'Java',
-								isDisabled: false
-							},
-							{
-								id: '2',
-								label: 'Python',
-								isDisabled: false
-							}
-						]
-					}, {
-						choice: true,
-						edit: true,
-						field: "ssss",
-						fieldName: "啊啊啊啊",
-						fieldType: "select",
-						lengthType: "1",
-						orderNum: "1",
-						parameter: "22222",
-						required: true,
-						serviceId: "11111",
-						show: true,
-						showNum: "2",
-						options: [{
-								id: '1',
-								label: 'Java',
-								isDisabled: false
-							},
-							{
-								id: '2',
-								label: 'Python',
-								isDisabled: false
-							}
-						]
-					}, {
-						choice: true,
-						edit: true,
-						field: "ssss",
-						fieldName: "啊啊啊啊",
-						fieldType: "select",
-						lengthType: "1",
-						orderNum: "1",
-						parameter: "22222",
-						required: true,
-						serviceId: "11111",
-						show: true,
-						showNum: "4",
-						options: [{
-								id: '1',
-								label: 'Java',
-								isDisabled: false
-							},
-							{
-								id: '2',
-								label: 'Python',
-								isDisabled: false
-							}
-						]
-					}],
+					creator: localStorage.getItem('ms_userId'),
+					company: "",
+					workItemTypeName:"",
+					lines: [],
 				},
 				previewList: {
-					rules: {
-						userName: [{
-							required: true,
-							message: '请输入用户名',
-							trigger: 'blur'
-						}],
-						password: [{
-							required: true,
-							message: '请输入密码',
-							trigger: 'blur'
-						}]
-					},
 					labelWidth: '100px',
 					inline: false,
 					labelPosition: 'right',
 					size: 'small',
 					rowList: []
-				}
+				},
+				//公司
+				CompanyData: [],
+				//预览校验规则
+				rulesChild: {},
 			}
 		},
 		created() {
@@ -498,6 +333,15 @@
 				console.log(this.context)
 				this.ruleForm = this.context
 			}
+			this.$api.collaborativeOffice.getCompanyData().then(data => {
+				console.log(data.data.data.rows)
+				this.CompanyData = data.data.data.rows
+				this.CompanyData.forEach(item => {
+					if(item.name == "福佳集团") {
+						this.ruleForm.company = item.id
+					}
+				})
+			})
 		},
 		methods: {
 			//服务类型
@@ -511,58 +355,126 @@
 						break;
 				}
 			},
+			fieldTypeShow(item) {
+				this.rulesChild[item.field] = []
+				if(item.required) {
+					this.rulesChild[item.field].push({
+						required: true,
+						message: "请填写" + item.fieldName,
+						trigger: 'blur'
+					})
+				}
+				switch(item.fieldType) {
+					//1浏览框、2字符型、3文本型、4整型、5浮点型、6富文本、7日期控件、8时间控件、9枚举项、10复选框
+					case "1":
+						return "browseBox"
+						break;
+					case "2":
+						return "character"
+						break;
+					case "3":
+						return "textType"
+						break;
+					case "4":
+						this.rulesChild[item.field].push({
+							pattern: /^-?[1-9]\d*$/,
+							message: '请输入正确的' + item.fieldName,
+							trigger: 'blur'
+						}, {
+							max: 20,
+							message: '长度至多20位字符',
+							trigger: 'blur'
+						})
+						return "integers"
+						break;
+					case "5":
+						this.rulesChild[item.field].push({
+							pattern: /^([1-9]\d{0,15}|0)(\.\d{1,4})?$/,
+							message: '请输入正确的' + item.fieldName,
+							trigger: 'blur'
+						})
+						return "floatingPoint"
+						break;
+					case "6":
+						return "richText"
+						break;
+					case "7":
+						return "dateControl"
+						break;
+					case "8":
+						return "timeControl"
+						break;
+					case "9":
+						return "select"
+						break;
+					case "10":
+						return "checkBox"
+						break;
+				}
+			},
 			//预览
 			preview() {
-				var cur = []
-				let obj = {};
-				this.ruleForm.lines.forEach(item => {
-					if(obj[item.showNum]) {
-						cur.forEach(val => {
-							if(val.showNum == item.showNum) {
-								val.colList.push(item)
-							}
-						})
-					} else {
-						obj[item.showNum] = true
-						cur.push({
-							showNum: item.showNum,
-							colList: [item]
-						});
+				this.$refs.ruleFormTable.validate((valid) => {
+					if(valid) {
+						if(this.ruleForm.workItemTypeName) {
+							var cur = []
+							let obj = {};
+							this.rulesChild = {}
+							this.ruleForm.lines.forEach(item => {
+								item.fieldTypeName = this.fieldTypeShow(item)
+								if(obj[item.showNum]) {
+									cur.forEach(val => {
+										if(val.showNum == item.showNum) {
+											val.colList.push(item)
+										}
+									})
+								} else {
+									obj[item.showNum] = true
+									cur.push({
+										showNum: item.showNum,
+										colList: [item]
+									});
+								}
+							})
+							//按照行序进行排序
+							var index = 0
+							cur.sort((a, b) => {
+								a.colList.sort((a1, b1) => {
+									return a1.orderNum - b1.orderNum
+								})
+								if(index == 0) {
+									b.colList.sort((a1, b1) => {
+										return a1.orderNum - b1.orderNum
+									})
+									index++
+								}
+								return a.showNum - b.showNum
+							})
+							this.previewList.rowList = cur
+							this.showFigForm = true
+						} else {
+							this.goOut("请选择主表分类")
+						}
 					}
-				})
-				this.previewList.rowList = cur
-				this.showFigForm = true
+				});
 			},
 			//选择主表分类
 			getSelectMainTableClassification() {
 				if(this.$refs.child.rowClick.id) {
-
-				} else {
-					this.$message.error("请选择数据");
-				}
-			},
-			//获取字段长度类型
-			getFieldLength(rowCon) {
-				this.rowCon = rowCon
-				this.dialogVisible_fieldLength = true
-				this.$api.collaborativeOffice.getFieldLength().then(data => {
-					console.log(data)
-					this.fieldLengthList = data.data.data
-				})
-			},
-			//字段长度类型选中
-			handleNodeClick(data) {
-				if(typeof(data.id) == "undefined") {
-					this.fieldLengthCon = data.typeName
-				} else {
-					this.fieldLengthCon = ""
-				}
-			},
-			//字段长度类型--确定
-			getFieldLengthSuccess() {
-				if(this.fieldLengthCon) {
-					this.rowCon.lengthType = this.fieldLengthCon
-					this.dialogVisible_fieldLength = false
+					this.$api.collaborativeOffice.getWorkItemTypeModel({
+						id: this.$refs.child.rowClick.id
+					}).then(data => {
+						data.data.data.lines.forEach(item => {
+							var con = JSON.parse(JSON.stringify(this.rowConNew))
+							con.field = item.field
+							con.fieldName = item.fieldName
+							con.fieldType = item.fieldType
+							this.ruleForm.lines.push(con)
+						})
+					})
+					this.ruleForm.workItemTypeName = this.$refs.child.rowClick.name
+					this.ruleForm.workItemType = this.$refs.child.rowClick.id
+					this.dialogVisible = false
 				} else {
 					this.$message.error("请选择数据");
 				}
@@ -577,8 +489,8 @@
 				})
 			},
 			//服务--确定
-			getTServiceByParams(){
-				this.$set(this.rowCon,'serviceCon',this.tServiceByParamsCon.fname) 
+			getTServiceByParams() {
+				this.$set(this.rowCon, 'serviceCon', this.tServiceByParamsCon.fname)
 				this.rowCon.serviceId = this.tServiceByParamsCon.foid
 				this.dialogVisible_TServiceByParams = false
 			},

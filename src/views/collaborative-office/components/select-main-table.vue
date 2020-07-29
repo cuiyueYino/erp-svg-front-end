@@ -98,7 +98,7 @@
 					page: 1,
 					size: 10
 				},
-				currentTotal: 100,
+				currentTotal: 0,
 				tableData: [],
 				rowClickId: "",
 			}

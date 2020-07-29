@@ -101,7 +101,7 @@
 					page: 1,
 					size: 10
 				},
-				currentTotal: 100,
+				currentTotal: 0,
 				tableData: [],
 				rowClickId: "",
 				rowClick: {},
@@ -127,8 +127,9 @@
 			updateStatus(status) {
 				if(this.getRowClickId()) {
 					this.$api.collaborativeOffice.updateStatus({
-						id: this.rowClickId,
-						status: status
+						id: this.rowClick.id,
+						status: status,
+						tableName : this.rowClick.tableName
 					}).then(data => {
 						if(this.dataBack(data, "修改状态成功")) {
 							this.toSelect()
