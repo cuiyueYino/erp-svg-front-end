@@ -51,7 +51,19 @@ const collaborativeOffice = {
 	},
 	// 修改工作事项模版主表分类
 	updateWorkItemTypeModel(params) {
-		return httpReqest.post('/api/interfaces/workItemType/updateWorkItemTypeModel',params);
+		return httpReqest.post('/api/interfaces/workItemType/updateWorkItemTypeModel', params);
+	},
+	// 查询枚举
+	findList(params) {
+		return httpReqest.post('/api/interfaces/enumContent/findList', params);
+	},
+	// 修改枚举
+	modify(params) {
+		return httpReqest.post('/api/interfaces/enumContent/modify', params);
+	},
+	// 新增（type:1:枚举类别；2：枚举内容 枚举内容需要设置PID，PID为对应枚举类别的ID）
+	add(params) {
+		return httpReqest.post('/api/interfaces/enumContent/add', params);
 	},
 
 };
