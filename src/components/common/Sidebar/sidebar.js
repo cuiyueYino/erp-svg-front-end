@@ -106,7 +106,7 @@ class ITEMData {
                                 title: '会议室使用详情'
                             }
                         ]
-                    }
+                    }, 
                 ]
             },
             {
@@ -203,7 +203,27 @@ class ITEMData {
 	                        index: 'templateMainTable',
 	                        title: '工作事项模板主表分类',
 	                    	}
-                		]
+                        ],
+                        index: 'documentManagement',
+                        title: '文档管理',
+                        subs: [
+                            {
+                                index: 'docCategory',
+                                title: '文档类别维护'
+                            },
+                            {
+                                index: 'docManage',
+                                title: '文档管理'
+                            },
+                            {
+                                index: 'docAuthority',
+                                title: '文档授权'
+                            },
+                            {
+                                index: 'docBrowse',
+                                title: '文档浏览'
+                            }
+                        ]
                     }
                 ]
             }
@@ -218,8 +238,21 @@ class ITEMData {
                         title: '内部邮件',
                     }
                 ]
-            }
+            },{
+                        index: 'workItems',
+                        title: '工作事项',
+               			subs: [
+	                    	{
+	                        index: 'templateMainTableClassification',
+	                        title: '工作事项模板主表分类',
+	                    	},
+	                    	{
+	                        index: 'templateMainTable',
+	                        title: '工作事项模板主表',
+	                    	}
+                		]
+                    }
         ];
     };
 }
-export default ITEMData
+export default ITEMData;
