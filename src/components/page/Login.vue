@@ -79,6 +79,9 @@ export default {
                     localStorage.setItem('ms_roleId',  '0');
                 }
                 localStorage.setItem('ms_userId',  'BFPID000000LR40002');
+                //localStorage.setItem('ms_userId',  'BFPID000000OV60NOU');
+                //localStorage.setItem('ms_userId',  'BFPID000000M4J0I62');
+                //localStorage.setItem('ms_userId',  'BFPID000000OV60NO8');
                 //用户部门
                 localStorage.setItem('ms_userDepartId',  'BFPID12333LSN033N');
                 localStorage.setItem('ms_userDepartName',  '集团信息中心');

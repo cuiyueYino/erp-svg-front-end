@@ -184,7 +184,12 @@
           </el-col>
           <el-col :span="12">
             <el-form-item label="容量：" :label-width="formLabelWidth" prop="fvolume">
-              <el-input :disabled="true" v-model="searchForm.fvolume" size="small" autocomplete="off"></el-input>
+              <el-input
+                :disabled="true"
+                v-model="searchForm.fvolume"
+                size="small"
+                autocomplete="off"
+              ></el-input>
             </el-form-item>
           </el-col>
         </el-row>
@@ -469,21 +474,52 @@ export default {
         this.$message.error("请选择一条数据进行编辑");
         return;
       }
-      this.$api.confMangement
-        .deleteConfOffice(this.multipleSelection[0].foid)
-        .then((res) => {
-          if (res.data.code == 0) {
-            this.$message.success("删除成功!");
-            this.isEdit = false;
-            //刷新表格
-            this.getTableData("");
-          } else {
-            this.$message.error(res.data.msg);
-          }
-        }),
-        (error) => {
-          console.log(error);
-        };
+      this.$confirm("确实要删除当前选择的记录吗?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      })
+        .then(() => {
+          this.$api.confMangement
+            .deleteConfOffice(this.multipleSelection[0].foid)
+            .then((res) => {
+              if (res.data.code == 0) {
+                this.$message.success("删除成功!");
+                this.isEdit = false;
+                //刷新表格
+                this.getTableData("");
+              } else {
+                let errorMsg = res.data.msg;
+                const h = this.$createElement;
+                let params = h("p", null, [
+                  h("span", null, ""),
+                  h("p", null, errorMsg),
+                ]);
+                this.errorOpen(params);
+              }
+            }),
+            (error) => {
+              console.log(error);
+            };
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消删除",
+          });
+        });
+    },
+    // 错误提示框
+    errorOpen(params) {
+      this.$msgbox({
+        title: "错误",
+        message: params,
+        showCancelButton: false,
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+      }).then((action) => {
+        
+      });
     },
     // 显示全部信息
     resetForm(formName) {

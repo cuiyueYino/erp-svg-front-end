@@ -194,14 +194,14 @@
     </div>
 </template>
 <script>
-import DynamicTable from '../../components/common/dytable/dytable.vue';
+// import DynamicTable from '../../components/common/dytable/dytable.vue';
 import PSpage from '../comment/personnel-search.vue';
 import DUTSpage from '../comment/duties-search.vue';
-import POSserachpage from '../comment/position-search.vue'
+import POSserachpage from '../comment/position-search.vue';
 export default {
     name:'workProcess',
     components: {
-      DynamicTable,
+    //   DynamicTable,
       DUTSpage,
       POSserachpage,
       PSpage
@@ -260,13 +260,15 @@ export default {
       
     },
     mounted() {
+        debugger;
         this.$api.management.selectAllOrganizationInfo().then(response => {
             let responsevalue = response;
             if (responsevalue) {
                 let tabledata=eval('(' + responsevalue.data.data + ')');
                 this.treeData=tabledata;
+                console.log(tabledata);
             }
-        }) 
+        }); 
     },
     computed:{
         
@@ -275,9 +277,9 @@ export default {
         // 查询行政上级，业务上级的返回值处理
         showORhideForPOSS(data,type){
             if(type === false){
-                this.rowPOSStype = false
+                this.rowPOSStype = false;
             }else{
-                this.rowPOSStype = true
+                this.rowPOSStype = true;
             }
             if(data.SearchData){
                 let Sdata=data.SearchData;
@@ -316,21 +318,21 @@ export default {
                             <span><i class="el-icon-office-building"></i></span>
                             <span style="margin-left: 5px;">{node.label}</span>
                         </span>
-                    )
+                    );
                 }else if(data.ftype=="2"){
                     return(
                         <span class="custom-tree-node">
                             <span><i class="el-icon-s-help"></i></span>
                             <span style="margin-left: 5px;">{node.label}</span>
                         </span>
-                    )
+                    );
                 }else if(data.ftype=="3"){
                     return(
                         <span class="custom-tree-node">
                             <span><i class="el-icon-s-check"></i></span>
                             <span style="margin-left: 5px;">{node.label}</span>
                         </span>
-                    )
+                    );
                 }
             }  
         },
@@ -347,9 +349,9 @@ export default {
         //获取人员查询结果
         showORhideForPS(data,type){
             if(type === false){
-                this.rowPStype = false
+                this.rowPStype = false;
             }else{
-                this.rowPStype = true
+                this.rowPStype = true;
             }
         },
         //查询职务
@@ -365,9 +367,9 @@ export default {
         //职务查询结果
         showORhideForDUTS(data,type){
             if(type === false){
-                this.rowDUTStype = false
+                this.rowDUTStype = false;
             }else{
-                this.rowDUTStype = true
+                this.rowDUTStype = true;
             }
         },
         //删除
@@ -573,7 +575,7 @@ export default {
                                         this.treeData=tabledata;
                                         this.defaultexpanded.push(this.NodeClickData.foid);
                                     }
-                                })
+                                });
                             }else{
                                 this.$message.error('保存公司失败!');
                             }
@@ -630,7 +632,7 @@ export default {
                                         this.treeData=tabledata;
                                         this.defaultexpanded.push(this.NodeClickData.foid);
                                     }
-                                })
+                                });
                             }else{
                                 this.$message.error('保存部门失败!');
                             }
@@ -692,7 +694,7 @@ export default {
                                         this.treeData=tabledata;
                                         this.defaultexpanded.push(this.NodeClickData.foid);
                                     }
-                                })
+                                });
                             }else{
                                 this.$message.error('保存职位失败!');
                             }
@@ -703,7 +705,7 @@ export default {
             
         }
     },
-}
+};
 </script>
 <style lang="scss" scoped>
  /deep/ .el-textarea .el-input__count{

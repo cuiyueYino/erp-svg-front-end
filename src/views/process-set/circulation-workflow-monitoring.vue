@@ -117,7 +117,7 @@
 import DynamicTable from '../../components/common/dytable/dytable.vue';
 import proData from '../../components/common/proData/proData';
 import UserTree from './user-tree-search.vue';
-import processnodelist from '../../views/finance/process-node-list';
+import processnodelist from '../../views/comment/process-node-list.vue';
 export default {
     props: {
         rowCWMDataObj: Object,

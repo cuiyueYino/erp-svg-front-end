@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="processStyle">
         <el-table
             :data="processtableData"
             v-loading="false"
@@ -206,6 +206,10 @@ export default {
     font-size: 15px;
     line-height: 30px;
     background-color: skyblue;
+}
+.processStyle{
+    margin-top: 20px;
+    margin-left: 10px;
 }
 </style>
 <style lang='scss'>

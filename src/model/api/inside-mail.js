@@ -24,13 +24,20 @@ const insideMail = {
     },
     // 查询具体邮件
     getMailById(params) {
-        return httpReqest.get('/api/interfaces/insideMail/getMailById', params);
+        var valueS='?';
+        for(var item in params){
+            valueS+=item+"="+params[item]+"&";
+        }
+        if(valueS.slice(valueS.length-1,valueS.length) ==="&"){
+            valueS=valueS.slice(0,valueS.length-1);
+        }
+        return httpReqest.get('/api/interfaces/insideMail/getMailById'+valueS);
     },
     // 编辑邮件
     updateInsideMail(params) {
         return httpReqest.post('/api/interfaces/insideMail/updateInsideMail', params);
     },
-    // 更改邮件（逻辑删除和还原）0：未删除，1：已删除
+    // 更改邮件（逻辑删除/还原,设置已读/未读）0：未，1：已
     modifyMail(params) {
         return httpReqest.post('/api/interfaces/insideMail/modifyMail', params);
     },
@@ -41,10 +48,6 @@ const insideMail = {
     // 获取未读数量
     unReadCountById(params) {
         return httpReqest.post('/api/interfaces/insideMail/unReadCountById', params);
-    },
-    // 设置已读（可多选）
-    setRead(params) {
-        return httpReqest.post('/api/interfaces/insideMail/setRead', params);
     },
     // 全部已读
     setReadAll(params) {
