@@ -6,7 +6,7 @@
                 :rules="configRules"
                 ref="formData"
                 class="dataForm"
-                :model="formdata"
+                :model="formData"
                 >
         <!-- TAB页 -->
         <el-tabs v-model="activeName" @tab-click="handleClick">
@@ -17,7 +17,7 @@
                 <el-form-item label="名称" :label-width="formLabelWidth" prop="name">
                     <el-input  v-model="formData.name" autocomplete="off" clearable></el-input>
                 </el-form-item>
-                 <el-form-item label="起点" :label-width="formLabelWidth" >
+                 <!-- <el-form-item label="起点" :label-width="formLabelWidth" >
                     <el-input v-model="formData.workData" autocomplete="off"></el-input>
                 </el-form-item>
                  <el-form-item label="终点" :label-width="formLabelWidth" >
@@ -28,7 +28,7 @@
                 </el-form-item>
                 <el-form-item label="隐藏" :label-width="formLabelWidth">
                     <el-checkbox v-model="checked"></el-checkbox>
-                </el-form-item>
+                </el-form-item> -->
                 <el-form-item label="描述：" :label-width="formLabelWidth">
                     <el-input maxlength="1000" clearable  autosize show-word-limit type="textarea" v-model="formData.fremark"></el-input>
                 </el-form-item>
@@ -217,7 +217,7 @@ export default {
     watch: {
         // 监听配置数据源
         data: {
-            handler (obj) {
+            handler (obj) {console.log(obj)
                 this.formData = JSON.parse(JSON.stringify(obj));
                 console.log( this.formData,this.data);
                 if( this.data.displayName !== '新建连接' ){

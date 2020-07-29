@@ -101,7 +101,7 @@ export default {
             // 对话框显示标识
             dialogVisible: false,
             // 配置表单数据
-            formData: this.data,
+            formData: {},
              // 配置表单校验规则
             configRules: {
                 displayName: { required: true, message: '请输入名称', trigger: 'blur' }
@@ -314,6 +314,7 @@ export default {
         saveLineData(e){
             console.log(e);
             this.data.displayName = e.name;
+            this.data.fremark = e.fremark;
             switch (e.name ) {
                 case '同意':
                         this.data.decisionType = 1

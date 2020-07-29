@@ -299,14 +299,11 @@ export default {
                 displayName: ''
             },
             // 绘制工作流节点数组
-            workflowNodes: [
-                ...TerminalNode()
-            ]
+            workflowNodes: [],
         };
     },
     watch: {},
     created () {
-        // console.log( JSON.parse( sessionStorage.getItem("eidtMsg") )    )
         if( JSON.parse( sessionStorage.getItem("eidtMsg") ) ){
             this.dataObj = JSON.parse( sessionStorage.getItem("eidtMsg") );
         }
@@ -335,8 +332,11 @@ export default {
                         oid:this.dataObj.lines.line[i].linefoid,
                         linefrom:this.dataObj.lines.line[i].linefrom,
                         data: {
-                            ...this.dataObj.lines.line[i].data,
-                            name: this.dataObj.lines.line[i].type,
+                            decisionType:this.dataObj.lines.line[i].linedecisontype,
+                            lineremark:this.dataObj.lines.line[i].lineremark,
+                            lineexpression:this.dataObj.lines.line[i].lineexpression,
+                            lineotherwise:this.dataObj.lines.line[i].lineotherwise,
+                            name: 'Line',
                             displayName: this.dataObj.lines.line[i].linefname,
                             
                         },
@@ -346,7 +346,6 @@ export default {
                                  displayName: this.dataObj.lines.line[i].from.name
                             },
                             target: this.dataObj.lines.line[i].from.target,
-                            // type:
                         },
                         to:{
                              data:{
@@ -354,7 +353,6 @@ export default {
                                  displayName: this.dataObj.lines.line[i].to.name,
                              },
                             target: this.dataObj.lines.line[i].to.target,
-                            // type:
                         },
                     }
                 )
@@ -365,8 +363,50 @@ export default {
                              newJoin.push(
                                 {
                                     data: {
-                                        ...this.dataObj.nodes.wfProcessor[i].data,
-                                        name: this.dataObj.nodes.wfProcessor[i].type,
+                                        mactivity : this.dataObj.nodes.wfProcessor[i].mactivity?{
+                                            "code": this.dataObj.nodes.wfProcessor[i].mactivity.code,
+                                            "oid": this.dataObj.nodes.wfProcessor[i].mactivity.oid,
+                                            "name": this.dataObj.nodes.wfProcessor[i].mactivity.name,
+                                        }:'',
+                                        dataType : this.dataObj.nodes.wfProcessor[i].dataType?{
+                                            "code": this.dataObj.nodes.wfProcessor[i].dataType.code,
+                                            "oid": this.dataObj.nodes.wfProcessor[i].dataType.oid,
+                                            "name": this.dataObj.nodes.wfProcessor[i].dataType.name,
+                                        }:'',
+                                        decisions :{
+                                            decision:this.dataObj.nodes.wfProcessor[i].decisions.decision
+                                        },
+                                        srcActivity : this.dataObj.nodes.wfProcessor[i].srcActivity?{
+                                            "code": this.dataObj.nodes.wfProcessor[i].srcActivity.code,
+                                            "oid": this.dataObj.nodes.wfProcessor[i].srcActivity.oid,
+                                            "name": this.dataObj.nodes.wfProcessor[i].srcActivity.name,
+                                        }:'',
+                                        wfCopyTo :{
+                                            copyTo:this.dataObj.nodes.wfProcessor[i].wfCopyTo.copyTo
+                                        },
+                                        wfParticipator :{
+                                            participator:this.dataObj.nodes.wfProcessor[i].wfParticipator.participator
+                                        },
+                                        wfViewOtherComments :{
+                                            wfViewOtherComment:this.dataObj.nodes.wfProcessor[i].wfViewOtherComments.wfViewOtherComment
+                                        },
+                                        fremark: this.dataObj.nodes.wfProcessor[i].fremark,
+                                        hidden: this.dataObj.nodes.wfProcessor[i].hidden,
+                                        maxWorkTime: this.dataObj.nodes.wfProcessor[i].maxWorkTime,
+                                        mntNextJoin: this.dataObj.nodes.wfProcessor[i].mntNextJoin,
+                                        multMail: this.dataObj.nodes.wfProcessor[i].multMail,
+                                        nodetype: this.dataObj.nodes.wfProcessor[i].nodetype,
+                                        orgUnit: this.dataObj.nodes.wfProcessor[i].orgUnit,
+                                        rollbackService: this.dataObj.nodes.wfProcessor[i].rollbackService,
+                                        timeUnit: this.dataObj.nodes.wfProcessor[i].timeUnit,
+                                        wfAuditType: this.dataObj.nodes.wfProcessor[i].wfAuditType,
+                                        autoHurry: this.dataObj.nodes.wfProcessor[i].autoHurry,
+                                        autoSubmit: this.dataObj.nodes.wfProcessor[i].autoSubmit,
+                                        permission: this.dataObj.nodes.wfProcessor[i].permission,
+                                        canSkip: this.dataObj.nodes.wfProcessor[i].canSkip,
+                                        code: this.dataObj.nodes.wfProcessor[i].code,
+                                        creator: this.dataObj.nodes.wfProcessor[i].creator,
+                                        name:'Join',
                                         displayName: this.dataObj.nodes.wfProcessor[i].name,
                                     },
                                     type: 'Join',
@@ -379,8 +419,8 @@ export default {
                                         height: 76,
                                         visible: false,
                                         color: '#909399',
-                                        x: this.dataObj.nodes.wfProcessor[i].x,
-                                        y: this.dataObj.nodes.wfProcessor[i].y,
+                                        x: Number(this.dataObj.nodes.wfProcessor[i].x),
+                                        y: Number(this.dataObj.nodes.wfProcessor[i].y),
                                         draggable: true
                                     }
                                 }
@@ -390,8 +430,50 @@ export default {
                              newCondition.push(
                                 {
                                     data: {
-                                        ...this.dataObj.nodes.wfProcessor[i].data,
-                                        name: this.dataObj.nodes.wfProcessor[i].type,
+                                        mactivity : {
+                                            "code": this.dataObj.nodes.wfProcessor[i].mactivity.code,
+                                            "oid": this.dataObj.nodes.wfProcessor[i].mactivity.oid,
+                                            "name": this.dataObj.nodes.wfProcessor[i].mactivity.name,
+                                        },
+                                        dataType : this.dataObj.nodes.wfProcessor[i].dataType?{
+                                            "code": this.dataObj.nodes.wfProcessor[i].dataType.code,
+                                            "oid": this.dataObj.nodes.wfProcessor[i].dataType.oid,
+                                            "name": this.dataObj.nodes.wfProcessor[i].dataType.name,
+                                        }:'',
+                                        decisions :this.dataObj.nodes.wfProcessor[i].decisions?{
+                                            decision:this.dataObj.nodes.wfProcessor[i].decisions.decision
+                                        }:'',
+                                        srcActivity : this.dataObj.nodes.wfProcessor[i].srcActivity?{
+                                            "code": this.dataObj.nodes.wfProcessor[i].srcActivity.code,
+                                            "oid": this.dataObj.nodes.wfProcessor[i].srcActivity.oid,
+                                            "name": this.dataObj.nodes.wfProcessor[i].srcActivity.name,
+                                        }:'',
+                                        wfCopyTo :{
+                                            copyTo:this.dataObj.nodes.wfProcessor[i].wfCopyTo.copyTo
+                                        },
+                                        wfParticipator :{
+                                            participator:this.dataObj.nodes.wfProcessor[i].wfParticipator.participator
+                                        },
+                                        wfViewOtherComments :{
+                                            wfViewOtherComment:this.dataObj.nodes.wfProcessor[i].wfViewOtherComments.wfViewOtherComment
+                                        },
+                                        autoHurry:this.dataObj.nodes.wfProcessor[i].autoHurry,
+                                        autoSubmit: this.dataObj.nodes.wfProcessor[i].autoSubmit,
+                                        permission: this.dataObj.nodes.wfProcessor[i].permission,
+                                        canSkip: this.dataObj.nodes.wfProcessor[i].canSkip,
+                                        code: this.dataObj.nodes.wfProcessor[i].code,
+                                        creator: this.dataObj.nodes.wfProcessor[i].creator,
+                                        fremark: this.dataObj.nodes.wfProcessor[i].fremark,
+                                        hidden: this.dataObj.nodes.wfProcessor[i].hidden,
+                                        maxWorkTime: this.dataObj.nodes.wfProcessor[i].maxWorkTime,
+                                        mntNextJoin: this.dataObj.nodes.wfProcessor[i].mntNextJoin,
+                                        multMail: this.dataObj.nodes.wfProcessor[i].multMail,
+                                        nodetype: this.dataObj.nodes.wfProcessor[i].nodetype,
+                                        orgUnit: this.dataObj.nodes.wfProcessor[i].orgUnit,
+                                        rollbackService: this.dataObj.nodes.wfProcessor[i].rollbackService,
+                                        timeUnit: this.dataObj.nodes.wfProcessor[i].timeUnit,
+                                        wfAuditType: this.dataObj.nodes.wfProcessor[i].wfAuditType,
+                                        name: 'Condition',
                                         displayName: this.dataObj.nodes.wfProcessor[i].name,
                                         
                                     },
@@ -405,8 +487,8 @@ export default {
                                         height: 76,
                                         visible: false,
                                         color: '#f39c43',
-                                        x: this.dataObj.nodes.wfProcessor[i].x,
-                                        y: this.dataObj.nodes.wfProcessor[i].y,
+                                        x: Number(this.dataObj.nodes.wfProcessor[i].x),
+                                        y: Number(this.dataObj.nodes.wfProcessor[i].y),
                                         draggable: true
                                     }
                                 }
@@ -422,10 +504,16 @@ export default {
                 newRouter.push(
                      {
                         data: {
-                             ...this.dataObj.nodes.wfRouter[i].data,
-                            name: this.dataObj.nodes.wfRouter[i].type,
+                            dataType : this.dataObj.nodes.wfRouter[i].dataType?{
+                                "code": this.dataObj.nodes.wfRouter[i].dataType.code,
+                                "oid": this.dataObj.nodes.wfRouter[i].dataType.oid,
+                                "name": this.dataObj.nodes.wfRouter[i].dataType.name,
+                            }:'',
+                            fremark: this.dataObj.nodes.wfRouter[i].fremark,
+                            hidden: this.dataObj.nodes.wfRouter[i].hidden,
+                            join: this.dataObj.nodes.wfRouter[i].join,
+                            name: 'Task',
                             displayName: this.dataObj.nodes.wfRouter[i].name,
-                           
                         },
                         type: 'Task',
                         name: this.dataObj.nodes.wfRouter[i].name,
@@ -437,8 +525,8 @@ export default {
                             height: 40,
                             visible: false,
                             color: '#25a3fd',
-                            x: this.dataObj.nodes.wfRouter[i].x,
-                            y: this.dataObj.nodes.wfRouter[i].y,
+                            x: Number(this.dataObj.nodes.wfRouter[i].x),
+                            y: Number(this.dataObj.nodes.wfRouter[i].y),
                             draggable: true
                         }
                     }
@@ -448,8 +536,16 @@ export default {
                 newFork.push(
                      {
                         data: {
-                            ...this.dataObj.nodes.wfProcessorAuto[i].data,
-                            name: this.dataObj.nodes.wfProcessorAuto[i].type,
+                            dataType : this.dataObj.nodes.wfProcessorAuto[i].dataType?{
+                                "code": this.dataObj.nodes.wfProcessorAuto[i].dataType.code,
+                                "oid": this.dataObj.nodes.wfProcessorAuto[i].dataType.oid,
+                                "name": this.dataObj.nodes.wfProcessorAuto[i].dataType.name,
+                            }:'',
+                            wfAuditType: this.dataObj.nodes.wfProcessorAuto[i].wfAuditType,
+                            fremark: this.dataObj.nodes.wfProcessorAuto[i].fremark,
+                            hidden: this.dataObj.nodes.wfProcessorAuto[i].hidden,
+                            join: this.dataObj.nodes.wfProcessorAuto[i].join,
+                            name: 'Fork',
                             displayName: this.dataObj.nodes.wfProcessorAuto[i].name,
                             
                         },
@@ -459,12 +555,12 @@ export default {
                         icon: 'el-icon-setting',
                         transition: [],
                         options: {
-                            width: 40,
-                            height: 40,
+                            width: 120,
+                            height: 76,
                             visible: false,
                             color: '#25a3fd',
-                            x: this.dataObj.nodes.wfProcessorAuto[i].x,
-                            y: this.dataObj.nodes.wfProcessorAuto[i].y,
+                            x: Number(this.dataObj.nodes.wfProcessorAuto[i].x),
+                            y: Number(this.dataObj.nodes.wfProcessorAuto[i].y),
                             draggable: true
                         }
                     }
@@ -479,8 +575,8 @@ export default {
                     transition: [],
                     options: {
                         draggable: true,
-                        x: this.dataObj.nodes.wfStarter[0].x,
-                        y: this.dataObj.nodes.wfStarter[0].y,
+                        x: Number(this.dataObj.nodes.wfStarter[0].x),
+                        y: Number(this.dataObj.nodes.wfStarter[0].y),
                         width: 100,
                         height: 100,
                         color: '#67C23A',
@@ -488,8 +584,7 @@ export default {
                         allowOut: true
                     },
                     data: {
-                        ...this.dataObj.nodes.wfStarter[0].data,
-                        name: this.dataObj.nodes.wfStarter[0].name,
+                        name: 'Start',
                         displayName: this.dataObj.nodes.wfStarter[0].name,
                         
                     },
@@ -502,8 +597,8 @@ export default {
                     oid:this.dataObj.nodes.wfEnder[0].oid,
                     options: {
                         draggable: true,
-                        x: this.dataObj.nodes.wfEnder[0].x,
-                        y: this.dataObj.nodes.wfEnder[0].y,
+                        x: Number(this.dataObj.nodes.wfEnder[0].x),
+                        y: Number(this.dataObj.nodes.wfEnder[0].y),
                          width: 100,
                          height: 100,
                          color: '#F56C6C',
@@ -511,8 +606,7 @@ export default {
                          allowOut: false
                     },
                     data: {
-                        ...this.dataObj.nodes.wfEnder[0].data,
-                        name: this.dataObj.nodes.wfEnder[0].type,
+                        name: 'End',
                         displayName: this.dataObj.nodes.wfEnder[0].name,
                         
                     },
@@ -541,11 +635,17 @@ export default {
                 })
             newObj.push(...newEnd);
             this.dataObj = newObj;
-            this.compileXMLToObj(this.dataObj)
-            // console.log(this.dataObj)
+            this.compileXMLToObj(this.dataObj);
+            for(let k =0 ; k<this.dataObj.length; k++){
+                this.workflowNodes.push(this.dataObj[k]);  
+            }
+            // console.log(this.workflowNodes,this.dataObj)
         }else{
             this.isEditF = false;
             this.isNewF = true;
+            workflowNodes: [
+                ...TerminalNode()
+            ]
         }
        })
 
@@ -604,8 +704,16 @@ export default {
         // 点击节点事件
         clickNode (node) {
             // 点击节点 保存节点数据 获取节点类型
+            // console.log(node)
             this.selectedNode = node;
+             for(let k =0 ; k<this.dataObj.length; k++){
+                if(this.dataObj[k].data.displayName === node.data.displayName){
+                    this.selectedNode.data = this.dataObj[k].data;
+                    // console.log(this.selectedNode,this.dataObj[k])
+                }
+            }
             this.nodeType = node.type;
+            // console.log(this.selectedNode,this.workflowNodes)
         },
         // 清空面板事件
         async cleanUp () {
@@ -740,7 +848,7 @@ div
 .svgBox{
     margin: 0;
     width: 100%;
-    height: 100%;
+    height: 97vh;
 }
 .select-nodes {
     position: relative;

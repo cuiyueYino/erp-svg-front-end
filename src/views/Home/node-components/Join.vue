@@ -6,7 +6,7 @@
                 :rules="configRules"
                 ref="formData"
                 class="dataForm"
-                :model="formdata"
+                :model="formData"
                 >
         <!-- TAB页 -->
         <el-tabs v-model="activeName" @tab-click="handleClick">

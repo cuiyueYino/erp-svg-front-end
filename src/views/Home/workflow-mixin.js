@@ -83,7 +83,7 @@ export default {
                     }
                 })
             });
-            data.then(res=>{ console.log(res);
+            data.then(res=>{ //console.log(res);
                 //遍历节点的返回值
                 this.workflowNodes.map(item => {
                     if( item.type == "Start"){
@@ -134,7 +134,7 @@ export default {
                         compileXML += `</${tagName}>`;
                     });
                     compileXML += '</process>';
-                    console.log(compileXML)
+                    // console.log(compileXML)
                     resolve(compileXML); 
             });
         },
@@ -192,7 +192,6 @@ export default {
                 const str = dataStr;
                 // debugger
                 const newArr = [];
-                let getLineArr = [];
                 // 创建文档对象
                 const parser = new DOMParser();
                 const xmlDoc = parser.parseFromString(str, 'text/html');
@@ -468,7 +467,7 @@ export default {
                         from: this.startObj,
                         to: this.endObj,
                         lineEdit: false
-                    });console.log( this.lineData)
+                    });//console.log( this.lineData)
                     this.lineData.map((item, index) => {
                         if (item.from.key === node.key) {
                             node.transition.push(item);
@@ -540,7 +539,6 @@ export default {
             this.$api.svg.addSvg(data).then(res=>{
               console.log(res)
               sessionStorage.setItem("eidtMsg",null);
-              sessionStorage.setItem('getLineArr',null)
             },error=>{
                 console.log(error)
             })
@@ -575,13 +573,12 @@ export default {
             this.$set(this.selectedNode, 'data', this.workflowData);
             // 打开配置对话框   
             // this.dialogSaveVisible = true;
-            this.$api.svg.addSvg(data).then(res=>{
-              console.log(res)
-              sessionStorage.setItem("eidtMsg",null);
-              sessionStorage.setItem('getLineArr',null)
-            },error=>{
-                console.log(error)
-            })
+            // this.$api.svg.addSvg(data).then(res=>{
+            //   console.log(res)
+            //   sessionStorage.setItem("eidtMsg",null);
+            // },error=>{
+            //     console.log(error)
+            // })
         }
     }
 };

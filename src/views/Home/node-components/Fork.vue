@@ -6,7 +6,7 @@
                 :rules="configRules"
                 ref="formData"
                 class="dataForm"
-                :model="formdata"
+                :model="formData"
                 >
         <!-- TAB页 -->
         <el-tabs v-model="activeName" @tab-click="handleClick">
@@ -30,12 +30,10 @@
                 </el-form-item>
                 <!-- Condition END-->
             </el-tab-pane>
-            <el-tab-pane label="业务服务参数列表" name="2">
-                <!-- Condition -->
+            <!-- <el-tab-pane label="业务服务参数列表" name="2">
                 <el-form-item label="业务服务" label-width="84px" prop="maxTime">
                     <el-input v-model="formData.maxTime" disabled autocomplete="off"></el-input>
                 </el-form-item>
-                <!-- 表格 -->
                 <dynamic-table
                     class="workTable"
                     :height="310"
@@ -49,7 +47,7 @@
                     v-loading="tableLoading"
                     element-loading-text="加载中"
                 ></dynamic-table>
-            </el-tab-pane>
+            </el-tab-pane> -->
            
         </el-tabs>
         <!-- 弹出框 -->

@@ -5,7 +5,7 @@
             v-for="item in data"
             :key="item.key"
             :class="{'link-line-text': selectedNode !== item, 'link-line-selected': selectedNode === item}"
-            @click="selectedNode = item"
+            @click="selectedNodeClick(item)"
             :style="{'left': `${item.left}px`, 'top': `${item.top}px`}"
         >
             {{item.data.displayName}}
@@ -84,7 +84,7 @@ export default {
         },
         // 监听选中连接线数据变化 提交父组件变化数据及方法
         selectedNode: {
-            handler (obj) {
+            handler (obj) {//console.log(obj)
                 this.$emit('update:selected', obj);
             },
             deep: true,
@@ -92,7 +92,12 @@ export default {
         }
     },
     created () {},
-    methods: {}
+    methods: {
+        selectedNodeClick(item){
+            this.selectedNode = item;
+            console.log(this.selectedNode)
+        },
+    }
 };
 </script>
 

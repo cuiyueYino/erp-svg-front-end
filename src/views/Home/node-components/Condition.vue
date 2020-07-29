@@ -7,7 +7,7 @@
       :rules="configRules"
       ref="formData"
       class="dataForm"
-      :model="formdata"
+      :model="formData"
     >
       <el-tabs v-model="activeName" @tab-click="handleClick">
         <el-tab-pane label="基本信息" name="1">
@@ -284,12 +284,14 @@ export default {
     // 监听配置数据源
     data: {
       handler(obj) {console.log(obj)
-        this.formData = JSON.parse(JSON.stringify(obj));
-         if( this.data.displayName !== '新建连接' ){
-            this.displayName  = this.data.displayName 
-        }else{
-            this.displayName  = ''
-        }
+        this.editData = obj;
+        this.displayName = this.editData.displayName
+        this.formData.work = this.editData.mactivity.name
+        //  if( this.data.displayName !== '新建连接' ){
+        //     this.displayName  = this.data.displayName 
+        // }else{
+        //     this.displayName  = ''
+        // }
         // console.log( this.formData,obj)
       },
       deep: true,
@@ -333,13 +335,16 @@ export default {
   },
   data() {
     return {
+      editData:{},
       fremark:"",
       displayName: "",
-      formdata: {
+      formData: {
         permission: null,
         mntNextJoin: null,
         canSkip: null,
-        multMail: null
+        multMail: null,
+        work:"",
+
       },
       baseInputType: "",
       baseInputTitle: "",
