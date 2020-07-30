@@ -74,8 +74,13 @@ const jobUserManagement = {
     },
 
      //  人员-根据公司查找人员
-     addDepartData(params){
-        return httpReqest.post('/api/staffManage/getStaffByCompany',params);
+    addDepartData(params){
+        return httpReqest.post('/api/interfaces/staffManage/getStaffByCompany',params);
+    },
+
+    // 人员-获取人员组织（树结构）
+    getStaffTree(params){
+        return httpReqest.post('/api/interfaces/staffManage/getStaffTree',params);
     },
 
     // 人员-公司查询
