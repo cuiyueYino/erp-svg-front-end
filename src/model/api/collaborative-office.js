@@ -41,6 +41,10 @@ const collaborativeOffice = {
 	findTServiceByParams(params) {
 		return httpReqest.post('/api/interfaces/tservice/findTServiceByParams', params);
 	},
+	// 按ID获取服务
+	findTServiceItemByParams(params) {
+		return httpReqest.post('/api/interfaces/tservice/findTServiceItemByParams', params);
+	},
 	// 新增工作事项模版主表分类
 	insertWorkItemTypeModel(params) {
 		return httpReqest.post('/api/interfaces/workItemType/insertWorkItemTypeModel', params);
@@ -53,10 +57,6 @@ const collaborativeOffice = {
 	updateWorkItemTypeModel(params) {
 		return httpReqest.post('/api/interfaces/workItemType/updateWorkItemTypeModel', params);
 	},
-	// 查询枚举
-	findList(params) {
-		return httpReqest.post('/api/interfaces/enumContent/findList', params);
-	},
 	// 修改枚举
 	modify(params) {
 		return httpReqest.post('/api/interfaces/enumContent/modify', params);
@@ -64,6 +64,22 @@ const collaborativeOffice = {
 	// 新增（type:1:枚举类别；2：枚举内容 枚举内容需要设置PID，PID为对应枚举类别的ID）
 	add(params) {
 		return httpReqest.post('/api/interfaces/enumContent/add', params);
+	},
+	// 新增（type:1:枚举类别；2：枚举内容 枚举内容需要设置PID，PID为对应枚举类别的ID）
+	dynamicinterface(params, item) {
+		if(item.requestMethod == "get") {
+			var valueS = '?';
+			for(var item in params) {
+				valueS += item + "=" + params[item] + "&";
+			}
+			if(valueS.slice(valueS.length - 1, valueS.length) === "&") {
+				valueS = valueS.slice(0, valueS.length - 1);
+			}
+			return httpReqest.get('/api/interfaces/'+item.interfacePath + valueS);
+		} else {
+			return httpReqest.post('/api/interfaces/'+item.interfacePath, params);
+		}
+
 	},
 
 };

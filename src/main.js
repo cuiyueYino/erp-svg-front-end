@@ -22,6 +22,10 @@ import 'components/index.js';
 import * as helpers from 'helpers';
 //公共方法
 import base from './utils/base.js';
+Vue.use(base);
+//全局变量文件
+import globalVariable from './utils/global_variable.js'
+Vue.prototype.$GLOBAL = globalVariable;
 
 Vue.config.productionTip = false;
 
@@ -31,7 +35,7 @@ Vue.prototype.$api = api;
 Vue.prototype.$Uformat = formatS;
 Vue.prototype.$Uconfirm = confirmapi.installF;
 Vue.use(ElementUI);
-Vue.use(base);
+
 
 // 使用钩子函数对路由进行权限跳转
 router.beforeEach((to, from, next) => {

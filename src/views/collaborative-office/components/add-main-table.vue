@@ -90,6 +90,13 @@
 								</el-form-item>
 							</template>
 						</el-table-column>
+						<el-table-column label="字段内容" align="center" width="140">
+							<template slot-scope="scope">
+								<el-form-item>
+									<el-input disabled v-model="scope.row.fieldContentName"></el-input>
+								</el-form-item>
+							</template>
+						</el-table-column>
 						<el-table-column prop="show" label="是否显示" align="center">
 							<template slot-scope="scope">
 								<el-form-item>
@@ -168,7 +175,7 @@
 					<el-table-column prop="fdescription" label="描述"></el-table-column>
 				</el-table>
 				<div slot="footer" class="dialog-footer">
-					<el-button @click="dialogVisible_fieldLength = false">取 消</el-button>
+					<el-button @click="dialogVisible_TServiceByParams = false">取 消</el-button>
 					<el-button type="primary" @click="getTServiceByParams">确 定</el-button>
 				</div>
 			</el-dialog>
@@ -269,7 +276,7 @@
 					}],
 				},
 				ruleFormTable: {},
-				fieldTypeList: this.getFieldTypeList(),
+				fieldTypeList: this.$GLOBAL.fieldTypeList,
 				rowConNew: {
 					choice: false,
 					//是否多选
@@ -305,7 +312,7 @@
 					remark: "",
 					creator: localStorage.getItem('ms_userId'),
 					company: "",
-					workItemTypeName:"",
+					workItemTypeName: "",
 					lines: [],
 				},
 				previewList: {
@@ -319,6 +326,12 @@
 				CompanyData: [],
 				//预览校验规则
 				rulesChild: {},
+				//全部枚举
+				selectList: [],
+				//工作事项
+				fieldBrowseList: [],
+				//公司部门职位的合集
+				allOrganizationInfo: []
 			}
 		},
 		created() {
@@ -330,17 +343,32 @@
 				this.ruleForm = this.context
 			} else if(this.showFigNum == "3") {
 				this.showFigAll = true
-				console.log(this.context)
 				this.ruleForm = this.context
 			}
 			this.$api.collaborativeOffice.getCompanyData().then(data => {
-				console.log(data.data.data.rows)
 				this.CompanyData = data.data.data.rows
 				this.CompanyData.forEach(item => {
 					if(item.name == "福佳集团") {
 						this.ruleForm.company = item.id
 					}
 				})
+			})
+			//全部枚举
+			this.$api.collaborativeOffice.findList({}).then(data => {
+				this.selectList = data.data.data
+			})
+			//全部服务
+			this.$api.collaborativeOffice.findTServiceByParams({}).then(data => {
+				this.tServiceByParams = data.data.data
+			})
+			//工作事项
+			this.$api.collaborativeOffice.getFieldBrowse().then(data => {
+				console.log(data)
+				this.fieldBrowseList = data.data.data
+			})
+			//公司 部门 职位
+			this.$api.management.selectAllOrganizationInfo().then(data => {
+				this.allOrganizationInfo = eval('(' + data.data.data + ')')
 			})
 		},
 		methods: {
@@ -367,6 +395,42 @@
 				switch(item.fieldType) {
 					//1浏览框、2字符型、3文本型、4整型、5浮点型、6富文本、7日期控件、8时间控件、9枚举项、10复选框
 					case "1":
+						//浏览框 : 一共有7种，其中1：公司，2：部门，3：职位可以共同使用同一个接口
+						var list = JSON.parse(JSON.stringify(this.allOrganizationInfo))
+						//公司
+						if(item.toSelect.id == 1) {
+							//删除部门和职位信息
+							for(var i = list[0].children.length - 1; i >= 0; i--) {
+								if(list[0].children[i].ftype == 2) {
+									list[0].children.splice(i, 1)
+								} else {
+									list[0].children[i].children = []
+								}
+							}
+							item.browseBoxList = list
+							//部门
+						} else if(item.toSelect.id == 2) {
+							//删除职位信息
+							list[0].children.forEach(val => {
+								if(typeof(val.children) != "undefined") {
+									val.children.forEach(valChild => {
+										valChild.children = []
+									})
+								}
+							})
+							item.browseBoxList = list
+							//职位（无需删除，保留原数据）
+						} else if(item.toSelect.id == 3) {
+							item.browseBoxList = list
+						} else if(item.toSelect.id == 4) {
+
+						} else if(item.toSelect.id == 5) {
+
+						} else if(item.toSelect.id == 6) {
+
+						} else if(item.toSelect.id == 7) {
+
+						}
 						return "browseBox"
 						break;
 					case "2":
@@ -464,14 +528,32 @@
 					this.$api.collaborativeOffice.getWorkItemTypeModel({
 						id: this.$refs.child.rowClick.id
 					}).then(data => {
+						console.log(data)
 						data.data.data.lines.forEach(item => {
 							var con = JSON.parse(JSON.stringify(this.rowConNew))
+							if(item.fieldType == 9) {
+								con.fieldContentName = item.fieldContentName
+								this.selectList.forEach(val => {
+									if(item.fieldContent == val.id) {
+										con.resList = val.resList
+									}
+								})
+							}
+							if(item.fieldType == 1) {
+								con.fieldContentName = item.fieldContentName
+								this.fieldBrowseList.forEach(val => {
+									if(item.fieldContent == val.id) {
+										con.toSelect = val
+									}
+								})
+							}
 							con.field = item.field
 							con.fieldName = item.fieldName
 							con.fieldType = item.fieldType
 							this.ruleForm.lines.push(con)
 						})
 					})
+					console.log(this.ruleForm.lines)
 					this.ruleForm.workItemTypeName = this.$refs.child.rowClick.name
 					this.ruleForm.workItemType = this.$refs.child.rowClick.id
 					this.dialogVisible = false
@@ -483,14 +565,21 @@
 			findTServiceByParams(rowCon) {
 				this.rowCon = rowCon
 				this.dialogVisible_TServiceByParams = true
-				this.$api.collaborativeOffice.findTServiceByParams({}).then(data => {
-					console.log(data)
-					this.tServiceByParams = data.data.data
-				})
 			},
 			//服务--确定
 			getTServiceByParams() {
+				//				this.$api.collaborativeOffice.findTServiceItemByParams({
+				//					fcode: "service10",
+				//					fid: "BFPID000000LSN02D0"
+				//				}).then(data => {
+				//					console.log(data)
+				//				})
+				//				return
 				this.$set(this.rowCon, 'serviceCon', this.tServiceByParamsCon.fname)
+				this.$set(this.rowCon, 'serviceNow', {
+					fid: this.tServiceByParamsCon.foid,
+					fcode: this.tServiceByParamsCon.fcode
+				})
 				this.rowCon.serviceId = this.tServiceByParamsCon.foid
 				this.dialogVisible_TServiceByParams = false
 			},

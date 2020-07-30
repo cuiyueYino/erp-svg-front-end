@@ -82,8 +82,8 @@
 					</el-table-column>
 					<el-table-column prop="date" label="字段内容" align="center">
 						<template slot-scope="scope">
-							<el-form-item :prop="'lines[' + scope.$index + '].fieldContent'" :rules="rulesTable.fieldContent">
-								<el-input disabled placeholder="字段内容" v-model="scope.row.fieldContent">
+							<el-form-item :prop="'lines[' + scope.$index + '].fieldContentName'" :rules="rulesTable.fieldContentName">
+								<el-input disabled placeholder="字段内容" v-model="scope.row.fieldContentName">
 									<el-button :disabled="(scope.row.fieldType != '1' && scope.row.fieldType != '9') || scope.row.showFig  || showFigAll" @click="toFieldContent(scope.row)" slot="append" icon="el-icon-search"></el-button>
 								</el-input>
 							</el-form-item>
@@ -181,7 +181,7 @@
 				},
 				//校验规则-table
 				rulesTable: {
-					fieldContent: [{
+					fieldContentName: [{
 						validator: fieldContentShow,
 						trigger: 'blur'
 					}],
@@ -216,6 +216,7 @@
 					fieldName: "",
 					fieldType: "",
 					fieldContent: "",
+					fieldContentName:"",
 					oprStatus: 1,
 					checked: false,
 					showFig: false,
@@ -265,6 +266,7 @@
 						fieldName: "",
 						fieldType: "",
 						fieldContent: "",
+						fieldContentName : "",
 						oprStatus: 1,
 						forbid: false,
 						showFig: false,
@@ -346,6 +348,7 @@
 					})
 				} else {
 					this.$api.collaborativeOffice.findList().then(data => {
+						console.log(data)
 						this.fieldBrowseList = data.data.data
 					})
 				}
@@ -353,7 +356,8 @@
 			},
 			//选择字段内容
 			fieldContentSave() {
-				this.fieldContent.fieldContent = this.rowClick.name
+				this.fieldContent.fieldContent = this.rowClick.id
+				this.fieldContent.fieldContentName = this.rowClick.name
 				this.dialogVisible = false
 			},
 			// 选中背景色

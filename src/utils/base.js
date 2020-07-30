@@ -1,49 +1,15 @@
 /*
- * 
- * 公共方法--孟鹏飞
-2020-07-28
+ * 公共方法 -- 孟鹏飞
+	2020-07-30
 
-使用方式：
-直接在JS中使用 this.goOut()来使用
-
-* */
+	调用方式 : 
+	 this.XXXX()
+  
+  * 
+  * */
 
 export default {
 	install(Vue, options) {
-		//获取字段类型
-		Vue.prototype.getFieldTypeList = function(error) {
-			return [{
-				id: '1',
-				label: '浏览框',
-			}, {
-				id: '2',
-				label: '字符型'
-			}, {
-				id: '3',
-				label: '文本型'
-			}, {
-				id: '4',
-				label: '整型'
-			}, {
-				id: '5',
-				label: '浮点型'
-			}, {
-				id: '6',
-				label: '富文本'
-			}, {
-				id: '7',
-				label: '日期控件'
-			}, {
-				id: '8',
-				label: '时间控件'
-			}, {
-				id: '9',
-				label: '枚举项'
-			}, {
-				id: '10',
-				label: '复选框'
-			}]
-		};
 		//警告框弹出
 		Vue.prototype.goOut = function(error) {
 			this.$message.error(error);
