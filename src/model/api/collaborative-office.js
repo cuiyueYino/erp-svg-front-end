@@ -65,6 +65,22 @@ const collaborativeOffice = {
 	add(params) {
 		return httpReqest.post('/api/interfaces/enumContent/add', params);
 	},
+	//人员/用户/职务-列表查询
+	findConList(url, params) {
+		return httpReqest.post('/api/interfaces/' + url, params);
+	},
+	//人员-列表查询
+	//	findStaffByPage(url,params) {
+	//		return httpReqest.post('/api/interfaces/staffManage/findStaffByPage', params);
+	//	},
+	//用户-列表查询
+	//	findUserBypage(params) {
+	//		return httpReqest.post('/api/interfaces/userManage/findUserBypage', params);
+	//	},
+	// 获取职务表格列表数据
+	//  findPositionList(params){
+	//      return httpReqest.post('/api/interfaces/positionmnt/findPositionList', params);
+	//  },
 	// 新增（type:1:枚举类别；2：枚举内容 枚举内容需要设置PID，PID为对应枚举类别的ID）
 	dynamicinterface(params, item) {
 		if(item.requestMethod == "get") {
@@ -75,9 +91,9 @@ const collaborativeOffice = {
 			if(valueS.slice(valueS.length - 1, valueS.length) === "&") {
 				valueS = valueS.slice(0, valueS.length - 1);
 			}
-			return httpReqest.get('/api/interfaces/'+item.interfacePath + valueS);
+			return httpReqest.get('/api/interfaces/' + item.interfacePath + valueS);
 		} else {
-			return httpReqest.post('/api/interfaces/'+item.interfacePath, params);
+			return httpReqest.post('/api/interfaces/' + item.interfacePath, params);
 		}
 
 	},

@@ -57,17 +57,12 @@
 					<el-button type="primary" @click="onSubmit('ruleForm')">
 						保存
 					</el-button>
-					<el-button @click="resetForm('ruleForm')">
-						重置
-					</el-button>
 				</el-form-item>
 			</el-form>
 		</el-card>
 		<!--弹出框-->
-		<el-dialog title="公司/部门/职位信息" :destroy-on-close="true" center :visible.sync="dialogVisible" width="60%">
-			<div class="treeDivClass">
-				<el-tree @check-change="handleClick" show-checkbox ref="treeDialogVisible" highlight-current :data="treeData" :props="defaultProps" node-key="foid" accordion></el-tree>
-			</div>
+		<el-dialog :title="titleShow" top="1vh" destroy-on-close center :visible.sync="dialogVisible" width="80%">
+			<formIconComponents ref="child" :showFig="showCon" :dataCon="dataCon"></formIconComponents>
 			<div slot="footer" class="dialog-footer">
 				<el-button @click="dialogVisible = false">取 消</el-button>
 				<el-button type="primary" @click="getDialogVisible">确 定</el-button>
@@ -77,12 +72,14 @@
 </template>
 
 <script>
+	import formIconComponents from '../../../../views/collaborative-office/components/encapsulation/sub-components/form-icon-components';
 	import { quillEditor } from 'vue-quill-editor'; //调用编辑器
 	import 'quill/dist/quill.snow.css';
 	import * as Quill from 'quill';
 	export default {
 		components: {
-			quillEditor
+			quillEditor,
+			formIconComponents
 		},
 		props: {
 			formData: {
@@ -96,46 +93,89 @@
 		},
 		data() {
 			return {
-				//				form: {},
+				//弹出框表头
+				titleShow: "",
+				//传入类型
+				showCon: "",
+				//传入值
+				dataCon: {},
+				//弹出框
 				dialogVisible: false,
+				//中间变量
 				dialogVisibleCon: {},
-				treeData: [],
-				defaultProps: {
-					children: 'children',
-					label: 'fname'
-				},
-				dataList: [],
+				//富文本基础数据
 				editorOption: this.$GLOBAL.editorOption,
-				checkedId: "",
-				count: 0
 			};
 		},
-		created() {
-			//			this.bindValue();
-			console.log(this.formData)
-		},
+		created() {},
 		methods: {
-			//单选
-			handleClick(data, checked, node) {
-				if(checked) {
-					this.$refs.treeDialogVisible.setCheckedNodes([data]);
-				}
-			},
+			//弹出框确定
 			getDialogVisible() {
-				var con = this.$refs.treeDialogVisible.getCheckedNodes(true)
-				if(con.length > 1) {
-					this.goOut("请单选")
-				} else {
-					this.dialogVisibleCon[this.dialogVisibleCon.field] = con[0].foid
-					this.dialogVisibleCon[this.dialogVisibleCon.field + 'Name'] = con[0].fname
-					this.dialogVisible = false
-				}
+				this.dialogVisibleCon[this.dialogVisibleCon.field] = this.$refs.child.backCon.value
+				this.dialogVisibleCon[this.dialogVisibleCon.field + 'Name'] = this.$refs.child.backCon.label
+				this.dialogVisible = false
 			},
+			//弹出框打开
 			findDialogVisible(row) {
 				this.dialogVisibleCon = row
-				this.treeData = row.browseBoxList
 				this.dialogVisible = true
-				this.count = 0
+				switch(row.toSelect.id) {
+					case "1":
+						this.showCon = "organization"
+						this.titleShow = "公司"
+						this.$set(this.dataCon, "context", row.browseBoxList)
+						break;
+					case "2":
+						this.showCon = "organization"
+						this.titleShow = "部门"
+						this.$set(this.dataCon, "context", row.browseBoxList)
+						break;
+					case "3":
+						this.showCon = "organization"
+						this.titleShow = "职位"
+						this.$set(this.dataCon, "context", row.browseBoxList)
+						break;
+					case "4":
+						this.showCon = "personnel"
+						this.titleShow = "人员"
+						this.$api.collaborativeOffice.findConList("staffManage/findStaffByPage", {
+							page: 1,
+							size: 10
+						}).then(data => {
+							this.$set(this.dataCon, "context", data.data.data.rows)
+							this.$set(this.dataCon, "currentTotal", data.data.data.total)
+						})
+						break;
+					case "5":
+						this.showCon = "user"
+						this.titleShow = "用户"
+						this.$api.collaborativeOffice.findConList("userManage/findUserBypage", {
+							page: 1,
+							size: 10
+						}).then(data => {
+							console.log(data)
+							this.$set(this.dataCon, "context", data.data.data.rows)
+							this.$set(this.dataCon, "currentTotal", data.data.data.total)
+						})
+						break;
+					case "6":
+						this.showCon = "jobSet"
+						this.titleShow = "职务"
+						this.$api.collaborativeOffice.findConList("positionmnt/findPositionList", {
+							page: 1,
+							size: 10
+						}).then(data => {
+							console.log(data)
+							this.$set(this.dataCon, "context", data.data.data.rows)
+							this.$set(this.dataCon, "currentTotal", data.data.data.total)
+						})
+						break;
+					case "7":
+						return "dateControl"
+						break;
+
+				}
+
 			},
 			onSubmit(formName) {
 				this.$refs[formName].validate((valid) => {
@@ -146,36 +186,6 @@
 						return false;
 					}
 				});
-			},
-			resetForm(formName) {
-				this.$refs[formName].resetFields();
-			},
-			bindValue() {
-				//				const obj = {};
-				//				this.formData.rowList.forEach((item, index) => {
-				//					item.colList.forEach(val => {
-				//						obj[val.field] = val.value;
-				//					})
-				//					// 这里不能写成this.form = obj  因为传递的不是值，而是引用，他们指向了同一个空间！
-				//				});
-				//				this.form = { ...obj
-				//				};
-			},
-			// 选中背景色
-			tableRowClassName({
-				row,
-				rowIndex
-			}) {
-				var color = ""
-				if(row.foid == this.tServiceByParamsCon.foid) {
-					color = "warning-row"
-				}
-				return color;
-			},
-			//选中行
-			clickRow(row) {
-				console.log(row)
-				this.tServiceByParamsCon = row
 			},
 			onEditorBlur() {}, // 失去焦点事件
 			onEditorFocus(event) {

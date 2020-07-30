@@ -159,7 +159,7 @@
 				</el-form>
 			</el-card>
 			<!--弹出框-->
-			<el-dialog title="工作事项模板主表分类" :destroy-on-close="true" center :visible.sync="dialogVisible" width="80%">
+			<el-dialog title="工作事项模板主表分类" top="1vh" :destroy-on-close="true" center :visible.sync="dialogVisible" width="80%">
 				<selectMainTableClassification show="1" ref="child"></selectMainTableClassification>
 				<div slot="footer" class="dialog-footer">
 					<el-button @click="dialogVisible = false">取 消</el-button>
@@ -167,7 +167,7 @@
 				</div>
 			</el-dialog>
 			<!--弹出框-->
-			<el-dialog title="服务" :destroy-on-close="true" center :visible.sync="dialogVisible_TServiceByParams" width="60%">
+			<el-dialog title="服务" top="1vh" :destroy-on-close="true" center :visible.sync="dialogVisible_TServiceByParams" width="60%">
 				<el-table :row-class-name="tableRowClassName" @row-click="clickRow" :data="tServiceByParams" border>
 					<el-table-column prop="fcode" label="服务编码"></el-table-column>
 					<el-table-column :formatter="ftypeShow" prop="ftype" label="服务类型"></el-table-column>
@@ -363,7 +363,6 @@
 			})
 			//工作事项
 			this.$api.collaborativeOffice.getFieldBrowse().then(data => {
-				console.log(data)
 				this.fieldBrowseList = data.data.data
 			})
 			//公司 部门 职位
@@ -524,6 +523,7 @@
 			},
 			//选择主表分类
 			getSelectMainTableClassification() {
+				this.ruleForm.lines = []
 				if(this.$refs.child.rowClick.id) {
 					this.$api.collaborativeOffice.getWorkItemTypeModel({
 						id: this.$refs.child.rowClick.id
@@ -553,7 +553,6 @@
 							this.ruleForm.lines.push(con)
 						})
 					})
-					console.log(this.ruleForm.lines)
 					this.ruleForm.workItemTypeName = this.$refs.child.rowClick.name
 					this.ruleForm.workItemType = this.$refs.child.rowClick.id
 					this.dialogVisible = false

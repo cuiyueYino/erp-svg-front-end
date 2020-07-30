@@ -53,7 +53,7 @@ export default {
 		//后台返回值
 		Vue.prototype.dataBack = function(data, val) {
 			console.log(data)
-			if(data.data.code == 0) {
+			if(data.status == 200) {
 				if(val != "") {
 					this.goOk(val)
 				}
