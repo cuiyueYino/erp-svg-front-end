@@ -44,8 +44,8 @@
 				<el-col style="text-align: right;" :span="10">
 					<el-button @click="$parent.toAdd('1')" icon="el-icon-delete" type="success">新增</el-button>
 					<el-button @click="toUpd()" icon="el-icon-delete" type="success">修改</el-button>
-					<el-button @click="updateStatus(1)" icon="el-icon-delete" type="primary">生效</el-button>
-					<el-button @click="updateStatus(2)" icon="el-icon-delete" type="danger">禁用</el-button>
+					<el-button @click="updateStatus(3)" icon="el-icon-delete" type="primary">生效</el-button>
+					<el-button @click="updateStatus(7)" icon="el-icon-delete" type="danger">禁用</el-button>
 					<el-button @click="toSee()" icon="el-icon-delete" type="primary" plain>查看</el-button>
 				</el-col>
 			</el-row>
@@ -101,6 +101,7 @@
 				currentTotal: 0,
 				tableData: [],
 				rowClickId: "",
+				rowClick: {}
 			}
 		},
 		created() {
@@ -110,26 +111,27 @@
 			//查看
 			toSee() {
 				if(this.getRowClickId()) {
-					this.$api.collaborativeOffice.getWorkItemTypeModel({
+					this.$api.collaborativeOffice.getWorkItemTempModel({
 						id: this.rowClickId
 					}).then(data => {
-						console.log(data.data.data)
+						console.log(data)
 						this.$parent.toAdd('3', data.data.data)
 					})
 				}
-
 			},
 			//修改状态
 			updateStatus(status) {
 				if(this.getRowClickId()) {
-					this.$api.collaborativeOffice.updateStatus({
-
+					this.$api.collaborativeOffice.updateStatusTemp({
+						id: this.rowClickId,
+						status: status,
 					}).then(data => {
-						console.log(data)
+						if(this.dataBack(data, "修改状态成功")) {
+							this.toSelect()
+						}
 					})
 				}
-			},
-			//状态展示
+			}, //状态展示
 			statusShow(row) {
 				switch(row.status) {
 					case 1:
@@ -145,7 +147,7 @@
 						return "回收"
 						break;
 					case 7:
-						return "作废"
+						return "禁用"
 						break;
 					case 8:
 						return "关闭/结清"
@@ -155,11 +157,11 @@
 			//修改
 			toUpd() {
 				if(this.getRowClickId()) {
-					this.$api.collaborativeOffice.getWorkItemTypeModel({
+					this.$api.collaborativeOffice.getWorkItemTempModel({
 						id: this.rowClickId
 					}).then(data => {
 						console.log(data.data.data)
-						this.$parent.toAdd('2', data.data.data)
+						this.$parent.toUpd(data.data.data)
 					})
 				}
 			},
@@ -198,6 +200,7 @@
 			//选中行
 			clickRow(row) {
 				this.rowClickId = row.id
+				this.rowClick = row
 			},
 		}
 	}

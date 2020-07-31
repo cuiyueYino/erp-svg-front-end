@@ -55,7 +55,7 @@
 				</el-row>
 				<el-form-item>
 					<el-button type="primary" @click="onSubmit('ruleForm')">
-						保存
+						效果展示
 					</el-button>
 				</el-form-item>
 			</el-form>
@@ -180,10 +180,9 @@
 			onSubmit(formName) {
 				this.$refs[formName].validate((valid) => {
 					if(valid) {
-						console.log(this.form);
-						alert('发送请求去 ');
+						this.goOk("可以提交")
 					} else {
-						return false;
+						this.goOk("数据填写不全")
 					}
 				});
 			},

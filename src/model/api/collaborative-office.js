@@ -6,9 +6,13 @@ const collaborativeOffice = {
 	findWorkItemTypePage(params) {
 		return httpReqest.post('/api/interfaces/workItemType/findWorkItemTypePage', params);
 	},
-	// 修改状态，7禁用、3有效
+	// 修改状态主表分类，7禁用、3有效
 	updateStatus(params) {
 		return httpReqest.post('/api/interfaces/workItemType/updateStatus', params);
+	},
+	// 修改状态主表，7禁用、3有效
+	updateStatusTemp(params) {
+		return httpReqest.post('/api/interfaces/workItemTemp/updateStatus', params);
 	},
 	// 根据ID查询工作事项模版主表分类
 	getWorkItemTypeModel(params) {
@@ -95,7 +99,25 @@ const collaborativeOffice = {
 		} else {
 			return httpReqest.post('/api/interfaces/' + item.interfacePath, params);
 		}
-
+	},
+	//新增工作事项模版主表
+	insertWorkItemTempModel(params) {
+		return httpReqest.post('/api/interfaces/workItemTemp/insertWorkItemTempModel', params);
+	},
+	//修改工作事项模版主表
+	updateWorkItemTempModel(params) {
+		return httpReqest.post('/api/interfaces/workItemTemp/updateWorkItemTempModel', params);
+	},
+	//根据ID查询工作事项模版主表
+	getWorkItemTempModel(params) {
+		var valueS = '?';
+		for(var item in params) {
+			valueS += item + "=" + params[item] + "&";
+		}
+		if(valueS.slice(valueS.length - 1, valueS.length) === "&") {
+			valueS = valueS.slice(0, valueS.length - 1);
+		}
+		return httpReqest.get('/api/interfaces/workItemTemp/getWorkItemTempModel' + valueS);
 	},
 
 };
