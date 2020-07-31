@@ -217,14 +217,30 @@ export default {
     watch: {
         // 监听配置数据源
         data: {
-            handler (obj) {console.log(obj)
-                this.formData = JSON.parse(JSON.stringify(obj));
-                console.log( this.formData,this.data);
-                if( this.data.displayName !== '新建连接' ){
-                    this.formData.name  = this.data.displayName;
-                }else{
-                    this.formData.name  = ''
-                }
+            handler (obj) {
+             if(obj.name === "Line"){console.log(obj)
+                this.editData = obj;
+                this.formData.code = this.editData.linefcode
+                this.formData.fremark = this.editData.lineremark
+                this.formData.name = this.editData.displayName
+                switch (this.editData.decisionType ) {
+                case 1:
+                        this.formData.decisionType = '同意'
+                    break;
+                case 2:
+                        this.formData.decisionType = '不同意'
+                    break;
+                case 3:
+                        this.formData.decisionType = '待处理'
+                    break;
+                case 4:
+                        this.formData.decisionType = '其他'
+                    break;
+            
+                default:
+                    break;
+            }
+             }
             },
             deep: true,
             immediate: true

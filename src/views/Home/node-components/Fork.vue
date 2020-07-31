@@ -237,6 +237,7 @@ export default {
         gridData:[],
         multipleSelection: [],
         options: [],
+        editData:{},
         };
     },
     computed: {
@@ -257,8 +258,18 @@ export default {
         // 监听配置数据源
         data: {
             handler (obj) {
-                this.formData = JSON.parse(JSON.stringify(obj));
-                // console.log( this.formData)
+                if(obj.name === "Fork"){console.log( obj)
+                    this.editData = obj;
+                    this.formData.name = this.editData.displayName
+                    this.formData.work = this.editData.mactivity?this.editData.mactivity.name:'' 
+                    this.formData.workId = this.editData.mactivity.oid
+                    this.formData.workCode = this.editData.mactivity.code
+                    this.formData.workData = this.editData.dataType.name
+                    this.formData.workDataId = this.editData.dataType.oid
+                    this.formData.workDataCode = this.editData.dataType.code
+                    this.formData.checked = this.editData.hidden==1?true:false
+                    this.formData.fremark = this.editData.fremark    
+                }
             },
             deep: true,
             immediate: true

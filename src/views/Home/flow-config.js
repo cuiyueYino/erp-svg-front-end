@@ -38,7 +38,7 @@ export function NodeConfig () {
             visible: false,
             color: '#909399'
         },
-        process: {
+        subprocess: {
             width: 120,
             height: 76,
             visible: false,
@@ -145,17 +145,17 @@ export function NodesData () {
             }
         },
         {
-            type: 'Process',
+            type: 'Subprocess',
             name: '子流程',
             icon: 'el-icon-connection',
             options: {
-                ...nodeConfig.process,
+                ...nodeConfig.subprocess,
                 x: 0,
                 y: 0,
                 draggable: true
             },
             data: {
-                name: 'Process',
+                name: 'Subprocess',
                 displayName: '子流程'
             }
         }

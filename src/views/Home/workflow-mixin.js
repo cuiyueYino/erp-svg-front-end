@@ -33,9 +33,9 @@ export default {
         },
         // 计算生成连接线数组
         lineData: {
-            get () {
+            get () {console.log(this.linkData);//debugger
                 this.linkData.map(item => {
-                    if (Object.keys(item).length > 2) {//console.log(item)
+                    if (Object.keys(item).length > 2) {console.log(item)
                         // 添加连接线类型
                         item.type = 'Line';
                         // 获取连接线连接点坐标 以及连接线文本偏移量
@@ -90,7 +90,7 @@ export default {
                          item.options.y = Number(yData) 
                     }
                     //遍历线的返回值
-                    res.map(node => {
+                    res.map(node => {//debugger
                         if (item.data.displayName === node.to.data.displayName) {
                             node.to = {
                                 ...item,
@@ -246,7 +246,7 @@ export default {
             });
         },
         // 解析连接线数据
-        compileLink (name, obj, arr,allNodes) {//debugger
+        compileLink (name, obj, arr,allNodes) {
             return new Promise((resolve, reject) => { 
             let lineList = [];
             let toName;
@@ -295,7 +295,7 @@ export default {
         });
         },
         // 计算连接点相对坐标
-        computedLinkPoint (obj, param) {
+        computedLinkPoint (obj, param) {//debugger
             //
             if (param === 'T') {
                 return [obj.width / 2, 0];
@@ -319,7 +319,7 @@ export default {
             }
         },
         // 点到点连接线生成事件
-        endToEndLink ({ from, to }) {//console.log( from, to)
+        endToEndLink ({ from, to }) {console.log( from, to);//debugger
             if (typeof from === 'undefined' || typeof to === 'undefined') return;
             // 结构出发和到达目标对象
             const fromPoint = from.target;
@@ -561,8 +561,8 @@ export default {
                     "oid":  editMsg.oid,
                     "nodes": workflowNodes
                 };
-            
-            console.log(data)
+                console.log(data)
+            // console.log(JSON.stringify(data))
             //
             this.selectedNode = {};
             // 设置保存标识

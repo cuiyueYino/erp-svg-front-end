@@ -73,11 +73,19 @@ export default {
     },
     computed: {},
     watch: {
+         // 监听配置数据变化
+        data: {
+            handler (obj) {
+                // console.log(obj)
+            },
+            deep: true,
+            immediate: true
+        },
         // 监听选中连接线数据变化
         selected: {
             handler (obj) {
                 this.selectedNode = obj;
-                // console.log(this.data)
+                //  console.log(this.data)
             },
             deep: true,
             immediate: true
@@ -95,7 +103,7 @@ export default {
     methods: {
         selectedNodeClick(item){
             this.selectedNode = item;
-            console.log(this.selectedNode)
+            this.$emit('selected-node-click',item);
         },
     }
 };

@@ -100,7 +100,7 @@
                             @dragstart="dragStartEvent($event)"
                             @dragend="handlerDragEnd($event, item)"
                         >
-                            <a class="workflow-nodes">
+                            <a class="workflow-nodes" v-if="item.name=='子流程'?(isSubProcess?false:true):true">
                                 <i :class="item.icon"></i>
                                 <span>{{item.name}}</span>
                             </a>
@@ -152,7 +152,7 @@
                 <!-- 条件节点 -->
                 <condition-node
                     :key="index"
-                    v-else-if="node.type === 'Condition'  || node.type === 'Process' || node.type === 'Fork' || node.type === 'Join' "
+                    v-else-if="node.type === 'Condition'  || node.type === 'Subprocess' || node.type === 'Fork' || node.type === 'Join' "
                     :icon="node.type === 'Condition'?'el-icon-user':node.type === 'Fork'?'el-icon-plus-supply-chain':
                     node.type === 'Join'?'el-icon-plus-param': ''"
                     :width="node.options.width"
@@ -219,6 +219,7 @@
                 :selected.sync="selectedNode"
                 @config="linkLineConfig"
                 @delete="linkLineDelete"
+                @selected-node-click="selectedNodeClick"
             >
             </link-text>
             <!-- 配置节点表单 -->
@@ -287,6 +288,8 @@ export default {
                 top: '30px',
                 'z-index': '1991'
             },
+            // 是否为子流程
+            isSubProcess:false,
             // 开始节点对象
             startObj: {},
             // 保存操作标识
@@ -306,10 +309,21 @@ export default {
     created () {
         if( JSON.parse( sessionStorage.getItem("eidtMsg") ) ){
             this.dataObj = JSON.parse( sessionStorage.getItem("eidtMsg") );
+            switch (this.dataObj.subProcess) {
+                case '0':
+                    this.isSubProcess = false;
+                    break;
+                case '1':
+                    this.isSubProcess = true;
+                    break;
+            
+                default:
+                    break;
+            }
         }
     },
     mounted () {
-       this.$nextTick(()=>{
+       this.$nextTick(()=>{//debugger
             //console.log(this.dataObj)
             if(this.dataObj.lines.line.length >0){
             this.isEditF = true;
@@ -332,6 +346,7 @@ export default {
                         oid:this.dataObj.lines.line[i].linefoid,
                         linefrom:this.dataObj.lines.line[i].linefrom,
                         data: {
+                            linefcode:this.dataObj.lines.line[i].linefcode,
                             decisionType:this.dataObj.lines.line[i].linedecisontype,
                             lineremark:this.dataObj.lines.line[i].lineremark,
                             lineexpression:this.dataObj.lines.line[i].lineexpression,
@@ -367,12 +382,12 @@ export default {
                                             "code": this.dataObj.nodes.wfProcessor[i].mactivity.code,
                                             "oid": this.dataObj.nodes.wfProcessor[i].mactivity.oid,
                                             "name": this.dataObj.nodes.wfProcessor[i].mactivity.name,
-                                        }:'',
+                                        }:{},
                                         dataType : this.dataObj.nodes.wfProcessor[i].dataType?{
                                             "code": this.dataObj.nodes.wfProcessor[i].dataType.code,
                                             "oid": this.dataObj.nodes.wfProcessor[i].dataType.oid,
                                             "name": this.dataObj.nodes.wfProcessor[i].dataType.name,
-                                        }:'',
+                                        }:{},
                                         decisions :{
                                             decision:this.dataObj.nodes.wfProcessor[i].decisions.decision
                                         },
@@ -380,7 +395,7 @@ export default {
                                             "code": this.dataObj.nodes.wfProcessor[i].srcActivity.code,
                                             "oid": this.dataObj.nodes.wfProcessor[i].srcActivity.oid,
                                             "name": this.dataObj.nodes.wfProcessor[i].srcActivity.name,
-                                        }:'',
+                                        }:{},
                                         wfCopyTo :{
                                             copyTo:this.dataObj.nodes.wfProcessor[i].wfCopyTo.copyTo
                                         },
@@ -439,15 +454,15 @@ export default {
                                             "code": this.dataObj.nodes.wfProcessor[i].dataType.code,
                                             "oid": this.dataObj.nodes.wfProcessor[i].dataType.oid,
                                             "name": this.dataObj.nodes.wfProcessor[i].dataType.name,
-                                        }:'',
+                                        }:{},
                                         decisions :this.dataObj.nodes.wfProcessor[i].decisions?{
                                             decision:this.dataObj.nodes.wfProcessor[i].decisions.decision
-                                        }:'',
+                                        }:{},
                                         srcActivity : this.dataObj.nodes.wfProcessor[i].srcActivity?{
                                             "code": this.dataObj.nodes.wfProcessor[i].srcActivity.code,
                                             "oid": this.dataObj.nodes.wfProcessor[i].srcActivity.oid,
                                             "name": this.dataObj.nodes.wfProcessor[i].srcActivity.name,
-                                        }:'',
+                                        }:{},
                                         wfCopyTo :{
                                             copyTo:this.dataObj.nodes.wfProcessor[i].wfCopyTo.copyTo
                                         },
@@ -508,10 +523,11 @@ export default {
                                 "code": this.dataObj.nodes.wfRouter[i].dataType.code,
                                 "oid": this.dataObj.nodes.wfRouter[i].dataType.oid,
                                 "name": this.dataObj.nodes.wfRouter[i].dataType.name,
-                            }:'',
+                            }:{},
                             fremark: this.dataObj.nodes.wfRouter[i].fremark,
                             hidden: this.dataObj.nodes.wfRouter[i].hidden,
                             join: this.dataObj.nodes.wfRouter[i].join,
+                            code: this.dataObj.nodes.wfRouter[i].code,
                             name: 'Task',
                             displayName: this.dataObj.nodes.wfRouter[i].name,
                         },
@@ -540,7 +556,7 @@ export default {
                                 "code": this.dataObj.nodes.wfProcessorAuto[i].dataType.code,
                                 "oid": this.dataObj.nodes.wfProcessorAuto[i].dataType.oid,
                                 "name": this.dataObj.nodes.wfProcessorAuto[i].dataType.name,
-                            }:'',
+                            }:{},
                             wfAuditType: this.dataObj.nodes.wfProcessorAuto[i].wfAuditType,
                             fremark: this.dataObj.nodes.wfProcessorAuto[i].fremark,
                             hidden: this.dataObj.nodes.wfProcessorAuto[i].hidden,
@@ -566,6 +582,38 @@ export default {
                     }
                 )
                 
+            };
+             for(let i in this.dataObj.nodes.wfSubProces){
+                newProcess.push(
+                     {
+                        data: {
+                            refWfProcess : this.dataObj.nodes.wfSubProces[i].refWfProcess?{
+                                "code": this.dataObj.nodes.wfSubProces[i].refWfProcess.code,
+                                "oid": this.dataObj.nodes.wfSubProces[i].refWfProcess.oid,
+                                "name": this.dataObj.nodes.wfSubProces[i].refWfProcess.name,
+                            }:{},
+                            fremark: this.dataObj.nodes.wfSubProces[i].fremark,
+                            hidden: this.dataObj.nodes.wfSubProces[i].hidden,
+                            code: this.dataObj.nodes.wfSubProces[i].code,
+                            name: 'Subprocess',
+                            displayName: this.dataObj.nodes.wfSubProces[i].name,
+                        },
+                        type: 'Subprocess',
+                        name: this.dataObj.nodes.wfSubProces[i].name,
+                        oid:this.dataObj.nodes.wfSubProces[i].oid,
+                        icon: 'el-icon-connection',
+                        transition: [],
+                        options: {
+                            width: 120,
+                            height: 76,
+                            visible: false,
+                            color: '#9389fb',
+                            x: Number(this.dataObj.nodes.wfSubProces[i].x),
+                            y: Number(this.dataObj.nodes.wfSubProces[i].y),
+                            draggable: true
+                        }
+                    }
+                )
             };
            
             newStart.push(
@@ -622,6 +670,7 @@ export default {
                 ...newCondition,
                 ...newFork,
                 ...newJoin,
+                ...newProcess,
             ]
             newObj.name = this.dataObj.name
             newObj.displayName = this.dataObj.name;
@@ -639,11 +688,11 @@ export default {
             for(let k =0 ; k<this.dataObj.length; k++){
                 this.workflowNodes.push(this.dataObj[k]);  
             }
-            // console.log(this.workflowNodes,this.dataObj)
+            console.log(this.workflowNodes,this.dataObj)
         }else{
             this.isEditF = false;
             this.isNewF = true;
-            workflowNodes: [
+            this.workflowNodes = [
                 ...TerminalNode()
             ]
         }
@@ -701,10 +750,25 @@ export default {
                 this.selectedNode = {};
             }
         },
+        // 点击线名字事件
+        selectedNodeClick(item){
+            let newData = []
+            for(let k =0 ; k<this.dataObj.length; k++){
+                newData  = this.dataObj[k].transition;//debugger
+                if(newData){
+                    for(let j =0 ; j<newData.length; j++){
+                        if(item.data.displayName == newData[j].data.displayName){
+                            item.data = newData[j].data
+
+                        }
+                    }
+                }
+            }
+            //  console.log(this.lineData,item)
+        },
         // 点击节点事件
         clickNode (node) {
             // 点击节点 保存节点数据 获取节点类型
-            // console.log(node)
             this.selectedNode = node;
              for(let k =0 ; k<this.dataObj.length; k++){
                 if(this.dataObj[k].data.displayName === node.data.displayName){
@@ -712,7 +776,7 @@ export default {
                     // console.log(this.selectedNode,this.dataObj[k])
                 }
             }
-            this.nodeType = node.type;
+            this.nodeType = node.type;console.log(node)
             // console.log(this.selectedNode,this.workflowNodes)
         },
         // 清空面板事件
@@ -848,7 +912,7 @@ div
 .svgBox{
     margin: 0;
     width: 100%;
-    height: 97vh;
+    height: 99vh;
 }
 .select-nodes {
     position: relative;

@@ -283,10 +283,23 @@ export default {
   watch: {
     // 监听配置数据源
     data: {
-      handler(obj) {console.log(obj)
-        this.editData = obj;
-        this.displayName = this.editData.displayName
-        this.formData.work = this.editData.mactivity.name
+      handler(obj) {
+      if(obj.name === "Condition"){console.log(obj)
+          this.editData = obj;
+          this.displayName = this.editData.displayName
+          this.formData.work = this.editData.mactivity.name
+          this.formData.workId = this.editData.mactivity.oid
+          this.formData.workCode = this.editData.mactivity.code
+          this.formData.workData = this.editData.dataType.name
+          this.formData.workDataId = this.editData.dataType.oid
+          this.formData.workDataCode = this.editData.dataType.code
+          this.formData.structure = this.editData.orgUnit?this.editData.orgUnit.id:''
+          this.formData.checked = this.editData.hidden==1?true:false
+          this.formData.fremark = this.editData.fremark
+          this.joinCheckBox = this.editData.permission=='1'?1:this.editData.mntNextJoin=='1'?2:this.editData.canSkip=='1'?3:this.editData.multMail=='1'?4:null
+          this.joinusertableData = this.editData.wfParticipator.participator
+          this.CCtableData = this.editData.wfCopyTo.copyTo
+      }
         //  if( this.data.displayName !== '新建连接' ){
         //     this.displayName  = this.data.displayName 
         // }else{
@@ -304,9 +317,6 @@ export default {
     // 对话框显示 自动聚焦name输入框
     visible(bool) {
       if (bool) {
-        // setTimeout(() => {
-        //     this.$refs.nameInput.focus();
-        // }, 100);
       } else {
         this.formData.displayName = this.displayName;
         this.formData.joinCheckBox = this.joinCheckBox;

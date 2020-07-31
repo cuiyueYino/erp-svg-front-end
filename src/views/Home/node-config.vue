@@ -21,10 +21,10 @@
             @submit.native.prevent
         >
         <node-condition :visible = visibleF?(ConditionF?true:false):false :data="editConData?editConData:null" @saveFormData="saveFormData" > </node-condition>
-        <node-fork :visible = visibleF?(ForkF?true:false):false @saveFormData="saveForkData" ></node-fork>
-        <node-join :visible = visibleF?(JoinF?true:false):false @saveFormData="saveJoinData" ></node-join>
-        <node-router-task :visible = visibleF?(TaskF?true:false):false @saveFormData="saveRouteData"  ></node-router-task>
-         <node-process :visible = visibleF?(ProcessF?true:false):false @saveFormData="saveRouteData"  ></node-process>
+        <node-fork :visible = visibleF?(ForkF?true:false):false :data="editForkData?editForkData:null" @saveFormData="saveForkData" ></node-fork>
+        <node-join :visible = visibleF?(JoinF?true:false):false :data="editJoinData?editJoinData:null"  @saveFormData="saveJoinData" ></node-join>
+        <node-router-task :visible = visibleF?(TaskF?true:false):false :data="editRouterData?editRouterData:null" @saveFormData="saveRouteData"  ></node-router-task>
+        <node-process :visible = visibleF?(ProcessF?true:false):false :data="sditProcessData?sditProcessData:null"  @saveFormData="saveProcessData"  ></node-process>
         <node-line :visible = visibleF?(LineF?true:false):false :data="editLineData?editLineData:null" @saveLineData="saveLineData" ></node-line>
          </el-form>
           <el-row :gutter="20">
@@ -108,6 +108,10 @@ export default {
             },
             editLineData:{},
             editConData:{},
+            editRouterData:{},
+            editForkData:{},
+            editJoinData:{},
+            sditProcessData:{},
         };
     },
     computed: {
@@ -120,7 +124,7 @@ export default {
                 Join: '审核活动配置',
                 Task: '路由配置',
                 Line: '连接线配置',
-                Process: '子流程配置',
+                Subprocess: '子流程配置',
             };
             return typeConfig[this.type] || '保存工作流';
         }
@@ -129,15 +133,16 @@ export default {
         // 监听配置数据源
         data: {
             handler (obj) {
-                this.formData = JSON.parse(JSON.stringify(obj));//console.log(this.formData,obj)
+                this.formData = JSON.parse(JSON.stringify(obj));console.log(this.formData,obj)
                 switch (this.formData.name) {
                     case "Task":
+                        this.TaskF = true
                         this.ConditionF =false
                         this.JoinF =false
                         this.ForkF =false
-                        this.TaskF = true
                         this.LineF =false
                         this.ProcessF =false
+                        this.editRouterData = this.formData
                         break;
                     case "Fork":
                         this.ConditionF =false
@@ -146,6 +151,7 @@ export default {
                         this.TaskF = false
                         this.LineF =false
                         this.ProcessF =false
+                        this.editForkData = this.formData
                         break;
                     case "Join":
                         this.ConditionF =false
@@ -154,6 +160,7 @@ export default {
                         this.TaskF = false
                         this.LineF =false
                         this.ProcessF =false
+                        this.editJoinData = this.formData
                         break;
                     case "Condition":
                         this.ConditionF =true
@@ -174,13 +181,14 @@ export default {
                         this.editLineData = this.formData
                         
                         break;
-                    case "Process":
+                    case "Subprocess":
                         this.ProcessF =true;
                         this.JoinF =false
                         this.ForkF =false
                         this.TaskF = false
                         this.ConditionF =false
                         this.LineF =false
+                        this.sditProcessData = this.formData
                         
                         break;
                 
@@ -209,7 +217,7 @@ export default {
         // 取消配置操作
         cancelConfig () {
             this.dialogVisible = false;
-            this.$refs.workflowConfigForm.resetFields();
+            // this.$refs.workflowConfigForm.resetFields();
             this.$emit('cancel');
         },
         // 执行保存配置操作
@@ -313,6 +321,7 @@ export default {
         //连接线保存
         saveLineData(e){
             console.log(e);
+            this.data.code =e.linefcode;
             this.data.displayName = e.name;
             this.data.fremark = e.fremark;
             switch (e.name ) {
@@ -498,6 +507,15 @@ export default {
         saveRouteData(e){
             this.data.hidden = e.checked?1:0;
             this.data.join = e.join?1:0;
+            this.data.fremark = e.fremark;
+            this.data.displayName = e.name;
+            this.data.code = e.code;
+        },
+        //子流程
+        saveProcessData(e){
+            console.log(e)
+            this.data.hidden = e.checked?1:0;
+            this.data.refWfProcess = e.refWfProcess;
             this.data.fremark = e.fremark;
             this.data.displayName = e.name;
             this.data.code = e.code;

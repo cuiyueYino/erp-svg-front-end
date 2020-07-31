@@ -132,6 +132,7 @@
                     <el-col :span="24">
                         <dynamic-table
                             :columns="columns4"
+                            ref="decisionTable"
                             :isShowPager="false"
                             :table-data="tableData3"
                             @selection-change="onSelectionChange"
@@ -446,6 +447,7 @@ export default {
             },
         ],
         gridData:[],
+        editData:{},  
         multipleSelection: [],
         options: [],
         titleStr:'',
@@ -481,14 +483,67 @@ export default {
     watch: {
         // 监听配置数据源
         data: {
-            handler (obj) {console.log( obj)
-                  this.formData = JSON.parse(JSON.stringify(obj));
-                    if( this.data.displayName !== '新建连接' ){
-                        this.formData.displayName  = this.data.displayName 
-                    }else{
-                        this.formData.displayName  = ''
-                    }
-                
+            handler (obj) {
+             if(obj.name === "Join"){console.log( obj)
+                   this.editData = obj;
+                   this.formData.name = this.editData.displayName
+                   this.formData.work = this.editData.mactivity.name
+                    this.formData.workId = this.editData.mactivity.oid
+                    this.formData.workCode = this.editData.mactivity.code
+                    this.formData.workData = this.editData.srcActivity.name
+                    this.formData.workDataId = this.editData.srcActivity.oid
+                    this.formData.workDataCode = this.editData.srcActivity.code
+                    this.formData.fmclassOid = this.editData.dataType.oid
+                    this.formData.fmclassCode = this.editData.dataType.code
+                   this.formData.fmclassName = this.editData.dataType.name
+                   this.formData.structure = this.editData.orgUnit?this.editData.orgUnit.id:''
+                   this.formData.checked = this.editData.hidden==1?true:false
+                   this.formData.fremark = this.editData.fremark    
+                   this.formData.maxWorkTime = this.editData.maxWorkTime
+                   this.formData.timeUnit = this.editData.timeUnit       
+                   this.formData.autoSubmit = this.editData.autoSubmit==1?true:false 
+                   this.formData.autoHurry = this.editData.autoHurry==1?true:false 
+                   this.joinCheckBox = this.editData.permission=='1'?1:this.editData.mntNextJoin=='1'?2:this.editData.canSkip=='1'?3:this.editData.multMail=='1'?4:null
+                   this.joinusertableData = this.editData.wfParticipator.participator
+                   this.tableData = this.editData.wfCopyTo.copyTo
+                   this.tableData2 = this.editData.wfViewOtherComments.wfViewOtherComment
+                    switch (this.editData.wfAuditType) {
+                        case 1:
+                            this.formData.wfAuditType = '普通审批'
+                            break;
+                        case 2:
+                            this.formData.wfAuditType = '并行会签'
+                            break;
+                        case 3:
+                            this.formData.wfAuditType = '串行会签'
+                            break;
+                        default:
+                            break;
+                    } 
+                    switch (this.editData.timeUnit) {
+                        case '1':
+                            this.formData.timeUnit = '小时'
+                            break;
+                        case '2':
+                            this.formData.timeUnit = '天'
+                            break;
+                        default:
+                            break;
+                    };
+               //    this.tableData3 = this.editData.decisions.decision
+                this.$nextTick(() => {
+                   this.editData.decisions.decision.forEach(row => {console.log(row.decisionType)
+                        if (this.tableData3.includes(row.decisionType)) {
+                            this.$refs.decisionTable.toggleRowSelection(row);
+                        }
+                    });
+                });
+                   // if( this.data.displayName !== '新建连接' ){
+                    //     this.formData.displayName  = this.data.displayName 
+                    // }else{
+                    //     this.formData.displayName  = ''
+                    // }
+             }  
             },
             deep: true,
             immediate: true

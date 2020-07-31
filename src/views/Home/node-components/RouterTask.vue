@@ -1,10 +1,17 @@
 <template>
 <!-- 弹出框内容 -->
         <div v-show="visible">
+              <el-form
+                label-width="110px"
+                :rules="configRules"
+                ref="formData"
+                class="dataForm"
+                :model="formData"
+                >
             <!-- TAB页 -->
             <el-tabs v-model="activeName" @tab-click="handleClick">
                 <el-tab-pane label="基本信息" name="1">
-                    <el-form-item label="编码" :label-width="formLabelWidth" prop="name">
+                    <el-form-item label="编码" :label-width="formLabelWidth" prop="code">
                         <el-input ref="nameInput" v-model="formData.code" autocomplete="off" clearable></el-input>
                     </el-form-item>
                     <el-form-item label="名称" :label-width="formLabelWidth" prop="name">
@@ -21,6 +28,7 @@
                     </el-form-item>
                 </el-tab-pane>
             </el-tabs>
+              </el-form>
         </div>
 </template>
 
@@ -72,14 +80,19 @@ export default {
             closeConfig: false,
             // 配置表单校验规则
             configRules: {
-                name: { required: true, message: '请输入英文名', trigger: 'blur' },
+                name: { required: true, message: '请输入名称', trigger: 'blur' },
+                code: { required: true, message: '请输入编码', trigger: 'blur' },
                 displayName: { required: true, message: '请输入名称', trigger: 'blur' },
                 performType: { required: true, message: '请选择参与类型', trigger: 'change' }
             },
             // 对话框显示标识
             dialogVisible: this.visible,
             // 配置表单数据
-            formData: this.data,
+            formData: {
+                code:'',
+                name:'',
+                fremark:''
+            },
             // task参与类型
             typeOpt: [
                 {
@@ -139,6 +152,7 @@ export default {
                 title: '描述'
             }
         ],
+        editData:{},
         tableData:[],
         tableData2:[],
         gridData:[],
@@ -164,8 +178,14 @@ export default {
         // 监听配置数据源
         data: {
             handler (obj) {
-                this.formData = JSON.parse(JSON.stringify(obj));
-                // console.log( this.formData)
+            if(obj.name === "Task"){console.log(obj)
+                this.editData = obj;
+                this.formData.code = this.editData.code
+                this.formData.name = this.editData.displayName
+                this.formData.fremark = this.editData.fremark
+                this.checked = this.editData.hidden==1?true:false
+                this.join = this.editData.join==1?true:false
+            }// console.log( this.formData)
             },
             deep: true,
             immediate: true

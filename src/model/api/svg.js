@@ -23,6 +23,11 @@ const svg = {
         return httpReqest.get('/api/wfInterfaces/workFlow/findWfProcessInfoById?foid=' + params);
     },
 
+    //子流程枚举列表  
+    getSubProcessList(){
+        return httpReqest.get('/api/wfInterfaces/workFlow/findSubWfProcessInfoList');
+    },
+
 };
 
 export default svg;

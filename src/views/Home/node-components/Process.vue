@@ -1,17 +1,24 @@
 <template>
 <!-- 弹出框内容 -->
         <div v-show="visible">
+            <el-form
+                label-width="110px"
+                :rules="configRules"
+                ref="formData"
+                class="dataForm"
+                :model="formData"
+                >
             <!-- TAB页 -->
             <el-tabs v-model="activeName" @tab-click="handleClick">
                 <el-tab-pane label="基本信息" name="1">
-                    <el-form-item label="编码" :label-width="formLabelWidth" prop="name">
+                    <el-form-item label="编码" :label-width="formLabelWidth" prop="code">
                         <el-input ref="nameInput" v-model="formData.code" autocomplete="off" clearable></el-input>
                     </el-form-item>
                     <el-form-item label="名称" :label-width="formLabelWidth" prop="name">
                         <el-input ref="nameInput" v-model="formData.name" autocomplete="off" clearable></el-input>
                     </el-form-item>
-                     <el-form-item label="引用流程" prop="company">
-                        <el-select v-model="formdata.company" value-key="value" >
+                     <el-form-item  label="引用流程" :label-width="formLabelWidth" prop="company">
+                        <el-select v-model="formData.company" value-key="value" >
                             <el-option
                                 v-for="item in options"
                                 :key="item.value"
@@ -28,6 +35,7 @@
                     </el-form-item>
                 </el-tab-pane>
             </el-tabs>
+            </el-form>
         </div>
 </template>
 
@@ -83,10 +91,16 @@ export default {
             // 对话框显示标识
             dialogVisible: this.visible,
             // 配置表单数据
-            formData: this.data,
+            formData: {
+                code:'',
+                name:'',
+                company:''
+            },
         gridData:[],
-        formdata:{},
+        formData:{},
         options: [],
+        editData:{},
+        newData:[],
         };
     },
     computed: {
@@ -98,7 +112,8 @@ export default {
                 Fork: '自由活动配置',
                 Join: '审核活动配置',
                 Task: '路由配置',
-                Line: '连接线配置'
+                Line: '连接线配置',
+                // Subprocess:'子流程配置'
             };
             return typeConfig[this.type] || '保存工作流';
         }
@@ -106,9 +121,23 @@ export default {
     watch: {
         // 监听配置数据源
         data: {
-            handler (obj) {
-                this.formData = JSON.parse(JSON.stringify(obj));
+            handler (obj) {console.log(obj)
+                if(obj.name === "Subprocess"){
+                this.editData = obj;
+                this.formData.checked = this.editData.hidden==1?true:false;
+                this.formData.fremark = this.editData.fremark;
+                this.formData.name = this.editData.displayName;
+                this.formData.code = this.editData.code;
+                
+                this.options = [{
+                            label:this.editData.refWfProcess.name,
+                            value:this.editData.refWfProcess.oid,
+                            code:this.editData.refWfProcess.code
+                        }];
+                this.formData.company = this.editData.refWfProcess.oid;
+                this.getSubprocessList();
                 // console.log( this.formData)
+                }
             },
             deep: true,
             immediate: true
@@ -118,15 +147,21 @@ export default {
             this.$emit('update:visible', bool);
         },
         // 对话框显示 自动聚焦name输入框
-        visible (bool) {
+        visible (bool) {console.log(bool)
             this.dialogVisible = bool;
             if (bool) {
-                // setTimeout(() => {
-                //     this.$refs.nameInput.focus();
-                // }, 100);
             }else {
                 this.formData.checked = this.checked;
-                this.formData.join = this.join;
+                this.newData.forEach(item => {
+                    if(item.foid == this.formData.company){
+                        this.formData.refWfProcess = {
+                            "oid": item.foid,
+                            "code":item.fcode,
+                            "name":  item.fname
+                     }
+                    }
+                });
+               
                 this.$emit(
                 "saveFormData",
                 this.formData
@@ -135,6 +170,23 @@ export default {
         }
     },
     methods: {
+        // 获取子流程列表
+        getSubprocessList(){
+            this.$api.svg.getSubProcessList().then(res=>{
+                this.newData = res.data.data;
+                this.newData.forEach(item => {
+                    this.options = [
+                        {
+                            label:item.fname,
+                            value:item.foid,
+                            code:item.fcode
+                        }
+                    ]
+                });
+            },error=>{
+                console.log(error)
+            })
+        },
         // 取消配置操作
         cancelConfig () {
             this.dialogVisible = false;
@@ -246,6 +298,12 @@ export default {
  /deep/ .el-form-item__content{
          display: flex;
  }
+ /deep/ .el-select {
+  width: 100%;
+   /deep/ .el-input{
+         width: 70%;
+ }
+}
  .icon-search{
      width: 24px;
      height: auto;
