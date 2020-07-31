@@ -64,7 +64,7 @@ export default {
       type: String,
       default: "",
     },
-    companyId: {
+    fcompanyid: {
       type: String,
       default: "_DefaultCompanyOId",
     },
@@ -105,7 +105,7 @@ export default {
       if (this.title == "用户查询") {
         this.strictly = false;
         let fromdata = {};
-        fromdata.id = this.companyId;
+        fromdata.id = this.fcompanyid;
         this.$api.confMangement.getStaffTreeList(fromdata).then(
           (res) => {
             let resData = res.data.data;
@@ -119,7 +119,7 @@ export default {
       } else if (this.title == "组织机构查询") {
         this.strictly = true;
         let fromdata = {};
-        fromdata.orgUnitId = this.companyId;
+        fromdata.orgUnitId = this.fcompanyid;
         fromdata.queryType = "org";
         this.$api.confMangement.getOrgunitTree(fromdata).then(
           (res) => {
@@ -139,7 +139,7 @@ export default {
     searchKey() {
       if (this.title == "用户查询") {
         let fromdata = {};
-        fromdata.id = this.companyId;
+        fromdata.id = this.fcompanyid;
         fromdata.name = this.form.selectVal;
         this.$api.confMangement.getStaffTreeList(fromdata).then(
           (res) => {
@@ -153,7 +153,7 @@ export default {
         );
       } else if (this.title == "组织机构查询") {
         let fromdata = {};
-        fromdata.orgUnitId = this.companyId;
+        fromdata.orgUnitId = this.fcompanyid;
         fromdata.queryType = "org";
         this.$api.confMangement.getOrgunitTree(fromdata).then(
           (res) => {
@@ -177,12 +177,12 @@ export default {
       }
       console.log(selectData);
       if (selectData.length > 0) {
-        if (selectData.length > 1) {
+        if (selectData.length > 1 && this.type != "4") {
           this.$message.error("只能选择一条数据!");
         } else {
           let dialogType = this.title;
           let typeS = this.type;
-          if (this.title == "用户查询") {
+          if (this.title == "用户查询" && this.type != "4") {
             // 获取员工信息
             this.$api.confMangement
               .getStaffInfoById(selectData[0].foid)
@@ -202,6 +202,9 @@ export default {
               (error) => {
                 console.log(error);
               };
+          } else if (this.title == "用户查询" && this.type == "4") {
+            // 查询内部参与人员时不需要获取员工的部门信息,所以直接返回选中的值即可
+            this.$emit("closeDialog", selectData, dialogType, typeS);
           } else if (this.title == "组织机构查询") {
             let serchData = {
               foid: selectData[0].foid,
@@ -216,9 +219,11 @@ export default {
     },
     handleNodeClick(data, checked) {
       if (checked) {
-        this.$refs.tree.setCheckedNodes([data]);
-        if (this.$refs.tree.getCheckedNodes(true).length > 1) {
-          this.goOut("清单选");
+        if (this.type != "4") {
+          this.$refs.tree.setCheckedNodes([data]);
+          if (this.$refs.tree.getCheckedNodes(true).length > 1) {
+            this.goOut("清单选");
+          }
         }
       }
     },

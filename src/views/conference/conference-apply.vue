@@ -216,13 +216,13 @@
               size="mini"
               icon="el-icon-search"
               style="padding:7px 8px"
-              @click="queryconfOffice(searchForm)"
+              @click="queryConfOffice()"
             ></el-button>
           </el-col>
           <el-col :span="11">
-            <el-form-item label="是否公开：" :label-width="formLabelWidth" prop="fovert">
+            <el-form-item label="是否公开：" :label-width="formLabelWidth" prop="fovertValue">
               <el-switch
-                v-model="searchForm.fovert"
+                v-model="searchForm.fovertValue"
                 active-color="#409EFF"
                 inactive-color="#cccccc"
                 :active-value="0"
@@ -233,17 +233,17 @@
         </el-row>
         <el-row :gutter="24">
           <el-col :span="11">
-            <el-form-item label="重要程度：" :label-width="formLabelWidth" prop="fimportance">
-              <el-select size="small" v-model="searchForm.fimportance" placeholder="请选择">
+            <el-form-item label="重要程度：" :label-width="formLabelWidth" prop="fimportanceValue">
+              <el-select size="small" v-model="searchForm.fimportanceValue" placeholder="请选择">
                 <el-option label="重要" value="0"></el-option>
                 <el-option label="一般" value="1"></el-option>
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="11" style="padding-left: 48px !important;">
-            <el-form-item label="是否对外：" :label-width="formLabelWidth" prop="fexternal">
+            <el-form-item label="是否对外：" :label-width="formLabelWidth" prop="fexternalVaule">
               <el-switch
-                v-model="searchForm.fexternal"
+                v-model="searchForm.fexternalVaule"
                 active-color="#409EFF"
                 inactive-color="#cccccc"
                 :active-value="1"
@@ -273,7 +273,7 @@
               size="mini"
               icon="el-icon-search"
               style="padding:7px 8px"
-              @click="queryconfOffice(searchForm)"
+              @click="baseInputTable('4','用户查询')"
             ></el-button>
           </el-col>
         </el-row>
@@ -411,7 +411,7 @@
           </el-col>
           <el-col :span="11">
             <el-form-item label="联系方式：" :label-width="formLabelWidth" prop="fphone">
-              <el-input v-model="searchForm.fcontactdept" size="small" autocomplete="off"></el-input>
+              <el-input v-model="searchForm.fphone" size="small" autocomplete="off"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="11" style="margin-left: 32px;">
@@ -463,13 +463,13 @@
               size="mini"
               icon="el-icon-search"
               style="padding:7px 8px"
-              @click="queryconfOffice(searchForm)"
+              @click="queryConfOffice()"
             ></el-button>
           </el-col>
           <el-col :span="11">
-            <el-form-item label="是否公开：" :label-width="formLabelWidth" prop="fovert">
+            <el-form-item label="是否公开：" :label-width="formLabelWidth" prop="fovertValue">
               <el-switch
-                v-model="searchForm.fovert"
+                v-model="searchForm.fovertValue"
                 active-color="#409EFF"
                 inactive-color="#cccccc"
                 :active-value="0"
@@ -480,17 +480,17 @@
         </el-row>
         <el-row :gutter="24">
           <el-col :span="11">
-            <el-form-item label="重要程度：" :label-width="formLabelWidth" prop="fimportance">
-              <el-select size="small" v-model="searchForm.fimportance" placeholder="请选择">
+            <el-form-item label="重要程度：" :label-width="formLabelWidth" prop="fimportanceValue">
+              <el-select size="small" v-model="searchForm.fimportanceValue" placeholder="请选择">
                 <el-option label="重要" value="0"></el-option>
                 <el-option label="一般" value="1"></el-option>
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="11" style="padding-left: 48px !important;">
-            <el-form-item label="是否对外：" :label-width="formLabelWidth" prop="fexternal">
+            <el-form-item label="是否对外：" :label-width="formLabelWidth" prop="fexternalVaule">
               <el-switch
-                v-model="searchForm.fexternal"
+                v-model="searchForm.fexternalVaule"
                 active-color="#409EFF"
                 inactive-color="#cccccc"
                 :active-value="1"
@@ -520,7 +520,7 @@
               size="mini"
               icon="el-icon-search"
               style="padding:7px 8px"
-              @click="queryconfOffice(searchForm)"
+              @click="baseInputTable('4','用户查询')"
             ></el-button>
           </el-col>
         </el-row>
@@ -722,13 +722,12 @@
               icon="el-icon-search"
               style="padding:7px 8px"
               :disabled="true"
-              @click="queryconfOffice(searchForm)"
             ></el-button>
           </el-col>
           <el-col :span="11">
-            <el-form-item label="是否公开：" :label-width="formLabelWidth" prop="fovert">
+            <el-form-item label="是否公开：" :label-width="formLabelWidth" prop="fovertValue">
               <el-switch
-                v-model="searchForm.fovert"
+                v-model="searchForm.fovertValue"
                 active-color="#409EFF"
                 inactive-color="#cccccc"
                 :active-value="0"
@@ -740,10 +739,10 @@
         </el-row>
         <el-row :gutter="24">
           <el-col :span="11">
-            <el-form-item label="重要程度：" :label-width="formLabelWidth" prop="fimportance">
+            <el-form-item label="重要程度：" :label-width="formLabelWidth" prop="fimportanceValue">
               <el-select
                 size="small"
-                v-model="searchForm.fimportance"
+                v-model="searchForm.fimportanceValue"
                 :disabled="true"
                 placeholder="请选择"
               >
@@ -753,9 +752,9 @@
             </el-form-item>
           </el-col>
           <el-col :span="11" style="padding-left: 48px !important;">
-            <el-form-item label="是否对外：" :label-width="formLabelWidth" prop="fexternal">
+            <el-form-item label="是否对外：" :label-width="formLabelWidth" prop="fexternalVaule">
               <el-switch
-                v-model="searchForm.fexternal"
+                v-model="searchForm.fexternalVaule"
                 active-color="#409EFF"
                 inactive-color="#cccccc"
                 :active-value="1"
@@ -787,7 +786,6 @@
               icon="el-icon-search"
               style="padding:7px 8px"
               :disabled="true"
-              @click="queryconfOffice(searchForm)"
             ></el-button>
           </el-col>
         </el-row>
@@ -824,16 +822,29 @@
       </el-form>
     </el-dialog>
 
-    <!-- 用户或组织机构查询 -->
+    <!-- 用户或组织机构模态框 -->
     <el-form :model="formProcess" ref="formProcess">
       <staff-tree-search
         class="children-dialog"
         :visible="staffTableVsible"
         :type="baseInputType"
         :title="baseInputTitle"
-        :companyId="companyId"
+        :fcompanyid="fcompanyid"
         @closeDialog="closeBaseInfo"
       ></staff-tree-search>
+    </el-form>
+
+    <!-- 会议室模态框 -->
+    <el-form :model="formProcess" ref="formProcess">
+      <conference-office-search
+        class="children-dialog"
+        :visible="officeTableVsible"
+        :fcompanyid="fcompanyid"
+        :fstartdate="fstartdate"
+        :fenddate="fenddate"
+        :fvolume="fvolume"
+        @closeDialog="closeConfOffice"
+      ></conference-office-search>
     </el-form>
   </div>
 </template>
@@ -841,12 +852,14 @@
 <script>
 import DynamicTable from "../../components/common/dytable/dytable.vue";
 import staffTreeSearch from "../conference/staff-tree-search";
+import conferenceOfficeSearch from "../conference/conference-office-search";
 
 export default {
   name: "confOffice",
   components: {
     DynamicTable,
     staffTreeSearch,
+    conferenceOfficeSearch,
   },
   data() {
     let checkInt = (rule, value, callback) => {
@@ -865,6 +878,7 @@ export default {
       resiveFormVisible: false,
       queryFormVisible: false,
       staffTableVsible: false,
+      officeTableVsible: false,
       rowPOSStype: false,
       pageNum: 1,
       pageSize: 10,
@@ -874,7 +888,10 @@ export default {
       formLabelWidth: "120px",
       internalMansId: "",
       internalMansName: "",
-      companyId:"",
+      fcompanyid: "",
+      fstartdate: "",
+      fenddate: "",
+      fvolume: 0,
       formProcess: {},
       tableData: [],
       rowPOSSDataObj: {},
@@ -884,6 +901,9 @@ export default {
         selectVal: "",
       },
       searchForm: {
+        fstartdate: "",
+        fenddate: "",
+        fcpmcount: "",
         fconvener: "",
         fconvenername: "",
         fconvenerdept: "",
@@ -892,7 +912,7 @@ export default {
         fcontactname: "",
         fcontactdept: "",
         fcontactdeptname: "",
-        fcompany: "_DefaultCompanyOId",
+        fcompanyid: "_DefaultCompanyOId",
         fcompanyname: "福佳集团",
       },
       columns: [
@@ -900,7 +920,7 @@ export default {
           type: "selection",
         },
         {
-          key: "fstatus",
+          key: "fstatusValue",
           title: "状态",
         },
         {
@@ -948,15 +968,15 @@ export default {
           title: "结束时间",
         },
         {
-          key: "fovert",
+          key: "fovertValue",
           title: "是否公开",
         },
         {
-          key: "fexternal",
+          key: "fexternalVaule",
           title: "是否对外",
         },
         {
-          key: "fimportance",
+          key: "fimportanceValue",
           title: "重要程度",
         },
       ],
@@ -1007,7 +1027,7 @@ export default {
             trigger: "blur",
           },
         ],
-        fimportance: [
+        fimportanceValue: [
           { required: true, message: "请输入重要程度", trigger: "blur" },
           {
             min: 1,
@@ -1089,7 +1109,7 @@ export default {
     // 新增
     add() {
       this.searchForm = {
-        fcompany: "_DefaultCompanyOId",
+        fcompanyid: "_DefaultCompanyOId",
         fcompanyname: "福佳集团",
       };
       this.submitFormVisible = true;
@@ -1102,7 +1122,7 @@ export default {
         this.$message.error("请选择一条数据进行编辑");
         return;
       }
-      if (this.multipleSelection[0].fstatus != "暂存") {
+      if (this.multipleSelection[0].fstatusValue != "暂存") {
         this.$message.error("只有暂存状态的数据可以修改");
         return;
       }
@@ -1116,7 +1136,7 @@ export default {
         this.$message.error("请选择一条数据进行编辑");
         return;
       }
-      if (this.multipleSelection[0].fstatus != "生效") {
+      if (this.multipleSelection[0].fstatusValue != "生效") {
         this.$message.error("只有生效状态的数据可以修改");
         return;
       }
@@ -1224,15 +1244,18 @@ export default {
             }
             switch (resData.fimportance) {
               case 0:
-                resData.fimportance = "一般";
+                resData.fimportanceValue = "一般";
                 break;
               case 1:
-                resData.fimportance = "重要";
+                resData.fimportanceValue = "重要";
                 break;
               default:
                 break;
             }
             this.searchForm = resData;
+            this.searchForm.fovertValue = resData.fovertValue;
+            this.searchForm.fexternalVaule = resData.fexternal;
+            console.log(this.searchForm );
             this.searchForm.internalMansName = this.internalMansName;
           } else {
             let taData = res.data.data.rows;
@@ -1240,16 +1263,16 @@ export default {
               // 状态 0：暂存 1：提交 2：生效 3：作废
               switch (taData[i].fstatus) {
                 case 0:
-                  taData[i].fstatus = "暂存";
+                  taData[i].fstatusValue = "暂存";
                   break;
                 case 1:
-                  taData[i].fstatus = "提交";
+                  taData[i].fstatusValue = "提交";
                   break;
                 case 2:
-                  taData[i].fstatus = "生效";
+                  taData[i].fstatusValue = "生效";
                   break;
                 case 3:
-                  taData[i].fstatus = "作废";
+                  taData[i].fstatusValue = "作废";
                   break;
                 default:
                   break;
@@ -1257,10 +1280,10 @@ export default {
               // 是否公开 0：公开 1：不公开
               switch (taData[i].fovert) {
                 case 0:
-                  taData[i].fovert = "是";
+                  taData[i].fovertValue = "是";
                   break;
                 case 1:
-                  taData[i].fovert = "否";
+                  taData[i].fovertValue = "否";
                   break;
                 default:
                   break;
@@ -1268,10 +1291,10 @@ export default {
               // 是否对外 0：对内 1：对外
               switch (taData[i].fexternal) {
                 case 0:
-                  taData[i].fexternal = "否";
+                  taData[i].fexternalVaule = "否";
                   break;
                 case 1:
-                  taData[i].fexternal = "是";
+                  taData[i].fexternalVaule = "是";
                   break;
                 default:
                   break;
@@ -1279,10 +1302,10 @@ export default {
               // 重要程度 0：一般 1：重要
               switch (taData[i].fimportance) {
                 case 0:
-                  taData[i].fimportance = "一般";
+                  taData[i].fimportanceValue = "一般";
                   break;
                 case 1:
-                  taData[i].fimportance = "重要";
+                  taData[i].fimportanceValue = "重要";
                   break;
                 default:
                   break;
@@ -1327,6 +1350,7 @@ export default {
     stagingConfApply(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
+          console.log(this.searchForm);
           this.$api.confMangement
             .stagingConfApply(this.searchForm)
             .then((res) => {
@@ -1362,19 +1386,19 @@ export default {
     // 打开组织架构弹窗
     baseInputTable(type, title) {
       this.staffTableVsible = true;
-      this.baseInputType = type;//公司:1,召集人:2,联系人:3
-      this.baseInputTitle = title;//如:用户查询
+      this.baseInputType = type; //公司:1,召集人:2,联系人:3
+      this.baseInputTitle = title; //如:用户查询
     },
     // 关闭组织架构弹窗
     closeBaseInfo(data, title, type) {
       if (data == null || data.length === 0) {
-      }else{
-        if(type === "1"){
+      } else {
+        if (type === "1") {
           // 公司
           this.searchForm.fcompanyname = data.fname;
-          this.searchForm.fcompany = data.foid;
-          this.fcompanyId = data.foid;
-        }else if (type === "2") {
+          this.searchForm.fcompanyid = data.foid;
+          this.fcompanyid = data.foid;
+        } else if (type === "2") {
           // 召集人
           this.searchForm.fconvenername = data.fname;
           this.searchForm.fconvener = data.foid;
@@ -1386,9 +1410,51 @@ export default {
           this.searchForm.fcontact = data.foid;
           this.searchForm.fcontactdeptname = data.fdeptname;
           this.searchForm.fcontactdept = data.fdeptid;
+        } else if (type === "4") {
+          let internalmans = [];
+          for (let i in data) {
+            if (i < data.length - 1) {
+              this.internalMansName += data[i].fname + ",";
+            } else {
+              this.internalMansName += data[i].fname;
+            }
+            let staff = {
+              oid: data[i].foid,
+              name: data[i].fname,
+            };
+            internalmans.push(staff);
+          }
+          this.searchForm.internalmans = internalmans;
+          this.searchForm.internalMansName = this.internalMansName;
         }
       }
       this.staffTableVsible = false;
+    },
+    // 打开会议室弹窗
+    queryConfOffice() {
+      if (this.searchForm.fstartdate == null) {
+        this.$message.error("会议开始时间不可为空");
+        return;
+      }
+      if (this.searchForm.fenddate == null) {
+        this.$message.error("会议结束时间不可为空");
+        return;
+      }
+      if (this.searchForm.fcpmcount == null) {
+        this.$message.error("会议参与人数不可为空");
+        return;
+      }
+      this.fcompanyid = this.searchForm.fcompany;
+      this.fstartdate = this.searchForm.fstartdate;
+      this.fenddate = this.searchForm.fenddate;
+      this.fvolume = this.searchForm.fcpmcount;
+      this.officeTableVsible = true;
+    },
+    // 关闭会议室弹窗
+    closeConfOffice(data) {
+      this.searchForm.fconfname = data.fname;
+      this.searchForm.fconfid = data.foid;
+      this.officeTableVsible = false;
     },
   },
 };
@@ -1445,7 +1511,7 @@ export default {
   color: #606266;
 }
 
-.el-internalMansName_{
+.el-internalMansName_ {
   padding: 10px 0 0 0 !important;
 }
 .box-card:first-child {
