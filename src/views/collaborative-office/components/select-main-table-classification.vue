@@ -51,7 +51,7 @@
 			</el-row>
 		</el-card>
 		<el-card class="box-card">
-			<el-table :row-class-name="tableRowClassName" @row-click="clickRow" :data="tableData" border>
+			<el-table height="450" :row-class-name="tableRowClassName" @row-click="clickRow" :data="tableData" border>
 				<el-table-column :formatter="statusShow" prop="status" label="状态" width="180" align="center"></el-table-column>
 				<el-table-column prop="code" label="主表分类编码" width="180" align="center"></el-table-column>
 				<el-table-column prop="name" label="主表分类名称" width="180" align="center"></el-table-column>
@@ -87,7 +87,7 @@
 					value: "回收"
 				}, {
 					id: "7",
-					value: "作废"
+					value: "禁用"
 				}, {
 					id: "8",
 					value: "关闭/结清"

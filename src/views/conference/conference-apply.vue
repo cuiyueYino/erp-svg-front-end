@@ -5,18 +5,34 @@
       <el-row :gutter="24">
         <el-col :span="15">
           <el-form :inline="true" :model="form" ref="form" class="demo-form-inline">
-            <el-col :span="3">
+            <el-col :span="4">
               <el-form-item prop="select">
                 <el-select v-model="form.select" placeholder="请选择">
+                  <el-option label="公司" value="fcompanyname"></el-option>
                   <el-option label="编码" value="fcode"></el-option>
                   <el-option label="名称" value="fname"></el-option>
-                  <el-option label="地点" value="fsite"></el-option>
-                  <el-option label="描述" value="fremark"></el-option>
+                  <el-option label="会议室" value="fconfname"></el-option>
+                  <el-option label="参会人数" value="fcpmcount"></el-option>
+                  <el-option label="是否公开" value="fovert"></el-option>
+                  <el-option label="起始时间" value="fstartdate"></el-option>
+                  <el-option label="结束时间" value="fenddate"></el-option>
                 </el-select>
               </el-form-item>
             </el-col>
             <el-form-item prop="selectVal">
-              <el-input clearable v-model="form.selectVal" placeholder="请输入任意查询内容"></el-input>
+              <el-input v-if="isNormal" clearable v-model="form.selectVal" placeholder="请输入任意查询内容"></el-input>
+              <el-date-picker
+                v-if="isDate"
+                clearable
+                v-model="form.selectVal"
+                value-format="yyyy-MM-dd HH:mm"
+                type="date"
+                placeholder="选择日期"
+              ></el-date-picker>
+              <el-select v-if="isOvert" v-model="form.selectVal" placeholder="请选择">
+                <el-option label="是" value="0"></el-option>
+                <el-option label="否" value="1"></el-option>
+              </el-select>
             </el-form-item>
             <el-form-item>
               <el-button type="primary" plain @click="onSubmit">搜索</el-button>
@@ -27,23 +43,10 @@
           </el-form>
         </el-col>
         <el-col :span="9" style="text-align: right;">
-          <el-button type="success" plain class="el-icon-plus" size="medium" @click="add">新增</el-button>
-          <el-button
-            type="warning"
-            plain
-            class="el-icon-edit"
-            size="medium"
-            @click="toEdit('修改')"
-          >修改</el-button>
-          <el-button
-            type="primary"
-            plain
-            class="el-icon-unlock"
-            size="medium"
-            @click="toUpdate(0)"
-          >生效</el-button>
-          <el-button type="primary" plain class="el-icon-lock" size="medium" @click="toUpdate(1)">禁用</el-button>
-          <el-button type="danger" plain class="el-icon-delete" size="medium" @click="deleteMsg">删除</el-button>
+          <el-button type="success" plain class="el-icon-plus" size="medium" @click="add">新建</el-button>
+          <el-button type="warning" plain class="el-icon-edit" size="medium" @click="toEdit">修改</el-button>
+          <el-button type="primary" plain class="el-icon-unlock" size="medium" @click="toRevise">修订</el-button>
+          <el-button type="danger" plain class="el-icon-delete" size="medium" @click="cancleMsg">取消</el-button>
           <el-button type="primary" plain class="el-icon-search" size="medium" @click="queryMsg">查看</el-button>
         </el-col>
       </el-row>
@@ -64,15 +67,15 @@
     </el-card>
     <!-- 提交弹出框 -->
     <el-dialog
-      :title="isEdit?'编辑会议室':'新建会议室'"
-      class="add-office"
+      :title="isEdit?'修改会议申请':'新建会议申请'"
+      class="add-apply"
       center
-      :visible.sync="addFormVisible"
+      :visible.sync="submitFormVisible"
       :close-on-click-modal="false"
     >
       <el-form :model="searchForm" :rules="rules" ref="searchForm" style="margin-right: 60px;">
         <el-row :gutter="24">
-          <el-col :span="12">
+          <el-col :span="11">
             <el-form-item
               label="公司："
               :label-width="formLabelWidth"
@@ -83,80 +86,489 @@
                 v-model="searchForm.fcompanyname"
                 autocomplete="off"
                 size="small"
-                @focus="baseInputTable('用户','组织结构查询')"
+                @focus="baseInputTable('1','组织机构查询')"
               ></el-input>
             </el-form-item>
           </el-col>
-          <el-col :span="12">
+        </el-row>
+        <el-row :gutter="24">
+          <el-col :span="11">
             <el-form-item label="编码：" :label-width="formLabelWidth" prop="fcode">
               <el-input v-model="searchForm.fcode" size="small" autocomplete="off"></el-input>
             </el-form-item>
           </el-col>
-          <el-col :span="12">
+          <el-col :span="11" style="margin-left: 32px;">
             <el-form-item label="名称：" :label-width="formLabelWidth" prop="fname">
               <el-input v-model="searchForm.fname" size="small" autocomplete="off"></el-input>
             </el-form-item>
           </el-col>
-          <el-col :span="12">
-            <el-form-item label="容量：" :label-width="formLabelWidth" prop="fvolume">
-              <el-input v-model="searchForm.fvolume" size="small" autocomplete="off"></el-input>
+          <el-col :span="11">
+            <el-form-item label="召集人：" :label-width="formLabelWidth" prop="fconvener">
+              <el-input
+                v-model="searchForm.fconvenername"
+                :disabled="true"
+                size="small"
+                autocomplete="off"
+              ></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="1" class="el-positionType">
+            <el-button
+              type="primary"
+              size="mini"
+              icon="el-icon-search"
+              style="padding:7px 8px"
+              @click="baseInputTable('2','用户查询')"
+            ></el-button>
+          </el-col>
+          <el-col :span="11">
+            <el-form-item label="召集人部门：" :label-width="formLabelWidth" prop="fconvenerdept">
+              <el-input
+                class="unfocus"
+                v-model="searchForm.fconvenerdeptname"
+                :disabled="true"
+                size="small"
+                autocomplete="off"
+              ></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="11">
+            <el-form-item label="联系人：" :label-width="formLabelWidth" prop="fcontact">
+              <el-input
+                v-model="searchForm.fcontactname"
+                :disabled="true"
+                size="small"
+                autocomplete="off"
+              ></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="1" class="el-positionType">
+            <el-button
+              type="primary"
+              size="mini"
+              icon="el-icon-search"
+              style="padding:7px 8px"
+              @click="baseInputTable('3','用户查询')"
+            ></el-button>
+          </el-col>
+          <el-col :span="11">
+            <el-form-item label="联系人部门：" :label-width="formLabelWidth" prop="fconvenerdept">
+              <el-input
+                class="unfocus"
+                v-model="searchForm.fcontactdeptname"
+                :disabled="true"
+                size="small"
+                autocomplete="off"
+              ></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="11">
+            <el-form-item label="联系方式：" :label-width="formLabelWidth" prop="fphone">
+              <el-input v-model="searchForm.fphone" size="small" autocomplete="off"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="11" style="margin-left: 32px;">
+            <el-form-item label="参会人数(人)：" :label-width="formLabelWidth" prop="fcpmcount">
+              <el-input v-model="searchForm.fcpmcount" size="small" autocomplete="off"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="11">
+            <el-form-item label="起始时间：" :label-width="formLabelWidth" prop="fstartdate">
+              <el-date-picker
+                clearable
+                v-model="searchForm.fstartdate"
+                value-format="yyyy-MM-dd HH:mm"
+                format="yyyy-MM-dd HH:mm"
+                type="datetime"
+                size="small"
+                placeholder="选择日期"
+                style="width: 100%;"
+              ></el-date-picker>
+            </el-form-item>
+          </el-col>
+          <el-col :span="11" style="margin-left: 32px;">
+            <el-form-item label="结束时间：" :label-width="formLabelWidth" prop="fenddate">
+              <el-date-picker
+                clearable
+                v-model="searchForm.fenddate"
+                format="yyyy-MM-dd HH:mm"
+                value-format="yyyy-MM-dd HH:mm"
+                type="datetime"
+                size="small"
+                placeholder="选择日期"
+                style="width: 100%;"
+              ></el-date-picker>
+            </el-form-item>
+          </el-col>
+          <el-col :span="11">
+            <el-form-item label="会议室：" :label-width="formLabelWidth" prop="fconfname">
+              <el-input
+                v-model="searchForm.fconfname"
+                :disabled="true"
+                size="small"
+                autocomplete="off"
+              ></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="1" class="el-positionType">
+            <el-button
+              type="primary"
+              size="mini"
+              icon="el-icon-search"
+              style="padding:7px 8px"
+              @click="queryConfOffice()"
+            ></el-button>
+          </el-col>
+          <el-col :span="11">
+            <el-form-item label="是否公开：" :label-width="formLabelWidth" prop="fovertValue">
+              <el-switch
+                v-model="searchForm.fovertValue"
+                active-color="#409EFF"
+                inactive-color="#cccccc"
+                :active-value="0"
+                :inactive-value="1"
+              ></el-switch>
             </el-form-item>
           </el-col>
         </el-row>
-        <el-row>
-          <el-form-item label="地点：" :label-width="formLabelWidth" prop="fsite">
-            <el-input
-              maxlength="3000"
-              size="small"
-              show-word-limit
-              autosize
-              type="textarea"
-              v-model="searchForm.fsite"
-            ></el-input>
-          </el-form-item>
+        <el-row :gutter="24">
+          <el-col :span="11">
+            <el-form-item label="重要程度：" :label-width="formLabelWidth" prop="fimportanceValue">
+              <el-select size="small" v-model="searchForm.fimportanceValue" placeholder="请选择">
+                <el-option label="重要" value="0"></el-option>
+                <el-option label="一般" value="1"></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="11" style="padding-left: 48px !important;">
+            <el-form-item label="是否对外：" :label-width="formLabelWidth" prop="fexternalVaule">
+              <el-switch
+                v-model="searchForm.fexternalVaule"
+                active-color="#409EFF"
+                inactive-color="#cccccc"
+                :active-value="1"
+                :inactive-value="0"
+              ></el-switch>
+            </el-form-item>
+          </el-col>
         </el-row>
-        <el-row>
-          <el-form-item label="设备：" :label-width="formLabelWidth" prop="fdevice">
-            <el-input
-              maxlength="3000"
-              size="small"
-              show-word-limit
-              autosize
-              type="textarea"
-              v-model="searchForm.fdevice"
-            ></el-input>
-          </el-form-item>
+        <el-row :gutter="24">
+          <el-col :span="23">
+            <el-form-item label="内部参与人：" :label-width="formLabelWidth" prop="internalmans">
+              <el-input
+                maxlength="3000"
+                size="small"
+                show-word-limit
+                autosize
+                type="textarea"
+                class="unfocus"
+                v-model="searchForm.internalMansName"
+                :disabled="true"
+              ></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="1" class="el-internalMansName_" style="padding: 10px 0 0 0 !improtant;">
+            <el-button
+              type="primary"
+              size="mini"
+              icon="el-icon-search"
+              style="padding:7px 8px"
+              @click="baseInputTable('4','用户查询')"
+            ></el-button>
+          </el-col>
         </el-row>
-        <el-row>
-          <el-form-item label="描述：" :label-width="formLabelWidth" prop="fremark">
-            <el-input
-              maxlength="3000"
-              size="small"
-              show-word-limit
-              autosize
-              type="textarea"
-              v-model="searchForm.fremark"
-            ></el-input>
-          </el-form-item>
+        <el-row :gutter="24">
+          <el-col :span="23">
+            <el-form-item label="外部参与人：" :label-width="formLabelWidth" prop="fexternalman">
+              <el-input
+                maxlength="3000"
+                size="small"
+                show-word-limit
+                autosize
+                type="textarea"
+                v-model="searchForm.fexternalman"
+              ></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row :gutter="24">
+          <el-col :span="23">
+            <el-form-item label="会议内容：" :label-width="formLabelWidth" prop="fmeetcontent">
+              <el-input
+                maxlength="3000"
+                size="small"
+                show-word-limit
+                autosize
+                type="textarea"
+                v-model="searchForm.fmeetcontent"
+              ></el-input>
+            </el-form-item>
+          </el-col>
         </el-row>
       </el-form>
 
       <div slot="footer" class="dialog-footer">
-        <el-button @click="addFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="addSubmit('searchForm')">提 交</el-button>
+        <el-button type="primary" @click="submitConfApply('searchForm')">提 交</el-button>
+        <el-button @click="stagingConfApply('searchForm')">暂 存</el-button>
+      </div>
+    </el-dialog>
+    <!-- 修订弹出框 -->
+    <el-dialog
+      :title="'修订会议申请'"
+      class="revise-apply"
+      center
+      :visible.sync="resiveFormVisible"
+      :close-on-click-modal="false"
+    >
+      <el-form :model="searchForm" :rules="rules" ref="searchForm" style="margin-right: 60px;">
+        <el-row :gutter="24">
+          <el-col :span="11">
+            <el-form-item
+              label="公司："
+              :label-width="formLabelWidth"
+              style="position:relative;"
+              prop="fcompany"
+            >
+              <el-input
+                v-model="searchForm.fcompanyname"
+                autocomplete="off"
+                size="small"
+                @focus="baseInputTable('1','组织机构查询')"
+              ></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row :gutter="24">
+          <el-col :span="11">
+            <el-form-item label="编码：" :label-width="formLabelWidth" prop="fcode">
+              <el-input v-model="searchForm.fcode" :disabled="true" size="small" autocomplete="off"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="11" style="margin-left: 32px;">
+            <el-form-item label="名称：" :label-width="formLabelWidth" prop="fname">
+              <el-input v-model="searchForm.fname" :disabled="true" size="small" autocomplete="off"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="11">
+            <el-form-item label="召集人：" :label-width="formLabelWidth" prop="fconvener">
+              <el-input
+                v-model="searchForm.fconvenername"
+                :disabled="true"
+                size="small"
+                autocomplete="off"
+              ></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="1" class="el-positionType">
+            <el-button
+              type="primary"
+              size="mini"
+              icon="el-icon-search"
+              style="padding:7px 8px"
+              @click="baseInputTable('2','用户查询')"
+            ></el-button>
+          </el-col>
+          <el-col :span="11">
+            <el-form-item label="召集人部门：" :label-width="formLabelWidth" prop="fconvenerdept">
+              <el-input
+                class="unfocus"
+                v-model="searchForm.fconvenerdeptname"
+                :disabled="true"
+                size="small"
+                autocomplete="off"
+              ></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="11">
+            <el-form-item label="联系人：" :label-width="formLabelWidth" prop="fcontact">
+              <el-input
+                v-model="searchForm.fcontactname"
+                :disabled="true"
+                size="small"
+                autocomplete="off"
+              ></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="1" class="el-positionType">
+            <el-button
+              type="primary"
+              size="mini"
+              icon="el-icon-search"
+              style="padding:7px 8px"
+              @click="baseInputTable('3','用户查询')"
+            ></el-button>
+          </el-col>
+          <el-col :span="11">
+            <el-form-item label="联系人部门：" :label-width="formLabelWidth" prop="fconvenerdept">
+              <el-input
+                class="unfocus"
+                v-model="searchForm.fcontactdeptname"
+                :disabled="true"
+                size="small"
+                autocomplete="off"
+              ></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="11">
+            <el-form-item label="联系方式：" :label-width="formLabelWidth" prop="fphone">
+              <el-input v-model="searchForm.fphone" size="small" autocomplete="off"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="11" style="margin-left: 32px;">
+            <el-form-item label="参会人数(人)：" :label-width="formLabelWidth" prop="fcpmcount">
+              <el-input v-model="searchForm.fcpmcount" size="small" autocomplete="off"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="11">
+            <el-form-item label="起始时间：" :label-width="formLabelWidth" prop="fstartdate">
+              <el-date-picker
+                clearable
+                v-model="searchForm.fstartdate"
+                value-format="yyyy-MM-dd HH:mm"
+                format="yyyy-MM-dd HH:mm"
+                type="datetime"
+                size="small"
+                placeholder="选择日期"
+                style="width: 100%;"
+              ></el-date-picker>
+            </el-form-item>
+          </el-col>
+          <el-col :span="11" style="margin-left: 32px;">
+            <el-form-item label="结束时间：" :label-width="formLabelWidth" prop="fenddate">
+              <el-date-picker
+                clearable
+                v-model="searchForm.fenddate"
+                format="yyyy-MM-dd HH:mm"
+                value-format="yyyy-MM-dd HH:mm"
+                type="datetime"
+                size="small"
+                placeholder="选择日期"
+                style="width: 100%;"
+              ></el-date-picker>
+            </el-form-item>
+          </el-col>
+          <el-col :span="11">
+            <el-form-item label="会议室：" :label-width="formLabelWidth" prop="fconfname">
+              <el-input
+                v-model="searchForm.fconfname"
+                :disabled="true"
+                size="small"
+                autocomplete="off"
+              ></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="1" class="el-positionType">
+            <el-button
+              type="primary"
+              size="mini"
+              icon="el-icon-search"
+              style="padding:7px 8px"
+              @click="queryConfOffice()"
+            ></el-button>
+          </el-col>
+          <el-col :span="11">
+            <el-form-item label="是否公开：" :label-width="formLabelWidth" prop="fovertValue">
+              <el-switch
+                v-model="searchForm.fovertValue"
+                active-color="#409EFF"
+                inactive-color="#cccccc"
+                :active-value="0"
+                :inactive-value="1"
+              ></el-switch>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row :gutter="24">
+          <el-col :span="11">
+            <el-form-item label="重要程度：" :label-width="formLabelWidth" prop="fimportanceValue">
+              <el-select size="small" v-model="searchForm.fimportanceValue" placeholder="请选择">
+                <el-option label="重要" value="0"></el-option>
+                <el-option label="一般" value="1"></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="11" style="padding-left: 48px !important;">
+            <el-form-item label="是否对外：" :label-width="formLabelWidth" prop="fexternalVaule">
+              <el-switch
+                v-model="searchForm.fexternalVaule"
+                active-color="#409EFF"
+                inactive-color="#cccccc"
+                :active-value="1"
+                :inactive-value="0"
+              ></el-switch>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row :gutter="24">
+          <el-col :span="23">
+            <el-form-item label="内部参与人：" :label-width="formLabelWidth" prop="internalmans">
+              <el-input
+                maxlength="3000"
+                size="small"
+                show-word-limit
+                autosize
+                type="textarea"
+                class="unfocus"
+                v-model="searchForm.internalMansName"
+                :disabled="true"
+              ></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="1" class="el-internalMansName">
+            <el-button
+              type="primary"
+              size="mini"
+              icon="el-icon-search"
+              style="padding:7px 8px"
+              @click="baseInputTable('4','用户查询')"
+            ></el-button>
+          </el-col>
+        </el-row>
+        <el-row :gutter="24">
+          <el-col :span="23">
+            <el-form-item label="外部参与人：" :label-width="formLabelWidth" prop="fexternalman">
+              <el-input
+                maxlength="3000"
+                size="small"
+                show-word-limit
+                autosize
+                type="textarea"
+                v-model="searchForm.fexternalman"
+              ></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row :gutter="24">
+          <el-col :span="23">
+            <el-form-item label="会议内容：" :label-width="formLabelWidth" prop="fmeetcontent">
+              <el-input
+                maxlength="3000"
+                size="small"
+                show-word-limit
+                autosize
+                type="textarea"
+                v-model="searchForm.fmeetcontent"
+              ></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+      </el-form>
+
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="submitConfApply('searchForm')">提 交</el-button>
       </div>
     </el-dialog>
     <!-- 查看弹出框 -->
     <el-dialog
-      :title="'查看会议室'"
-      class="query-office"
+      :title="'查看会议申请'"
+      class="add-apply"
       center
       :visible.sync="queryFormVisible"
       :close-on-click-modal="false"
     >
       <el-form :model="searchForm" :rules="rules" ref="searchForm" style="margin-right: 60px;">
         <el-row :gutter="24">
-          <el-col :span="12">
+          <el-col :span="11">
             <el-form-item
               label="公司："
               :label-width="formLabelWidth"
@@ -168,95 +580,286 @@
                 autocomplete="off"
                 size="small"
                 :disabled="true"
-                @focus="baseInputTable('用户','组织结构查询')"
               ></el-input>
             </el-form-item>
           </el-col>
-          <el-col :span="12">
+        </el-row>
+        <el-row :gutter="24">
+          <el-col :span="11">
             <el-form-item label="编码：" :label-width="formLabelWidth" prop="fcode">
-              <el-input :disabled="true" v-model="searchForm.fcode" size="small" autocomplete="off"></el-input>
+              <el-input v-model="searchForm.fcode" :disabled="true" size="small" autocomplete="off"></el-input>
             </el-form-item>
           </el-col>
-          <el-col :span="12">
+          <el-col :span="11" style="margin-left: 32px;">
             <el-form-item label="名称：" :label-width="formLabelWidth" prop="fname">
-              <el-input :disabled="true" v-model="searchForm.fname" size="small" autocomplete="off"></el-input>
+              <el-input v-model="searchForm.fname" :disabled="true" size="small" autocomplete="off"></el-input>
             </el-form-item>
           </el-col>
-          <el-col :span="12">
-            <el-form-item label="容量：" :label-width="formLabelWidth" prop="fvolume">
+          <el-col :span="11">
+            <el-form-item label="召集人：" :label-width="formLabelWidth" prop="fconvener">
               <el-input
+                v-model="searchForm.fconvenername"
                 :disabled="true"
-                v-model="searchForm.fvolume"
                 size="small"
                 autocomplete="off"
               ></el-input>
             </el-form-item>
           </el-col>
-        </el-row>
-        <el-row>
-          <el-form-item label="地点：" :label-width="formLabelWidth" prop="fsite">
-            <el-input
-              maxlength="3000"
-              size="small"
-              show-word-limit
-              autosize
-              type="textarea"
+          <el-col :span="1" class="el-positionType">
+            <el-button
+              type="primary"
+              size="mini"
+              icon="el-icon-search"
+              style="padding:7px 8px"
               :disabled="true"
-              v-model="searchForm.fsite"
-            ></el-input>
-          </el-form-item>
-        </el-row>
-        <el-row>
-          <el-form-item label="设备：" :label-width="formLabelWidth" prop="fdevice">
-            <el-input
-              maxlength="3000"
-              size="small"
-              show-word-limit
-              autosize
+            ></el-button>
+          </el-col>
+          <el-col :span="11">
+            <el-form-item label="召集人部门：" :label-width="formLabelWidth" prop="fconvenerdept">
+              <el-input
+                class="unfocus"
+                v-model="searchForm.fconvenerdeptname"
+                :disabled="true"
+                size="small"
+                autocomplete="off"
+              ></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="11">
+            <el-form-item label="联系人：" :label-width="formLabelWidth" prop="fcontact">
+              <el-input
+                v-model="searchForm.fcontactname"
+                :disabled="true"
+                size="small"
+                autocomplete="off"
+              ></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="1" class="el-positionType">
+            <el-button
+              type="primary"
+              size="mini"
+              icon="el-icon-search"
+              style="padding:7px 8px"
               :disabled="true"
-              type="textarea"
-              v-model="searchForm.fdevice"
-            ></el-input>
-          </el-form-item>
-        </el-row>
-        <el-row>
-          <el-form-item label="描述：" :label-width="formLabelWidth" prop="fremark">
-            <el-input
-              maxlength="3000"
-              size="small"
-              show-word-limit
-              autosize
+            ></el-button>
+          </el-col>
+          <el-col :span="11">
+            <el-form-item label="联系人部门：" :label-width="formLabelWidth" prop="fconvenerdept">
+              <el-input
+                class="unfocus"
+                v-model="searchForm.fcontactdeptname"
+                :disabled="true"
+                size="small"
+                autocomplete="off"
+              ></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="11">
+            <el-form-item label="联系方式：" :label-width="formLabelWidth" prop="fphone">
+              <el-input
+                v-model="searchForm.fphone"
+                :disabled="true"
+                size="small"
+                autocomplete="off"
+              ></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="11" style="margin-left: 32px;">
+            <el-form-item label="参会人数(人)：" :label-width="formLabelWidth" prop="fcpmcount">
+              <el-input
+                v-model="searchForm.fcpmcount"
+                :disabled="true"
+                size="small"
+                autocomplete="off"
+              ></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="11">
+            <el-form-item label="起始时间：" :label-width="formLabelWidth" prop="fstartdate">
+              <el-date-picker
+                clearable
+                v-model="searchForm.fstartdate"
+                value-format="yyyy-MM-dd HH:mm"
+                format="yyyy-MM-dd HH:mm"
+                type="datetime"
+                size="small"
+                placeholder="选择日期"
+                style="width: 100%;"
+                :disabled="true"
+              ></el-date-picker>
+            </el-form-item>
+          </el-col>
+          <el-col :span="11" style="margin-left: 32px;">
+            <el-form-item label="结束时间：" :label-width="formLabelWidth" prop="fenddate">
+              <el-date-picker
+                clearable
+                v-model="searchForm.fenddate"
+                format="yyyy-MM-dd HH:mm"
+                value-format="yyyy-MM-dd HH:mm"
+                type="datetime"
+                size="small"
+                placeholder="选择日期"
+                style="width: 100%;"
+                :disabled="true"
+              ></el-date-picker>
+            </el-form-item>
+          </el-col>
+          <el-col :span="11">
+            <el-form-item label="会议室：" :label-width="formLabelWidth" prop="fconfname">
+              <el-input
+                v-model="searchForm.fconfname"
+                :disabled="true"
+                size="small"
+                autocomplete="off"
+              ></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="1" class="el-positionType">
+            <el-button
+              type="primary"
+              size="mini"
+              icon="el-icon-search"
+              style="padding:7px 8px"
               :disabled="true"
-              type="textarea"
-              v-model="searchForm.fremark"
-            ></el-input>
-          </el-form-item>
+            ></el-button>
+          </el-col>
+          <el-col :span="11">
+            <el-form-item label="是否公开：" :label-width="formLabelWidth" prop="fovertValue">
+              <el-switch
+                v-model="searchForm.fovertValue"
+                active-color="#409EFF"
+                inactive-color="#cccccc"
+                :active-value="0"
+                :inactive-value="1"
+                :disabled="true"
+              ></el-switch>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row :gutter="24">
+          <el-col :span="11">
+            <el-form-item label="重要程度：" :label-width="formLabelWidth" prop="fimportanceValue">
+              <el-select
+                size="small"
+                v-model="searchForm.fimportanceValue"
+                :disabled="true"
+                placeholder="请选择"
+              >
+                <el-option label="重要" value="0"></el-option>
+                <el-option label="一般" value="1"></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="11" style="padding-left: 48px !important;">
+            <el-form-item label="是否对外：" :label-width="formLabelWidth" prop="fexternalVaule">
+              <el-switch
+                v-model="searchForm.fexternalVaule"
+                active-color="#409EFF"
+                inactive-color="#cccccc"
+                :active-value="1"
+                :inactive-value="0"
+                :disabled="true"
+              ></el-switch>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row :gutter="24">
+          <el-col :span="23">
+            <el-form-item label="内部参与人：" :label-width="formLabelWidth" prop="internalmans">
+              <el-input
+                maxlength="3000"
+                size="small"
+                show-word-limit
+                autosize
+                type="textarea"
+                class="unfocus"
+                v-model="searchForm.internalMansName"
+                :disabled="true"
+              ></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="1" class="el-internalMansName_">
+            <el-button
+              type="primary"
+              size="mini"
+              icon="el-icon-search"
+              style="padding:7px 8px"
+              :disabled="true"
+            ></el-button>
+          </el-col>
+        </el-row>
+        <el-row :gutter="24">
+          <el-col :span="23">
+            <el-form-item label="外部参与人：" :label-width="formLabelWidth" prop="fexternalman">
+              <el-input
+                maxlength="3000"
+                size="small"
+                show-word-limit
+                autosize
+                type="textarea"
+                :disabled="true"
+                v-model="searchForm.fexternalman"
+              ></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row :gutter="24">
+          <el-col :span="23">
+            <el-form-item label="会议内容：" :label-width="formLabelWidth" prop="fmeetcontent">
+              <el-input
+                maxlength="3000"
+                size="small"
+                show-word-limit
+                autosize
+                type="textarea"
+                :disabled="true"
+                v-model="searchForm.fmeetcontent"
+              ></el-input>
+            </el-form-item>
+          </el-col>
         </el-row>
       </el-form>
     </el-dialog>
 
+    <!-- 用户或组织机构模态框 -->
     <el-form :model="formProcess" ref="formProcess">
-      <!-- 第三层弹窗 -->
-      <base-info-dialog
+      <staff-tree-search
         class="children-dialog"
-        :visible="baseInputTableF"
+        :visible="staffTableVsible"
         :type="baseInputType"
         :title="baseInputTitle"
+        :fcompanyid="fcompanyid"
         @closeDialog="closeBaseInfo"
-      ></base-info-dialog>
+      ></staff-tree-search>
+    </el-form>
+
+    <!-- 会议室模态框 -->
+    <el-form :model="formProcess" ref="formProcess">
+      <conference-office-search
+        class="children-dialog"
+        :visible="officeTableVsible"
+        :fcompanyid="fcompanyid"
+        :fstartdate="fstartdate"
+        :fenddate="fenddate"
+        :fvolume="fvolume"
+        @closeDialog="closeConfOffice"
+      ></conference-office-search>
     </el-form>
   </div>
 </template>
 
 <script>
 import DynamicTable from "../../components/common/dytable/dytable.vue";
-import baseInfoDialog from "../Home/node-components/base-info-dialog";
+import staffTreeSearch from "../conference/staff-tree-search";
+import conferenceOfficeSearch from "../conference/conference-office-search";
 
 export default {
   name: "confOffice",
   components: {
     DynamicTable,
-    baseInfoDialog,
+    staffTreeSearch,
+    conferenceOfficeSearch,
   },
   data() {
     let checkInt = (rule, value, callback) => {
@@ -268,37 +871,57 @@ export default {
     };
     return {
       isEdit: false,
-      addFormVisible: false,
+      isDate: false,
+      isNormal: true,
+      isOvert: false,
+      submitFormVisible: false,
+      resiveFormVisible: false,
       queryFormVisible: false,
-      baseInputTableF: false,
+      staffTableVsible: false,
+      officeTableVsible: false,
+      rowPOSStype: false,
       pageNum: 1,
       pageSize: 10,
       total: 20,
       baseInputTitle: "",
       baseInputType: "",
       formLabelWidth: "120px",
+      internalMansId: "",
+      internalMansName: "",
+      fcompanyid: "",
+      fstartdate: "",
+      fenddate: "",
+      fvolume: 0,
       formProcess: {},
       tableData: [],
+      rowPOSSDataObj: {},
       multipleSelection: [],
       form: {
         select: [],
         selectVal: "",
       },
-      value: "_DefaultCompanyOId",
       searchForm: {
-        fcode: "",
-        fname: "",
-        fvolume: "",
-        fsite: "",
-        fdevice: "",
-        fremark: "",
-        fstatus: "",
-        fcompany: "_DefaultCompanyOId",
+        fstartdate: "",
+        fenddate: "",
+        fcpmcount: "",
+        fconvener: "",
+        fconvenername: "",
+        fconvenerdept: "",
+        fconvenerdeptname: "",
+        fcontact: "",
+        fcontactname: "",
+        fcontactdept: "",
+        fcontactdeptname: "",
+        fcompanyid: "_DefaultCompanyOId",
         fcompanyname: "福佳集团",
       },
       columns: [
         {
           type: "selection",
+        },
+        {
+          key: "fstatusValue",
+          title: "状态",
         },
         {
           key: "fcode",
@@ -309,36 +932,55 @@ export default {
           title: "名称",
         },
         {
-          key: "fsite",
-          title: "地点",
+          key: "fconfname",
+          title: "会议室",
         },
         {
-          key: "fvolume",
-          title: "容量",
+          key: "fconvenername",
+          title: "召集人",
         },
         {
-          key: "fdevice",
-          title: "设备",
+          key: "fconvenerdeptname",
+          title: "召集人部门",
         },
         {
-          key: "fremark",
-          title: "描述",
+          key: "fcontactname",
+          title: "联系人",
         },
         {
-          key: "fstatus",
-          title: "状态",
+          key: "fcontactdeptname",
+          title: "联系人部门",
+        },
+        {
+          key: "fphone",
+          title: "联系方式",
+        },
+        {
+          key: "fcpmcount",
+          title: "参会人数(人)",
+        },
+        {
+          key: "fstartdate",
+          title: "起始时间",
+        },
+        {
+          key: "fenddate",
+          title: "结束时间",
+        },
+        {
+          key: "fovertValue",
+          title: "是否公开",
+        },
+        {
+          key: "fexternalVaule",
+          title: "是否对外",
+        },
+        {
+          key: "fimportanceValue",
+          title: "重要程度",
         },
       ],
       rules: {
-        fcompany: [
-          { required: true, message: "请输入公司", trigger: "blur" },
-          {
-            min: 1,
-            max: 100,
-            message: "长度在 1 到 50 个字符",
-            trigger: "blur",
-          },
-        ],
         fcode: [
           { required: true, message: "请输入编码", trigger: "blur" },
           {
@@ -357,9 +999,9 @@ export default {
             trigger: "blur",
           },
         ],
-        fvolume: [{ validator: checkInt, trigger: "blur" }],
-        fsite: [
-          { required: false, message: "请输入地点", trigger: "blur" },
+        fcpmcount: [{ validator: checkInt, trigger: "blur" }],
+        fconvener: [
+          { required: true, message: "请输入召集人", trigger: "blur" },
           {
             min: 1,
             max: 3000,
@@ -367,8 +1009,8 @@ export default {
             trigger: "blur",
           },
         ],
-        fdevice: [
-          { required: false, message: "请输入设备", trigger: "blur" },
+        fcontact: [
+          { required: true, message: "请输入联系人", trigger: "blur" },
           {
             min: 1,
             max: 3000,
@@ -376,13 +1018,38 @@ export default {
             trigger: "blur",
           },
         ],
-        fdevice: [
-          { required: false, message: "请输入描述", trigger: "blur" },
+        fconfname: [
+          { required: true, message: "请输入会议室", trigger: "blur" },
           {
             min: 1,
             max: 3000,
             message: "长度在 1 到 3000 个字符",
             trigger: "blur",
+          },
+        ],
+        fimportanceValue: [
+          { required: true, message: "请输入重要程度", trigger: "blur" },
+          {
+            min: 1,
+            max: 3000,
+            message: "长度在 1 到 3000 个字符",
+            trigger: "blur",
+          },
+        ],
+        fstartdate: [
+          {
+            type: "string",
+            required: true,
+            message: "起始时间格式错误",
+            trigger: "change",
+          },
+        ],
+        fenddate: [
+          {
+            type: "string",
+            required: true,
+            message: "结束时间格式错误",
+            trigger: "change",
           },
         ],
       },
@@ -393,8 +1060,31 @@ export default {
       this.getTableData("");
     });
   },
-  computed: {},
-  watch: {},
+  computed: {
+    querySelect() {
+      return this.form.select;
+    },
+  },
+  watch: {
+    querySelect(val) {
+      this.form.selectVal = null;
+      if (val == "fstartdate" || val == "fenddate") {
+        // 开始，结束时间查询时
+        this.isDate = true;
+        this.isNormal = false;
+        this.isOvert = false;
+      } else if (val == "fovert") {
+        // 是否公开查询时
+        this.isOvert = true;
+        this.isDate = false;
+        this.isNormal = false;
+      } else {
+        this.isNormal = true;
+        this.isDate = false;
+        this.isOvert = false;
+      }
+    },
+  },
   methods: {
     //分页、下一页
     onCurrentChange(val) {
@@ -419,72 +1109,58 @@ export default {
     // 新增
     add() {
       this.searchForm = {
-        fcode: "",
-        fname: "",
-        fvolume: "",
-        fsite: "",
-        fdevice: "",
-        fremark: "",
-        fstatus: "",
-        fcompany: "_DefaultCompanyOId",
+        fcompanyid: "_DefaultCompanyOId",
         fcompanyname: "福佳集团",
       };
-      this.addFormVisible = true;
+      this.submitFormVisible = true;
       this.pageNum = 1;
       this.isEdit = false;
     },
     // 修改
-    toEdit(params) {
+    toEdit() {
       if (this.multipleSelection.length != 1) {
         this.$message.error("请选择一条数据进行编辑");
+        return;
+      }
+      if (this.multipleSelection[0].fstatusValue != "暂存") {
+        this.$message.error("只有暂存状态的数据可以修改");
         return;
       }
       this.isEdit = true;
       this.getTableData("foid");
-      this.addFormVisible = true;
+      this.submitFormVisible = true;
     },
-    // 生效，禁用
-    toUpdate(params) {
+    // 修订
+    toRevise() {
       if (this.multipleSelection.length != 1) {
         this.$message.error("请选择一条数据进行编辑");
         return;
       }
-      let data = {
-        foid: this.multipleSelection[0].foid,
-        fstatus: params,
-      };
-      this.$api.confMangement.editConfOffice(data).then(
-        (res) => {
-          if (res.data.code == 0) {
-            this.$message.success("修改成功");
-            //刷新表格
-            this.getTableData("");
-          } else {
-            this.$message.error(res.data.msg);
-          }
-        },
-        (error) => {
-          console.log(error);
-        }
-      );
+      if (this.multipleSelection[0].fstatusValue != "生效") {
+        this.$message.error("只有生效状态的数据可以修改");
+        return;
+      }
+      this.isEdit = true;
+      this.getTableData("foid");
+      this.resiveFormVisible = true;
     },
-    // 删除
-    deleteMsg() {
+    // 取消
+    cancleMsg() {
       if (this.multipleSelection.length != 1) {
         this.$message.error("请选择一条数据进行编辑");
         return;
       }
-      this.$confirm("确实要删除当前选择的记录吗?", "提示", {
+      this.$confirm("确实要取消当前选择的记录吗?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning",
       })
         .then(() => {
           this.$api.confMangement
-            .deleteConfOffice(this.multipleSelection[0].foid)
+            .cancelConfApply(this.multipleSelection[0].foid)
             .then((res) => {
               if (res.data.code == 0) {
-                this.$message.success("删除成功!");
+                this.$message.success("已取消!");
                 this.isEdit = false;
                 //刷新表格
                 this.getTableData("");
@@ -517,9 +1193,7 @@ export default {
         showCancelButton: false,
         confirmButtonText: "确定",
         cancelButtonText: "取消",
-      }).then((action) => {
-        
-      });
+      }).then((action) => {});
     },
     // 显示全部信息
     resetForm(formName) {
@@ -540,9 +1214,10 @@ export default {
           };
           break;
         case false:
+          let dataParams = this.form.selectVal;
           // 新增
           data = {
-            [params]: this.form.selectVal,
+            [params]: dataParams,
             page: this.pageNum,
             size: this.pageSize,
           };
@@ -551,19 +1226,86 @@ export default {
         default:
           break;
       }
-      this.$api.confMangement.getConfOfficeList(data).then(
+      this.$api.confMangement.getApplyList(data).then(
         (res) => {
           if (this.isEdit) {
-            this.searchForm = res.data.data.rows[0];
+            let resData = res.data.data.rows[0];
+            let internalMans = resData.internalmans;
+            this.internalMansName = "";
+            this.internalMansId = "";
+            for (let i in internalMans) {
+              if (i < internalMans.length - 1) {
+                this.internalMansName += internalMans[i].name + ",";
+                this.internalMansId += internalMans[i].oid + ",";
+              } else {
+                this.internalMansName += internalMans[i].name;
+                this.internalMansId += internalMans[i].oid;
+              }
+            }
+            switch (resData.fimportance) {
+              case 0:
+                resData.fimportanceValue = "一般";
+                break;
+              case 1:
+                resData.fimportanceValue = "重要";
+                break;
+              default:
+                break;
+            }
+            this.searchForm = resData;
+            this.searchForm.fovertValue = resData.fovertValue;
+            this.searchForm.fexternalVaule = resData.fexternal;
+            console.log(this.searchForm );
+            this.searchForm.internalMansName = this.internalMansName;
           } else {
             let taData = res.data.data.rows;
             for (let i in taData) {
+              // 状态 0：暂存 1：提交 2：生效 3：作废
               switch (taData[i].fstatus) {
-                case 1:
-                  taData[i].fstatus = "禁用";
-                  break;
                 case 0:
-                  taData[i].fstatus = "生效";
+                  taData[i].fstatusValue = "暂存";
+                  break;
+                case 1:
+                  taData[i].fstatusValue = "提交";
+                  break;
+                case 2:
+                  taData[i].fstatusValue = "生效";
+                  break;
+                case 3:
+                  taData[i].fstatusValue = "作废";
+                  break;
+                default:
+                  break;
+              }
+              // 是否公开 0：公开 1：不公开
+              switch (taData[i].fovert) {
+                case 0:
+                  taData[i].fovertValue = "是";
+                  break;
+                case 1:
+                  taData[i].fovertValue = "否";
+                  break;
+                default:
+                  break;
+              }
+              // 是否对外 0：对内 1：对外
+              switch (taData[i].fexternal) {
+                case 0:
+                  taData[i].fexternalVaule = "否";
+                  break;
+                case 1:
+                  taData[i].fexternalVaule = "是";
+                  break;
+                default:
+                  break;
+              }
+              // 重要程度 0：一般 1：重要
+              switch (taData[i].fimportance) {
+                case 0:
+                  taData[i].fimportanceValue = "一般";
+                  break;
+                case 1:
+                  taData[i].fimportanceValue = "重要";
                   break;
                 default:
                   break;
@@ -579,49 +1321,52 @@ export default {
       );
     },
     // 提交
-    addSubmit(formName) {
+    submitConfApply(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          switch (this.isEdit) {
-            case true:
-              this.$api.confMangement
-                .submitConfOffice(this.searchForm)
-                .then((res) => {
-                  if (res.data.code == 0) {
-                    this.addFormVisible = false;
-                    this.isEdit = false;
-                    this.$message.success("修改成功");
-                    //刷新表格
-                    this.getTableData("");
-                  } else {
-                    this.$message.error(res.data.msg);
-                  }
-                }),
-                (error) => {
-                  console.log(error);
-                };
-              break;
-            case false:
-              this.$api.confMangement
-                .submitConfOffice(this.searchForm)
-                .then((res) => {
-                  if (res.data.code == 0) {
-                    this.addFormVisible = false;
-                    this.$message.success("新增成功");
-                    //刷新表格
-                    this.getTableData("");
-                  } else {
-                    this.$message.error(res.data.msg);
-                  }
-                }),
-                (error) => {
-                  console.log(error);
-                };
-              break;
-
-            default:
-              break;
-          }
+          this.$api.confMangement
+            .submitConfApply(this.searchForm)
+            .then((res) => {
+              if (res.data.code == 0) {
+                this.submitFormVisible = false;
+                this.isEdit = false;
+                this.$message.success("提交成功");
+                //刷新表格
+                this.getTableData("");
+              } else {
+                this.$message.error(res.data.msg);
+              }
+            }),
+            (error) => {
+              console.log(error);
+            };
+        } else {
+          console.log("error submit!!");
+          return false;
+        }
+      });
+    },
+    // 暂存
+    stagingConfApply(formName) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          console.log(this.searchForm);
+          this.$api.confMangement
+            .stagingConfApply(this.searchForm)
+            .then((res) => {
+              if (res.data.code == 0) {
+                this.submitFormVisible = false;
+                this.isEdit = false;
+                this.$message.success("暂存成功");
+                //刷新表格
+                this.getTableData("");
+              } else {
+                this.$message.error(res.data.msg);
+              }
+            }),
+            (error) => {
+              console.log(error);
+            };
         } else {
           console.log("error submit!!");
           return false;
@@ -639,18 +1384,77 @@ export default {
       this.queryFormVisible = true;
     },
     // 打开组织架构弹窗
-    baseInputTable(str, title) {
-      this.baseInputTableF = true;
-      this.baseInputTitle = title;
-      this.baseInputType = str;
+    baseInputTable(type, title) {
+      this.staffTableVsible = true;
+      this.baseInputType = type; //公司:1,召集人:2,联系人:3
+      this.baseInputTitle = title; //如:用户查询
     },
     // 关闭组织架构弹窗
-    closeBaseInfo(data, dialogtitle, type) {
-      if (data.length > 0) {
-        this.searchForm.fcompany = data[0].foid;
-        this.searchForm.fcompanyname = data[0].fname;
+    closeBaseInfo(data, title, type) {
+      if (data == null || data.length === 0) {
+      } else {
+        if (type === "1") {
+          // 公司
+          this.searchForm.fcompanyname = data.fname;
+          this.searchForm.fcompanyid = data.foid;
+          this.fcompanyid = data.foid;
+        } else if (type === "2") {
+          // 召集人
+          this.searchForm.fconvenername = data.fname;
+          this.searchForm.fconvener = data.foid;
+          this.searchForm.fconvenerdeptname = data.fdeptname;
+          this.searchForm.fconvenerdept = data.fdeptid;
+        } else if (type === "3") {
+          // 联系人
+          this.searchForm.fcontactname = data.fname;
+          this.searchForm.fcontact = data.foid;
+          this.searchForm.fcontactdeptname = data.fdeptname;
+          this.searchForm.fcontactdept = data.fdeptid;
+        } else if (type === "4") {
+          let internalmans = [];
+          for (let i in data) {
+            if (i < data.length - 1) {
+              this.internalMansName += data[i].fname + ",";
+            } else {
+              this.internalMansName += data[i].fname;
+            }
+            let staff = {
+              oid: data[i].foid,
+              name: data[i].fname,
+            };
+            internalmans.push(staff);
+          }
+          this.searchForm.internalmans = internalmans;
+          this.searchForm.internalMansName = this.internalMansName;
+        }
       }
-      this.baseInputTableF = false;
+      this.staffTableVsible = false;
+    },
+    // 打开会议室弹窗
+    queryConfOffice() {
+      if (this.searchForm.fstartdate == null) {
+        this.$message.error("会议开始时间不可为空");
+        return;
+      }
+      if (this.searchForm.fenddate == null) {
+        this.$message.error("会议结束时间不可为空");
+        return;
+      }
+      if (this.searchForm.fcpmcount == null) {
+        this.$message.error("会议参与人数不可为空");
+        return;
+      }
+      this.fcompanyid = this.searchForm.fcompany;
+      this.fstartdate = this.searchForm.fstartdate;
+      this.fenddate = this.searchForm.fenddate;
+      this.fvolume = this.searchForm.fcpmcount;
+      this.officeTableVsible = true;
+    },
+    // 关闭会议室弹窗
+    closeConfOffice(data) {
+      this.searchForm.fconfname = data.fname;
+      this.searchForm.fconfid = data.foid;
+      this.officeTableVsible = false;
     },
   },
 };
@@ -663,6 +1467,9 @@ export default {
   width: 100%;
 }
 
+/deep/ .el-col {
+  padding-right: 6px !important;
+}
 /deep/ .el-confOffice {
   padding-left: 0px !important;
   padding-top: 6px;
@@ -672,6 +1479,41 @@ export default {
   background-color: revert;
 }
 
+/deep/ .el-positionType {
+  padding-left: 0px !important;
+  padding-top: 6px;
+}
+/deep/ .el-internalmans {
+  padding-left: 0px !important;
+  padding-top: 10px;
+}
+
+/deep/ .el-form-item .el-form-item__label {
+  padding-left: 13px;
+  text-align: left;
+}
+
+/deep/ .unfocus .el-textarea__inner {
+  background-color: #e4e7ed;
+  color: #606266;
+}
+
+/deep/ .unfocus .el-input__inner {
+  background-color: #e4e7ed;
+  color: #606266;
+}
+
+/deep/ .el-input.is-disabled .el-input__inner {
+  color: #606266;
+}
+
+/deep/ .el-textarea.is-disabled .el-textarea__inner {
+  color: #606266;
+}
+
+.el-internalMansName_ {
+  padding: 10px 0 0 0 !important;
+}
 .box-card:first-child {
   margin-bottom: 16px;
 }
