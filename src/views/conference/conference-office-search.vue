@@ -87,6 +87,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    type: {
+      type: String,
+      defaule: "1",
+    },
   },
   data() {
     return {
@@ -140,7 +144,11 @@ export default {
     visible(bool) {
       this.dialogVisible = bool;
       let data = {};
-      this.getTableData(data);
+      if (this.type == "1") {
+        this.getTableData(data);
+      } else if (this.type == "2") {
+        this.getTableDataAll(data);
+      }
     },
   },
   methods: {
@@ -148,7 +156,11 @@ export default {
     onCurrentChange(val) {
       this.pageNum = val;
       let data = {};
-      this.getTableData(data);
+      if (this.type == "1") {
+        this.getTableData(data);
+      } else if (this.type == "2") {
+        this.getTableDataAll(data);
+      }
     },
     //多选
     onSelectionChange(val) {
@@ -164,7 +176,11 @@ export default {
       let data = {
         [params]: this.form.selectVal,
       };
-      this.getTableData(data);
+      if (this.type == "1") {
+        this.getTableData(data);
+      } else if (this.type == "2") {
+        this.getTableDataAll(data);
+      }
     },
     // 查询有效会议室列表数据
     getTableData(data) {
@@ -173,8 +189,27 @@ export default {
       data.fcompany = this.fcompanyid;
       data.fstartdate = this.fstartdate;
       data.fenddate = this.fenddate;
-      data.fvolume = this.fvolume;
+      data.fvolume =Number(this.fvolume);
       this.$api.confMangement.getAvailableConfOffice(data).then(
+        (res) => {
+          if (res.data.code == 0) {
+            this.tableData = res.data.data.rows;
+            this.total = res.data.data.total;
+          } else {
+            this.$message.error(res.data.msg);
+          }
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+    },
+    // 查询会议室列表数据
+    getTableDataAll(data) {
+      data.page = this.pageNum;
+      data.size = this.pageSize;
+      data.fcompany = this.fcompanyid;
+      this.$api.confMangement.getConfOfficeList(data).then(
         (res) => {
           if (res.data.code == 0) {
             this.tableData = res.data.data.rows;

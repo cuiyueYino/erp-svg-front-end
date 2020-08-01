@@ -69,10 +69,33 @@ const confMangement = {
     confUsageDetailExport(params) {
         return httpReqest.post('/api/interfaces/confOffice/confUsageDetailExport', params);
     },
+    // 会议室使用详情Excel导出
+    confUsageDetailExport() {
+        httpReqest.post("/api/interfaces/confOffice/confUsageDetailExport", {}, {
+            responseType: "blob", //设置响应的数据类型为一个包含二进制数据的 Blob 对象，必须设置！！！
+          })
+          .then(function (response) {
+            const blob = new Blob([response.data]);
+            const fileName = "会议室使用详情.xls";
+            const linkNode = document.createElement("a");
+  
+            linkNode.download = fileName; //a标签的download属性规定下载文件的名称
+            linkNode.style.display = "none";
+            linkNode.href = URL.createObjectURL(blob); //生成一个Blob URL
+            document.body.appendChild(linkNode);
+            linkNode.click(); //模拟在按钮上的一次鼠标单击
+  
+            URL.revokeObjectURL(linkNode.href); // 释放URL 对象
+            document.body.removeChild(linkNode);
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+    },
 
     //================================组织架构==============================================
     //  人员-根据ID查找人员
-    getStaffInfoById(params){
+    getStaffInfoById(params) {
         return httpReqest.post('/api/interfaces/staffManage/findStaffById?id=' + params);
     },
 
@@ -82,15 +105,15 @@ const confMangement = {
     },
 
     //公司部门人员树
-    getOrgunitTree(params){
-        var valueS='?';
-        for(var item in params){
-            valueS+=item+"="+params[item]+"&";
+    getOrgunitTree(params) {
+        var valueS = '?';
+        for (var item in params) {
+            valueS += item + "=" + params[item] + "&";
         }
-        if(valueS.slice(valueS.length-1,valueS.length) ==="&"){
-            valueS=valueS.slice(0,valueS.length-1);
+        if (valueS.slice(valueS.length - 1, valueS.length) === "&") {
+            valueS = valueS.slice(0, valueS.length - 1);
         }
-        return httpReqest.get('/api/wfInterfaces/workFlow/findCompanyDeptStaffInfoByOrgUnitIdFromRedis'+valueS);
+        return httpReqest.get('/api/wfInterfaces/workFlow/findCompanyDeptStaffInfoByOrgUnitIdFromRedis' + valueS);
     },
 };
 
