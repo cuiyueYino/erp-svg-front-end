@@ -499,13 +499,15 @@
 						if(this.ruleForm.workItemTypeName) {
 							//传走的校验置空，下面方法中重新添加
 							this.rulesChild = {}
+							var cur = []
+							let obj = {};
 							//循环判断是否有添加服务的字段名
-							this.ruleForm.lines.forEach(item => {
+							this.ruleForm.lines.forEach((item, index1) => {
 								item.parameterList = []
 								//时间控件计算差值
 								this.ruleForm.lines.forEach(itemChild => {
 									//通过‘-’符号确定需要计算的两边
-									if(itemChild.parameter.indexOf('-') != -1) {
+									if(!this.noNull(itemChild.parameter) && itemChild.parameter.indexOf('-') != -1) {
 										//left right 分别是需要计算的两个值的字段名称
 										var index = itemChild.parameter.indexOf('-')
 										var left = itemChild.parameter.substring(0, index)
@@ -526,8 +528,6 @@
 
 								})
 								//行序按照填写排序
-								var cur = []
-								let obj = {};
 								item.fieldTypeName = this.fieldTypeShow(item)
 								if(obj[item.showNum]) {
 									cur.forEach(val => {
