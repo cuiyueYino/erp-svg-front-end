@@ -2,6 +2,7 @@ const path = require('path');
 const resolve = filename => path.resolve(__dirname, filename);
 
 module.exports = {
+    lintOnSave: false,
     pages: {
         index: {
             // page 的入口
@@ -61,6 +62,7 @@ module.exports = {
             //  }
         },
         hotOnly: false,
-        https: false
+        https: false,
+        
     }
 };

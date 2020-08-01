@@ -32,7 +32,7 @@
                 <el-button  size="small" @click="saveConfig">保存</el-button>
             </el-col>
             <el-col :span="12">
-                <el-button size="small" @click="cancelConfig">取消</el-button>
+                <el-button size="small" @click="saveConfig">取消</el-button>
             </el-col>
         </el-row>
     </el-dialog>

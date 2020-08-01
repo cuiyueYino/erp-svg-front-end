@@ -202,10 +202,10 @@ export default {
                 for(let i in this.tableData){
                     switch ( this.tableData[i].fstatus) {
                         case 3:
-                             this.tableData[i].fstatus = '禁用'
+                             this.tableData[i].fstatus = '生效'
                              break;
                         case 8:
-                             this.tableData[i].fstatus = '生效'
+                             this.tableData[i].fstatus = '禁用'
                              break;
                         default:
                             break;
@@ -284,10 +284,10 @@ export default {
             
             switch (status.fstatus) {
                 case '生效':
-                    status.fstatus = 3
+                    status.fstatus = 8
                     break;
                 case '禁用':
-                    status.fstatus = 8
+                    status.fstatus = 3
                     break;
                 default:
                     break;

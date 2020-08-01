@@ -122,7 +122,7 @@ export default {
         // 监听配置数据源
         data: {
             handler (obj) {console.log(obj)
-                if(obj.name === "Subprocess"){
+                if(obj.type === "Subprocess" || obj.name === "Subprocess"){
                 this.editData = obj;
                 this.formData.checked = this.editData.hidden==1?true:false;
                 this.formData.fremark = this.editData.fremark;
@@ -135,7 +135,6 @@ export default {
                             code:this.editData.refWfProcess.code
                         }];
                 this.formData.company = this.editData.refWfProcess.oid;
-                this.getSubprocessList();
                 // console.log( this.formData)
                 }
             },
@@ -169,20 +168,21 @@ export default {
             }
         }
     },
+    created(){
+        this.getSubprocessList();
+    },
     methods: {
         // 获取子流程列表
         getSubprocessList(){
             this.$api.svg.getSubProcessList().then(res=>{
                 this.newData = res.data.data;
                 this.newData.forEach(item => {
-                    this.options = [
-                        {
+                    this.options.push({
                             label:item.fname,
                             value:item.foid,
                             code:item.fcode
-                        }
-                    ]
-                });
+                        })
+                });//console.log(this.options)
             },error=>{
                 console.log(error)
             })

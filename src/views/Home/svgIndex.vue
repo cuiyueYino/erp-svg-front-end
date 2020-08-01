@@ -99,6 +99,7 @@
                             draggable
                             @dragstart="dragStartEvent($event)"
                             @dragend="handlerDragEnd($event, item)"
+                            :style="item.name=='子流程'?(isSubProcess?'hiddenSubProcess':'showSubProcess'):'showSubProcess'"
                         >
                             <a class="workflow-nodes" v-if="item.name=='子流程'?(isSubProcess?false:true):true">
                                 <i :class="item.icon"></i>
@@ -893,6 +894,12 @@ export default {
     height: 90%;
 }
  /deep/ .el-dialog__header{
+     display: none;
+ }
+ showSubProcess{
+     display: inline-block;
+ }
+ hiddenSubProcess{
      display: none;
  }
 div
