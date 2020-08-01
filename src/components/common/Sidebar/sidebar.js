@@ -224,6 +224,14 @@ class ITEMData {
 				{
 					index: 'templateMainTable',
 					title: '工作事项模板主表',
+				},
+				{
+					index: 'templateMainTableClassificationChild',
+					title: '工作事项模板子表分类',
+				},
+				{
+					index: 'templateMainTableChild',
+					title: '工作事项模板子表',
 				}
 			]
 		}, {
@@ -233,10 +241,9 @@ class ITEMData {
 				index: 'systemSettings',
 				title: '系统设置',
 				subs: [{
-						index: 'enumerationList',
-						title: '枚举内容',
-					}
-				]
+					index: 'enumerationList',
+					title: '枚举内容',
+				}]
 			}]
 		}];
 	};

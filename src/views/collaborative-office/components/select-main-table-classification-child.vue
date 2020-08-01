@@ -15,17 +15,17 @@
 							</el-col>
 							<el-col :span="5">
 								<el-form-item>
-									<el-input clearable v-model="formInline.code" placeholder="主表编码"></el-input>
+									<el-input clearable v-model="formInline.code" placeholder="子表分类编码"></el-input>
 								</el-form-item>
 							</el-col>
 							<el-col :span="5">
 								<el-form-item>
-									<el-input clearable v-model="formInline.name" placeholder="主表名称"></el-input>
+									<el-input clearable v-model="formInline.name" placeholder="子表分类名称"></el-input>
 								</el-form-item>
 							</el-col>
 							<el-col :span="4">
 								<el-form-item>
-									<el-input clearable v-model="formInline.workItemTypeName" placeholder="主表分类"></el-input>
+									<el-input clearable v-model="formInline.tableName" placeholder="数据库表名"></el-input>
 								</el-form-item>
 							</el-col>
 							<el-col :span="3">
@@ -51,11 +51,11 @@
 			</el-row>
 		</el-card>
 		<el-card class="box-card">
-			<el-table :row-class-name="tableRowClassName" @row-click="clickRow" :data="tableData" border>
+			<el-table height="450" :row-class-name="tableRowClassName" @row-click="clickRow" :data="tableData" border>
 				<el-table-column :formatter="statusShow" prop="status" label="状态" width="180" align="center"></el-table-column>
-				<el-table-column prop="code" label="主表编码" width="180" align="center"></el-table-column>
-				<el-table-column prop="name" label="主表名称" width="180" align="center"></el-table-column>
-				<el-table-column prop="workItemTypeName" label="主表分类" width="180" align="center"></el-table-column>
+				<el-table-column prop="code" label="子表分类编码" width="180" align="center"></el-table-column>
+				<el-table-column prop="name" label="子表分类名称" width="180" align="center"></el-table-column>
+				<el-table-column prop="tableName" label="数据库表名" width="180" align="center"></el-table-column>
 				<el-table-column prop="remark" label="描述" align="center"></el-table-column>
 			</el-table>
 			<pageNation :total="currentTotal" ref="pageNation" @pageChange="pageChange"></pageNation>
@@ -87,7 +87,7 @@
 					value: "回收"
 				}, {
 					id: "7",
-					value: "作废"
+					value: "禁用"
 				}, {
 					id: "8",
 					value: "关闭/结清"
@@ -97,14 +97,14 @@
 					name: "",
 					remark: "",
 					status: "",
-					workItemTypeName: "",
+					tableName: "",
 					page: 1,
 					size: 10
 				},
 				currentTotal: 0,
 				tableData: [],
 				rowClickId: "",
-				rowClick: {}
+				rowClick: {},
 			}
 		},
 		created() {
@@ -114,27 +114,30 @@
 			//查看
 			toSee() {
 				if(this.getRowClickId()) {
-					this.$api.collaborativeOffice.getWorkItemTempModel({
+					this.$api.collaborativeOffice.getWorkItemTypeSubModel({
 						id: this.rowClickId
 					}).then(data => {
-						console.log(data)
+						console.log(data.data.data)
 						this.$parent.toAdd('3', data.data.data)
 					})
 				}
+
 			},
 			//修改状态
 			updateStatus(status) {
 				if(this.getRowClickId()) {
-					this.$api.collaborativeOffice.updateStatusTemp({
-						id: this.rowClickId,
+					this.$api.collaborativeOffice.apiUrl("workItemTypeSub/updateStatus", {
+						id: this.rowClick.id,
 						status: status,
+						tableName: this.rowClick.tableName
 					}).then(data => {
 						if(this.dataBack(data, "修改状态成功")) {
 							this.toSelect()
 						}
 					})
 				}
-			}, //状态展示
+			},
+			//状态展示
 			statusShow(row) {
 				switch(row.status) {
 					case 1:
@@ -160,11 +163,11 @@
 			//修改
 			toUpd() {
 				if(this.getRowClickId()) {
-					this.$api.collaborativeOffice.getWorkItemTempModel({
+					this.$api.collaborativeOffice.getWorkItemTypeSubModel({
 						id: this.rowClickId
 					}).then(data => {
 						console.log(data.data.data)
-						this.$parent.toUpd(data.data.data)
+						this.$parent.toAdd('2', data.data.data)
 					})
 				}
 			},
@@ -183,7 +186,7 @@
 			},
 			//搜索
 			toSelect() {
-				this.$api.collaborativeOffice.findWorkItemTempPage(this.formInline).then(data => {
+				this.$api.collaborativeOffice.apiUrl("workItemTypeSub/findWorkItemTypeSubPage", this.formInline).then(data => {
 					console.log(data)
 					this.tableData = data.data.data.rows
 					this.currentTotal = data.data.data.total

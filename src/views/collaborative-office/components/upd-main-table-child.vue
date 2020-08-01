@@ -181,7 +181,7 @@
 			</el-dialog>
 		</div>
 		<div v-if="showFigForm">
-			<formIcon :form-data="conData">
+			<formIcon :rules="rulesChild" :form-data="previewList">
 				<el-row style="text-align: right;margin-bottom: 10px;">
 					<el-button icon="el-icon-arrow-left" size="mini" type="danger" plain @click="showFigForm = false">返回</el-button>
 				</el-row>
@@ -314,23 +314,17 @@
 					workItemTypeName: "",
 					lines: [],
 				},
-				//传入子组件的值
-				conData: {
-					top: {
-						//form的label宽度
-						labelWidth: '100px',
-						//横向显示
-						inline: false,
-						//label位置
-						labelPosition: 'right',
-						//form大小
-						size: 'small',
-						//值
-						rowList: []
-					},
+				previewList: {
+					labelWidth: '100px',
+					inline: false,
+					labelPosition: 'right',
+					size: 'small',
+					rowList: []
 				},
 				//公司
 				CompanyData: [],
+				//预览校验规则
+				rulesChild: {},
 				//全部枚举
 				selectList: [],
 				//工作事项
@@ -407,6 +401,14 @@
 						}
 					})
 				}
+				this.rulesChild[item.field] = []
+				if(item.required) {
+					this.rulesChild[item.field].push({
+						required: true,
+						message: "请填写" + item.fieldName,
+						trigger: 'blur'
+					})
+				}
 				switch(item.fieldType) {
 					//1浏览框、2字符型、3文本型、4整型、5浮点型、6富文本、7日期控件、8时间控件、9枚举项、10复选框
 					case "1":
@@ -437,6 +439,14 @@
 							//职位（无需删除，保留原数据）
 						} else if(item.toSelect.id == 3) {
 							item.browseBoxList = list
+						} else if(item.toSelect.id == 4) {
+
+						} else if(item.toSelect.id == 5) {
+
+						} else if(item.toSelect.id == 6) {
+
+						} else if(item.toSelect.id == 7) {
+
 						}
 						return "browseBox"
 						break;
@@ -447,9 +457,23 @@
 						return "textType"
 						break;
 					case "4":
+						this.rulesChild[item.field].push({
+							pattern: /^-?[1-9]\d*$/,
+							message: '请输入正确的' + item.fieldName,
+							trigger: 'blur'
+						}, {
+							max: 20,
+							message: '长度至多20位字符',
+							trigger: 'blur'
+						})
 						return "integers"
 						break;
 					case "5":
+						this.rulesChild[item.field].push({
+							pattern: /^([1-9]\d{0,15}|0)(\.\d{1,4})?$/,
+							message: '请输入正确的' + item.fieldName,
+							trigger: 'blur'
+						})
 						return "floatingPoint"
 						break;
 					case "6":
@@ -470,11 +494,14 @@
 				}
 			},
 			//预览
+			//预览
 			preview() {
 				this.$refs.ruleFormTable.validate((valid) => {
 					if(valid) {
 						//确认主表分类选定
 						if(this.ruleForm.workItemTypeName) {
+							//传走的校验置空，下面方法中重新添加
+							this.rulesChild = {}
 							var cur = []
 							let obj = {};
 							//循环判断是否有添加服务的字段名
