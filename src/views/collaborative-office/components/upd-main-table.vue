@@ -357,23 +357,8 @@
 			})
 			//公司 部门 职位
 			this.$api.management.selectAllOrganizationInfo().then(data => {
+				this.goOk("最大数据已经返回，可以预览")
 				this.allOrganizationInfo = eval('(' + data.data.data + ')')
-			})
-			this.ruleForm.lines.forEach(item => {
-				if(item.fieldType == 9) {
-					this.selectList.forEach(val => {
-						if(item.fieldContent == val.id) {
-							item.resList = val.resList
-						}
-					})
-				}
-				if(item.fieldType == 1) {
-					this.fieldBrowseList.forEach(val => {
-						if(item.fieldContent == val.id) {
-							item.toSelect = val
-						}
-					})
-				}
 			})
 		},
 		methods: {
@@ -389,7 +374,20 @@
 				}
 			},
 			fieldTypeShow(item) {
-				console.log(item)
+				if(item.fieldType == 9) {
+					this.selectList.forEach(val => {
+						if(item.fieldContent == val.id) {
+							item.resList = val.resList
+						}
+					})
+				}
+				if(item.fieldType == 1) {
+					this.fieldBrowseList.forEach(val => {
+						if(item.fieldContent == val.id) {
+							item.toSelect = val
+						}
+					})
+				}
 				this.rulesChild[item.field] = []
 				if(item.required) {
 					this.rulesChild[item.field].push({
@@ -491,6 +489,12 @@
 							let obj = {};
 							this.rulesChild = {}
 							this.ruleForm.lines.forEach(item => {
+								item.parameterList = []
+								this.ruleForm.lines.forEach(itemChild => {
+									if(itemChild.parameter == item.field) {
+										item.parameterList.push(itemChild.field)
+									}
+								})
 								item.fieldTypeName = this.fieldTypeShow(item)
 								if(obj[item.showNum]) {
 									cur.forEach(val => {
