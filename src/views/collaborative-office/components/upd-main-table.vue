@@ -350,6 +350,19 @@
 			//全部服务
 			this.$api.collaborativeOffice.findTServiceByParams({}).then(data => {
 				this.tServiceByParams = data.data.data
+				this.ruleForm.lines.forEach(item => {
+					this.tServiceByParams.forEach(val => {
+						if(item.serviceId != null && item.serviceId == val.foid) {
+							//服务显示名称
+							this.$set(item, 'serviceCon', val.fname)
+							//查询服务的参数：fid是根据条件查询的“条件” fcode是具体查询哪条服务的内容
+							this.$set(item, 'serviceNow', {
+								fid: "",
+								fcode: val.fcode
+							})
+						}
+					})
+				})
 			})
 			//工作事项
 			this.$api.collaborativeOffice.getFieldBrowse().then(data => {
@@ -357,23 +370,8 @@
 			})
 			//公司 部门 职位
 			this.$api.management.selectAllOrganizationInfo().then(data => {
+				this.goOk("最大数据已经返回，可以预览")
 				this.allOrganizationInfo = eval('(' + data.data.data + ')')
-			})
-			this.ruleForm.lines.forEach(item => {
-				if(item.fieldType == 9) {
-					this.selectList.forEach(val => {
-						if(item.fieldContent == val.id) {
-							item.resList = val.resList
-						}
-					})
-				}
-				if(item.fieldType == 1) {
-					this.fieldBrowseList.forEach(val => {
-						if(item.fieldContent == val.id) {
-							item.toSelect = val
-						}
-					})
-				}
 			})
 		},
 		methods: {
@@ -389,7 +387,20 @@
 				}
 			},
 			fieldTypeShow(item) {
-				console.log(item)
+				if(item.fieldType == 9) {
+					this.selectList.forEach(val => {
+						if(item.fieldContent == val.id) {
+							item.resList = val.resList
+						}
+					})
+				}
+				if(item.fieldType == 1) {
+					this.fieldBrowseList.forEach(val => {
+						if(item.fieldContent == val.id) {
+							item.toSelect = val
+						}
+					})
+				}
 				this.rulesChild[item.field] = []
 				if(item.required) {
 					this.rulesChild[item.field].push({
@@ -483,14 +494,43 @@
 				}
 			},
 			//预览
+			//预览
 			preview() {
 				this.$refs.ruleFormTable.validate((valid) => {
 					if(valid) {
+						//确认主表分类选定
 						if(this.ruleForm.workItemTypeName) {
+							//传走的校验置空，下面方法中重新添加
+							this.rulesChild = {}
 							var cur = []
 							let obj = {};
-							this.rulesChild = {}
-							this.ruleForm.lines.forEach(item => {
+							//循环判断是否有添加服务的字段名
+							this.ruleForm.lines.forEach((item, index1) => {
+								item.parameterList = []
+								//时间控件计算差值
+								this.ruleForm.lines.forEach(itemChild => {
+									//通过‘-’符号确定需要计算的两边
+									if(!this.noNull(itemChild.parameter) && itemChild.parameter.indexOf('-') != -1) {
+										//left right 分别是需要计算的两个值的字段名称
+										var index = itemChild.parameter.indexOf('-')
+										var left = itemChild.parameter.substring(0, index)
+										var right = itemChild.parameter.substring(index + 1)
+										//两个字段都要添加属性parameterList，里面存储需要计算的字段名和需要显示的字段名child
+										if(left == item.field || right == item.field) {
+											item.parameterList = {}
+											item.parameterList.left = left
+											item.parameterList.right = right
+											item.parameterList.child = itemChild.field
+										}
+									} else {
+										//发现被添加服务的字段后，绑定双方
+										if(itemChild.parameter == item.field) {
+											item.parameterList.push(itemChild.field)
+										}
+									}
+
+								})
+								//行序按照填写排序
 								item.fieldTypeName = this.fieldTypeShow(item)
 								if(obj[item.showNum]) {
 									cur.forEach(val => {
@@ -506,7 +546,7 @@
 									});
 								}
 							})
-							//按照行序进行排序
+							//列序按照填写排序
 							var index = 0
 							cur.sort((a, b) => {
 								a.colList.sort((a1, b1) => {
@@ -521,6 +561,7 @@
 								return a.showNum - b.showNum
 							})
 							this.previewList.rowList = cur
+							//打开预览页面
 							this.showFigForm = true
 						} else {
 							this.goOut("请选择主表分类")
@@ -531,33 +572,49 @@
 			//选择主表分类
 			getSelectMainTableClassification() {
 				this.ruleForm.lines = []
+				//判断是否选中
 				if(this.$refs.child.rowClick.id) {
+					//调用查看详情接口
 					this.$api.collaborativeOffice.getWorkItemTypeModel({
 						id: this.$refs.child.rowClick.id
 					}).then(data => {
 						data.data.data.lines.forEach(item => {
+							//为每一条数据定义好字段
 							var con = JSON.parse(JSON.stringify(this.rowConNew))
+							//枚举
 							if(item.fieldType == 9) {
+								//前台显示用，查看字段内容
+								con.fieldContentName = item.fieldContentName
+								//获取枚举LIST里面和字段相同的内容，并放入数据中，为了在后面显示用
 								this.selectList.forEach(val => {
 									if(item.fieldContent == val.id) {
+										//resList 枚举的list
 										con.resList = val.resList
+										//枚举的ID
+										con.fieldContent = val.id
 									}
 								})
 							}
+							//浏览框，同上面枚举
 							if(item.fieldType == 1) {
+								con.fieldContentName = item.fieldContentName
 								this.fieldBrowseList.forEach(val => {
 									if(item.fieldContent == val.id) {
 										con.toSelect = val
+										con.fieldContent = val.id
 									}
 								})
 							}
+							//获取其他字段，放入要传走的数据中
 							con.field = item.field
 							con.fieldName = item.fieldName
 							con.fieldType = item.fieldType
 							this.ruleForm.lines.push(con)
 						})
 					})
+					//主表分类名称显示
 					this.ruleForm.workItemTypeName = this.$refs.child.rowClick.name
+					//主表分类名称ID
 					this.ruleForm.workItemType = this.$refs.child.rowClick.id
 					this.dialogVisible = false
 				} else {
@@ -566,23 +623,20 @@
 			},
 			//获取服务
 			findTServiceByParams(rowCon) {
+				//服务中间值关联每一次打开的服务弹出框，修改this.rowCon 同时会修改行内容
 				this.rowCon = rowCon
 				this.dialogVisible_TServiceByParams = true
 			},
 			//服务--确定
 			getTServiceByParams() {
-				//				this.$api.collaborativeOffice.findTServiceItemByParams({
-				//					fcode: "service10",
-				//					fid: "BFPID000000LSN02D0"
-				//				}).then(data => {
-				//					console.log(data)
-				//				})
-				//				return
+				//服务显示名称
 				this.$set(this.rowCon, 'serviceCon', this.tServiceByParamsCon.fname)
+				//查询服务的参数：fid是根据条件查询的“条件” fcode是具体查询哪条服务的内容
 				this.$set(this.rowCon, 'serviceNow', {
-					fid: this.tServiceByParamsCon.foid,
+					fid: "",
 					fcode: this.tServiceByParamsCon.fcode
 				})
+				//行内添加服务ID，需要后台存储
 				this.rowCon.serviceId = this.tServiceByParamsCon.foid
 				this.dialogVisible_TServiceByParams = false
 			},

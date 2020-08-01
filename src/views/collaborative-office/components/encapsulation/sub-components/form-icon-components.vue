@@ -1,9 +1,17 @@
+<!--
+	预览页面弹出框显示内容 -- 孟鹏飞
+	2020-07-31
+	
+	传入参数：
+	showFig  展示内容（ 1. organization 公司，部门，职位树状图   2. personnel 人员table   3. user 用户table  4.职务table
+	dataCon  展示数据
+-->
+
 <template>
 	<div>
 		<div v-if="showFig == 'organization' " class="treeDivClass">
 			<el-tree @check-change="handleClick" show-checkbox ref="treeDialogVisible" highlight-current :data="dataCon.context" :props="defaultProps" node-key="foid" accordion></el-tree>
 		</div>
-
 		<div v-if="showFig == 'personnel'" style="margin-bottom: 40px;">
 			<el-form label-width="80px" :inline="true" ref="formInlineTName" :model="formInlineTName" class="demo-form-inline">
 				<el-form-item label="名称：" prop="tname">
@@ -125,8 +133,8 @@
 				}
 			};
 		},
-		mounted() {},
 		methods: {
+			//是否兼职
 			trueFalse(row, column, cellValue, index) {
 				if(cellValue == 0) {
 					return "否"
@@ -138,24 +146,28 @@
 			toSelect() {
 				var url = ""
 				var con = {}
+				//人员
 				switch(this.showFig) {
 					case "personnel":
 						url = "staffManage/findStaffByPage"
 						con = this.formInlineTName
 						break;
 				}
+				//用户
 				switch(this.showFig) {
 					case "user":
 						url = "userManage/findUserBypage"
 						con = this.formInlineTNameUser
 						break;
 				}
+				//职务
 				switch(this.showFig) {
 					case "jobSet":
 						url = "positionmnt/findPositionList"
 						con = this.formInlineTNameJob
 						break;
 				}
+				//查询并赋值
 				this.$api.collaborativeOffice.findConList(url, con).then(data => {
 					this.dataCon.context = data.data.data.rows
 					this.currentTotal = data.data.data.total
@@ -173,7 +185,7 @@
 				this.$refs[formName].resetFields();
 				this.toSelect()
 			},
-			//公司部门职位 tree选中
+			//公司部门职位 tree选中（只能单选，如果全选给提示，如果全选确定只去数据第一条）
 			handleClick(data, checked, node) {
 				if(checked) {
 					this.$refs.treeDialogVisible.setCheckedNodes([data]);
@@ -202,7 +214,7 @@
 				}
 				return color;
 			},
-			//选中行
+			//选中行，backCon是返回的值，全部变成label和value的形式
 			clickRow(row) {
 				if(this.showFig == "user" || this.showFig == "jobSet") {
 					this.backCon.label = row.fname

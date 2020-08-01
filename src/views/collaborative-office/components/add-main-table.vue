@@ -139,7 +139,7 @@
 								</el-form-item>
 							</template>
 						</el-table-column>
-						<el-table-column prop="serviceId" label="服务" align="center" width="180">
+						<el-table-column prop="serviceId" label="服务" align="center" width="280">
 							<template slot-scope="scope">
 								<el-form-item>
 									<el-input disabled v-model="scope.row.serviceCon">
@@ -190,7 +190,9 @@
 	</div>
 </template>
 <script>
+	//工作事项模板主表分类
 	import selectMainTableClassification from './select-main-table-classification';
+	//预览
 	import formIcon from '../../../views/collaborative-office/components/encapsulation/form-icon';
 	export default {
 		components: {
@@ -198,7 +200,9 @@
 			formIcon
 		},
 		props: {
+			//查看
 			showFigNum: String,
+			//值
 			context: Object
 		},
 		data() {
@@ -216,14 +220,13 @@
 				}],
 				//服务
 				tServiceByParams: [],
+				//切换子组件
 				showFigForm: false,
-				showFig: false,
+				//查看-置灰
 				showFigSee: false,
-				//选中行ID
-				rowClickId: "",
-				//弹出框
+				//弹出框-工作事项模板主表分类
 				dialogVisible: false,
-				dialogVisible_fieldLength: false,
+				//弹出框-服务
 				dialogVisible_TServiceByParams: false,
 				//服务 中间值
 				rowCon: {},
@@ -275,7 +278,7 @@
 						trigger: "blur"
 					}],
 				},
-				ruleFormTable: {},
+				//字段类型
 				fieldTypeList: this.$GLOBAL.fieldTypeList,
 				rowConNew: {
 					choice: false,
@@ -305,6 +308,7 @@
 					showNum: "",
 					//显示行数
 				},
+				//输入框整体内容
 				ruleForm: {
 					code: "",
 					name: "",
@@ -317,11 +321,17 @@
 					workItemTypeName: "",
 					lines: [],
 				},
+				//传入子组件的值
 				previewList: {
+					//form的label宽度
 					labelWidth: '100px',
+					//横向显示
 					inline: false,
+					//label位置
 					labelPosition: 'right',
+					//form大小
 					size: 'small',
+					//值
 					rowList: []
 				},
 				//公司
@@ -333,14 +343,16 @@
 				//工作事项
 				fieldBrowseList: [],
 				//公司部门职位的合集
-				allOrganizationInfo: []
+				allOrganizationInfo: [],
 			}
 		},
 		created() {
+			//showFigNum 等于 “3” 为查看
 			if(this.showFigNum == "3") {
 				this.showFigSee = true
 				this.ruleForm = this.context
 			}
+			//最上端公司选择
 			this.$api.collaborativeOffice.getCompanyData().then(data => {
 				this.CompanyData = data.data.data.rows
 				this.CompanyData.forEach(item => {
@@ -355,6 +367,7 @@
 			})
 			//全部服务
 			this.$api.collaborativeOffice.findTServiceByParams({}).then(data => {
+				console.log(data)
 				this.tServiceByParams = data.data.data
 			})
 			//工作事项
@@ -378,17 +391,30 @@
 						break;
 				}
 			},
+			//添加校验（显示的值的校验)
 			fieldTypeShow(item) {
 				this.rulesChild[item.field] = []
+				this.rulesChild[item.field + "Name"] = []
 				if(item.required) {
-					this.rulesChild[item.field].push({
-						required: true,
-						message: "请填写" + item.fieldName,
-						trigger: 'blur'
-					})
+					if(item.fieldType == 1) {
+						this.rulesChild[item.field + "Name"].push({
+							required: true,
+							message: "请填写" + item.fieldName,
+							trigger: 'blur'
+						})
+					} else {
+						this.rulesChild[item.field].push({
+							required: true,
+							message: "请填写" + item.fieldName,
+							trigger: 'blur'
+						})
+					}
+
 				}
+				//添加form动态表单的比对值fieldTypeName
 				switch(item.fieldType) {
 					//1浏览框、2字符型、3文本型、4整型、5浮点型、6富文本、7日期控件、8时间控件、9枚举项、10复选框
+					//重组浏览框内的显示数据
 					case "1":
 						//浏览框 : 一共有7种，其中1：公司，2：部门，3：职位可以共同使用同一个接口
 						var list = JSON.parse(JSON.stringify(this.allOrganizationInfo))
@@ -417,14 +443,6 @@
 							//职位（无需删除，保留原数据）
 						} else if(item.toSelect.id == 3) {
 							item.browseBoxList = list
-						} else if(item.toSelect.id == 4) {
-
-						} else if(item.toSelect.id == 5) {
-
-						} else if(item.toSelect.id == 6) {
-
-						} else if(item.toSelect.id == 7) {
-
 						}
 						return "browseBox"
 						break;
@@ -435,6 +453,7 @@
 						return "textType"
 						break;
 					case "4":
+						//添加整型校验
 						this.rulesChild[item.field].push({
 							pattern: /^-?[1-9]\d*$/,
 							message: '请输入正确的' + item.fieldName,
@@ -447,6 +466,7 @@
 						return "integers"
 						break;
 					case "5":
+						//添加浮点型校验
 						this.rulesChild[item.field].push({
 							pattern: /^([1-9]\d{0,15}|0)(\.\d{1,4})?$/,
 							message: '请输入正确的' + item.fieldName,
@@ -475,11 +495,39 @@
 			preview() {
 				this.$refs.ruleFormTable.validate((valid) => {
 					if(valid) {
+						//确认主表分类选定
 						if(this.ruleForm.workItemTypeName) {
+							//传走的校验置空，下面方法中重新添加
+							this.rulesChild = {}
 							var cur = []
 							let obj = {};
-							this.rulesChild = {}
-							this.ruleForm.lines.forEach(item => {
+							//循环判断是否有添加服务的字段名
+							this.ruleForm.lines.forEach((item, index1) => {
+								item.parameterList = []
+								//时间控件计算差值
+								this.ruleForm.lines.forEach(itemChild => {
+									//通过‘-’符号确定需要计算的两边
+									if(!this.noNull(itemChild.parameter) && itemChild.parameter.indexOf('-') != -1) {
+										//left right 分别是需要计算的两个值的字段名称
+										var index = itemChild.parameter.indexOf('-')
+										var left = itemChild.parameter.substring(0, index)
+										var right = itemChild.parameter.substring(index + 1)
+										//两个字段都要添加属性parameterList，里面存储需要计算的字段名和需要显示的字段名child
+										if(left == item.field || right == item.field) {
+											item.parameterList = {}
+											item.parameterList.left = left
+											item.parameterList.right = right
+											item.parameterList.child = itemChild.field
+										}
+									} else {
+										//发现被添加服务的字段后，绑定双方
+										if(itemChild.parameter == item.field) {
+											item.parameterList.push(itemChild.field)
+										}
+									}
+
+								})
+								//行序按照填写排序
 								item.fieldTypeName = this.fieldTypeShow(item)
 								if(obj[item.showNum]) {
 									cur.forEach(val => {
@@ -495,7 +543,7 @@
 									});
 								}
 							})
-							//按照行序进行排序
+							//列序按照填写排序
 							var index = 0
 							cur.sort((a, b) => {
 								a.colList.sort((a1, b1) => {
@@ -510,6 +558,7 @@
 								return a.showNum - b.showNum
 							})
 							this.previewList.rowList = cur
+							//打开预览页面
 							this.showFigForm = true
 						} else {
 							this.goOut("请选择主表分类")
@@ -520,22 +569,30 @@
 			//选择主表分类
 			getSelectMainTableClassification() {
 				this.ruleForm.lines = []
+				//判断是否选中
 				if(this.$refs.child.rowClick.id) {
+					//调用查看详情接口
 					this.$api.collaborativeOffice.getWorkItemTypeModel({
 						id: this.$refs.child.rowClick.id
 					}).then(data => {
-						console.log(data)
 						data.data.data.lines.forEach(item => {
+							//为每一条数据定义好字段
 							var con = JSON.parse(JSON.stringify(this.rowConNew))
+							//枚举
 							if(item.fieldType == 9) {
+								//前台显示用，查看字段内容
 								con.fieldContentName = item.fieldContentName
+								//获取枚举LIST里面和字段相同的内容，并放入数据中，为了在后面显示用
 								this.selectList.forEach(val => {
 									if(item.fieldContent == val.id) {
+										//resList 枚举的list
 										con.resList = val.resList
+										//枚举的ID
 										con.fieldContent = val.id
 									}
 								})
 							}
+							//浏览框，同上面枚举
 							if(item.fieldType == 1) {
 								con.fieldContentName = item.fieldContentName
 								this.fieldBrowseList.forEach(val => {
@@ -545,13 +602,16 @@
 									}
 								})
 							}
+							//获取其他字段，放入要传走的数据中
 							con.field = item.field
 							con.fieldName = item.fieldName
 							con.fieldType = item.fieldType
 							this.ruleForm.lines.push(con)
 						})
 					})
+					//主表分类名称显示
 					this.ruleForm.workItemTypeName = this.$refs.child.rowClick.name
+					//主表分类名称ID
 					this.ruleForm.workItemType = this.$refs.child.rowClick.id
 					this.dialogVisible = false
 				} else {
@@ -560,26 +620,24 @@
 			},
 			//获取服务
 			findTServiceByParams(rowCon) {
+				//服务中间值关联每一次打开的服务弹出框，修改this.rowCon 同时会修改行内容
 				this.rowCon = rowCon
 				this.dialogVisible_TServiceByParams = true
 			},
 			//服务--确定
 			getTServiceByParams() {
-				//				this.$api.collaborativeOffice.findTServiceItemByParams({
-				//					fcode: "service10",
-				//					fid: "BFPID000000LSN02D0"
-				//				}).then(data => {
-				//					console.log(data)
-				//				})
-				//				return
+				//服务显示名称
 				this.$set(this.rowCon, 'serviceCon', this.tServiceByParamsCon.fname)
+				//查询服务的参数：fid是根据条件查询的“条件” fcode是具体查询哪条服务的内容
 				this.$set(this.rowCon, 'serviceNow', {
-					fid: this.tServiceByParamsCon.foid,
+					fid: "",
 					fcode: this.tServiceByParamsCon.fcode
 				})
+				//行内添加服务ID，需要后台存储
 				this.rowCon.serviceId = this.tServiceByParamsCon.foid
 				this.dialogVisible_TServiceByParams = false
 			},
+			//提交/暂存（1：提交，2：暂存）
 			submitForm(formName) {
 				var msg = ""
 				if(formName == 1) {
@@ -589,7 +647,6 @@
 					this.ruleForm.status = 7
 					msg = "新增成功"
 				}
-				console.log(this.ruleForm)
 				this.$refs.ruleForm.validate((valid) => {
 					if(valid) {
 						this.$refs.ruleFormTable.validate((valid) => {
@@ -604,16 +661,13 @@
 					}
 				});
 			},
-			//新增
-			toFieldContent(row) {
-				this.dialogVisible = true
-			},
 			// 选中背景色
 			tableRowClassName({
 				row,
 				rowIndex
 			}) {
 				var color = ""
+				//如果选中行id与list的id相同，则选中行变色
 				if(row.foid == this.tServiceByParamsCon.foid) {
 					color = "warning-row"
 				}
@@ -621,7 +675,7 @@
 			},
 			//选中行
 			clickRow(row) {
-				console.log(row)
+				//绑定中间值
 				this.tServiceByParamsCon = row
 			},
 		}
