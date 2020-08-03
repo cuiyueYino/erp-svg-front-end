@@ -125,6 +125,68 @@ const processSet = {
         return httpReqest.post('/api/workFlow/handledTask', params);
     },
     //加批
+    addSign(params){
+        return httpReqest.post('/api/workFlow/addSign', params);
+    },
+    //已发事项查询
+    sendedTask(params){
+        return httpReqest.post('/api/workFlow/sendedTask', params);
+    },
+    //获取回收站数据
+    getRecycleBinList(params){
+        return httpReqest.post('/api/workFlow/getRecycleBinList', params);
+    },
+    //还原回收站代办邮件
+    reductionRecycleBin(params){
+        return httpReqest.post('/api/workFlow/reductionRecycleBin', params);
+    },
+    //流程业务查询
+    getProBusList(params){
+        return httpReqest.post('/api/workFlow/getProcessBussinessList', params);
+    },
+    //部门的详细数据查询
+    getdepartmentList(params){
+        return httpReqest.post('/api/workFlow/departmentSearch', params);
+    },
+    //查询角色列表
+    findRolePage(params){
+        return httpReqest.post('/api/workFlow/getRoles', params);
+    },
+    //查询状态信息
+    getStatus(params){
+        return httpReqest.post('/api/workFlow/getStatus', params);
+    },
+    //查询角色类别
+    findRoleType(params){
+        return httpReqest.post('/Lapi/interfaces/roleType/findRoleTypeList', params);
+    },
+    //查询公司
+    getCompanyData(params){
+        return httpReqest.post('/api/workFlow/getCompanyData', params);
+    },
+    //流程业务新增
+    saveProBusData(params){
+        return httpReqest.post('/api/workFlow/saveProcessBussiness', params);
+    },
+    //流程业务修改
+    updateProBusData(params){
+        return httpReqest.post('/api/workFlow/updateProcessBussiness', params);
+    },
+    //删除流程业务
+    delProBusData(params){
+        return httpReqest.post('/api/workFlow/delProcessBussinessList', params);
+    },
+    //获取某一条流程业务数据
+    getProBusData(params){
+        var valueS='?';
+        for(var item in params){
+            valueS+=item+"="+params[item]+"&";
+        }
+        if(valueS.slice(valueS.length-1,valueS.length) ==="&"){
+            valueS=valueS.slice(0,valueS.length-1);
+        }
+        return httpReqest.get('/api/workFlow/getProcessBussiness'+valueS);
+    },
 };
 
 export default processSet;

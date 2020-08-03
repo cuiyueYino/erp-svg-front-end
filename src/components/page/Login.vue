@@ -75,6 +75,9 @@ export default {
                 localStorage.setItem('ms_name',  '王世超');
                 if(usernameS==='OA'){
                     localStorage.setItem('ms_roleId',  '3');
+                }else if(usernameS==='CW'){
+                    //财务
+                    localStorage.setItem('ms_roleId',  '2');
                 }else{
                     localStorage.setItem('ms_roleId',  '0');
                 }
