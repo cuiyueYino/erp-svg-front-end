@@ -167,6 +167,13 @@ class ITEMData {
 						title: '用户授权'
 					},
 				]
+			},{
+				index: 'OaHome',
+				title: '门户首页',
+				subs: [{
+					index: 'oaCompanyHome',
+					title: '集团门户',
+				}]
 			},
 			{
 				index: 'menuManage',
@@ -238,7 +245,8 @@ class ITEMData {
 					}
 				]
 			}]
-		}];
+		}
+	];
 	};
 }
 export default ITEMData;

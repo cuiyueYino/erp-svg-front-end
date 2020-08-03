@@ -260,7 +260,6 @@ export default {
       
     },
     mounted() {
-        debugger;
         this.$api.management.selectAllOrganizationInfo().then(response => {
             let responsevalue = response;
             if (responsevalue) {
