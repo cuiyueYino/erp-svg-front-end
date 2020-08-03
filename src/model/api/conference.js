@@ -66,10 +66,6 @@ const confMangement = {
     },
 
     // 会议室使用详情Excel导出
-    confUsageDetailExport(params) {
-        return httpReqest.post('/api/interfaces/confOffice/confUsageDetailExport', params);
-    },
-    // 会议室使用详情Excel导出
     confUsageDetailExport() {
         httpReqest.post("/api/interfaces/confOffice/confUsageDetailExport", {}, {
             responseType: "blob", //设置响应的数据类型为一个包含二进制数据的 Blob 对象，必须设置！！！

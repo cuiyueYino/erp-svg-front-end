@@ -6,7 +6,7 @@
         <el-row :gutter="14">
           <el-col :span="4">
             <el-form-item label="会议室：" label-width="100px" prop="fconfname">
-              <el-input v-model="form.fconfname" :disabled="true" size="small" autocomplete="off"></el-input>
+              <el-input v-model="form.fconfname" :disabled="true" size="small" autocomplete="off" clearable></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="1" class="el-positionType">
@@ -20,7 +20,7 @@
           </el-col>
           <el-col :span="4">
             <el-form-item label="会议室地点：" label-width="100px" prop="fsite">
-              <el-input v-model="form.fsite" size="small" autocomplete="off"></el-input>
+              <el-input v-model="form.fsite" size="small" autocomplete="off" clearable></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="4">
@@ -67,20 +67,20 @@
           </el-col>
           <el-col :span="4">
             <el-form-item label="联系方式：" label-width="100px" prop="fphone">
-              <el-input v-model="form.fphone" size="small" autocomplete="off"></el-input>
+              <el-input v-model="form.fphone" size="small" autocomplete="off" clearable></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="4">
             <el-form-item label="对内对外：" label-width="100px" prop="fexternal">
-              <el-select v-model="form.fexternal" placeholder="请选择" size="small">
-                <el-option label="是" value="1"></el-option>
-                <el-option label="否" value="0"></el-option>
+              <el-select v-model="form.fexternal" placeholder="请选择" clearable size="small">
+                <el-option label="对外" value="1"></el-option>
+                <el-option label="对内" value="0"></el-option>
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="4">
             <el-form-item label="重要程度：" label-width="100px" prop="fimportance">
-              <el-select v-model="form.fimportance" placeholder="请选择" size="small">
+              <el-select v-model="form.fimportance" placeholder="请选择" clearable size="small">
                 <el-option label="重要" value="1"></el-option>
                 <el-option label="一般" value="0"></el-option>
               </el-select>
@@ -170,7 +170,7 @@
           class="office_usage"
         ></el-table-column>
         <el-table-column
-          prop="fimportance"
+          prop="fimportanceValue"
           label="重要程度"
           show-overflow-tooltip
           width="135"
@@ -266,17 +266,18 @@ export default {
       this.getTableData("");
     },
     // 查询
-    search() {},
+    search() {
+      this.getTableData();
+    },
     // 导出
     upload() {
       this.$api.confMangement.confUsageDetailExport();
     },
     // 获取表格数据
     getTableData() {
-      let data = {
-        page: this.pageNum,
-        size: this.pageSize,
-      };
+      let data = this.form;
+      data.page = this.pageNum;
+      data.size = this.pageSize;
       this.$api.confMangement.getConfUsageDetail(data).then(
         (res) => {
           let resRows = res.data.data.rows;
