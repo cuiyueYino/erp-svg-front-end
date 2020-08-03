@@ -181,21 +181,22 @@
 			</el-dialog>
 		</div>
 		<div v-if="showFigForm">
-			<formIcon :form-data="conData">
+			<formAndTable :form-data="conData">
 				<el-row style="text-align: right;margin-bottom: 10px;">
 					<el-button icon="el-icon-arrow-left" size="mini" type="danger" plain @click="showFigForm = false">返回</el-button>
 				</el-row>
-			</formIcon>
+			</formAndTable>
 		</div>
 	</div>
 </template>
 <script>
 	import selectMainTableClassification from './select-main-table-classification';
-	import formIcon from '../../../views/collaborative-office/components/encapsulation/form-icon';
+	//预览
+	import formAndTable from './form-and-table';
 	export default {
 		components: {
 			selectMainTableClassification,
-			formIcon
+			formAndTable
 		},
 		props: {
 			context: Object
@@ -327,7 +328,7 @@
 						size: 'small',
 						//值
 						rowList: []
-					},
+					}
 				},
 				//公司
 				CompanyData: [],
@@ -533,7 +534,7 @@
 								}
 								return a.showNum - b.showNum
 							})
-							this.previewList.rowList = cur
+							this.conData.top.rowList = cur
 							//打开预览页面
 							this.showFigForm = true
 						} else {

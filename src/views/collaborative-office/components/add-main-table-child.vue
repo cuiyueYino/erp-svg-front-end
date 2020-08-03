@@ -3,7 +3,7 @@
 		<div v-if="!showFigForm">
 			<el-card class="box-card">
 				<el-row>
-					<el-col :span="23">工作事项模板子表</el-col>
+					<el-col :span="23">工作事项模板子表-新增</el-col>
 					<el-col :span="1" style="text-align: right;">
 						<el-button type="danger" @click="$parent.toSelect()" size="mini" icon="el-icon-close"></el-button>
 					</el-col>
@@ -54,7 +54,7 @@
 					<el-row>
 						<el-col :span="6">
 							<el-form-item prop="type" label="子表类型">
-								<el-select style="width: 110%;" :disabled="showFigSee" size='mini' v-model="ruleForm.type" placeholder="子表类型">
+								<el-select @change="getType" style="width: 110%;" :disabled="showFigSee" size='mini' v-model="ruleForm.type" placeholder="子表类型">
 									<el-option v-for="item in typeList" :key="item.id" :label="item.name" :value="item.id">
 									</el-option>
 								</el-select>
@@ -111,7 +111,7 @@
 						<el-table-column prop="lengthType" label="字段长度类型" align="center" width="180">
 							<template slot-scope="scope">
 								<el-form-item :prop="'lines[' + scope.$index + '].lengthType'" :rules="rulesTable.lengthType">
-									<el-select :disabled="showFigSee" style="width: 100%;" v-model="scope.row.lengthType" placeholder="字段长度类型">
+									<el-select :disabled="showFigSee || showType" style="width: 100%;" v-model="scope.row.lengthType" placeholder="字段长度类型">
 										<el-option v-for="item in lengthTypeList" :key="item.id" :label="item.name" :value="item.id"></el-option>
 									</el-select>
 								</el-form-item>
@@ -141,7 +141,7 @@
 						<el-table-column prop="showNum" label="显示行数" align="center">
 							<template slot-scope="scope">
 								<el-form-item :prop="'lines[' + scope.$index + '].showNum'" :rules="rulesTable.showNum">
-									<el-input :disabled="showFigSee" v-model="scope.row.showNum" placeholder=""></el-input>
+									<el-input :disabled="showFigSee || showType" v-model="scope.row.showNum" placeholder=""></el-input>
 								</el-form-item>
 							</template>
 						</el-table-column>
@@ -245,6 +245,8 @@
 		},
 		data() {
 			return {
+				//子表类型
+				showType: false,
 				//子表类型
 				typeList: [{
 					id: "1",
@@ -391,7 +393,8 @@
 					creator: localStorage.getItem('ms_userId'),
 					company: "",
 					lines: [],
-				}, //传入子组件的值
+				},
+				//传入子组件的值
 				conData: {
 					top: {
 						//form的label宽度
@@ -462,6 +465,43 @@
 			})
 		},
 		methods: {
+			//子表类型（校验不同）
+			getType(type) {
+				this.$nextTick(() => {
+					this.$refs.ruleFormTable.resetFields();
+				})
+				if(type == 2) {
+					this.showType = true
+					this.rulesTable = {
+						lengthType: [],
+						orderNum: [{
+							required: true,
+							message: "请输入显示顺序",
+							trigger: "blur"
+						}],
+						showNum: []
+					}
+				} else {
+					this.showType = false
+					this.rulesTable = {
+						lengthType: [{
+							required: true,
+							message: "请选择字段长度类型",
+							trigger: "blur"
+						}],
+						orderNum: [{
+							required: true,
+							message: "请输入显示顺序",
+							trigger: "blur"
+						}],
+						showNum: [{
+							required: true,
+							message: "请填写显示行数",
+							trigger: "blur"
+						}]
+					}
+				}
+			},
 			//选择主表模板-确认
 			getDialogVisible() {
 				//主表模板名称
@@ -558,6 +598,17 @@
 				let obj = {};
 				//循环判断是否有添加服务的字段名
 				rowConList.forEach((item, index1) => {
+					this.tServiceByParams.forEach(val => {
+						if(item.serviceId != null && item.serviceId == val.foid) {
+							//服务显示名称
+							this.$set(item, 'serviceCon', val.fname)
+							//查询服务的参数：fid是根据条件查询的“条件” fcode是具体查询哪条服务的内容
+							this.$set(item, 'serviceNow', {
+								fid: "",
+								fcode: val.fcode
+							})
+						}
+					})
 					item.parameterList = []
 					//时间控件计算差值
 					rowConList.forEach(itemChild => {
@@ -696,6 +747,7 @@
 				this.$refs.ruleFormTable.validate((valid) => {
 					if(valid) {
 						this.conData.bottom[0].label = this.ruleForm.showName
+						this.conData.bottom[0].type = this.ruleForm.type
 						//确认子表分类选定
 						if(this.ruleForm.workItemTypeSubName) {
 							var cur = []
@@ -741,6 +793,7 @@
 										colList: [item]
 									});
 								}
+
 							})
 							//列序按照填写排序
 							var index = 0
@@ -764,7 +817,6 @@
 						}
 					}
 				});
-				console.log(this.conData)
 			},
 			//选择子表分类
 			getSelectMainTableClassification() {
