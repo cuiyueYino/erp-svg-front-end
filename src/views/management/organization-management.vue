@@ -260,7 +260,6 @@ export default {
       
     },
     mounted() {
-        debugger;
         this.$api.management.selectAllOrganizationInfo().then(response => {
             let responsevalue = response;
             if (responsevalue) {
@@ -374,16 +373,22 @@ export default {
         },
         //删除
         remove(){
-            let selectData=this.NodeClickData;
-            if(selectData.fstruid){
-                let fromdata={};
-                fromdata.fstruid=selectData.fstruid;
-                this.$api.management.deleteOrganizationInfo(fromdata).then(response => {
-                    let responsevalue = response;
-                    this.$message.success('删除成功!');
-                    this.reload();
-                });
-            } 
+            this.$confirm('确定要删除这条信息吗?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+                }).then(() => {
+                    let selectData=this.NodeClickData;
+                    if(selectData.fstruid){
+                        let fromdata={};
+                        fromdata.fstruid=selectData.fstruid;
+                        this.$api.management.deleteOrganizationInfo(fromdata).then(response => {
+                            let responsevalue = response;
+                            this.$message.success('删除成功!');
+                            this.reload();
+                        });
+                    } 
+                })
         },
         //作废
         tovoid(){
@@ -530,6 +535,22 @@ export default {
             this.disabled=false;
             this.CeateTypeflag='EDIT';
         },
+        //保存数据检查
+        checkData(tempData){
+            if(tempData.fcode.length > 50){
+                this.$message.error('编号长度不能大于50！');
+                return true;
+            }
+            if(tempData.fname.length > 100){
+                this.$message.error('名称长度不能大于100！');
+                return true;
+            }
+            if(tempData.fremark != null && tempData.fremark.length > 100){
+                this.$message.error('简称长度不能大于100！');
+                return true;
+            }
+            return false;
+        },
         //保存公司、部门，职务
         saveCDD(){
             let SelectData=this.NodeClickData;
@@ -561,6 +582,10 @@ export default {
                         fromdata.fremark=this.ConformData.fremark;
                     }else{
                         fromdata.fremark="";
+                    }
+                    //长度检查
+                    if (this.checkData(this.ConformData)){
+                        return;
                     }
                     fromdata.fcreator=localStorage.getItem('ms_userId');
                     if(saveflag === true){
@@ -608,6 +633,10 @@ export default {
                         fromdata.fremark=this.DepformData.fremark;
                     }else{
                         fromdata.fremark="";
+                    }
+                    //长度检查
+                    if (this.checkData(this.DepformData)){
+                        return;
                     }
                     if(this.DepformData.vicePresidentName){
                         fromdata.vicePresidentId=this.DepformData.vicePresidentName;
@@ -680,6 +709,10 @@ export default {
                         fromdata.responsibility=this.DutformData.responsibility;
                     }else{
                         fromdata.responsibility= '';  
+                    }
+                    //长度检查
+                    if (this.checkData(this.DutformData)){
+                        return;
                     }
                     fromdata.fcreator=localStorage.getItem('ms_userId');
                     if(saveflag === true){
