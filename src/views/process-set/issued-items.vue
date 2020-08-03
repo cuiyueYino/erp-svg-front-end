@@ -4,16 +4,16 @@
         <el-card class="box-table">
            <el-row :gutter="24">
                <el-col :span="14">
-                    <el-button type="primary" plain @click="onSubmit('day')">当日</el-button>
-                    <el-button type="primary" plain @click="onSubmit('week')">本周</el-button>
-                    <el-button type="primary" plain @click="onSubmit('month')" >本月</el-button>
+                    <el-button type="primary" plain @click="onSerchSubmit('day')">当日</el-button>
+                    <el-button type="primary" plain @click="onSerchSubmit('week')">本周</el-button>
+                    <el-button type="primary" plain @click="onSerchSubmit('month')" >本月</el-button>
                 </el-col>
                  <el-col :span="10">
-                     <el-button type="primary" icon="el-icon-refresh" plain @click="carsh">刷新</el-button>
+                     <el-button type="primary" icon="el-icon-refresh" plain @click="Basecarsh">刷新</el-button>
                      <el-button type="primary" icon="el-icon-search" plain @click="search">查询</el-button>
-                     <el-button type="primary" icon="el-icon-document"  plain @click="look">查看</el-button>
-                     <el-button type="primary" icon="el-icon-share" plain @click="forward">转发</el-button>
-                     <el-button type="primary" icon="el-icon-view" plain @click="attention">关注</el-button>
+                     <el-button type="primary" icon="el-icon-document"  plain @click="Tolook">查看</el-button>
+                     <el-button type="primary" icon="el-icon-share" plain @click="baseInputTable">转发</el-button>
+                     <el-button type="primary" icon="el-icon-view" plain @click="basefollow">关注</el-button>
                  </el-col>
             </el-row>
         </el-card>
@@ -27,6 +27,7 @@
                 :page-size="pageSize"
                 @current-change="onCurrentChange"
                 @selection-change="onSelectionChange"
+                :tableRowClassName="tableRowClassName"
                 v-loading="false"
                 element-loading-text="加载中"
             ></dynamic-table>
@@ -43,9 +44,9 @@
                  <el-row :gutter="24" >
                  <el-col :span="22" class="box-card" :offset="2">
                             <el-form-item label="来源单据公司" label-width="120px">
-                                <el-select v-model="DataForm.WFMtype" clearable placeholder="请选择">
+                                <el-select v-model="DataForm.srcCompany" clearable placeholder="请选择">
                                     <el-option
-                                    v-for="item in options"
+                                    v-for="item in companyoptions"
                                     :key="item.value"
                                     :label="item.label"
                                     :value="item.value">
@@ -55,30 +56,30 @@
                  </el-col>
                    <el-col :span="22" class="box-card" :offset="2">
                              <el-form-item label="业务数据" label-width="120px">
-                                <el-select v-model="DataForm.WFMtype" clearable placeholder="请选择">
+                                <el-select v-model="DataForm.metaClass" clearable placeholder="请选择">
                                     <el-option
-                                    v-for="item in options"
-                                    :key="item.value"
-                                    :label="item.label"
-                                    :value="item.value">
-                                    </el-option>
+                                    v-for="item in WFMtypeoptions"
+                                    :key="item.foid"
+                                    :label="item.fname"
+                                    :value="item.foid"
+                                    ></el-option>
                                 </el-select>
                             </el-form-item>
                    </el-col>
                     <el-col :span="22" :offset="2">
                             <el-form-item label="业务工作" label-width="120px">
-                                <el-input clearable v-model="DataForm.documentNo" placeholder="请输入条件值"></el-input>
+                                <el-input clearable v-model="DataForm.activityName" placeholder="请输入条件值" class="Carfiles"></el-input>
                             </el-form-item>
                     </el-col>
                      <el-col :span="22" :offset="2">
                             <el-form-item label="主题" label-width="120px">
-                                <el-input clearable  v-model="DataForm.documentNo" placeholder="请输入条件值"></el-input>
+                                <el-input clearable  v-model="DataForm.subject" placeholder="请输入条件值" class="Carfiles"></el-input>
                             </el-form-item>
                      </el-col>
                       <el-col :span="22" :offset="2">
                             <el-form-item label="接收时间" label-width="120px">
                                 <el-date-picker
-                                      v-model="DataForm.docDateStart"
+                                      v-model="DataForm.receiveTimeFrom"
                                       type="datetimerange"
                                       range-separator="至"
                                       start-placeholder="开始日期"
@@ -89,16 +90,16 @@
                       </el-col>
                        <el-col :span="22" :offset="2">
                             <el-form-item label="发起人" label-width="120px">
-                                <el-input clearable  v-model="DataForm.documentNo" placeholder="请输入条件值"></el-input>
+                                <el-input clearable  v-model="DataForm.displaystartMan" placeholder="请输入条件值" class="Carfiles"></el-input>
                                  <img class="icon-search"  
-                                    @click="workSearch"
+                                    @click="MoreSearchPS(DataForm)"
                                     src="../../assets/img/search.svg">
                             </el-form-item>
                        </el-col>
                         <el-col :span="22" :offset="2">
                             <el-form-item label="发起时间" label-width="120px">
                                 <el-date-picker
-                                    v-model="DataForm.docDateStart"
+                                    v-model="DataForm.startTimeFrom"
                                      type="datetimerange"
                                       range-separator="至"
                                       start-placeholder="开始日期"
@@ -109,7 +110,7 @@
                         </el-col>
                          <el-col :span="22" :offset="2">
                             <el-form-item label="超时" label-width="120px">
-                               <el-radio-group v-model="DataForm.radio">
+                               <el-radio-group v-model="DataForm.overTime">
                                 <el-radio :label="1">是</el-radio>
                                 <el-radio :label="0">否</el-radio>
                             </el-radio-group>
@@ -122,124 +123,109 @@
                 <el-button type="primary" @click="addSubmit('form')" size="medium">确 定</el-button>
             </div>
         </el-dialog>
-        <!-- 部门弹出框 -->
-        <pro-bus-dialog :visible="proBusDialogF" :title="titleStr" :type="userType"  @closeDialog="closeBaseInfo"></pro-bus-dialog>
-       
+        <PSpage  :rowPSDataObj="rowPSDataObj" :rowPStype="rowPStype" @changeShow="showORhideForPS"/>
+        <baseInfoDialog  :rowUTSDataObj="rowUTSDataObj" :rowUTStype="rowUTStype" @changeShow="closeBaseInfo"/>
+        <WAApage  :rowWAADataObj="rowWAADataObj" :rowWAAtype="rowWAAtype" @changeShow="showORhideForWAA"/>
     </div>
 </template>
 
 <script>
 import DynamicTable from '../../components/common/dytable/dytable.vue';
-import proBusDialog from './proces-busines-dialog';
-
+import proData from '../../components/common/proData/proData';
+import PSpage from '../comment/personnel-search.vue';
+import WAApage from './warehousing-applicant-approval.vue';
+import baseInfoDialog from './user-tree-search.vue';
 export default {
     name:'issuedItems',
     components: {
       DynamicTable,
-      proBusDialog,
+      WAApage,
+      baseInfoDialog,
+      PSpage,
     },
+    inject: ['reload'],
     data() {
         return {
             homeTitle:'',
             userType:'',
             rowDStype:false,
             rowDSDataObj:{},
-            proBusDialogF:false,
-            proApartDialogF:false,
-            dialogFormVisible:false,
+            rowPSDataObj:{},
+            rowWAADataObj:{},
+            rowUTSDataObj:{},
+            rowPStype:false,
+            rowUTStype:false,
+            rowWAAtype:false,
             dialogWFMVisible:false,
             titleStr:'',
             formCode:'',
             pageNum: 1,
             pageSize: 10,
             total: 20,
-            columns: [
-            {
-                type: 'selection'
-            },
-            {
-                key: 'fcode',
-                title: '用户名称'
-            },
-            {
-                key: 'fname',
-                title: '角色'
-            },
-           
-        ],
         columns1: [
             {
                 type: 'selection'
             },
             {
-                key: 'fcode',
+                key: 'fstatus',
                 title: '状态'
             },
             {
-                key: 'fname',
+                key: 'fsrcCompany',
                 title: '单据类型'
             },
              {
-                key: 'fcode',
+                key: 'factivityName',
                 title: '业务工作'
             },
             {
-                key: 'fname',
+                key: 'freceiveTime',
                 title: '发起时间'
             },
              {
-                key: 'fcode',
+                key: 'fpreAddresser',
                 title: '当前审批人'
             },
             {
-                key: 'fname',
+                key: 'fsubject',
                 title: '主题'
             },
              {
-                key: 'fcode',
+                key: 'fpreReceiveTime',
                 title: '审批人接收时间'
             },
             {
-                key: 'fname',
+                key: 'fmaxWorkTime',
                 title: '标准用时'
             },
              {
-                key: 'fname',
+                key: 'takeTime',
                 title: '已耗时'
             },
              {
-                key: 'fname',
+                key: 'repeat',
                 title: '转发人'
             },
              {
-                key: 'fcode',
+                key: 'repeatTime',
                 title: '转发时间'
             },
             {
-                key: 'fname',
+                key: 'trustMan',
                 title: '委托人'
             },
              {
-                key: 'fname',
+                key: 'trustTime',
                 title: '委托时间'
             },
            
         ],
         tableData:[],
         options:[],
+        companyoptions: new proData().company,
         WFMtypeoptions:[],
         multipleSelection: [],
         checked:false,
-         form: {
-          name: '',
-          region: '',
-          date1: '',
-          date2: '',
-          delivery: false,
-          type: [],
-          resource: '',
-          fremark: ''
-        },
         DataForm: {
                 WFMtype: '',
                 radio: 1,
@@ -265,37 +251,224 @@ export default {
     },
     
     created(){
-        this.$nextTick(()=>{
-            this.getTableData('')
-        })
+        let fromdata={};
+        fromdata.infosBeginNum=1;
+        fromdata.infosEndNum=this.pageSize;
+        fromdata.userId=localStorage.getItem("ms_userId")
+        this.getIssuedItems(fromdata);
+        //查找业务数据
+        let fromdata1={};
+        this.getmetaClass(fromdata1);
     },
     computed:{
         
     },
     methods:{
-        //业务工作弹窗
-        workSearch(){
-            this.titleStr = '部门查询'
-             this.proBusDialogF = true;
-              this.userType = ''
-            //  this.showBaseInfo = false;
-             // 业务工作-搜索枚举项
-            // this.workSearchOption()
-            // this.workSearchTable()
+        //根据状态改背景色
+        tableRowClassName({ row }) {
+            if (row.fstatus === '暂停') {
+                return 'gray';
+            } else if (row.fstatus === '已作废') {
+                return 'red';
+            } else if (row.fstatus === '已完结') {
+                return 'green';
+            }
+            return '';
         },
-        joinSearch(Str){
-            this.titleStr = '新建用户&角色'
-             this.proBusDialogF = true;
-             this.userType = Str
+        //查找业务数据
+        getmetaClass(data){
+            let fromdata=data;
+            this.$api.processSet.getProcessClass(fromdata).then(response => {
+                let responsevalue = response;
+                if (responsevalue) {
+                    let returndata = responsevalue.data;
+                    this.WFMtypeoptions=returndata.data.rows;
+                } else {
+                    this.$message.success('数据库没有该条数据!');
+                }
+            });
         },
-        saveConfig(){
-
+        //已发事项查询
+        getIssuedItems(data){
+            let fromdata=data;
+            this.$api.processSet.sendedTask(fromdata).then(response => {
+                let responsevalue = response;
+                if (responsevalue) {
+                    let returndata = responsevalue.data;
+                    if(returndata.data){
+                        let tableArr=returndata.data.rows;
+                        this.tableData=tableArr;
+                        this.total=returndata.data.total;
+                    }else{
+                        this.tableData=[];
+                        this.total=0;
+                    }
+                    this.dialogWFMVisible=false;
+                } else {
+                    this.$message.success('数据库没有该条数据!');
+                }
+            }); 
         },
-        cancelConfig(){
-            this.dialogFormVisible = false;
+        //查询发起人员
+        MoreSearchPS(data){
+            this.rowPStype = true;
+            let finandata=data;
+            finandata.finanrowname="人员缺省查询方案";
+            finandata.finanrowId="QS_0056";
+            finandata.nametitle="工作流监控";
+            this.rowPSDataObj=finandata;
         },
-         closeBaseInfo(){
-            this.proBusDialogF = false;
+        //获取人员查询结果
+        showORhideForPS(data,type){
+            if(type === false){
+                this.rowPStype = false
+            }else{
+                this.rowPStype = true
+            }
+            if(data.selectOptionID){
+                this.DataForm.displaystartMan=data.selectOptionName;
+                this.DataForm.displaystartManId=data.selectOptionID;
+                this.DataForm.displaystartMancode=data.selectOptionCode;
+            }
+        },
+        //查询按钮点击事件
+        addSubmit(){
+            let fromdata={};
+            fromdata.page=this.pageNum;
+            fromdata.size=this.pageSize;
+            let CompanyS=this.DataForm.srcCompany;
+            if(CompanyS && CompanyS!=''){
+                fromdata.srcCompany=this.DataForm.srcCompany;
+            }
+            let MetaCS=this.DataForm.metaClass;
+            if(MetaCS && MetaCS!=''){
+                fromdata.metaClass=this.DataForm.metaClass;
+            }
+            let activNS=this.DataForm.activityName;
+            if(activNS && activNS!=''){
+                fromdata.activityName=this.DataForm.activityName;
+            }
+            let subjectS=this.DataForm.subject;
+            if(subjectS && subjectS!=''){
+                fromdata.subject=this.DataForm.subject;
+            }
+            let receTime= this.DataForm.receiveTimeFrom;
+            if(receTime && receTime!=''){
+                if(receTime[0]){
+                    fromdata.receiveTimeFrom=receTime[0];
+                }
+                if(receTime[1]){
+                    fromdata.receiveTimeTo=receTime[1];
+                }
+            }
+            let dispsMS=this.DataForm.displaystartMan;
+            if(dispsMS && dispsMS!=''){
+                fromdata.displaystartMan=this.DataForm.displaystartManId;
+            }
+            let startTime= this.DataForm.startTimeFrom;
+            if(startTime && startTime!=''){
+                if(startTime[0]){
+                    fromdata.startTimeFrom=startTime[0];
+                }
+                if(startTime[1]){
+                    fromdata.startTimeTo=startTime[1];
+                }
+            }
+            let overTimeS=this.DataForm.overTime;
+            if(overTimeS && overTimeS!=''){
+                fromdata.overTime=this.DataForm.overTime;
+            }
+            this.getIssuedItems(fromdata);
+        },
+        //转发按钮点击事件
+        baseInputTable(data){
+            if(this.multipleSelection.length > 1){
+                this.$message.error('只能选择一个');
+            }else if(this.multipleSelection.length == 0){
+                this.$message.error('请选择一项');
+            }else{
+                this.rowUTStype = true;
+                let finandata={};
+                finandata.finanrowname="人员缺省查询方案";
+                finandata.finanrowId="QS_0056";
+                finandata.nametitle="待办事项";
+                finandata.SelectionData=this.multipleSelection;
+                finandata.FunctionType=data;
+                this.rowUTSDataObj=finandata;
+            };
+        },
+        closeBaseInfo(data){
+            if(data === false){
+                this.rowUTStype = false
+            }else{
+                this.rowUTStype = true
+            }
+        },
+        //查询已发事项
+        search(){
+           this.dialogWFMVisible =true;
+        },
+        //查看
+        Tolook(){
+            if(this.multipleSelection.length > 1){
+                this.$message.error('只能选择一个');
+            }else if(this.multipleSelection.length == 0){
+                this.$message.error('请选择一项');
+            }else{
+                let selectData=this.multipleSelection;
+                let finandata={};
+                finandata.selectData=selectData;
+                finandata.finanrowname="人员缺省查询方案";
+                finandata.finanrowId="QS_0056";
+                finandata.nametitle="入库申请申请人审批";
+                this.rowWAADataObj=finandata;
+                this.rowWAAtype=true;
+                this.financingLFCAtype=true;
+            }
+        },
+        //查看详情页返回事件
+        showORhideForWAA(data){
+            if(data === false){
+                this.rowWAAtype = false
+            }else{
+                this.rowWAAtype = true
+            }
+        },
+        //刷新
+        Basecarsh(){
+            this.reload();
+        },
+        //关注点击事件
+        basefollow(){
+            if(this.multipleSelection.length > 1){
+                this.$message.error('只能选择一个');
+            }else if(this.multipleSelection.length == 0){
+                this.$message.error('请选择一项');
+            }else{
+                let selectData=this.multipleSelection;
+                let subject=selectData[0].fsubject;
+                if(subject.indexOf('转发')>-1){
+                    this.$message.error('转发邮件不能添加关注!');
+                }else if(subject.indexOf('抄送')>-1){
+                    this.$message.error('抄送邮件不能添加关注!');
+                }else if(subject.indexOf('加签')>-1){
+                    this.$message.error('加签邮件不能添加关注!');
+                }else{
+                    let fromdata={};
+                    fromdata.fvoucherOid=selectData[0].fsrcoId;
+                    fromdata.fattentionOid=localStorage.getItem("ms_userId");
+                    this.$api.processSet.addAttention(fromdata).then(response => {
+                        let responsevalue = response;
+                        if (responsevalue) {
+                            let returndata = responsevalue.data;
+                            this.$message.success('添加关注成功!');
+                            this.reload();
+                        } else {
+                            this.$message.success('数据库没有该条数据!');
+                        }
+                    });
+                }  
+            }
         },
         //多选
         onSelectionChange(val) {
@@ -303,160 +476,19 @@ export default {
         },
         //分页、下一页
         onCurrentChange(val){
-             this.pageNum = val;
-            this.getTableData('')
+            let fromdata={};
+            fromdata.infosBeginNum=(val-1)*10;
+            fromdata.infosEndNum=val*10;
+            fromdata.userId=localStorage.getItem("ms_userId")
+            this.getIssuedItems(fromdata);
         },
-        workSearch(){
-
-        },
-         
-        // 搜索
-        onSubmit(Str){
-            
-        },
-        search(){
-           this.dialogWFMVisible =true;
-        },
-        carsh(){
-            
-        },
-        look(){
-            
-        },
-        forward(){
-
-        },
-        attention(){
-
-        },
-        // 获取表格数据
-        getTableData(params){
-            let data = {
-                fcode: params,
-                page:this.pageNum,
-                size:this.pageSize
-            };
-            this.$api.processSet.getTableData(data).then(res=>{
-                this.tableData = res.data.data.rows
-                for(let i in this.tableData){
-                    switch ( this.tableData[i].fstatus) {
-                        case 3:
-                             this.tableData[i].fstatus = '禁用'
-                             break;
-                        case 8:
-                             this.tableData[i].fstatus = '生效'
-                             break;
-                        default:
-                            break;
-                    }
-                    switch ( this.tableData[i].fsubprocess) {
-                    case 1:
-                            this.tableData[i].fsubprocess = '是'
-                            break;
-                    case 0:
-                            this.tableData[i].fsubprocess = '否'
-                            break;
-                    default:
-                        break;
-                }
-                }
-            },error=>{
-                console.log(error)
-            })
-        },
-        //新增
-        add(Str){
-            this.homeTitle = Str
-            this.dialogFormVisible = true
-            
-        },
-        addSubmit(formName){
-             this.$refs[formName].validate((valid) => {
-                if (valid) {
-                    this.$api.processSet.addSubmit(this.form).then(res=>{
-                        if(res.data.data.msg = "success"){
-                            this.dialogFormVisible = false
-                            this.$message.success('新增成功');
-                            //刷新表格
-                            this.getTableData('')
-                        }
-                    }),error=>{
-                        console.log(error);
-                    }
-                } else {
-                    console.log('error submit!!');
-                    return false;
-                }
-             });
-
-        },
-        //删除
-        deleteMsg(){
-            if(this.multipleSelection.length > 1){
-                 this.$message.error('只能选择一个删除');
-                 return;
-            }
-            this.$api.processSet.deleteMsg(this.multipleSelection[0].foid).then(res=>{
-                    if(res.data.data.msg = "success"){
-                        this.$message.success('删除成功');
-                        //刷新表格
-                        this.getTableData('')
-                    }
-                }),error=>{
-                    console.log(error);
-                }
-        },
-         //生效/禁用
-        effectOrDisableMsg(){
-            let status = this.multipleSelection[0];
-            if(this.multipleSelection.length > 1){
-                 this.$message.error('只能选择一个删除');
-                 return;
-            }else if(this.multipleSelection.length = 0){
-                this.$message.error('请选择一项删除');
-                 return;
-            };
-            
-            switch (status.fstatus) {
-                case '生效':
-                    status.fstatus = 3
-                    break;
-                case '禁用':
-                    status.fstatus = 8
-                    break;
-                default:
-                    break;
-            }
-            let data = {
-                foid  : status.foid,
-                status  : status.fstatus
-            }
-            this.$api.processSet.effectOrDisable(data).then(res=>{
-                    if(res.data.data.msg = "success"){
-                        this.$message.success('操作成功');
-                        //刷新表格
-                        this.getTableData('')
-                       
-                    }
-                }),error=>{
-                    console.log(error);
-                }
-        },
-        toEdit(){
-             if(this.multipleSelection.length > 1){
-                 this.$message.error('只能选择一个编辑');
-                 return;
-            }else if(this.multipleSelection.length = 0){
-                this.$message.error('请选择一项编辑');
-                 return;
-            };
-             this.$router.push({
-                name:"svgIndex",
-                params:{
-                    data: this.multipleSelection[0]
-                    }
-             })
-            
+        onSerchSubmit(formName){
+            let fromdata={};
+            fromdata.infosBeginNum=0;
+            fromdata.infosEndNum=10;
+            fromdata.userId=localStorage.getItem("ms_userId");
+            fromdata.buttonQuery=formName;
+            this.getIssuedItems(fromdata);
         },
     },
 }
@@ -468,8 +500,8 @@ export default {
 /deep/ .el-select{
     width: 70%;
 }
- /deep/ .el-input{
-         width: 70%;
+ .Carfiles{
+     width: 70%;
  }
  /deep/ .el-textarea .el-input__count{
      background: #fff0;
@@ -477,16 +509,8 @@ export default {
  /deep/ .el-textarea{
       width: 70%;
  }
- /deep/ .el-input__inner{
-         width: 466px;
- }
 .box-table:first-child{
     margin-bottom: 16px;
-}
-.box-card{
-    /deep/ .el-input{
-        width: 100%;
-    }
 }
 
 .search-all{

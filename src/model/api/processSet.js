@@ -63,19 +63,19 @@ const processSet = {
     },
     //获取待办事项
     getunhandledTask(params){
-        return httpReqest.post('/api/workFlow/unhandledTask', params);
+        return httpReqest.post('/api/wfInterfaces/workFlow/unhandledTask', params);
     },
     //部门的详细数据查询
     getdepaSearch(params){
-        return httpReqest.post('/api/workFlow/departmentSearch', params);
+        return httpReqest.post('/api/wfInterfaces/workFlow/departmentSearch', params);
     },
     //发起人详细数据查询
     getaddresserSearch(params){
-        return httpReqest.post('/api/workFlow/addresserSearch', params);
+        return httpReqest.post('/api/wfInterfaces/workFlow/addresserSearch', params);
     },
     //查找业务数据workFlow/getProcessClass
     getProcessClass(params){
-        return httpReqest.post('/api/workFlow/getProcessClass', params);
+        return httpReqest.post('/api/wfInterfaces/workFlow/getProcessClass', params);
     },
     //公司部门人员树
     getUserTreeData(params){
@@ -86,43 +86,43 @@ const processSet = {
         if(valueS.slice(valueS.length-1,valueS.length) ==="&"){
             valueS=valueS.slice(0,valueS.length-1);
         }
-        return httpReqest.get('/api/workFlow/findCompanyDeptStaffInfoByOrgUnitIdFromRedis'+valueS);
+        return httpReqest.get('/api/wfInterfaces/workFlow/findCompanyDeptStaffInfoByOrgUnitIdFromRedis'+valueS);
     },
     //待办事项-转发
     setencyclic(params){
-        return httpReqest.post('/api/workFlow/encyclic', params);
+        return httpReqest.post('/api/wfInterfaces/workFlow/encyclic', params);
     },
     //委托
     transmit(params){
-        return httpReqest.post('/api/workFlow/transmit', params);
+        return httpReqest.post('/api/wfInterfaces/workFlow/transmit', params);
     },
     //关注
     addAttention(params){
-        return httpReqest.post('/api/workFlow/addAttention', params);
+        return httpReqest.post('/api/wfInterfaces/workFlow/addAttention', params);
     },
     //加签
     SeTaddTag(params){
-        return httpReqest.post('/api/workFlow/addTag', params);
+        return httpReqest.post('/api/wfInterfaces/workFlow/addTag', params);
     },
     //移除
     RemoveTBin(params){
-        return httpReqest.post('/api/workFlow/removeToRecyleBin', params);
+        return httpReqest.post('/api/wfInterfaces/workFlow/removeToRecyleBin', params);
     },
     //流程图
     viewProcess(params){
-        return httpReqest.post('/api/workFlow/viewProcess', params);
+        return httpReqest.post('/api/wfInterfaces/workFlow/viewProcess', params);
     },
     //获取关注事项数据
     attentionTask(params){
-        return httpReqest.post('/api/workFlow/attentionTask', params);
+        return httpReqest.post('/api/wfInterfaces/workFlow/attentionTask', params);
     },
     //取消关注
     deleteAttention(params){
-        return httpReqest.post('/api/workFlow/deleteAttention', params);
+        return httpReqest.post('/api/wfInterfaces/workFlow/deleteAttention', params);
     },
     //获取已办消息
     handledTask(params){
-        return httpReqest.post('/api/workFlow/handledTask', params);
+        return httpReqest.post('/api/wfInterfaces/workFlow/handledTask', params);
     },
     //加批
 
@@ -154,6 +154,65 @@ const processSet = {
     //保存编辑信息
     saveEdit(){
         return httpReqest.post('api/interfaces/processMonitor/confirm', params);
+    },
+
+    addSign(params){
+        return httpReqest.post('/api/wfInterfaces/workFlow/addSign', params);
+    },
+    //已发事项查询
+    sendedTask(params){
+        return httpReqest.post('/api/wfInterfaces/workFlow/sendedTask', params);
+    },
+    //获取回收站数据
+    getRecycleBinList(params){
+        return httpReqest.post('/api/wfInterfaces/workFlow/getRecycleBinList', params);
+    },
+    //还原回收站代办邮件
+    reductionRecycleBin(params){
+        return httpReqest.post('/api/wfInterfaces/workFlow/reductionRecycleBin', params);
+    },
+    //流程业务查询
+    getProBusList(params){
+        return httpReqest.post('/api/wfInterfaces/workFlow/getProcessBussinessList', params);
+    },
+    //部门的详细数据查询
+    getdepartmentList(params){
+        return httpReqest.post('/api/wfInterfaces/workFlow/departmentSearch', params);
+    },
+    //查询角色列表
+    findRolePage(params){
+        return httpReqest.post('/api/wfInterfaces/workFlow/getRoles', params);
+    },
+    //查询状态信息
+    getStatus(params){
+        return httpReqest.post('/api/wfInterfaces/workFlow/getStatus', params);
+    },
+    //查询公司
+    getCompanyData(params){
+        return httpReqest.post('/api/wfInterfaces/workFlow/getCompanyData', params);
+    },
+    //流程业务新增
+    saveProBusData(params){
+        return httpReqest.post('/api/wfInterfaces/workFlow/saveProcessBussiness', params);
+    },
+    //流程业务修改
+    updateProBusData(params){
+        return httpReqest.post('/api/wfInterfaces/workFlow/updateProcessBussiness', params);
+    },
+    //删除流程业务
+    delProBusData(params){
+        return httpReqest.post('/api/wfInterfaces/workFlow/delProcessBussinessList', params);
+    },
+    //获取某一条流程业务数据
+    getProBusData(params){
+        var valueS='?';
+        for(var item in params){
+            valueS+=item+"="+params[item]+"&";
+        }
+        if(valueS.slice(valueS.length-1,valueS.length) ==="&"){
+            valueS=valueS.slice(0,valueS.length-1);
+        }
+        return httpReqest.get('/api/wfInterfaces/workFlow/getProcessBussiness'+valueS);
     },
 };
 

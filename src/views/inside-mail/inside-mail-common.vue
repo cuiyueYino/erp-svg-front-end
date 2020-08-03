@@ -35,7 +35,7 @@
                 <div>
                     <mailDetail :id="mailId" :key="detailTimer"></mailDetail>
                 </div>
-            </el-tab-pane>       
+            </el-tab-pane>
         </el-tabs>
     </div>
 </template>
@@ -71,10 +71,10 @@ export default {
         }
     },
     methods: {
-        toNewMail(data){
-            this.common = "newMail",
+        toPage(data,page){
+            this.common = page,
             this.perData = data
-            this.refresh("newMail");
+            this.refresh(page);
         },
 
         /**
@@ -101,7 +101,6 @@ export default {
          * 返回
          */
         goBack(){
-            console.log(this.lastPage),
             this.common = this.lastPage,
             this.refresh(this.lastPage)
         },
