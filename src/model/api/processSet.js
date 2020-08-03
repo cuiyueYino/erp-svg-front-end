@@ -127,33 +127,33 @@ const processSet = {
     //加批
 
     //获取邮件列表
-    getMailInfo(){
-        return httpReqest.post('api/interfaces/processMonitor/getMailInfoBypage', params);
+    getMailInfo(params){
+        return httpReqest.post('api/wfInterfaces/workFlow/processMonitor/getMailInfoBypage', params);
     },
 
     //获取邮件详细信息
-    getMailDetailInfo(){
-        return httpReqest.post('api/interfaces/processMonitor/getMailDetail', params);
+    getMailDetailInfo(params){
+        return httpReqest.post('api/wfInterfaces/workFlow/processMonitor/getMailDetail', params);
     },
 
     //获取回复信息
-    getAuditReplyMsg(){
-        return httpReqest.post('api/interfaces/processMonitor/getAuditReplyMsg', params);
+    getAuditReplyMsg(params){
+        return httpReqest.post('api/wfInterfaces/workFlow/processMonitor/getAuditReplyMsg', params);
     },
 
     //新增审批回复信息
-    addAuditReply(){
-        return httpReqest.post('api/interfaces/processMonitor/addAuditReply', params);
+    addAuditReply(params){
+        return httpReqest.post('api/wfInterfaces/workFlow/processMonitor/addAuditReply', params);
     },
 
     //删除邮件
-    removeMail(){
-        return httpReqest.post('api/interfaces/processMonitor/removeMail', params);
+    removeMail(params){
+        return httpReqest.post('api/wfInterfaces/workFlow/processMonitor/removeMail', params);
     },
 
     //保存编辑信息
-    saveEdit(){
-        return httpReqest.post('api/interfaces/processMonitor/confirm', params);
+    saveEdit(params){
+        return httpReqest.post('api/wfInterfaces/workFlow/processMonitor/confirm', params);
     },
 
     addSign(params){
