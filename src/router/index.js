@@ -12,6 +12,7 @@ import DocumentManagement from '../views/document-management/route';
 import InsideMail from '../views/inside-mail/route';
 import confMangement from '../views/conference/route';
 import collaborativeOffice from '../views/collaborative-office/route';
+import OaHome from '../views/oa-home-page/route';
 
 Vue.use(Router);
 
@@ -39,6 +40,7 @@ export default new Router({
                 ...InsideMail,
                 ...confMangement,
                 ...collaborativeOffice,
+                ...OaHome,
                 {
                     path: 'svgIndex',
                     name: 'svgIndex',

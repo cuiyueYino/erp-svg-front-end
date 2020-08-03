@@ -5,6 +5,7 @@
         :title="title"
         :visible.sync="dialogVisible"
         :modal="false"
+        :show-close="false"
         :close-on-click-modal="closeConfig"
         :close-on-press-escape="closeConfig"
         width="600px"
@@ -284,12 +285,12 @@ export default {
                 this.data.wfParticipator = {
                     participator:[
                         {
-                            "oid":item.oid,
+                            "oid":item.foid,
                             //6:表示 选择的是职务
                             "type": item.type,
                             //表达式的值 
                              [item.typeName]:{
-                                "oid": item.oid,
+                                "oid": item.foid,
                                 "code":item.fUsercode,
                                 "name":item.fUsername
                             },

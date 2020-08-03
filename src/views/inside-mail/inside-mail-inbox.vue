@@ -76,6 +76,8 @@ export default {
     return {
       name: "insideMailInbox",
       
+      userName: localStorage.getItem('ms_username'),
+      userId: localStorage.getItem('ms_userId'),
       //搜索内容
       form: {
         select: [],
@@ -138,6 +140,7 @@ export default {
     getReceiveMail(){
       //表格查询基础参数
       let reqParam={
+        // owner: this.userId,
         owner: 'BFPID000000LSN000E',
         page: this.pageNum,
         size: this.pageSize
@@ -251,7 +254,9 @@ export default {
      * 全部已读
      */ 
     setReadAll(){
+      
       let reqParam={
+        // owner: this.userId,
         owner: 'BFPID000000LSN000E'
       }
       //返回成功 刷新表格

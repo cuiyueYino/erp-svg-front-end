@@ -214,13 +214,13 @@ class ITEMData {
 								index: 'workBusiGroup',
 								title: '工作业务组'
 							},
-							{
+							/*{
 								index: 'proBusiGroup',
 								title: '流程业务组'
-							},
+							},*/
 							{
 								index: 'businessProcess',
-								title: '流程业务',
+								title: '流程业务组',
 							},
 							{
 								index: 'peopleSet',
@@ -278,8 +278,87 @@ class ITEMData {
 						]
 					},
 				]
+			},{
+				index: 'OaHome',
+				title: '门户首页',
+				subs: [{
+					index: 'oaCompanyHome',
+					title: '集团门户',
+				}]
+			},
+			{
+				index: 'menuManage',
+				title: '系统设置',
+				subs: [{
+					index: 'menuManagement',
+					title: '功能菜单'
+				}, ]
+			}, {
+				index: 'collaborativeOffice',
+				title: '协同办公',
+				subs: [{
+					index: 'workItems',
+					title: '工作事项',
+					subs: [{
+						index: 'templateMainTable',
+						title: '工作事项模板主表分类',
+					}],
+					index: 'documentManagement',
+					title: '文档管理',
+					subs: [{
+							index: 'docCategory',
+							title: '文档类别维护'
+						},
+						{
+							index: 'docManage',
+							title: '文档管理'
+						},
+						{
+							index: 'docAuthority',
+							title: '文档授权'
+						},
+						{
+							index: 'docBrowse',
+							title: '文档浏览'
+						}
+					]
+				}]
 			}
 		];
+		this.ITEMother = [{
+			index: 'Business',
+			title: '业务协同',
+			subs: [{
+				index: 'insideMailCommon',
+				title: '内部邮件',
+			}]
+		}, {
+			index: 'workItems',
+			title: '工作事项',
+			subs: [{
+					index: 'templateMainTableClassification',
+					title: '工作事项模板主表分类',
+				},
+				{
+					index: 'templateMainTable',
+					title: '工作事项模板主表',
+				}
+			]
+		}, {
+			index: 'systemManagement',
+			title: '系统管理',
+			subs: [{
+				index: 'systemSettings',
+				title: '系统设置',
+				subs: [{
+						index: 'enumerationList',
+						title: '枚举内容',
+					}
+				]
+			}]
+		}
+	];
+			
 	};
 }
 export default ITEMData;

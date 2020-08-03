@@ -71,6 +71,9 @@ export default {
             pageNum: 1,
             pageSize: 10,
             total: 0,
+
+            userName: localStorage.getItem('ms_username'),
+            userId: localStorage.getItem('ms_userId'),
             form : {
                 select:[],
                 selectVal: "",
@@ -140,6 +143,7 @@ export default {
         getRecycleMail(){
             //表格查询基础参数
             let reqParam={
+                // owner: this.userId,
                 owner: 'BFPID000000LSN000E',
                 page: this.pageNum,
                 size: this.pageSize

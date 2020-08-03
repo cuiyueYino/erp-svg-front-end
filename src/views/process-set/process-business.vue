@@ -16,7 +16,7 @@
                     </el-form-item>
                     </el-form>
                 </el-col>
-                 <el-col :span="10">
+                 <el-col :span="6" :offset="4">
                      <el-button type="success" plain @click="add('新增业务')">新增</el-button>
                      <el-button type="danger" plain @click="deleteMsgData">删除</el-button>
                      <el-button type="warning" plain @click="add('编辑业务')">编辑</el-button>
@@ -474,6 +474,9 @@ export default {
 .box-card:first-child{
     margin-bottom: 16px;
 }
+/deep/ .el-table__fixed-right::before{
+    background-color: revert;
+}
 .Carfiles{
      width: 70%;
  }
@@ -486,7 +489,7 @@ export default {
      margin-left: 12px;
      cursor: pointer;
  }
- .joinTableBox{
+/deep/ .joinTableBox{
     margin-bottom:30px;
     margin-left: 10px;
  }
@@ -498,7 +501,7 @@ export default {
      button{
          margin-bottom: 10px;
      }
-     /deep/ .el-button+.el-button{
+     /deep/ .el-button .el-button{
          margin-left: 0; 
      }
  }

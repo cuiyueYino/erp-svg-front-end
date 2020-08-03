@@ -201,6 +201,7 @@ export default {
                     let tableDataArr=returndata.data.rows;
                     this.tableData = tableDataArr;
                     this.total = returndata.data.total;
+                    this.MoreSearchVisible=false;
                 } else {
                     this.$message.success('没有查到数据!');
                 }

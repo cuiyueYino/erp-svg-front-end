@@ -50,14 +50,14 @@
                 <el-form-item label="名称：" :label-width="formLabelWidth" prop="fname">
                     <el-input v-model="form.fname" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="组织结构" :label-width="formLabelWidth" style="position:relative;">
+                <!-- <el-form-item label="组织结构" :label-width="formLabelWidth" style="position:relative;">
                     <el-input v-model="form.structure" autocomplete="off"></el-input>
                     <img
                     class="icon-search"
                     src="../../assets/img/search.svg"
                     @click="baseInputTable('用户','组织结构查询')"
                     />
-                </el-form-item>
+                </el-form-item> -->
                 <el-form-item label="子流程：" :label-width="formLabelWidth"> 
                     <el-checkbox v-model="checked"></el-checkbox>
                 </el-form-item>
@@ -178,7 +178,7 @@ export default {
         },
          closeBaseInfo(data, dialogtitle, type) {
             if (data.length > 0) {
-                this.form.structure = data[0].fname;
+                // this.form.structure = data[0].fname;
                 this.form.structurecode = data[0].fcode;
                 this.form.structureId = data[0].foid;
             }
