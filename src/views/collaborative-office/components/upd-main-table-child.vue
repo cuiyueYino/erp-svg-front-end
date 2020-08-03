@@ -917,7 +917,7 @@
 								this.ruleForm.lines.forEach(item => {
 									item.oprStatus = 2
 								})
-								this.$api.collaborativeOffice.updateWorkItemTempModel(this.ruleForm).then(data => {
+								this.$api.collaborativeOffice.updateWorkItemTempSubModel(this.ruleForm).then(data => {
 									if(this.dataBack(data, msg)) {
 										this.$parent.toSelect()
 									}

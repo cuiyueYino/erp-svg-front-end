@@ -140,7 +140,7 @@
 			//查看
 			toSee() {
 				if(this.getRowClickId()) {
-					this.$api.collaborativeOffice.getWorkItemTempModel({
+					this.$api.collaborativeOffice.getWorkItemTempSubModel({
 						id: this.rowClickId
 					}).then(data => {
 						console.log(data)

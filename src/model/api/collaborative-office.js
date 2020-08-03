@@ -107,6 +107,10 @@ const collaborativeOffice = {
 	updateWorkItemTempModel(params) {
 		return httpReqest.post('/api/interfaces/workItemTemp/updateWorkItemTempModel', params);
 	},
+	//修改工作事项模版子表
+	updateWorkItemTempSubModel(params) {
+		return httpReqest.post('/api/interfaces/workItemTempSub/updateWorkItemTempSubModel', params);
+	},
 	//根据ID查询工作事项模版主表
 	getWorkItemTempModel(params) {
 		var valueS = '?';
