@@ -314,10 +314,6 @@ export default {
                 Roledata.page=this.pageNum;
                 Roledata.size=this.pageSize;
                 this.getUserRole(Roledata);
-                /*let RoleTdata={};
-                this.getUserType(RoleTdata);
-                let Stadata={};
-                this.getStatus(Stadata);*/
             }else{
                 let Roledata={};
                 Roledata.page=this.pageNum;
@@ -360,16 +356,6 @@ export default {
                 let resData=res;
                 this.griddepData=resData.data.data.rows;
                 this.total3=resData.data.data.total;
-            },error=>{
-                console.log(error)
-            })
-        },
-        //查询角色类别
-        getUserType(data){
-            let fromdata=data;
-            this.$api.processSet.findRoleType(fromdata).then(res=>{
-                let resData=res;
-                this.Roleoptions=resData.data.data;
             },error=>{
                 console.log(error)
             })

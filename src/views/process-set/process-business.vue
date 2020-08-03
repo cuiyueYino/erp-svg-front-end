@@ -225,10 +225,9 @@ export default {
                 }else if(this.multipleSelection.length == 0){
                     this.$message.error('请选择一项');
                 }else{
-                    
                     let fromdata={};
                     fromdata.foid=this.multipleSelection[0].foid;
-                    this.getLCData(fromdata);
+                    this.getLCData(fromdata,data);
                 }
             }
         },
@@ -372,29 +371,40 @@ export default {
             });
         },
         //获取某一条流程业务数据
-        getLCData(params){
+        getLCData(params,data){
             let fromdata=params;
             this.$api.processSet.getProBusData(fromdata).then(response => {
                 let responsevalue = response;
                 if(responsevalue){
-                    console.log(responsevalue)
-                    /*this.form=this.multipleSelection[0];
+                    this.form=responsevalue.data.data;
                     this.dialogFormVisible=true;
                     this.homeTitle=data;
                     let UBData=[];
-                    let roleList=this.multipleSelection[0].roleList;
-                    let userList=this.multipleSelection[0].userList;
+                    let roleList=responsevalue.data.data.roleVoList;
+                    let userList=responsevalue.data.data.userVoList;
                     if(roleList && userList){
-                        for(let i=0;i<roleList.length;i++){
+                        for(let i=0;i<roleList.length;i++){ 
                             let DataObj={};
-                            DataObj.froleId=roleList[i];
-                            DataObj.fuserId=userList[i];
+                            DataObj.froleId=roleList[i][0].oid;
+                            DataObj.froleName=roleList[i][0].name;
+                            let userId='';
+                            let userName='';
+                            let usetL=userList[i];
+                            for(let j=0;j<usetL.length;j++){
+                                let LSTObj=usetL[j];
+                                userId+=LSTObj.oid+",";
+                                userName+=LSTObj.name+",";
+                            }
+                            userId=userId.slice(0,userId.length -1);
+                            userName=userName.slice(0,userName.length -1);
+                            DataObj.fuserId=userId;
+                            DataObj.fuserName=userName;
                             UBData.push(DataObj);
                         }
                         this.tableUBData=UBData;
                     }else{
                         this.tableUBData=[];
-                    }*/
+                    }
                 }else{
                     this.$message.error('查询失败!');    
                 }
