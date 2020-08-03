@@ -131,7 +131,11 @@ export default {
                 );
             }
             return ret;
+        },
+        toggleRowSelection(val){
+            this.$refs.refTable.toggleRowSelection(val)
         }
+
     },
     /**
      * Vue实例渲染函数，生成组件模版
@@ -183,6 +187,7 @@ export default {
                     on-row-click={onRowClick}
                     on-selection-change={onSelectionChange}
                     size="small"
+                    ref="refTable"
                     row-class-name={tableRowClassName}
                     default-sort={defaultsort}
                 >

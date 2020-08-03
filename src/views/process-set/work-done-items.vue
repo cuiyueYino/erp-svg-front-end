@@ -8,9 +8,9 @@
                     <el-button type="success" icon="el-icon-search" plain @click="search">查询</el-button>
                     <el-button type="warning" icon="el-icon-document" plain @click="Tolook">查看</el-button>
                     <el-button type="success" icon="el-icon-share" plain @click="baseInputTable()">转发</el-button>
-                    <el-button type="danger" icon="el-icon-more" plain @click="baseInputTable1()">加批</el-button>
-                    <el-button type="danger" icon="el-icon-view" plain @click="baseInputTable1()">关注</el-button>
-                    <el-button type="danger" icon="el-icon-printer" plain @click="baseInputTable1()">打印</el-button>
+                    <el-button type="danger" icon="el-icon-more" plain @click="AdditionalApp()">加批</el-button>
+                    <el-button type="danger" icon="el-icon-view" plain @click="basefollow()">关注</el-button>
+                    <el-button type="danger" icon="el-icon-printer" plain @click="basePrinting()">打印</el-button>
                 </el-col>
             </el-row>
         </el-card>
@@ -120,6 +120,28 @@
                 <el-button type="primary" @click="addSubmit()" size="medium">确 定</el-button>
             </div>
         </el-dialog>
+        <el-dialog title="已办事项" :visible.sync="dialogAddVisible" :close-on-click-modal="false" width="30%">
+            <el-form 
+                :model="DataAddForm" 
+                label-width="97px"
+                label-suffix="："
+                size="small"
+                :rules="rules"
+                @submit.native.prevent
+                label-position="right">
+                    <el-row>
+                        <el-col>
+                            <el-form-item label="加批意见" prop="remark" style="margin-left: 10px;">
+                                <el-input type="textarea" v-model="DataAddForm.remark" :rows="6" ></el-input>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="dialogAddVisible = false" size="medium">取 消</el-button>
+                <el-button type="primary" @click="AdditionalSubmit()" size="medium">确 定</el-button>
+            </div>
+        </el-dialog>
         <PSpage  :rowPSDataObj="rowPSDataObj" :rowPStype="rowPStype" @changeShow="showORhideForPS"/>
         <baseInfoDialog  :rowUTSDataObj="rowUTSDataObj" :rowUTStype="rowUTStype" @changeShow="closeBaseInfo"/>
         <WAApage  :rowWAADataObj="rowWAADataObj" :rowWAAtype="rowWAAtype" @changeShow="showORhideForWAA"/>
@@ -144,20 +166,20 @@ export default {
     data() {
         return {
             companyoptions: new proData().company,
-            WFMtypeoptions:[],
             homeTitle:'',
             userType:'',
             rowDStype:false,
-            rowPStype:false,
             rowDSDataObj:{},
             rowPSDataObj:{},
             rowWAADataObj:{},
             rowUTSDataObj:{},
+            rowPStype:false,
             rowUTStype:false,
             rowWAAtype:false,
             proApartDialogF:false,
             dialogFormVisible:false,
             dialogWFMVisible:false,
+            dialogAddVisible:false,
             titleStr:'',
             formCode:'',
             pageNum: 1,
@@ -251,16 +273,12 @@ export default {
           fremark: ''
         },
         DataForm: {},
+        DataAddForm: {},
         formLabelWidth: '120px',
-         rules: {
-          fcode: [
-            { required: true, message: '请输入编码', trigger: 'blur' },
-            { min: 1, max: 100, message: '长度在 1 到 50 个字符', trigger: 'blur' }
-          ],
-           fname: [
-            { required: true, message: '请输入名称', trigger: 'blur' },
-            { min: 1, max: 100, message: '长度在 1 到 100 个字符', trigger: 'blur' }
-          ],
+        rules: {
+          remark: [
+            { required: true, message: '请输入加批意见', trigger: 'blur' },
+          ]
          },
         };
     },
@@ -453,7 +471,8 @@ export default {
                 this.rowUTStype = true
             }
         },
-        baseInputTable1(){
+        //打印
+        basePrinting(){
 
         },
         //多选
@@ -465,8 +484,80 @@ export default {
             let fromdata={};
             fromdata.infosBeginNum=(val-1)*10;
             fromdata.infosEndNum=val*10;
-            fromdata.userId=localStorage.getItem("ms_userId")
+            fromdata.userId=localStorage.getItem("ms_userId");
             this.getHunTableData(fromdata);
+        },
+        //加批按钮点击事件
+        AdditionalApp(){
+            let selectOption= this.multipleSelection;
+            if(selectOption.length >0){
+                if(selectOption.length >1){
+                    this.$message.error('只能选择一行!');
+                }else{
+                    let messageStr="确认要对选中的邮件进行附加批注么？";
+                    let tital="已办事项加批";
+                    this.$Uconfirm(tital,messageStr).then(() => {
+                        this.dialogAddVisible=true;
+                    }).catch(() => {
+                        this.$message.success('取消加批!');
+                    });
+                }
+            }else{
+                this.$message.error('请选择一行你要加批的数据!');
+            }
+        },
+        // 加批提交按钮点击事件
+        AdditionalSubmit(){
+            let remakeS=this.DataAddForm.remark;
+            if(remakeS && remakeS!=''){
+                let selectOption= this.multipleSelection;
+                let fromdata={};
+                fromdata.currUserId=localStorage.getItem('ms_userId');
+                fromdata.bizMailId=selectOption[0].foid;
+                fromdata.advice=this.DataAddForm.remark;
+                this.$api.processSet.addSign(fromdata).then(response => {
+                    let responsevalue = response;
+                    if (responsevalue) {
+                        this.dialogAddVisible=false;
+                    } else {
+                        this.$message.success('邮件加批失败!');
+                    }
+                });
+            }else{
+                this.$message.error('请选择一行你要加批的数据!');
+            }
+        },
+        //关注点击事件
+        basefollow(){
+            if(this.multipleSelection.length > 1){
+                this.$message.error('只能选择一个');
+            }else if(this.multipleSelection.length == 0){
+                this.$message.error('请选择一项');
+            }else{
+                let selectData=this.multipleSelection;
+                let subject=selectData[0].fsubject;
+                if(subject.indexOf('转发')>-1){
+                    this.$message.error('转发邮件不能添加关注!');
+                }else if(subject.indexOf('抄送')>-1){
+                    this.$message.error('抄送邮件不能添加关注!');
+                }else if(subject.indexOf('加签')>-1){
+                    this.$message.error('加签邮件不能添加关注!');
+                }else{
+                    let fromdata={};
+                    fromdata.fvoucherOid=selectData[0].fsrcoId;
+                    fromdata.fattentionOid=localStorage.getItem("ms_userId");
+                    this.$api.processSet.addAttention(fromdata).then(response => {
+                        let responsevalue = response;
+                        if (responsevalue) {
+                            let returndata = responsevalue.data;
+                            this.$message.success('添加关注成功!');
+                            this.reload();
+                        } else {
+                            this.$message.success('数据库没有该条数据!');
+                        }
+                    });
+                }  
+            }
         },
     },
 }

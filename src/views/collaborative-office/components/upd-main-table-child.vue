@@ -3,7 +3,7 @@
 		<div v-if="!showFigForm">
 			<el-card class="box-card">
 				<el-row>
-					<el-col :span="23">工作事项模板主表</el-col>
+					<el-col :span="23">工作事项模板子表-修改</el-col>
 					<el-col :span="1" style="text-align: right;">
 						<el-button type="danger" @click="$parent.toSelect()" size="mini" icon="el-icon-close"></el-button>
 					</el-col>
@@ -27,25 +27,52 @@
 				<el-form size="mini" label-width="80px" :inline="true" :rules="rules" ref="ruleForm" :model="ruleForm" class="demo-form-inline">
 					<el-row>
 						<el-col :span="6">
-							<el-form-item prop="code" label="主表编码">
-								<el-input style="width: 110%;" clearable v-model="ruleForm.code" maxlength="50" placeholder="主表编码"></el-input>
+							<el-form-item prop="code" label="子表编码">
+								<el-input style="width: 110%;" clearable v-model="ruleForm.code" maxlength="50" placeholder="子表编码"></el-input>
 							</el-form-item>
 						</el-col>
 						<el-col :span="6">
-							<el-form-item prop="name" label="主表名称">
-								<el-input style="width: 110%;" clearable v-model="ruleForm.name" maxlength="50" placeholder="主表名称"></el-input>
+							<el-form-item prop="name" label="子表名称">
+								<el-input style="width: 110%;" clearable v-model="ruleForm.name" maxlength="50" placeholder="子表名称"></el-input>
 							</el-form-item>
 						</el-col>
 						<el-col :span="6">
-							<el-form-item prop="workItemTypeName" label="主表分类">
-								<el-input style="width: 110%;" disabled placeholder="主表分类" v-model="ruleForm.workItemTypeName">
-									<el-button @click="dialogVisible = true" slot="append" icon="el-icon-search"></el-button>
+							<el-form-item prop="workItemTypeSubName" label="子表分类">
+								<el-input style="width: 110%;" disabled placeholder="子表分类" v-model="ruleForm.workItemTypeSubName">
+									<el-button @click="dialogVisibleChild = true" slot="append" icon="el-icon-search"></el-button>
 								</el-input>
 							</el-form-item>
 						</el-col>
 						<el-col :span="6">
+							<el-form-item prop="workItemTempName" label="主表">
+								<el-input style="width: 110%;" disabled placeholder="主表" v-model="ruleForm.workItemTempName">
+									<el-button @click="dialogVisible = true" slot="append" icon="el-icon-search"></el-button>
+								</el-input>
+							</el-form-item>
+						</el-col>
+					</el-row>
+					<el-row>
+						<el-col :span="6">
+							<el-form-item prop="type" label="子表类型">
+								<el-select @change="getType" style="width: 110%;" size='mini' v-model="ruleForm.type" placeholder="子表类型">
+									<el-option v-for="item in typeList" :key="item.id" :label="item.name" :value="item.id">
+									</el-option>
+								</el-select>
+							</el-form-item>
+						</el-col>
+						<el-col :span="6">
+							<el-form-item prop="showName" label="显示名称">
+								<el-input style="width: 110%;" clearable v-model="ruleForm.showName" maxlength="50" placeholder="显示名称"></el-input>
+							</el-form-item>
+						</el-col>
+						<el-col :span="6">
+							<el-form-item prop="orderNum" label="显示顺序">
+								<el-input style="width: 110%;" clearable v-model="ruleForm.orderNum" maxlength="50" placeholder="显示顺序"></el-input>
+							</el-form-item>
+						</el-col>
+						<el-col :span="6">
 							<el-form-item label="描述">
-								<el-input clearable style="width: 130%;" type="textarea" :rows="1" maxlength="1500" v-model="ruleForm.remark" placeholder="描述"></el-input>
+								<el-input clearable style="width: 140%;" type="textarea" :rows="1" maxlength="1500" v-model="ruleForm.remark" placeholder="描述"></el-input>
 							</el-form-item>
 						</el-col>
 					</el-row>
@@ -53,7 +80,7 @@
 			</el-card>
 			<el-card class="box-card">
 				<el-row>
-					<el-col>工作事项模板主表行</el-col>
+					<el-col>工作事项模板子表行</el-col>
 				</el-row>
 				<el-form :model="ruleForm" :rules="rulesTable" ref="ruleFormTable">
 					<el-table size="small" height="400" :data="ruleForm.lines" border style="width: 100%">
@@ -84,7 +111,7 @@
 						<el-table-column prop="lengthType" label="字段长度类型" align="center" width="180">
 							<template slot-scope="scope">
 								<el-form-item :prop="'lines[' + scope.$index + '].lengthType'" :rules="rulesTable.lengthType">
-									<el-select style="width: 100%;" v-model="scope.row.lengthType" placeholder="字段长度类型">
+									<el-select :disabled="showType" style="width: 100%;" v-model="scope.row.lengthType" placeholder="字段长度类型">
 										<el-option v-for="item in lengthTypeList" :key="item.id" :label="item.name" :value="item.id"></el-option>
 									</el-select>
 								</el-form-item>
@@ -114,7 +141,7 @@
 						<el-table-column prop="showNum" label="显示行数" align="center">
 							<template slot-scope="scope">
 								<el-form-item :prop="'lines[' + scope.$index + '].showNum'" :rules="rulesTable.showNum">
-									<el-input v-model="scope.row.showNum" placeholder=""></el-input>
+									<el-input :disabled="showType" v-model="scope.row.showNum" placeholder=""></el-input>
 								</el-form-item>
 							</template>
 						</el-table-column>
@@ -139,7 +166,7 @@
 								</el-form-item>
 							</template>
 						</el-table-column>
-						<el-table-column prop="serviceId" label="服务" align="center" width="180">
+						<el-table-column prop="serviceId" label="服务" align="center" width="280">
 							<template slot-scope="scope">
 								<el-form-item>
 									<el-input disabled v-model="scope.row.serviceCon">
@@ -159,11 +186,19 @@
 				</el-form>
 			</el-card>
 			<!--弹出框-->
-			<el-dialog title="工作事项模板主表分类" top="1vh" :destroy-on-close="true" center :visible.sync="dialogVisible" width="80%">
-				<selectMainTableClassification show="1" ref="child"></selectMainTableClassification>
+			<el-dialog title="工作事项模板子表分类" top="1vh" :destroy-on-close="true" center :visible.sync="dialogVisibleChild" width="80%">
+				<selectMainTableClassificationChild show="1" ref="child"></selectMainTableClassificationChild>
+				<div slot="footer" class="dialog-footer">
+					<el-button @click="dialogVisibleChild = false">取 消</el-button>
+					<el-button type="primary" @click="getSelectMainTableClassification">确 定</el-button>
+				</div>
+			</el-dialog>
+			<!--弹出框-->
+			<el-dialog title="工作事项主板模板" top="1vh" :destroy-on-close="true" center :visible.sync="dialogVisible" width="80%">
+				<selectMainTable show="1" ref="childMain"></selectMainTable>
 				<div slot="footer" class="dialog-footer">
 					<el-button @click="dialogVisible = false">取 消</el-button>
-					<el-button type="primary" @click="getSelectMainTableClassification">确 定</el-button>
+					<el-button type="primary" @click="getDialogVisible(true)">确 定</el-button>
 				</div>
 			</el-dialog>
 			<!--弹出框-->
@@ -190,12 +225,16 @@
 	</div>
 </template>
 <script>
-	import selectMainTableClassification from './select-main-table-classification';
+	//工作事项模板子表分类
+	import selectMainTableClassificationChild from './select-main-table-classification-child';
+	//工作事项主表模板
+	import selectMainTable from './select-main-table';
 	//预览
 	import formAndTable from './form-and-table';
 	export default {
 		components: {
-			selectMainTableClassification,
+			selectMainTableClassificationChild,
+			selectMainTable,
 			formAndTable
 		},
 		props: {
@@ -203,6 +242,16 @@
 		},
 		data() {
 			return {
+				//子表类型
+				showType: false,
+				//子表类型
+				typeList: [{
+					id: "1",
+					name: "子表"
+				}, {
+					id: "2",
+					name: "明细表"
+				}],
 				//字段长度类型
 				lengthTypeList: [{
 					id: "1",
@@ -224,6 +273,8 @@
 				dialogVisible: false,
 				dialogVisible_fieldLength: false,
 				dialogVisible_TServiceByParams: false,
+				//弹出框-工作事项模板子表分类
+				dialogVisibleChild: false,
 				//服务 中间值
 				rowCon: {},
 				//服务选中
@@ -315,6 +366,23 @@
 					workItemTypeName: "",
 					lines: [],
 				},
+				previewList: {
+					labelWidth: '100px',
+					inline: false,
+					labelPosition: 'right',
+					size: 'small',
+					rowList: []
+				},
+				//公司
+				CompanyData: [],
+				//预览校验规则
+				rulesChild: {},
+				//全部枚举
+				selectList: [],
+				//工作事项
+				fieldBrowseList: [],
+				//公司部门职位的合集
+				allOrganizationInfo: [],
 				//传入子组件的值
 				conData: {
 					top: {
@@ -328,16 +396,21 @@
 						size: 'small',
 						//值
 						rowList: []
-					}
+					},
+					bottom: [{
+						//form的label宽度
+						labelWidth: '100px',
+						//横向显示
+						inline: false,
+						//label位置
+						labelPosition: 'right',
+						//form大小
+						size: 'small',
+						//值
+						rowList: [],
+						label: ""
+					}]
 				},
-				//公司
-				CompanyData: [],
-				//全部枚举
-				selectList: [],
-				//工作事项
-				fieldBrowseList: [],
-				//公司部门职位的合集
-				allOrganizationInfo: []
 			}
 		},
 		created() {
@@ -357,6 +430,7 @@
 			//全部服务
 			this.$api.collaborativeOffice.findTServiceByParams({}).then(data => {
 				this.tServiceByParams = data.data.data
+				this.getDialogVisible(false)
 				this.ruleForm.lines.forEach(item => {
 					this.tServiceByParams.forEach(val => {
 						if(item.serviceId != null && item.serviceId == val.foid) {
@@ -380,8 +454,47 @@
 				this.goOk("最大数据已经返回，可以预览")
 				this.allOrganizationInfo = eval('(' + data.data.data + ')')
 			})
+			this.getDialogVisible(false)
+			this.getType(this.ruleForm.type)
 		},
 		methods: {
+			//子表类型（校验不同）
+			getType(type) {
+				this.$nextTick(() => {
+					this.$refs.ruleFormTable.resetFields();
+				})
+				if(type == 2) {
+					this.showType = true
+					this.rulesTable = {
+						lengthType: [],
+						orderNum: [{
+							required: true,
+							message: "请输入显示顺序",
+							trigger: "blur"
+						}],
+						showNum: []
+					}
+				} else {
+					this.showType = false
+					this.rulesTable = {
+						lengthType: [{
+							required: true,
+							message: "请选择字段长度类型",
+							trigger: "blur"
+						}],
+						orderNum: [{
+							required: true,
+							message: "请输入显示顺序",
+							trigger: "blur"
+						}],
+						showNum: [{
+							required: true,
+							message: "请填写显示行数",
+							trigger: "blur"
+						}]
+					}
+				}
+			},
 			//服务类型
 			ftypeShow(row) {
 				switch(row.ftype) {
@@ -393,7 +506,22 @@
 						break;
 				}
 			},
-			fieldTypeShow(item) {
+			//选择主表模板-确认
+			getDialogVisible(show) {
+				if(show) {
+					//主表模板名称
+					this.ruleForm.workItemTempName = this.$refs.childMain.rowClick.name
+					//主表模板名称ID
+					this.ruleForm.workItemTemp = this.$refs.childMain.rowClick.id
+				}
+				this.dialogVisible = false
+				this.$api.collaborativeOffice.getWorkItemTempModel({
+					id: this.ruleForm.workItemTemp
+				}).then(data => {
+					this.preview2(data.data.data.lines)
+				})
+			},
+			fieldTypeShow2(item) {
 				if(item.fieldType == 9) {
 					this.selectList.forEach(val => {
 						if(item.fieldContent == val.id) {
@@ -470,12 +598,169 @@
 						break;
 				}
 			},
+			//整理主表数据
+			preview2(rowConList) { //确认主表分类选定
+				var cur = []
+				let obj = {};
+				//循环判断是否有添加服务的字段名
+				rowConList.forEach((item, index1) => {
+					this.tServiceByParams.forEach(val => {
+						if(item.serviceId != null && item.serviceId == val.foid) {
+							//服务显示名称
+							this.$set(item, 'serviceCon', val.fname)
+							//查询服务的参数：fid是根据条件查询的“条件” fcode是具体查询哪条服务的内容
+							this.$set(item, 'serviceNow', {
+								fid: "",
+								fcode: val.fcode
+							})
+						}
+					})
+					console.log(rowConList)
+					item.parameterList = []
+					//时间控件计算差值
+					rowConList.forEach(itemChild => {
+						//通过‘-’符号确定需要计算的两边
+						if(!this.noNull(itemChild.parameter) && itemChild.parameter.indexOf('-') != -1) {
+							//left right 分别是需要计算的两个值的字段名称
+							var index = itemChild.parameter.indexOf('-')
+							var left = itemChild.parameter.substring(0, index)
+							var right = itemChild.parameter.substring(index + 1)
+							//两个字段都要添加属性parameterList，里面存储需要计算的字段名和需要显示的字段名child
+							if(left == item.field || right == item.field) {
+								item.parameterList = {}
+								item.parameterList.left = left
+								item.parameterList.right = right
+								item.parameterList.child = itemChild.field
+							}
+						} else {
+							//发现被添加服务的字段后，绑定双方
+							if(itemChild.parameter == item.field) {
+								item.parameterList.push(itemChild.field)
+							}
+						}
+
+					})
+					//行序按照填写排序
+					item.fieldTypeName = this.fieldTypeShow2(item)
+					if(obj[item.showNum]) {
+						cur.forEach(val => {
+							if(val.showNum == item.showNum) {
+								val.colList.push(item)
+							}
+						})
+					} else {
+						obj[item.showNum] = true
+						cur.push({
+							showNum: item.showNum,
+							colList: [item]
+						});
+					}
+				})
+				//列序按照填写排序
+				var index = 0
+				cur.sort((a, b) => {
+					a.colList.sort((a1, b1) => {
+						return a1.orderNum - b1.orderNum
+					})
+					if(index == 0) {
+						b.colList.sort((a1, b1) => {
+							return a1.orderNum - b1.orderNum
+						})
+						index++
+					}
+					return a.showNum - b.showNum
+				})
+				this.conData.top.rowList = cur
+			},
+			//添加校验（显示的值的校验)
+			fieldTypeShow(item) {
+				if(item.fieldType == 9) {
+					this.selectList.forEach(val => {
+						if(item.fieldContent == val.id) {
+							item.resList = val.resList
+						}
+					})
+				}
+				if(item.fieldType == 1) {
+					this.fieldBrowseList.forEach(val => {
+						if(item.fieldContent == val.id) {
+							item.toSelect = val
+						}
+					})
+				}
+				//添加form动态表单的比对值fieldTypeName
+				switch(item.fieldType) {
+					//1浏览框、2字符型、3文本型、4整型、5浮点型、6富文本、7日期控件、8时间控件、9枚举项、10复选框
+					//重组浏览框内的显示数据
+					case "1":
+						//浏览框 : 一共有7种，其中1：公司，2：部门，3：职位可以共同使用同一个接口
+						var list = JSON.parse(JSON.stringify(this.allOrganizationInfo))
+						//公司
+						if(item.toSelect.id == 1) {
+							//删除部门和职位信息
+							for(var i = list[0].children.length - 1; i >= 0; i--) {
+								if(list[0].children[i].ftype == 2) {
+									list[0].children.splice(i, 1)
+								} else {
+									list[0].children[i].children = []
+								}
+							}
+							item.browseBoxList = list
+							//部门
+						} else if(item.toSelect.id == 2) {
+							//删除职位信息
+							list[0].children.forEach(val => {
+								if(typeof(val.children) != "undefined") {
+									val.children.forEach(valChild => {
+										valChild.children = []
+									})
+								}
+							})
+							item.browseBoxList = list
+							//职位（无需删除，保留原数据）
+						} else if(item.toSelect.id == 3) {
+							item.browseBoxList = list
+						}
+						return "browseBox"
+						break;
+					case "2":
+						return "character"
+						break;
+					case "3":
+						return "textType"
+						break;
+					case "4":
+						return "integers"
+						break;
+					case "5":
+						return "floatingPoint"
+						break;
+					case "6":
+						return "richText"
+						break;
+					case "7":
+						return "dateControl"
+						break;
+					case "8":
+						return "timeControl"
+						break;
+					case "9":
+						return "select"
+						break;
+					case "10":
+						return "checkBox"
+						break;
+				}
+			},
 			//预览
 			preview() {
 				this.$refs.ruleFormTable.validate((valid) => {
 					if(valid) {
-						//确认主表分类选定
-						if(this.ruleForm.workItemTypeName) {
+						console.log(this.ruleForm.type)
+						this.conData.bottom[0].label = this.ruleForm.showName
+						this.conData.bottom[0].type = this.ruleForm.type
+						//确认子表分类选定
+						if(this.ruleForm.workItemTypeSubName) {
 							var cur = []
 							let obj = {};
 							//循环判断是否有添加服务的字段名
@@ -519,6 +804,7 @@
 										colList: [item]
 									});
 								}
+
 							})
 							//列序按照填写排序
 							var index = 0
@@ -534,11 +820,11 @@
 								}
 								return a.showNum - b.showNum
 							})
-							this.conData.top.rowList = cur
+							this.conData.bottom[0].rowList = cur
 							//打开预览页面
 							this.showFigForm = true
 						} else {
-							this.goOut("请选择主表分类")
+							this.goOut("请选择子表分类")
 						}
 					}
 				});
@@ -631,7 +917,7 @@
 								this.ruleForm.lines.forEach(item => {
 									item.oprStatus = 2
 								})
-								this.$api.collaborativeOffice.updateWorkItemTempModel(this.ruleForm).then(data => {
+								this.$api.collaborativeOffice.updateWorkItemTempSubModel(this.ruleForm).then(data => {
 									if(this.dataBack(data, msg)) {
 										this.$parent.toSelect()
 									}

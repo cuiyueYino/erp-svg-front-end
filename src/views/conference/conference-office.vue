@@ -399,6 +399,7 @@ export default {
     //分页、下一页
     onCurrentChange(val) {
       this.pageNum = val;
+      this.isEdit = true;
       this.getTableData("");
     },
     //多选
@@ -457,6 +458,7 @@ export default {
         (res) => {
           if (res.data.code == 0) {
             this.$message.success("修改成功");
+            this.isEdit = false;
             //刷新表格
             this.getTableData("");
           } else {
@@ -525,6 +527,7 @@ export default {
     resetForm(formName) {
       this.$refs[formName].resetFields();
       this.pageNum = 1;
+      this.isEdit = true;
       this.getTableData("");
     },
     // 获取列表数据

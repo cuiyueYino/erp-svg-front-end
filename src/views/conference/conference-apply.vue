@@ -216,7 +216,7 @@
               size="mini"
               icon="el-icon-search"
               style="padding:7px 8px"
-              @click="queryConfOffice()"
+              @click="queryConfOffice('1')"
             ></el-button>
           </el-col>
           <el-col :span="11">
@@ -463,7 +463,7 @@
               size="mini"
               icon="el-icon-search"
               style="padding:7px 8px"
-              @click="queryConfOffice()"
+              @click="queryConfOffice('1')"
             ></el-button>
           </el-col>
           <el-col :span="11">
@@ -838,6 +838,7 @@
     <el-form :model="formProcess" ref="formProcess">
       <conference-office-search
         class="children-dialog"
+        :type="type"
         :visible="officeTableVsible"
         :fcompanyid="fcompanyid"
         :fstartdate="fstartdate"
@@ -891,6 +892,7 @@ export default {
       fcompanyid: "",
       fstartdate: "",
       fenddate: "",
+      type: "",
       fvolume: 0,
       formProcess: {},
       tableData: [],
@@ -901,17 +903,6 @@ export default {
         selectVal: "",
       },
       searchForm: {
-        fstartdate: "",
-        fenddate: "",
-        fcpmcount: "",
-        fconvener: "",
-        fconvenername: "",
-        fconvenerdept: "",
-        fconvenerdeptname: "",
-        fcontact: "",
-        fcontactname: "",
-        fcontactdept: "",
-        fcontactdeptname: "",
         fcompanyid: "_DefaultCompanyOId",
         fcompanyname: "福佳集团",
       },
@@ -1089,6 +1080,7 @@ export default {
     //分页、下一页
     onCurrentChange(val) {
       this.pageNum = val;
+      this.isEdit = false;
       this.getTableData("");
     },
     //多选
@@ -1199,6 +1191,7 @@ export default {
     resetForm(formName) {
       this.$refs[formName].resetFields();
       this.pageNum = 1;
+      this.isEdit = true;
       this.getTableData("");
     },
     // 获取列表数据
@@ -1235,11 +1228,11 @@ export default {
             this.internalMansId = "";
             for (let i in internalMans) {
               if (i < internalMans.length - 1) {
-                this.internalMansName += internalMans[i].name + ",";
-                this.internalMansId += internalMans[i].oid + ",";
+                this.internalMansName += internalMans[i].fname + ",";
+                this.internalMansId += internalMans[i].foid + ",";
               } else {
-                this.internalMansName += internalMans[i].name;
-                this.internalMansId += internalMans[i].oid;
+                this.internalMansName += internalMans[i].fname;
+                this.internalMansId += internalMans[i].foid;
               }
             }
             switch (resData.fimportance) {
@@ -1419,8 +1412,8 @@ export default {
               this.internalMansName += data[i].fname;
             }
             let staff = {
-              oid: data[i].foid,
-              name: data[i].fname,
+              foid: data[i].foid,
+              fname: data[i].fname,
             };
             internalmans.push(staff);
           }
@@ -1431,7 +1424,7 @@ export default {
       this.staffTableVsible = false;
     },
     // 打开会议室弹窗
-    queryConfOffice() {
+    queryConfOffice(type) {
       if (this.searchForm.fstartdate == null) {
         this.$message.error("会议开始时间不可为空");
         return;
@@ -1444,10 +1437,11 @@ export default {
         this.$message.error("会议参与人数不可为空");
         return;
       }
+      this.type = type;
       this.fcompanyid = this.searchForm.fcompany;
       this.fstartdate = this.searchForm.fstartdate;
       this.fenddate = this.searchForm.fenddate;
-      this.fvolume = this.searchForm.fcpmcount;
+      this.fvolume = parseInt(this.searchForm.fcpmcount);
       this.officeTableVsible = true;
     },
     // 关闭会议室弹窗

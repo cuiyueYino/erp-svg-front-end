@@ -181,11 +181,11 @@
 			</el-dialog>
 		</div>
 		<div v-if="showFigForm">
-			<formIcon :rules="rulesChild" :form-data="previewList">
+			<formAndTable :form-data="conData">
 				<el-row style="text-align: right;margin-bottom: 10px;">
 					<el-button icon="el-icon-arrow-left" size="mini" type="danger" plain @click="showFigForm = false">返回</el-button>
 				</el-row>
-			</formIcon>
+			</formAndTable>
 		</div>
 	</div>
 </template>
@@ -193,11 +193,11 @@
 	//工作事项模板主表分类
 	import selectMainTableClassification from './select-main-table-classification';
 	//预览
-	import formIcon from '../../../views/collaborative-office/components/encapsulation/form-icon';
+	import formAndTable from './form-and-table';
 	export default {
 		components: {
 			selectMainTableClassification,
-			formIcon
+			formAndTable
 		},
 		props: {
 			//查看
@@ -322,22 +322,22 @@
 					lines: [],
 				},
 				//传入子组件的值
-				previewList: {
-					//form的label宽度
-					labelWidth: '100px',
-					//横向显示
-					inline: false,
-					//label位置
-					labelPosition: 'right',
-					//form大小
-					size: 'small',
-					//值
-					rowList: []
+				conData: {
+					top: {
+						//form的label宽度
+						labelWidth: '100px',
+						//横向显示
+						inline: false,
+						//label位置
+						labelPosition: 'right',
+						//form大小
+						size: 'small',
+						//值
+						rowList: []
+					},
 				},
 				//公司
 				CompanyData: [],
-				//预览校验规则
-				rulesChild: {},
 				//全部枚举
 				selectList: [],
 				//工作事项
@@ -393,24 +393,6 @@
 			},
 			//添加校验（显示的值的校验)
 			fieldTypeShow(item) {
-				this.rulesChild[item.field] = []
-				this.rulesChild[item.field + "Name"] = []
-				if(item.required) {
-					if(item.fieldType == 1) {
-						this.rulesChild[item.field + "Name"].push({
-							required: true,
-							message: "请填写" + item.fieldName,
-							trigger: 'blur'
-						})
-					} else {
-						this.rulesChild[item.field].push({
-							required: true,
-							message: "请填写" + item.fieldName,
-							trigger: 'blur'
-						})
-					}
-
-				}
 				//添加form动态表单的比对值fieldTypeName
 				switch(item.fieldType) {
 					//1浏览框、2字符型、3文本型、4整型、5浮点型、6富文本、7日期控件、8时间控件、9枚举项、10复选框
@@ -453,25 +435,9 @@
 						return "textType"
 						break;
 					case "4":
-						//添加整型校验
-						this.rulesChild[item.field].push({
-							pattern: /^-?[1-9]\d*$/,
-							message: '请输入正确的' + item.fieldName,
-							trigger: 'blur'
-						}, {
-							max: 20,
-							message: '长度至多20位字符',
-							trigger: 'blur'
-						})
 						return "integers"
 						break;
 					case "5":
-						//添加浮点型校验
-						this.rulesChild[item.field].push({
-							pattern: /^([1-9]\d{0,15}|0)(\.\d{1,4})?$/,
-							message: '请输入正确的' + item.fieldName,
-							trigger: 'blur'
-						})
 						return "floatingPoint"
 						break;
 					case "6":
@@ -498,7 +464,6 @@
 						//确认主表分类选定
 						if(this.ruleForm.workItemTypeName) {
 							//传走的校验置空，下面方法中重新添加
-							this.rulesChild = {}
 							var cur = []
 							let obj = {};
 							//循环判断是否有添加服务的字段名
@@ -557,7 +522,7 @@
 								}
 								return a.showNum - b.showNum
 							})
-							this.previewList.rowList = cur
+							this.conData.top.rowList = cur
 							//打开预览页面
 							this.showFigForm = true
 						} else {

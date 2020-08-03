@@ -124,6 +124,9 @@ export default {
         console.log("进入信息详情");
     },
     methods: {
+        /**
+         * 获取详情
+         */
         getDetail(){
             if(this.id!=null&&this.id!=''){
                 console.log(this.id);
@@ -131,7 +134,7 @@ export default {
                     id: this.id
                 }
                 this.$api.insideMail.getMailById(reqParam).then(res => {
-                    if(res.data.code==0){
+                    if(this.dataBack(res,"")){
                         let data = res.data.data;
                         this.formData.senderName = data.senderName;
                         this.formData.subject = data.subject;
@@ -141,8 +144,6 @@ export default {
                         this.formData.duplicateList = data.duplicateList;
                         this.formData.sendTime = data.sendTime;
                         this.content = data.content;
-                    }else{
-                        this.$message.error(res.data.msg)
                     };
                 })
             }

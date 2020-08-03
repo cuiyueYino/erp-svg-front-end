@@ -365,7 +365,8 @@ export default {
             }else{
                 let selectData=this.multipleSelection;
                 let fromdata={};
-                fromdata.oid=selectData[0].fsrcoId;
+                fromdata.foids=selectData[0].foid;
+                fromdata.oid=localStorage.getItem('ms_userId');
                 this.$api.processSet.RemoveTBin(fromdata).then(res=>{
                     let resData=res;                   
                     this.ShowFinancVisible=false;
