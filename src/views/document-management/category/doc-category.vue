@@ -235,8 +235,6 @@ export default {
         },
         //树结构点击事件
         handleNodeClick(data) {
-            debugger;
-            console.log(data);
             let fromdata={};
             fromdata.page=this.pageNum;
             fromdata.size=this.pageSize;
@@ -271,7 +269,6 @@ export default {
         },
         // 循环生成树数据
         toTreeData(data,id,pid,name,code) {
-            debugger;
             // 建立个树形结构,需要定义个最顶层的父节点，pId是1
             let parent = [];
             for (let i = 0; i < data.length; i++) {

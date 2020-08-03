@@ -214,13 +214,13 @@ class ITEMData {
 								index: 'workBusiGroup',
 								title: '工作业务组'
 							},
-							{
+							/*{
 								index: 'proBusiGroup',
 								title: '流程业务组'
-							},
+							},*/
 							{
 								index: 'businessProcess',
-								title: '流程业务',
+								title: '流程业务组',
 							},
 							{
 								index: 'peopleSet',
