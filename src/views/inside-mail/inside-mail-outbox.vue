@@ -33,10 +33,11 @@
                         style="width:140px">
                     </el-date-picker>
                 </el-col >
-                <el-col :span="3">
+                <el-col :span="4">
                     <el-button el-button type="primary" @click="search" icon="el-icon-search" size="mini">搜索</el-button>
+                    <el-button type="primary" plain class="el-icon-paperclip" @click="showAll" size="mini">显示全部</el-button>
                 </el-col>
-                <el-col :span="14" style="text-align: right;">
+                <el-col :span="13" style="text-align: right;">
                     <el-button type="primary" plain class="el-icon-s-promotion" @click="reply" size="mini">回复</el-button>
                     <el-button type="primary" plain class="el-icon-s-promotion" @click="replyAll" size="mini">回复全部</el-button>
                     <el-button type="primary" plain class="el-icon-share" @click="relay" size="mini">转发</el-button>
@@ -191,6 +192,16 @@ export default {
             // 刷新列表
             this.getSendMail();
         },
+
+        /**
+         * 显示全部
+         */
+        showAll() {
+            this.emptyParam();
+            this.pageNum = 1;
+            this.getSendMail();
+        },
+
         /**
          * 清空共享参数列表
          */

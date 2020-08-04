@@ -74,7 +74,7 @@
                 </el-card>
             </el-form>
             <span slot="footer" class="dialog-footer">
-                <el-button @click="ShowFinancVisible = false">取 消</el-button>
+                <el-button @click="handleClose">取 消</el-button>
                 <el-button type="primary" @click="onHandleSave">保存</el-button>
             </span>
         </el-dialog>
@@ -159,6 +159,10 @@ export default {
                 fromDataS.creator=localStorage.getItem('ms_userId');
             }else{
                 fromDataS.handler=localStorage.getItem('ms_userId');
+            }
+            if(this.formdata.activityName){  
+            }else{
+                this.formdata.activity='';
             }
             if(this.NewOrEditFlag==="NEW"){
                 this.saveNewMenu(fromDataS);
