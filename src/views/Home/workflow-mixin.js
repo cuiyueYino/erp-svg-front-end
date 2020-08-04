@@ -548,9 +548,11 @@ export default {
         saveEditWorkflow (workflowNodes) {console.log(workflowNodes) 
             let editMsg = JSON.parse( sessionStorage.getItem("eidtMsg") );
             workflowNodes.forEach(item => {
+                item.key = item.data.oid;
                 if(item.transition.length>0){
                     let newTransiton = item.transition;
                     newTransiton.forEach(items => {
+                        items.key = items.data.oid
                         if( items.from.transition ){
                             delete items.from.transition;
                             delete items.to.transition;

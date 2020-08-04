@@ -16,10 +16,25 @@
                             </ul>
                         </el-tab-pane>
                         <el-tab-pane label="消息中心" name="2">
-                            
                         </el-tab-pane>
                     </el-tabs>
-                
+             </el-card>
+             <el-card class="box-card">
+                 <span class="tab-title">新闻中心</span>
+                 <span class="tab-title-tips">News Center</span>
+                 <el-divider></el-divider>
+                  <el-tabs v-model="activeName" @tab-click="handleClick">
+                        <el-tab-pane label="处理中心" name="1">
+                            <ul class="ul-left">
+                                <li>关于岗位调整公示</li>
+                            </ul>
+                            <ul class="ul-right">
+                                <li>2020-7-30</li>
+                            </ul>
+                        </el-tab-pane>
+                        <el-tab-pane label="消息中心" name="2">
+                        </el-tab-pane>
+                    </el-tabs>
              </el-card>
         </el-main>
     </el-container>
@@ -107,6 +122,7 @@ export default {
   }
   .box-card{
       display: flex;
+      margin-bottom: 20px;
       .el-divider--horizontal{
         margin:11px 0 0 0;
         width: 63vw;

@@ -233,6 +233,7 @@ export default {
         //手工活动保存
         saveFormData(e,e2,e3){console.log(e,e2,e3)
             this.formData = e;
+            this.data.oid = e.oid;
             this.data.mactivity = {
                 "code": e.workCode,
                 "oid": e.workId,
@@ -322,6 +323,7 @@ export default {
         //连接线保存
         saveLineData(e){
             console.log(e);
+            this.data.oid = e.oid;
             this.data.code =e.linefcode;
             this.data.displayName = e.name;
             this.data.fremark = e.fremark;
@@ -347,6 +349,7 @@ export default {
          //审核活动保存
         saveJoinData(e,e1,e2,e3,e4,e5){
             console.log(e,e1,e2,e3,e4,e5);
+            this.data.oid = e.oid;
             this.data.displayName = e.name;
             //业务工作
             this.data.mactivity = {
@@ -490,6 +493,7 @@ export default {
         },
         //自由活动
         saveForkData(e){
+            this.data.oid = e.oid;
               this.data.mactivity = {
                 "code": e.workCode,
                 "oid": e.workId,
@@ -506,6 +510,7 @@ export default {
         },
          //路由
         saveRouteData(e){
+            this.data.oid = e.oid;
             this.data.hidden = e.checked?1:0;
             this.data.join = e.join?1:0;
             this.data.fremark = e.fremark;
@@ -515,6 +520,7 @@ export default {
         //子流程
         saveProcessData(e){
             console.log(e)
+            this.data.oid = e.oid;
             this.data.hidden = e.checked?1:0;
             this.data.refWfProcess = e.refWfProcess;
             this.data.fremark = e.fremark;

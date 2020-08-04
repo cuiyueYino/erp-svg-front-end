@@ -760,7 +760,7 @@ export default {
                     for(let j =0 ; j<newData.length; j++){
                         if(item.data.displayName == newData[j].data.displayName){
                             item.data = newData[j].data
-
+                            item.data.oid =newData[j].oid
                         }
                     }
                 }
@@ -774,10 +774,11 @@ export default {
              for(let k =0 ; k<this.dataObj.length; k++){
                 if(this.dataObj[k].data.displayName === node.data.displayName){
                     this.selectedNode.data = this.dataObj[k].data;
+                    this.selectedNode.data.oid = this.dataObj[k].oid;
                     // console.log(this.selectedNode,this.dataObj[k])
                 }
             }
-            this.nodeType = node.type;console.log(node)
+            this.nodeType = node.type;console.log(node,this.selectedNode)
             // console.log(this.selectedNode,this.workflowNodes)
         },
         // 清空面板事件
