@@ -42,7 +42,7 @@
                 </el-card>
             </el-form>
             <span slot="footer" class="dialog-footer">
-                <el-button @click="ShowFinancVisible = false">取 消</el-button>
+                <el-button @click="handleClose">取 消</el-button>
                 <el-button type="primary" @click="onHandleSave">确认</el-button>
             </span>
         </el-dialog>
