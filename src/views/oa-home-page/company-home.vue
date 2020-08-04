@@ -6,23 +6,38 @@
                  <span class="tab-title">通知公告</span>
                  <span class="tab-title-tips">Notice</span>
                  <el-divider></el-divider>
-                 <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
-                <el-menu-item index="1">处理中心</el-menu-item>
-                <el-menu-item index="3" >消息中心</el-menu-item>
-               </el-menu>
+                  <el-tabs v-model="activeName" @tab-click="handleClick">
+                        <el-tab-pane label="处理中心" name="1">
+                            <ul class="ul-left">
+                                <li>关于岗位调整公示</li>
+                            </ul>
+                            <ul class="ul-right">
+                                <li>2020-7-30</li>
+                            </ul>
+                        </el-tab-pane>
+                        <el-tab-pane label="消息中心" name="2">
+                            
+                        </el-tab-pane>
+                    </el-tabs>
+                
              </el-card>
         </el-main>
     </el-container>
     <el-aside width="30%">
         <div class="img1">
-            <img src="../../assets/img/oa2.png">
-            <img src="../../assets/img/oa5.png" class="img5">
+            <div>
+                <img src="../../assets/img/oa2.png">
+                <img src="../../assets/img/oa5.png" class="img5">
+            </div>
         </div>
         <div class="img2">
-            <!-- <img src="../../assets/img/oa1.png"> -->
+            <div>
+                <img src="../../assets/img/oa4.png">
+                <span>通讯录</span>
+            </div>
         </div>
         <el-card class="box-card-right">
-             <span class="tab-title">日历行程</span>
+             <span class="tab-title">日历</span>
             <span class="tab-title-tips">Calendar</span>
              <el-divider></el-divider>
              <el-calendar v-model="value">
@@ -37,7 +52,7 @@ export default {
     name:'oaCompanyHome',
     data() {
         return {
-            activeIndex: '1',
+            activeName: '1',
             value: new Date()
         };
     },
@@ -52,8 +67,8 @@ export default {
         
     },
     methods:{
-        handleSelect(key, keyPath) {
-        console.log(key, keyPath);
+        handleClick(tab, event) {
+        console.log(tab, event);
       },
         //删除
         deleteMsg(){
@@ -93,11 +108,20 @@ export default {
   .box-card{
       display: flex;
       .el-divider--horizontal{
-        margin:11px 0 18px 0;
+        margin:11px 0 0 0;
         width: 63vw;
       }
-      .el-menu.el-menu--horizontal{
-              border-bottom:none;
+     /deep/ .el-tabs__nav-wrap::after{
+          display: none !important;
+      }
+       /deep/ .el-tabs__content{
+              width: 96%;
+      }
+      .ul-left{
+          float: left;
+      }
+       .ul-right{
+          float: right;
       }
   }
   .tab-title{
@@ -114,13 +138,22 @@ export default {
       background-image: url("../../assets/img/oa1.png");
         max-width: 520px;
         height: 270px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
         // background-size: cover;
         // background-position: center;
         object-fit: cover;
         object-position: center top;
-        display: flex;
-        justify-content: center;
-        align-items: center;
+        div{
+            display: flex;
+            flex-wrap: wrap;
+            width: 200px;
+            justify-content: center;
+        }
+        img{
+            display: block;
+        }
     }
     .img2{
       background-image: url("../../assets/img/oa3.png");
@@ -129,6 +162,25 @@ export default {
         margin: 15px 0;
         object-fit: cover;
         object-position: center top;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+         div{
+            display: flex;
+            flex-wrap: wrap;
+            width: 100px;
+            justify-content: center;
+            img{
+                display: block;
+            }
+            span{
+                font-size:20px;
+                line-height: 16px;
+                margin-top: 30px;
+                color: #FFFFFF;
+
+            }
+        }
     }
     .box-card-right{
         display: flex;
@@ -150,5 +202,6 @@ export default {
     .img5{
         width: 140px;
         height: 34px;
+        margin-top: 30px;
     }
 </style>

@@ -526,6 +526,7 @@ export default {
                 };
             
             console.log(data)
+            console.log(JSON.stringify(data))
             //
             this.selectedNode = {};
             // 设置保存标识
@@ -564,7 +565,7 @@ export default {
                     "nodes": workflowNodes
                 };
                 console.log(data)
-            // console.log(JSON.stringify(data))
+            console.log(JSON.stringify(data))
             //
             this.selectedNode = {};
             // 设置保存标识
