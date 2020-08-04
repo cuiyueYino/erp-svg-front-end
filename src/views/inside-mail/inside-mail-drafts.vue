@@ -33,10 +33,11 @@
                         style="width:140px">
                     </el-date-picker>
                 </el-col >
-                <el-col :span="3">
+                <el-col :span="4">
                     <el-button el-button type="primary" @click="search" icon="el-icon-search" size="mini">搜索</el-button>
+                    <el-button type="primary" plain class="el-icon-paperclip" @click="showAll" size="mini">显示全部</el-button>
                 </el-col>
-                <el-col :span="14" style="text-align: right;">
+                <el-col :span="13" style="text-align: right;">
                     <el-button type="primary" plain class="el-icon-edit" @click="edit" size="mini">编辑</el-button>
                     <el-button type="info" plain class="el-icon-reading" @click="read" size="mini">查看</el-button>
                     <el-button type="danger" plain class="el-icon-delete" @click="deleteMsg" size="mini">删除</el-button>
@@ -70,7 +71,10 @@ export default {
             name: 'insideMailDrafts',
             pageNum: 1,
             pageSize: 10,
-            total: 100,
+            total: 0,
+
+            userName: localStorage.getItem('ms_username'),
+            userId: localStorage.getItem('ms_userId'),
             form : {
                 select:[],
                 selectVal: "",
@@ -134,6 +138,7 @@ export default {
         getDraftMail(){
             //表格查询基础参数
             let reqParam={
+                // owner: this.userId,
                 owner: 'BFPID000000LSN000E',
                 page: this.pageNum,
                 size: this.pageSize
@@ -183,6 +188,16 @@ export default {
             // 刷新列表
             this.getDraftMail();
         },
+
+        /**
+         * 显示全部
+         */
+        showAll() {
+            this.emptyParam();
+            this.pageNum = 1;
+            this.getDraftMail();
+        },
+
         /**
          * 清空共享参数列表
          */

@@ -41,7 +41,7 @@
                 </el-card>
             </el-form>
             <span slot="footer" class="dialog-footer">
-                <el-button @click="ShowFinancVisible = false">取 消</el-button>
+                <el-button @click="handleClose">取 消</el-button>
                 <el-button type="primary" @click="savefinanceValue">提交</el-button>
             </span>
         </el-dialog>
@@ -151,6 +151,7 @@ export default {
         //关闭当前dialog时给父组件传值
         handleClose(){
             //返回选中的父组件选中的row,并修某些改值
+            this.ShowFinancVisible = false;
             this.$emit('changeShow',this.rowBADataObj,false);
         },
         //选中数据改变

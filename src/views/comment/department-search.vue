@@ -42,7 +42,7 @@
                 </el-card>
             </el-form>
             <span slot="footer" class="dialog-footer">
-                <el-button @click="ShowFinancVisible = false">取 消</el-button>
+                <el-button @click="handleClose">取 消</el-button>
                 <el-button type="primary" @click="savefinanceValue">提交</el-button>
             </span>
         </el-dialog>
@@ -201,6 +201,7 @@ export default {
                     let tableDataArr=returndata.data.rows;
                     this.tableData = tableDataArr;
                     this.total = returndata.data.total;
+                    this.MoreSearchVisible=false;
                 } else {
                     this.$message.success('没有查到数据!');
                 }

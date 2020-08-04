@@ -265,7 +265,6 @@ export default {
             if (responsevalue) {
                 let tabledata=eval('(' + responsevalue.data.data + ')');
                 this.treeData=tabledata;
-                console.log(tabledata);
             }
         }); 
     },
@@ -338,7 +337,7 @@ export default {
         //查询发起人员
         MoreSearchPS(data,type){
             this.rowPStype = true;
-            let finandata={};
+            let finandata=data;
             finandata.finanrowname="人员缺省查询方案";
             finandata.finanrowId="QS_0056";
             finandata.nametitle="组织机构维护";
@@ -351,6 +350,13 @@ export default {
                 this.rowPStype = false;
             }else{
                 this.rowPStype = true;
+            }
+            if(data.UserSearchtype=='分管领导'){
+                this.DepformData.vicePresidentName=data.selectOptionName;
+                this.DepformData.vicePresidentId=data.selectOptionID;
+            }else{
+                this.DepformData.departmentLeaderName=data.selectOptionName;
+                this.DepformData.departmentLeaderId=data.selectOptionID;
             }
         },
         //查询职务
@@ -370,25 +376,23 @@ export default {
             }else{
                 this.rowDUTStype = true;
             }
+            if(data.UserSearchtype=="职务"){
+                this.DutformData.positonName=data.awardcreditbreedname;
+                this.DutformData.positonId=data.awardcreditbreedId;
+            }
         },
         //删除
         remove(){
-            this.$confirm('确定要删除这条信息吗?', '提示', {
-                confirmButtonText: '确定',
-                cancelButtonText: '取消',
-                type: 'warning'
-                }).then(() => {
-                    let selectData=this.NodeClickData;
-                    if(selectData.fstruid){
-                        let fromdata={};
-                        fromdata.fstruid=selectData.fstruid;
-                        this.$api.management.deleteOrganizationInfo(fromdata).then(response => {
-                            let responsevalue = response;
-                            this.$message.success('删除成功!');
-                            this.reload();
-                        });
-                    } 
-                })
+            let selectData=this.NodeClickData;
+            if(selectData.fstruid){
+                let fromdata={};
+                fromdata.fstruid=selectData.fstruid;
+                this.$api.management.deleteOrganizationInfo(fromdata).then(response => {
+                    let responsevalue = response;
+                    this.$message.success('删除成功!');
+                    this.reload();
+                });
+            } 
         },
         //作废
         tovoid(){
@@ -608,49 +612,45 @@ export default {
                     }
                 }else if(this.Departmentflag == true){
                     //保存部门
-                    let fromdata={};
+                    let fromdataBM={};
                     if(this.CeateTypeflag=='EDIT'){
-                        fromdata=SelectData;
+                        fromdataBM=SelectData;
                     }else{
-                        fromdata.foid='';
-                        fromdata.fcompanyOid=SelectData.foid;
-                        fromdata.pid=SelectData.foid;
+                        fromdataBM.foid='';
+                        fromdataBM.fcompanyOid=SelectData.foid;
+                        fromdataBM.pid=SelectData.foid;
                     }
-                    let saveflag=true;
+                    let saveflagBM=true;
                     if(this.DepformData.fcode){
-                        fromdata.fcode=this.DepformData.fcode;
+                        fromdataBM.fcode=this.DepformData.fcode;
                     }else{
                         this.$message.error('请输入部门编号!');
-                        saveflag=false;
+                        saveflagBM=false;
                     }
                     if(this.DepformData.fname){
-                        fromdata.fname=this.DepformData.fname;
+                        fromdataBM.fname=this.DepformData.fname;
                     }else{
                         this.$message.error('请输入部门名称!');
-                        saveflag=false;
+                        saveflagBM=false;
                     }
                     if(this.DepformData.fremark){
-                        fromdata.fremark=this.DepformData.fremark;
+                        fromdataBM.fremark=this.DepformData.fremark;
                     }else{
-                        fromdata.fremark="";
+                        fromdataBM.fremark="";
                     }
                     //长度检查
                     if (this.checkData(this.DepformData)){
                         return;
                     }
                     if(this.DepformData.vicePresidentName){
-                        fromdata.vicePresidentId=this.DepformData.vicePresidentName;
-                    }else{
-                        fromdata.vicePresidentId= 'BFPID000000OV20W6X';  
+                        fromdataBM.vicePresidentId=this.DepformData.vicePresidentId;
                     }
                     if(this.DepformData.departmentLeaderId){
-                        fromdata.departmentLeaderId=this.DepformData.departmentLeaderId;
-                    }else{
-                        fromdata.departmentLeaderId= 'BFPID000000OV20W6X';  
+                        fromdataBM.departmentLeaderId=this.DepformData.departmentLeaderId;
                     }
-                    fromdata.fcreator=localStorage.getItem('ms_userId');
-                    if(saveflag === true){
-                        this.$api.management.saveDeptmentInfo(fromdata).then(response => {
+                    fromdataBM.fcreator=localStorage.getItem('ms_userId');
+                    if(saveflagBM === true){
+                        this.$api.management.saveDeptmentInfo(fromdataBM).then(response => {
                             let responsevalue = response;
                             if(responsevalue.statusText && responsevalue.statusText=='OK'){
                                 this.disabled=true;
@@ -660,6 +660,7 @@ export default {
                                         let tabledata=eval('(' + responsevalue.data.data + ')');
                                         this.treeData=tabledata;
                                         this.defaultexpanded.push(this.NodeClickData.foid);
+                                        this.$message.success('部门新建成功!');
                                     }
                                 });
                             }else{
@@ -669,54 +670,54 @@ export default {
                     }
                 }else if(this.Dutiesflag == true){
                     //保存职务
-                    let fromdata={};
+                    let fromdataZW={};
                     if(this.CeateTypeflag=='EDIT'){
-                        fromdata=SelectData;
+                        fromdataZW=SelectData;
                     }else{
-                        fromdata.foid='';
-                        fromdata.fcompanyOid=SelectData.foid;
-                        fromdata.pid=SelectData.foid;
+                        fromdataZW.foid='';
+                        fromdataZW.fcompanyOid=SelectData.foid;
+                        fromdataZW.pid=SelectData.foid;
                     }
-                    let saveflag=true;
+                    let saveflagZW=true;
                     if(this.DutformData.fcode){
-                        fromdata.fcode=this.DutformData.fcode;
+                        fromdataZW.fcode=this.DutformData.fcode;
                     }else{
                         this.$message.error('请输入职位编号!');
-                        saveflag=false;
+                        saveflagZW=false;
                     }
                     if(this.DutformData.fname){
-                        fromdata.fname=this.DutformData.fname;
+                        fromdataZW.fname=this.DutformData.fname;
                     }else{
                         this.$message.error('请输入职位名称!');
-                        saveflag=false;
+                        saveflagZW=false;
                     }
                     if(this.DutformData.positonName){
-                        fromdata.positonId=this.DutformData.positonId;
+                        fromdataZW.positonId=this.DutformData.positonId;
                     }else{
-                        fromdata.positonId="";
+                        fromdataZW.positonId="";
                     }
                     if(this.DutformData.businessLeaderName){
-                        fromdata.businessLeaderId=this.DutformData.businessLeaderId;
+                        fromdataZW.businessLeaderId=this.DutformData.businessLeaderId;
                     }else{
-                        fromdata.businessLeaderId= '';  
+                        fromdataZW.businessLeaderId= '';  
                     }
                     if(this.DutformData.directLeaderName){
-                        fromdata.directLeaderId=this.DutformData.directLeaderId;
+                        fromdataZW.directLeaderId=this.DutformData.directLeaderId;
                     }else{
-                        fromdata.directLeaderId= '';  
+                        fromdataZW.directLeaderId= '';  
                     }
                     if(this.DutformData.responsibility){
-                        fromdata.responsibility=this.DutformData.responsibility;
+                        fromdataZW.responsibility=this.DutformData.responsibility;
                     }else{
-                        fromdata.responsibility= '';  
+                        fromdataZW.responsibility= '';  
                     }
                     //长度检查
                     if (this.checkData(this.DutformData)){
                         return;
                     }
-                    fromdata.fcreator=localStorage.getItem('ms_userId');
-                    if(saveflag === true){
-                        this.$api.management.savePositionInfo(fromdata).then(response => {
+                    fromdataZW.fcreator=localStorage.getItem('ms_userId');
+                    if(saveflagZW === true){
+                        this.$api.management.savePositionInfo(fromdataZW).then(response => {
                             let responsevalue = response;
                             if(responsevalue.statusText && responsevalue.statusText=='OK'){
                                 this.disabled=true;
@@ -726,6 +727,7 @@ export default {
                                         let tabledata=eval('(' + responsevalue.data.data + ')');
                                         this.treeData=tabledata;
                                         this.defaultexpanded.push(this.NodeClickData.foid);
+                                        this.$message.success('职务新建成功!');
                                     }
                                 });
                             }else{

@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div >
         <el-form 
             :model="formData" 
             label-width="100px"
@@ -30,7 +30,7 @@
             <el-row>
                 <el-col :span="14">
                     <el-form-item label="主题" prop="subject">
-                        <el-input  size="small" v-model="formData.subject" readonly></el-input>
+                        <el-input  size="small" v-model="formData.subject"  readonly></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>
@@ -49,6 +49,7 @@
                                 v-model="content"
                                 ref="myQuillEditor"
                                 :options="editorOption"
+                                style="height:400px"
                                 @blur="onEditorBlur($event)"
                                 @focus="onEditorFocus($event)"
                                 @change="onEditorChange($event)"
@@ -63,7 +64,7 @@
             <br/>
             <el-row>
                 <el-col :span="14">
-                    <el-button type="primary" @click="$parent.$parent.$parent.goBack();" icon="" size="mini">返回</el-button>
+                    <el-button type="primary" @click="$parent.$parent.goBack();" icon="" size="mini">返回</el-button>
                 </el-col>
             </el-row>
         </el-form>
@@ -169,5 +170,4 @@ export default {
 }
 </script>
 <style scoped>
-
 </style>

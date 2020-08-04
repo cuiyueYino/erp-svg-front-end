@@ -35,7 +35,7 @@ export default {
         lineData: {
             get () {console.log(this.linkData);//debugger
                 this.linkData.map(item => {
-                    if (Object.keys(item).length > 2) {console.log(item)
+                    if (Object.keys(item).length > 2) {//console.log(item)
                         // 添加连接线类型
                         item.type = 'Line';
                         // 获取连接线连接点坐标 以及连接线文本偏移量
@@ -319,7 +319,7 @@ export default {
             }
         },
         // 点到点连接线生成事件
-        endToEndLink ({ from, to }) {console.log( from, to);//debugger
+        endToEndLink ({ from, to }) {//console.log( from, to);//debugger
             if (typeof from === 'undefined' || typeof to === 'undefined') return;
             // 结构出发和到达目标对象
             const fromPoint = from.target;
@@ -526,6 +526,7 @@ export default {
                 };
             
             console.log(data)
+            console.log(JSON.stringify(data))
             //
             this.selectedNode = {};
             // 设置保存标识
@@ -547,13 +548,15 @@ export default {
         saveEditWorkflow (workflowNodes) {console.log(workflowNodes) 
             let editMsg = JSON.parse( sessionStorage.getItem("eidtMsg") );
             workflowNodes.forEach(item => {
-                let newTransiton = item.transition;
-                newTransiton.forEach(items => {
-                    if( items.from.transition ){
-                        delete items.from.transition;
-                        delete items.to.transition;
-                    }
-                });
+                if(item.transition.length>0){
+                    let newTransiton = item.transition;
+                    newTransiton.forEach(items => {
+                        if( items.from.transition ){
+                            delete items.from.transition;
+                            delete items.to.transition;
+                        }
+                    });
+                }
             });
             let data = {
                     "code": editMsg.code,
@@ -562,7 +565,7 @@ export default {
                     "nodes": workflowNodes
                 };
                 console.log(data)
-            // console.log(JSON.stringify(data))
+            console.log(JSON.stringify(data))
             //
             this.selectedNode = {};
             // 设置保存标识

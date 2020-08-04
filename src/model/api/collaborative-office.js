@@ -107,6 +107,10 @@ const collaborativeOffice = {
 	updateWorkItemTempModel(params) {
 		return httpReqest.post('/api/interfaces/workItemTemp/updateWorkItemTempModel', params);
 	},
+	//修改工作事项模版子表
+	updateWorkItemTempSubModel(params) {
+		return httpReqest.post('/api/interfaces/workItemTempSub/updateWorkItemTempSubModel', params);
+	},
 	//根据ID查询工作事项模版主表
 	getWorkItemTempModel(params) {
 		var valueS = '?';
@@ -117,6 +121,17 @@ const collaborativeOffice = {
 			valueS = valueS.slice(0, valueS.length - 1);
 		}
 		return httpReqest.get('/api/interfaces/workItemTemp/getWorkItemTempModel' + valueS);
+	},
+	//根据ID查询工作事项模版子表
+	getWorkItemTempSubModel(params) {
+		var valueS = '?';
+		for(var item in params) {
+			valueS += item + "=" + params[item] + "&";
+		}
+		if(valueS.slice(valueS.length - 1, valueS.length) === "&") {
+			valueS = valueS.slice(0, valueS.length - 1);
+		}
+		return httpReqest.get('/api/interfaces/workItemTempSub/getWorkItemTempSubModel' + valueS);
 	},
 	//api手动输入接口名称
 	apiUrl(url, params) {

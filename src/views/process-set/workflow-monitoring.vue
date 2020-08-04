@@ -205,7 +205,7 @@ export default {
                     type: 'selection'
                 },
                 {
-                    key: 'fcode',
+                    key: 'statusStr',
                     title: '状态'
                 },
                 {
@@ -213,54 +213,54 @@ export default {
                     title: '类型'
                 },
                 {
-                    key: 'fcode',
+                    key: 'metaClassName',
                     title: '单据类型'
                 },
                 {
-                    key: 'fcode',
+                    key: 'destNodeName',
                     title: '业务工作'
                 },
                 {
-                    key: 'fcode',
+                    key: 'startMan',
                     title: '发起人'
                 },
                 {
-                    key: 'fcode',
+                    key: 'startTime',
                     title: '发起时间'
                 },
                 {
-                    key: 'fcode',
+                    key: 'subject',
                     title: '主题'
                 },
                 {
-                    key: 'fcode',
+                    key: 'addresser',
                     title: '上一节点'
                 },
                 {
-                    key: 'fcode',
+                    key: 'receiveTime',
                     title: '审批人接收时间'
                 },
                 {
-                    key: 'fcode',
+                    key: 'standardTime',
                     title: '标准用时'
                 },
                 {
-                    key: 'fcode',
+                    key: 'handleTime',
                     title: '已耗时'
                 },{
-                    key: 'fcode',
+                    key: 'encyclicMan',
                     title: '转发人'
                 },
                 {
-                    key: 'fcode',
+                    key: 'encyclicTime',
                     title: '转发时间'
                 },
                 {
-                    key: 'fcode',
+                    key: 'transmitMan',
                     title: '委托人'
                 },
                 {
-                    key: 'fcode',
+                    key: 'transmitTime',
                     title: '委托时间'
                 }
             ],
@@ -377,33 +377,12 @@ export default {
                 page:this.pageNum,
                 size:this.pageSize
             };
-            /*this.$api.processSet.getTableData(data).then(res=>{
-                this.tableData = res.data.data.rows
-                for(let i in this.tableData){
-                    switch ( this.tableData[i].fstatus) {
-                        case 3:
-                             this.tableData[i].fstatus = '禁用'
-                             break;
-                        case 8:
-                             this.tableData[i].fstatus = '生效'
-                             break;
-                        default:
-                            break;
-                    }
-                    switch ( this.tableData[i].fsubprocess) {
-                    case 1:
-                            this.tableData[i].fsubprocess = '是'
-                            break;
-                    case 0:
-                            this.tableData[i].fsubprocess = '否'
-                            break;
-                    default:
-                        break;
-                }
-                }
+            this.$api.processSet.getTableData(data).then(res=>{
+                console.log(res)
+                this.tableData = res.data.data.rows;
             },error=>{
                 console.log(error)
-            })*/
+            })
         },
         //提交
         addSubmit(formName){

@@ -42,7 +42,7 @@
                 </el-card>
             </el-form>
             <span slot="footer" class="dialog-footer">
-                <el-button @click="ShowFinancVisible = false">取 消</el-button>
+                <el-button @click="handleClose">取 消</el-button>
                 <el-button type="primary" @click="savefinanceValue">提交</el-button>
             </span>
         </el-dialog>
@@ -91,7 +91,7 @@
                     <el-col :span="6" class="elColCenter">状态</el-col>
                     <el-col :span="6" class="elColCenter">等于</el-col>
                     <el-col :span="6">
-                        <el-select v-model="dialog.company">
+                        <el-select v-model="dialog.fstatus">
                             <el-option
                                 v-for="item in usertypeoptions"
                                 :key="item.value"
@@ -105,7 +105,7 @@
                     <el-col :span="6" class="elColCenter">职务类型</el-col>
                     <el-col :span="6" class="elColCenter">等于</el-col>
                     <el-col :span="6">
-                        <el-select v-model="dialog.company">
+                        <el-select v-model="dialog.fpositiontype">
                             <el-option
                                 v-for="item in jobtypeoptions"
                                 :key="item.code"
@@ -214,19 +214,19 @@ export default {
                     type: 'selection'
                 },
                 {
-                    key: 'code',
+                    key: 'fcode',
                     title: '编码'
                 },
                 {
-                    key: 'name',
+                    key: 'fname',
                     title: '名称'
                 },
                 {
-                    key: 'firmPositonName',
+                    key: 'fstatus',
                     title: '职务类型'
                 },
                 {
-                    key: 'firmPositonName',
+                    key: 'fremark',
                     title: '描述'
                 }
             ],
@@ -240,6 +240,7 @@ export default {
         //关闭当前dialog时给父组件传值
         handleClose(){
             //返回选中的父组件选中的row,并修某些改值
+            this.ShowFinancVisible = false;
             this.$emit('changeShow',this.rowDUTSDataObj,false);
         },
         onSelectionChange(val) {
@@ -251,26 +252,28 @@ export default {
         },
         //下一页
         onCurrentChange(val) {
-            var form = new FormData();
-            form.append('page', val);
-            form.append('size', this.pageSize);
-            this.$api.task.findAwardCreditBreedPage(form).then(response => {
+            let fromdata={};
+            fromdata.page=val;
+            fromdata.size=this.pageSize;
+            fromdata.fcompanyoid=localStorage.getItem('ms_companyId');
+            this.$api.jobUserManagement.getTableData(fromdata).then(response => {
                 let responsevalue = response;
                 if (responsevalue) {
-                    let returndata = responsevalue.data;
+                    let returndata = responsevalue.data.data;
                     let tableDataArr=returndata.rows;
-                    for(var i =0;i<tableDataArr.length;i++){
-                        if(tableDataArr[i].status === 1){
-                            tableDataArr[i].statusString="暂存";
-                        }else if(tableDataArr[i].status === 2){
-                            tableDataArr[i].statusString="提交";
-                        }else if(tableDataArr[i].status === 3){
-                            tableDataArr[i].statusString="有效";
-                        }else {
-                            tableDataArr[i].statusString="作废";
+                    this.tableData = tableDataArr;
+                    for (let i in this.tableData) {
+                        switch (this.tableData[i].fstatus) {
+                        case 3:
+                            this.tableData[i].fstatus = "有效";
+                            break;
+                        case 8:
+                            this.tableData[i].fstatus = "禁用";
+                            break;
+                        default:
+                            break;
                         }
                     }
-                    this.tableData = tableDataArr;
                     this.total = returndata.total;
                 } else {
                     this.$message.success('没有查到数据!');
@@ -279,38 +282,47 @@ export default {
         },
         //获得查询结果
         onHandleMoreSearch() {
-            var form = new FormData();
-            form.append('page', this.pageNum);
-            form.append('size', this.pageSize);
+            let fromdata={};
+            fromdata.page=this.pageNum;
+            fromdata.size=this.pageSize;
             let namevalueS=this.dialog.name;
             if(namevalueS && namevalueS!=''){
-                form.append('name', this.dialog.name); 
+                fromdata.name=this.dialog.name;
             }
             let codevalueS=this.dialog.codeNomber;
             if(codevalueS && codevalueS!=''){
-                form.append('code', this.dialog.codeNomber);
+                fromdata.code=this.dialog.codeNomber;
             }
             let compvalueS=this.dialog.company;
             if(compvalueS && compvalueS!=''){
-                form.append('company', this.dialog.company);
+                fromdata.fcompanyoid=this.dialog.company;
             }
-            this.$api.task.findAwardCreditBreedPage(form).then(response => {
+            let fstatusS=this.dialog.fstatus;
+            if(fstatusS && fstatusS!=''){
+                fromdata.fstatus=this.dialog.fstatus;
+            }
+            let fpostype=this.dialog.fpositiontype;
+            if(fpostype && fpostype!=''){
+                fromdata.fpositiontype=this.dialog.fpositiontype;
+            }
+            this.$api.jobUserManagement.getTableData(form).then(response => {
                 let responsevalue = response;
                 if (responsevalue) {
-                    let returndata = responsevalue.data;
+                    let returndata = responsevalue.data.data;
                     let tableDataArr=returndata.rows;
-                    for(var i =0;i<tableDataArr.length;i++){
-                        if(tableDataArr[i].status === 1){
-                            tableDataArr[i].statusString="暂存";
-                        }else if(tableDataArr[i].status === 2){
-                            tableDataArr[i].statusString="提交";
-                        }else if(tableDataArr[i].status === 3){
-                            tableDataArr[i].statusString="有效";
-                        }else {
-                            tableDataArr[i].statusString="作废";
+                    this.tableData = tableDataArr;
+                    for (let i in this.tableData) {
+                        switch (this.tableData[i].fstatus) {
+                        case 3:
+                            this.tableData[i].fstatus = "有效";
+                            break;
+                        case 8:
+                            this.tableData[i].fstatus = "禁用";
+                            break;
+                        default:
+                            break;
                         }
                     }
-                    this.tableData = tableDataArr;
                     this.total = returndata.total;
                     this.MoreSearchVisible = false;
                 } else {
@@ -325,11 +337,12 @@ export default {
                 if(selectOption.length >1){
                     this.$message.error('只能选择一行!');
                 }else{
+                    console.log(selectOption)
                     //返回选中的父组件选中的row,并修某些改值
-                    this.rowDSDataObj.awardcreditbreed=selectOption[0].code;
-                    this.rowDSDataObj.awardcreditbreedname=selectOption[0].name;
-                    this.rowDSDataObj.awardcreditbreedId=selectOption[0].id;
-                    this.$emit('changeShow',this.rowDSDataObj,false);
+                    this.rowDUTSDataObj.awardcreditbreed=selectOption[0].fcode;
+                    this.rowDUTSDataObj.awardcreditbreedname=selectOption[0].fname;
+                    this.rowDUTSDataObj.awardcreditbreedId=selectOption[0].foid;
+                    this.$emit('changeShow',this.rowDUTSDataObj,false);
                     this.ShowFinancVisible = false;
                 }
             }else{
@@ -348,33 +361,32 @@ export default {
             this.title=rowDataObj.nametitle;
             this.formdata.searchName=rowDataObj.finanrowId;
             this.rowFincename=rowDataObj.finanrowname;
-            var form = new FormData();
-            form.append('page', this.pageNum);
-            form.append('size', this.pageSize);
-            form.append('company', localStorage.getItem('ms_companyId'));
-            /*this.$api.task.findAwardCreditBreedPage(form).then(response => {
+            let fromdata={};
+            fromdata.page=this.pageNum;
+            fromdata.size=this.pageSize;
+            this.$api.jobUserManagement.getTableData(fromdata).then(response => {
                 let responsevalue = response;
                 if (responsevalue) {
-                    let returndata = responsevalue.data;
+                    let returndata = responsevalue.data.data;
                     let tableDataArr=returndata.rows;
-                    for(var i =0;i<tableDataArr.length;i++){
-                        if(tableDataArr[i].status === 1){
-                            tableDataArr[i].statusString="暂存";
-                        }else if(tableDataArr[i].status === 2){
-                            tableDataArr[i].statusString="提交";
-                        }else if(tableDataArr[i].status === 3){
-                            tableDataArr[i].statusString="有效";
-                        }else {
-                            tableDataArr[i].statusString="作废";
+                    this.tableData = tableDataArr;
+                    for (let i in this.tableData) {
+                        switch (this.tableData[i].fstatus) {
+                        case 3:
+                            this.tableData[i].fstatus = "有效";
+                            break;
+                        case 8:
+                            this.tableData[i].fstatus = "禁用";
+                            break;
+                        default:
+                            break;
                         }
                     }
-                    this.tableData = tableDataArr;
                     this.total = returndata.total;
                 } else {
                     this.$message.success('没有查到数据!');
                 }
             });
-            */
         }
     }
 }

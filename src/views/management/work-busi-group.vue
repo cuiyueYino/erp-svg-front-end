@@ -573,5 +573,4 @@ export default {
   left: 292px;
   cursor: pointer;
 }
-
 </style>

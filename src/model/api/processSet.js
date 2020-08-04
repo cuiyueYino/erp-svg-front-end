@@ -125,6 +125,37 @@ const processSet = {
         return httpReqest.post('/api/wfInterfaces/workFlow/handledTask', params);
     },
     //加批
+
+    //获取邮件列表
+    getMailInfo(params){
+        return httpReqest.post('api/wfInterfaces/workFlow/processMonitor/getMailInfoBypage', params);
+    },
+
+    //获取邮件详细信息
+    getMailDetailInfo(params){
+        return httpReqest.post('api/wfInterfaces/workFlow/processMonitor/getMailDetail', params);
+    },
+
+    //获取回复信息
+    getAuditReplyMsg(params){
+        return httpReqest.post('api/wfInterfaces/workFlow/processMonitor/getAuditReplyMsg', params);
+    },
+
+    //新增审批回复信息
+    addAuditReply(params){
+        return httpReqest.post('api/wfInterfaces/workFlow/processMonitor/addAuditReply', params);
+    },
+
+    //删除邮件
+    removeMail(params){
+        return httpReqest.post('api/wfInterfaces/workFlow/processMonitor/removeMail', params);
+    },
+
+    //保存编辑信息
+    saveEdit(params){
+        return httpReqest.post('api/wfInterfaces/workFlow/processMonitor/confirm', params);
+    },
+
     addSign(params){
         return httpReqest.post('/api/wfInterfaces/workFlow/addSign', params);
     },

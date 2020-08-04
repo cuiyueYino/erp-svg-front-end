@@ -1181,7 +1181,6 @@ const Utils = {
 	    }
 	},
 	exportExcel:function(params){
-		debugger;
 		var form = $('<form></form>');
 	    // 设置属性
 	    form.attr("action",webSubHost+"/excelOption/exportExcelFile");

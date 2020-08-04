@@ -137,8 +137,8 @@
         element-loading-text="加载中"
       ></dynamic-table>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="addSubmit('form')">保 存</el-button>
+        <el-button @click="closeDialog('form')">取 消</el-button>
+        <el-button  @click="addSubmit('form')">保 存</el-button>
       </div>
     </el-dialog>
     <!-- 使用者弹窗 -->
@@ -298,7 +298,7 @@ export default {
         fremark: ""
       },
       searchForm: {
-         fcode: "cuiyue",
+        fcode: "",
         fname: "",
         departmentname: "",
         fforbid: "",
@@ -424,6 +424,10 @@ export default {
     },
 
   methods: {
+    closeDialog(formName){
+      this.dialogFormVisible = false;
+      
+    },
     filterNode(value, data) {
       if (!value) return true;
       return data.label.indexOf(value) !== -1;
@@ -573,31 +577,34 @@ export default {
                 }
             });
             console.log(this.tableData2,newTableRow)
-            switch (newTableRow.foperationcontent) {
-              case '其他':
-                    newTableRow.content = 3
-                    newTableRow.cause = 3
-                break;
-              case '封号':
-                    newTableRow.content = 1
-                    newTableRow.cause = 1
-                break;
-              case '启用':
-                    newTableRow.content = 2
-                    newTableRow.cause = 2
-                break;
+            if(newTableRow){
+               switch (newTableRow.foperationcontent) {
+                  case '其他':
+                        newTableRow.content = 3
+                        newTableRow.cause = 3
+                    break;
+                  case '封号':
+                        newTableRow.content = 1
+                        newTableRow.cause = 1
+                    break;
+                  case '启用':
+                        newTableRow.content = 2
+                        newTableRow.cause = 2
+                    break;
 
-              default:
-                break;
+                  default:
+                    break;
+                }
+              this.form.tuseroperationrecordReqVo = {
+                fcompanyoid:this.form.fcompanyoid,
+                fcreator :'BFPID000000LQW0007',
+                foperationtime:newTableRow.foperationtime,
+                foperationcontent:newTableRow.content,
+                foperationcause:newTableRow.cause,
+                
+              }
             }
-            this.form.tuseroperationrecordReqVo = {
-              fcompanyoid:this.form.fcompanyoid,
-              fcreator :'BFPID000000LQW0007',
-              foperationtime:newTableRow.foperationtime,
-              foperationcontent:newTableRow.content,
-              foperationcause:newTableRow.cause,
-              
-            }
+           
           }else{
               //不修改表格
               this.form.tuseroperationrecordReqVo = {}
@@ -609,6 +616,7 @@ export default {
                   if ((res.data.data.msg = "success")) {
                     this.dialogFormVisible = false;
                     this.$message.success("修改成功");
+                    this.$refs[formName].resetFields();
                     //刷新表格
                     this.getTableData();
                   }
@@ -622,6 +630,7 @@ export default {
                   if (res.data.data.msg = "success") {
                     this.dialogFormVisible = false;
                     this.$message.success("新增成功");
+                    this.$refs[formName].resetFields();
                     //刷新表格
                     this.getTableData();
                   }else{
