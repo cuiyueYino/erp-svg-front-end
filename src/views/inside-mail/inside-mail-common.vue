@@ -31,12 +31,11 @@
                     <mailRecycle :key="recycleTimer"></mailRecycle>
                 </div>
             </el-tab-pane>
-            <el-tab-pane name = "detail" disabled>
-                <div>
-                    <mailDetail :id="mailId" :key="detailTimer"></mailDetail>
+                <div v-if = "detailView" >
+                    <mailDetail :id="mailId" :key="detailTimer" ></mailDetail>
                 </div>
-            </el-tab-pane>
         </el-tabs>
+                
     </div>
 </template>
 <script>
@@ -68,6 +67,8 @@ export default {
             outboxTimer:'',
             recycleTimer:'',
             detailTimer:'',
+
+            detailView: false,
         }
     },
     methods: {
@@ -82,6 +83,7 @@ export default {
          */
         handleClick(tab, event) {
             this.refresh(tab.name)
+             this.detailView = false
         },
         clearPerData(){
             this.perData = null;
@@ -91,7 +93,8 @@ export default {
          * 去详情页
          */
         toDetail(data,last){
-            this.common = "detail",
+            this.common = "",
+            this.detailView = true
             this.mailId = data,
             this.lastPage = last,
             this.refresh("detail");
@@ -101,6 +104,7 @@ export default {
          * 返回
          */
         goBack(){
+            this.detailView = false
             this.common = this.lastPage,
             this.refresh(this.lastPage)
         },

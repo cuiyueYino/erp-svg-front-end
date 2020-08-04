@@ -34,10 +34,11 @@
                 style="width:140px">
           </el-date-picker>
         </el-col >
-        <el-col :span="2">
+        <el-col :span="4">
           <el-button el-button type="primary" @click="search" icon="el-icon-search" size="mini">搜索</el-button>
+          <el-button type="primary" plain class="el-icon-paperclip" @click="showAll" size="mini">显示全部</el-button>
         </el-col>
-        <el-col :span="15" style="text-align: right;">
+        <el-col :span="13" style="text-align: right;">
           <el-button type="primary" plain class="el-icon-paperclip" @click="getUnRead" size="mini">未读邮件({{unReadCount}})</el-button>
           <el-button type="primary" plain class="el-icon-check" @click="setRead" size="mini">已读</el-button>
           <el-button type="primary" plain class="el-icon-check" @click="setReadAll" size="mini">全部已读</el-button>
@@ -215,6 +216,15 @@ export default {
       // 刷新列表
       this.getReceiveMail();
     },
+
+    /**
+     * 显示全部
+     */
+     showAll() {
+       this.emptyParam();
+       this.pageNum = 1;
+       this.getReceiveMail();
+     },
 
     /**
      * 选择器
