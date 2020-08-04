@@ -467,6 +467,15 @@ export default {
                         this.Departmentflag=false;
                         this.Dutiesflag=true;
                         this.disabled=true;
+                        let busLList=returndata.businessLeaderList;
+                        let busLListS='';
+                        if(busLList){
+                            for(let i=0;i<busLList.length;i++){
+                                busLListS+=busLList[i].fname+",";
+                            }
+                            busLListS=busLListS.slice(0,busLListS.length-1);
+                            returndata.businessLeaderName=busLListS;
+                        }
                         this.DutformData=returndata;
                     } else {
                         this.$message.success('没有查到数据!');
@@ -603,6 +612,7 @@ export default {
                                         let tabledata=eval('(' + responsevalue.data.data + ')');
                                         this.treeData=tabledata;
                                         this.defaultexpanded.push(this.NodeClickData.foid);
+                                        this.$message.success('公司保存成功!');
                                     }
                                 });
                             }else{
@@ -660,7 +670,7 @@ export default {
                                         let tabledata=eval('(' + responsevalue.data.data + ')');
                                         this.treeData=tabledata;
                                         this.defaultexpanded.push(this.NodeClickData.foid);
-                                        this.$message.success('部门新建成功!');
+                                        this.$message.success('部门保存成功!');
                                     }
                                 });
                             }else{
@@ -727,7 +737,7 @@ export default {
                                         let tabledata=eval('(' + responsevalue.data.data + ')');
                                         this.treeData=tabledata;
                                         this.defaultexpanded.push(this.NodeClickData.foid);
-                                        this.$message.success('职务新建成功!');
+                                        this.$message.success('职务保存成功!');
                                     }
                                 });
                             }else{

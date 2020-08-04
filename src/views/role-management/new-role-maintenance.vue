@@ -231,12 +231,18 @@ export default {
                 if(this.formdata.remark){
                     fromdata.remark=this.formdata.remark;
                 }
+                if(SelectNodeDate.length ===0){
+                    this.$message.error('请选择业务权限!');
+                    savetype=false;
+                }else{
+                    let MenuObj={};
+                    MenuObj.company=this.company;
+                    MenuObj.menuIds=SelectNodeDate;
+                    fromdata.roleMenu=MenuObj;
+                    savetype=true;
+                }
                 fromdata.company=this.company;
                 fromdata.creator=localStorage.getItem('ms_userId');
-                let MenuObj={};
-                MenuObj.company=this.company;
-                MenuObj.menuIds=SelectNodeDate;
-                fromdata.roleMenu=MenuObj;
                 if(savetype){
                     this.$api.RoleManagement.insertRoleModel(fromdata).then(response => {
                         let responsevalue = response;
@@ -279,11 +285,17 @@ export default {
                 }
                 fromdata.company=this.company;
                 fromdata.creator=localStorage.getItem('ms_userId');
-                let MenuObj={};
-                MenuObj.company=this.company;
-                MenuObj.roleId=this.formdata.id;
-                MenuObj.menuIds=SelectNodeDate;
-                fromdata.roleMenu=MenuObj;
+                if(SelectNodeDate.length ===0){
+                    this.$message.error('请选择业务权限!');
+                    savetype=false;
+                }else{
+                    let MenuObj={};
+                    MenuObj.company=this.company;
+                    MenuObj.roleId=this.formdata.id;
+                    MenuObj.menuIds=SelectNodeDate;
+                    fromdata.roleMenu=MenuObj;
+                    savetype=true;
+                }
                 if(savetype){
                     this.$api.RoleManagement.updateRoleModel(fromdata).then(response => {
                         let responsevalue = response;
@@ -404,6 +416,7 @@ export default {
             this.createtype=this.rowNRMDataObj.createtype;
             if(this.rowNRMDataObj.createtype =="NEW"){
                 this.maketree(this.company);
+                this.formdata={};
             }else{
                 let selectdata=this.rowNRMDataObj.SelectData;
                 let fromdata={};

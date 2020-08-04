@@ -91,6 +91,7 @@ export default {
     components: {
       busActpage,
     },
+    inject: ['reload'],
     data(){
         return{
             ShowFinancVisible:false,
@@ -162,8 +163,9 @@ export default {
             }
             if(this.formdata.activityName){  
             }else{
-                this.formdata.activity='';
+                fromDataS.activityId='';
             }
+            console.log(fromDataS)
             if(this.NewOrEditFlag==="NEW"){
                 this.saveNewMenu(fromDataS);
             }else{
@@ -179,7 +181,7 @@ export default {
             }
             if(data.selectBADataObj){
                 this.formdata.activityName=data.selectBADataObj.fname;
-                this.formdata.activity=data.selectBADataObj.foid;
+                this.formdata.activityId=data.selectBADataObj.foid;
             }
         },
         //根据ID查询菜单
@@ -234,7 +236,9 @@ export default {
             this.NewOrEditFlag=this.rowNMMDataObj.NewOrEditFlag;
             if(this.rowNMMDataObj.NewOrEditFlag==="NEW"){
                 this.formdata={};
-                this.formdata.company=this.rowNMMDataObj.company;   
+                this.formdata.company=this.rowNMMDataObj.company;
+                this.formdata.parentId=this.rowNMMDataObj.parentId;
+                this.formdata.strutid=this.rowNMMDataObj.strutid;   
             }else{
                 let fromdataA={};
                 fromdataA.id=this.rowNMMDataObj.MenuID;
