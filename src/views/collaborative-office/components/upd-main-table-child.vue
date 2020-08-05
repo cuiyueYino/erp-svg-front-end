@@ -454,7 +454,6 @@
 				this.goOk("最大数据已经返回，可以预览")
 				this.allOrganizationInfo = eval('(' + data.data.data + ')')
 			})
-			this.getDialogVisible(false)
 			this.getType(this.ruleForm.type)
 		},
 		methods: {
@@ -615,7 +614,6 @@
 							})
 						}
 					})
-					console.log(rowConList)
 					item.parameterList = []
 					//时间控件计算差值
 					rowConList.forEach(itemChild => {
@@ -756,8 +754,7 @@
 			preview() {
 				this.$refs.ruleFormTable.validate((valid) => {
 					if(valid) {
-						console.log(this.ruleForm.type)
-						this.conData.bottom[0].label = this.ruleForm.showName
+						this.conData.bottom[0].showName = this.ruleForm.showName
 						this.conData.bottom[0].type = this.ruleForm.type
 						//确认子表分类选定
 						if(this.ruleForm.workItemTypeSubName) {

@@ -184,7 +184,6 @@
 			//搜索
 			toSelect() {
 				this.$api.collaborativeOffice.findWorkItemTempPage(this.formInline).then(data => {
-					console.log(data)
 					this.tableData = data.data.data.rows
 					this.currentTotal = data.data.data.total
 				})

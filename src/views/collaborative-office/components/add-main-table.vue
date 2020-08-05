@@ -181,7 +181,7 @@
 			</el-dialog>
 		</div>
 		<div v-if="showFigForm">
-			<formAndTable :form-data="conData">
+			<formAndTable showAdd="1" :form-data="conData">
 				<el-row style="text-align: right;margin-bottom: 10px;">
 					<el-button icon="el-icon-arrow-left" size="mini" type="danger" plain @click="showFigForm = false">返回</el-button>
 				</el-row>
@@ -237,7 +237,7 @@
 					code: [{
 							required: true,
 							message: '请输入主表分类编码',
-							trigger: 'blur'
+							trigger: 'change'
 						},
 						{
 							pattern: /^[a-z_A-Z0-9-\.!@#\$%\\\^&\*\)\(\+=\{\}\[\]\/",'<>~\·`\?:;|]+$/,
@@ -247,7 +247,7 @@
 					name: [{
 							required: true,
 							message: '请输入主表分类名称',
-							trigger: 'blur'
+							trigger: 'change'
 						},
 						{
 							pattern: "[\u4e00-\u9fa5]",
@@ -257,7 +257,7 @@
 					workItemTypeName: [{
 						required: true,
 						message: '请选择主表分类',
-						trigger: 'blur'
+						trigger: 'change'
 					}],
 				},
 				//校验规则-table
@@ -265,17 +265,17 @@
 					lengthType: [{
 						required: true,
 						message: "请选择字段长度类型",
-						trigger: "blur"
+						trigger: "change"
 					}],
 					orderNum: [{
 						required: true,
 						message: "请输入显示顺序",
-						trigger: "blur"
+						trigger: "change"
 					}],
 					showNum: [{
 						required: true,
 						message: "请填写显示行数",
-						trigger: "blur"
+						trigger: "change"
 					}],
 				},
 				//字段类型
@@ -529,6 +529,7 @@
 							this.goOut("请选择主表分类")
 						}
 					}
+					console.log(this.conData.top)
 				});
 			},
 			//选择主表分类
@@ -616,6 +617,10 @@
 					if(valid) {
 						this.$refs.ruleFormTable.validate((valid) => {
 							if(valid) {
+								this.ruleForm.oprStatus = 1
+								this.ruleForm.lines.forEach(item => {
+									item.oprStatus = 1
+								})
 								this.$api.collaborativeOffice.insertWorkItemTempModel(this.ruleForm).then(data => {
 									if(this.dataBack(data, msg)) {
 										this.$parent.toSelect()

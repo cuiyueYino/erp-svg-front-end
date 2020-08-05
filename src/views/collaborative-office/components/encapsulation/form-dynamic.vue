@@ -1,9 +1,9 @@
 <template>
 	<div>
 		<slot></slot>
-		<el-form ref="ruleForm" class="demo-ruleForm" :model="ruleForm" :label-width="formData.labelWidth" :rules="rules" :inline="formData.inline" :size="formData.size" :label-position="formData.labelPosition">
+		<el-form ref="ruleForm" class="demo-ruleForm" :model="ruleForm" label-width="80px" :rules="rules" :inline="formData.inline" :size="formData.size" :label-position="formData.labelPosition">
 			<!--固定部分-->
-			<div>
+			<div v-if="show == 1">
 				<el-row>
 					<el-col :span="8">
 						<el-form-item label="单据编号" prop="voucherId">
@@ -19,12 +19,12 @@
 				<el-row>
 					<el-col :span="8">
 						<el-form-item label="经办人" prop="gestor">
-							<el-input style="width: 100%;" v-model="ruleForm.gestor" disabled></el-input>
+							<el-input style="width: 100%;" v-model="gestorName" disabled></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :span="8">
 						<el-form-item label="经办部门" prop="gestorDept">
-							<el-input style="width: 100%;" v-model="ruleForm.gestorDept" disabled></el-input>
+							<el-input style="width: 100%;" v-model="gestorDeptName" disabled></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :span="8">
@@ -37,37 +37,34 @@
 			<!--动态部分-->
 			<el-row v-for="(val, index) in formData.rowList" :key="index">
 				<el-col v-for="(item,indexOther) in val.colList" :key="indexOther" :span="item.lengthType * 8">
-					<el-form-item v-if="item.fieldTypeName == 'browseBox' && item.show" :label="item.fieldName" :prop="item.field+'Name'">
-						<!-- 浏览框 -->
-						<el-input style="width: 100%;" v-model="ruleForm[item.field+'Name']" disabled>
-							<el-button @click="findDialogVisible(item)" slot="append" icon="el-icon-search"></el-button>
-						</el-input>
-					</el-form-item>
-					<el-form-item v-else :label="item.fieldName" :prop="item.field">
-						<!-- 字符型 / 文本框 / 整型 / 浮点型 -->
-						<el-input v-if="item.fieldTypeName=='character' || item.fieldTypeName=='textType' || item.fieldTypeName=='integers' || item.fieldTypeName=='floatingPoint' && item.show" style="width: 100%;" v-model="ruleForm[item.field]" :disabled="!item.edit" />
-						<!--富文本-->
-						<quill-editor v-if="item.fieldTypeName == 'richText' && item.show" style="width: 100%;" v-model="ruleForm[item.field]" ref="myQuillEditor" :options="editorOption" @blur="onEditorBlur($event)" @focus="onEditorFocus($event)" @change="onEditorChange($event)"></quill-editor>
-						<!-- 日期选择器 -->
-						<el-date-picker v-if="item.fieldTypeName == 'dateControl' && item.show" @change="getDate(item)" style="width: 100%;" :disabled="!item.edit" v-model="ruleForm[item.field]" type="date" value-format="yyyy-MM-dd" placeholder="选择日期" />
-						<!--时间控件-->
-						<el-time-picker v-if="item.fieldTypeName == 'timeControl' && item.show" style="width: 100%;" v-model="ruleForm[item.field]"></el-time-picker>
-						<!-- 下拉框 -->
-						<el-select v-if="item.fieldTypeName == 'select' && item.show" style="width: 100%;" v-model="ruleForm[item.field]" :multiple="item.choice" clearable :disabled="!item.edit" :placeholder="item.placeholder">
-							<el-option v-for="itemSelect in item.resList" :key="itemSelect.id" :label="itemSelect.name" :value="itemSelect.id" />
-						</el-select>
-						<!--复选框-->
-						<el-checkbox-group v-if="item.fieldTypeName == 'checkBox' && item.show" style="width: 100%;" v-model="ruleForm[item.field]" :disabled="!item.edit">
-							<el-checkbox label="复选框 A"></el-checkbox>
-						</el-checkbox-group>
-					</el-form-item>
+					<div v-if="item.show">
+						<el-form-item v-if="item.fieldTypeName == 'browseBox'" :label="item.fieldName" :prop="item.field+'_NameShow'">
+							<!-- 浏览框 -->
+							<el-input style="width: 100%;" v-model="ruleForm[item.field+'_NameShow']" disabled>
+								<el-button @click="findDialogVisible(item)" slot="append" icon="el-icon-search"></el-button>
+							</el-input>
+						</el-form-item>
+						<el-form-item v-else :label="item.fieldName" :prop="item.field">
+							<!-- 字符型 / 文本框 / 整型 / 浮点型 -->
+							<el-input v-if="item.fieldTypeName=='character' || item.fieldTypeName=='textType' || item.fieldTypeName=='integers' || item.fieldTypeName=='floatingPoint' && item.show" style="width: 100%;" v-model="ruleForm[item.field]" :disabled="!item.edit" />
+							<!--富文本-->
+							<quill-editor v-if="item.fieldTypeName == 'richText' && item.show" style="width: 100%;" v-model="ruleForm[item.field]" ref="myQuillEditor" :options="editorOption" @blur="onEditorBlur($event)" @focus="onEditorFocus($event)" @change="onEditorChange($event)"></quill-editor>
+							<!-- 日期选择器 -->
+							<el-date-picker v-if="item.fieldTypeName == 'dateControl' && item.show" @change="getDate(item)" style="width: 100%;" :disabled="!item.edit" v-model="ruleForm[item.field]" type="date" value-format="yyyy-MM-dd" placeholder="选择日期" />
+							<!--时间控件-->
+							<el-time-picker v-if="item.fieldTypeName == 'timeControl' && item.show" style="width: 100%;" v-model="ruleForm[item.field]"></el-time-picker>
+							<!-- 下拉框 -->
+							<el-select v-if="item.fieldTypeName == 'select' && item.show" style="width: 100%;" v-model="ruleForm[item.field]" :multiple="item.choice" clearable :disabled="!item.edit" :placeholder="item.placeholder">
+								<el-option v-for="itemSelect in item.resList" :key="itemSelect.id" :label="itemSelect.name" :value="itemSelect.id" />
+							</el-select>
+							<!--复选框-->
+							<el-checkbox-group v-if="item.fieldTypeName == 'checkBox' && item.show" style="width: 100%;" v-model="ruleForm[item.field]" :disabled="!item.edit">
+								<el-checkbox label="复选框 A"></el-checkbox>
+							</el-checkbox-group>
+						</el-form-item>
+					</div>
 				</el-col>
 			</el-row>
-			<el-form-item>
-				<el-button type="primary" @click="onSubmit('ruleForm')">
-					效果展示
-				</el-button>
-			</el-form-item>
 		</el-form>
 		<!--弹出框-->
 		<el-dialog :title="titleShow" top="1vh" destroy-on-close center :visible.sync="dialogVisible" width="80%">
@@ -98,6 +95,14 @@
 				type: Object,
 				required: true
 			},
+			show: {
+				type: String,
+				required: true
+			},
+			showAdd: {
+				type: String,
+				required: true
+			}
 		},
 		data() {
 			return {
@@ -105,16 +110,15 @@
 					title: [{
 						required: true,
 						message: '请输入子表分类编码',
-						trigger: 'blur'
+						trigger: 'change'
 					}]
-				}, //表单
-				ruleForm: {
-					voucherId: "",
-					title: "",
-					gestor: "",
-					gestorDept: "",
-					voucherTime: ""
 				},
+				//表单
+				ruleForm: {
+					tableName: this.formData.tableName
+				},
+				gestorName: "",
+				gestorDeptName: "",
 				//弹出框表头
 				titleShow: "",
 				//传入类型
@@ -126,37 +130,99 @@
 				//中间变量
 				dialogVisibleCon: {},
 				//富文本基础数据
-				editorOption: this.$GLOBAL.editorOption
+				editorOption: this.$GLOBAL.editorOption,
+				timer: ""
+			}
+		},
+		//销毁时间
+		beforeDestroy() {
+			if(this.timer) {
+				clearInterval(this.timer);
 			}
 		},
 		created() {
-			this.getOther()
-			this.getrulesList()
+			if(this.show == 1) {
+				if(this.showAdd == 1) {
+					this.gestorName = localStorage.getItem('ms_username')
+					this.gestorDeptName = localStorage.getItem('ms_userDepartName')
+					this.$set(this.ruleForm, "gestor", localStorage.getItem('ms_userId'))
+					this.$set(this.ruleForm, "gestorName", localStorage.getItem('ms_username'))
+					this.$set(this.ruleForm, "gestorDept", localStorage.getItem('ms_userDepartId'))
+				} else {
+//					this.gestorName = localStorage.getItem('ms_username')
+//					this.$set(this.ruleForm, "gestorDept", localStorage.getItem('ms_userDepartId'))
+//					this.$set(this.ruleForm, "gestor", localStorage.getItem('ms_userId'))
+//					this.$set(this.ruleForm, "gestorDept", localStorage.getItem('ms_userDepartId'))
+				}
+				this.$set(this.ruleForm, "voucherId", "")
+				this.$set(this.ruleForm, "title", "")
+				this.$set(this.ruleForm, "voucherTime", new Date().getFullYear() +
+					"-" +
+					(new Date().getMonth() + 1) +
+					"-" +
+					new Date().getDate() +
+					" " +
+					this.appendZero(new Date().getHours()) +
+					":" +
+					this.appendZero(new Date().getMinutes()) +
+					":" +
+					this.appendZero(new Date().getSeconds()))
+				this.getTime()
+			}
+			if(!this.noObject(this.formData) && typeof(this.formData.rowList) != "undefined") {
+				this.getOther()
+				this.getrulesList()
+			}
+			console.log(this.ruleForm)
 		},
 		methods: {
+			getTime() {
+				var self = this
+				self.timer = setInterval(function() {
+					self.ruleForm.voucherTime =
+						new Date().getFullYear() +
+						"-" +
+						(new Date().getMonth() + 1) +
+						"-" +
+						new Date().getDate() +
+						" " +
+						self.appendZero(new Date().getHours()) +
+						":" +
+						self.appendZero(new Date().getMinutes()) +
+						":" +
+						self.appendZero(new Date().getSeconds());
+				}, 1000);
+			},
+			appendZero(obj) {
+				if(obj < 10) {
+					return "0" + obj;
+				} else {
+					return obj;
+				}
+			},
 			getrulesList() {
 				this.formData.rowList.forEach(itemOne => {
 					itemOne.colList.forEach(item => {
 						this.rules[item.field] = []
-						this.rules[item.field + "Name"] = []
+						this.rules[item.field + "_NameShow"] = []
 						if(item.required) {
 							if(item.fieldType == 1) {
-								this.rules[item.field + "Name"].push({
+								this.rules[item.field + "_NameShow"].push({
 									required: true,
 									message: "请填写" + item.fieldName,
-									trigger: 'blur'
+									trigger: 'change'
 								})
 							} else if(item.fieldType == 9) {
 								this.rules[item.field].push({
 									required: true,
 									message: "请填写" + item.fieldName,
-									trigger: 'blur'
+									trigger: 'change'
 								})
 							} else {
 								this.rules[item.field].push({
 									required: true,
 									message: "请填写" + item.fieldName,
-									trigger: 'blur'
+									trigger: 'change'
 								})
 							}
 						}
@@ -166,11 +232,11 @@
 								this.rules[item.field].push({
 									pattern: /^-?[1-9]\d*$/,
 									message: '请输入正确的' + item.fieldName,
-									trigger: 'blur'
+									trigger: 'change'
 								}, {
 									max: 20,
 									message: '长度至多20位字符',
-									trigger: 'blur'
+									trigger: 'change'
 								})
 								return "integers"
 								break;
@@ -179,7 +245,7 @@
 								this.rules[item.field].push({
 									pattern: /^([1-9]\d{0,15}|0)(\.\d{1,4})?$/,
 									message: '请输入正确的' + item.fieldName,
-									trigger: 'blur'
+									trigger: 'change'
 								})
 								return "floatingPoint"
 								break;
@@ -245,7 +311,7 @@
 							})
 							//存入值
 							this.$set(this.ruleForm, listChild.colList[i2].field, conNow.id)
-							//							this.$set(this.ruleForm, listChild.colList[i2].field + "Name", conNow.name)
+							//							this.$set(this.ruleForm, listChild.colList[i2].field + "_NameShow", conNow.name)
 						}
 					}
 				}
@@ -253,12 +319,14 @@
 			//弹出框确定
 			getDialogVisible() {
 				//获取子组件返回的id和name
-				this.$set(this.ruleForm, this.dialogVisibleCon.field + 'Name', this.$refs.child.backCon.label)
+				this.$set(this.ruleForm, this.dialogVisibleCon.field + '_NameShow', this.$refs.child.backCon.label)
 				this.$set(this.ruleForm, this.dialogVisibleCon.field, this.$refs.child.backCon.value) //如果有联动查询的数据
 				if(this.dialogVisibleCon.parameterList.length != 0) {
 					//调用toGetServiceNow（绑定的联动改变字段，获取的选中id）
 					this.toGetServiceNow(this.dialogVisibleCon.parameterList, this.$refs.child.backCon.value)
 				}
+//				this.ruleForm.show_NameShow = undefined
+//				console.log(JSON.stringify(this.ruleForm))
 				this.dialogVisible = false
 			},
 			/*
@@ -315,7 +383,7 @@
 								})
 								//改变需要联动的值的内容和显示内容
 								this.$set(this.ruleForm, listChild.colList[i2].field, conNow.id)
-								this.$set(this.ruleForm, listChild.colList[i2].field + "Name", conNow.name)
+								this.$set(this.ruleForm, listChild.colList[i2].field + "_NameShow", conNow.name)
 							}
 						}
 					}
@@ -388,13 +456,13 @@
 			},
 			//测试提交
 			onSubmit(formName) {
-				this.$refs[formName].validate((valid) => {
+				var returnData = false
+				this.$refs.ruleForm.validate((valid) => {
 					if(valid) {
-						this.goOk("可以提交")
-					} else {
-						this.goOk("数据填写不全")
+						returnData = true
 					}
 				});
+				return returnData
 			},
 			//富文本事件
 			onEditorBlur() {}, // 失去焦点事件

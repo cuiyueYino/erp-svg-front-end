@@ -111,6 +111,10 @@ const collaborativeOffice = {
 	updateWorkItemTempSubModel(params) {
 		return httpReqest.post('/api/interfaces/workItemTempSub/updateWorkItemTempSubModel', params);
 	},
+	//分页查询工作事项，必填参数creator
+	findPage(params) {
+		return httpReqest.post('/api/interfaces/workItem/findPage', params);
+	},
 	//根据ID查询工作事项模版主表
 	getWorkItemTempModel(params) {
 		var valueS = '?';
@@ -132,6 +136,17 @@ const collaborativeOffice = {
 			valueS = valueS.slice(0, valueS.length - 1);
 		}
 		return httpReqest.get('/api/interfaces/workItemTempSub/getWorkItemTempSubModel' + valueS);
+	},
+	//根据ID查询工作事项模版
+	findById(params) {
+		var valueS = '?';
+		for(var item in params) {
+			valueS += item + "=" + params[item] + "&";
+		}
+		if(valueS.slice(valueS.length - 1, valueS.length) === "&") {
+			valueS = valueS.slice(0, valueS.length - 1);
+		}
+		return httpReqest.get('/api/interfaces/workItem/findById' + valueS);
 	},
 	//api手动输入接口名称
 	apiUrl(url, params) {

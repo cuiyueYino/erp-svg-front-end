@@ -145,19 +145,23 @@ class ITEMData {
 						title: '工作事项',
 						subs: [{
 								index: 'templateMainTableClassification',
-								title: '工作事项模板主表分类',
+								title: '主表分类模板',
 							},
 							{
 								index: 'templateMainTable',
-								title: '工作事项模板主表',
+								title: '主表模板',
 							},
 							{
 								index: 'templateMainTableClassificationChild',
-								title: '工作事项模板子表分类',
+								title: '子表分类模板',
 							},
 							{
 								index: 'templateMainTableChild',
-								title: '工作事项模板子表',
+								title: '子表模板',
+							},
+							{
+								index: 'workItems',
+								title: '工作事项',
 							}
 						]
 					},
