@@ -151,6 +151,16 @@ const processSet = {
         return httpReqest.post('api/wfInterfaces/workFlow/processMonitor/removeMail', params);
     },
 
+    // 查询公司
+    getCompanyData(){
+        return httpReqest.get('/api/interfaces/organization/getCompanyData');
+    },
+
+    //获取业务数据列表
+    getTmClass(){
+        return httpReqest.post('api/wfInterfaces/workFlow/processMonitor/getTmClass');
+    },
+
     //保存编辑信息
     saveEdit(params){
         return httpReqest.post('api/wfInterfaces/workFlow/processMonitor/confirm', params);
