@@ -67,7 +67,7 @@
                 </el-col>
             </el-form>
             <div slot="footer" class="dialog-footer">
-                <el-button @click="dialogFormVisible = false">取 消</el-button>
+                <el-button @click="closeDialog('form')">取 消</el-button>
                 <el-button type="primary" @click="addSubmit('form')">确 定</el-button>
             </div>
         </el-dialog>
@@ -132,7 +132,9 @@ export default {
           delivery: false,
           type: [],
           resource: '',
-          fremark: ''
+          fremark: '',
+          fcode:'',
+          fname:'',
         },
         formLabelWidth: '120px',
          rules: {
@@ -159,7 +161,18 @@ export default {
     computed:{
         
     },
+    watch:{
+        dialogFormVisible(val){
+            if(!val){
+                this.$refs['form'].resetFields();
+            }
+        }
+    },
     methods:{
+        closeDialog(formName){
+            this.dialogFormVisible = false;
+            this.$refs[formName].resetFields();
+        },
         //多选
         onSelectionChange(val) {//console.log(val)
             this.multipleSelection = val;

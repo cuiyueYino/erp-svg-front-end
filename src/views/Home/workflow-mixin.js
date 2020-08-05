@@ -548,14 +548,37 @@ export default {
         saveEditWorkflow (workflowNodes) {console.log(workflowNodes) 
             let editMsg = JSON.parse( sessionStorage.getItem("eidtMsg") );
             workflowNodes.forEach(item => {
-                item.key = item.data.oid;
+                if(item.data.oid){
+                    item.key = item.data.oid 
+                }
                 if(item.transition.length>0){
                     let newTransiton = item.transition;
                     newTransiton.forEach(items => {
-                        items.key = items.data.oid
-                        if( items.from.transition ){
-                            delete items.from.transition;
-                            delete items.to.transition;
+                        if(items.data.oid){
+                            items.key = items.data.oid 
+                        }
+                        if(items.from.data.displayName == item.data.displayName){
+                            items.from.key = item.key
+                        }
+                        if(items.to.data.displayName == item.data.displayName){
+                            items.to.key = item.key
+                        }
+                        delete items.from.transition;
+                        delete items.to.transition;
+                        
+                    });
+                    newTransiton.forEach(items => {//debugger
+                        for(let i =1; i<workflowNodes.length; i++){
+                            if(workflowNodes[i].data.oid){
+                                if(items.to.data.displayName == workflowNodes[i].data.displayName){
+                                    items.to.key = workflowNodes[i].data.oid
+                                }
+                            }
+                            // else if(workflowNodes[i].data.name == "End" || workflowNodes[i].data.name == "Start"){
+                            //         items.to.key = workflowNodes[i].data.name
+                            // }
+                            
+                            
                         }
                     });
                 }
