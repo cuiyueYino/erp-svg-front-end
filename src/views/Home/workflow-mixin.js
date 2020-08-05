@@ -577,13 +577,13 @@ export default {
             //
             this.$set(this.selectedNode, 'data', this.workflowData);
             // 打开配置对话框   
-            // this.dialogSaveVisible = true;
-            // this.$api.svg.addSvg(data).then(res=>{
-            //   console.log(res)
-            //   sessionStorage.setItem("eidtMsg",null);
-            // },error=>{
-            //     console.log(error)
-            // })
+            this.dialogSaveVisible = true;
+            this.$api.svg.addSvg(data).then(res=>{
+              console.log(res)
+              sessionStorage.setItem("eidtMsg",null);
+            },error=>{
+                console.log(error)
+            })
         }
     }
 };
