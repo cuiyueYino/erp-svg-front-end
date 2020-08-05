@@ -23,7 +23,13 @@
                         <COOTaskPage  :rowCOOTaskDataObj="rowCOOTaskDataObj" :rowCOOTasktype="rowCOOTasktype" @changeShow="showLookOrUpdate"/>
                         <ComANPPage  :rowCOMAPDataObj="rowCOMAPDataObj" :rowCOMAPtype="rowCOMAPtype" @changeShow="showLookOrUpdate"/>
                         <TempTaskPage  :rowTEMTaskDataObj="rowTEMTaskDataObj" :rowTEMTasktype="rowTEMTasktype" @changeShow="showLookOrUpdate"/>
-                    </el-row>
+                        <EachPerEachJobPage  :rowEACHPerEachJobDataObj="rowEACHPerEachJobDataObj" :rowEACHPerEachJobtype="rowEACHPerEachJobtype" @changeShow="showLookOrUpdate"/>
+                        <SaffAppraisalPage  :rowSAFFAppraisalDataObj="rowSAFFAppraisalDataObj" :rowSAFFAppraisaltype="rowSAFFAppraisaltype" @changeShow="showLookOrUpdate"/>
+                        <DepartYearEncPlanPage  :rowDepartYearEncPlanDataObj="rowDepartYearEncPlanDataObj" :rowDepartYearEncPlantype="rowDepartYearEncPlantype" @changeShow="showLookOrUpdate"/>
+                        <EncBenefitsIndPage  :rowEncBenefitsIndDataObj="rowEncBenefitsIndDataObj" :rowEncBenefitsIndtype="rowEncBenefitsIndtype" @changeShow="showLookOrUpdate"/>
+                        <EmpAppraisalSummaryPage  :rowEmpAppraisalSummaryDataObj="rowEmpAppraisalSummaryDataObj" :rowEmpAppraisalSummarytype="rowEmpAppraisalSummarytype" @changeShow="showLookOrUpdate"/>
+                        <EachPerEachTableReportedPage  :rowEachPerEachTableReportedDataObj="rowEachPerEachTableReportedDataObj" :rowEachPerEachTableReportedtype="rowEachPerEachTableReportedtype" @changeShow="showLookOrUpdate"/>
+                    </el-row>  
                     <el-row>
                         <el-col :span="22">
                             <processnodelist :rowDataprocessObj="rowDataprocessObj"  @changeShow="showprocessData"/> 
@@ -67,6 +73,13 @@ import ComANPPage from '../plan-options/company-Annual-plan.vue';//公司年度�
 import TempTaskPage from '../plan-options/temporary-task.vue';//临时任务配发
 import creditEnclFilelist from '../comment/enclosure-file.vue';
 import baseInfoDialog from './user-tree-search.vue';//转发加签委托人员选择
+import EachPerEachJobPage from '../plan-options/each-person-each-job.vue';//一岗一表
+import SaffAppraisalPage from '../plan-options/saff-appraisal.vue';//员工考评表
+import DepartYearEncPlanPage from '../plan-options/depart-year-enc-plan.vue';//部门年度经济指标计划
+import EncBenefitsIndPage from '../plan-options/enc-benefits-indicators.vue';//经济效益指标
+import EmpAppraisalSummaryPage from '../plan-options/employees-appraisal-summary.vue';//员工考评表汇总
+import EachPerEachTableReportedPage from '../plan-options/each-person-each-table-Reported.vue';//一人一表任务表（报备）
+
 export default {
     props: {
         rowWAADataObj: Object,
@@ -83,7 +96,13 @@ export default {
         ComANPPage,
         processnodelist,
         baseInfoDialog,
-        TempTaskPage
+        TempTaskPage,
+        EachPerEachJobPage,
+        SaffAppraisalPage,
+        DepartYearEncPlanPage,
+        EncBenefitsIndPage,
+        EmpAppraisalSummaryPage,
+        EachPerEachTableReportedPage
     },
     inject: ['reload'],
     data: function() {   
@@ -103,12 +122,24 @@ export default {
             rowCOMAPtype:false,
             financingEFListtype:false,
             rowTEMTasktype:false,
+            rowEACHPerEachJobtype:false,
+            rowSAFFAppraisaltype:false,
+            rowDepartYearEncPlantype:false,
+            rowEncBenefitsIndtype:false,
+            rowEmpAppraisalSummarytype:false,
+            rowEachPerEachTableReportedtype:false,
             rowUTSDataObj:{},
             rowDataprocessObj: {},
             rowCOOTaskDataObj: {},
             rowCOMAPDataObj: {},
             rowEFListDataObj: {},
             rowTEMTaskDataObj: {},
+            rowEACHPerEachJobDataObj: {},
+            rowSAFFAppraisalDataObj: {},
+            rowDepartYearEncPlanDataObj: {},
+            rowEncBenefitsIndDataObj: {},
+            rowEmpAppraisalSummaryDataObj: {},
+            rowEachPerEachTableReportedDataObj: {},
             pageNum: 1,
             pageSize: 10,
             total: 20,
@@ -123,6 +154,12 @@ export default {
             this.rowCOMAPtype=false;
             this.financingEFListtype=false;
             this.rowTEMTasktype=false;
+            this.rowEACHPerEachJobtype=false;
+            this.rowSAFFAppraisaltype=false;
+            this.rowDepartYearEncPlantype=false;
+            this.rowEncBenefitsIndtype=false;
+            this.rowEmpAppraisalSummarytype=false;
+            this.rowEachPerEachTableReportedtype=false;
             this.reload();
             this.$emit('changeShow',false);
         },
@@ -177,6 +214,20 @@ export default {
                 this.rowCOMAPtype=true;
             }else if(data === '显示C'){
                 this.rowTEMTasktype=true;
+            } else if(data === '显示D'){
+                this.rowEACHPerEachJobtype=true;
+            } else if(data === '显示E'){
+                this.rowSAFFAppraisaltype=true;
+            } else if(data === '显示F'){
+                this.rowDepartYearEncPlantype=true;
+            } else if(data === '显示G'){
+                this.rowDepartYearEncPlaAntype=true;
+            } else if(data === '显示H'){
+                this.rowEncBenefitsIndtype=true;
+            } else if(data === '显示I'){
+                this.rowEmpAppraisalSummarytype=true;
+            } else if(data === '显示J'){
+                this.rowEachPerEachTableReportedtype=true;
             }
         },
         //转发按钮点击事件
