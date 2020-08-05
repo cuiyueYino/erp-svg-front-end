@@ -389,8 +389,12 @@ export default {
                 fromdata.fstruid=selectData.fstruid;
                 this.$api.management.deleteOrganizationInfo(fromdata).then(response => {
                     let responsevalue = response;
-                    this.$message.success('删除成功!');
-                    this.reload();
+                    if(responsevalue.data.code==0){
+                        this.$message.success('删除成功!');
+                        this.reload();
+                    }else{
+                        this.$message.error(responsevalue.data.msg);
+                    }
                 });
             } 
         },
@@ -402,8 +406,12 @@ export default {
                 fromdata.fstruid=selectData.fstruid;
                 this.$api.management.cancelOrganizationInfo(fromdata).then(response => {
                     let responsevalue = response;
-                    this.$message.success('作废成功!');
-                    this.reload();
+                    if(responsevalue.data.code==0){
+                        this.$message.success('作废成功!');
+                        this.reload();
+                    }else{
+                        this.$message.error(responsevalue.data.msg);
+                    }
                 });
             } 
         },
@@ -415,8 +423,12 @@ export default {
                 fromdata.fstruid=selectData.fstruid;
                 this.$api.management.uncancelOrganizationInfo(fromdata).then(response => {
                     let responsevalue = response;
-                    this.$message.success('反作废成功!');
-                    this.reload();
+                    if(responsevalue.data.code==0){
+                        this.$message.success('反作废成功!');
+                        this.reload();
+                    }else{
+                        this.$message.error(responsevalue.data.msg);
+                    }
                 });
             } 
         },
@@ -469,12 +481,16 @@ export default {
                         this.disabled=true;
                         let busLList=returndata.businessLeaderList;
                         let busLListS='';
+                        let busIDListS='';
                         if(busLList){
                             for(let i=0;i<busLList.length;i++){
                                 busLListS+=busLList[i].fname+",";
+                                busIDListS+=busLList[i].foid+",";
                             }
                             busLListS=busLListS.slice(0,busLListS.length-1);
+                            busIDListS=busIDListS.slice(0,busIDListS.length-1);
                             returndata.businessLeaderName=busLListS;
+                            returndata.businessLeaderId=busIDListS;
                         }
                         this.DutformData=returndata;
                     } else {
@@ -572,7 +588,7 @@ export default {
                 if(this.Companyflag == true){
                     let fromdata={};
                     if(this.CeateTypeflag=='EDIT'){
-                        fromdata=SelectData;
+                        fromdata=this.ConformData;
                     }else{
                         fromdata.foid='';
                         fromdata.fcompanyOid=SelectData.foid;
@@ -604,19 +620,22 @@ export default {
                     if(saveflag === true){
                         this.$api.management.saveCompanyInfo(fromdata).then(response => {
                             let responsevalue = response;
-                            if(responsevalue.statusText && responsevalue.statusText=='OK'){
+                            if(responsevalue.data.code==0){
                                 this.disabled=true;
+                                this.ConformData.foid=responsevalue.data.data.foid;
+                                this.ConformData.fstruid=responsevalue.data.data.fstruid;
                                 this.$api.management.selectAllOrganizationInfo().then(response => {
                                     let responsevalue = response;
                                     if (responsevalue) {
                                         let tabledata=eval('(' + responsevalue.data.data + ')');
                                         this.treeData=tabledata;
+                                        this.defaultexpanded=[];
                                         this.defaultexpanded.push(this.NodeClickData.foid);
                                         this.$message.success('公司保存成功!');
                                     }
                                 });
                             }else{
-                                this.$message.error('保存公司失败!');
+                                this.$message.error(responsevalue.data.msg);
                             }
                         });
                     }
@@ -624,7 +643,7 @@ export default {
                     //保存部门
                     let fromdataBM={};
                     if(this.CeateTypeflag=='EDIT'){
-                        fromdataBM=SelectData;
+                        fromdataBM=this.DepformData;
                     }else{
                         fromdataBM.foid='';
                         fromdataBM.fcompanyOid=SelectData.foid;
@@ -661,9 +680,11 @@ export default {
                     fromdataBM.fcreator=localStorage.getItem('ms_userId');
                     if(saveflagBM === true){
                         this.$api.management.saveDeptmentInfo(fromdataBM).then(response => {
-                            let responsevalue = response;
-                            if(responsevalue.statusText && responsevalue.statusText=='OK'){
+                            let responseBMvalue = response;
+                            if(responseBMvalue.data.code == 0){
                                 this.disabled=true;
+                                this.DepformData.foid=responseBMvalue.data.data.foid;
+                                this.DepformData.fstruid=responseBMvalue.data.data.fstruid;
                                 this.$api.management.selectAllOrganizationInfo().then(response => {
                                     let responsevalue = response;
                                     if (responsevalue) {
@@ -674,7 +695,7 @@ export default {
                                     }
                                 });
                             }else{
-                                this.$message.error('保存部门失败!');
+                                this.$message.error(responseBMvalue.data.msg);
                             }
                         });
                     }
@@ -682,7 +703,7 @@ export default {
                     //保存职务
                     let fromdataZW={};
                     if(this.CeateTypeflag=='EDIT'){
-                        fromdataZW=SelectData;
+                        fromdataZW=this.DutformData;
                     }else{
                         fromdataZW.foid='';
                         fromdataZW.fcompanyOid=SelectData.foid;
@@ -728,9 +749,11 @@ export default {
                     fromdataZW.fcreator=localStorage.getItem('ms_userId');
                     if(saveflagZW === true){
                         this.$api.management.savePositionInfo(fromdataZW).then(response => {
-                            let responsevalue = response;
-                            if(responsevalue.statusText && responsevalue.statusText=='OK'){
+                            let responseZWvalue = response;
+                            if(responseZWvalue.data.code == 0){
                                 this.disabled=true;
+                                this.DutformData.foid=responseZWvalue.data.data.foid;
+                                this.DutformData.fstruid=responseZWvalue.data.data.fstruid;
                                 this.$api.management.selectAllOrganizationInfo().then(response => {
                                     let responsevalue = response;
                                     if (responsevalue) {
@@ -741,7 +764,7 @@ export default {
                                     }
                                 });
                             }else{
-                                this.$message.error('保存职位失败!');
+                                this.$message.error(responseZWvalue.data.msg);
                             }
                         });
                     }

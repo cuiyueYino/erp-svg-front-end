@@ -290,13 +290,6 @@ class ITEMData {
 				}]
 			},
 			{
-				index: 'menuManage',
-				title: '系统设置',
-				subs: [{
-					index: 'menuManagement',
-					title: '功能菜单'
-				}, ]
-			}, {
 				index: 'collaborativeOffice',
 				title: '协同办公',
 				subs: [{
