@@ -28,6 +28,7 @@
                         <DepartYearEncPlanPage  :rowDepartYearEncPlanDataObj="rowDepartYearEncPlanDataObj" :rowDepartYearEncPlantype="rowDepartYearEncPlantype" @changeShow="showLookOrUpdate"/>
                         <EncBenefitsIndPage  :rowEncBenefitsIndDataObj="rowEncBenefitsIndDataObj" :rowEncBenefitsIndtype="rowEncBenefitsIndtype" @changeShow="showLookOrUpdate"/>
                         <EmpAppraisalSummaryPage  :rowEmpAppraisalSummaryDataObj="rowEmpAppraisalSummaryDataObj" :rowEmpAppraisalSummarytype="rowEmpAppraisalSummarytype" @changeShow="showLookOrUpdate"/>
+                        <EachPerEachTableReportedPage  :rowEachPerEachTableReportedDataObj="rowEachPerEachTableReportedDataObj" :rowEachPerEachTableReportedtype="rowEachPerEachTableReportedtype" @changeShow="showLookOrUpdate"/>
                     </el-row>  
                     <el-row>
                         <el-col :span="22">
@@ -77,7 +78,7 @@ import SaffAppraisalPage from '../plan-options/saff-appraisal.vue';//员工考�
 import DepartYearEncPlanPage from '../plan-options/depart-year-enc-plan.vue';//部门年度经济指标计划
 import EncBenefitsIndPage from '../plan-options/enc-benefits-indicators.vue';//经济效益指标
 import EmpAppraisalSummaryPage from '../plan-options/employees-appraisal-summary.vue';//员工考评表汇总
-
+import EachPerEachTableReportedPage from '../plan-options/each-person-each-table-Reported.vue';//一人一表任务表（报备）
 
 export default {
     props: {
@@ -100,7 +101,8 @@ export default {
         SaffAppraisalPage,
         DepartYearEncPlanPage,
         EncBenefitsIndPage,
-        EmpAppraisalSummaryPage
+        EmpAppraisalSummaryPage,
+        EachPerEachTableReportedPage
     },
     inject: ['reload'],
     data: function() {   
@@ -125,6 +127,7 @@ export default {
             rowDepartYearEncPlantype:false,
             rowEncBenefitsIndtype:false,
             rowEmpAppraisalSummarytype:false,
+            rowEachPerEachTableReportedtype:false,
             rowUTSDataObj:{},
             rowDataprocessObj: {},
             rowCOOTaskDataObj: {},
@@ -136,6 +139,7 @@ export default {
             rowDepartYearEncPlanDataObj: {},
             rowEncBenefitsIndDataObj: {},
             rowEmpAppraisalSummaryDataObj: {},
+            rowEachPerEachTableReportedDataObj: {},
             pageNum: 1,
             pageSize: 10,
             total: 20,
@@ -155,6 +159,7 @@ export default {
             this.rowDepartYearEncPlantype=false;
             this.rowEncBenefitsIndtype=false;
             this.rowEmpAppraisalSummarytype=false;
+            this.rowEachPerEachTableReportedtype=false;
             this.reload();
             this.$emit('changeShow',false);
         },
@@ -221,6 +226,8 @@ export default {
                 this.rowEncBenefitsIndtype=true;
             } else if(data === '显示I'){
                 this.rowEmpAppraisalSummarytype=true;
+            } else if(data === '显示J'){
+                this.rowEachPerEachTableReportedtype=true;
             }
         },
         //转发按钮点击事件
