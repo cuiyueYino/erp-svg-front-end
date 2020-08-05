@@ -284,6 +284,9 @@ class ITEMData {
 				subs: [{
 					index: 'oaCompanyHome',
 					title: '集团门户',
+				},{
+					index: 'oaPersonalHome',
+					title: '个人门户',
 				}]
 			},
 			{

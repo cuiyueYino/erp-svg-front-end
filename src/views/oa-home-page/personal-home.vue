@@ -3,8 +3,8 @@
     <el-container>
         <el-main>
              <el-card class="box-card">
-                 <span class="tab-title">通知公告</span>
-                 <span class="tab-title-tips">Notice</span>
+                 <span class="tab-title">流程中心</span>
+                 <span class="tab-title-tips">Workflow</span>
                  <el-divider></el-divider>
                   <el-tabs v-model="activeName" @tab-click="handleClick">
                         <el-tab-pane label="处理中心" name="1">
@@ -20,8 +20,8 @@
                     </el-tabs>
              </el-card>
              <el-card class="box-card">
-                 <span class="tab-title">新闻中心</span>
-                 <span class="tab-title-tips">News Center</span>
+                 <span class="tab-title">我的邮件</span>
+                 <span class="tab-title-tips">Mail</span>
                  <el-divider></el-divider>
                   <el-tabs v-model="activeName" @tab-click="handleClick">
                         <el-tab-pane label="处理中心" name="1">
@@ -64,7 +64,7 @@
 
 <script>
 export default {
-    name:'oaCompanyHome',
+    name:'oaPersonalHome',
     data() {
         return {
             activeName: '1',
