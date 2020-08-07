@@ -1,5 +1,6 @@
 <template>
     <div v-if="ShowFinancVisible" class="itemDivStyle">
+    <div>测试开始。。。。。。。。。。</div>
         <el-form
             label-width="110px"
             v-model="formdata"
@@ -37,7 +38,7 @@
             </el-row>
             <el-row>
                 <el-col :span="6">
-                    <el-form-item label="汇总编号">
+                    <el-form-item label="汇总编号侵权">
                         <el-input v-model="formdata.voucherid" v-bind:disabled="disabled"></el-input>
                     </el-form-item>
                 </el-col>
@@ -111,6 +112,7 @@
                 </el-tab-pane>
             </el-tabs>
         </el-form>
+    <div>测试结束。。。。。。。。。。</div>
     </div>
 </template>
 <script>
@@ -199,6 +201,7 @@ export default {
     },
     watch:{
         rowCOMAPtype(oldVal,newVal){
+            debugger;
             this.ShowFinancVisible=this.rowCOMAPtype;
         }
     }
