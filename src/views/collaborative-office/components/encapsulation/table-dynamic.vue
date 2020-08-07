@@ -4,9 +4,9 @@
 			<el-table size="small" height="400" :data="ruleForm.lines" border style="width: 100%">
 				<el-table-column v-for="(item,index) in formData.conList" :key="index" prop="field" :label="item.fieldName" align="center">
 					<template slot-scope="scope">
-						<el-form-item v-if="item.fieldTypeName == 'browseBox' && item.show" :prop="'lines[' + scope.$index + '].' + item.field +'Name'" :rules="rules[item.field + 'Name']">
+						<el-form-item v-if="item.fieldTypeName == 'browseBox' && item.show" :prop="'lines[' + scope.$index + '].' + item.field +'_NameShow'" :rules="rules[item.field + '_NameShow']">
 							<!-- 浏览框 -->
-							<el-input style="width: 100%;" v-model="scope.row[item.field + 'Name']" disabled>
+							<el-input style="width: 100%;" v-model="scope.row[item.field + '_NameShow']" disabled>
 								<el-button @click=" findDialogVisible(item,scope.row)" slot="append" icon="el-icon-search"></el-button>
 							</el-input>
 						</el-form-item>
@@ -40,8 +40,6 @@
 				</el-table-column>
 			</el-table>
 		</el-form>
-
-		<el-button type="primary" @click="onSubmit('ruleFormTable')">效果展示</el-button>
 		<!--弹出框-->
 		<el-dialog :title="titleShow" top="1vh" destroy-on-close center :visible.sync="dialogVisible" width="80%">
 			<formIconComponents ref="child" :showFig="showCon" :dataCon="dataCon"></formIconComponents>
@@ -96,11 +94,14 @@
 			}
 		},
 		created() {
-			this.formData.conList.forEach(item => {
-				this.$set(this.rowNow,item.field,"")
-			})
-			this.ruleForm.lines.push(JSON.parse(JSON.stringify(this.rowNow)))
-			this.getrulesList()
+			if(typeof(this.formData.conList) != "undefined" && this.formData.conList.length != 0) {
+				this.formData.conList.forEach(item => {
+					this.$set(this.rowNow, item.field, "")
+				})
+				this.$set(this.rowNow, "tableName", this.formData.tableName)
+				this.ruleForm.lines.push(JSON.parse(JSON.stringify(this.rowNow)))
+				this.getrulesList()
+			}
 		},
 		methods: {
 			delRow(rowIndex) {
@@ -112,26 +113,26 @@
 			getrulesList() {
 				this.formData.conList.forEach(item => {
 					this.rules[item.field] = []
-					this.rules[item.field + "Name"] = []
+					this.rules[item.field + "_NameShow"] = []
+					console.log(item)
 					if(item.required) {
-
 						if(item.fieldType == 1) {
-							this.rules[item.field + "Name"].push({
+							this.rules[item.field + "_NameShow"].push({
 								required: true,
 								message: "请填写" + item.fieldName,
-								trigger: 'blur'
+								trigger: 'change'
 							})
 						} else if(item.fieldType == 9) {
 							this.rules[item.field].push({
 								required: true,
 								message: "请填写" + item.fieldName,
-								trigger: 'blur'
+								trigger: 'change'
 							})
 						} else {
 							this.rules[item.field].push({
 								required: true,
 								message: "请填写" + item.fieldName,
-								trigger: 'blur'
+								trigger: 'change'
 							})
 						}
 					}
@@ -141,11 +142,11 @@
 							this.rules[item.field].push({
 								pattern: /^-?[1-9]\d*$/,
 								message: '请输入正确的' + item.fieldName,
-								trigger: 'blur'
+								trigger: 'change'
 							}, {
 								max: 20,
 								message: '长度至多20位字符',
-								trigger: 'blur'
+								trigger: 'change'
 							})
 							return "integers"
 							break;
@@ -154,13 +155,12 @@
 							this.rules[item.field].push({
 								pattern: /^([1-9]\d{0,15}|0)(\.\d{1,4})?$/,
 								message: '请输入正确的' + item.fieldName,
-								trigger: 'blur'
+								trigger: 'change'
 							})
 							return "floatingPoint"
 							break;
 					}
 				})
-				console.log(this.rules)
 			},
 			//计算时间差值
 			getDate(row) {
@@ -216,14 +216,14 @@
 						})
 						//存入值
 						this.$set(this.ruleForm, this.formData.conList[i2].field, conNow.id)
-						//							this.$set(this.ruleForm, this.formData.conList[i2].field +"Name", conNow.name)
+						//							this.$set(this.ruleForm, this.formData.conList[i2].field +"_NameShow", conNow.name)
 					}
 				}
 			},
 			//弹出框确定
 			getDialogVisible() {
 				//获取子组件返回的id和name
-				this.$set(this.tableRowCon, this.dialogVisibleCon.field + 'Name', this.$refs.child.backCon.label)
+				this.$set(this.tableRowCon, this.dialogVisibleCon.field + '_NameShow', this.$refs.child.backCon.label)
 				this.$set(this.tableRowCon, this.dialogVisibleCon.field, this.$refs.child.backCon.value)
 				//如果有联动查询的数据
 				if(this.dialogVisibleCon.parameterList.length != 0) {
@@ -286,7 +286,7 @@
 							})
 							//改变需要联动的值的内容和显示内容
 							this.$set(this.tableRowCon, this.formData.conList[i2].field, conNow.id)
-							this.$set(this.tableRowCon, this.formData.conList[i2].field + "Name", conNow.name)
+							this.$set(this.tableRowCon, this.formData.conList[i2].field + "_NameShow", conNow.name)
 						}
 					}
 				}
@@ -359,14 +359,13 @@
 			},
 			//测试提交
 			onSubmit(formName) {
-				console.log(this.ruleForm)
-				this.$refs[formName].validate((valid) => {
+				var returnData = false
+				this.$refs.ruleFormTable.validate((valid) => {
 					if(valid) {
-						this.goOk("可以提交")
-					} else {
-						this.goOk("数据填写不全")
+						returnData = true
 					}
 				});
+				return returnData
 			},
 			//富文本事件
 			onEditorBlur() {}, // 失去焦点事件

@@ -368,6 +368,9 @@ export default {
    watch: {
      dialogFormVisible(val){
          this.newIndex = null;
+         if(!val){
+              this.$refs['form'].resetFields();
+          }
      },
       filterText(val) {
         this.$refs.tree.filter(val);
@@ -426,6 +429,7 @@ export default {
   methods: {
     closeDialog(formName){
       this.dialogFormVisible = false;
+      this.$refs[formName].resetFields();
       
     },
     filterNode(value, data) {

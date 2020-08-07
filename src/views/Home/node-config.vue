@@ -509,7 +509,7 @@ export default {
             this.data.displayName = e.name;
         },
          //路由
-        saveRouteData(e){
+        saveRouteData(e){console.log(e)
             this.data.oid = e.oid;
             this.data.hidden = e.checked?1:0;
             this.data.join = e.join?1:0;
