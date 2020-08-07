@@ -33,6 +33,8 @@
                 <el-col :span="6">
                     <div class="El-tree">
                         <el-tree
+                            v-loading="treeloading"
+                            element-loading-text="拼命加载中"
                             :data="treeData"
                             :props="defaultProps"
                             node-key="foid"
@@ -253,18 +255,21 @@ export default {
             rules: {
                 fname:[{ required: true, message: '请输入名称', trigger: 'blur' }],
                 fcode:[{ required: true, message: '请输入编码', trigger: 'blur' }],
-            }
+            },
+            treeloading:false
         };
     },
     created(){
       
     },
     mounted() {
+        this.treeloading = true;
         this.$api.management.selectAllOrganizationInfo().then(response => {
             let responsevalue = response;
             if (responsevalue) {
                 let tabledata=eval('(' + responsevalue.data.data + ')');
                 this.treeData=tabledata;
+                this.treeloading = false;
             }
         }); 
     },
@@ -383,20 +388,26 @@ export default {
         },
         //删除
         remove(){
-            let selectData=this.NodeClickData;
-            if(selectData.fstruid){
-                let fromdata={};
-                fromdata.fstruid=selectData.fstruid;
-                this.$api.management.deleteOrganizationInfo(fromdata).then(response => {
-                    let responsevalue = response;
-                    if(responsevalue.data.code==0){
-                        this.$message.success('删除成功!');
-                        this.reload();
-                    }else{
-                        this.$message.error(responsevalue.data.msg);
-                    }
+            this.$confirm('确定要删除这条信息吗?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+                }).then(() => {
+                    let selectData=this.NodeClickData;
+                    if(selectData.fstruid){
+                        let fromdata={};
+                        fromdata.fstruid=selectData.fstruid;
+                        this.$api.management.deleteOrganizationInfo(fromdata).then(response => {
+                            let responsevalue = response;
+                            if(responsevalue.data.code==0){
+                                this.$message.success('删除成功!');
+                                this.reload();
+                            }else{
+                                this.$message.error(responsevalue.data.msg);
+                            }
+                        });
+                    } 
                 });
-            } 
         },
         //作废
         tovoid(){
@@ -564,7 +575,7 @@ export default {
             this.disabled=false;
             this.CeateTypeflag='EDIT';
         },
-        //保存数据检查
+        //保存数据时检查
         checkData(tempData){
             if(tempData.fcode.length > 50){
                 this.$message.error('编号长度不能大于50！');
