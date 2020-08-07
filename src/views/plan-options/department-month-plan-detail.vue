@@ -1,6 +1,6 @@
 <template>
     <div v-if="ShowFinancVisible" class="itemDivStyle">
-    <div>部门月度计划开始。。。。。。。。。。</div>
+    <div>部门月度计划开始。。。。。。。。。。a</div>
         <el-form
             :label-width="formLabelWidth"
             v-model="formdata"
