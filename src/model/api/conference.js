@@ -21,7 +21,7 @@ const confMangement = {
 
     // 删除会议室
     deleteConfOffice(params) {
-        return httpReqest.get('/api/interfaces/confOffice/deleteConfOffice?foid=' + params);
+        return httpReqest.get('/api/interfaces/confMnt/findTodayApplyList?foid=' + params);
     },
 
     // 获取有效会议室列表
@@ -74,13 +74,13 @@ const confMangement = {
             const blob = new Blob([response.data]);
             const fileName = "会议室使用详情.xls";
             const linkNode = document.createElement("a");
-  
+
             linkNode.download = fileName; //a标签的download属性规定下载文件的名称
             linkNode.style.display = "none";
             linkNode.href = URL.createObjectURL(blob); //生成一个Blob URL
             document.body.appendChild(linkNode);
             linkNode.click(); //模拟在按钮上的一次鼠标单击
-  
+
             URL.revokeObjectURL(linkNode.href); // 释放URL 对象
             document.body.removeChild(linkNode);
           })
@@ -110,6 +110,22 @@ const confMangement = {
             valueS = valueS.slice(0, valueS.length - 1);
         }
         return httpReqest.get('/api/wfInterfaces/workFlow/findCompanyDeptStaffInfoByOrgUnitIdFromRedis' + valueS);
+    },
+
+    //================================会议室控制台服务==============================================
+    // 根据会议室foid获取该会议室当天会议内容列表
+    getTodayApplyList(params) {
+        return httpReqest.get('/api/interfaces/confMnt/findTodayApplyList?foid=' + params);
+    },
+
+    // 控制台会议室分页查询
+    getConfMntList(params) {
+        return httpReqest.post('/api/interfaces/confMnt/findConfMntList', params);
+    },
+
+    // 当前会议室状态控制，开始、停止、超时
+    editConfMnt(params) {
+        return httpReqest.post('/api/interfaces/confMnt/editConfMnt', params);
     },
 };
 
