@@ -104,7 +104,7 @@
                 </el-card>
             </el-form>
             <span slot="footer" v-if="LookOrupdate" class="dialog-footer">
-                <el-button type="primary" @click="ShowFinancVisible=false">取消</el-button>
+                <el-button type="primary" @click="handleClose()">取消</el-button>
                 <el-button @click="saveNewAndEdit()">提交</el-button>
             </span>
         </el-dialog>
@@ -161,7 +161,27 @@ export default {
             objectoptions:new proData().project,
         }
     },
+    updated(){
+        this.$nextTick(()=>{
+            if(this.rowLWMtype){
+                this.showDetail()
+            }
+        })
+    },
     methods: {
+        showDetail(){
+            console.log(this.rowLWMDataObj.foid)
+            let data = {
+                mailInfo:{
+                    foid:this.rowLWMDataObj.foid
+                }
+            }
+            this.$api.processSet.getMailDetailInfo(data).then(res=>{
+                console.log(res.data)
+            },error=>{
+                console.log(error)
+            })
+        },
         //关闭当前dialog时给父组件传值
         handleClose(){
             this.$emit('changeShow',false);

@@ -45,7 +45,7 @@
                         <el-col :span="6" class="elColCenter">类型</el-col>
                         <el-col :span="6" class="elColCenter">等于</el-col>
                         <el-col :span="6">
-                            <el-select v-model="DataForm.WFMtype" size="mini">
+                            <el-select v-model="DataForm.status" size="mini">
                                 <el-option
                                     v-for="item in WFMtypeoptions"
                                     :key="item.value"
@@ -59,12 +59,12 @@
                         <el-col :span="6" class="elColCenter">来源单据公司</el-col>
                         <el-col :span="6" class="elColCenter">等于</el-col>
                         <el-col :span="6">
-                            <el-select v-model="DataForm.WFMtype" size="mini">
+                            <el-select v-model="DataForm.companyId" size="mini">
                                 <el-option
-                                    v-for="item in WFMtypeoptions"
-                                    :key="item.value"
-                                    :label="item.label"
-                                    :value="item.value"
+                                    v-for="item in conmpanyList"
+                                    :key="item.id"
+                                    :label="item.name"
+                                    :value="item.id"
                                 ></el-option>
                             </el-select>
                         </el-col>
@@ -73,12 +73,12 @@
                         <el-col :span="6" class="elColCenter">业务数据</el-col>
                         <el-col :span="6" class="elColCenter">等于</el-col>
                         <el-col :span="6">
-                            <el-select v-model="DataForm.WFMtype" size="mini">
+                            <el-select v-model="DataForm.mclassId" size="mini">
                                 <el-option
-                                    v-for="item in WFMtypeoptions"
-                                    :key="item.value"
-                                    :label="item.label"
-                                    :value="item.value"
+                                    v-for="item in tmClassList"
+                                    :key="item.foid"
+                                    :label="item.fname"
+                                    :value="item.foid"
                                 ></el-option>
                             </el-select>
                         </el-col>
@@ -87,14 +87,14 @@
                         <el-col :span="6" class="elColCenter">业务工作</el-col>
                         <el-col :span="6"  class="elColCenter">左右匹配</el-col>
                         <el-col :span="6">
-                        <el-input v-model="DataForm.documentNo" size="mini"></el-input>
+                        <el-input v-model="DataForm.factivityName" size="mini"></el-input>
                         </el-col>
                     </el-row>
                     <el-row class="elrowStyle" size="mini">
                         <el-col :span="6" class="elColCenter">主题</el-col>
                         <el-col :span="6"  class="elColCenter">左右匹配</el-col>
                         <el-col :span="6">
-                        <el-input v-model="DataForm.documentNo" size="mini"></el-input>
+                        <el-input v-model="DataForm.subject" size="mini"></el-input>
                         </el-col>
                     </el-row>
                     <el-row class="elrowStyle" >
@@ -102,7 +102,7 @@
                         <el-col :span="6"  class="elColCenter">大于等于</el-col>
                         <el-col :span="6">
                             <el-date-picker
-                                v-model="DataForm.docDateStart"
+                                v-model="DataForm.freceiveTimeGt"
                                 type="datetime"
                                 size="mini"
                                 default-time="12:00:00"
@@ -115,7 +115,7 @@
                         <el-col :span="6"  class="elColCenter">小于等于</el-col>
                         <el-col :span="6">
                             <el-date-picker
-                                v-model="DataForm.docDateStart"
+                                v-model="DataForm.freceiveTimeLt"
                                 type="datetime"
                                 size="mini"
                                 default-time="12:00:00"
@@ -127,10 +127,10 @@
                         <el-col :span="6" class="elColCenter">发起人</el-col>
                         <el-col :span="6"  class="elColCenter">等于</el-col>
                         <el-col :span="5">
-                        <el-input v-model="DataForm.documentNo" size="mini"></el-input>
+                        <el-input v-model="DataForm.selectOptionName" size="mini" clearable @clear="cleareAddresser()"></el-input>
                         </el-col>
-                        <el-col :span="1">
-                        <el-button type="primary" size="mini" icon="el-icon-search" @click="MoreSearchPS(DataForm)"></el-button>
+                        <el-col :span="4">
+                            <el-button type="primary" size="mini" icon="el-icon-search" @click="MoreSearchPS(DataForm)"></el-button>
                         </el-col>
                     </el-row>
                     <el-row class="elrowStyle" >
@@ -138,7 +138,7 @@
                         <el-col :span="6"  class="elColCenter">大于等于</el-col>
                         <el-col :span="6">
                             <el-date-picker
-                                v-model="DataForm.docDateStart"
+                                v-model="DataForm.createTimeGt"
                                 type="datetime"
                                 size="mini"
                                 default-time="12:00:00"
@@ -151,7 +151,7 @@
                         <el-col :span="6"  class="elColCenter">小于等于</el-col>
                         <el-col :span="6">
                             <el-date-picker
-                                v-model="DataForm.docDateStart"
+                                v-model="DataForm.createTimeLt"
                                 type="datetime"
                                 size="mini"
                                 default-time="12:00:00"
@@ -163,15 +163,15 @@
                         <el-col :span="6" class="elColCenter">超时</el-col>
                         <el-col :span="6"  class="elColCenter">等于</el-col>
                         <el-col :span="6">
-                            <el-radio v-model="DataForm.radio" label="1">是</el-radio>
-                            <el-radio v-model="DataForm.radio" label="2">否</el-radio>
+                            <el-radio v-model="DataForm.timeOut" label="0">是</el-radio>
+                            <el-radio v-model="DataForm.timeOut" label="1">否</el-radio>
                         </el-col>
                     </el-row>
                 </el-card>
             </el-form>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="dialogWFMVisible = false">取 消</el-button>
-                <el-button type="primary" @click="addSubmit('form')">确 定</el-button>
+                <el-button type="primary" @click="onSubmit('form')">确 定</el-button>
             </div>
         </el-dialog>
         <PSpage  :rowPSDataObj="rowPSDataObj" :rowPStype="rowPStype" @changeShow="showORhideForPS"/>
@@ -183,7 +183,7 @@
 <script>
 import DynamicTable from '../../components/common/dytable/dytable.vue';
 import PSpage from '../comment/personnel-search.vue';
-import LWMworkflowpage from './look-workflow-monitoring';
+import LWMworkflowpage from './look-workflow-monitoring.vue';
 import CWMworkflowpage from './circulation-workflow-monitoring.vue'
 export default {
     name:'workProcess',
@@ -198,7 +198,7 @@ export default {
             rowCWMDataObj:{},
             pageNum: 1,
             pageSize: 10,
-            total: 20,
+            total: '',
             labelPosition: 'left',
             columns: [
                 {
@@ -209,7 +209,7 @@ export default {
                     title: '状态'
                 },
                 {
-                    key: 'fcode',
+                    key: 'statusTyp',
                     title: '类型'
                 },
                 {
@@ -267,17 +267,51 @@ export default {
             tableData:[],
             multipleSelection: [],
             checked:false,
-            DataForm: {
-                WFMtype: '',
-                radio: 1,
-                date1: '',
-                date2: '',
-                delivery: false,
-                type: [],
-                resource: '',
-                fremark: ''
+            statusType:{
+                
             },
-            WFMtypeoptions:[],
+            DataForm: {
+                status: '',
+                selectOptionName:'',
+                companyId: '',
+                mclassId: '',
+                factivityName: '',
+                subject: '',
+                freceiveTimeLt: '',
+                freceiveTimeLt:'',
+                promoterStaffId:'',
+                createTimeLt: '',
+                createTimeGt: '',
+                timeOut:''
+            },
+            WFMtypeoptions:[
+                {
+                    value:'0',
+                    label:'--'
+                },
+                {
+                    value:'1',
+                    label:'待办'
+                },
+                {
+                    value:'2',
+                    label:'作废'
+                },
+                {
+                    value:'3',
+                    label:'已办'
+                },
+                {
+                    value:'4',
+                    label:'抄送'
+                },
+                {
+                    value:'5',
+                    label:'其他'
+                }
+            ],
+            conmpanyList:[],//公司列表
+            tmClassList:[],//业务数据列表
             formLabelWidth: '120px',
         };
     },
@@ -296,6 +330,7 @@ export default {
         
     },
     methods:{
+        
         //多选
         onSelectionChange(val) {
             this.multipleSelection = val;
@@ -307,39 +342,28 @@ export default {
         },
         //刷新
         refresh(){
+             this.getTableData('')
         },
         //查看
         Tolook(){
-            /*let selectOption= this.multipleSelection;
+            let selectOption = this.multipleSelection;
             if(selectOption.length >0){
                 if(selectOption.length >1){
                     this.$message.error('只能选择一行!');
                 }else{
                     this.rowLWMtype=true;
                     let finandata={};
-                    finandata.finanrowname="";
-                    finandata.finanrowId=selectOption[0].id;
+                    finandata.foid=selectOption[0].foid;
                     finandata.nametitle="工作流监控";
                     this.rowLWMDataObj=finandata;
                 }
             }else{
                 this.$message.error('请选择一行你要查看的数据!');
-            }*/
-            this.rowLWMtype = true;
-            let finandata={};
-            finandata.finanrowname="";
-            finandata.finanrowId="";
-            finandata.nametitle="工作流监控";
-            finandata.lookflag="look";
-            this.rowLWMDataObj=finandata;
+            }
         },
         //查看返回处理
         showORhidelookpage(data){
-            if(data === false){
-                this.rowLWMtype = false
-            }else{
-                this.rowLWMtype = true
-            }
+            this.rowLWMtype = false
         },
         //流转
         circulation(){
@@ -362,23 +386,61 @@ export default {
         //查询
         search(){
             this.dialogWFMVisible=true;
+            
+            //获取公司列表
+            this.$api.processSet.getCompanyData().then(res=>{
+                let array = res.data.data.rows;
+                let defaultOption = {
+                    id:'0',
+                    name:'--'
+                };
+                array.unshift(defaultOption);
+                this.conmpanyList = array;
+            },error=>{
+                console.log(error)
+            })
+
+            //获取业务数据列表
+            this.$api.processSet.getTmClass().then(res=>{
+                let array = res.data.data;
+                let defaultOption = {
+                    foid:'0',
+                    fname:'--'
+                };
+                array.unshift(defaultOption);
+                this.tmClassList = array;
+            },error=>{
+                console.log(error)
+            })
         },
         // 搜索
         onSubmit(){
-            this.getTableData(this.formCode);
+            this.dialogWFMVisible=false;
+            this.pageNum = 0;
+            this.pageSize = 10;
+            this.getTableData();
         },
         getAll(){
             this.getTableData('')
         },
         // 获取表格数据
         getTableData(params){
+            if(this.DataForm.status == 0){
+                this.DataForm.status = null;
+            }
+            if(this.DataForm.companyId == 0){
+                this.DataForm.companyId = null;
+            }
+            if(this.DataForm.mclassId == 0){
+                this.DataForm.mclassId = null;
+            }
             let data = {
-                fcode: params,
+                findFilter:this.DataForm,
                 page:this.pageNum,
                 size:this.pageSize
             };
-            this.$api.processSet.getTableData(data).then(res=>{
-                console.log(res)
+            this.$api.processSet.getMailInfo(data).then(res=>{
+                this.total = res.data.data.total;
                 this.tableData = res.data.data.rows;
             },error=>{
                 console.log(error)
@@ -430,12 +492,12 @@ export default {
         },
         //获取人员查询结果
         showORhideForPS(data){
-            if(data === false){
-                this.rowPStype = false
-            }else{
-                this.rowPStype = true
-            }
+            this.rowPStype = false
         },
+        //清空发起人
+        cleareAddresser(){
+            this.DataForm.promoterStaffId='';
+        }
     },
 }
 </script>

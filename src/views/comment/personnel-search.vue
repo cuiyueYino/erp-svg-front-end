@@ -309,6 +309,7 @@ export default {
                     this.rowPSDataObj.selectOptionCode=selectOption[0].code;
                     this.rowPSDataObj.selectOptionName=selectOption[0].name;
                     this.rowPSDataObj.selectOptionID=selectOption[0].foid;
+                    this.rowPSDataObj.promoterStaffId=selectOption[0].staff;
                     this.$emit('changeShow',this.rowPSDataObj,false);
                     this.ShowFinancVisible = false;
                 }
