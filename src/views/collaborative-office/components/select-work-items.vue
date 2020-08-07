@@ -44,7 +44,7 @@
 			<el-table :row-class-name="tableRowClassName" @row-click="clickRow" :data="tableData" border>
 				<el-table-column :formatter="statusShow" prop="status" label="状态" width="100" align="center"></el-table-column>
 				<el-table-column prop="voucherId" label="单据编号" align="center"></el-table-column>
-				<el-table-column prop="tempName" label="标题" align="center"></el-table-column>
+				<el-table-column prop="title" label="标题" align="center"></el-table-column>
 				<el-table-column prop="gestorName" label="经办人" align="center"></el-table-column>
 				<el-table-column prop="gestorDeptName" label="经办部门" align="center"></el-table-column>
 				<el-table-column prop="voucherTime" label="经办时间" align="center"></el-table-column>
@@ -118,7 +118,7 @@
 						tempId: this.rowClick.tempId,
 						tableName: this.rowClick.tableName
 					}).then(data => {
-						this.$parent.toSee(JSON.parse(data.data.data),this.rowClick.tempId)
+						this.$parent.toSee(JSON.parse(data.data.data),this.rowClick.tempId,"1")
 					})
 				}
 			},
@@ -160,11 +160,12 @@
 			//修改
 			toUpd() {
 				if(this.getRowClickId()) {
-					this.$api.collaborativeOffice.getWorkItemTempModel({
-						id: this.rowClick.id
+					this.$api.collaborativeOffice.findDataBySrcId({
+						srcId: this.rowClick.srcId,
+						tempId: this.rowClick.tempId,
+						tableName: this.rowClick.tableName
 					}).then(data => {
-						console.log(data.data.data)
-						this.$parent.toUpd(data.data.data)
+						this.$parent.toSee(JSON.parse(data.data.data),this.rowClick.tempId,"3")
 					})
 				}
 			},

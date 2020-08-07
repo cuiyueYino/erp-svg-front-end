@@ -18,7 +18,7 @@
 							<!-- 日期选择器 -->
 							<el-date-picker v-if="item.fieldTypeName=='dateControl' && item.show" @change="getDate(item)" style="width: 100%;" :disabled="!item.edit" v-model="scope.row[item.field]" type="date" value-format="yyyy-MM-dd" placeholder="选择日期" />
 							<!--时间控件-->
-							<el-time-picker v-if="item.fieldTypeName=='timeControl' && item.show" style="width: 100%;" v-model="scope.row[item.field]"></el-time-picker>
+							<el-time-picker value-format="HH:mm:ss" format="HH:mm:ss" v-if="item.fieldTypeName=='timeControl' && item.show" style="width: 100%;" v-model="scope.row[item.field]"></el-time-picker>
 							<!-- 下拉框 -->
 							<el-select v-if="item.fieldTypeName=='select' && item.show" style="width: 100%;" v-model="scope.row[item.field]" :multiple="item.choice" clearable :disabled="!item.edit" :placeholder="item.placeholder">
 								<el-option v-for="itemSelect in item.resList" :key="itemSelect.id" :label="itemSelect.name" :value="itemSelect.id" />
@@ -110,19 +110,19 @@
 		created() {
 			if(typeof(this.formData.conList) != "undefined" && this.formData.conList.length != 0) {
 				//查看1  新增2
-				if(this.dis == 1) {
-					this.get_NameShow()
-				} else {
-					this.formData.conList.forEach(item => {
-						this.$set(this.rowNow, item.field, "")
-					})
-					this.$set(this.rowNow, "tableName", this.formData.tableName)
+				this.get_NameShow()
+				this.formData.conList.forEach(item => {
+					this.$set(this.rowNow, item.field, "")
+				})
+				this.$set(this.rowNow, "tableName", this.formData.tableName)
+				if(this.dis == 2) {
 					this.ruleForm.lines.push(JSON.parse(JSON.stringify(this.rowNow)))
-					this.getrulesList()
 				}
+				this.getrulesList()
 
 			}
 		},
+		//注释同form-dynamic 
 		methods: {
 			//查看页面获取 _NameShow
 			get_NameShow() {
@@ -142,22 +142,27 @@
 												})
 											case "2":
 												item.browseBoxList[0].children.forEach(itemChild => {
-													itemChild.children.forEach(itemChild2 => {
-														if(itemChild2.foid == val[keyVal]) {
-															this.$set(val, keyVal + "_NameShow", itemChild.fname)
-														}
-													})
-
-												})
-											case "3":
-												item.browseBoxList[0].children.forEach(itemChild => {
-													itemChild.children.forEach(itemChild2 => {
-														itemChild2.children.forEach(itemChild3 => {
-															if(itemChild3.foid == val[keyVal]) {
+													if(typeof(itemChild.children) != "undefined") {
+														itemChild.children.forEach(itemChild2 => {
+															if(itemChild2.foid == val[keyVal]) {
 																this.$set(val, keyVal + "_NameShow", itemChild.fname)
 															}
 														})
-													})
+													}
+												})
+											case "3":
+												item.browseBoxList[0].children.forEach(itemChild => {
+													if(typeof(itemChild.children) != "undefined") {
+														itemChild.children.forEach(itemChild2 => {
+															if(typeof(itemChild2.children) != "undefined") {
+																itemChild2.children.forEach(itemChild3 => {
+																	if(itemChild3.foid == val[keyVal]) {
+																		this.$set(val, keyVal + "_NameShow", itemChild.fname)
+																	}
+																})
+															}
+														})
+													}
 												})
 												break;
 											case "4":
@@ -439,7 +444,7 @@
 						break;
 				}
 			},
-			//测试提交
+			//提交
 			onSubmit(formName) {
 				var returnData = false
 				this.$refs.ruleFormTable.validate((valid) => {

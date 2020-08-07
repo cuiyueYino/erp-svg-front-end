@@ -16,7 +16,7 @@
 					</el-select>
 				</el-col>
 			</el-row>
-			<formAndTable dis="1" showAdd="2" ref="child" :form-data="conData"></formAndTable>
+			<formAndTable :dis="showSeeOrUpd" showAdd="2" ref="child" :form-data="conData"></formAndTable>
 		</el-card>
 	</div>
 </template>
@@ -32,7 +32,8 @@
 		},
 		props: {
 			//值
-			context: Object
+			context: Object,
+			showSeeOrUpd : String
 		},
 		data() {
 			return {
@@ -83,7 +84,6 @@
 					this.conData.bottom.sort((a1, b1) => {
 						return a1.orderNum - b1.orderNum
 					})
-					console.log(this.conData)
 				})
 			},
 			//子表数据整理
