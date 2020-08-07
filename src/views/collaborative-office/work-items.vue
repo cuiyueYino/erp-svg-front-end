@@ -6,11 +6,13 @@
 <script>
 	import selectWorkItems from '../../views/collaborative-office/components/select-work-items';
 	import addWorkItem from '../../views/collaborative-office/components/add-work-items';
+	import seeWorkItem from '../../views/collaborative-office/components/see-work-items';
 //	import updMainTable from '../../views/collaborative-office/components/upd-main-table';
 	export default {
 		components: {
 			selectWorkItems,
 			addWorkItem,
+			seeWorkItem
 //			updMainTable
 		},
 		data() {
@@ -33,6 +35,11 @@
 			},
 			toSelect() {
 				this.tabViews = "selectWorkItems"
+			},
+			toSee(context,tempId){
+				this.context = context
+				this.context.tempId = tempId
+				this.tabViews = "seeWorkItem"
 			}
 		}
 	}

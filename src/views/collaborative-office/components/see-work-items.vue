@@ -10,27 +10,14 @@
 			<el-row>
 				<el-col :span="18">
 					公司：
-					<el-select size='mini' value-key="id" v-model="company" placeholder="公司">
+					<el-select disabled size='mini' value-key="id" v-model="company" placeholder="公司">
 						<el-option v-for="item in CompanyData" :key="item.id" :label="item.name" :value="item">
 						</el-option>
 					</el-select>
 				</el-col>
-				<el-col :span="6" style="text-align: right;">
-					<el-button v-if="showFig" @click="submitForm(2)" type="success" size="mini" icon="el-icon-check">提交</el-button>
-					<el-button v-if="showFig" @click="submitForm(1)" type="success" size="mini" icon="el-icon-check">暂存</el-button>
-					<el-button @click="dialogVisible =  true" type="success" size="mini" icon="el-icon-check">选择模板</el-button>
-				</el-col>
 			</el-row>
-			<formAndTable dis="2" showAdd="1" ref="child" :form-data="conData"></formAndTable>
+			<formAndTable dis="1" showAdd="2" ref="child" :form-data="conData"></formAndTable>
 		</el-card>
-		<!--弹出框-->
-		<el-dialog title="工作事项主板模板" top="1vh" :destroy-on-close="true" center :visible.sync="dialogVisible" width="80%">
-			<selectMainTable show="1" ref="childMain"></selectMainTable>
-			<div slot="footer" class="dialog-footer">
-				<el-button @click="dialogVisible = false">取 消</el-button>
-				<el-button type="primary" @click="getDialogVisible">确 定</el-button>
-			</div>
-		</el-dialog>
 	</div>
 </template>
 <script>
@@ -44,18 +31,18 @@
 			formAndTable
 		},
 		props: {
-			//查看
-			showFigNum: String,
 			//值
 			context: Object
 		},
 		data() {
 			return {
-				//提交/暂存按钮显示
-				showFig: false,
-				//主表弹出框
-				dialogVisible: false,
 				company: "",
+				//主表ID
+				tempId: "",
+				conData: {
+					top: {},
+					bottom: []
+				},
 				//全部服务
 				tServiceByParams: JSON.parse(localStorage.getItem('tServiceByParams')),
 				//全部公司
@@ -66,98 +53,36 @@
 				fieldBrowseList: JSON.parse(localStorage.getItem('fieldBrowseList')),
 				//公司部门职位的合集
 				allOrganizationInfo: JSON.parse(localStorage.getItem('allOrganizationInfo')),
-				//主表tableName
-				tableName: "",
-				//主表ID
-				tempId: "",
-				conData: {
-					top: {},
-					bottom: []
-				}
 			}
 		},
 		created() {
 			//最上端公司选择
-			console.log(this.CompanyData)
 			this.CompanyData.forEach(item => {
 				if(item.name == "福佳集团") {
 					this.company = item
 				}
 			})
+			this.getDialogVisible()
 		},
-		methods: {
-			//提交/暂存
-			submitForm(status) {
-				//校验所有必填字段
-				if(this.$refs.child.onSubmit()) {
-					//获取返回字段的合集
-					var backData = {
-						jsonStr: this.$refs.child.conData
-					}
-					//存入外层信息
-					backData.voucherId = backData.jsonStr.voucherId
-					backData.title = backData.jsonStr.title
-					backData.gestor = backData.jsonStr.gestor
-					backData.gestorDept = backData.jsonStr.gestorDept
-					backData.voucherTime = backData.jsonStr.voucherTime
-					backData.companyCode = this.company.code
-					backData.creator = localStorage.getItem('ms_userId')
-					backData.status = status
-					backData.tableName = this.tableName
-					backData.tempId = this.tempId
-					//存入里层信息
-					//状态
-					backData.jsonStr.status = status
-					//公司ID
-					backData.jsonStr.company = this.company.id
-					//新增
-					backData.jsonStr.oprStatus = 1
-					for(var key in backData.jsonStr) {
-						if(typeof(backData.jsonStr[key]) == "object") {
-							backData.jsonStr[key].forEach(item => {
-								for(var keyItem in item) {
-									if(keyItem.indexOf("_NameShow") != -1) {
-										item[keyItem] = undefined
-									}
-								}
-								item.oprStatus = 1
-							})
-						}
-						if(key.indexOf("_NameShow") != -1) {
-							backData.jsonStr[key] = undefined
-						}
-					}
-					backData.jsonStr = JSON.stringify(backData.jsonStr)
-					this.$api.collaborativeOffice.apiUrl("workItem/insertWorkItem", backData).then(data => {
-						if(this.dataBack(data, "新增成功")) {
-							this.$parent.toSelect()
-						}
-					})
-				} else {
-					this.goOut("请填写必填的数据")
-				}
-			},
-			//选择模板
+		methods: { //选择模板
 			getDialogVisible() {
 				//获取模板详细数据
-				this.tempId = this.$refs.childMain.rowClick.id
 				this.$api.collaborativeOffice.findById({
-					id: this.$refs.childMain.rowClick.id
+					id: this.context.tempId
 				}).then(data => {
-					this.tableName = data.data.data.workItemTemp.tableName
 					//整理传入子组件的数据top 主表  bottom 子表
 					this.conData.top = data.data.data.workItemTemp
+					this.$set(this.conData.top, "wholeData", this.context)
 					this.conData.bottom = data.data.data.workItemTempSub
 					this.preview(this.conData.top.lines, "", 1)
 					this.conData.bottom.forEach((val, index) => {
+						this.$set(val, "wholeData", this.context)
 						this.preview(val.lines, index, 2)
 					})
 					//子表模板排序
 					this.conData.bottom.sort((a1, b1) => {
 						return a1.orderNum - b1.orderNum
 					})
-					this.dialogVisible = false
-					this.showFig = true
 					console.log(this.conData)
 				})
 			},

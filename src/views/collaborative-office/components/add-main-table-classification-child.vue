@@ -272,6 +272,8 @@
 						showFig: false,
 					}],
 				},
+				//全部公司
+				CompanyData: JSON.parse(localStorage.getItem('CompanyData')),
 			}
 		},
 		created() {
@@ -285,14 +287,10 @@
 				this.showFigAll = true
 				this.ruleForm = this.context
 			}
-			this.$api.collaborativeOffice.getCompanyData().then(data => {
-				console.log(data.data.data.rows)
-				this.CompanyData = data.data.data.rows
-				this.CompanyData.forEach(item => {
-					if(item.name == "福佳集团") {
-						this.ruleForm.company = item.id
-					}
-				})
+			this.CompanyData.forEach(item => {
+				if(item.name == "福佳集团") {
+					this.ruleForm.company = item.id
+				}
 			})
 		},
 		methods: {

@@ -1,14 +1,14 @@
 <template>
 	<div>
 		<el-card>
-			<formIcon :showAdd="showAdd" :key="count" ref="mainTableChild" show="1" :form-data="formData.top">
+			<formIcon :dis="dis" :showAdd="showAdd" :key="count" ref="mainTableChild" show="1" :form-data="formData.top">
 				<slot></slot>
 			</formIcon>
 		</el-card>
 		<el-tabs v-model="activeName" type="border-card">
 			<el-tab-pane :label="item.showName" v-for="(item,index) in formData.bottom" :name="item.id" :key="index">
-				<formIcon :key="count" ref="refCon" show="2" v-if="item.type == 1" :form-data="item"></formIcon>
-				<tableDynamic :key="count" ref="refCon" v-else :form-data="item"></tableDynamic>
+				<formIcon :dis="dis" :showAdd="showAdd" :key="count" ref="refCon" show="2" v-if="item.type == 1" :form-data="item"></formIcon>
+				<tableDynamic :dis="dis" :key="count" ref="refCon" v-else :form-data="item"></tableDynamic>
 			</el-tab-pane>
 			<el-tab-pane name="wobuxinnengchongfu" label="附件">1</el-tab-pane>
 		</el-tabs>
@@ -31,6 +31,10 @@
 				required: true
 			},
 			showAdd: {
+				type: String,
+				required: true
+			},
+			dis: {
 				type: String,
 				required: true
 			}
@@ -59,7 +63,6 @@
 			}
 		},
 		created() {
-			console.log(this.formData)
 		},
 		methods: {
 			onSubmit() {
@@ -79,10 +82,10 @@
 					if(typeof(this.$refs.refCon) != "undefined") {
 						this.$refs.refCon.forEach(item => {
 							if(item.formData.type == 1) {
-								this.$set(this.conData, item.formData.tableName, [])
-								this.conData[item.formData.tableName].push(item.ruleForm)
+								this.$set(this.conData, item.formData.id, [])
+								this.conData[item.formData.id].push(item.ruleForm)
 							} else {
-								this.$set(this.conData, item.formData.tableName, item.ruleForm.lines)
+								this.$set(this.conData, item.formData.id, item.ruleForm.lines)
 							}
 						})
 					}

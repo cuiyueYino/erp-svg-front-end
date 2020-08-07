@@ -31,7 +31,7 @@
 						</el-row>
 					</el-form>
 				</el-col>
-				<el-col style="text-align: right;" :span="10">
+				<el-col v-show="show != '1'" style="text-align: right;" :span="10">
 					<el-button @click="$parent.toAdd('1')" icon="el-icon-delete" type="success">新增</el-button>
 					<el-button @click="toUpd()" icon="el-icon-delete" type="success">修改</el-button>
 					<el-button @click="updateStatus(3)" icon="el-icon-delete" type="primary">生效</el-button>
@@ -41,7 +41,7 @@
 			</el-row>
 		</el-card>
 		<el-card class="box-card">
-			<el-table row-dblclick="dblclick" :row-class-name="tableRowClassName" @row-click="clickRow" :data="tableData" border>
+			<el-table :row-class-name="tableRowClassName" @row-click="clickRow" :data="tableData" border>
 				<el-table-column :formatter="statusShow" prop="status" label="状态" width="100" align="center"></el-table-column>
 				<el-table-column prop="voucherId" label="单据编号" align="center"></el-table-column>
 				<el-table-column prop="tempName" label="标题" align="center"></el-table-column>
@@ -59,6 +59,9 @@
 	export default {
 		components: {
 			pageNation
+		},
+		props: {
+			show: String,
 		},
 		data() {
 			return {
@@ -97,7 +100,6 @@
 				},
 				currentTotal: 0,
 				tableData: [],
-				rowClickId: "",
 				rowClick: {}
 			}
 		},
@@ -105,17 +107,18 @@
 			this.toSelect()
 		},
 		methods: {
-			dblclick(){
-				
+			dblclick() {
+
 			},
 			//查看
 			toSee() {
 				if(this.getRowClickId()) {
-					this.$api.collaborativeOffice.getWorkItemTempModel({
-						id: this.rowClickId
+					this.$api.collaborativeOffice.findDataBySrcId({
+						srcId: this.rowClick.srcId,
+						tempId: this.rowClick.tempId,
+						tableName: this.rowClick.tableName
 					}).then(data => {
-						console.log(data)
-						this.$parent.toAdd('3', data.data.data)
+						this.$parent.toSee(JSON.parse(data.data.data),this.rowClick.tempId)
 					})
 				}
 			},
@@ -123,7 +126,7 @@
 			updateStatus(status) {
 				if(this.getRowClickId()) {
 					this.$api.collaborativeOffice.updateStatusTemp({
-						id: this.rowClickId,
+						id: this.rowClick.id,
 						status: status,
 					}).then(data => {
 						if(this.dataBack(data, "修改状态成功")) {
@@ -158,7 +161,7 @@
 			toUpd() {
 				if(this.getRowClickId()) {
 					this.$api.collaborativeOffice.getWorkItemTempModel({
-						id: this.rowClickId
+						id: this.rowClick.id
 					}).then(data => {
 						console.log(data.data.data)
 						this.$parent.toUpd(data.data.data)
@@ -167,7 +170,7 @@
 			},
 			//判断是否选中ROW
 			getRowClickId() {
-				if(this.rowClickId) {
+				if(this.rowClick.srcId) {
 					return true
 				} else {
 					this.$message.error("请选择数据");
@@ -182,7 +185,7 @@
 			toSelect() {
 				var toGet = JSON.parse(JSON.stringify(this.formInline))
 				if(this.value != 'time') {
-					if(!this.noNull(this.value)){
+					if(!this.noNull(this.value)) {
 						toGet[this.value] = this.selectData
 					}
 				} else {
@@ -201,14 +204,14 @@
 				rowIndex
 			}) {
 				var color = ""
-				if(row.id == this.rowClickId) {
+				if(typeof(this.rowClick.srcId) != "undefined" && row.srcId == this.rowClick.srcId) {
 					color = "warning-row"
 				}
 				return color;
 			},
 			//选中行
 			clickRow(row) {
-				this.rowClickId = row.id
+				console.log(row)
 				this.rowClick = row
 			},
 		}

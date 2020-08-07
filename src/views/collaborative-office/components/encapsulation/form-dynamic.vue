@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<slot></slot>
-		<el-form ref="ruleForm" class="demo-ruleForm" :model="ruleForm" label-width="80px" :rules="rules" :inline="formData.inline" :size="formData.size" :label-position="formData.labelPosition">
+		<el-form ref="ruleForm" :disabled="dis == '1'" class="demo-ruleForm" :model="ruleForm" label-width="120px" :rules="rules" :inline="formData.inline" :size="formData.size" :label-position="formData.labelPosition">
 			<!--固定部分-->
 			<div v-if="show == 1">
 				<el-row>
@@ -68,18 +68,23 @@
 		</el-form>
 		<!--弹出框-->
 		<el-dialog :title="titleShow" top="1vh" destroy-on-close center :visible.sync="dialogVisible" width="80%">
+			<!--<div class="dialogCss">-->
 			<formIconComponents ref="child" :showFig="showCon" :dataCon="dataCon"></formIconComponents>
+			<!--</div>-->
 			<div slot="footer" class="dialog-footer">
 				<el-button @click="dialogVisible = false">取 消</el-button>
 				<el-button type="primary" @click="getDialogVisible">确 定</el-button>
 			</div>
 		</el-dialog>
+		<!--弹出框-工作流-->
+		<workflowDialog ref="childWork"></workflowDialog>
 	</div>
 </template>
 
 <script>
 	//所有弹出框
 	import formIconComponents from '../../../../views/collaborative-office/components/encapsulation/sub-components/form-icon-components';
+	import workflowDialog from '../../../../views/collaborative-office/components/encapsulation/sub-components/workflow-dialog';
 	//富文本
 	import { quillEditor } from 'vue-quill-editor'; //调用编辑器
 	import 'quill/dist/quill.snow.css';
@@ -87,7 +92,8 @@
 	export default {
 		components: {
 			quillEditor,
-			formIconComponents
+			formIconComponents,
+			workflowDialog
 		},
 		props: {
 			//传入的data值
@@ -100,6 +106,10 @@
 				required: true
 			},
 			showAdd: {
+				type: String,
+				required: true
+			},
+			dis: {
 				type: String,
 				required: true
 			}
@@ -131,7 +141,14 @@
 				dialogVisibleCon: {},
 				//富文本基础数据
 				editorOption: this.$GLOBAL.editorOption,
-				timer: ""
+				timer: "",
+				allOrganizationInfo: JSON.parse(localStorage.getItem('allOrganizationInfo')),
+				//人员
+				staffList: JSON.parse(localStorage.getItem('staffList')),
+				//用户
+				userList: JSON.parse(localStorage.getItem('userList')),
+				//职务
+				positionList: JSON.parse(localStorage.getItem('positionList')),
 			}
 		},
 		//销毁时间
@@ -141,41 +158,130 @@
 			}
 		},
 		created() {
-			if(this.show == 1) {
-				if(this.showAdd == 1) {
-					this.gestorName = localStorage.getItem('ms_username')
-					this.gestorDeptName = localStorage.getItem('ms_userDepartName')
-					this.$set(this.ruleForm, "gestor", localStorage.getItem('ms_userId'))
-					this.$set(this.ruleForm, "gestorName", localStorage.getItem('ms_username'))
-					this.$set(this.ruleForm, "gestorDept", localStorage.getItem('ms_userDepartId'))
-				} else {
-//					this.gestorName = localStorage.getItem('ms_username')
-//					this.$set(this.ruleForm, "gestorDept", localStorage.getItem('ms_userDepartId'))
-//					this.$set(this.ruleForm, "gestor", localStorage.getItem('ms_userId'))
-//					this.$set(this.ruleForm, "gestorDept", localStorage.getItem('ms_userDepartId'))
-				}
-				this.$set(this.ruleForm, "voucherId", "")
-				this.$set(this.ruleForm, "title", "")
-				this.$set(this.ruleForm, "voucherTime", new Date().getFullYear() +
-					"-" +
-					(new Date().getMonth() + 1) +
-					"-" +
-					new Date().getDate() +
-					" " +
-					this.appendZero(new Date().getHours()) +
-					":" +
-					this.appendZero(new Date().getMinutes()) +
-					":" +
-					this.appendZero(new Date().getSeconds()))
-				this.getTime()
-			}
 			if(!this.noObject(this.formData) && typeof(this.formData.rowList) != "undefined") {
 				this.getOther()
 				this.getrulesList()
+				//显示固定栏(主表)
+				if(this.show == 1) {
+					//新增：1       查看 ：2
+					if(this.showAdd == 1) {
+						this.gestorName = localStorage.getItem('ms_username')
+						this.gestorDeptName = localStorage.getItem('ms_userDepartName')
+						//					this.$set(this.ruleForm, "gestor", localStorage.getItem('ms_userId'))
+						//					this.$set(this.ruleForm, "gestorDept", localStorage.getItem('ms_userDepartId'))
+						this.$set(this.ruleForm, "gestor", "BFPID000000LSN01ZA")
+						this.$set(this.ruleForm, "gestorDept", "BFPID000000LRS001C")
+						this.$set(this.ruleForm, "voucherId", "")
+						this.$set(this.ruleForm, "title", "")
+						this.$set(this.ruleForm, "voucherTime", this.getTimeNow())
+						this.getTime()
+					} else if(this.showAdd == 2) {
+						console.log(this.formData)
+						//整理主表数据
+						this.get_NameShow(1)
+						this.gestorName = localStorage.getItem('ms_username')
+						this.gestorDeptName = localStorage.getItem('ms_userDepartName')
+						this.$set(this.ruleForm, "voucherId", this.formData.wholeData.voucherId)
+						this.$set(this.ruleForm, "title", this.formData.wholeData.title)
+						this.$set(this.ruleForm, "voucherTime", this.conversionTime(this.formData.wholeData.voucherTime))
+					}
+					//不显示固定栏（子表）
+				} else {
+					console.log(this.formData)
+					this.get_NameShow(2)
+				}
 			}
-			console.log(this.ruleForm)
 		},
 		methods: {
+			//查看页面根据ID获取浏览框内容 _NameShow
+			get_NameShow(state) {
+				var valObject = {}
+				if(state == 1) {
+					valObject = this.formData.wholeData
+				} else {
+					for(var key in this.formData.wholeData) {
+						if(key == this.formData.id) {
+							valObject = this.formData.wholeData[key][0]
+						}
+					}
+				}
+				this.get_NameShowChlid(valObject)
+			},
+			get_NameShowChlid(valObject) {
+				for(var i = 0; i < this.formData.rowList.length; i++) {
+					for(var k = 0; k < this.formData.rowList[i].colList.length; k++) {
+						var item = this.formData.rowList[i].colList[k]
+						for(var key in valObject) {
+							if(item.field == key) {
+								this.$set(this.ruleForm, key, valObject[key])
+								if(item.fieldType == 1) {
+									switch(item.toSelect.id) {
+										case "1":
+											item.browseBoxList[0].children.forEach(itemChild => {
+												if(itemChild.foid == valObject[key]) {
+													this.$set(this.ruleForm, key + "_NameShow", itemChild.fname)
+												}
+											})
+										case "2":
+											item.browseBoxList[0].children.forEach(itemChild => {
+												itemChild.children.forEach(itemChild2 => {
+													if(itemChild2.foid == valObject[key]) {
+														this.$set(this.ruleForm, key + "_NameShow", itemChild2.fname)
+													}
+												})
+
+											})
+										case "3":
+											item.browseBoxList[0].children.forEach(itemChild => {
+												itemChild.children.forEach(itemChild2 => {
+													itemChild2.children.forEach(itemChild3 => {
+														if(itemChild3.foid == valObject[key]) {
+															this.$set(this.ruleForm, key + "_NameShow", itemChild3.fname)
+														}
+													})
+												})
+											})
+											break;
+										case "4":
+											this.staffList.forEach(itemChild => {
+												if(itemChild.toid == valObject[key]) {
+													this.$set(this.ruleForm, key + "_NameShow", itemChild.tname)
+												}
+											})
+											break;
+										case "5":
+											this.userList.forEach(itemChild => {
+												if(itemChild.foid == valObject[key]) {
+													this.$set(this.ruleForm, key + "_NameShow", itemChild.fname)
+												}
+											})
+											break;
+										case "6":
+											this.positionList.forEach(itemChild => {
+												if(itemChild.foid == valObject[key]) {
+													this.$set(this.ruleForm, key + "_NameShow", itemChild.fname)
+												}
+											})
+											break;
+										case "7":
+											return "dateControl"
+											break;
+									}
+								}
+							}
+						}
+					}
+				}
+			},
+			getWorkDialig(row) {
+				this.$set(this.ruleForm, this.dialogVisibleCon.field + '_NameShow', row.tempName)
+				this.$set(this.ruleForm, this.dialogVisibleCon.field, row.tempId) //如果有联动查询的数据
+				if(this.dialogVisibleCon.parameterList.length != 0) {
+					//调用toGetServiceNow（绑定的联动改变字段，获取的选中id）
+					this.toGetServiceNow(this.dialogVisibleCon.parameterList, row.tempId)
+				}
+				this.$refs.childWork.dialogVisible = false
+			},
 			getTime() {
 				var self = this
 				self.timer = setInterval(function() {
@@ -325,8 +431,6 @@
 					//调用toGetServiceNow（绑定的联动改变字段，获取的选中id）
 					this.toGetServiceNow(this.dialogVisibleCon.parameterList, this.$refs.child.backCon.value)
 				}
-//				this.ruleForm.show_NameShow = undefined
-//				console.log(JSON.stringify(this.ruleForm))
 				this.dialogVisible = false
 			},
 			/*
@@ -346,8 +450,10 @@
 								listChild.colList[i2].serviceNow.fid = id
 								//循环查询
 								var conNow = await this.$api.collaborativeOffice.findTServiceItemByParams(listChild.colList[i2].serviceNow).then(data => {
+									console.log(data)
 									return new Promise(resolve => {
 										//把根据‘不同的服务’获取到的返回值从新赋值，都是id和name的形式，方便调用
+										console.log(listChild.colList[i2].serviceNow.fcode)
 										switch(listChild.colList[i2].serviceNow.fcode) {
 											case "service09":
 											case "service08":
@@ -393,7 +499,11 @@
 			findDialogVisible(row) {
 				//取到中间值
 				this.dialogVisibleCon = row
-				this.dialogVisible = true
+				if(row.toSelect.id == 7) {
+					this.$refs.childWork.dialogVisible = true
+				} else {
+					this.dialogVisible = true
+				}
 				/*
 				 * 判断浏览框内显示的内容，并放入数据（公司，部门，职位在上层已经查询出来，直接放里面就行，
 				 * 其他数据需要接口查询后才能显示
@@ -482,5 +592,11 @@
 	.treeDivClass {
 		height: 300px;
 		overflow: auto;
+	}
+	
+	>>>.el-dialog__body {
+		border-bottom: 1px solid #dcdfe6;
+		min-height: calc(100vh - 300px);
+		overflow-y: auto;
 	}
 </style>
