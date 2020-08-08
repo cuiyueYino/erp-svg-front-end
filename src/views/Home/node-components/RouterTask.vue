@@ -17,9 +17,9 @@
                     <el-form-item label="名称" :label-width="formLabelWidth" prop="name">
                         <el-input ref="nameInput" v-model="formData.name" autocomplete="off" clearable></el-input>
                     </el-form-item>
-                    <el-form-item label="隐藏" :label-width="formLabelWidth">
+                    <!-- <el-form-item label="隐藏" :label-width="formLabelWidth">
                         <el-checkbox v-model="checked"></el-checkbox>
-                    </el-form-item>
+                    </el-form-item> -->
                     <el-form-item label="汇聚模式" :label-width="formLabelWidth">
                         <el-checkbox v-model="join"></el-checkbox>
                     </el-form-item>

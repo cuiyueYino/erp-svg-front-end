@@ -284,14 +284,14 @@ export default {
             //参与-表格
             e2.forEach(item => {
                 this.data.wfParticipator = {
-                    participator:[
+                     participator:[
                         {
-                            "oid":item.foid,
+                            "oid":item.oid?item.oid:'',
                             //6:表示 选择的是职务
                             "type": item.type,
                             //表达式的值 
                              [item.typeName]:{
-                                "oid": item.foid,
+                                "oid": item.fUseroid?item.fUseroid:item.oid,
                                 "code":item.fUsercode,
                                 "name":item.fUsername
                             },
@@ -305,11 +305,11 @@ export default {
                 this.data.wfCopyTo = {
                     copyTo:[
                         {
-                            "oid":item.oid,
+                           "oid":item.oid?item.oid:'',
                             "type": item.type,
                             //表达式的值 
                             [item.typeName]:{
-                                "oid": item.foid,
+                                "oid": item.oid?item.oid:item.foid,
                                 "code":item.fUsercode,
                                 "name":item.fUsername
                             },
@@ -370,25 +370,11 @@ export default {
                 "oid": e.fmclassOid,
                 "name": e.fmclassName,
             };
-            //组织结构
-            this.data.orgUnit = {
-                "id": e.structureId,
-            };
-            this.data.hidden = e.checked?1:0;
             this.data.autoSubmit = e.autoSubmit?1:0;
             this.data.autoHurry = e.autoHurry?1:0;
             this.data.fremark = e.fremark;
             this.data.maxWorkTime = e.maxWorkTime;
-            switch (e.timeUnit) {
-                case '小时':
-                     this.data.timeUnit = 1
-                    break;
-                case '天':
-                     this.data.timeUnit = 2
-                    break;
-                default:
-                    break;
-            };
+            this.data.timeUnit = 1;
             //审批类型:1:普通,2:并行,3:串行
              switch (e.wfAuditType) {
                 case '普通审批':
@@ -439,12 +425,12 @@ export default {
                 this.data.wfParticipator = {
                     participator:[
                         {
-                            "oid":item.oid,
+                            "oid":item.oid?item.oid:'',
                             //6:表示 选择的是职务
                             "type": item.type,
                             //表达式的值 
                              [item.typeName]:{
-                                "oid": item.oid,
+                                "oid": item.fUseroid?item.fUseroid:item.oid,
                                 "code":item.fUsercode,
                                 "name":item.fUsername
                             },
@@ -458,11 +444,11 @@ export default {
                 this.data.wfCopyTo = {
                     copyTo:[
                         {
-                            "oid":item.oid,
+                           "oid":item.oid?item.oid:'',
                             "type": item.type,
                             //表达式的值 
                             [item.typeName]:{
-                                "oid": item.oid,
+                                "oid": item.oid?item.oid:item.foid,
                                 "code":item.fUsercode,
                                 "name":item.fUsername
                             },
@@ -472,24 +458,30 @@ export default {
                 };
             });
             //审核单范围
-            this.data.wfViewOtherComments = {
-                wfViewOtherComment:[
-                    {
-                        // "oid":12312,
-						// "wfProcessor":"BFPID000000P4F001" -- 选中哪个的审批结点的id
-                    }
-                ]
-            },
+             e5.forEach(item => {
+                this.data.wfViewOtherComments = {
+                    wfViewOtherComment:[
+                        {
+                            "oid":'',
+                            "wfProcessor": item.wfProcessor //-- 选中哪个的审批结点的id
+                        }
+                    ]
+                }
+             })
+            
            
          //决策类型
-         this.data.decisions = {
-             decision:[
-                 {
-                    "decisionType": e4[0].decisionType,
-                    "decisionText": e4[0].decisionText,
-				}
-             ]
-         }
+          e5.forEach(item => {
+              this.data.decisions = {
+                    decision:[
+                        {
+                            "decisionType": item.decisionType,
+                            "decisionText": item.decisionText,
+                        }
+                    ]
+                }
+          })
+         
         },
         //自由活动
         saveForkData(e){

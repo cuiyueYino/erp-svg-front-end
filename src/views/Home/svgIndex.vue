@@ -778,6 +778,9 @@ export default {
                     // console.log(this.selectedNode,this.dataObj[k])
                 }
             }
+            if(node.type == "Join"){
+                sessionStorage.setItem('allData',JSON.stringify(this.dataObj))
+            }
             this.nodeType = node.type;console.log(node,this.selectedNode)
             // console.log(this.selectedNode,this.workflowNodes)
         },

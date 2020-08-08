@@ -28,13 +28,13 @@
                     <el-input v-model="formData.fmclassName" autocomplete="off"></el-input>
                    
                 </el-form-item>
-                <el-form-item label="组织结构" :label-width="formLabelWidth" >
+                <!-- <el-form-item label="组织结构" :label-width="formLabelWidth" >
                     <el-input v-model="formData.structure" autocomplete="off"></el-input>
                      <img class="icon-search" @click="baseInputTable('用户','组织结构查询')" src="../../../assets/img/search.svg">
-                </el-form-item>
-                <el-form-item label="隐藏" :label-width="formLabelWidth">
+                </el-form-item> 
+                 <el-form-item label="隐藏" :label-width="formLabelWidth">
                     <el-checkbox v-model="formData.checked"></el-checkbox>
-                </el-form-item>
+                </el-form-item> -->
                 <el-form-item label="描述：" :label-width="formLabelWidth">
                     <el-input maxlength="1000"  autosize show-word-limit type="textarea" v-model="formData.fremark"></el-input>
                 </el-form-item>
@@ -54,8 +54,7 @@
                 </el-form-item>
                 <el-form-item label="时间单位" :label-width="formLabelWidth" prop="timeUnit">
                      <el-radio-group v-model="formData.timeUnit">
-                        <el-radio label="小时"></el-radio>
-                        <el-radio label="天"></el-radio>
+                        <el-radio label="1">小时</el-radio>
                     </el-radio-group>
                 </el-form-item>
                  <el-form-item  :label-width="formLabelWidth" prop="autoSubmit">
@@ -79,7 +78,7 @@
                         <dynamic-table
                             :columns="columns"
                             :table-data="joinusertableData"
-                            @selection-change="onSelectionChange"
+                            @selection-change="onJoinUserSelectionChange"
                             v-loading="false"
                             element-loading-text="加载中"
                         ></dynamic-table>
@@ -99,7 +98,7 @@
                         <dynamic-table
                             :columns="columns"
                             :table-data="tableData"
-                            @selection-change="onSelectionChange"
+                            @selection-change="onCopyToSelectionChange"
                             v-loading="false"
                             element-loading-text="加载中"
                         ></dynamic-table>
@@ -118,7 +117,7 @@
                  <dynamic-table
                     :columns="columns2"
                     :table-data="tableData2"
-                    @selection-change="onSelectionChange"
+                    @selection-change="onJoinSelectionChange"
                     v-loading="false"
                     :isShowPager="false"
                     element-loading-text="加载中"
@@ -135,7 +134,7 @@
                             ref="decisionTable"
                             :isShowPager="false"
                             :table-data="tableData3"
-                            @selection-change="onSelectionChange"
+                            @selection-change="onSelectionDecision"
                             v-loading="false"
                             element-loading-text="加载中"
                         ></dynamic-table>
@@ -165,7 +164,7 @@
                 />
               </el-form-item>
               <el-form-item label="条件表达式" :label-width="formLabelWidth">
-                <el-input type="textarea" v-model="roleReq.role_expression"></el-input>
+                <el-input type="textarea" v-model="roleReq.role_expression" :disabled="true"></el-input>
               </el-form-item>
             </el-tab-pane>
             <el-tab-pane label="用户" name="2">
@@ -178,7 +177,7 @@
                 />
               </el-form-item>
               <el-form-item label="条件表达式" :label-width="formLabelWidth">
-                <el-input type="textarea" v-model="UserListReq.fenglishname"></el-input>
+                <el-input type="textarea" v-model="UserListReq.fenglishname" :disabled="true"></el-input>
               </el-form-item>
             </el-tab-pane>
             <el-tab-pane label="服务" name="3">
@@ -362,7 +361,19 @@ export default {
             // 对话框显示标识
             dialogVisible: this.visible,
             // 配置表单数据
-            formData: this.data,
+            formData: {
+                name:'',
+                work:'',
+                workData:'',
+                fmclassName:'',
+                fremark:'',
+                wfAuditType:'',
+                maxWorkTime:'',
+                autoSubmit:'',
+                autoHurry:'',
+                joinCheckBox:1,
+                timeUnit:'1'
+            },
             columns: [
             {
                 type: 'selection'
@@ -382,17 +393,17 @@ export default {
         ],
         columns2: [
             {
-                key: 'fcode',
-                title: '节点'
+                type: 'selection'
             },
             {
                 key: 'fname',
-                title: '节点类别'
+                title: '节点'
             },
             {
-                key: 'fstatus',
-                title: '选择'
-            }
+                key: 'ftype',
+                title: '节点类别'
+            },
+            
         ],
         columns3: [
              {
@@ -449,6 +460,10 @@ export default {
         gridData:[],
         editData:{},  
         multipleSelection: [],
+        decisionSelection:[],
+        joinSelection:[],
+        copyToSelection:[],
+        joinUserSelection:[],
         options: [],
         titleStr:'',
         baseInputTableF:false,
@@ -496,16 +511,145 @@ export default {
                     this.formData.fmclassOid = this.editData.dataType.oid
                     this.formData.fmclassCode = this.editData.dataType.code
                    this.formData.fmclassName = this.editData.dataType.name
-                   this.formData.structure = this.editData.orgUnit?this.editData.orgUnit.id:''
-                   this.formData.checked = this.editData.hidden==1?true:false
                    this.formData.fremark = this.editData.fremark    
                    this.formData.maxWorkTime = this.editData.maxWorkTime
                    this.formData.timeUnit = this.editData.timeUnit       
                    this.formData.autoSubmit = this.editData.autoSubmit==1?true:false 
                    this.formData.autoHurry = this.editData.autoHurry==1?true:false 
-                   this.joinCheckBox = this.editData.permission=='1'?1:this.editData.mntNextJoin=='1'?2:this.editData.canSkip=='1'?3:this.editData.multMail=='1'?4:null
-                   this.joinusertableData = this.editData.wfParticipator.participator
-                   this.tableData = this.editData.wfCopyTo.copyTo
+                   this.formData.joinCheckBox = this.editData.permission=='1'?1:this.editData.mntNextJoin=='1'?2:this.editData.canSkip=='1'?3:this.editData.multMail=='1'?4:null
+                //    this.joinusertableData = this.editData.wfParticipator.participator
+                    let joinusertable = [];
+                   this.editData.wfParticipator.participator.forEach(item=>{
+                       switch (item.type) {
+                           case 3://用户
+                                joinusertable.push({
+                                   fUsercode: "用户",
+                                   fUsername: item.user.name,
+                                   fUserRemake: item.expression,
+                                   fUseroid:item.user.foid,
+                                   oid:item.oid,
+                                   type:item.type,
+                                   typeName:'user',
+                               })
+                               break;
+                            case 2://角色
+                                joinusertable.push({
+                                   fUsercode:  "角色",
+                                   fUsername: item.role.name,
+                                   fUserRemake: item.expression,
+                                   fUseroid:item.role.foid,
+                                   oid:item.oid,
+                                   type:item.type,
+                                    typeName:'role',
+                               })
+                               break;
+                            case 4://服务
+                               joinusertable.push({
+                                   fUsercode: "服务",
+                                   fUsername: item.service.name,
+                                   fUserRemake: item.expression,
+                                   fUseroid:item.service.foid,
+                                   oid:item.oid,
+                                   type:item.type,
+                                    typeName:'service',
+                               })
+                               break;
+                            case 6://职务
+                                joinusertable.push({
+                                   fUsercode: "职务",
+                                   fUsername: item.position.name,
+                                   fUserRemake: item.expression,
+                                   fUseroid:item.position.foid,
+                                   oid:item.oid,
+                                   type:item.type,
+                                   typeName:'position',
+                               })
+                               break;
+                            case 5://表达式
+                                   joinusertable.push({
+                                   fUsercode: "表达式",
+                                   fUsername: item.expression.name,
+                                   fUserRemake: item.expression,
+                                   fUseroid:item.expression.foid,
+                                   oid:item.oid,
+                                   type:item.type,
+                                   typeName:'expression',
+                               })
+                               break;
+                           default:
+                               break;
+                       }
+                   });
+                   if( this.joinusertableData.length === 0  && joinusertable.length !== 0){
+                        this.joinusertableData.push(joinusertable[0])
+                   }
+                   console.log(this.joinusertableData,joinusertable);
+                    let tableDataNewSet = []
+                    this.editData.wfCopyTo.copyTo.forEach(item=>{
+                       switch (item.type) {
+                           case 3://用户
+                               tableDataNewSet.push({
+                                   fUsercode: "用户",
+                                   fUsername: item.user.name,
+                                   fUserRemake: item.expression,
+                                   fUseroid:item.user.foid,
+                                   oid:item.oid,
+                                   type:item.type,
+                                   typeName:'user',
+                               })
+                               break;
+                            case 2://角色
+                               tableDataNewSet.push({
+                                   fUsercode: "角色",
+                                   fUsername: item.role.name,
+                                   fUserRemake: item.expression,
+                                   fUseroid:item.role.foid,
+                                   oid:item.oid,
+                                   type:item.type,
+                                   typeName:'role',
+                               })
+                               break;
+                             case 4://服务
+                               tableDataNewSet.push({
+                                   fUsercode:  "服务",
+                                   fUsername: item.service.name,
+                                   fUserRemake: item.expression,
+                                   fUseroid:item.service.foid,
+                                   oid:item.oid,
+                                   type:item.type,
+                                   typeName:'service',
+                               })
+                               break;
+                            case 6://职务
+                               tableDataNewSet.push({
+                                   fUsercode: "职务",
+                                   fUsername: item.position.name,
+                                   fUserRemake: item.expression,
+                                   fUseroid:item.position.foid,
+                                    oid:item.oid,
+                                    type:item.type,
+                                   typeName:'position',
+                               })
+                               break;
+                            case 5://表达式
+                               tableDataNewSet.push({
+                                   fUsercode: "表达式",
+                                   fUsername: item.expression.name,
+                                   fUserRemake: item.expression,
+                                   fUseroid:item.expression.foid,
+                                   oid:item.oid,
+                                    type:item.type,
+                                   typeName:'expression',
+                               })
+                               break;
+                       
+                           default:
+                               break;
+                       }
+                   });
+                    if( this.tableData.length === 0 && tableDataNewSet.length !== 0){
+                        this.tableData.push(tableDataNewSet[0])
+                    }
                    this.tableData2 = this.editData.wfViewOtherComments.wfViewOtherComment
                     switch (this.editData.wfAuditType) {
                         case 1:
@@ -520,30 +664,19 @@ export default {
                         default:
                             break;
                     } 
-                    switch (this.editData.timeUnit) {
-                        case '1':
-                            this.formData.timeUnit = '小时'
-                            break;
-                        case '2':
-                            this.formData.timeUnit = '天'
-                            break;
-                        default:
-                            break;
-                    };
-               //    this.tableData3 = this.editData.decisions.decision
-                this.$nextTick(() => {
-                   this.editData.decisions.decision.forEach(row => {console.log(row.decisionType)
-                        if (this.tableData3.includes(row.decisionType)) {
-                            this.$refs.decisionTable.toggleRowSelection(row);
-                        }
-                    });
-                });
-                   // if( this.data.displayName !== '新建连接' ){
-                    //     this.formData.displayName  = this.data.displayName 
-                    // }else{
-                    //     this.formData.displayName  = ''
-                    // }
-             }  
+                    // switch (this.editData.timeUnit) {
+                    //     case 1 || '1':
+                    //         this.formData.timeUnit = '小时'
+                    //         break;
+                    //     default:
+                    //         break;
+                    // };
+                  this.tableData3 = this.editData.decisions.decision
+                       this.tableData3.forEach(row => {
+                            this.$refs.decisionTable.toggleRowSelection(row);
+                        });
+                    
+             }
             },
             deep: true,
             immediate: true
@@ -560,8 +693,6 @@ export default {
                 //     this.$refs.nameInput.focus();
                 // }, 100);
             }else{
-                    this.formData.checked = this.checked;
-                    // this.formData.joinCheckBox = this.joinCheckBox;
                     this.$emit(
                     "saveFormData",
                     this.formData,
@@ -597,8 +728,28 @@ export default {
                 this.dialogVisible = false;
             });
         },
-        handleClick(tab, event) {
-            // console.log(tab, event);
+        handleClick() {//console.log(this.formData.name)
+            if(this.activeName == '5'){//debugger
+                  this.tableData2 =[]
+                let allData = JSON.parse( sessionStorage.getItem('allData') );
+                allData.forEach(item=>{
+                    if(item.type == 'Join'&& (item.data.displayName !== this.formData.name) ){
+                        this.tableData2.push({
+                            fname:item.data.displayName,
+                            ftype:item.data.name,
+                            wfProcessor: item.oid?item.oid:item.key
+                        })
+                        // item.wfViewOtherComments.wfViewOtherComment.forEach(vOcItime=>{
+                        //     vOcItime.push({
+                        //         fname:item.data.displayName,
+                        //         ftype:item.data.name,
+                        //         wfProcessor:vOcItime.wfProcessor
+                        //     })
+                        // })
+                    }
+                })
+            }   
+            
         },
          // 参与人弹窗
         joinSearch(Str){
@@ -740,7 +891,7 @@ export default {
                 }
                 }
       }
-       else if (this.titleStr === "业务工作") {
+       else if (this.titleStr === "审核工作") {
     //     let selectOption = this.WorkmultipleSelection;
     //     if (selectOption.length > 0) {
     //       if (selectOption.length > 1) {
@@ -796,8 +947,24 @@ export default {
                 this.tableData = updateCCDate;
             }
         },
+        //决策类型-多选
+        onSelectionDecision(val){
+            this.decisionSelection = val;
+        },
+        //审核单范围-多选
+        onJoinSelectionChange(val){
+            this.joinSelection = val;
+        },
+        //抄送-多选
+        onCopyToSelectionChange(val){
+             this.copyToSelection = val;
+        },
+        //参与者-多选
+        onJoinUserSelectionChange(val){
+             this.joinUserSelection = val;
+        },
          //多选
-        onSelectionChange(val) {console.log(val)
+        onSelectionChange(val) { console.log(val)
             this.multipleSelection = val;
             switch (this.titleStr) {
                 case '源单据业务':

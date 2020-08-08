@@ -66,14 +66,14 @@
                         </el-select>
                     </el-form-item>
                 </el-col> 
-                 <el-col :span="10" v-show="type ==='角色'">
+                 <!-- <el-col :span="10" v-show="type ==='角色'">
                     <el-form-item label="缺省管理员角色" label-width="112px">
                     <el-radio-group v-model="radio">
                         <el-radio :label="1">是</el-radio>
                         <el-radio :label="0">否</el-radio>
                     </el-radio-group>
                  </el-form-item>
-                </el-col> 
+                </el-col>  -->
                  <el-col :span="10" v-show="type ==='职务'" class="job-class">
                      <el-form-item label="职务类型" label-width="70px">
                      <el-input clearable size="small" v-model="formData.formRoleName" placeholder="请输入条件值"></el-input>
@@ -253,10 +253,10 @@ export default {
                         key: 'sortOrder',
                         title: '描述'
                     },
-                    {
-                        key: 'AdminS',
-                        title: '缺省管理员'
-                    },
+                    // {
+                    //     key: 'AdminS',
+                    //     title: '缺省管理员'
+                    // },
                 ];
                 let fromdata={};
                 fromdata.page=this.pageNum;

@@ -27,9 +27,9 @@
                             ></el-option>
                         </el-select>
                     </el-form-item>
-                    <el-form-item label="隐藏" :label-width="formLabelWidth">
+                    <!-- <el-form-item label="隐藏" :label-width="formLabelWidth">
                         <el-checkbox v-model="checked"></el-checkbox>
-                    </el-form-item>
+                    </el-form-item> -->
                     <el-form-item label="描述：" :label-width="formLabelWidth">
                         <el-input maxlength="1000" clearable  autosize show-word-limit type="textarea" v-model="formData.fremark"></el-input>
                     </el-form-item>
@@ -121,8 +121,8 @@ export default {
     watch: {
         // 监听配置数据源
         data: {
-            handler (obj) {console.log(obj)
-                if(obj.type === "Subprocess" || obj.name === "Subprocess"){
+            handler (obj) {
+                if(obj.type === "Subprocess" || obj.name === "Subprocess"){console.log(obj)
                 this.editData = obj;
                 this.formData.checked = this.editData.hidden==1?true:false;
                 this.formData.fremark = this.editData.fremark;
