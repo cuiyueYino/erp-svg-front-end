@@ -80,13 +80,11 @@
 import DynamicTable from '../../components/common/dytable/dytable.vue';
 import proData from '../../components/common/proData/proData';
 import processnodelist from '../../views/comment/process-node-list.vue';//流程相关
-import COOTaskPage from '../plan-options/cooperate-task.vue';//配合任务
 import ComAnnDetaiPage from '../plan-options/company-Annual-plan-detail.vue';//公司年度计划汇总 C
 import TempTaskPage from '../plan-options/temporary-task.vue';//临时任务派发 E
 import creditEnclFilelist from '../comment/enclosure-file.vue';
 import baseInfoDialog from './user-tree-search.vue';//转发加签委托人员选择
 import EachPerEachJobDetailPage from '../plan-options/each-person-each-job-detail.vue';//一岗一表 F
-import SaffAppraisalPage from '../plan-options/saff-appraisal.vue';//员工考评表
 import DepartYearEncPlanDetailPage from '../plan-options/depart-year-enc-plan-detail.vue';//部门年度经济指标计划 Q
 import EncBenefitsIndDetailPage from '../plan-options/enc-benefits-indicators-detail.vue';//经济效益指标 R
 import EachPerEachTableDelayPage from '../plan-options/each-person-each-table-delay.vue';//一人一表任务表（延期）I
