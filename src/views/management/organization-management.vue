@@ -269,8 +269,8 @@ export default {
             if (responsevalue) {
                 let tabledata=eval('(' + responsevalue.data.data + ')');
                 this.treeData=tabledata;
-                this.treeloading = false;
             }
+            this.treeloading = false;
         }); 
     },
     computed:{
