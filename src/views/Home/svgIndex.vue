@@ -304,6 +304,7 @@ export default {
             },
             // 绘制工作流节点数组
             workflowNodes: [],
+            MMworkflowNodes: [],
         };
     },
     watch: {},
@@ -353,26 +354,30 @@ export default {
                             lineexpression:this.dataObj.lines.line[i].lineexpression,
                             lineotherwise:this.dataObj.lines.line[i].lineotherwise,
                             name: 'Line',
+                            oid:this.dataObj.lines.line[i].linefoid,
                             displayName: this.dataObj.lines.line[i].linefname,
-                            
                         },
                         from:{
                             data:{
                                  name: this.dataObj.lines.line[i].from.type,
                                  displayName: this.dataObj.lines.line[i].from.name
                             },
+                            options:this.dataObj.lines.line[i].from.options,
                             target: this.dataObj.lines.line[i].from.target,
+                            point:this.dataObj.lines.line[i].from.point,
                         },
                         to:{
                              data:{
                                  name: this.dataObj.lines.line[i].to.type,
                                  displayName: this.dataObj.lines.line[i].to.name,
-                             },
+                            },
+                            options:this.dataObj.lines.line[i].to.options,
+                            point:this.dataObj.lines.line[i].to.point,
                             target: this.dataObj.lines.line[i].to.target,
                         },
                     }
                 )
-             };
+            };
             for(let i in this.dataObj.nodes.wfProcessor){
                 switch (this.dataObj.nodes.wfProcessor[i].type) {
                     case "Join":
@@ -406,6 +411,7 @@ export default {
                                         wfViewOtherComments :{
                                             wfViewOtherComment:this.dataObj.nodes.wfProcessor[i].wfViewOtherComments.wfViewOtherComment
                                         },
+                                        oid:this.dataObj.nodes.wfProcessor[i].oid,
                                         fremark: this.dataObj.nodes.wfProcessor[i].fremark,
                                         hidden: this.dataObj.nodes.wfProcessor[i].hidden,
                                         maxWorkTime: this.dataObj.nodes.wfProcessor[i].maxWorkTime,
@@ -473,6 +479,7 @@ export default {
                                         wfViewOtherComments :{
                                             wfViewOtherComment:this.dataObj.nodes.wfProcessor[i].wfViewOtherComments.wfViewOtherComment
                                         },
+                                        oid:this.dataObj.nodes.wfProcessor[i].oid,
                                         autoHurry:this.dataObj.nodes.wfProcessor[i].autoHurry,
                                         autoSubmit: this.dataObj.nodes.wfProcessor[i].autoSubmit,
                                         permission: this.dataObj.nodes.wfProcessor[i].permission,
@@ -530,6 +537,7 @@ export default {
                             join: this.dataObj.nodes.wfRouter[i].join,
                             code: this.dataObj.nodes.wfRouter[i].code,
                             name: 'Task',
+                            oid:this.dataObj.nodes.wfRouter[i].oid,
                             displayName: this.dataObj.nodes.wfRouter[i].name,
                         },
                         type: 'Task',
@@ -563,6 +571,7 @@ export default {
                             hidden: this.dataObj.nodes.wfProcessorAuto[i].hidden,
                             join: this.dataObj.nodes.wfProcessorAuto[i].join,
                             name: 'Fork',
+                            oid:this.dataObj.nodes.wfProcessorAuto[i].oid,
                             displayName: this.dataObj.nodes.wfProcessorAuto[i].name,
                             
                         },
@@ -597,6 +606,7 @@ export default {
                             hidden: this.dataObj.nodes.wfSubProces[i].hidden,
                             code: this.dataObj.nodes.wfSubProces[i].code,
                             name: 'Subprocess',
+                            oid:this.dataObj.nodes.wfSubProces[i].oid,
                             displayName: this.dataObj.nodes.wfSubProces[i].name,
                         },
                         type: 'Subprocess',
@@ -634,8 +644,8 @@ export default {
                     },
                     data: {
                         name: 'Start',
+                        oid:this.dataObj.nodes.wfStarter[0].oid,
                         displayName: this.dataObj.nodes.wfStarter[0].name,
-                        
                     },
                     key: 'Start'
                 }
@@ -656,6 +666,7 @@ export default {
                     },
                     data: {
                         name: 'End',
+                        oid:this.dataObj.nodes.wfEnder[0].oid,
                         displayName: this.dataObj.nodes.wfEnder[0].name,
                         
                     },
@@ -676,20 +687,24 @@ export default {
             newObj.name = this.dataObj.name
             newObj.displayName = this.dataObj.name;
             // 更改节点信息 同步更新终点为当前配置节点的to属性
-                newObj.forEach(item=>{
-                    for( let i = 0; i < newLine.length; i++ ){
-                     if(item.oid === newLine[i].linefrom ){
-                                item.transition.push(newLine[i]);
+            newObj.forEach(item=>{
+                for( let i = 0; i < newLine.length; i++ ){
+                    if(newLine[i].linefrom){
+                        if(item.oid === newLine[i].linefrom ){
+                            item.transition.push(newLine[i]);
                         }
                     }
-                })
+                }
+            })
             newObj.push(...newEnd);
             this.dataObj = newObj;
+            this.MMworkflowNodes=[];
             this.compileXMLToObj(this.dataObj);
             for(let k =0 ; k<this.dataObj.length; k++){
-                this.workflowNodes.push(this.dataObj[k]);  
+                this.workflowNodes.push(this.dataObj[k]);
+                this.MMworkflowNodes.push(this.dataObj[k]);  
             }
-            console.log(this.workflowNodes,this.dataObj)
+            console.log(this.MMworkflowNodes)
         }else{
             this.isEditF = false;
             this.isNewF = true;
@@ -712,6 +727,9 @@ export default {
         //         // this.workflowNodes.splice(this.workflowNodes.length - 1, 1);
         //     }
         // });
+    },
+    updated(){
+       this.workflowNodes=this.MMworkflowNodes; 
     },
     destroyed () {
         // document.removeEventListener('keyup');
@@ -778,7 +796,8 @@ export default {
                     // console.log(this.selectedNode,this.dataObj[k])
                 }
             }
-            this.nodeType = node.type;console.log(node,this.selectedNode)
+            this.nodeType = node.type;
+            console.log(node,this.selectedNode)
             // console.log(this.selectedNode,this.workflowNodes)
         },
         // 清空面板事件
@@ -797,6 +816,7 @@ export default {
                     node.options.x = node.type === 'Start' ? 300 : 450;
                 });
                 this.workflowNodes = [];
+                this.MMworkflowNodes = [];
                 this.linkData = [];
                 this.$nextTick(() => {
                     this.workflowNodes = [
@@ -884,7 +904,7 @@ export default {
                 target
             };
             this.endPoint = [point[0] + cx, point[1] + cy];
-        }
+        },
     }
 };
 </script>

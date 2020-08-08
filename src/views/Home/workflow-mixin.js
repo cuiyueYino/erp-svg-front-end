@@ -87,8 +87,10 @@ export default {
                 //遍历节点的返回值
                 this.workflowNodes.map(item => {
                     if( item.type == "Start"){
-                         item.options.y = Number(yData) 
+                        item.options.y = Number(yData) 
                     }
+                    //线置空，然后重新赋值
+                    item.transition=[];
                     //遍历线的返回值
                     res.map(node => {//debugger
                         if (item.data.displayName === node.to.data.displayName) {
@@ -106,8 +108,6 @@ export default {
                 });
                 // console.log( this.workflowNodes)
             });
-           
-            
         },
          // 解析成为XML格式数据_加载
          compileObjToXMLLoading (obj) {
@@ -545,43 +545,45 @@ export default {
             })
         },
         // 编辑-点击保存工作流按钮执行事件
-        saveEditWorkflow (workflowNodes) {console.log(workflowNodes) 
+        saveEditWorkflow (workflowNodes) {
             let editMsg = JSON.parse( sessionStorage.getItem("eidtMsg") );
             workflowNodes.forEach(item => {
-                if(item.data.oid){
-                    item.key = item.data.oid 
+                if(item.oid){
+                    item.key = item.oid 
                 }
-                if(item.transition.length>0){
-                    let newTransiton = item.transition;
-                    newTransiton.forEach(items => {
-                        if(items.data.oid){
-                            items.key = items.data.oid 
-                        }
-                        if(items.from.data.displayName == item.data.displayName){
-                            items.from.key = item.key
-                        }
-                        if(items.to.data.displayName == item.data.displayName){
-                            items.to.key = item.key
-                        }
-                        delete items.from.transition;
-                        delete items.to.transition;
-                        
-                    });
-                    newTransiton.forEach(items => {//debugger
-                        for(let i =1; i<workflowNodes.length; i++){
-                            if(workflowNodes[i].data.oid){
-                                if(items.to.data.displayName == workflowNodes[i].data.displayName){
-                                    items.to.key = workflowNodes[i].data.oid
-                                }
+                if(item.transition){
+                    if(item.transition.length>0){
+                        let newTransiton = item.transition;
+                        newTransiton.forEach(items => {
+                            if(items.oid){
+                                items.key = items.oid 
                             }
-                            // else if(workflowNodes[i].data.name == "End" || workflowNodes[i].data.name == "Start"){
-                            //         items.to.key = workflowNodes[i].data.name
-                            // }
+                            if(items.from.data.displayName == item.data.displayName){
+                                items.from.key = item.key
+                            }
+                            if(items.to.data.displayName == item.data.displayName){
+                                items.to.key = item.key
+                            }
+                            delete items.from.transition;
+                            delete items.to.transition;
                             
-                            
-                        }
-                    });
-                }
+                        });
+                        newTransiton.forEach(items => {//debugger
+                            for(let i =1; i<workflowNodes.length; i++){
+                                if(workflowNodes[i].oid){
+                                    if(items.to.data.displayName == workflowNodes[i].data.displayName){
+                                        items.to.key = workflowNodes[i].oid
+                                    }
+                                }
+                                // else if(workflowNodes[i].data.name == "End" || workflowNodes[i].data.name == "Start"){
+                                //         items.to.key = workflowNodes[i].data.name
+                                // }
+                                
+                                
+                            }
+                        });
+                    }
+                } 
             });
             let data = {
                     "code": editMsg.code,
@@ -589,7 +591,7 @@ export default {
                     "oid":  editMsg.oid,
                     "nodes": workflowNodes
                 };
-                console.log(data)
+            console.log("wwww")
             console.log(JSON.stringify(data))
             //
             this.selectedNode = {};
@@ -607,6 +609,7 @@ export default {
             },error=>{
                 console.log(error)
             })
+            console.log(workflowNodes)
         }
     }
 };

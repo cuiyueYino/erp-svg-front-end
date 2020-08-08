@@ -57,26 +57,21 @@
 				//     this.$message.error("请输入密码!");
 				// }
 				if(usernameS && passwordS) {
-					//     let paramdata={};
-					//     paramdata.username=usernameS;
-					//     paramdata.password=passwordS;
-					//     paramdata.grant_type = 'password';
-					//     this.$api.common.getToken(paramdata).then((response)=>{
-					//         var responsevalue=response;
-					//         if(responsevalue){
-					//             if(responsevalue.data && responsevalue.data !=""){
-					//                 let returndata =responsevalue.data;
-					//                 localStorage.setItem('ms_tokenId',  returndata.access_token);
-					// this.getUserInfo()
-					//             }else{
-					//                 this.$message.error("请输入正确用户名和密码!");
-					//                 return false;
-					//             }
-					//         }else{
-					//             this.$message.error("请输入正确用户名和密码!");
-					//             return false;
-					//         }
-					//     });
+					/*let paramdata={};
+					paramdata.grant_type = 'password';
+					paramdata.username=usernameS;
+					paramdata.password=passwordS;
+					localStorage.removeItem("ms_tokenId");
+					console.log(this.$api.common.getTokenData(paramdata))
+					this.$api.common.getTokenData(paramdata).then((response)=>{
+						var responsevalue=response;
+						if(responsevalue){
+							console.log(responsevalue)
+						}else{
+							this.$message.error("请输入正确用户名和密码!");
+							return false;
+						}
+					});*/
 
 					localStorage.setItem('ms_username', '王世超');
 					localStorage.setItem('ms_name', '王世超');
