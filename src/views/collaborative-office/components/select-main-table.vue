@@ -4,41 +4,28 @@
 			<el-row :gutter="24">
 				<el-col :span="14">
 					<el-form label-width="10px" :model="formInline" class="demo-form-inline">
-						<el-row>
-							<el-col :span="4">
-								<el-form-item>
-									<el-select clearable v-model="formInline.status" placeholder="状态">
-										<el-option v-for="item in statusList" :key="item.id" :label="item.value" :value="item.id">
-										</el-option>
-									</el-select>
-								</el-form-item>
-							</el-col>
-							<el-col :span="5">
-								<el-form-item>
-									<el-input clearable v-model="formInline.code" placeholder="主表编码"></el-input>
-								</el-form-item>
-							</el-col>
-							<el-col :span="5">
-								<el-form-item>
-									<el-input clearable v-model="formInline.name" placeholder="主表名称"></el-input>
-								</el-form-item>
-							</el-col>
-							<el-col :span="4">
-								<el-form-item>
-									<el-input clearable v-model="formInline.workItemTypeName" placeholder="主表分类"></el-input>
-								</el-form-item>
-							</el-col>
-							<el-col :span="3">
-								<el-form-item>
-									<el-input clearable v-model="formInline.remark" placeholder="描述"></el-input>
-								</el-form-item>
-							</el-col>
-							<el-col :span="3">
-								<el-form-item>
-									<el-button type="primary" @click="$refs.pageNation.toBegin()">搜索</el-button>
-								</el-form-item>
-							</el-col>
-						</el-row>
+						<el-form label-width="10px" :model="formInline" class="demo-form-inline">
+							<el-row>
+								<el-col :span="8">
+									<el-form-item>
+										<el-select style="width: 100%;" clearable @change="selectChange" v-model="value" value-key="id">
+											<el-option v-for="item in formInlineList" :key="item.id" :label="item.name" :value="item">
+											</el-option>
+										</el-select>
+									</el-form-item>
+								</el-col>
+								<el-col :span="8">
+									<el-form-item>
+										<el-input clearable v-model="selectData"></el-input>
+									</el-form-item>
+								</el-col>
+								<el-col :span="4">
+									<el-form-item>
+										<el-button type="primary" @click="$refs.pageNation.toBegin()">搜索</el-button>
+									</el-form-item>
+								</el-col>
+							</el-row>
+						</el-form>
 					</el-form>
 				</el-col>
 				<el-col v-show="show != '1'" style="text-align: right;" :span="10">
@@ -52,10 +39,10 @@
 		</el-card>
 		<el-card class="box-card">
 			<el-table :row-class-name="tableRowClassName" @row-click="clickRow" :data="tableData" border>
-				<el-table-column :formatter="statusShow" prop="status" label="状态" width="180" align="center"></el-table-column>
-				<el-table-column prop="code" label="主表编码" width="180" align="center"></el-table-column>
-				<el-table-column prop="name" label="主表名称" width="180" align="center"></el-table-column>
-				<el-table-column prop="workItemTypeName" label="主表分类" width="180" align="center"></el-table-column>
+				<el-table-column :formatter="statusShow" prop="status" label="状态" align="center"></el-table-column>
+				<el-table-column prop="code" label="主表编码" align="center"></el-table-column>
+				<el-table-column prop="name" label="主表名称" align="center"></el-table-column>
+				<el-table-column prop="workItemTypeName" label="主表分类" align="center"></el-table-column>
 				<el-table-column prop="remark" label="描述" align="center"></el-table-column>
 			</el-table>
 			<pageNation :total="currentTotal" ref="pageNation" @pageChange="pageChange"></pageNation>
@@ -73,44 +60,48 @@
 		},
 		data() {
 			return {
-				statusList: [{
-					id: "1",
-					value: "暂存"
+				value: "",
+				selectData: "",
+				formInlineList: [{
+					id: "status",
+					name: "状态"
 				}, {
-					id: "2",
-					value: "提交"
+					id: "code",
+					name: "主表编码"
 				}, {
-					id: "3",
-					value: "有效"
+					id: "name",
+					name: "主表名称"
 				}, {
-					id: "4",
-					value: "回收"
+					id: "workItemTypeName",
+					name: "主表分类"
 				}, {
-					id: "7",
-					value: "作废"
-				}, {
-					id: "8",
-					value: "关闭/结清"
+					id: "remark",
+					name: "描述"
 				}],
 				formInline: {
-					code: "",
-					name: "",
-					remark: "",
-					status: "",
-					workItemTypeName: "",
 					page: 1,
 					size: 10
 				},
 				currentTotal: 0,
 				tableData: [],
 				rowClickId: "",
-				rowClick: {}
+				rowClick: {},
+				selectCon: "",
+				toSelectData: {
+					page: 1,
+					size: 10
+				},
 			}
 		},
 		created() {
 			this.toSelect()
 		},
 		methods: {
+			selectChange(data) {
+				this.selectCon = data.id
+				this.toSelectData = JSON.parse(JSON.stringify(this.formInline))
+				this.toSelectData[data.id] = this.selectData
+			},
 			//查看
 			toSee() {
 				if(this.getRowClickId()) {
@@ -183,7 +174,10 @@
 			},
 			//搜索
 			toSelect() {
-				this.$api.collaborativeOffice.findWorkItemTempPage(this.formInline).then(data => {
+				if(typeof(this.toSelectData[this.selectCon]) != "undefined") {
+					this.toSelectData[this.selectCon] = this.selectData
+				}
+				this.$api.collaborativeOffice.findWorkItemTempPage(this.toSelectData).then(data => {
 					this.tableData = data.data.data.rows
 					this.currentTotal = data.data.data.total
 				})

@@ -92,14 +92,6 @@
 					name: "描述"
 				}],
 				formInline: {
-					//					status: "",
-					//					code: "",
-					//					name: "",
-					//					workItemTypeSubName: "",
-					//					workItemTypeName: "",
-					//					showName: "",
-					//					orderNum: "",
-					//					remark: "",
 					page: 1,
 					size: 10
 				},

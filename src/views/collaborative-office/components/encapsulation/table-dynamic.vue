@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<el-form :model="ruleForm" :disabled="dis == '1'" :rules="rules" ref="ruleFormTable">
-			<el-table size="small" height="400" :data="ruleForm.lines" border style="width: 100%">
+			<el-table size="small" height="400" :data="ruleForm.lines.filter(v => v.oprStatus != 3)" border style="width: 100%">
 				<el-table-column v-for="(item,index) in formData.conList" :key="index" prop="field" :label="item.fieldName" align="center">
 					<template slot-scope="scope">
 						<el-form-item v-if="item.fieldTypeName == 'browseBox' && item.show" :prop="'lines[' + scope.$index + '].' + item.field +'_NameShow'" :rules="rules[item.field + '_NameShow']">
@@ -35,7 +35,7 @@
 						<el-button size="mini" @click="addRow()">新建</el-button>
 					</template>
 					<template slot-scope="scope">
-						<el-button size="mini" @click="delRow(scope.$index)">删除</el-button>
+						<el-button size="mini" @click="delRow(scope.$index,scope.row)">删除</el-button>
 					</template>
 				</el-table-column>
 			</el-table>
@@ -105,21 +105,27 @@
 				userList: JSON.parse(localStorage.getItem('userList')),
 				//职务
 				positionList: JSON.parse(localStorage.getItem('positionList')),
+				stateType: 0
 			}
 		},
 		created() {
 			if(typeof(this.formData.conList) != "undefined" && this.formData.conList.length != 0) {
-				//查看1  新增2
+				//查看1  新增2  修改3
 				this.get_NameShow()
 				this.formData.conList.forEach(item => {
 					this.$set(this.rowNow, item.field, "")
 				})
 				this.$set(this.rowNow, "tableName", this.formData.tableName)
+				this.$set(this.rowNow, "oprStatus", 1)
 				if(this.dis == 2) {
 					this.ruleForm.lines.push(JSON.parse(JSON.stringify(this.rowNow)))
+				} else if(this.dis == 3) {
+					this.ruleForm.lines.forEach(item => {
+						this.$set(item, "oprStatus", 2)
+						this.$set(item, "tableName", this.formData.tableName)
+					})
 				}
 				this.getrulesList()
-
 			}
 		},
 		//注释同form-dynamic 
@@ -132,6 +138,12 @@
 						this.formData.conList.forEach(item => {
 							this.ruleForm.lines.forEach(val => {
 								for(var keyVal in val) {
+									if(item.fieldType == 4 && item.field == keyVal) {
+										val[keyVal] = parseInt(val[keyVal])
+									}
+									if(item.fieldType == 5 && item.field == keyVal) {
+										val[keyVal] = parseFloat(val[keyVal])
+									}
 									if(item.fieldType == 1 && item.field == keyVal) {
 										switch(item.toSelect.id) {
 											case "1":
@@ -206,11 +218,30 @@
 				}
 				this.$refs.childWork.dialogVisible = false
 			},
-			delRow(rowIndex) {
-				this.ruleForm.lines.splice(rowIndex, 1)
+			delRow(rowIndex, row) {
+				if(this.dis == 2) {
+					this.ruleForm.lines.splice(rowIndex, 1)
+				} else if(this.dis == 3) {
+					if(row.oprStatus == 1) {
+						for(var i = this.ruleForm.lines.length - 1; i >= 0; i--) {
+							if(this.ruleForm.lines[i].state == row.state) {
+								this.ruleForm.lines.splice(i, 1)
+							}
+						}
+					} else {
+						this.$set(row, "oprStatus", 3)
+					}
+				}
 			},
 			addRow() {
-				this.ruleForm.lines.push(JSON.parse(JSON.stringify(this.rowNow)))
+				if(this.dis == 3) {
+					this.$set(this.rowNow, "state", this.stateType)
+					this.ruleForm.lines.push(JSON.parse(JSON.stringify(this.rowNow)))
+					this.stateType++
+				} else {
+					this.ruleForm.lines.push(JSON.parse(JSON.stringify(this.rowNow)))
+				}
+
 			},
 			getrulesList() {
 				this.formData.conList.forEach(item => {
@@ -243,10 +274,6 @@
 							this.rules[item.field].push({
 								pattern: /^-?[1-9]\d*$/,
 								message: '请输入正确的' + item.fieldName,
-								trigger: 'change'
-							}, {
-								max: 20,
-								message: '长度至多20位字符',
 								trigger: 'change'
 							})
 							return "integers"

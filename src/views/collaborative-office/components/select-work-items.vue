@@ -34,8 +34,7 @@
 				<el-col v-show="show != '1'" style="text-align: right;" :span="10">
 					<el-button @click="$parent.toAdd('1')" icon="el-icon-delete" type="success">新增</el-button>
 					<el-button @click="toUpd()" icon="el-icon-delete" type="success">修改</el-button>
-					<el-button @click="updateStatus(3)" icon="el-icon-delete" type="primary">生效</el-button>
-					<el-button @click="updateStatus(7)" icon="el-icon-delete" type="danger">禁用</el-button>
+					<el-button @click="del()" icon="el-icon-delete" type="danger">删除</el-button>
 					<el-button @click="toSee()" icon="el-icon-delete" type="primary" plain>查看</el-button>
 				</el-col>
 			</el-row>
@@ -107,8 +106,19 @@
 			this.toSelect()
 		},
 		methods: {
-			dblclick() {
-
+			//删除
+			del() {
+				if(this.getRowClickId()) {
+					this.$api.collaborativeOffice.apiUrl("workItem/delWorkItem", {
+						srcId: this.rowClick.srcId,
+						tempId: this.rowClick.tempId,
+						tableName: this.rowClick.tableName
+					}).then(data => {
+						if(this.dataBack(data), "删除成功") {
+							this.toSelect()
+						}
+					})
+				}
 			},
 			//查看
 			toSee() {
@@ -118,23 +128,13 @@
 						tempId: this.rowClick.tempId,
 						tableName: this.rowClick.tableName
 					}).then(data => {
-						this.$parent.toSee(JSON.parse(data.data.data),this.rowClick.tempId,"1")
-					})
-				}
-			},
-			//修改状态
-			updateStatus(status) {
-				if(this.getRowClickId()) {
-					this.$api.collaborativeOffice.updateStatusTemp({
-						id: this.rowClick.id,
-						status: status,
-					}).then(data => {
-						if(this.dataBack(data, "修改状态成功")) {
-							this.toSelect()
+						if(this.dataBack(data)) {
+							this.$parent.toSee(JSON.parse(data.data.data), this.rowClick.tempId, "1")
 						}
 					})
 				}
-			}, //状态展示
+			},
+			//状态展示
 			statusShow(row) {
 				switch(row.status) {
 					case 1:
@@ -165,7 +165,8 @@
 						tempId: this.rowClick.tempId,
 						tableName: this.rowClick.tableName
 					}).then(data => {
-						this.$parent.toSee(JSON.parse(data.data.data),this.rowClick.tempId,"3")
+						console.log(data)
+						this.$parent.toSee(JSON.parse(data.data.data), this.rowClick.tempId, "3")
 					})
 				}
 			},
@@ -212,7 +213,6 @@
 			},
 			//选中行
 			clickRow(row) {
-				console.log(row)
 				this.rowClick = row
 			},
 		}

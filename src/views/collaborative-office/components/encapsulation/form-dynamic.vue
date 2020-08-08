@@ -172,8 +172,8 @@
 				this.getrulesList()
 				//显示固定栏(主表)
 				if(this.show == 1) {
-					//新增：1       查看/修改 ：2
-					if(this.showAdd == 1) {
+					//新增1   查看2   修改3
+					if(this.dis == 2) {
 						//经办人，经办部门的展示数据（并不传走）
 						this.gestorName = localStorage.getItem('ms_username')
 						this.gestorDeptName = localStorage.getItem('ms_userDepartName')
@@ -190,7 +190,7 @@
 						//展示当前经办时间（传走后台也不要）
 						this.$set(this.ruleForm, "voucherTime", this.getTimeNow())
 						this.getTime()
-					} else if(this.showAdd == 2) {
+					} else if(this.dis == 1) {
 						//整理主表数据
 						this.get_NameShow(1)
 						//这地方应该是动态的经办人和部门，后期要改
@@ -202,11 +202,34 @@
 							this.$set(this.ruleForm, "title", this.formData.wholeData.title)
 							this.$set(this.ruleForm, "voucherTime", this.conversionTime(this.formData.wholeData.voucherTime))
 						}
+					} else if(this.dis == 3) {
+						//整理主表数据
+						this.get_NameShow(1)
+						//这地方应该是动态的经办人和部门，后期要改
+						this.gestorName = localStorage.getItem('ms_username')
+						this.gestorDeptName = localStorage.getItem('ms_userDepartName')
+
+						//展示单据编号，标题，经办时间
+						if(typeof(this.formData.wholeData) != "undefined") {
+							this.$set(this.ruleForm, "voucherId", this.formData.wholeData.voucherId)
+							this.$set(this.ruleForm, "title", this.formData.wholeData.title)
+							this.$set(this.ruleForm, "voucherTime", this.conversionTime(this.formData.wholeData.voucherTime))
+
+							//要改！！！！
+							this.$set(this.ruleForm, "gestor", "BFPID000000LSN01ZA")
+							this.$set(this.ruleForm, "gestorDept", "BFPID000000LRS001C")
+						}
+						this.$set(this.ruleForm, "oprStatus", 2)
+						console.log(this.formData)
+						this.$set(this.ruleForm, "id", this.formData.wholeData.id)
 					}
 					//不显示固定栏（子表）
 				} else {
 					//整理子表数据
 					this.get_NameShow(2)
+					if(this.dis == 3) {
+						this.$set(this.ruleForm, "oprStatus", 2)
+					}
 				}
 			}
 		},
@@ -218,11 +241,15 @@
 				if(state == 1) {
 					//主表在外层
 					valObject = this.formData.wholeData
+					if(this.dis == 3) {
+						this.$set(this.ruleForm, "id", valObject.id)
+					}
 				} else {
 					//子表需要循环找到正确的数据
 					for(var key in this.formData.wholeData) {
 						if(key == this.formData.id) {
 							valObject = this.formData.wholeData[key][0]
+							this.$set(this.ruleForm, "id", valObject.id)
 						}
 					}
 				}
@@ -238,8 +265,14 @@
 						for(var key in valObject) {
 							//找到模板字段和数据key相同的
 							if(item.field == key) {
-								//存入需要返回的值
-								this.$set(this.ruleForm, key, valObject[key])
+								//存入需要返回的值,如果是整形或者浮点 转化为相应类型
+								if(item.fieldType == 4) {
+									this.$set(this.ruleForm, key, parseInt(valObject[key]))
+								} else if(item.fieldType == 5) {
+									this.$set(this.ruleForm, key, parseFloat(valObject[key]))
+								} else {
+									this.$set(this.ruleForm, key, valObject[key])
+								}
 								/*
 								 * 设置浏览框展示数据 _NameShow(这些数据在新增或者修改返回时需要被删除)
 								 */
@@ -380,10 +413,6 @@
 								this.rules[item.field].push({
 									pattern: /^-?[1-9]\d*$/,
 									message: '请输入正确的' + item.fieldName,
-									trigger: 'change'
-								}, {
-									max: 20,
-									message: '长度至多20位字符',
 									trigger: 'change'
 								})
 								return "integers"
