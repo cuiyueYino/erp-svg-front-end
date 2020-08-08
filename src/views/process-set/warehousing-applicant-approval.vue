@@ -20,11 +20,9 @@
                         </el-col>
                     </el-row>
                     <el-row :gutter="24">
-                        <COOTaskPage  :rowCOOTaskDataObj="rowCOOTaskDataObj" :rowCOOTasktype="rowCOOTasktype" @changeShow="showLookOrUpdate"/>
                         <ComAnnDetaiPage  :rowComPanDetaiDataObj="rowComPanDetaiDataObj" :rowComPanDetaitype="rowComPanDetaitype" @changeShow="showLookOrUpdate"/>
                         <TempTaskPage  :rowTEMTaskDataObj="rowTEMTaskDataObj" :rowTEMTasktype="rowTEMTasktype" @changeShow="showLookOrUpdate"/>
                         <EachPerEachJobDetailPage  :rowEACHPerEachJobDetDataObj="rowEACHPerEachJobDetDataObj" :rowEACHPerEachJobDettype="rowEACHPerEachJobDettype" @changeShow="showLookOrUpdate"/>
-                        <SaffAppraisalPage  :rowSAFFAppraisalDataObj="rowSAFFAppraisalDataObj" :rowSAFFAppraisaltype="rowSAFFAppraisaltype" @changeShow="showLookOrUpdate"/>
                         <DepartYearEncPlanDetailPage  :rowDepartYearEncPlanDetailDataObj="rowDepartYearEncPlanDetailDataObj" :rowDepartYearEncPlanDetailtype="rowDepartYearEncPlanDetailtype" @changeShow="showLookOrUpdate"/>
                         <EncBenefitsIndDetailPage  :rowEncBenefitsIndDetailDataObj="rowEncBenefitsIndDetailDataObj" :rowEncBenefitsIndDetailtype="rowEncBenefitsIndDetailtype" @changeShow="showLookOrUpdate"/>
                         <EachPerEachTableReportPage  :rowEachPerEachTableReportDataObj="rowEachPerEachTableReportDataObj" :rowEachPerEachTableReporttype="rowEachPerEachTableReporttype" @changeShow="showLookOrUpdate"/>
@@ -114,13 +112,11 @@ export default {
     components: {
         DynamicTable,
         creditEnclFilelist,
-        COOTaskPage,
         ComAnnDetaiPage,
         processnodelist,
         baseInfoDialog,
         TempTaskPage,
         EachPerEachJobDetailPage,
-        SaffAppraisalPage,
         DepartYearEncPlanDetailPage,
         EncBenefitsIndDetailPage,
         EachPerEachTableDelayPage,
@@ -157,7 +153,6 @@ export default {
             financingEFListtype:false,
             rowTEMTasktype:false,
             rowEACHPerEachJobDettype:false,
-            rowSAFFAppraisaltype:false,
             rowDepartYearEncPlanDetailtype:false,
             rowEncBenefitsIndDetailtype:false,
             rowEachPerEachTableDelaytype:false,
@@ -181,7 +176,6 @@ export default {
             rowEFListDataObj: {},
             rowTEMTaskDataObj: {},
             rowEACHPerEachJobDetDataObj: {},
-            rowSAFFAppraisalDataObj: {},
             rowDepartYearEncPlanDetailDataObj: {},
             rowEncBenefitsIndDetailDataObj: {},
             rowEachPerEachTableDelayDataObj: {},
@@ -213,7 +207,6 @@ export default {
             this.financingEFListtype=false;
             this.rowTEMTasktype=false;
             this.rowEACHPerEachJobDettype=false;
-            this.rowSAFFAppraisaltype=false;
             this.rowDepartYearEncPlanDetailtype=false;
             this.rowEncBenefitsIndDetailtype=false;
             this.rowEachPerEachTableDelaytype=false;
