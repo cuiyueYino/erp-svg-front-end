@@ -17,47 +17,63 @@ import OaHome from '../views/oa-home-page/route';
 Vue.use(Router);
 
 export default new Router({
-    mode: 'history',
-    base: '/',
-    routes: [
+  mode: 'history',
+  base: '/',
+  routes: [
+    {
+      path: '/',
+      name: 'home',
+      component: () => import(/* webpackChunkName: "home" */ '../components/common/Home.vue'),
+      meta: {
+        title: ''
+      },
+      children: [
+        ...Finance,
+        ...Process,
+        ...Users,
+        ...Jobs,
+        ...Management,
+        ...Peoples,
+        ...RoleMen,
+        ...MenuMen,
+        ...DocumentManagement,
+        ...InsideMail,
+        ...confMangement,
+        ...collaborativeOffice,
+        ...OaHome,
         {
-            path: '/',
-            name: 'home',
-            component: () => import(/* webpackChunkName: "home" */ '../components/common/Home.vue'),
-            meta: {
-                title: ''
-            },
-            children: [
-                ...Finance,
-                ...Process,
-                ...Users,
-                ...Jobs,
-                ...Management,
-                ...Peoples,
-                ...RoleMen,
-                ...MenuMen,
-                ...DocumentManagement,
-                ...InsideMail,
-                ...confMangement,
-                ...collaborativeOffice,
-                ...OaHome,
-                {
-                    path: 'svgIndex',
-                    name: 'svgIndex',
-                    component: () => import(/* webpackChunkName: "tabs" */ 'views/Home/svgIndex.vue'),
-                    meta: {
-                        title: '工作流'
-                    }
-                }
-            ]
-        },
-        {
-            path: '/login',
-            name: 'login',
-            component: () => import(/* webpackChunkName: "login" */ '../components/page/Login.vue'),
-            meta: {
-                title: '登录'
-            }
+          path: 'svgIndex',
+          name: 'svgIndex',
+          component: () => import(/* webpackChunkName: "tabs" */ 'views/Home/svgIndex.vue'),
+          meta: {
+            title: '工作流'
+          }
         }
-    ]
+      ]
+    },
+    {
+      path: '/login',
+      name: 'login',
+      component: () => import(/* webpackChunkName: "login" */ '../components/page/Login.vue'),
+      meta: {
+        title: '登录'
+      }
+    },
+    {
+      path: '/confMnt/login',
+      name: 'confMntLogin',
+      component: () => import(/* webpackChunkName: "login" */ '../components/page/ConfMntLogin.vue'),
+      meta: {
+        title: '会议室控制台登录'
+      }
+    },
+    {
+      path: '/confMnt',
+      name: 'confManagement',
+      component: () => import(/* webpackChunkName: "login" */ '../views/confmangement/conference-management.vue'),
+      meta: {
+        title: '会议室控制台'
+      }
+    }
+  ]
 });

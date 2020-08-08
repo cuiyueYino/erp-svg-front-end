@@ -237,4 +237,10 @@
 	.el-table>>>.warning-row {
 		background-color: #ffe48d;
 	}
+	
+	>>>.el-dialog__body {
+		border-bottom: 1px solid #dcdfe6;
+		min-height: calc(100vh - 300px);
+		overflow-y: auto;
+	}
 </style>

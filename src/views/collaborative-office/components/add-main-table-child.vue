@@ -216,7 +216,7 @@
 			</el-dialog>
 		</div>
 		<div v-if="showFigForm">
-			<formAndTable :form-data="conData">
+			<formAndTable dis="2" showAdd="1" :form-data="conData">
 				<el-row style="text-align: right;margin-bottom: 10px;">
 					<el-button icon="el-icon-arrow-left" size="mini" type="danger" plain @click="showFigForm = false">返回</el-button>
 				</el-row>
@@ -266,8 +266,6 @@
 					id: "3",
 					name: "长度- 3"
 				}],
-				//服务
-				tServiceByParams: [],
 				//切换子组件
 				showFigForm: false,
 				//查看-置灰
@@ -287,7 +285,7 @@
 					code: [{
 							required: true,
 							message: '请输入子表分类编码',
-							trigger: 'blur'
+							trigger: 'change'
 						},
 						{
 							pattern: /^[a-z_A-Z0-9-\.!@#\$%\\\^&\*\)\(\+=\{\}\[\]\/",'<>~\·`\?:;|]+$/,
@@ -297,7 +295,7 @@
 					name: [{
 							required: true,
 							message: '请输入子表分类名称',
-							trigger: 'blur'
+							trigger: 'change'
 						},
 						{
 							pattern: "[\u4e00-\u9fa5]",
@@ -307,27 +305,27 @@
 					workItemTypeSubName: [{
 						required: true,
 						message: '请选择子表分类',
-						trigger: 'blur'
+						trigger: 'change'
 					}],
 					workItemTempName: [{
 						required: true,
 						message: '请选择子表分类',
-						trigger: 'blur'
+						trigger: 'change'
 					}],
 					showName: [{
 						required: true,
 						message: '请选择子表分类',
-						trigger: 'blur'
+						trigger: 'change'
 					}],
 					type: [{
 						required: true,
 						message: '请选择子表分类',
-						trigger: 'blur'
+						trigger: 'change'
 					}],
 					orderNum: [{
 						required: true,
 						message: '请选择子表分类',
-						trigger: 'blur'
+						trigger: 'change'
 					}]
 				},
 				//校验规则-table
@@ -335,17 +333,17 @@
 					lengthType: [{
 						required: true,
 						message: "请选择字段长度类型",
-						trigger: "blur"
+						trigger: "change"
 					}],
 					orderNum: [{
 						required: true,
 						message: "请输入显示顺序",
-						trigger: "blur"
+						trigger: "change"
 					}],
 					showNum: [{
 						required: true,
 						message: "请填写显示行数",
-						trigger: "blur"
+						trigger: "change"
 					}],
 				},
 				//字段类型
@@ -422,14 +420,16 @@
 						label: ""
 					}]
 				},
-				//公司
-				CompanyData: [],
+				//全部服务
+				tServiceByParams: JSON.parse(localStorage.getItem('tServiceByParams')),
+				//全部公司
+				CompanyData: JSON.parse(localStorage.getItem('CompanyData')),
 				//全部枚举
-				selectList: [],
-				//工作事项
-				fieldBrowseList: [],
+				selectList: JSON.parse(localStorage.getItem('selectList')),
+				//全部工作事项
+				fieldBrowseList: JSON.parse(localStorage.getItem('fieldBrowseList')),
 				//公司部门职位的合集
-				allOrganizationInfo: [],
+				allOrganizationInfo: JSON.parse(localStorage.getItem('allOrganizationInfo')),
 			}
 		},
 		created() {
@@ -439,29 +439,10 @@
 				this.ruleForm = this.context
 			}
 			//最上端公司选择
-			this.$api.collaborativeOffice.getCompanyData().then(data => {
-				this.CompanyData = data.data.data.rows
-				this.CompanyData.forEach(item => {
-					if(item.name == "福佳集团") {
-						this.ruleForm.company = item.id
-					}
-				})
-			})
-			//全部枚举
-			this.$api.collaborativeOffice.findList({}).then(data => {
-				this.selectList = data.data.data
-			})
-			//全部服务
-			this.$api.collaborativeOffice.findTServiceByParams({}).then(data => {
-				this.tServiceByParams = data.data.data
-			})
-			//工作事项
-			this.$api.collaborativeOffice.getFieldBrowse().then(data => {
-				this.fieldBrowseList = data.data.data
-			})
-			//公司 部门 职位
-			this.$api.management.selectAllOrganizationInfo().then(data => {
-				this.allOrganizationInfo = eval('(' + data.data.data + ')')
+			this.CompanyData.forEach(item => {
+				if(item.name == "福佳集团") {
+					this.ruleForm.company = item.id
+				}
 			})
 		},
 		methods: {
@@ -477,7 +458,7 @@
 						orderNum: [{
 							required: true,
 							message: "请输入显示顺序",
-							trigger: "blur"
+							trigger: "change"
 						}],
 						showNum: []
 					}
@@ -487,17 +468,17 @@
 						lengthType: [{
 							required: true,
 							message: "请选择字段长度类型",
-							trigger: "blur"
+							trigger: "change"
 						}],
 						orderNum: [{
 							required: true,
 							message: "请输入显示顺序",
-							trigger: "blur"
+							trigger: "change"
 						}],
 						showNum: [{
 							required: true,
 							message: "请填写显示行数",
-							trigger: "blur"
+							trigger: "change"
 						}]
 					}
 				}
@@ -746,7 +727,7 @@
 			preview() {
 				this.$refs.ruleFormTable.validate((valid) => {
 					if(valid) {
-						this.conData.bottom[0].label = this.ruleForm.showName
+						this.conData.bottom[0].showName = this.ruleForm.showName
 						this.conData.bottom[0].type = this.ruleForm.type
 						//确认子表分类选定
 						if(this.ruleForm.workItemTypeSubName) {
@@ -903,6 +884,10 @@
 					if(valid) {
 						this.$refs.ruleFormTable.validate((valid) => {
 							if(valid) {
+								this.ruleForm.oprStatus = 1
+								this.ruleForm.lines.forEach(item => {
+									item.oprStatus = 1
+								})
 								this.$api.collaborativeOffice.apiUrl("workItemTempSub/insertWorkItemTempSubModel", this.ruleForm).then(data => {
 									if(this.dataBack(data, msg)) {
 										this.$parent.toSelect()

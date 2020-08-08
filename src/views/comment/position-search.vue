@@ -15,6 +15,8 @@
                 <el-card>
                     <div class="El-tree">
                         <el-tree
+                            v-loading="treeloading"
+                            element-loading-text="拼命加载中"
                             :data="treeData"
                             :props="defaultProps"
                             node-key="foid"
@@ -52,6 +54,7 @@ export default {
                 children: 'children',
                 label: 'fname'
             },
+            treeloading:false
         }
     },
     methods:{
@@ -141,11 +144,13 @@ export default {
             }else{
                 this.showcheckbox=false;
             }
+            this.treeloading = true;
             this.$api.management.selectAllOrganizationInfo().then(response => {
                 let responsevalue = response;
                 if (responsevalue) {
                     let tabledata=eval('(' + responsevalue.data.data + ')');
                     this.treeData=tabledata;
+                    this.treeloading = false;
                 }
             }) 
         }

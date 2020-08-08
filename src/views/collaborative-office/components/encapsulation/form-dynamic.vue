@@ -1,9 +1,9 @@
 <template>
 	<div>
 		<slot></slot>
-		<el-form ref="ruleForm" class="demo-ruleForm" :model="ruleForm" :label-width="formData.labelWidth" :rules="rules" :inline="formData.inline" :size="formData.size" :label-position="formData.labelPosition">
+		<el-form ref="ruleForm" :disabled="dis == '1'" class="demo-ruleForm" :model="ruleForm" label-width="120px" :rules="rules" :inline="formData.inline" :size="formData.size" :label-position="formData.labelPosition">
 			<!--固定部分-->
-			<div>
+			<div v-if="show == 1">
 				<el-row>
 					<el-col :span="8">
 						<el-form-item label="单据编号" prop="voucherId">
@@ -19,12 +19,12 @@
 				<el-row>
 					<el-col :span="8">
 						<el-form-item label="经办人" prop="gestor">
-							<el-input style="width: 100%;" v-model="ruleForm.gestor" disabled></el-input>
+							<el-input style="width: 100%;" v-model="gestorName" disabled></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :span="8">
 						<el-form-item label="经办部门" prop="gestorDept">
-							<el-input style="width: 100%;" v-model="ruleForm.gestorDept" disabled></el-input>
+							<el-input style="width: 100%;" v-model="gestorDeptName" disabled></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :span="8">
@@ -37,52 +37,54 @@
 			<!--动态部分-->
 			<el-row v-for="(val, index) in formData.rowList" :key="index">
 				<el-col v-for="(item,indexOther) in val.colList" :key="indexOther" :span="item.lengthType * 8">
-					<el-form-item v-if="item.fieldTypeName == 'browseBox' && item.show" :label="item.fieldName" :prop="item.field+'Name'">
-						<!-- 浏览框 -->
-						<el-input style="width: 100%;" v-model="ruleForm[item.field+'Name']" disabled>
-							<el-button @click="findDialogVisible(item)" slot="append" icon="el-icon-search"></el-button>
-						</el-input>
-					</el-form-item>
-					<el-form-item v-else :label="item.fieldName" :prop="item.field">
-						<!-- 字符型 / 文本框 / 整型 / 浮点型 -->
-						<el-input v-if="item.fieldTypeName=='character' || item.fieldTypeName=='textType' || item.fieldTypeName=='integers' || item.fieldTypeName=='floatingPoint' && item.show" style="width: 100%;" v-model="ruleForm[item.field]" :disabled="!item.edit" />
-						<!--富文本-->
-						<quill-editor v-if="item.fieldTypeName == 'richText' && item.show" style="width: 100%;" v-model="ruleForm[item.field]" ref="myQuillEditor" :options="editorOption" @blur="onEditorBlur($event)" @focus="onEditorFocus($event)" @change="onEditorChange($event)"></quill-editor>
-						<!-- 日期选择器 -->
-						<el-date-picker v-if="item.fieldTypeName == 'dateControl' && item.show" @change="getDate(item)" style="width: 100%;" :disabled="!item.edit" v-model="ruleForm[item.field]" type="date" value-format="yyyy-MM-dd" placeholder="选择日期" />
-						<!--时间控件-->
-						<el-time-picker v-if="item.fieldTypeName == 'timeControl' && item.show" style="width: 100%;" v-model="ruleForm[item.field]"></el-time-picker>
-						<!-- 下拉框 -->
-						<el-select v-if="item.fieldTypeName == 'select' && item.show" style="width: 100%;" v-model="ruleForm[item.field]" :multiple="item.choice" clearable :disabled="!item.edit" :placeholder="item.placeholder">
-							<el-option v-for="itemSelect in item.resList" :key="itemSelect.id" :label="itemSelect.name" :value="itemSelect.id" />
-						</el-select>
-						<!--复选框-->
-						<el-checkbox-group v-if="item.fieldTypeName == 'checkBox' && item.show" style="width: 100%;" v-model="ruleForm[item.field]" :disabled="!item.edit">
-							<el-checkbox label="复选框 A"></el-checkbox>
-						</el-checkbox-group>
-					</el-form-item>
+					<div v-if="item.show">
+						<el-form-item v-if="item.fieldTypeName == 'browseBox'" :label="item.fieldName" :prop="item.field+'_NameShow'">
+							<!-- 浏览框 -->
+							<el-input style="width: 100%;" v-model="ruleForm[item.field+'_NameShow']" disabled>
+								<el-button @click="findDialogVisible(item)" slot="append" icon="el-icon-search"></el-button>
+							</el-input>
+						</el-form-item>
+						<el-form-item v-else :label="item.fieldName" :prop="item.field">
+							<!-- 字符型 / 文本框 / 整型 / 浮点型 -->
+							<el-input v-if="item.fieldTypeName=='character' || item.fieldTypeName=='textType' || item.fieldTypeName=='integers' || item.fieldTypeName=='floatingPoint' && item.show" style="width: 100%;" v-model="ruleForm[item.field]" :disabled="!item.edit" />
+							<!--富文本-->
+							<quill-editor v-if="item.fieldTypeName == 'richText' && item.show" style="width: 100%;" v-model="ruleForm[item.field]" ref="myQuillEditor" :options="editorOption" @blur="onEditorBlur($event)" @focus="onEditorFocus($event)" @change="onEditorChange($event)"></quill-editor>
+							<!-- 日期选择器 -->
+							<el-date-picker v-if="item.fieldTypeName == 'dateControl' && item.show" @change="getDate(item)" style="width: 100%;" :disabled="!item.edit" v-model="ruleForm[item.field]" type="date" value-format="yyyy-MM-dd" placeholder="选择日期" />
+							<!--时间控件-->
+							<el-time-picker value-format="HH:mm:ss" format="HH:mm:ss" v-if="item.fieldTypeName == 'timeControl' && item.show" style="width: 100%;" v-model="ruleForm[item.field]"></el-time-picker>
+							<!-- 下拉框 -->
+							<el-select v-if="item.fieldTypeName == 'select' && item.show" style="width: 100%;" v-model="ruleForm[item.field]" :multiple="item.choice" clearable :disabled="!item.edit" :placeholder="item.placeholder">
+								<el-option v-for="itemSelect in item.resList" :key="itemSelect.id" :label="itemSelect.name" :value="itemSelect.id" />
+							</el-select>
+							<!--复选框-->
+							<el-checkbox-group v-if="item.fieldTypeName == 'checkBox' && item.show" style="width: 100%;" v-model="ruleForm[item.field]" :disabled="!item.edit">
+								<el-checkbox label="复选框 A"></el-checkbox>
+							</el-checkbox-group>
+						</el-form-item>
+					</div>
 				</el-col>
 			</el-row>
-			<el-form-item>
-				<el-button type="primary" @click="onSubmit('ruleForm')">
-					效果展示
-				</el-button>
-			</el-form-item>
 		</el-form>
 		<!--弹出框-->
 		<el-dialog :title="titleShow" top="1vh" destroy-on-close center :visible.sync="dialogVisible" width="80%">
+			<!--<div class="dialogCss">-->
 			<formIconComponents ref="child" :showFig="showCon" :dataCon="dataCon"></formIconComponents>
+			<!--</div>-->
 			<div slot="footer" class="dialog-footer">
 				<el-button @click="dialogVisible = false">取 消</el-button>
 				<el-button type="primary" @click="getDialogVisible">确 定</el-button>
 			</div>
 		</el-dialog>
+		<!--弹出框-工作流-->
+		<workflowDialog ref="childWork"></workflowDialog>
 	</div>
 </template>
 
 <script>
 	//所有弹出框
 	import formIconComponents from '../../../../views/collaborative-office/components/encapsulation/sub-components/form-icon-components';
+	import workflowDialog from '../../../../views/collaborative-office/components/encapsulation/sub-components/workflow-dialog';
 	//富文本
 	import { quillEditor } from 'vue-quill-editor'; //调用编辑器
 	import 'quill/dist/quill.snow.css';
@@ -90,7 +92,8 @@
 	export default {
 		components: {
 			quillEditor,
-			formIconComponents
+			formIconComponents,
+			workflowDialog
 		},
 		props: {
 			//传入的data值
@@ -98,23 +101,40 @@
 				type: Object,
 				required: true
 			},
+			//主表还是子表form  主1子2
+			show: {
+				type: String,
+				required: true
+			},
+			//新增1 查看/修改2
+			showAdd: {
+				type: String,
+				required: true
+			},
+			//全屏不可编辑1  可编辑其他
+			dis: {
+				type: String,
+				required: true
+			}
 		},
 		data() {
 			return {
+				//固定栏校验写死
 				rules: {
 					title: [{
 						required: true,
 						message: '请输入子表分类编码',
-						trigger: 'blur'
+						trigger: 'change'
 					}]
-				}, //表单
-				ruleForm: {
-					voucherId: "",
-					title: "",
-					gestor: "",
-					gestorDept: "",
-					voucherTime: ""
 				},
+				//表单
+				ruleForm: {
+					tableName: this.formData.tableName
+				},
+				//经办人显示
+				gestorName: "",
+				//经办部门显示
+				gestorDeptName: "",
 				//弹出框表头
 				titleShow: "",
 				//传入类型
@@ -126,51 +146,245 @@
 				//中间变量
 				dialogVisibleCon: {},
 				//富文本基础数据
-				editorOption: this.$GLOBAL.editorOption
+				editorOption: this.$GLOBAL.editorOption,
+				timer: "",
+				allOrganizationInfo: JSON.parse(localStorage.getItem('allOrganizationInfo')),
+				//人员
+				staffList: JSON.parse(localStorage.getItem('staffList')),
+				//用户
+				userList: JSON.parse(localStorage.getItem('userList')),
+				//职务
+				positionList: JSON.parse(localStorage.getItem('positionList')),
+			}
+		},
+		//销毁时间
+		beforeDestroy() {
+			if(this.timer) {
+				clearInterval(this.timer);
 			}
 		},
 		created() {
-			this.getOther()
-			this.getrulesList()
+			//判断是否有模板数据
+			if(!this.noObject(this.formData) && typeof(this.formData.rowList) != "undefined") {
+				//服务10需要特殊对待，进入页面就查询出来并赋值
+				this.getOther()
+				//添加完整的校验
+				this.getrulesList()
+				//显示固定栏(主表)
+				if(this.show == 1) {
+					//新增：1       查看/修改 ：2
+					if(this.showAdd == 1) {
+						//经办人，经办部门的展示数据（并不传走）
+						this.gestorName = localStorage.getItem('ms_username')
+						this.gestorDeptName = localStorage.getItem('ms_userDepartName')
+
+						//这面写的是固定值，后期需要改
+						//this.$set(this.ruleForm, "gestor", localStorage.getItem('ms_userId'))
+						//this.$set(this.ruleForm, "gestorDept", localStorage.getItem('ms_userDepartId'))
+						this.$set(this.ruleForm, "gestor", "BFPID000000LSN01ZA")
+						this.$set(this.ruleForm, "gestorDept", "BFPID000000LRS001C")
+
+						//置空无需填写的数据
+						this.$set(this.ruleForm, "voucherId", "")
+						this.$set(this.ruleForm, "title", "")
+						//展示当前经办时间（传走后台也不要）
+						this.$set(this.ruleForm, "voucherTime", this.getTimeNow())
+						this.getTime()
+					} else if(this.showAdd == 2) {
+						//整理主表数据
+						this.get_NameShow(1)
+						//这地方应该是动态的经办人和部门，后期要改
+						this.gestorName = localStorage.getItem('ms_username')
+						this.gestorDeptName = localStorage.getItem('ms_userDepartName')
+						//展示单据编号，标题，经办时间
+						if(typeof(this.formData.wholeData) != "undefined") {
+							this.$set(this.ruleForm, "voucherId", this.formData.wholeData.voucherId)
+							this.$set(this.ruleForm, "title", this.formData.wholeData.title)
+							this.$set(this.ruleForm, "voucherTime", this.conversionTime(this.formData.wholeData.voucherTime))
+						}
+					}
+					//不显示固定栏（子表）
+				} else {
+					//整理子表数据
+					this.get_NameShow(2)
+				}
+			}
 		},
 		methods: {
+			//查看页面根据ID获取浏览框内容 _NameShow  主表1 子表2
+			get_NameShow(state) {
+				//获取当前form应该展示的所有数据 
+				var valObject = {}
+				if(state == 1) {
+					//主表在外层
+					valObject = this.formData.wholeData
+				} else {
+					//子表需要循环找到正确的数据
+					for(var key in this.formData.wholeData) {
+						if(key == this.formData.id) {
+							valObject = this.formData.wholeData[key][0]
+						}
+					}
+				}
+				this.get_NameShowChlid(valObject)
+			},
+			//整理数据 valObject 是当前form显示数据
+			get_NameShowChlid(valObject) {
+				for(var i = 0; i < this.formData.rowList.length; i++) {
+					for(var k = 0; k < this.formData.rowList[i].colList.length; k++) {
+						//懒得写那么长，item就是每条数据
+						var item = this.formData.rowList[i].colList[k]
+						//遍历显示数据的key
+						for(var key in valObject) {
+							//找到模板字段和数据key相同的
+							if(item.field == key) {
+								//存入需要返回的值
+								this.$set(this.ruleForm, key, valObject[key])
+								/*
+								 * 设置浏览框展示数据 _NameShow(这些数据在新增或者修改返回时需要被删除)
+								 */
+								if(item.fieldType == 1) {
+									//确定浏览框字段内容
+									switch(item.toSelect.id) {
+										case "1":
+											//公司
+											item.browseBoxList[0].children.forEach(itemChild => {
+												if(itemChild.foid == valObject[key]) {
+													this.$set(this.ruleForm, key + "_NameShow", itemChild.fname)
+												}
+											})
+										case "2":
+											//部门
+											item.browseBoxList[0].children.forEach(itemChild => {
+												if(typeof(itemChild.children) != "undefined") {
+													itemChild.children.forEach(itemChild2 => {
+														if(itemChild2.foid == valObject[key]) {
+															this.$set(this.ruleForm, key + "_NameShow", itemChild2.fname)
+														}
+													})
+												}
+											})
+										case "3":
+											//职位
+											item.browseBoxList[0].children.forEach(itemChild => {
+												if(typeof(itemChild.children) != "undefined") {
+													itemChild.children.forEach(itemChild2 => {
+														if(typeof(itemChild2.children) != "undefined") {
+															itemChild2.children.forEach(itemChild3 => {
+																if(itemChild3.foid == valObject[key]) {
+																	this.$set(this.ruleForm, key + "_NameShow", itemChild3.fname)
+																}
+															})
+														}
+													})
+												}
+											})
+											break;
+										case "4":
+											//人员
+											this.staffList.forEach(itemChild => {
+												if(itemChild.toid == valObject[key]) {
+													this.$set(this.ruleForm, key + "_NameShow", itemChild.tname)
+												}
+											})
+											break;
+										case "5":
+											//用户
+											this.userList.forEach(itemChild => {
+												if(itemChild.foid == valObject[key]) {
+													this.$set(this.ruleForm, key + "_NameShow", itemChild.fname)
+												}
+											})
+											break;
+										case "6":
+											//职务
+											this.positionList.forEach(itemChild => {
+												if(itemChild.foid == valObject[key]) {
+													this.$set(this.ruleForm, key + "_NameShow", itemChild.fname)
+												}
+											})
+											break;
+										case "7":
+											//工作流
+											break;
+									}
+								}
+							}
+						}
+					}
+				}
+			},
+			//这个是给 工作流弹出框子组件调用的，确定时，返回字段
+			getWorkDialig(row) {
+				this.$set(this.ruleForm, this.dialogVisibleCon.field + '_NameShow', row.tempName)
+				this.$set(this.ruleForm, this.dialogVisibleCon.field, row.tempId)
+				//如果有联动查询的数据（其实工作流也没啥联动，懒得删了，一旦后期有了呢）
+				if(this.dialogVisibleCon.parameterList.length != 0) {
+					//调用toGetServiceNow（绑定的联动改变字段，获取的选中id）
+					this.toGetServiceNow(this.dialogVisibleCon.parameterList, row.tempId)
+				}
+				this.$refs.childWork.dialogVisible = false
+			},
+			//让当前时间动起来~
+			getTime() {
+				var self = this
+				self.timer = setInterval(function() {
+					self.ruleForm.voucherTime =
+						new Date().getFullYear() +
+						"-" +
+						(new Date().getMonth() + 1) +
+						"-" +
+						new Date().getDate() +
+						" " +
+						self.appendZero(new Date().getHours()) +
+						":" +
+						self.appendZero(new Date().getMinutes()) +
+						":" +
+						self.appendZero(new Date().getSeconds());
+				}, 1000);
+			},
+			//2020-8-7变成2020-08-07  好看一点（实际无用）
+			appendZero(obj) {
+				if(obj < 10) {
+					return "0" + obj;
+				} else {
+					return obj;
+				}
+			},
+			//添加完整校验
 			getrulesList() {
 				this.formData.rowList.forEach(itemOne => {
 					itemOne.colList.forEach(item => {
 						this.rules[item.field] = []
-						this.rules[item.field + "Name"] = []
+						this.rules[item.field + "_NameShow"] = []
 						if(item.required) {
+							//浏览框校验的是显示的 _NameShow,其他正常校验
 							if(item.fieldType == 1) {
-								this.rules[item.field + "Name"].push({
+								this.rules[item.field + "_NameShow"].push({
 									required: true,
 									message: "请填写" + item.fieldName,
-									trigger: 'blur'
-								})
-							} else if(item.fieldType == 9) {
-								this.rules[item.field].push({
-									required: true,
-									message: "请填写" + item.fieldName,
-									trigger: 'blur'
+									trigger: 'change'
 								})
 							} else {
 								this.rules[item.field].push({
 									required: true,
 									message: "请填写" + item.fieldName,
-									trigger: 'blur'
+									trigger: 'change'
 								})
 							}
 						}
+						//浮点和整型校验 特殊对待一下
 						switch(item.fieldType) {
 							case "4":
 								//添加整型校验
 								this.rules[item.field].push({
 									pattern: /^-?[1-9]\d*$/,
 									message: '请输入正确的' + item.fieldName,
-									trigger: 'blur'
+									trigger: 'change'
 								}, {
 									max: 20,
 									message: '长度至多20位字符',
-									trigger: 'blur'
+									trigger: 'change'
 								})
 								return "integers"
 								break;
@@ -179,7 +393,7 @@
 								this.rules[item.field].push({
 									pattern: /^([1-9]\d{0,15}|0)(\.\d{1,4})?$/,
 									message: '请输入正确的' + item.fieldName,
-									trigger: 'blur'
+									trigger: 'change'
 								})
 								return "floatingPoint"
 								break;
@@ -245,16 +459,17 @@
 							})
 							//存入值
 							this.$set(this.ruleForm, listChild.colList[i2].field, conNow.id)
-							//							this.$set(this.ruleForm, listChild.colList[i2].field + "Name", conNow.name)
+							//							this.$set(this.ruleForm, listChild.colList[i2].field + "_NameShow", conNow.name)
 						}
 					}
 				}
 			},
-			//弹出框确定
+			//除了工作流其他弹出框确定
 			getDialogVisible() {
 				//获取子组件返回的id和name
-				this.$set(this.ruleForm, this.dialogVisibleCon.field + 'Name', this.$refs.child.backCon.label)
-				this.$set(this.ruleForm, this.dialogVisibleCon.field, this.$refs.child.backCon.value) //如果有联动查询的数据
+				this.$set(this.ruleForm, this.dialogVisibleCon.field + '_NameShow', this.$refs.child.backCon.label)
+				this.$set(this.ruleForm, this.dialogVisibleCon.field, this.$refs.child.backCon.value)
+				//如果有联动查询的数据
 				if(this.dialogVisibleCon.parameterList.length != 0) {
 					//调用toGetServiceNow（绑定的联动改变字段，获取的选中id）
 					this.toGetServiceNow(this.dialogVisibleCon.parameterList, this.$refs.child.backCon.value)
@@ -280,6 +495,7 @@
 								var conNow = await this.$api.collaborativeOffice.findTServiceItemByParams(listChild.colList[i2].serviceNow).then(data => {
 									return new Promise(resolve => {
 										//把根据‘不同的服务’获取到的返回值从新赋值，都是id和name的形式，方便调用
+										console.log(listChild.colList[i2].serviceNow.fcode)
 										switch(listChild.colList[i2].serviceNow.fcode) {
 											case "service09":
 											case "service08":
@@ -315,7 +531,7 @@
 								})
 								//改变需要联动的值的内容和显示内容
 								this.$set(this.ruleForm, listChild.colList[i2].field, conNow.id)
-								this.$set(this.ruleForm, listChild.colList[i2].field + "Name", conNow.name)
+								this.$set(this.ruleForm, listChild.colList[i2].field + "_NameShow", conNow.name)
 							}
 						}
 					}
@@ -325,7 +541,12 @@
 			findDialogVisible(row) {
 				//取到中间值
 				this.dialogVisibleCon = row
-				this.dialogVisible = true
+				//工作流打开一个特殊的弹框（就数它事多）
+				if(row.toSelect.id == 7) {
+					this.$refs.childWork.dialogVisible = true
+				} else {
+					this.dialogVisible = true
+				}
 				/*
 				 * 判断浏览框内显示的内容，并放入数据（公司，部门，职位在上层已经查询出来，直接放里面就行，
 				 * 其他数据需要接口查询后才能显示
@@ -381,20 +602,17 @@
 							this.$set(this.dataCon, "currentTotal", data.data.data.total)
 						})
 						break;
-					case "7":
-						return "dateControl"
-						break;
 				}
 			},
-			//测试提交
+			//提交
 			onSubmit(formName) {
-				this.$refs[formName].validate((valid) => {
+				var returnData = false
+				this.$refs.ruleForm.validate((valid) => {
 					if(valid) {
-						this.goOk("可以提交")
-					} else {
-						this.goOk("数据填写不全")
+						returnData = true
 					}
 				});
+				return returnData
 			},
 			//富文本事件
 			onEditorBlur() {}, // 失去焦点事件
@@ -414,5 +632,11 @@
 	.treeDivClass {
 		height: 300px;
 		overflow: auto;
+	}
+	
+	>>>.el-dialog__body {
+		border-bottom: 1px solid #dcdfe6;
+		min-height: calc(100vh - 300px);
+		overflow-y: auto;
 	}
 </style>

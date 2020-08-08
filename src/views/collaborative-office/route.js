@@ -8,13 +8,15 @@ const templateMainTableChild = () =>
 	import('./template-main-table-child.vue');
 const enumerationList = () =>
 	import('./enumerationList.vue');
+const workItems = () =>
+	import('./work-items.vue');
 
 const InsideMail = [{
 		path: 'templateMainTableClassification',
 		name: 'templateMainTableClassification',
 		component: templateMainTableClassification,
 		meta: {
-			title: '工作事项模板主表分类'
+			title: '主表分类模板'
 		}
 	},
 	{
@@ -22,7 +24,7 @@ const InsideMail = [{
 		name: 'templateMainTable',
 		component: templateMainTable,
 		meta: {
-			title: '工作事项模板主表分类'
+			title: '主表模板'
 		}
 	},
 	{
@@ -38,7 +40,7 @@ const InsideMail = [{
 		name: 'templateMainTableClassificationChild',
 		component: templateMainTableClassificationChild,
 		meta: {
-			title: '工作事项模板子表分类'
+			title: '子表分类模板'
 		}
 	},
 	{
@@ -46,7 +48,15 @@ const InsideMail = [{
 		name: 'templateMainTableChild',
 		component: templateMainTableChild,
 		meta: {
-			title: '工作事项模板子表'
+			title: '子表模板'
+		}
+	},
+	{
+		path: 'workItems',
+		name: 'workItems',
+		component: workItems,
+		meta: {
+			title: '工作事项'
 		}
 	}
 ];

@@ -1,5 +1,6 @@
 <template>
     <div v-if="ShowFinancVisible" class="itemDivStyle">
+    <div>配合任务测试开始。。。。。。。。。。</div>
         <el-form
             label-width="110px"
             v-model="formdata"
@@ -30,7 +31,7 @@
                     </el-form-item>
                 </el-col>
                 <el-col :span="5" :offset="2">
-                    <el-form-item label="责任部门" prop="name">
+                    <el-form-item label="责任部门11" prop="name">
                         <el-input v-model="formdata.creditcontract" v-bind:disabled="disabled"></el-input>
                     </el-form-item>
                 </el-col>
@@ -160,7 +161,9 @@
                 </el-col>
             </el-row>
         </el-form>
+        <div>配合任务测结束。。。。。。。。。。</div>
     </div>
+    
 </template>
 <script>
 import proData from '../../components/common/proData/proData';

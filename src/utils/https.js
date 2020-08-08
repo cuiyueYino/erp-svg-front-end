@@ -86,7 +86,16 @@ _axios.interceptors.request.use(
         if(localStorage.getItem('ms_tokenId')){
             config.headers.Authorization = 'bearer '+localStorage.getItem('ms_tokenId');
         }else{
-            // config.headers.Authorization = 'bearer ooooooooooooooooooo';
+            //config.headers.Authorization = 'Basic ZXJwLWFkbWluOmVycC1hZG1pbi1zZWNyZXQ=';
+            config.Authorization={
+                TYPE:'Basic Auth',
+                Username:'erp-admin',
+                Password:'erp-admin-secret'
+            }
+            //config.headers.Authorization.type = 'Basic Auth';
+            //config.headers.Authorization.Username = 'erp-admin';
+            //config.headers.Authorization.Password = 'erp-admin-secret';
+            Loading.start();
         }
         //config.headers.Accept = 'application/json;charset=utf-8';
         // 登录流程控制中，根据本地是否存在token判断用户的登录情况

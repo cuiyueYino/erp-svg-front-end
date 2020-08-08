@@ -153,7 +153,7 @@
 					code: [{
 							required: true,
 							message: '请输入子表分类编码',
-							trigger: 'blur'
+							trigger: 'change'
 						},
 						{
 							pattern: /^[a-z_A-Z0-9-\.!@#\$%\\\^&\*\)\(\+=\{\}\[\]\/",'<>~\·`\?:;|]+$/,
@@ -163,7 +163,7 @@
 					name: [{
 							required: true,
 							message: '请输入子表分类名称',
-							trigger: 'blur'
+							trigger: 'change'
 						},
 						{
 							pattern: "[\u4e00-\u9fa5]",
@@ -173,7 +173,7 @@
 					tableName: [{
 						required: true,
 						message: '请输入数据库表名',
-						trigger: 'blur'
+						trigger: 'change'
 					}, {
 						pattern: /^[a-z_A-Z0-9-\.!@#\$%\\\^&\*\)\(\+=\{\}\[\]\/",'<>~\·`\?:;|]+$/,
 						message: '请输入正确的数据库表名'
@@ -183,12 +183,12 @@
 				rulesTable: {
 					fieldContentName: [{
 						validator: fieldContentShow,
-						trigger: 'blur'
+						trigger: 'change'
 					}],
 					field: [{
 						required: true,
 						message: "请输入数据库字段名",
-						trigger: "blur"
+						trigger: "change"
 					}, {
 						pattern: /^[a-zA-Z]+$/,
 						message: '请输入正确的数据库字段名'
@@ -196,7 +196,7 @@
 					fieldName: [{
 							required: true,
 							message: "请输入字段显示名称",
-							trigger: "blur"
+							trigger: "change"
 						},
 						{
 							pattern: "[\u4e00-\u9fa5]",
@@ -206,7 +206,7 @@
 					fieldType: [{
 						required: true,
 						message: "请选择字段类型",
-						trigger: "blur"
+						trigger: "change"
 					}],
 				},
 				//字段内容中间变量
@@ -272,6 +272,8 @@
 						showFig: false,
 					}],
 				},
+				//全部公司
+				CompanyData: JSON.parse(localStorage.getItem('CompanyData')),
 			}
 		},
 		created() {
@@ -285,14 +287,10 @@
 				this.showFigAll = true
 				this.ruleForm = this.context
 			}
-			this.$api.collaborativeOffice.getCompanyData().then(data => {
-				console.log(data.data.data.rows)
-				this.CompanyData = data.data.data.rows
-				this.CompanyData.forEach(item => {
-					if(item.name == "福佳集团") {
-						this.ruleForm.company = item.id
-					}
-				})
+			this.CompanyData.forEach(item => {
+				if(item.name == "福佳集团") {
+					this.ruleForm.company = item.id
+				}
 			})
 		},
 		methods: {

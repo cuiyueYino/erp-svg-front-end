@@ -235,8 +235,8 @@
           <el-col :span="11">
             <el-form-item label="重要程度：" :label-width="formLabelWidth" prop="fimportanceValue">
               <el-select size="small" v-model="searchForm.fimportanceValue" placeholder="请选择">
-                <el-option label="重要" value="0"></el-option>
-                <el-option label="一般" value="1"></el-option>
+                <el-option label="重要" value="1"></el-option>
+                <el-option label="一般" value="0"></el-option>
               </el-select>
             </el-form-item>
           </el-col>

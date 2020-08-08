@@ -1,5 +1,6 @@
 <template>
     <div v-if="ShowFinancVisible" class="itemDivStyle">
+    <div>一人一岗测试开始。。。。。。。。。。</div>
         <el-form
             label-width="110px"
             v-model="formdata"
@@ -187,6 +188,7 @@
                     </el-table>
               </el-col>
             </el-row>
+            <div>一人一岗测试结束。。。。。。。。。。</div>
         </el-form>
     </div>
 </template>

@@ -1,12 +1,12 @@
 <template>
 	<div>
-		<el-form :model="ruleForm" :rules="rules" ref="ruleFormTable">
+		<el-form :model="ruleForm" :disabled="dis == '1'" :rules="rules" ref="ruleFormTable">
 			<el-table size="small" height="400" :data="ruleForm.lines" border style="width: 100%">
 				<el-table-column v-for="(item,index) in formData.conList" :key="index" prop="field" :label="item.fieldName" align="center">
 					<template slot-scope="scope">
-						<el-form-item v-if="item.fieldTypeName == 'browseBox' && item.show" :prop="'lines[' + scope.$index + '].' + item.field +'Name'" :rules="rules[item.field + 'Name']">
+						<el-form-item v-if="item.fieldTypeName == 'browseBox' && item.show" :prop="'lines[' + scope.$index + '].' + item.field +'_NameShow'" :rules="rules[item.field + '_NameShow']">
 							<!-- 浏览框 -->
-							<el-input style="width: 100%;" v-model="scope.row[item.field + 'Name']" disabled>
+							<el-input style="width: 100%;" v-model="scope.row[item.field + '_NameShow']" disabled>
 								<el-button @click=" findDialogVisible(item,scope.row)" slot="append" icon="el-icon-search"></el-button>
 							</el-input>
 						</el-form-item>
@@ -18,7 +18,7 @@
 							<!-- 日期选择器 -->
 							<el-date-picker v-if="item.fieldTypeName=='dateControl' && item.show" @change="getDate(item)" style="width: 100%;" :disabled="!item.edit" v-model="scope.row[item.field]" type="date" value-format="yyyy-MM-dd" placeholder="选择日期" />
 							<!--时间控件-->
-							<el-time-picker v-if="item.fieldTypeName=='timeControl' && item.show" style="width: 100%;" v-model="scope.row[item.field]"></el-time-picker>
+							<el-time-picker value-format="HH:mm:ss" format="HH:mm:ss" v-if="item.fieldTypeName=='timeControl' && item.show" style="width: 100%;" v-model="scope.row[item.field]"></el-time-picker>
 							<!-- 下拉框 -->
 							<el-select v-if="item.fieldTypeName=='select' && item.show" style="width: 100%;" v-model="scope.row[item.field]" :multiple="item.choice" clearable :disabled="!item.edit" :placeholder="item.placeholder">
 								<el-option v-for="itemSelect in item.resList" :key="itemSelect.id" :label="itemSelect.name" :value="itemSelect.id" />
@@ -40,8 +40,6 @@
 				</el-table-column>
 			</el-table>
 		</el-form>
-
-		<el-button type="primary" @click="onSubmit('ruleFormTable')">效果展示</el-button>
 		<!--弹出框-->
 		<el-dialog :title="titleShow" top="1vh" destroy-on-close center :visible.sync="dialogVisible" width="80%">
 			<formIconComponents ref="child" :showFig="showCon" :dataCon="dataCon"></formIconComponents>
@@ -50,12 +48,15 @@
 				<el-button type="primary" @click="getDialogVisible">确 定</el-button>
 			</div>
 		</el-dialog>
+		<!--弹出框-工作流-->
+		<workflowDialog ref="childWork"></workflowDialog>
 	</div>
 </template>
 
 <script>
 	//所有弹出框
 	import formIconComponents from '../../../../views/collaborative-office/components/encapsulation/sub-components/form-icon-components';
+	import workflowDialog from '../../../../views/collaborative-office/components/encapsulation/sub-components/workflow-dialog';
 	//富文本
 	import { quillEditor } from 'vue-quill-editor'; //调用编辑器
 	import 'quill/dist/quill.snow.css';
@@ -63,12 +64,17 @@
 	export default {
 		components: {
 			quillEditor,
-			formIconComponents
+			formIconComponents,
+			workflowDialog
 		},
 		props: {
 			//传入的data值
 			formData: {
 				type: Object,
+				required: true
+			},
+			dis: {
+				type: String,
 				required: true
 			},
 		},
@@ -93,16 +99,113 @@
 				//富文本基础数据
 				editorOption: this.$GLOBAL.editorOption,
 				rowNow: {},
+				//人员
+				staffList: JSON.parse(localStorage.getItem('staffList')),
+				//用户
+				userList: JSON.parse(localStorage.getItem('userList')),
+				//职务
+				positionList: JSON.parse(localStorage.getItem('positionList')),
 			}
 		},
 		created() {
-			this.formData.conList.forEach(item => {
-				this.$set(this.rowNow,item.field,"")
-			})
-			this.ruleForm.lines.push(JSON.parse(JSON.stringify(this.rowNow)))
-			this.getrulesList()
+			if(typeof(this.formData.conList) != "undefined" && this.formData.conList.length != 0) {
+				//查看1  新增2
+				this.get_NameShow()
+				this.formData.conList.forEach(item => {
+					this.$set(this.rowNow, item.field, "")
+				})
+				this.$set(this.rowNow, "tableName", this.formData.tableName)
+				if(this.dis == 2) {
+					this.ruleForm.lines.push(JSON.parse(JSON.stringify(this.rowNow)))
+				}
+				this.getrulesList()
+
+			}
 		},
+		//注释同form-dynamic 
 		methods: {
+			//查看页面获取 _NameShow
+			get_NameShow() {
+				for(var key in this.formData.wholeData) {
+					if(this.formData.id == key) {
+						this.ruleForm.lines = this.formData.wholeData[key]
+						this.formData.conList.forEach(item => {
+							this.ruleForm.lines.forEach(val => {
+								for(var keyVal in val) {
+									if(item.fieldType == 1 && item.field == keyVal) {
+										switch(item.toSelect.id) {
+											case "1":
+												item.browseBoxList[0].children.forEach(itemChild => {
+													if(itemChild.foid == val[keyVal]) {
+														this.$set(val, keyVal + "_NameShow", itemChild.fname)
+													}
+												})
+											case "2":
+												item.browseBoxList[0].children.forEach(itemChild => {
+													if(typeof(itemChild.children) != "undefined") {
+														itemChild.children.forEach(itemChild2 => {
+															if(itemChild2.foid == val[keyVal]) {
+																this.$set(val, keyVal + "_NameShow", itemChild.fname)
+															}
+														})
+													}
+												})
+											case "3":
+												item.browseBoxList[0].children.forEach(itemChild => {
+													if(typeof(itemChild.children) != "undefined") {
+														itemChild.children.forEach(itemChild2 => {
+															if(typeof(itemChild2.children) != "undefined") {
+																itemChild2.children.forEach(itemChild3 => {
+																	if(itemChild3.foid == val[keyVal]) {
+																		this.$set(val, keyVal + "_NameShow", itemChild.fname)
+																	}
+																})
+															}
+														})
+													}
+												})
+												break;
+											case "4":
+												this.staffList.forEach(itemChild => {
+													if(itemChild.toid == val[keyVal]) {
+														this.$set(val, keyVal + "_NameShow", itemChild.tname)
+													}
+												})
+												break;
+											case "5":
+												this.userList.forEach(itemChild => {
+													if(itemChild.foid == val[keyVal]) {
+														this.$set(val, keyVal + "_NameShow", itemChild.fname)
+													}
+												})
+												break;
+											case "6":
+												this.positionList.forEach(itemChild => {
+													if(itemChild.foid == val[keyVal]) {
+														this.$set(val, keyVal + "_NameShow", itemChild.fname)
+													}
+												})
+												break;
+											case "7":
+												return "dateControl"
+												break;
+										}
+									}
+								}
+							})
+						})
+					}
+				}
+			},
+			getWorkDialig(row) {
+				this.$set(this.tableRowCon, this.dialogVisibleCon.field + '_NameShow', row.tempName)
+				this.$set(this.tableRowCon, this.dialogVisibleCon.field, row.tempId) //如果有联动查询的数据
+				if(this.dialogVisibleCon.parameterList.length != 0) {
+					//调用toGetServiceNow（绑定的联动改变字段，获取的选中id）
+					this.toGetServiceNow(this.dialogVisibleCon.parameterList, row.tempId)
+				}
+				this.$refs.childWork.dialogVisible = false
+			},
 			delRow(rowIndex) {
 				this.ruleForm.lines.splice(rowIndex, 1)
 			},
@@ -112,26 +215,25 @@
 			getrulesList() {
 				this.formData.conList.forEach(item => {
 					this.rules[item.field] = []
-					this.rules[item.field + "Name"] = []
+					this.rules[item.field + "_NameShow"] = []
 					if(item.required) {
-
 						if(item.fieldType == 1) {
-							this.rules[item.field + "Name"].push({
+							this.rules[item.field + "_NameShow"].push({
 								required: true,
 								message: "请填写" + item.fieldName,
-								trigger: 'blur'
+								trigger: 'change'
 							})
 						} else if(item.fieldType == 9) {
 							this.rules[item.field].push({
 								required: true,
 								message: "请填写" + item.fieldName,
-								trigger: 'blur'
+								trigger: 'change'
 							})
 						} else {
 							this.rules[item.field].push({
 								required: true,
 								message: "请填写" + item.fieldName,
-								trigger: 'blur'
+								trigger: 'change'
 							})
 						}
 					}
@@ -141,11 +243,11 @@
 							this.rules[item.field].push({
 								pattern: /^-?[1-9]\d*$/,
 								message: '请输入正确的' + item.fieldName,
-								trigger: 'blur'
+								trigger: 'change'
 							}, {
 								max: 20,
 								message: '长度至多20位字符',
-								trigger: 'blur'
+								trigger: 'change'
 							})
 							return "integers"
 							break;
@@ -154,13 +256,12 @@
 							this.rules[item.field].push({
 								pattern: /^([1-9]\d{0,15}|0)(\.\d{1,4})?$/,
 								message: '请输入正确的' + item.fieldName,
-								trigger: 'blur'
+								trigger: 'change'
 							})
 							return "floatingPoint"
 							break;
 					}
 				})
-				console.log(this.rules)
 			},
 			//计算时间差值
 			getDate(row) {
@@ -216,19 +317,18 @@
 						})
 						//存入值
 						this.$set(this.ruleForm, this.formData.conList[i2].field, conNow.id)
-						//							this.$set(this.ruleForm, this.formData.conList[i2].field +"Name", conNow.name)
+						//							this.$set(this.ruleForm, this.formData.conList[i2].field +"_NameShow", conNow.name)
 					}
 				}
 			},
 			//弹出框确定
 			getDialogVisible() {
 				//获取子组件返回的id和name
-				this.$set(this.tableRowCon, this.dialogVisibleCon.field + 'Name', this.$refs.child.backCon.label)
+				this.$set(this.tableRowCon, this.dialogVisibleCon.field + '_NameShow', this.$refs.child.backCon.label)
 				this.$set(this.tableRowCon, this.dialogVisibleCon.field, this.$refs.child.backCon.value)
 				//如果有联动查询的数据
 				if(this.dialogVisibleCon.parameterList.length != 0) {
 					//调用toGetServiceNow（绑定的联动改变字段，获取的选中id）
-					console.log(this.dialogVisibleCon.parameterList)
 					this.toGetServiceNow(this.dialogVisibleCon.parameterList, this.$refs.child.backCon.value)
 				}
 				this.dialogVisible = false
@@ -286,7 +386,7 @@
 							})
 							//改变需要联动的值的内容和显示内容
 							this.$set(this.tableRowCon, this.formData.conList[i2].field, conNow.id)
-							this.$set(this.tableRowCon, this.formData.conList[i2].field + "Name", conNow.name)
+							this.$set(this.tableRowCon, this.formData.conList[i2].field + "_NameShow", conNow.name)
 						}
 					}
 				}
@@ -296,7 +396,11 @@
 				//取到中间值
 				this.dialogVisibleCon = row
 				this.tableRowCon = tableRow
-				this.dialogVisible = true
+				if(row.toSelect.id == 7) {
+					this.$refs.childWork.dialogVisible = true
+				} else {
+					this.dialogVisible = true
+				}
 				/*
 				 * 判断浏览框内显示的内容，并放入数据（公司，部门，职位在上层已经查询出来，直接放里面就行，
 				 * 其他数据需要接口查询后才能显示
@@ -320,53 +424,35 @@
 					case "4":
 						this.showCon = "personnel"
 						this.titleShow = "人员"
-						this.$api.collaborativeOffice.findConList("staffManage/findStaffByPage", {
-							page: 1,
-							size: 10
-						}).then(data => {
-							this.$set(this.dataCon, "context", data.data.data.rows)
-							this.$set(this.dataCon, "currentTotal", data.data.data.total)
-						})
+						this.$set(this.dataCon, "context", this.staffList.slice(0, 10))
+						this.$set(this.dataCon, "currentTotal", this.staffList.length)
 						break;
 					case "5":
 						this.showCon = "user"
 						this.titleShow = "用户"
-						this.$api.collaborativeOffice.findConList("userManage/findUserBypage", {
-							page: 1,
-							size: 10
-						}).then(data => {
-							console.log(data)
-							this.$set(this.dataCon, "context", data.data.data.rows)
-							this.$set(this.dataCon, "currentTotal", data.data.data.total)
-						})
+						this.$set(this.dataCon, "context", this.userList.slice(0, 10))
+						this.$set(this.dataCon, "currentTotal", this.userList.length)
 						break;
 					case "6":
 						this.showCon = "jobSet"
 						this.titleShow = "职务"
-						this.$api.collaborativeOffice.findConList("positionmnt/findPositionList", {
-							page: 1,
-							size: 10
-						}).then(data => {
-							console.log(data)
-							this.$set(this.dataCon, "context", data.data.data.rows)
-							this.$set(this.dataCon, "currentTotal", data.data.data.total)
-						})
+						this.$set(this.dataCon, "context", this.positionList.slice(0, 10))
+						this.$set(this.dataCon, "currentTotal", this.positionList.length)
 						break;
 					case "7":
 						return "dateControl"
 						break;
 				}
 			},
-			//测试提交
+			//提交
 			onSubmit(formName) {
-				console.log(this.ruleForm)
-				this.$refs[formName].validate((valid) => {
+				var returnData = false
+				this.$refs.ruleFormTable.validate((valid) => {
 					if(valid) {
-						this.goOk("可以提交")
-					} else {
-						this.goOk("数据填写不全")
+						returnData = true
 					}
 				});
+				return returnData
 			},
 			//富文本事件
 			onEditorBlur() {}, // 失去焦点事件
@@ -386,5 +472,11 @@
 	.treeDivClass {
 		height: 300px;
 		overflow: auto;
+	}
+	
+	>>>.el-dialog__body {
+		border-bottom: 1px solid #dcdfe6;
+		min-height: calc(100vh - 300px);
+		overflow-y: auto;
 	}
 </style>

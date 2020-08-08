@@ -216,7 +216,7 @@
 			</el-dialog>
 		</div>
 		<div v-if="showFigForm">
-			<formAndTable :form-data="conData">
+			<formAndTable dis="2" showAdd="2" :form-data="conData">
 				<el-row style="text-align: right;margin-bottom: 10px;">
 					<el-button icon="el-icon-arrow-left" size="mini" type="danger" plain @click="showFigForm = false">返回</el-button>
 				</el-row>
@@ -263,8 +263,6 @@
 					id: "3",
 					name: "长度- 3"
 				}],
-				//服务
-				tServiceByParams: [],
 				showFigForm: false,
 				showFig: false,
 				//选中行ID
@@ -373,16 +371,8 @@
 					size: 'small',
 					rowList: []
 				},
-				//公司
-				CompanyData: [],
 				//预览校验规则
 				rulesChild: {},
-				//全部枚举
-				selectList: [],
-				//工作事项
-				fieldBrowseList: [],
-				//公司部门职位的合集
-				allOrganizationInfo: [],
 				//传入子组件的值
 				conData: {
 					top: {
@@ -411,50 +401,40 @@
 						label: ""
 					}]
 				},
+				//全部服务
+				tServiceByParams: JSON.parse(localStorage.getItem('tServiceByParams')),
+				//全部公司
+				CompanyData: JSON.parse(localStorage.getItem('CompanyData')),
+				//全部枚举
+				selectList: JSON.parse(localStorage.getItem('selectList')),
+				//全部工作事项
+				fieldBrowseList: JSON.parse(localStorage.getItem('fieldBrowseList')),
+				//公司部门职位的合集
+				allOrganizationInfo: JSON.parse(localStorage.getItem('allOrganizationInfo')),
 			}
 		},
 		created() {
 			this.ruleForm = this.context
-			this.$api.collaborativeOffice.getCompanyData().then(data => {
-				this.CompanyData = data.data.data.rows
-				this.CompanyData.forEach(item => {
-					if(item.name == "福佳集团") {
-						this.ruleForm.company = item.id
+			this.CompanyData.forEach(item => {
+				if(item.name == "福佳集团") {
+					this.ruleForm.company = item.id
+				}
+			})
+			//全部服务
+			this.getDialogVisible(false)
+			this.ruleForm.lines.forEach(item => {
+				this.tServiceByParams.forEach(val => {
+					if(item.serviceId != null && item.serviceId == val.foid) {
+						//服务显示名称
+						this.$set(item, 'serviceCon', val.fname)
+						//查询服务的参数：fid是根据条件查询的“条件” fcode是具体查询哪条服务的内容
+						this.$set(item, 'serviceNow', {
+							fid: "",
+							fcode: val.fcode
+						})
 					}
 				})
 			})
-			//全部枚举
-			this.$api.collaborativeOffice.findList({}).then(data => {
-				this.selectList = data.data.data
-			})
-			//全部服务
-			this.$api.collaborativeOffice.findTServiceByParams({}).then(data => {
-				this.tServiceByParams = data.data.data
-				this.getDialogVisible(false)
-				this.ruleForm.lines.forEach(item => {
-					this.tServiceByParams.forEach(val => {
-						if(item.serviceId != null && item.serviceId == val.foid) {
-							//服务显示名称
-							this.$set(item, 'serviceCon', val.fname)
-							//查询服务的参数：fid是根据条件查询的“条件” fcode是具体查询哪条服务的内容
-							this.$set(item, 'serviceNow', {
-								fid: "",
-								fcode: val.fcode
-							})
-						}
-					})
-				})
-			})
-			//工作事项
-			this.$api.collaborativeOffice.getFieldBrowse().then(data => {
-				this.fieldBrowseList = data.data.data
-			})
-			//公司 部门 职位
-			this.$api.management.selectAllOrganizationInfo().then(data => {
-				this.goOk("最大数据已经返回，可以预览")
-				this.allOrganizationInfo = eval('(' + data.data.data + ')')
-			})
-			this.getDialogVisible(false)
 			this.getType(this.ruleForm.type)
 		},
 		methods: {
@@ -615,7 +595,6 @@
 							})
 						}
 					})
-					console.log(rowConList)
 					item.parameterList = []
 					//时间控件计算差值
 					rowConList.forEach(itemChild => {
@@ -756,8 +735,7 @@
 			preview() {
 				this.$refs.ruleFormTable.validate((valid) => {
 					if(valid) {
-						console.log(this.ruleForm.type)
-						this.conData.bottom[0].label = this.ruleForm.showName
+						this.conData.bottom[0].showName = this.ruleForm.showName
 						this.conData.bottom[0].type = this.ruleForm.type
 						//确认子表分类选定
 						if(this.ruleForm.workItemTypeSubName) {

@@ -1,16 +1,16 @@
 <template>
-	<div style="height: 85vh; overflow-y:scroll">
+	<div>
 		<el-card>
-			<formIcon :form-data="formData.top">
+			<formIcon :dis="dis" :showAdd="showAdd" :key="count" ref="mainTableChild" show="1" :form-data="formData.top">
 				<slot></slot>
 			</formIcon>
 		</el-card>
-		<el-tabs type="border-card">
-			<el-tab-pane :label="item.label" v-for="(item,index) in formData.bottom" :key="index">
-				<formIcon v-if="item.type == 1" :form-data="item"></formIcon>
-				<tableDynamic v-else :form-data="item"></tableDynamic>
+		<el-tabs v-model="activeName" type="border-card">
+			<el-tab-pane :label="item.showName" v-for="(item,index) in formData.bottom" :name="item.id" :key="index">
+				<formIcon :dis="dis" :showAdd="showAdd" :key="count" ref="refCon" show="2" v-if="item.type == 1" :form-data="item"></formIcon>
+				<tableDynamic :dis="dis" :key="count" ref="refCon" v-else :form-data="item"></tableDynamic>
 			</el-tab-pane>
-			<el-tab-pane label="附件"></el-tab-pane>
+			<el-tab-pane name="wobuxinnengchongfu" label="附件">1</el-tab-pane>
 		</el-tabs>
 	</div>
 </template>
@@ -30,31 +30,69 @@
 				type: Object,
 				required: true
 			},
+			showAdd: {
+				type: String,
+				required: true
+			},
+			dis: {
+				type: String,
+				required: true
+			}
 		},
 		data() {
 			return {
-				aa: "",
+				count: 0,
+				conData: {}
 			};
 		},
-		created() {
-			if(typeof(this.formData.bottom) != "undefined" && this.formData.bottom.length != 0) {
-				this.formData.bottom.forEach(item => {
-					if(item.type == 2) {
-						item.conList = []
-						item.rowList.forEach(val1 => {
-							val1.colList.forEach(val2 => {
-								item.conList.push(val2)
-							})
-						})
-					}
-					item.conList.sort((a1, b1) => {
-						return a1.orderNum - b1.orderNum
-					})
-				})
-				
+		computed: {
+			activeName: {
+				get() {
+					this.count++
+						if(typeof(this.formData.bottom) != "undefined") {
+							if(typeof(this.formData.bottom[0]) != "undefined") {
+								return this.formData.bottom[0].id
+							} else {
+								return "wobuxinnengchongfu"
+							}
+						} else {
+							return "wobuxinnengchongfu"
+						}
+				},
+				set() {}
 			}
 		},
-		methods: {},
+		created() {
+		},
+		methods: {
+			onSubmit() {
+				var state = true
+				if(!this.$refs.mainTableChild.onSubmit()) {
+					state = false
+				}
+				if(typeof(this.$refs.refCon) != "undefined") {
+					this.$refs.refCon.forEach(item => {
+						if(!item.onSubmit()) {
+							state = false
+						}
+					})
+				}
+				if(state) {
+					this.conData = this.$refs.mainTableChild.ruleForm
+					if(typeof(this.$refs.refCon) != "undefined") {
+						this.$refs.refCon.forEach(item => {
+							if(item.formData.type == 1) {
+								this.$set(this.conData, item.formData.id, [])
+								this.conData[item.formData.id].push(item.ruleForm)
+							} else {
+								this.$set(this.conData, item.formData.id, item.ruleForm.lines)
+							}
+						})
+					}
+					return true
+				}
+			}
+		},
 
 	}
 </script>
