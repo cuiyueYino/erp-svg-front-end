@@ -190,14 +190,14 @@
                 </el-col>
             </el-row>
         </el-card>
-        <PSpage  :rowPSDataObj="rowPSDataObj" :rowPStype="rowPStype" @changeShow="showORhideForPS"/>
+        <OPSpage  :rowOPSDataObj="rowOPSDataObj" :rowOPStype="rowOPStype" @changeShow="showORhideForPS"/>
         <DUTSpage  :rowDUTSDataObj="rowDUTSDataObj" :rowDUTStype="rowDUTStype" @changeShow="showORhideForDUTS"/>
         <POSserachpage  :rowPOSSDataObj="rowPOSSDataObj" :rowPOSStype="rowPOSStype" @changeShow="showORhideForPOSS"/>
     </div>
 </template>
 <script>
 // import DynamicTable from '../../components/common/dytable/dytable.vue';
-import PSpage from '../comment/personnel-search.vue';
+import OPSpage from '../comment/organization-personnel-search.vue.vue';
 import DUTSpage from '../comment/duties-search.vue';
 import POSserachpage from '../comment/position-search.vue';
 export default {
@@ -246,8 +246,8 @@ export default {
             },
             WFMtypeoptions:[],
             formLabelWidth: '120px',
-            rowPStype:false,
-            rowPSDataObj:{},
+            rowOPStype:false,
+            rowOPSDataObj:{},
             rowDUTStype:false,
             rowDUTSDataObj:{},
             rowPOSStype:false,
@@ -341,20 +341,20 @@ export default {
         },
         //查询发起人员
         MoreSearchPS(data,type){
-            this.rowPStype = true;
+            this.rowOPStype = true;
             let finandata=data;
             finandata.finanrowname="人员缺省查询方案";
             finandata.finanrowId="QS_0056";
             finandata.nametitle="组织机构维护";
             finandata.UserSearchtype=type;
-            this.rowPSDataObj=finandata;
+            this.rowOPSDataObj=finandata;
         },
         //获取人员查询结果
         showORhideForPS(data,type){
             if(type === false){
-                this.rowPStype = false;
+                this.rowOPStype = false;
             }else{
-                this.rowPStype = true;
+                this.rowOPStype = true;
             }
             if(data.UserSearchtype=='分管领导'){
                 this.DepformData.vicePresidentName=data.selectOptionName;

@@ -165,7 +165,6 @@ export default {
             }else{
                 fromDataS.activityId='';
             }
-            console.log(fromDataS)
             if(this.NewOrEditFlag==="NEW"){
                 this.saveNewMenu(fromDataS);
             }else{
