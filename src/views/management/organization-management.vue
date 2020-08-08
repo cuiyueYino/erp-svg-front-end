@@ -197,7 +197,7 @@
 </template>
 <script>
 // import DynamicTable from '../../components/common/dytable/dytable.vue';
-import OPSpage from '../comment/organization-personnel-search.vue.vue';
+import OPSpage from '../comment/organization-personnel-search.vue';
 import DUTSpage from '../comment/duties-search.vue';
 import POSserachpage from '../comment/position-search.vue';
 export default {
@@ -206,7 +206,7 @@ export default {
     //   DynamicTable,
       DUTSpage,
       POSserachpage,
-      PSpage
+      OPSpage
     },
     inject: ['reload'],
     data() {
