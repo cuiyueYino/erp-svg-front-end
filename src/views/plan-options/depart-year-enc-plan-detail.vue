@@ -1,19 +1,18 @@
 <template>
     <div v-if="ShowFinancVisible" class="itemDivStyle">
-    <div>部门年度经济指标计划试开始。。。。。。。。。。</div>
+    <div>部门年度经济指标计划开始。。。。。。。。。。</div>
         <el-form
             label-width="110px"
             v-model="formdata"
             class="dataForm"
-            :rules="rules"
             size="mini"
             :model="formdata"
             :label-position="labelPosition"
         >
             <el-row>
-                <el-col :span="12">
-                    <el-form-item label="公司" prop="company">
-                        <el-select v-model="formdata.company" value-key="value" v-bind:disabled="disabled">
+                <el-col :span="6">
+                    <el-form-item label="公司：">
+                        <el-select v-model="formdata.company" value-key="value" :disabled="true">
                             <el-option
                                 v-for="item in companyData"
                                 :key="item.value"
@@ -26,30 +25,30 @@
             </el-row>
             <el-row>
                 <el-col :span="6">
-                    <el-form-item label="单据号">
-                        <el-input v-model="formdata.code" v-bind:disabled="disabled"></el-input>
+                    <el-form-item label="单据号：">
+                        <el-input v-model="formdata.code" :disabled="true"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="6" :offset="2">
-                    <el-form-item label="部门">
-                        <el-input v-model="formdata.bumen" v-bind:disabled="disabled"></el-input>
+                    <el-form-item label="部门：">
+                        <el-input v-model="formdata.bumen" :disabled="true"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="6" :offset="2">
-                    <el-form-item label="年度">
-                        <el-input v-model="formdata.gangwei" v-bind:disabled="disabled"></el-input>
+                    <el-form-item label="年度：">
+                        <el-input v-model="formdata.gangwei" :disabled="true"></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>
             <el-row>
                 <el-col :span="6">
-                    <el-form-item label="经办人">
-                        <el-input v-model="formdata.name" v-bind:disabled="disabled"></el-input>
+                    <el-form-item label="经办人：">
+                        <el-input v-model="formdata.name" :disabled="true"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="6" :offset="2">
-                    <el-form-item label="经办日期">
-                        <el-input v-model="formdata.nianfen" v-bind:disabled="disabled"></el-input>
+                    <el-form-item label="经办日期：">
+                        <el-input v-model="formdata.nianfen" :disabled="true"></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>
@@ -67,12 +66,6 @@
                         v-loading="false"
                         element-loading-text="加载中"
                     ></dynamic-table>
-                    <el-row>
-                        <el-col :span="5">
-                            <el-button size="small" :disabled="isLook"  v-show="!isEdit" type="success" plain @click="baseInputTable('新增一岗一表')">新增</el-button>
-                            <el-button size="small" :disabled="isLook" type="danger" plain @click="deleteRow()">删除</el-button>
-                        </el-col>
-                    </el-row>
                 </el-tab-pane>
                 <el-tab-pane label="附件" name="second">
                     <dynamic-table
@@ -100,8 +93,8 @@ import proData from '../../components/common/proData/proData';
 import DynamicTable from '../../components/common/dytable/dytable.vue';
 export default {
     props: {
-        rowEACHPerEachJobDataObj: Object,
-        rowEACHPerEachJobtype:Boolean,
+        rowDepartYearEncPlanDetailtype: Object,
+        rowDepartYearEncPlanDetailtype:Boolean,
     },
     components: {
         DynamicTable,
@@ -121,6 +114,9 @@ export default {
             isEdit: false,
             isLook:false,
             columns:[
+                {
+                    type: 'selection'
+                },
                 {
                     key: 'key1',
                     title: '序号'
@@ -217,11 +213,6 @@ export default {
                 },
             ],
             tableData:[],
-            rules: {
-                name:[{ required: true, message: '请输入名称', trigger: 'blur' }],
-                company:[{ required: true, message: '请选择公司', trigger: 'blur' }],
-                code:[{ required: true, message: '请输入编码', trigger: 'blur' }],
-            },
             peopleTableRules:{ 
                 zhibiaoku: [
                 { required: true, message: "请输入xxxxxx", trigger: "blur" }
@@ -261,8 +252,8 @@ export default {
                 break;
             }
             },
-        rowEACHPerEachJobtype(oldVal,newVal){
-            this.ShowFinancVisible=this.rowEACHPerEachJobtype;
+        rowDepartYearEncPlanDetailtype(oldVal,newVal){
+            this.ShowFinancVisible=this.rowDepartYearEncPlanDetailtype;
         }
     }
 }

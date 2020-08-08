@@ -1,18 +1,18 @@
 <template>
     <div v-if="ShowFinancVisible" class="itemDivStyle">
+    <div>临时任务派发开始。。。。。。。。。。</div>
         <el-form
             label-width="110px"
             v-model="formdata"
             class="dataForm"
-            :rules="rules"
             size="mini"
             :model="formdata"
             :label-position="labelPosition"
         >
             <el-row>
-                <el-col :span="12">
-                    <el-form-item label="公司" prop="company">
-                        <el-select v-model="formdata.company" value-key="value" v-bind:disabled="disabled">
+                <el-col :span="6">
+                    <el-form-item label="公司：">
+                        <el-select v-model="formdata.company" value-key="value" :disabled="true">
                             <el-option
                                 v-for="item in companyData"
                                 :key="item.value"
@@ -25,185 +25,176 @@
             </el-row>
             <el-row>
                 <el-col :span="6">
-                    <el-form-item label="单据号" prop="name">
-                        <el-input v-model="formdata.name" v-bind:disabled="disabled"></el-input>
+                    <el-form-item label="单据号：">
+                        <el-input v-model="formdata.name" :disabled="true"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="6" :offset="2">
-                    <el-form-item label="部门" >
-                        <el-input v-model="formdata.creditcontract" v-bind:disabled="disabled"></el-input>
+                    <el-form-item label="部门：" >
+                        <el-input v-model="formdata.creditcontract" :disabled="true"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="6" :offset="2">
-                    <el-form-item label="责任部门" prop="name">
-                        <el-input v-model="formdata.name" v-bind:disabled="disabled"></el-input>
+                    <el-form-item label="责任部门：">
+                        <el-input v-model="formdata.name" :disabled="true"></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>
             <el-row>
                 <el-col :span="6">
-                    <el-form-item label="检查人" prop="name">
-                        <el-input v-model="formdata.name" v-bind:disabled="disabled"></el-input>
+                    <el-form-item label="检查人：">
+                        <el-input v-model="formdata.name" :disabled="true"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="6" :offset="2">
-                    <el-form-item label="交办人" prop="name">
-                        <el-input v-model="formdata.name" v-bind:disabled="disabled"></el-input>
+                    <el-form-item label="交办人：">
+                        <el-input v-model="formdata.name" :disabled="true"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="6" :offset="2">
-                    <el-form-item label="任务状态" >
-                        <el-input v-model="formdata.adjustdateStr" v-bind:disabled="disabled"></el-input>
+                    <el-form-item label="任务状态：" >
+                        <el-input v-model="formdata.adjustdateStr" :disabled="true"></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>
             <el-row>
                 <el-col :span="14">
-                    <el-form-item label="责任人" prop="name">
-                        <el-input v-model="formdata.name" v-bind:disabled="disabled"></el-input>
+                    <el-form-item label="责任人：">
+                        <el-input v-model="formdata.name" :disabled="true"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="6" :offset="2">
-                    <el-form-item label="调整" >
-                        <el-checkbox v-model="formdata.checked">时间调整</el-checkbox>
+                    <el-form-item label="调整：">
+                        <el-checkbox v-model="formdata.checked" :disabled="true">时间调整</el-checkbox>
                     </el-form-item>
                 </el-col>
             </el-row>
             <el-row>
                 <el-col :span="6">
-                    <el-form-item label="协办人">
-                        <el-input v-model="formdata.name" v-bind:disabled="disabled"></el-input>
+                    <el-form-item label="协办人：">
+                        <el-input v-model="formdata.name" :disabled="true"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="6" :offset="2">
-                    <el-form-item label="秘书">
-                        <el-input v-model="formdata.name" v-bind:disabled="disabled"></el-input>
+                    <el-form-item label="秘书：">
+                        <el-input v-model="formdata.name" :disabled="true"></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>
             <el-row>
                 <el-col :span="6">
-                    <el-form-item label="开始时间" prop="name">
+                    <el-form-item label="开始时间：">
                         <el-date-picker
                             v-model="formdata.name"
                             type="date"
-                            v-bind:disabled="disabled"
+                            :disabled="true"
                             placeholder="选择日期">
                         </el-date-picker>
                     </el-form-item>
                 </el-col>
                 <el-col :span="6" :offset="2">
-                    <el-form-item label="结束时间" prop="name">
+                    <el-form-item label="结束时间：">
                         <el-date-picker
                             v-model="formdata.name"
                             type="date"
-                            v-bind:disabled="disabled"
+                            :disabled="true"
                             placeholder="选择日期">
                         </el-date-picker>
                     </el-form-item>
                 </el-col>
                 <el-col :span="6" :offset="2">
-                    <el-form-item label="任务类型" prop="name">
-                        <el-input v-model="formdata.name" v-bind:disabled="disabled"></el-input>
+                    <el-form-item label="任务类型：">
+                        <el-input v-model="formdata.name" :disabled="true"></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>
             <el-row>
                 <el-col :span="6">
-                    <el-form-item label="任务等级" prop="name">
-                        <el-input v-model="formdata.name" v-bind:disabled="disabled"></el-input>
+                    <el-form-item label="任务等级：">
+                        <el-input v-model="formdata.name" :disabled="true"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="6" :offset="2">
-                    <el-form-item label="任务名称" prop="name">
-                        <el-input v-model="formdata.name" v-bind:disabled="disabled"></el-input>
+                    <el-form-item label="任务名称：">
+                        <el-input v-model="formdata.name" :disabled="true"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="6" :offset="2">
-                    <el-form-item label="经办人" >
-                        <el-input v-model="formdata.adjustdateStr" v-bind:disabled="disabled"></el-input>
+                    <el-form-item label="经办人：" >
+                        <el-input v-model="formdata.adjustdateStr" :disabled="true"></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>
             <el-row>
                 <el-col :span="6">
-                    <el-form-item label="经办时间">
+                    <el-form-item label="经办时间：">
                         <el-date-picker
                             v-model="formdata.name"
                             type="date"
-                            v-bind:disabled="disabled"
+                            :disabled="true"
                             placeholder="选择日期">
                         </el-date-picker>
                     </el-form-item>
                 </el-col>
                 <el-col :span="14" :offset="2">
-                    <el-form-item label="重要级别" >
-                        <el-radio v-model="formdata.radio" label="1">集团重点</el-radio>
-                        <el-radio v-model="formdata.radio" label="2">公司重点</el-radio>
-                        <el-radio v-model="formdata.radio" label="3">部门重点</el-radio>
+                    <el-form-item label="重要级别：" >
+                        <el-checkbox-group v-model="focusLevelCheckList" disabled="true">
+                            <el-checkbox label="集团重点"></el-checkbox>
+                            <el-checkbox label="公司重点"></el-checkbox>
+                            <el-checkbox label="部门重点" disabled></el-checkbox>
+                        </el-checkbox-group>
                     </el-form-item>
                 </el-col>
             </el-row>
             <el-row>
                 <el-col :span="22">
-                    <el-form-item label="工作标准">
-                        <el-input type="textarea" v-model="formdata.remark" :rows="5"></el-input>
+                    <el-form-item label="工作标准：">
+                        <el-input type="textarea" v-model="formdata.remark" :rows="5" :disabled="true"></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>
             <el-row>
                 <el-col :span="22">
-                    <el-form-item label="描述">
-                        <el-input type="textarea" v-model="formdata.remark" :rows="5"></el-input>
+                    <el-form-item label="描述：">
+                        <el-input type="textarea" v-model="formdata.remark" :rows="5" :disabled="true"></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>
             <el-row>
-                <el-col :span="22">
-                    <el-table
-                        :data="tableData"
-                        ref="table"
+                <el-col :span="22"> 
+                    <dynamic-table
+                        :columns="columns"
+                        :table-data="tableData"
+                        :total="total"
                         size="mini"
-                        tooltip-effect="dark"
-                        border
-                        stripe
-                        style="width:100%;">
-                        <el-table-column label="序号" >
-                            计划值
-                        </el-table-column>
-                        <el-table-column label="参数名称" >
-                            Q累计预计计划完成指标
-                        </el-table-column>
-                        <el-table-column label="期权数值" >
-                            <template slot-scope="scope">
-                                <el-input v-model="scope.row.awardable" size="mini"></el-input>
-                            </template>
-                        </el-table-column>
-                        <el-table-column label="计量单位" >
-                            <template slot-scope="scope">
-                                <el-input v-model="scope.row.awardableamount" size="mini"></el-input>
-                            </template>
-                        </el-table-column>
-                    </el-table>
+                        :isShowPager="false"    
+                        ref="multipleTable"
+                        :page-num="pageNum"
+                        :page-size="pageSize"
+                        v-loading="false"
+                        element-loading-text="加载中"
+                    ></dynamic-table>
               </el-col>
             </el-row>
+            <div>临时任务派发结束。。。。。。。。。。</div>
         </el-form>
     </div>
 </template>
 <script>
 import proData from '../../components/common/proData/proData';
+import DynamicTable from '../../components/common/dytable/dytable.vue';
 export default {
     props: {
         rowTEMTaskDataObj: Object,
         rowTEMTasktype:Boolean,
     },
     components: {
-        
+        DynamicTable,
     },
     data(){
         return{
+            focusLevelCheckList:[],
             ShowFinancVisible:false,
-            disabled:false,
             labelPosition: 'left',
             formdata:{},
             companyData:new proData().company,
@@ -211,26 +202,33 @@ export default {
             pageNum: 1,
             pageSize: 10,
             total: 20,
-            tableData:[
+            tableData:[],
+            columns:[
                 {
-                    awardable:'',
-                    awardableamount:'',
-                }
+                    key: 'key1',
+                    title: '序号'
+                },
+                {
+                    key: 'key2',
+                    title: '参数名称'
+                },
+                {
+                    key: 'key3',
+                    title: '关键指标'
+                },
+                {
+                    key: 'key4',
+                    title: '期权数值'
+                },
+                {
+                    key: 'key5',
+                    title: '计量单位'
+                },
             ],
-            rules: {
-                name:[{ required: true, message: '请输入名称', trigger: 'blur' }],
-                company:[{ required: true, message: '请选择公司', trigger: 'blur' }],
-                code:[{ required: true, message: '请输入编码', trigger: 'blur' }],
-            }
         }
     },
     methods: {
-        MoreSearchPS(){
-
-        },
-        handleClick(){
-
-        },
+       
     },
     watch:{
         rowTEMTasktype(oldVal,newVal){
@@ -242,18 +240,5 @@ export default {
 <style lang='scss' scoped>
 .itemDivStyle{
     margin-left: 20px;
-}
-</style>
-<style lang='scss'>
-.replydiag {
-    .el-textarea__inner {
-        min-height: 300px !important;
-    }
-}
-.el-dialog__body{
-    padding: 0;
-}
-.el-card__header{
-    padding: 10px 20px;
 }
 </style>

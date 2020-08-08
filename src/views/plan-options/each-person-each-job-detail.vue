@@ -6,12 +6,11 @@
             v-model="formdata"
             class="dataForm"
             size="mini"
-            :rules="rules"
             :model="formdata"
             :label-position="labelPosition"
         >
             <el-row>
-                <el-col :span="12">
+                <el-col :span="6">
                     <el-form-item label="公司：">
                         <el-select v-model="formdata.company" value-key="value" :disabled="true">
                             <el-option  
@@ -31,12 +30,12 @@
                     </el-form-item>
                 </el-col>
                 <el-col :span="6" :offset="2">
-                    <el-form-item label="岗位：" prop="job">
+                    <el-form-item label="岗位：">
                         <el-input v-model="formdata.gangwei"  :disabled="true"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="6" :offset="2">
-                    <el-form-item label="版本：" prop="version">
+                    <el-form-item label="版本：">
                         <el-input v-model="formdata.gangwei"  :disabled="true"></el-input>
                     </el-form-item>
                 </el-col>
@@ -117,35 +116,7 @@
                 </el-tab-pane>
             </el-tabs> 
         </el-form>
-
         </el-dialog>
-      <!-- 计划部门弹窗  -->
-      <el-dialog title="选择计划部门" 
-      class="add-user"
-        center
-        width="50%"
-      :visible.sync="isDeartPopVisible"
-      append-to-body
-      :close-on-click-modal="false">
-       <div v-show="true">
-          <el-tree
-              :data="treeData2"
-              :props="defaultProps"
-               ref="treeData2"
-              node-key="id"
-              :render-content="renderContent"
-              accordion
-              show-checkbox
-              :default-expanded-keys="checkdata"
-              :default-checked-keys="checkdata"
-              @node-click="nodeClick">
-          </el-tree>
-       </div>
-         <div slot="footer" class="dialog-footer">
-            <el-button @click="isDeartPopVisible = false">取 消</el-button>
-            <el-button type="primary" @click="addPeople()">确 定</el-button>
-        </div>
-      </el-dialog>
       <div>一岗一表结束。。。。。。。。。</div>
     </div>
 </template>
@@ -162,14 +133,7 @@ export default {
     },
     data(){
         return{
-             rules: {
-                job:[{ required: true, message: '请输入岗位', trigger: 'blur' }],
-                version:[{ required: true, message: '请输入版本号', trigger: 'blur' }]
-            },
-            //fileList: [{name: 'food.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'}, {name: 'food2.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'}],
-            fileList: [{name: 'food.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'},],
             isDeartPopVisible:false,
-            fenddate:'',
             formLabelWidth: "120px",
             ShowFinancVisible:false,
             peopleJobgsTableVisible: false,
@@ -183,12 +147,6 @@ export default {
             pageNum: 1,
             pageSize: 10,
             total: 20,
-            isEdit: false,
-            isLook:false,
-             defaultProps: {
-                children: 'children',
-                label: 'label'
-                },
             treeData2:[
                 {
                     label: '计划部门类别',
@@ -315,14 +273,6 @@ export default {
                     title: '备注'
                 },
             ],
-            peopleTableForm:{
-                zhibiaoku: "",
-                guanjinzhibiao: "",
-                zizhibiao:'',
-                dingyizhibiao:'',
-                kaopingfangfa:'',
-                beizhu:''
-            },
             attachColumns:[
                 {
                     key: 'key1',
@@ -340,70 +290,9 @@ export default {
         }
     },
     methods: {
-        // 图片上传的限制方法
-        handleRemove(file, fileList) {
-            console.log(file, fileList);
-        },
-        handlePreview(file) {
-            console.log(file);
-        },
-        handleExceed(files, fileList) {
-            this.$message.warning(`当前限制选择 3 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
-        },
-        beforeRemove(file, fileList) {
-            return this.$confirm(`确定移除 ${ file.name }？`);
-        },
-        // 导出
-        upload() {
-            //this.$api.confMangement.confUsageDetailExport();
-            console.log("导出年计划编制");
-        },
-        // 生成任务
-        generateTask() {
-            //this.$api.confMangement.confUsageDetailExport();
-            console.log("生成任务");
-        },
-        // 月度配合任务
-        monthCooperateTask() {
-            //this.$api.confMangement.confUsageDetailExport();
-            console.log("月度配合任务");
-        },
-        // 选择 计划部门 方法
-        PlanDep() {
-            this.isDeartPopVisible = true
-        },
-        addPeople(){
-            this.isDeartPopVisible =false
-            this.formdata.jihuabumen = "IT开发部"
-            },
-        //树结构点击事件
-        filterNode(value, data) {
-            if (!value) return true;
-            return data.label.indexOf(value) !== -1;
-        },
-        handleNodeClick(data) {
-            console.log(data);
-        },
-        MoreSearchPS(){
 
-        },
-        handleClick(){
-
-        }
     },
     watch:{
-        //新建一岗一表行数据清空
-        peopleJobgsTableVisible(val){
-            switch (val) {
-                case false:
-                    this.$refs['peopleTableForm'].resetFields();
-                    this.checked = false;
-                break;
-            
-                default:
-                break;
-            }
-            },
         rowEACHPerEachJobDettype(oldVal,newVal){
             this.ShowFinancVisible=this.rowEACHPerEachJobDettype;
         }
@@ -413,26 +302,5 @@ export default {
 <style lang='scss' scoped>
 .itemDivStyle{
     margin-left: 20px;
-}
-</style>
-<style lang='scss'>
-.btn-file {
-    margin-bottom:5px;
-    text-align:right;
-}
-.btn-wrapper {
-    text-align:right;
-    margin-bottom:5px;
-}
-.replydiag {
-    .el-textarea__inner {
-        min-height: 300px !important;
-    }
-}
-.el-dialog__body{
-    padding: 0;
-}
-.el-card__header{
-    padding: 10px 20px;
 }
 </style>

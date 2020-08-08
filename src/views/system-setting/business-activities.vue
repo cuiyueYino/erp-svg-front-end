@@ -198,10 +198,16 @@ export default {
             this.$api.SystemSet.getProcessActivity(formDataA).then(response => {
                 let responsevalue = response;
                 if (responsevalue) {
-                    let returndata = responsevalue.data;
-                    let tableDataArr=returndata.data.rows;
-                    this.tableData = tableDataArr;
-                    this.total=returndata.data.total;
+                    if(responsevalue.data != ''){
+                        let returndata = responsevalue.data;
+                        let tableDataArr=returndata.data.rows;
+                        this.tableData = tableDataArr;
+                        this.total=returndata.data.total;
+                    }else{
+                        this.tableData =[];
+                        this.total=0;
+                    }
+                    this.MoreSearchVisible=false;
                 } else {
                     this.$message.success('查询失败!');
                 }

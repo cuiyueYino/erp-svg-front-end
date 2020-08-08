@@ -79,10 +79,15 @@ export default {
 		Vue.prototype.dataBack = function(data, val) {
 			console.log(data)
 			if(data.status == 200 && data.data.code == 0) {
-				if(val != "") {
-					this.goOk(val)
+				if(data.data.data == "") {
+					this.goOut("返回数据为空")
+					return false
+				} else {
+					if(typeof(val) != "undefined" && val != "") {
+						this.goOk(val)
+					}
+					return true
 				}
-				return true
 			} else {
 				this.goOut(data.data.msg)
 				return false

@@ -10,6 +10,8 @@ const enumerationList = () =>
 	import('./enumerationList.vue');
 const workItems = () =>
 	import('./work-items.vue');
+const workItemsToGrantAuthorization = () =>
+	import('./work-items-to-grant-authorization.vue');
 
 const InsideMail = [{
 		path: 'templateMainTableClassification',
@@ -57,6 +59,14 @@ const InsideMail = [{
 		component: workItems,
 		meta: {
 			title: '工作事项'
+		}
+	},
+	{
+		path: 'workItemsToGrantAuthorization',
+		name: 'workItemsToGrantAuthorization',
+		component: workItemsToGrantAuthorization,
+		meta: {
+			title: '工作事项模板授权'
 		}
 	}
 ];

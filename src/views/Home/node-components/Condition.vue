@@ -22,7 +22,7 @@
           <el-form-item label="业务数据" :label-width="formLabelWidth">
             <el-input v-model="formData.workData" autocomplete="off"></el-input>
           </el-form-item>
-          <el-form-item label="组织结构" :label-width="formLabelWidth">
+          <!-- <el-form-item label="组织结构" :label-width="formLabelWidth">
             <el-input v-model="formData.structure" autocomplete="off"></el-input>
             <img
               class="icon-search"
@@ -32,7 +32,7 @@
           </el-form-item>
           <el-form-item label="隐藏" :label-width="formLabelWidth">
             <el-checkbox v-model="formData.checked"></el-checkbox>
-          </el-form-item>
+          </el-form-item> -->
           <el-form-item label="描述：" :label-width="formLabelWidth">
             <el-input
               maxlength="1000"
@@ -112,7 +112,7 @@
                 />
               </el-form-item>
               <el-form-item label="条件表达式" :label-width="formLabelWidth">
-                <el-input type="textarea" v-model="roleReq.role_expression"></el-input>
+                <el-input type="textarea" v-model="roleReq.role_expression" :disabled="true"></el-input>
               </el-form-item>
             </el-tab-pane>
             <el-tab-pane label="用户" name="2">
@@ -125,7 +125,7 @@
                 />
               </el-form-item>
               <el-form-item label="条件表达式" :label-width="formLabelWidth">
-                <el-input type="textarea" v-model="UserListReq.fenglishname"></el-input>
+                <el-input type="textarea" v-model="UserListReq.fenglishname" :disabled="true"></el-input>
               </el-form-item>
             </el-tab-pane>
             <el-tab-pane label="服务" name="3">
@@ -293,19 +293,142 @@ export default {
           this.formData.workData = this.editData.dataType.name
           this.formData.workDataId = this.editData.dataType.oid
           this.formData.workDataCode = this.editData.dataType.code
-          this.formData.structure = this.editData.orgUnit?this.editData.orgUnit.id:''
-          this.formData.checked = this.editData.hidden==1?true:false
+          // this.formData.structure = this.editData.orgUnit?this.editData.orgUnit.id:''
+          // this.formData.checked = this.editData.hidden==1?true:false
           this.formData.fremark = this.editData.fremark
           this.joinCheckBox = this.editData.permission=='1'?1:this.editData.mntNextJoin=='1'?2:this.editData.canSkip=='1'?3:this.editData.multMail=='1'?4:null
-          this.joinusertableData = this.editData.wfParticipator.participator
-          this.CCtableData = this.editData.wfCopyTo.copyTo
+          let tableDataNewSet = []
+          this.editData.wfCopyTo.copyTo.forEach(item=>{
+              switch (item.type) {
+                  case 3://用户
+                      tableDataNewSet.push({
+                          fUsercode: "用户",
+                          fUsername: item.user.name,
+                          fUserRemake: item.expression,
+                          fUseroid:item.user.foid,
+                          oid:item.oid,
+                          type:item.type,
+                          typeName:'user',
+                      })
+                      break;
+                  case 2://角色
+                      tableDataNewSet.push({
+                          fUsercode: "角色",
+                          fUsername: item.role.name,
+                          fUserRemake: item.expression,
+                          fUseroid:item.role.foid,
+                          oid:item.oid,
+                          type:item.type,
+                          typeName:'role',
+                      })
+                      break;
+                    case 4://服务
+                      tableDataNewSet.push({
+                          fUsercode:  "服务",
+                          fUsername: item.service.name,
+                          fUserRemake: item.expression,
+                          fUseroid:item.service.foid,
+                          oid:item.oid,
+                          type:item.type,
+                          typeName:'service',
+                      })
+                      break;
+                  case 6://职务
+                      tableDataNewSet.push({
+                          fUsercode: "职务",
+                          fUsername: item.position.name,
+                          fUserRemake: item.expression,
+                          fUseroid:item.position.foid,
+                          oid:item.oid,
+                          type:item.type,
+                          typeName:'position',
+                      })
+                      break;
+                  case 5://表达式
+                      tableDataNewSet.push({
+                          fUsercode: "表达式",
+                          fUsername: item.expression.name,
+                          fUserRemake: item.expression,
+                          fUseroid:item.expression.foid,
+                          oid:item.oid,
+                          type:item.type,
+                          typeName:'expression',
+                      })
+                      break;
+              
+                  default:
+                      break;
+              }
+          });
+            if( this.CCtableData.length === 0 && tableDataNewSet.length !== 0){
+                this.CCtableData.push(tableDataNewSet[0])
+              }
+           let joinusertable = [];
+          this.editData.wfParticipator.participator.forEach(item=>{
+              switch (item.type) {
+                  case 3://用户
+                      joinusertable.push({
+                          fUsercode: "用户",
+                          fUsername: item.user.name,
+                          fUserRemake: item.expression,
+                          fUseroid:item.user.foid,
+                          oid:item.oid,
+                          type:item.type,
+                          typeName:'user',
+                      })
+                      break;
+                  case 2://角色
+                      joinusertable.push({
+                          fUsercode:  "角色",
+                          fUsername: item.role.name,
+                          fUserRemake: item.expression,
+                          fUseroid:item.role.foid,
+                          oid:item.oid,
+                          type:item.type,
+                          typeName:'role',
+                      })
+                      break;
+                  case 4://服务
+                      joinusertable.push({
+                          fUsercode: "服务",
+                          fUsername: item.service.name,
+                          fUserRemake: item.expression,
+                          fUseroid:item.service.foid,
+                          oid:item.oid,
+                          type:item.type,
+                          typeName:'service',
+                      })
+                      break;
+                  case 6://职务
+                      joinusertable.push({
+                          fUsercode: "职务",
+                          fUsername: item.position.name,
+                          fUserRemake: item.expression,
+                          fUseroid:item.position.foid,
+                          oid:item.oid,
+                          type:item.type,
+                          typeName:'position',
+                      })
+                      break;
+                  case 5://表达式
+                          joinusertable.push({
+                          fUsercode: "表达式",
+                          fUsername: item.expression.name,
+                          fUserRemake: item.expression,
+                          fUseroid:item.expression.foid,
+                          oid:item.oid,
+                          type:item.type,
+                          typeName:'expression',
+                      })
+                      break;
+                  default:
+                      break;
+              }
+          });
+          if( this.joinusertableData.length === 0 && joinusertable.length !== 0){
+              this.joinusertableData.push(joinusertable[0])
+          }
       }
-        //  if( this.data.displayName !== '新建连接' ){
-        //     this.displayName  = this.data.displayName 
-        // }else{
-        //     this.displayName  = ''
-        // }
-        // console.log( this.formData,obj)
       },
       deep: true,
       immediate: true

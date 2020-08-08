@@ -10,9 +10,9 @@
             :label-position="labelPosition"
         >
             <el-row>
-                <el-col :span="12">
+                <el-col :span="6">
                     <el-form-item label="公司：">
-                        <el-select v-model="formdata.company" value-key="value" v-bind:disabled="disabled">
+                        <el-select v-model="formdata.company" value-key="value" :disabled="true">
                             <el-option  
                                 v-for="item in companyData"
                                 :key="item.value"
@@ -36,7 +36,7 @@
                 </el-col>
                 <el-col :span="6" :offset="2">
                     <el-form-item label="年份：">
-                        <el-select v-model="formdata.years" value-key="value" v-bind:disabled="disabled">
+                        <el-select v-model="formdata.years" value-key="value" :disabled="true">
                             <el-option  
                                 v-for="item in yearsData"
                                 :key="item.value"
@@ -54,7 +54,7 @@
                     </el-form-item>
                 </el-col>
                 <el-col :span="1">
-                    <el-button type="primary" size="mini" icon="el-icon-search" @click="PlanDep(formdata)"></el-button>
+                    <el-button type="primary" size="mini" icon="el-icon-search" :disabled="true"></el-button>
                 </el-col>
                 <el-col :span="6" :offset="2">
                 <el-form-item label="编制日期：" :label-width="formLabelWidth" prop="fenddate">
@@ -67,7 +67,7 @@
                         size="small"
                         placeholder="选择日期"
                         style="width: 100%;"
-                        :disabled="false"
+                        :disabled="true"
                     ></el-date-picker>
                 </el-form-item>
                 </el-col>
@@ -78,39 +78,14 @@
                 </el-col>
             </el-row>
             <el-row>
-                <el-col :span="22">
-                    <el-form-item label="备注">
-                        <el-input type="textarea" v-model="formdata.beizhu" :rows="5"></el-input>
+                 <el-col :span="22">
+                    <el-form-item label="备注：">
+                        <el-input v-model="formdata.text1" :disabled="true"></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>
             <el-tabs v-model="atctiveName" @tab-click="handleClick">
                 <el-tab-pane label="年计划编制" name="first">
-                    <el-row type="flex" justify="center">
-                        <el-col :span="24" class="btn-wrapper">
-                            <el-button type="primary" size="small" plain icon="el-icon-view" @click="yearCooperateTask">年度配合任务</el-button>
-                            <el-button type="primary" size="small" plain icon="el-icon-download" @click="generateTask">生成任务</el-button>
-                            <el-button type="primary" size="small" plain icon="el-icon-upload2" @click="upload">导 出</el-button>
-                            <el-button type="primary" size="small" plain icon="el-icon-download" @click="download">导 入</el-button>
-                        </el-col>
-                    </el-row>
-                    <el-row>
-                        <el-col :span="24" class="btn-file">
-                            <el-upload
-                                class="upload-demo"
-                                action="https://jsonplaceholder.typicode.com/posts/"
-                                :on-preview="handlePreview"
-                                :on-remove="handleRemove"
-                                :before-remove="beforeRemove"
-                                multiple
-                                :limit="3"
-                                :on-exceed="handleExceed"
-                                :file-list="fileList">
-                                <el-button size="small" type="primary" icon="el-icon-download">文件上传</el-button>
-                                <!-- <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div> -->
-                            </el-upload>
-                        </el-col>
-                    </el-row>
                     <dynamic-table
                         :columns="columns"
                         :table-data="tableData"
@@ -125,24 +100,6 @@
                     ></dynamic-table>
                 </el-tab-pane>
                 <el-tab-pane label="附件" name="fourth">
-                 <el-row>
-                        <el-col :span="24" class="btn-file">
-                            <el-upload
-                                class="upload-demo"
-                                action="https://jsonplaceholder.typicode.com/posts/"
-                                :on-preview="handlePreview"
-                                :on-remove="handleRemove"
-                                :before-remove="beforeRemove"
-                                multiple
-                                :limit="3"
-                                :on-exceed="handleExceed"
-                                :file-list="fileList">
-                                <el-button size="small" type="primary" icon="el-icon-download">文件上传</el-button>
-                                
-                                <!-- <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div> -->
-                            </el-upload>
-                        </el-col>
-                    </el-row>
                     <dynamic-table
                         :columns="attachColumns"
                         :table-data="tableData"
@@ -158,35 +115,7 @@
                 </el-tab-pane>
             </el-tabs> 
         </el-form>
-
         </el-dialog>
-      <!-- 计划部门弹窗  -->
-      <el-dialog title="选择计划部门" 
-      class="add-user"
-        center
-        width="50%"
-      :visible.sync="isDeartPopVisible"
-      append-to-body
-      :close-on-click-modal="false">
-       <div v-show="true">
-          <el-tree
-              :data="treeData2"
-              :props="defaultProps"
-               ref="treeData2"
-              node-key="id"
-              :render-content="renderContent"
-              accordion
-              show-checkbox
-              :default-expanded-keys="checkdata"
-              :default-checked-keys="checkdata"
-              @node-click="nodeClick">
-          </el-tree>
-       </div>
-         <div slot="footer" class="dialog-footer">
-            <el-button @click="isDeartPopVisible = false">取 消</el-button>
-            <el-button type="primary" @click="addPeople()">确 定</el-button>
-        </div>
-      </el-dialog>
       <div>部门年度计划结束。。。。。。。。。</div>
     </div>
 </template>
@@ -203,13 +132,8 @@ export default {
     },
     data(){
         return{
-            //fileList: [{name: 'food.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'}, {name: 'food2.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'}],
-            fileList: [{name: 'food.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'},],
-            isDeartPopVisible:false,
-            fenddate:'',
             formLabelWidth: "120px",
             ShowFinancVisible:false,
-            peopleJobgsTableVisible: false,
             disabled:false,
             labelPosition: 'left',
             formdata:{},
@@ -219,43 +143,6 @@ export default {
             pageNum: 1,
             pageSize: 10,
             total: 20,
-            isEdit: false,
-            isLook:false,
-             defaultProps: {
-                children: 'children',
-                label: 'label'
-                },
-            treeData2:[
-                {
-                    label: '计划部门类别',
-                    id:'company01',
-                    type:'company',
-                    children: [
-                        {
-                            label: 'IT开发部',
-                            id:'duties03',
-                            type:'duties',  
-                        },
-                        {
-                            label: '财务部',
-                            id:'department01',
-                            type:'department',
-                            children: [
-                                {
-                                label: '石化财务',
-                                id:'duties01',
-                                type:'duties',
-                                },
-                                {
-                                label: '收费员',
-                                id:'duties02',
-                                type:'duties',
-                                }
-                            ]
-                        }
-                    ]
-                }
-                ],
             columns:[
                 {
                     type: "selection"
@@ -293,14 +180,6 @@ export default {
                     title: '工作标准'
                 },
             ],
-            peopleTableForm:{
-                zhibiaoku: "",
-                guanjinzhibiao: "",
-                zizhibiao:'',
-                dingyizhibiao:'',
-                kaopingfangfa:'',
-                beizhu:''
-            },
             attachColumns:[
                 {
                     key: 'key1',
@@ -319,75 +198,8 @@ export default {
         }
     },
     methods: {
-        // 图片上传的限制方法
-        handleRemove(file, fileList) {
-            console.log(file, fileList);
-        },
-        handlePreview(file) {
-            console.log(file);
-        },
-        handleExceed(files, fileList) {
-            this.$message.warning(`当前限制选择 3 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
-        },
-        beforeRemove(file, fileList) {
-            return this.$confirm(`确定移除 ${ file.name }？`);
-        },
-        // 导出
-        upload() {
-            //this.$api.confMangement.confUsageDetailExport();
-            console.log("导出年计划编制");
-        },
-        // 导入
-         download() {
-            //this.$api.confMangement.confUsageDetailExport();
-            console.log("导入年计划编制");
-        },
-        // 生成任务
-        generateTask() {
-            //this.$api.confMangement.confUsageDetailExport();
-            console.log("生成任务");
-        },
-        // 年度配合任务
-        yearCooperateTask() {
-            //this.$api.confMangement.confUsageDetailExport();
-            console.log("年度配合任务");
-        },
-        // 选择 计划部门 方法
-        PlanDep() {
-            this.isDeartPopVisible = true
-        },
-        addPeople(){
-            this.isDeartPopVisible =false
-            this.formdata.jihuabumen = "IT开发部"
-            },
-        //树结构点击事件
-        filterNode(value, data) {
-            if (!value) return true;
-            return data.label.indexOf(value) !== -1;
-        },
-        handleNodeClick(data) {
-            console.log(data);
-        },
-        MoreSearchPS(){
-
-        },
-        handleClick(){
-
-        }
     },
     watch:{
-        //新建一岗一表行数据清空
-        peopleJobgsTableVisible(val){
-            switch (val) {
-                case false:
-                    this.$refs['peopleTableForm'].resetFields();
-                    this.checked = false;
-                break;
-            
-                default:
-                break;
-            }
-            },
         rowDepartAnnPlanDettype(oldVal,newVal){
             this.ShowFinancVisible=this.rowDepartAnnPlanDettype;
         }
@@ -400,23 +212,4 @@ export default {
 }
 </style>
 <style lang='scss'>
-.btn-file {
-    margin-bottom:5px;
-    text-align:right;
-}
-.btn-wrapper {
-    text-align:right;
-    margin-bottom:5px;
-}
-.replydiag {
-    .el-textarea__inner {
-        min-height: 300px !important;
-    }
-}
-.el-dialog__body{
-    padding: 0;
-}
-.el-card__header{
-    padding: 10px 20px;
-}
 </style>

@@ -162,6 +162,10 @@ class ITEMData {
 							{
 								index: 'workItems',
 								title: '工作事项',
+							},
+							{
+								index: 'workItemsToGrantAuthorization',
+								title: '工作事项模板授权',
 							}
 						]
 					},
