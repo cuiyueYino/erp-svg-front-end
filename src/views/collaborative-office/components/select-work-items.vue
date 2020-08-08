@@ -40,7 +40,7 @@
 			</el-row>
 		</el-card>
 		<el-card class="box-card">
-			<el-table :row-class-name="tableRowClassName" @row-click="clickRow" :data="tableData" border>
+			<el-table size="small" highlight-current-row @row-click="clickRow" :data="tableData" border>
 				<el-table-column :formatter="statusShow" prop="status" label="状态" width="100" align="center"></el-table-column>
 				<el-table-column prop="voucherId" label="单据编号" align="center"></el-table-column>
 				<el-table-column prop="title" label="标题" align="center"></el-table-column>
@@ -200,17 +200,6 @@
 					this.currentTotal = data.data.data.total
 				})
 			},
-			// 选中背景色
-			tableRowClassName({
-				row,
-				rowIndex
-			}) {
-				var color = ""
-				if(typeof(this.rowClick.srcId) != "undefined" && row.srcId == this.rowClick.srcId) {
-					color = "warning-row"
-				}
-				return color;
-			},
 			//选中行
 			clickRow(row) {
 				this.rowClick = row
@@ -220,10 +209,6 @@
 </script>
 
 <style scoped>
-	.el-table>>>.warning-row {
-		background-color: #ffe48d;
-	}
-	
 	.box-card:first-child {
 		margin-bottom: 16px;
 	}

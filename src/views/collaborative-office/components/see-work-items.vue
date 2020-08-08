@@ -358,10 +358,6 @@
 		font-size: 20px;
 	}
 	
-	.el-table>>>.warning-row {
-		background-color: #ffe48d;
-	}
-	
 	>>>.el-card {
 		margin-bottom: 10px;
 	}

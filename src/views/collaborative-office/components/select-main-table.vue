@@ -38,7 +38,7 @@
 			</el-row>
 		</el-card>
 		<el-card class="box-card">
-			<el-table :row-class-name="tableRowClassName" @row-click="clickRow" :data="tableData" border>
+			<el-table size="small" highlight-current-row @row-click="clickRow" :data="tableData" border>
 				<el-table-column :formatter="statusShow" prop="status" label="状态" align="center"></el-table-column>
 				<el-table-column prop="code" label="主表编码" align="center"></el-table-column>
 				<el-table-column prop="name" label="主表名称" align="center"></el-table-column>
@@ -182,17 +182,6 @@
 					this.currentTotal = data.data.data.total
 				})
 			},
-			// 选中背景色
-			tableRowClassName({
-				row,
-				rowIndex
-			}) {
-				var color = ""
-				if(row.id == this.rowClickId) {
-					color = "warning-row"
-				}
-				return color;
-			},
 			//选中行
 			clickRow(row) {
 				this.rowClickId = row.id
@@ -203,10 +192,6 @@
 </script>
 
 <style scoped>
-	.el-table>>>.warning-row {
-		background-color: #ffe48d;
-	}
-	
 	.box-card:first-child {
 		margin-bottom: 16px;
 	}

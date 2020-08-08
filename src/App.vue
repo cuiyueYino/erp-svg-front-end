@@ -43,4 +43,8 @@ export default {
 @import './assets/css/main.scss';
 @import './assets/css/color-dark.css';
 /* @import "./assets/css/theme-green/color-green.css";   浅绿色主题*/
+/*el-table 选中行颜色*/
+	.el-table__body tr.current-row>td {
+		background-color: #DDF8D0 !important;
+	}
 </style>

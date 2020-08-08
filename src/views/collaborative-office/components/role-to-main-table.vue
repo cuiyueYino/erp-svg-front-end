@@ -44,9 +44,6 @@
 	}
 </script>
 <style scoped="scoped">
-	.el-table>>>.warning-row {
-		background-color: #ffe48d;
-	}
 	
 	.box-card:first-child {
 		margin-bottom: 16px;

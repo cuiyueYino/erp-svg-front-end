@@ -29,9 +29,7 @@
 					</el-col>
 				</el-row>
 			</el-form>
-		</el-card>
-		<el-card class="box-card">
-			<el-table ref="multipleTable" :row-class-name="tableRowClassName" @row-click="clickRow" :data="tableData" border @selection-change="handleSelectionChange">
+			<el-table size="small" highlight-current-row ref="multipleTable" height="700"  @row-click="clickRow" :data="tableData" border @selection-change="handleSelectionChange">
 				<el-table-column v-if="showFig == 2" type="selection" width="40" align="center"></el-table-column>
 				<el-table-column prop="code" label="主表编码" align="center"></el-table-column>
 				<el-table-column prop="name" label="主表名称" align="center"></el-table-column>
@@ -123,19 +121,6 @@
 					this.tableData = data.data.data
 				})
 			},
-			// 选中背景色
-			tableRowClassName({
-				row,
-				rowIndex
-			}) {
-				var color = ""
-				if(row.id == this.rowClick.id) {
-					color = "warning-row"
-				}
-				if(this.showFig == 1) {
-					return color;
-				}
-			},
 			//选中行
 			clickRow(row) {
 				this.rowClick = row
@@ -156,9 +141,6 @@
 </script>
 
 <style scoped>
-	.el-table>>>.warning-row {
-		background-color: #ffe48d;
-	}
 	
 	.box-card:first-child {
 		margin-bottom: 16px;

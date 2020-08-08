@@ -40,7 +40,4 @@
 		overflow: auto;
 	}
 	
-	.el-table>>>.warning-row {
-		background-color: #ffe48d;
-	}
 </style>
