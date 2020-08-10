@@ -1,6 +1,5 @@
 <template>
     <div v-if="ShowFinancVisible" class="itemDivStyle">
-    <div>公司年度计划汇总测试开始。。。。。。。。。。</div>
         <el-form
             label-width="110px"
             v-model="formdata"
@@ -97,7 +96,6 @@
                 </el-tab-pane>
             </el-tabs>
         </el-form>
-    <div>公司年度计划汇总测试结束。。。。。。。。。。</div>
     </div>
 </template>
 <script>
@@ -151,10 +149,12 @@ export default {
         }
     },
     methods: {
+        handleClick() {
+            
+        }
     },
     watch:{
         rowComPanDetaitype(oldVal,newVal){
-            debugger;
             this.ShowFinancVisible=this.rowComPanDetaitype;
         }
     }

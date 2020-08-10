@@ -1,6 +1,5 @@
 <template>
     <div v-if="ShowFinancVisible" class="itemDivStyle">
-    <div>部门月度计划开始。。。。。。。。。。a</div>
         <el-form
             :label-width="formLabelWidth"
             v-model="formdata"
@@ -139,7 +138,6 @@
         </el-form>
 
         </el-dialog>
-      <div>部门月度计划结束。。。。。。。。。</div>
     </div>
 </template>
 <script>
@@ -157,7 +155,6 @@ export default {
         return{
             formLabelWidth: "120px",
             ShowFinancVisible:false,
-            disabled:false,
             labelPosition: 'left',
             formdata:{},
             companyData:new proData().company,
@@ -273,7 +270,7 @@ export default {
         }
     },
     methods: {
-        
+        handleClick() {}
     },
     watch:{
         rowDepartMonPlanDettype(oldVal,newVal){

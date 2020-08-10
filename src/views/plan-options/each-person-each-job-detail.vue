@@ -1,6 +1,5 @@
 <template>
     <div v-if="ShowFinancVisible" class="itemDivStyle">
-    <div>一岗一表开始。。。。。。。。。。</div>
         <el-form
             :label-width="formLabelWidth"
             v-model="formdata"
@@ -117,7 +116,6 @@
             </el-tabs> 
         </el-form>
         </el-dialog>
-      <div>一岗一表结束。。。。。。。。。</div>
     </div>
 </template>
 <script>
@@ -290,7 +288,9 @@ export default {
         }
     },
     methods: {
-
+        handleClick() {
+            
+        }
     },
     watch:{
         rowEACHPerEachJobDettype(oldVal,newVal){
