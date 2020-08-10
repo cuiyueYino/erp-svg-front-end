@@ -13,14 +13,14 @@
                     <el-row>
                         <el-col :span="6">
                             <el-form-item label="当前流程" >
-                                <el-input v-model="formdata.awardcode" v-bind:disabled="disabled"></el-input>
+                                <el-input v-model="formdata.curProcess" v-bind:disabled="disabled"></el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="6" :offset="2">
                             <el-form-item label="审批类型" >
-                                <el-select v-model="formdata.project" value-key="value" v-bind:disabled="disabled">
+                                <el-select v-model="formdata.auditType" value-key="value" v-bind:disabled="disabled">
                                     <el-option
-                                        v-for="item in objectoptions"
+                                        v-for="item in auditTypes"
                                         :key="item.value"
                                         :label="item.label"
                                         :value="item.value"
@@ -30,24 +30,24 @@
                         </el-col>
                         <el-col :span="6" :offset="2">
                             <el-form-item label="来源节点">
-                                <el-input v-model="formdata.contractname" v-bind:disabled="disabled"></el-input>
+                                <el-input v-model="formdata.srcNodeName" v-bind:disabled="disabled"></el-input>
                             </el-form-item>
                         </el-col>
                     </el-row>
                     <el-row>
                         <el-col :span="6">
                             <el-form-item label="当前节点" >
-                                <el-input v-model="formdata.awardcode" v-bind:disabled="disabled"></el-input>
+                                <el-input v-model="formdata.curNodeName" v-bind:disabled="disabled"></el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="6" :offset="2">
                             <el-form-item label="业务工作" >
-                                 <el-input v-model="formdata.awardcode" v-bind:disabled="disabled"></el-input>
+                                 <el-input v-model="formdata.activityName" v-bind:disabled="disabled"></el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="6" :offset="2">
                             <el-form-item label="业务数据">
-                                <el-input v-model="formdata.contractname" v-bind:disabled="disabled"></el-input>
+                                <el-input v-model="formdata.metaClassName" v-bind:disabled="disabled"></el-input>
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -81,7 +81,7 @@
                     </el-row>
                     <el-row>
                         <el-col :span="22"> 
-                            <el-form-item label="修改方式" >
+                            <el-form-item label="流转方式" >
                                 <el-row>
                                     <el-col :span="20">
                                         <el-radio v-model="formdata.radio" label="1">略过当前节点直接流转到目标节点</el-radio>
@@ -98,7 +98,7 @@
                     <el-row>
                         <el-col :span="8"> 
                             <el-form-item label="当前审批人" >
-                                <el-input v-model="formdata.documentNo" size="mini" v-bind:disabled="disabled"></el-input>
+                                <el-input v-model="formdata.currReviewers" size="mini" v-bind:disabled="disabled"></el-input>
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -138,32 +138,83 @@ export default {
             LookOrupdate:false,
             rowUTStype:false,
             rowUTSDataObj:{},
-            rowDataprocessObj:{},
+            rowDataprocessObj:[],
             pageNum: 1,
             pageSize: 10,
             total: 20,
+            mailDetail:{},
+            auditMsg:[],
+            participatorList:[],
+            reviewerList:[],
             columns:[
                 {
-                    key: 'statusString',
+                    key: 'participatorTypeName',
                     title: '类别'
                 },
                 {
-                    key: 'statusString',
+                    key: 'content',
                     title: '内容'
                 },
                 {
-                    key: 'statusString',
+                    key: 'expression',
                     title: '表达式'
                 },
             ],  
+            auditTypes:[
+                {
+                    value:1,
+                    label:'普通审批'
+                },{
+                    value:2,
+                    label:'并行会签'
+                },{
+                    value:3,
+                    label:'串行会签'
+                }
+            ],
             formdata:{
-                radio:'',
+                radio:'1',
             },
             tableData:[],
             objectoptions:new proData().project,
         }
     },
     methods: {
+        showDetail(){
+            let data = {
+                mailInfo:{
+                    foid:this.rowCWMDataObj.foid,
+                    srcOid:this.rowCWMDataObj.srcOid
+                }
+            }
+            this.$api.processSet.getMailDetailInfo(data).then(res=>{
+                let detailMsg = res.data.data
+                this.mailDetail = detailMsg.mailDetail
+                this.auditMsg = detailMsg.auditMsg
+                this.rowDataprocessObj = detailMsg.auditMsg
+                this.participatorList = detailMsg.participatorList
+                this.reviewerList = detailMsg.reviewerList
+
+                this.formdata.curProcess = detailMsg.mailDetail.curProcess
+                this.formdata.auditType = detailMsg.mailDetail.auditType
+                this.formdata.srcNodeName = detailMsg.mailDetail.srcNodeName
+                this.formdata.curNodeName = detailMsg.mailDetail.curNodeName
+                this.formdata.activityName = detailMsg.mailDetail.activityName
+                this.formdata.metaClassName = detailMsg.mailDetail.metaClassName
+
+                this.tableData = detailMsg.participatorList
+
+                let tmpReviewers = ''
+                detailMsg.reviewerList.forEach(element => {
+                    tmpReviewers += element.fname + ','
+                });
+
+                this.formdata.currReviewers = tmpReviewers.substring(0,tmpReviewers.length-1)
+
+            },error=>{
+                console.log(error)
+            })
+        },
         //关闭当前dialog时给父组件传值
         handleClose(){
             this.$emit('changeShow',false);
@@ -195,6 +246,9 @@ export default {
     },
     watch:{
         rowCWMtype(oldVal,newVal){
+            if(oldVal){
+                this.showDetail()
+            }
             this.ShowFinancVisible=this.rowCWMtype;
             let finandata=this.rowCWMDataObj.finanrowId;
             let formDataA ={};

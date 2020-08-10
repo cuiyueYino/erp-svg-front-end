@@ -1,6 +1,5 @@
 <template>
     <div v-if="ShowFinancVisible" class="itemDivStyle">
-    <div>员工考评表汇总开始。。。。。。。。。。</div>
         <el-form
             :label-width="formLabelWidth"
             v-model="formdata"
@@ -36,7 +35,7 @@
                     <el-form-item label="年度：">
                         <el-select v-model="formdata.text" value-key="value" :disabled="true">
                             <el-option  
-                                v-for="item in text"
+                                v-for="item in yearData"
                                 :key="item.value"
                                 :label="item.label"
                                 :value="item.value"
@@ -48,7 +47,7 @@
                     <el-form-item label="月份：">
                         <el-select v-model="formdata.text" value-key="value" :disabled="true">
                             <el-option  
-                                v-for="item in text"
+                                v-for="item in monthData"
                                 :key="item.value"
                                 :label="item.label"
                                 :value="item.value"
@@ -122,7 +121,6 @@
             </el-tabs> 
         </el-form>
         </el-dialog>
-      <div>员工考评表汇总结束。。。。。。。。。</div>
     </div>
 </template>
 <script>
@@ -138,6 +136,8 @@ export default {
     },
     data(){
         return{
+            yearData:[],
+            monthData:[],
             formLabelWidth: "120px",
             ShowFinancVisible:false,
             disabled:false,
@@ -177,6 +177,9 @@ export default {
         }
     },
     methods: {
+        handleClick() {
+            
+        }
     },
     watch:{
         rowEmpApprTabNumDetailtype(oldVal,newVal){

@@ -24,7 +24,7 @@
                         </el-col>
                         <el-col :span="10" :offset="2">
                             <el-form-item label="被回复人" >
-                                <el-input v-model="formdata.Cnumber2" disabled></el-input>
+                                <el-input v-model="formdata.staffName" disabled></el-input>
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -36,7 +36,7 @@
                     <el-row>
                         <el-col :span="22">
                             <el-form-item label="回复内容" >
-                                <el-input type="textarea" v-model="formdata.remark" :rows="4" ></el-input>
+                                <el-input type="textarea" v-model="formdata.freplycontent" :rows="4" ></el-input>
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -113,8 +113,21 @@ export default {
         },
         //提交回复
         saveNewAndEdit(){
-            this.ShowFinancVisible= false;
-            this.$emit('changeShow',foredata,false);
+            let data = {
+                fcreator:this.formdata.senduserId,
+                freplyedpesron:this.formdata.staffId,
+                fpublish:this.formdata.checked == undefined || this.formdata.checked == false ? 0 : 1,
+                freplycontent:this.formdata.freplycontent,
+                faudit:this.formdata.foid
+            }
+
+            this.$api.processSet.addAuditReply(data).then(res=>{
+                 this.ShowFinancVisible= false;
+                 this.$emit('changeShow',this.formdata,true);
+            },error=>{
+                console.log(error)
+            })
+
         },
     },
     watch:{

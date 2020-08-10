@@ -1,6 +1,5 @@
 <template>
     <div v-if="ShowFinancVisible" class="itemDivStyle">
-    <div>一人一表任务表（任务调整功能）开始。。。。。。。。。。</div>
         <el-form
             label-width="110px"
             v-model="formdata"
@@ -26,38 +25,38 @@
             <el-row>
                 <el-col :span="6">
                     <el-form-item label="部门：">
-                        <el-input v-model="formdata.bumen" disabled="true"></el-input>
+                        <el-input v-model="formdata.bumen" :disabled="true"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="6" :offset="2">
                     <el-form-item label="任务状态：">
-                        <el-input v-model="formdata.renwuzhaungtai" disabled="true"></el-input>
+                        <el-input v-model="formdata.renwuzhaungtai" :disabled="true"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="6" :offset="2">
                     <el-form-item label="任务类型：">
-                        <el-input v-model="formdata.renwuleixing" disabled="true"></el-input>
+                        <el-input v-model="formdata.renwuleixing" :disabled="true"></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>
             <el-row>
                 <el-col :span="6">
                     <el-form-item label="任务级别：">
-                        <el-input v-model="formdata.renwujibie" disabled="true"></el-input>
+                        <el-input v-model="formdata.renwujibie" :disabled="true"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="3" :offset="1">
-                    <el-form-item label="周期性任务：" ><el-checkbox v-model="formdata.checked" disabled="true"></el-checkbox></el-form-item>
+                    <el-form-item label="周期性任务：" ><el-checkbox v-model="formdata.checked" :disabled="true"></el-checkbox></el-form-item>
                 </el-col>
                 <el-col :span="2">
-                    <el-form-item label="年计划调整：" ><el-checkbox v-model="formdata.checked" disabled="true"></el-checkbox></el-form-item>
+                    <el-form-item label="年计划调整：" ><el-checkbox v-model="formdata.checked" :disabled="true"></el-checkbox></el-form-item>
                 </el-col>
                 <el-col :span="9" :offset="2">
                     <el-form-item label="重点级别：">
-                        <el-checkbox-group v-model="focusLevelCheckList" disabled="true">
+                        <el-checkbox-group v-model="focusLevelCheckList" :disabled="true">
                             <el-checkbox label="集团重点"></el-checkbox>
                             <el-checkbox label="公司重点"></el-checkbox>
-                            <el-checkbox label="部门重点" disabled></el-checkbox>
+                            <el-checkbox label="部门重点"></el-checkbox>
                         </el-checkbox-group>
                     </el-form-item>
                 </el-col>  
@@ -221,7 +220,6 @@
                 </el-tab-pane>
             </el-tabs>
         </el-form>
-    <div>一人一表任务表（任务调整功能）结束。。。。。。。。</div>
     </div>
     
 </template>
@@ -339,7 +337,6 @@ export default {
             ],
             ShowFinancVisible:false,
             peopleJobgsTableVisible: false,
-            disabled:false,
             labelPosition: 'left',
             formdata:{},
             companyData:new proData().company,
@@ -354,6 +351,9 @@ export default {
         }
     },
     methods: {
+        handleClick() {
+
+        },
         objectSpanMethod({ row, column, rowIndex, columnIndex }) {
             if (columnIndex === 0) {
                 if (rowIndex === 1) {

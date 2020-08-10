@@ -1,6 +1,5 @@
 <template>
     <div v-if="ShowFinancVisible" class="itemDivStyle">
-    <div>经济效益指标开始。。。。。。。。。。</div>
         <el-form
             label-width="110px"
             v-model="formdata"
@@ -31,7 +30,7 @@
                 </el-col>
                 <el-col :span="6" :offset="2">
                     <el-form-item label="年度：">
-                        <el-select v-model="formdata.text" value-key="value" :disabled="true">
+                        <el-select v-model="formdata.yearData" value-key="value" :disabled="true">
                             <el-option
                                 v-for="item in companyData"
                                 :key="item.value"
@@ -45,7 +44,7 @@
                     <el-form-item label="月份：">
                         <el-select v-model="formdata.text" value-key="value" :disabled="true">
                             <el-option
-                                v-for="item in companyData"
+                                v-for="item in monthData"
                                 :key="item.value"
                                 :label="item.label"
                                 :value="item.value"
@@ -110,7 +109,6 @@
             </el-tabs> 
             
         </el-form>
-    <div>经济效益指标结束。。。。。。。。</div>
     </div>
     
 </template>
@@ -127,6 +125,8 @@ export default {
     },
     data(){
         return{
+            yearData:[],
+            monthData:[],
             ShowFinancVisible:false,
             peopleJobgsTableVisible: false,
             disabled:false,
@@ -194,6 +194,8 @@ export default {
         }
     },
     methods: {
+        handleClick() {}
+        
     },
     watch:{
         rowEncBenefitsIndDetailtype(oldVal,newVal){

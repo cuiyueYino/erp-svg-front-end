@@ -40,7 +40,7 @@
 			</el-row>
 		</el-card>
 		<el-card class="box-card">
-			<el-table size="small" highlight-current-row @row-click="clickRow" :data="tableData" border>
+			<el-table size="small" height="650" highlight-current-row @row-click="clickRow" :data="tableData" border>
 				<el-table-column :formatter="statusShow" prop="status" label="状态" width="100" align="center"></el-table-column>
 				<el-table-column prop="voucherId" label="单据编号" align="center"></el-table-column>
 				<el-table-column prop="title" label="标题" align="center"></el-table-column>
@@ -128,6 +128,7 @@
 						tempId: this.rowClick.tempId,
 						tableName: this.rowClick.tableName
 					}).then(data => {
+						console.log(data)
 						if(this.dataBack(data)) {
 							this.$parent.toSee(JSON.parse(data.data.data), this.rowClick.tempId, "1")
 						}

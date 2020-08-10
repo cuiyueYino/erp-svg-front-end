@@ -258,6 +258,26 @@ export default {
             let fromdata={};
             fromdata.page=val;
             fromdata.size=this.pageSize;
+            let namevalueS=this.dialog.name;
+            if(namevalueS && namevalueS!=''){
+                fromdata.tname=this.dialog.name;
+            }
+            let codevalueS=this.dialog.codeNomber;
+            if(codevalueS && codevalueS!=''){
+                fromdata.tcode=this.dialog.codeNomber;
+            }
+            let compvalueS=this.dialog.company;
+            if(compvalueS && compvalueS!=''){
+                fromdata.tcompanyname=this.dialog.company;
+            }
+            let departS=this.dialog.departmentName;
+            if(departS && departS!=''){
+                fromdata.tdepartmentname=this.dialog.departmentName;
+            }
+            let usertypeS=this.dialog.usertype;
+            if(usertypeS && usertypeS!='-1'){
+                fromdata.fpositionstate=this.dialog.usertype;
+            }
             this.GetUSerData(fromdata);
         },
         //获得查询结果

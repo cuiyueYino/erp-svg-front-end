@@ -174,6 +174,20 @@
                 <el-button type="primary" @click="onSubmit('form')">确 定</el-button>
             </div>
         </el-dialog>
+        <el-dialog title="删除邮件" :visible.sync="dialogFormVisible">
+            <el-form :model="deleteForm">   
+                <el-form-item :label-width="formLabelWidth">
+                    <el-radio v-model="deleteForm.radio" label="1">只删除选中邮件</el-radio>
+                </el-form-item>
+                <el-form-item :label-width="formLabelWidth">
+                    <el-radio v-model="deleteForm.radio" label="2">删除源单据所有邮件、流转记录并回收源单据</el-radio>
+                </el-form-item>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="dialogFormVisible = false">取 消</el-button>
+                <el-button type="primary" @click="deleteConfirm">确 定</el-button>
+            </div>
+        </el-dialog>
         <PSpage  :rowPSDataObj="rowPSDataObj" :rowPStype="rowPStype" @changeShow="showORhideForPS"/>
         <LWMworkflowpage  :rowLWMDataObj="rowLWMDataObj" :rowLWMtype="rowLWMtype" @changeShow="showORhidelookpage"/>
         <CWMworkflowpage  :rowCWMDataObj="rowCWMDataObj" :rowCWMtype="rowCWMtype" @changeShow="showORhideCpage"/>
@@ -196,10 +210,14 @@ export default {
             rowPSDataObj:{},
             rowLWMDataObj:{},
             rowCWMDataObj:{},
+            dialogFormVisible:false,
             pageNum: 1,
             pageSize: 10,
             total: '',
             labelPosition: 'left',
+            deleteForm:{
+                radio:'1'
+            },
             columns: [
                 {
                     type: 'selection'
@@ -354,6 +372,9 @@ export default {
                     this.rowLWMtype=true;
                     let finandata={};
                     finandata.foid=selectOption[0].foid;
+                    finandata.srcOid=selectOption[0].srcOid;
+                    finandata.operationType=false;
+                    finandata.lookflag = 'look'
                     finandata.nametitle="工作流监控";
                     this.rowLWMDataObj=finandata;
                 }
@@ -362,18 +383,40 @@ export default {
             }
         },
         //查看返回处理
-        showORhidelookpage(data){
-            this.rowLWMtype = false
+        showORhidelookpage(result){
+            if(result){
+                this.rowLWMtype = false
+                this.refresh()
+            } else {
+                this.rowLWMtype = false
+            }
         },
         //流转
         circulation(){
-            this.rowCWMtype = true;
-            let finandata={};
-            finandata.finanrowname="";
-            finandata.finanrowId="";
-            finandata.nametitle="工作流监控";
-            finandata.lookflag="update";
-            this.rowCWMDataObj=finandata;
+            // this.rowCWMtype = true;
+            // let finandata={};
+            // finandata.finanrowname="";
+            // finandata.finanrowId="";
+            // finandata.nametitle="工作流监控";
+            // finandata.lookflag="update";
+            // this.rowCWMDataObj=finandata;
+
+            let selectOption = this.multipleSelection;
+            if(selectOption.length >0){
+                if(selectOption.length >1){
+                    this.$message.error('只能选择一行!');
+                }else{
+                    this.rowCWMtype=true;
+                    let finandata={};
+                    finandata.foid=selectOption[0].foid;
+                    finandata.srcOid=selectOption[0].srcOid;
+                    finandata.operationType=false;
+                    finandata.nametitle="工作流监控";
+                    this.rowCWMDataObj=finandata;
+                }
+            }else{
+                this.$message.error('请选择一行你要查看的数据!');
+            }
         },
         //流转返回处理
         showORhideCpage(data){
@@ -452,34 +495,52 @@ export default {
         },
         //删除
         deleteMsg(){
-            if(this.multipleSelection.length > 1){
-                this.$message.error('只能选择一个删除');
-                return;
+            let selectOption = this.multipleSelection;
+            if(selectOption.length >0){
+                if(selectOption.length > 1){
+                    this.$message.error('只能选择一个删除');
+                    return;
+                } else {
+                    this.dialogFormVisible=true;
+                }
+            } else {
+                this.$message.error('请选择一行需要删除的数据!');
             }
+            
+        },
+        deleteConfirm(){
+            this.dialogFormVisible=false;
+            let data = {
+                removeType:this.deleteForm.radio,
+                mailInfo:{
+                    foid:this.multipleSelection[0].foid
+                }
+            }
+
+            this.$api.processSet.removeMail(data).then(res=>{
+                this.refresh()
+            },error=>{
+                console.log(error)
+            })
         },
         toEdit(){
-           /*let selectOption= this.multipleSelection;
+           let selectOption = this.multipleSelection;
             if(selectOption.length >0){
                 if(selectOption.length >1){
                     this.$message.error('只能选择一行!');
-                }else{
+                }  else{
                     this.rowLWMtype=true;
                     let finandata={};
-                    finandata.finanrowname="";
-                    finandata.finanrowId=selectOption[0].id;
+                    finandata.foid=selectOption[0].foid;
+                    finandata.srcOid=selectOption[0].srcOid;
+                    finandata.operationType=false;
+                    finandata.lookflag = 'edit';
                     finandata.nametitle="工作流监控";
                     this.rowLWMDataObj=finandata;
                 }
             }else{
                 this.$message.error('请选择一行你要查看的数据!');
-            }*/
-            this.rowLWMtype = true;
-            let finandata={};
-            finandata.finanrowname="";
-            finandata.finanrowId="";
-            finandata.nametitle="工作流监控";
-            finandata.lookflag="edit";
-            this.rowLWMDataObj=finandata;  
+            }
         },
         //查询发起人员
         MoreSearchPS(data){

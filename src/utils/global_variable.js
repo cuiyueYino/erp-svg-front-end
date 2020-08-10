@@ -81,7 +81,7 @@ const fieldTypeList = [{
 	label: '日期控件'
 }, {
 	id: '8',
-	label: '时间控件'
+	label: '日期时间控件'
 }, {
 	id: '9',
 	label: '枚举项'

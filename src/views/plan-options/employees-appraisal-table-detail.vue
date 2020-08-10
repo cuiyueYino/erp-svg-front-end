@@ -1,6 +1,5 @@
 <template>
     <div v-if="ShowFinancVisible" class="itemDivStyle">
-    <div>员工考评表开始。。。。。。。。。。</div>
         <el-form
             :label-width="formLabelWidth"
             v-model="formdata"
@@ -56,7 +55,7 @@
                     <el-form-item label="年份：">
                         <el-select v-model="formdata.text" value-key="value" :disabled="true">
                             <el-option  
-                                v-for="item in text"
+                                v-for="item in yearData"
                                 :key="item.value"
                                 :label="item.label"
                                 :value="item.value"
@@ -68,7 +67,7 @@
                     <el-form-item label="月份：">
                         <el-select v-model="formdata.text" value-key="value" :disabled="true">
                             <el-option  
-                                v-for="item in text"
+                                v-for="item in monthData"
                                 :key="item.value"
                                 :label="item.label"
                                 :value="item.value"
@@ -87,10 +86,10 @@
                     <el-button type="primary" size="mini" icon="el-icon-search" :disabled="true"></el-button>
                 </el-col>
                 <el-col :span="6" :offset="2">
-                    <el-form-item label="大学生：" ><el-checkbox v-model="formdata.checked" disabled="true"></el-checkbox></el-form-item>
+                    <el-form-item label="大学生：" ><el-checkbox v-model="formdata.checked" :disabled="true"></el-checkbox></el-form-item>
                 </el-col>
                 <el-col :span="6" :offset="2">
-                    <el-form-item label="试用期：" ><el-checkbox v-model="formdata.checked" disabled="true"></el-checkbox></el-form-item>
+                    <el-form-item label="试用期：" ><el-checkbox v-model="formdata.checked" :disabled="true"></el-checkbox></el-form-item>
                 </el-col>
             </el-row>
             <el-row>
@@ -160,7 +159,6 @@
             </el-tabs> 
         </el-form>
         </el-dialog>
-      <div>员工考评表。。。。。。。。。</div>
     </div>
 </template>
 <script>
@@ -176,9 +174,10 @@ export default {
     },
     data(){
         return{
+            yearData:[],
+            monthData:[],
             formLabelWidth: "120px",
             ShowFinancVisible:false,
-            disabled:false,
             labelPosition: 'left',
             formdata:{},
             companyData:new proData().company,
@@ -363,6 +362,9 @@ export default {
         }
     },
     methods: {
+        handleClick() {
+
+        }
     },
     watch:{
         rowEmpApprTabDetailtype(oldVal,newVal){

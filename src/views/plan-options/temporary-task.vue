@@ -1,6 +1,5 @@
 <template>
     <div v-if="ShowFinancVisible" class="itemDivStyle">
-    <div>临时任务派发开始。。。。。。。。。。</div>
         <el-form
             label-width="110px"
             v-model="formdata"
@@ -138,10 +137,10 @@
                 </el-col>
                 <el-col :span="14" :offset="2">
                     <el-form-item label="重要级别：" >
-                        <el-checkbox-group v-model="focusLevelCheckList" disabled="true">
+                        <el-checkbox-group v-model="focusLevelCheckList" :disabled="true">
                             <el-checkbox label="集团重点"></el-checkbox>
                             <el-checkbox label="公司重点"></el-checkbox>
-                            <el-checkbox label="部门重点" disabled></el-checkbox>
+                            <el-checkbox label="部门重点"></el-checkbox>
                         </el-checkbox-group>
                     </el-form-item>
                 </el-col>
@@ -176,7 +175,6 @@
                     ></dynamic-table>
               </el-col>
             </el-row>
-            <div>临时任务派发结束。。。。。。。。。。</div>
         </el-form>
     </div>
 </template>

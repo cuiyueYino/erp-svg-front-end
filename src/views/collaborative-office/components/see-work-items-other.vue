@@ -1,36 +1,20 @@
 <template>
-	<div style="height: 88vh; overflow-y:scroll">
+	<div style="height: 85vh; overflow-y:scroll">
 		<el-card class="box-card">
-			<el-row style="margin-bottom: 10px;">
-				<el-col :span="23">工作事项模板主表</el-col>
-				<el-col :span="1" style="text-align: right;">
-					<el-button type="danger" @click="$parent.toSelect()" size="mini" icon="el-icon-close"></el-button>
-				</el-col>
+			<el-row>
+				<el-col :span="23">工作事项</el-col>
 			</el-row>
-			<el-row style="margin-bottom: 10px;">
+			<el-row>
 				<el-col :span="18">
 					公司：
-					<el-select size='mini' value-key="id" v-model="company" placeholder="公司">
+					<el-select disabled size='mini' value-key="id" v-model="company" placeholder="公司">
 						<el-option v-for="item in CompanyData" :key="item.id" :label="item.name" :value="item">
 						</el-option>
 					</el-select>
 				</el-col>
-				<el-col :span="6" style="text-align: right;">
-					<el-button v-if="showFig" @click="submitForm(2)" type="success" size="mini" icon="el-icon-check">提交</el-button>
-					<el-button v-if="showFig" @click="submitForm(1)" type="success" size="mini" icon="el-icon-check">暂存</el-button>
-					<el-button @click="dialogVisible =  true" type="success" size="mini" icon="el-icon-check">选择模板</el-button>
-				</el-col>
 			</el-row>
-			<formAndTable dis="2" showAdd="1" ref="child" :form-data="conData"></formAndTable>
+			<formAndTable dis="1" showAdd="2" ref="child" :form-data="conData"></formAndTable>
 		</el-card>
-		<!--弹出框-->
-		<el-dialog title="工作事项主板模板" top="1vh" :destroy-on-close="true" center :visible.sync="dialogVisible" width="80%">
-			<selectMainTable show="1" ref="childMain"></selectMainTable>
-			<div slot="footer" class="dialog-footer">
-				<el-button @click="dialogVisible = false">取 消</el-button>
-				<el-button type="primary" @click="getDialogVisible">确 定</el-button>
-			</div>
-		</el-dialog>
 	</div>
 </template>
 <script>
@@ -43,18 +27,20 @@
 			selectMainTable,
 			formAndTable
 		},
-		props: {
-			//值
-			context: Object
-		},
 		data() {
 			return {
-				//提交/暂存按钮显示
-				showFig: false,
-				//主表弹出框
-				dialogVisible: false,
-				//选择公司
+				context: {},
 				company: "",
+				//主表ID
+				tempId: "",
+				conData: {
+					top: {},
+					bottom: []
+				},
+				//主表tableName
+				tableName: "",
+				//主表ID
+				tempId: "",
 				//全部服务
 				tServiceByParams: JSON.parse(localStorage.getItem('tServiceByParams')),
 				//全部公司
@@ -65,24 +51,20 @@
 				fieldBrowseList: JSON.parse(localStorage.getItem('fieldBrowseList')),
 				//公司部门职位的合集
 				allOrganizationInfo: JSON.parse(localStorage.getItem('allOrganizationInfo')),
-				//主表tableName
-				tableName: "",
-				//主表ID
-				tempId: "",
-				//传走的值 top主表  bottom子表List
-				conData: {
-					top: {},
-					bottom: []
-				}
 			}
 		},
 		created() {
+			if(this.$route.query.tempId) {
+				this.context = JSON.parse(this.$route.query.context)
+				this.context.tempId = this.$route.query.tempId
+			}
 			//最上端公司选择
 			this.CompanyData.forEach(item => {
 				if(item.name == "福佳集团") {
 					this.company = item
 				}
 			})
+			this.getDialogVisible()
 		},
 		methods: {
 			//提交/暂存
@@ -97,7 +79,9 @@
 					 * 存入外层信息
 					 * */
 					//单据编号
+					console.log(this.$refs.child.conData)
 					backData.voucherId = JSON.parse(JSON.stringify(backData.jsonStr.voucherId))
+
 					//标题
 					backData.title = JSON.parse(JSON.stringify(backData.jsonStr.title))
 					//经办人
@@ -105,8 +89,10 @@
 					//经办部门
 					backData.gestorDept = JSON.parse(JSON.stringify(backData.jsonStr.gestorDept))
 					//经办时间
+
 					backData.voucherTime = JSON.parse(JSON.stringify(backData.jsonStr.voucherTime))
 					//公司code
+
 					backData.companyCode = this.company.code
 					//登陆人
 					backData.creator = localStorage.getItem('ms_userId')
@@ -116,6 +102,9 @@
 					backData.tableName = this.tableName
 					//主表Id
 					backData.tempId = this.tempId
+					backData.srcId = JSON.parse(JSON.stringify(this.$refs.child.conData.id))
+					backData.oprStatus = 2
+
 					/*
 					 * 存入里层信息
 					 * */
@@ -123,8 +112,6 @@
 					backData.jsonStr.status = status
 					//公司ID
 					backData.jsonStr.company = this.company.id
-					//新增状态
-					backData.jsonStr.oprStatus = 1
 					/*
 					 * 删除所有显示内容  _NameShow
 					 * */
@@ -141,9 +128,10 @@
 									if(keyItem.indexOf("_NameShow") != -1) {
 										item[keyItem] = undefined
 									}
+									if(keyItem.indexOf("state") != -1) {
+										item[keyItem] = undefined
+									}
 								}
-								//添加新增状态
-								item.oprStatus = 1
 							})
 						}
 						//删除外层（主表）的显示数据
@@ -153,8 +141,8 @@
 					}
 					//后台需要json格式的数据 
 					backData.jsonStr = JSON.stringify(con)
-					this.$api.collaborativeOffice.apiUrl("workItem/insertWorkItem", backData).then(data => {
-						if(this.dataBack(data, "新增成功")) {
+					this.$api.collaborativeOffice.updateWorkItem(backData).then(data => {
+						if(this.dataBack(data, "修改成功")) {
 							this.$parent.toSelect()
 						}
 					})
@@ -164,45 +152,32 @@
 			},
 			//选择模板
 			getDialogVisible() {
-				/*
-				 * 获取模板详细数据
-				 */
-				//主表ID
-				this.tempId = this.$refs.childMain.rowClick.id
-				//根据主表ID查询详细信息
+				//获取模板详细数据
 				this.$api.collaborativeOffice.findById({
-					id: this.$refs.childMain.rowClick.id
+					id: this.context.tempId
 				}).then(data => {
-					//主表Name
+					//整理传入子组件的数据top 主表  bottom 子表
+					this.tempId = this.context.tempId
 					this.tableName = data.data.data.workItemTemp.tableName
-					//整理传入子组件的数据主表top  子表bottom 
 					this.conData.top = data.data.data.workItemTemp
+					this.$set(this.conData.top, "wholeData", this.context)
 					this.conData.bottom = data.data.data.workItemTempSub
-					//整理主表数据（主表1，子表2）
 					this.preview(this.conData.top.lines, "", 1)
-					//循环整理子表数据
 					this.conData.bottom.forEach((val, index) => {
+						this.$set(val, "wholeData", this.context)
 						this.preview(val.lines, index, 2)
 					})
 					//子表模板排序
 					this.conData.bottom.sort((a1, b1) => {
 						return a1.orderNum - b1.orderNum
 					})
-					//关闭弹出框
-					this.dialogVisible = false
-					//显示提交按钮
-					this.showFig = true
 				})
 			},
-			//数据整理（传入数据rowConList，下标rowIndex(子表用)，状态(主1子2)）
+			//数据整理
 			preview(rowConList, rowIndex, state) {
-				//排序和整理数据的最终结果cur
 				var cur = []
-				//排序判断用
 				let obj = {};
-				/*
-				 * 循环判断是否有添加服务的字段名
-				 */
+				//循环判断是否有添加服务的字段名
 				rowConList.forEach((item, index1) => {
 					this.tServiceByParams.forEach(val => {
 						if(item.serviceId != null && item.serviceId == val.foid) {
@@ -215,11 +190,9 @@
 							})
 						}
 					})
-					/*
-					 * 时间控件计算差值
-					 */
 					if(item.serviceId == 5) {
 						item.parameterList = []
+						//时间控件计算差值
 						rowConList.forEach(itemChild => {
 							//通过‘-’符号确定需要计算的两边
 							if(!this.noNull(itemChild.parameter) && itemChild.parameter.indexOf('-') != -1) {
@@ -240,14 +213,10 @@
 									item.parameterList.push(itemChild.field)
 								}
 							}
-
 						})
 					}
-					//添加校验
+					//行序按照填写排序
 					item.fieldTypeName = this.fieldTypeShow(item)
-					/*
-					 * 行序按照填写排序
-					 */
 					if(obj[item.showNum]) {
 						cur.forEach(val => {
 							if(val.showNum == item.showNum) {
@@ -296,7 +265,6 @@
 			},
 			//添加校验（显示的值的校验)
 			fieldTypeShow(item) {
-				//确定枚举9 浏览框1 点击时需要展开的数据并放在数据内存储
 				if(item.fieldType == 9) {
 					this.selectList.forEach(val => {
 						if(item.fieldContent == val.id) {
@@ -318,7 +286,6 @@
 					case "1":
 						//浏览框 : 一共有7种，其中1：公司，2：部门，3：职位可以共同使用同一个接口
 						var list = JSON.parse(JSON.stringify(this.allOrganizationInfo))
-						//添加不同浏览框打开弹出框的值browseBoxList
 						//公司
 						if(item.toSelect.id == 1) {
 							//删除部门和职位信息

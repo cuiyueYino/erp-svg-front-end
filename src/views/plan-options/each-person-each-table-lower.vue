@@ -1,6 +1,5 @@
 <template>
     <div v-if="ShowFinancVisible" class="itemDivStyle">
-    <div>一人一表任务表（下级任务功能）开始。。。。。。。。。。</div>
        <dynamic-table
             :columns="columns"
             :table-data="tableData"
@@ -13,7 +12,6 @@
             v-loading="false"
             element-loading-text="加载中"
         ></dynamic-table>
-    <div>一人一表任务表（下级任务功能）结束。。。。。。。。</div>
     </div>
     
 </template>

@@ -1,6 +1,5 @@
 <template>
     <div v-if="ShowFinancVisible" class="itemDivStyle">
-    <div>部门年度经济指标计划开始。。。。。。。。。。</div>
         <el-form
             label-width="110px"
             v-model="formdata"
@@ -84,7 +83,6 @@
             </el-tabs> 
             
         </el-form>
-    <div>部门年度经济指标计划结束。。。。。。。。</div>
     </div>
     
 </template>
@@ -213,23 +211,11 @@ export default {
                 },
             ],
             tableData:[],
-            peopleTableRules:{ 
-                zhibiaoku: [
-                { required: true, message: "请输入xxxxxx", trigger: "blur" }
-                ],
-                guanjinzhibiao: [
-                { required: true, message: "请输入xxxxxxxxxx", trigger: "blur" }
-                ],
-                zizhibiao: [
-                { required: true, message: "请输入xxxxxx", trigger: "blur" }
-                ],
-            },
         }
     },
     methods: {
         //pop框里面的新增表格行
         baseInputTable(Str) {
-            alert("新增111111111");
             this.peopleJobgsTableVisible = true;
         },
         MoreSearchPS(){

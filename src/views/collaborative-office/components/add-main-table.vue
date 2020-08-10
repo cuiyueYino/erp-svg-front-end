@@ -56,7 +56,7 @@
 					<el-col>工作事项模板主表行</el-col>
 				</el-row>
 				<el-form :model="ruleForm" :rules="rulesTable" ref="ruleFormTable">
-					<el-table size="small" height="400" :data="ruleForm.lines" border style="width: 100%">
+					<el-table size="small" height="600" :data="ruleForm.lines" border style="width: 100%">
 						<el-table-column prop="field" label="数据库字段名" align="center" width="120">
 							<template slot-scope="scope">
 								<el-form-item>
@@ -148,7 +148,7 @@
 								</el-form-item>
 							</template>
 						</el-table-column>
-						<el-table-column prop="parameter" label="参数" align="center">
+						<el-table-column prop="parameter" label="参数" align="center" width="200">
 							<template slot-scope="scope">
 								<el-form-item>
 									<el-input :disabled="showFigSee" v-model="scope.row.parameter" placeholder="参数"></el-input>
@@ -194,6 +194,7 @@
 	import selectMainTableClassification from './select-main-table-classification';
 	//预览
 	import formAndTable from './form-and-table';
+	import { computed } from './computed.js';
 	export default {
 		components: {
 			selectMainTableClassification,
@@ -344,6 +345,12 @@
 				fieldBrowseList: JSON.parse(localStorage.getItem('fieldBrowseList')),
 				//公司部门职位的合集
 				allOrganizationInfo: JSON.parse(localStorage.getItem('allOrganizationInfo')),
+				fo: {
+					a: 1,
+					b: 2,
+					c: 3,
+					d: 4
+				}
 			}
 		},
 		created() {
@@ -449,28 +456,30 @@
 							this.ruleForm.lines.forEach((item, index1) => {
 								item.parameterList = []
 								//时间控件计算差值
-								this.ruleForm.lines.forEach(itemChild => {
-									//通过‘-’符号确定需要计算的两边
-									if(!this.noNull(itemChild.parameter) && itemChild.parameter.indexOf('-') != -1) {
-										//left right 分别是需要计算的两个值的字段名称
-										var index = itemChild.parameter.indexOf('-')
-										var left = itemChild.parameter.substring(0, index)
-										var right = itemChild.parameter.substring(index + 1)
-										//两个字段都要添加属性parameterList，里面存储需要计算的字段名和需要显示的字段名child
-										if(left == item.field || right == item.field) {
-											item.parameterList = {}
-											item.parameterList.left = left
-											item.parameterList.right = right
-											item.parameterList.child = itemChild.field
+								if(item.serviceId == 5) {
+									this.ruleForm.lines.forEach(itemChild => {
+										//通过‘-’符号确定需要计算的两边
+										if(!this.noNull(itemChild.parameter) && itemChild.parameter.indexOf('-') != -1) {
+											//left right 分别是需要计算的两个值的字段名称
+											var index = itemChild.parameter.indexOf('-')
+											var left = itemChild.parameter.substring(0, index)
+											var right = itemChild.parameter.substring(index + 1)
+											//两个字段都要添加属性parameterList，里面存储需要计算的字段名和需要显示的字段名child
+											if(left == item.field || right == item.field) {
+												item.parameterList = {}
+												item.parameterList.left = left
+												item.parameterList.right = right
+												item.parameterList.child = itemChild.field
+											}
+										} else {
+											//发现被添加服务的字段后，绑定双方
+											if(itemChild.parameter == item.field) {
+												item.parameterList.push(itemChild.field)
+											}
 										}
-									} else {
-										//发现被添加服务的字段后，绑定双方
-										if(itemChild.parameter == item.field) {
-											item.parameterList.push(itemChild.field)
-										}
-									}
 
-								})
+									})
+								}
 								//行序按照填写排序
 								item.fieldTypeName = this.fieldTypeShow(item)
 								if(obj[item.showNum]) {

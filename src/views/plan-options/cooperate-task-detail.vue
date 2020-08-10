@@ -1,6 +1,5 @@
 <template>
     <div v-if="ShowFinancVisible" class="itemDivStyle">
-    <div>配合任务开始。。。。。。。。。。</div>
         <el-form
             :label-width="formLabelWidth"
             v-model="formdata"
@@ -99,10 +98,10 @@
                 </el-col>
                 <el-col :span="10" :offset="2">
                     <el-form-item label="重点级别：">
-                        <el-checkbox-group v-model="focusLevelCheckList" disabled="true">
+                        <el-checkbox-group v-model="focusLevelCheckList" :disabled="true">
                             <el-checkbox label="集团重点"></el-checkbox>
                             <el-checkbox label="公司重点"></el-checkbox>
-                            <el-checkbox label="部门重点" disabled></el-checkbox>
+                            <el-checkbox label="部门重点"></el-checkbox>
                         </el-checkbox-group>
                     </el-form-item>
                 </el-col>  
@@ -142,7 +141,6 @@
             ></dynamic-table>
         </el-form>
         </el-dialog>
-      <div>配合任务结束。。。。。。。。。</div>
     </div>
 </template>
 <script>
@@ -158,9 +156,9 @@ export default {
     },
     data(){
         return{
+            focusLevelCheckList:[],
             formLabelWidth: "120px",
             ShowFinancVisible:false,
-            disabled:false,
             labelPosition: 'left',
             formdata:{},
             companyData:new proData().company,

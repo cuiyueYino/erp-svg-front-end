@@ -1,6 +1,5 @@
 <template>
     <div v-if="ShowFinancVisible" class="itemDivStyle">
-    <div>部门年度计划开始。。。。。。。。。。</div>
         <el-form
             :label-width="formLabelWidth"
             v-model="formdata"
@@ -116,7 +115,6 @@
             </el-tabs> 
         </el-form>
         </el-dialog>
-      <div>部门年度计划结束。。。。。。。。。</div>
     </div>
 </template>
 <script>
@@ -198,6 +196,9 @@ export default {
         }
     },
     methods: {
+        handleClick() {
+            
+        }
     },
     watch:{
         rowDepartAnnPlanDettype(oldVal,newVal){
