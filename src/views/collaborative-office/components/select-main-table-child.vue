@@ -36,7 +36,7 @@
 			</el-row>
 		</el-card>
 		<el-card class="box-card">
-			<el-table size="small" highlight-current-row @row-click="clickRow" :data="tableData" border>
+			<el-table size="small" height="650" highlight-current-row @row-click="clickRow" :data="tableData" border>
 				<el-table-column :formatter="statusShow" prop="status" label="状态" width="180" align="center"></el-table-column>
 				<el-table-column prop="code" label="子表编码" width="180" align="center"></el-table-column>
 				<el-table-column prop="name" label="子表名称" width="180" align="center"></el-table-column>

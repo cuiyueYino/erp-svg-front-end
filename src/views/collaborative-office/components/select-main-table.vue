@@ -4,28 +4,26 @@
 			<el-row :gutter="24">
 				<el-col :span="14">
 					<el-form label-width="10px" :model="formInline" class="demo-form-inline">
-						<el-form label-width="10px" :model="formInline" class="demo-form-inline">
-							<el-row>
-								<el-col :span="8">
-									<el-form-item>
-										<el-select style="width: 100%;" clearable @change="selectChange" v-model="value" value-key="id">
-											<el-option v-for="item in formInlineList" :key="item.id" :label="item.name" :value="item">
-											</el-option>
-										</el-select>
-									</el-form-item>
-								</el-col>
-								<el-col :span="8">
-									<el-form-item>
-										<el-input clearable v-model="selectData"></el-input>
-									</el-form-item>
-								</el-col>
-								<el-col :span="4">
-									<el-form-item>
-										<el-button type="primary" @click="$refs.pageNation.toBegin()">搜索</el-button>
-									</el-form-item>
-								</el-col>
-							</el-row>
-						</el-form>
+						<el-row>
+							<el-col :span="8">
+								<el-form-item>
+									<el-select style="width: 100%;" clearable @change="selectChange" v-model="value" value-key="id">
+										<el-option v-for="item in formInlineList" :key="item.id" :label="item.name" :value="item">
+										</el-option>
+									</el-select>
+								</el-form-item>
+							</el-col>
+							<el-col :span="8">
+								<el-form-item>
+									<el-input clearable v-model="selectData"></el-input>
+								</el-form-item>
+							</el-col>
+							<el-col :span="4">
+								<el-form-item>
+									<el-button type="primary" @click="$refs.pageNation.toBegin()">搜索</el-button>
+								</el-form-item>
+							</el-col>
+						</el-row>
 					</el-form>
 				</el-col>
 				<el-col v-show="show != '1'" style="text-align: right;" :span="10">
@@ -38,7 +36,7 @@
 			</el-row>
 		</el-card>
 		<el-card class="box-card">
-			<el-table size="small" highlight-current-row @row-click="clickRow" :data="tableData" border>
+			<el-table size="small" height="500" highlight-current-row @row-click="clickRow" :data="tableData" border>
 				<el-table-column :formatter="statusShow" prop="status" label="状态" align="center"></el-table-column>
 				<el-table-column prop="code" label="主表编码" align="center"></el-table-column>
 				<el-table-column prop="name" label="主表名称" align="center"></el-table-column>

@@ -12,6 +12,8 @@ const workItems = () =>
 	import('./work-items.vue');
 const workItemsToGrantAuthorization = () =>
 	import('./work-items-to-grant-authorization.vue');
+const seeWorkItem = () =>
+	import('../../views/collaborative-office/components/see-work-items-other.vue');
 
 const InsideMail = [{
 		path: 'templateMainTableClassification',
@@ -67,6 +69,14 @@ const InsideMail = [{
 		component: workItemsToGrantAuthorization,
 		meta: {
 			title: '工作事项模板授权'
+		}
+	},
+	{
+		path: 'seeWorkItem',
+		name: 'seeWorkItem',
+		component: seeWorkItem,
+		meta: {
+			title: '工作流查看'
 		}
 	}
 ];

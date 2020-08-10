@@ -14,6 +14,15 @@ export default {
 		Vue.prototype.goOut = function(error) {
 			this.$message.error(error);
 		};
+		//警告框弹出
+		Vue.prototype.goOut2 = function(error) {
+			this.$message({
+				showClose: true,
+				message: error,
+				type: 'error',
+				duration: 0
+			});
+		};
 		//成功框弹出
 		Vue.prototype.goOk = function(success) {
 			this.$message.success(success);

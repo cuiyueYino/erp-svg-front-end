@@ -40,19 +40,20 @@
 					<div v-if="item.show">
 						<el-form-item v-if="item.fieldTypeName == 'browseBox'" :label="item.fieldName" :prop="item.field+'_NameShow'">
 							<!-- 浏览框 -->
-							<el-input style="width: 100%;" v-model="ruleForm[item.field+'_NameShow']" disabled>
+							<a @click="toNew(ruleForm[item.field])" v-if="dis == '1' && item.toSelect.id == '7'" href="javascript:void(0)">{{ruleForm[item.field+'_NameShow']}}</a>
+							<el-input v-else style="width: 100%;" v-model="ruleForm[item.field+'_NameShow']" disabled>
 								<el-button @click="findDialogVisible(item)" slot="append" icon="el-icon-search"></el-button>
 							</el-input>
 						</el-form-item>
 						<el-form-item v-else :label="item.fieldName" :prop="item.field">
 							<!-- 字符型 / 文本框 / 整型 / 浮点型 -->
-							<el-input v-if="item.fieldTypeName=='character' || item.fieldTypeName=='textType' || item.fieldTypeName=='integers' || item.fieldTypeName=='floatingPoint' && item.show" style="width: 100%;" v-model="ruleForm[item.field]" :disabled="!item.edit" />
+							<el-input @focus="fuwu(item)" v-if="item.fieldTypeName=='character' || item.fieldTypeName=='textType' || item.fieldTypeName=='integers' || item.fieldTypeName=='floatingPoint' && item.show" style="width: 100%;" v-model="ruleForm[item.field]" :disabled="!item.edit" />
 							<!--富文本-->
 							<quill-editor v-if="item.fieldTypeName == 'richText' && item.show" style="width: 100%;" v-model="ruleForm[item.field]" ref="myQuillEditor" :options="editorOption" @blur="onEditorBlur($event)" @focus="onEditorFocus($event)" @change="onEditorChange($event)"></quill-editor>
 							<!-- 日期选择器 -->
 							<el-date-picker v-if="item.fieldTypeName == 'dateControl' && item.show" @change="getDate(item)" style="width: 100%;" :disabled="!item.edit" v-model="ruleForm[item.field]" type="date" value-format="yyyy-MM-dd" placeholder="选择日期" />
 							<!--时间控件-->
-							<el-time-picker value-format="HH:mm:ss" format="HH:mm:ss" v-if="item.fieldTypeName == 'timeControl' && item.show" style="width: 100%;" v-model="ruleForm[item.field]"></el-time-picker>
+							<el-date-picker value-format="yyyy-MM-dd HH:mm:ss" format="yyyy-MM-dd HH:mm:ss" type="datetime" v-if="item.fieldTypeName == 'timeControl' && item.show" style="width: 100%;" v-model="ruleForm[item.field]"></el-date-picker>
 							<!-- 下拉框 -->
 							<el-select v-if="item.fieldTypeName == 'select' && item.show" style="width: 100%;" v-model="ruleForm[item.field]" :multiple="item.choice" clearable :disabled="!item.edit" :placeholder="item.placeholder">
 								<el-option v-for="itemSelect in item.resList" :key="itemSelect.id" :label="itemSelect.name" :value="itemSelect.id" />
@@ -89,6 +90,7 @@
 	import { quillEditor } from 'vue-quill-editor'; //调用编辑器
 	import 'quill/dist/quill.snow.css';
 	import * as Quill from 'quill';
+	import { computed } from '../computed.js';
 	export default {
 		components: {
 			quillEditor,
@@ -155,6 +157,7 @@
 				userList: JSON.parse(localStorage.getItem('userList')),
 				//职务
 				positionList: JSON.parse(localStorage.getItem('positionList')),
+				itemChildOther: {}
 			}
 		},
 		//销毁时间
@@ -220,7 +223,6 @@
 							this.$set(this.ruleForm, "gestorDept", "BFPID000000LRS001C")
 						}
 						this.$set(this.ruleForm, "oprStatus", 2)
-						console.log(this.formData)
 						this.$set(this.ruleForm, "id", this.formData.wholeData.id)
 					}
 					//不显示固定栏（子表）
@@ -234,6 +236,35 @@
 			}
 		},
 		methods: {
+			toNew(id) {
+				this.$api.collaborativeOffice.findDataBySrcId({
+					srcId: id,
+					tempId: this.itemChildOther.tempId,
+					tableName: this.itemChildOther.tableName
+				}).then(data => {
+					let routeData = this.$router.resolve({　　
+						path: '/seeWorkItem',
+						　　query: {
+							context: data.data.data,
+							tempId: this.formData.wholeData.tempId,
+							showSeeOrUpd: 1
+						}
+					});
+					window.open(routeData.href, '_blank');
+				})
+			},
+			//计算公式服务
+			fuwu(row) {
+				if(row.serviceId == 11) {
+					//row.parameter 计算公式 
+					let result = computed(row.parameter, this.ruleForm)
+					if(result.successCon) {
+						this.ruleForm[row.field] = result.con
+					} else {
+						this.goOut2("数据或者公式不全" + "\n计算数据:" + result.errorCon)
+					}
+				}
+			},
 			//查看页面根据ID获取浏览框内容 _NameShow  主表1 子表2
 			get_NameShow(state) {
 				//获取当前form应该展示的所有数据 
@@ -256,7 +287,7 @@
 				this.get_NameShowChlid(valObject)
 			},
 			//整理数据 valObject 是当前form显示数据
-			get_NameShowChlid(valObject) {
+			async get_NameShowChlid(valObject) {
 				for(var i = 0; i < this.formData.rowList.length; i++) {
 					for(var k = 0; k < this.formData.rowList[i].colList.length; k++) {
 						//懒得写那么长，item就是每条数据
@@ -337,8 +368,23 @@
 												}
 											})
 											break;
-										case "7":
 											//工作流
+										case "7":
+											await this.$api.collaborativeOffice.findPage({
+												size: 1000000,
+												page: 1,
+												creator: localStorage.getItem('ms_userId')
+											}).then(data => {
+												data.data.data.rows.forEach(itemChild => {
+													if(itemChild.srcId == valObject[key]) {
+														this.itemChildOther = itemChild
+														return new Promise(resolve => {
+															this.$set(this.ruleForm, key + "_NameShow", itemChild.title)
+															resolve({})
+														});
+													}
+												})
+											})
 											break;
 									}
 								}
@@ -349,13 +395,8 @@
 			},
 			//这个是给 工作流弹出框子组件调用的，确定时，返回字段
 			getWorkDialig(row) {
-				this.$set(this.ruleForm, this.dialogVisibleCon.field + '_NameShow', row.tempName)
-				this.$set(this.ruleForm, this.dialogVisibleCon.field, row.tempId)
-				//如果有联动查询的数据（其实工作流也没啥联动，懒得删了，一旦后期有了呢）
-				if(this.dialogVisibleCon.parameterList.length != 0) {
-					//调用toGetServiceNow（绑定的联动改变字段，获取的选中id）
-					this.toGetServiceNow(this.dialogVisibleCon.parameterList, row.tempId)
-				}
+				this.$set(this.ruleForm, this.dialogVisibleCon.field + '_NameShow', row.title)
+				this.$set(this.ruleForm, this.dialogVisibleCon.field, row.srcId)
 				this.$refs.childWork.dialogVisible = false
 			},
 			//让当前时间动起来~
@@ -540,12 +581,6 @@
 												resolve({
 													id: data.data.data.vicePresidentId,
 													name: data.data.data.vicePresidentName
-												})
-												break;
-											case "service05":
-												resolve({
-													id: "",
-													name: ""
 												})
 												break;
 											case "service03":

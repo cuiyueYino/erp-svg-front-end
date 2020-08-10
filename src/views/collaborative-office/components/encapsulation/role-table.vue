@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<el-card class="box-card">
-			<el-form label-width="10px" :model="formInline" class="demo-form-inline">
+			<el-form style="margin-bottom: 10px;" label-width="10px" :model="formInline" class="demo-form-inline">
 				<el-row>
 					<el-col :span="7">
 						<el-form-item>

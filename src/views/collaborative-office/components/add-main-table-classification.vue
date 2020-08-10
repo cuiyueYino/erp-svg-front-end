@@ -55,7 +55,7 @@
 			</el-row>
 
 			<el-form :model="ruleForm" :rules="rulesTable" ref="ruleFormTable">
-				<el-table size="small" height="400" :data="ruleForm.lines" border style="width: 100%">
+				<el-table size="small" height="600" :data="ruleForm.lines" border style="width: 100%">
 					<el-table-column prop="date" label="数据库字段名" align="center">
 						<template slot-scope="scope">
 							<el-form-item :prop="'lines[' + scope.$index + '].field'" :rules="rulesTable.field">
@@ -74,7 +74,7 @@
 						<template slot-scope="scope">
 							<el-form-item :prop="'lines[' + scope.$index + '].fieldType'" :rules="rulesTable.fieldType">
 								<el-select clearable :disabled="scope.row.showFig || showFigAll" style="width: 100%;" v-model="scope.row.fieldType" placeholder="字段类型">
-									<el-option v-for="item in options" :key="item.id" :label="item.label" :value="item.id">
+									<el-option v-for="item in fieldTypeList" :key="item.id" :label="item.label" :value="item.id">
 									</el-option>
 								</el-select>
 							</el-form-item>
@@ -223,37 +223,7 @@
 				},
 				ruleFormTable: {},
 				CompanyData: [],
-				options: [{
-					id: '1',
-					label: '浏览框'
-				}, {
-					id: '2',
-					label: '字符型'
-				}, {
-					id: '3',
-					label: '文本型'
-				}, {
-					id: '4',
-					label: '整型'
-				}, {
-					id: '5',
-					label: '浮点型'
-				}, {
-					id: '6',
-					label: '富文本'
-				}, {
-					id: '7',
-					label: '日期控件'
-				}, {
-					id: '8',
-					label: '时间控件'
-				}, {
-					id: '9',
-					label: '枚举项'
-				}, {
-					id: '10',
-					label: '复选框'
-				}, ],
+				fieldTypeList: this.$GLOBAL.fieldTypeList,
 				ruleForm: {
 					code: "",
 					name: "",

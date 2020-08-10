@@ -461,30 +461,32 @@
 							let obj = {};
 							//循环判断是否有添加服务的字段名
 							this.ruleForm.lines.forEach((item, index1) => {
-								item.parameterList = []
-								//时间控件计算差值
-								this.ruleForm.lines.forEach(itemChild => {
-									//通过‘-’符号确定需要计算的两边
-									if(!this.noNull(itemChild.parameter) && itemChild.parameter.indexOf('-') != -1) {
-										//left right 分别是需要计算的两个值的字段名称
-										var index = itemChild.parameter.indexOf('-')
-										var left = itemChild.parameter.substring(0, index)
-										var right = itemChild.parameter.substring(index + 1)
-										//两个字段都要添加属性parameterList，里面存储需要计算的字段名和需要显示的字段名child
-										if(left == item.field || right == item.field) {
-											item.parameterList = {}
-											item.parameterList.left = left
-											item.parameterList.right = right
-											item.parameterList.child = itemChild.field
+								if(item.serviceId == 5) {
+									item.parameterList = []
+									//时间控件计算差值
+									this.ruleForm.lines.forEach(itemChild => {
+										//通过‘-’符号确定需要计算的两边
+										if(!this.noNull(itemChild.parameter) && itemChild.parameter.indexOf('-') != -1) {
+											//left right 分别是需要计算的两个值的字段名称
+											var index = itemChild.parameter.indexOf('-')
+											var left = itemChild.parameter.substring(0, index)
+											var right = itemChild.parameter.substring(index + 1)
+											//两个字段都要添加属性parameterList，里面存储需要计算的字段名和需要显示的字段名child
+											if(left == item.field || right == item.field) {
+												item.parameterList = {}
+												item.parameterList.left = left
+												item.parameterList.right = right
+												item.parameterList.child = itemChild.field
+											}
+										} else {
+											//发现被添加服务的字段后，绑定双方
+											if(itemChild.parameter == item.field) {
+												item.parameterList.push(itemChild.field)
+											}
 										}
-									} else {
-										//发现被添加服务的字段后，绑定双方
-										if(itemChild.parameter == item.field) {
-											item.parameterList.push(itemChild.field)
-										}
-									}
 
-								})
+									})
+								}
 								//行序按照填写排序
 								item.fieldTypeName = this.fieldTypeShow(item)
 								if(obj[item.showNum]) {
@@ -639,6 +641,7 @@
 		color: red;
 		font-size: 20px;
 	}
+	
 	>>>.el-card {
 		margin-bottom: 10px;
 	}
