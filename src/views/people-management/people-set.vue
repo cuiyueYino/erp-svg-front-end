@@ -479,6 +479,7 @@ export default {
         }),error => {
           console.log(error);
         }
+        
      },
     addDepart(){
       this.userVisible = false;
@@ -721,7 +722,8 @@ export default {
       }),
       error => {
         console.log(error);
-    };
+      };
+      this.isEdit = false;
     }
   }
 };

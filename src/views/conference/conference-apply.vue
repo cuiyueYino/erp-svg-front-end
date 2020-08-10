@@ -1344,6 +1344,7 @@ export default {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           console.log(this.searchForm);
+          debugger
           this.$api.confMangement
             .stagingConfApply(this.searchForm)
             .then((res) => {

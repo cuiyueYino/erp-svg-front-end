@@ -21,18 +21,20 @@
           <el-date-picker
             class="dateSelect"
             v-model="value2"
-            align="right"
-            type="datetime"
+            type="date"
             format="M月d日"
+            value-format="yyyy-MM-dd"
             size="small"
-            :picker-options="pickerOptions"
+            :clearable="false"
+            :editable="false"
+            disabled
           ></el-date-picker>
           <el-button type="primary" icon="el-icon-arrow-right" size="mini"></el-button>
         </el-col>
         <el-col :span="9" style="text-align: right;" v-if="buttonShow">
-          <el-button type="success" plain class="el-icon-plus" size="medium" @click="editStatus(0)">开始</el-button>
-          <el-button type="warning" plain class="el-icon-edit" size="medium" @click="editStatus(1)">停止</el-button>
-          <el-button type="primary" plain class="el-icon-unlock" size="medium" @click="outTime">超时</el-button>
+          <button class="bt-style bt-start" @click="editStatus(0)">开始</button>
+          <button class="bt-style bt-end" @click="editStatus(1)">停止</button>
+          <button class="bt-style bt-outTime" @click="outTime">超时</button>
         </el-col>
       </el-row>
     </el-card>
@@ -40,10 +42,25 @@
     <div class="row-list">
       <el-row :gutter="24">
         <div v-for="(item,index) in tableData" :key="item.foid">
-          <div :class="isclick != index ? 'moduleCut' : 'moduleCutClose'" :style="item.fconfshow == null ? moduleCut1 : moduleCut2" @click="button(item,index)"
+          <div :class="[
+          {'module background-img-1': (item.fconfshow == null && isclick != index)},
+          {'module background-img-2 leisure-click': (item.fconfshow == null && isclick == index)},
+          {'module background-img-3': (item.fconfshow != null && isclick != index)},
+          {'module background-img-4 using-click': (item.fconfshow != null && isclick == index)}
+          ]"
+               @click="button(item,index)"
                @dblclick="showConf(item)">
+            <div :class="[
+              {'mark-style mark-un-using': (item.fconfshow == null && isclick != index)},
+              {'mark-style mark-un-using-click': (item.fconfshow == null && isclick == index)},
+              {'mark-style mark-using': (item.fconfshow != null && isclick != index)},
+              {'mark-style mark-using-click': (item.fconfshow != null && isclick == index)}
+            ]">
+              {{index + 1}}
+            </div>
             <div class="second-li">
-              <label class="confName_style">{{item.fname}}</label>
+              <label
+                :class="item.fconfshow == null ? 'unusingConf-fontStyle confFirst_style' : 'usingConf-fontStyle confFirst_style'">{{item.fname}}</label>
             </div>
             <div v-if="item.fconfshow != null" class="third-li">
               <el-tooltip
@@ -55,14 +72,16 @@
                 <label
                   show-overflow-tooltip
                   width="80"
-                  class="confSecond_style"
+                  class="usingConf-fontStyle confSecond_style"
                 >{{item.fconfshow.fconvenerdept}}</label>
               </el-tooltip>
-              <label class="confThird_style">{{item.fconfshow.fimportance==0?'一般':'重要'}}</label>
-              <label class="confThird_style">{{item.fconfshow.fexternal==0?'对内':'对外'}}</label>
+              <label
+                class="usingConf-fontStyle confThird_style">{{item.fconfshow.fimportance==0?'一般':'重要'}}</label>
+              <label
+                class="usingConf-fontStyle confThird_style">{{item.fconfshow.fexternal==0?'对内':'对外'}}</label>
             </div>
             <div v-if="item.fconfshow != null" class="four-li">
-              <label class="confFour_style">{{item.fconfshow.confDatePeriod}}</label>
+              <label class="usingConf-fontStyle confFour_style">{{item.fconfshow.confDatePeriod}}</label>
             </div>
           </div>
         </div>
@@ -82,7 +101,8 @@
 </template>
 
 <script>
-  import vHead from '../../components/common/Header.vue';
+  import './conference-style.css';
+  import vHead from './conference-header.vue';
   import conferenceApplySearch from "./conference-apply-search";
 
   export default {
@@ -93,21 +113,13 @@
       conferenceApplySearch
     },
     created() {
-
       this.$nextTick(() => {
         this.getNowDate();
         this.getCompanyInfo();
         this.getTableData();
       });
     },
-    watch: {
-      companyName(val) {
-        console.log("1" + val);
-      },
-      fcompanyid(val) {
-        console.log("21" + val);
-      }
-    },
+    watch: {},
     data() {
       return {
         tagsList: [],
@@ -116,6 +128,7 @@
         options: [],
         value1: "",
         value2: "",
+        nowDate: "",
         isclick: -1,
         clickData: {},
         formProcess: {},
@@ -131,41 +144,7 @@
         total: 20,
         tableData: [],
         imgSrc: "",
-        pickerOptions: {
-          disabledDate(time) {
-            return time.getTime() > Date.now();
-          },
-          shortcuts: [
-            {
-              text: "今天",
-              onClick(picker) {
-                picker.$emit("pick", new Date());
-              },
-            },
-            {
-              text: "昨天",
-              onClick(picker) {
-                const date = new Date();
-                date.setTime(date.getTime() - 3600 * 1000 * 24);
-                picker.$emit("pick", date);
-              },
-            },
-            {
-              text: "一周前",
-              onClick(picker) {
-                const date = new Date();
-                date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
-                picker.$emit("pick", date);
-              },
-            },
-          ],
-        },
-        moduleCut1: {
-          backgroundImage: "url(" + require("./el-icon-leisure.png") + ")",
-        },
-        moduleCut2: {
-          backgroundImage: "url(" + require("./el-icon-using.png") + ")",
-        },
+        backgroundImg: "",
       };
     },
     methods: {
@@ -179,7 +158,7 @@
         this.getTableData();
       },
       // 显示功能按钮
-      button(item,index) {
+      button(item, index) {
         this.clickData = {};
         this.clickData = item;
         this.buttonShow = true;
@@ -193,28 +172,34 @@
           month: nowDate.getMonth() + 1,
           date: nowDate.getDate(),
         };
-        this.value2 = date.month + "-" + date.date;
+        this.value2 = date.year + "-" + date.month + "-" + date.date;
       },
-      // 开始按钮
+      // 开始，结束，超时
       editStatus(fstatus) {
         let data = {}
+        let confShow = this.clickData.fconfshow;
         if (fstatus == 0) {
           // 会议开始
           data.fconfid = this.clickData.foid
-        } else if (fstatus == 1) {
-          // 结束
-          data.foid = this.clickData.fconfshow.foid;
+        } else {
+          // 结束，超时
+          if (confShow == null) {
+            this.$message.error("当前会议室没有开始状态的会议！");
+            return;
+          }
+          data.foid = confShow.foid;
           data.fstatus = fstatus;
-        } else if (fstatus == 2) {
+        }
+        if (fstatus == 2) {
           // 超时
-          data.foid = this.clickData.fconfshow.foid;
-          data.fstatus = fstatus;
           data.fouttime = this.fouttime;
         }
         this.$api.confMangement.editConfMnt(data).then(
           (res) => {
             if (res.data.code == 0) {
-              this.$message.success("当前会议开始");
+              this.$message.success("设置成功");
+              //刷新页面
+              this.getTableData();
             } else {
               this.$message.error(res.data.msg);
             }
@@ -225,8 +210,7 @@
         );
       },
       outTime() {
-        // this.$refs.import.focus();
-        // this.isOutTime = true;
+
       },
       // 会议模态框
       showConf(item) {
@@ -245,6 +229,8 @@
       },
       // 获取表格数据
       getTableData() {
+        this.isclick = -1;
+        this.buttonShow = false;
         let data = {
           fcompany: this.fcompanyid,
           page: this.pageNum,
@@ -292,123 +278,43 @@
     },
   };
 </script>
+
 <style lang="scss" scoped>
-  .box-card {
-    margin: 16px 30px;
-    height: 80px;
+  /deep/ .el-dialog {
+    margin-top: 25vh !important;
+    border-radius: 0px 0px 5px 5px;
   }
 
-  .row-list{
-    border: 1px solid #EBEEF5;
-    background-color: #FFF;
-    color: #303133;
-    -webkit-transition: .3s;
-    transition: .3s;
-    border-radius: 4px;
-    margin: 16px 30px;
-    padding: 20px;
-    box-shadow: 0 2px 12px 0 rgba(0,0,0,.1);
-    height: 730px;
-    overflow: auto;
+  /deep/ .el-dialog__headerbtn {
+    top: 10px;
   }
 
-  .wrapper{
-    background: aliceblue;
+  /deep/ .el-dialog__headerbtn .el-dialog__close {
+    color: #FFFFFF;
   }
 
-  .confName_style {
-    font-size: 18px;
-    font-family: Microsoft YaHei;
-    font-weight: bold;
-    color: rgba(255, 255, 255, 1);
-    text-align: center;
+  /deep/ .el-table th {
+    background-color: #EDF5FF !important;
   }
 
-  .confSecond_style {
-    font-size: 9px;
-    font-family: Microsoft YaHei;
-    font-weight: 400;
-    color: rgba(255, 255, 255, 1);
-    padding-right: 10px;
-    display: inline-block;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    overflow: hidden;
-    width: 80px;
+  /deep/ .el-table th > .cell {
+    color: #2989FF;
   }
 
-  .moduleCut {
-    width: 350px;
-    height: 255px;
-    float: left;
-    margin: 60px 90px;
-    background-repeat: no-repeat;
-    background-size: 100% 100%;
+  /deep/ .el-dialog__body {
+    padding: 0px 20px;
   }
 
-  .moduleCutClose {
-    width: 350px;
-    height: 255px;
-    float: left;
-    margin: 60px 90px;
-    background-repeat: no-repeat;
-    background-size: 100% 100%;
-    box-shadow: 0px 0px 20px 1px #b0c1ff;
-    border-radius: 10px;
+  /deep/ .el-dialog__title {
+    line-height: 26px;
+    font-size: 16px;
+    color: #FFFFFF;
   }
 
-  .confThird_style {
-    font-size: 9px;
-    font-family: Microsoft YaHei;
-    font-weight: 400;
-    color: rgba(255, 255, 255, 1);
-    padding-right: 0px;
-    display: inline-block;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    overflow: hidden;
-    width: 50px;
-  }
-
-  .confFour_style {
-    font-size: 9px;
-    font-family: Microsoft YaHei;
-    font-weight: 400;
-    color: rgba(255, 255, 255, 1);
-    padding-right: 0px;
-    display: inline-block;
-  }
-
-  .second-li {
-    width: 100px;
-    margin: 70px 130px;
-    position: absolute;
-  }
-
-  .third-li {
-    width: 190px;
-    margin: 110px 90px;
-    position: absolute;
-  }
-
-  .four-li {
-    width: 90px;
-    margin: 140px 135px;
-    position: absolute;
-  }
-
-  .timeDialog {
-    width: 183px !important;
-    position: absolute;
-    left: 10%;
-    top: 20%;
-  }
-
-  .header-button {
-    border: 1px solid #2989ff !important;
-    border-radius: 3px 0px 0px 3px !important;
-    font-size:12px;
-    color:rgba(41,137,255,1);
+  /deep/ .el-dialog__header {
+    padding: 6px 20px 0px !important;
+    background-color: #2989FF !important;
+    border-radius: 5px 5px 0px 0px !important;
   }
 
   /deep/ .el-col-6 {
@@ -423,12 +329,15 @@
     width: 115px;
   }
 
-  /deep/ .el-card__body{
+  /deep/ .el-card__body {
     height: 100%;
   }
 
   /deep/ .dateSelect .el-input__inner {
     border: none !important;
+    font-size: 14px;
+    font-family: Microsoft YaHei;
+    color: #2989FF;
   }
 
   /deep/ .dateSelect .el-input__prefix {
