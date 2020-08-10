@@ -11,14 +11,13 @@
       style="z-index:2007"
     >
       <el-form>
-        <div style="height:350px;overflow:auto">
+        <div>
           <dynamic-table
             :columns="columns"
             :table-data="tableData"
-            :page-num="pageNum"
-            :page-size="pageSize"
             v-loading="false"
             element-loading-text="加载中"
+            :isShowPager="false"
           ></dynamic-table>
         </div>
         <el-row :gutter="20"></el-row>
@@ -143,6 +142,14 @@
   }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+  /deep/ .el-table__fixed-body-wrapper {
+    height: 450px;
+    overflow-y: scroll;
+    width: 100%;
+  }
 
+  /deep/ .el-table__body-wrapper{
+    height: 450px;
+  }
 </style>
