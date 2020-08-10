@@ -842,7 +842,6 @@ export default {
             const $T = Number(top.split('px')[0]);
             const disX = evt.clientX - $L;
             const disY = evt.clientY - $T;
-
             document.onmousemove = event => {
                 const moveEvent = window.event || event;
                 const L = moveEvent.clientX - disX < 0 ? 0 : moveEvent.clientX - disX;
