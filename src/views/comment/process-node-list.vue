@@ -8,28 +8,28 @@
             @selection-change="onSelectionChange"
             element-loading-text="加载中"
         >
-            <el-table-column label="流程节点" prop="Cnumber1"></el-table-column>
-            <el-table-column label="审批人" prop="Cnumber2"></el-table-column>
-            <el-table-column label="审批结论" prop="Cnumber3"></el-table-column>
-            <el-table-column label="审批说明" prop="Cnumber4"></el-table-column>
-            <el-table-column label="审批时间" prop="Cnumber5"></el-table-column>
-            <el-table-column label="标准时间" prop="Cnumber6"></el-table-column>
-            <el-table-column label="耗时" prop="Cnumber7"></el-table-column>
-            <el-table-column label="回复" prop="Cnumber8">
+            <el-table-column label="流程节点" prop="nodName"></el-table-column>
+            <el-table-column label="审批人" prop="staffName"></el-table-column>
+            <el-table-column label="审批结论" prop="auditResult"></el-table-column>
+            <el-table-column label="审批说明" prop="remark"></el-table-column>
+            <el-table-column label="审批时间" prop="fcreatetime"></el-table-column>
+            <el-table-column label="标准时间" prop="ftimeunit"></el-table-column>
+            <el-table-column label="耗时" prop="fmaxworktime"></el-table-column>
+            <el-table-column label="回复" >
                 <template slot-scope="scope" >
                     <el-button size="mini" type="primary" @click="onRowbuttonClick(scope.row)">回复</el-button>
                 </template>
             </el-table-column>
-            <el-table-column type="expand">
+            <el-table-column type="expand" >
                 <template slot-scope="props">
                     <el-form label-position="left" inline class="demo-table-expand">
-                        <elreplypage :ReplyData="props.row.replydata"></elreplypage>
+                        <elreplypage :ReplyData="props.row.auditReplyMsg"></elreplypage>
                     </el-form>
                 </template>
             </el-table-column>
-            <el-table-column label="纸质签收日期" prop="Cnumber9"></el-table-column>
+            <el-table-column label="纸质签收日期" prop="frewritedate"></el-table-column>
         </el-table>
-        <div class="pagination" v-if="processtableData.length >0">
+        <div class="pagination" v-if="processtableData.length > 0">
                 <el-pagination
                     :total="total"
                     background
@@ -54,7 +54,7 @@ import replypage from '../../components/common/reply/reply-main-page.vue';
 import elreplypage from '../../components/common/reply/el-reply-main.vue';
 export default {
     props: {
-        rowDataprocessObj:Object
+        rowDataprocessObj:Array
     },
     name: 'basetable',
     components: {
@@ -77,7 +77,8 @@ export default {
             rowRMPDataObj:{},
             rowRMPtype:false,
             labelPosition:'left',
-            processtableData: [
+            processtableData:[],
+            processtableTmp: [
                 {
                     Cnumber1:'qqqq',
                     Cnumber2:'1111',
@@ -142,10 +143,16 @@ export default {
         },
         //回复页面关闭
         closeReplyPage(data,type){
+            this.rowRMPtype = false
             if(type === false){
                 this.rowRMPtype = false
             }else{
-                this.rowRMPtype = true
+                this.rowRMPtype = false
+                //获取最新的回复信息
+                this.$api.processSet.getAuditAndReplyMsg(data.foid).then(res=>{
+            },error=>{
+                console.log(error)
+            })
             }
         },
         //下一页
@@ -167,8 +174,13 @@ export default {
             rowdata.senduserId=localStorage.getItem('ms_userId');
             this.rowRMPDataObj=rowdata;
             this.rowRMPtype= true;
-        },
-    }
+        }
+    },
+    watch:{
+            rowDataprocessObj(oldVal,newVal){
+                this.processtableData = this.rowDataprocessObj
+            }
+        }
 };
 </script>
 

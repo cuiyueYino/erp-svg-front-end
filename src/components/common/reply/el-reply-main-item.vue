@@ -1,19 +1,19 @@
 <template>
     <div>
-        <el-submenu v-if="ReplyItemData.resub" :index="ReplyItemData.index">
+        <el-submenu v-if="ReplyItemData.childReply" :index="ReplyItemData.index">
             <template slot="title">
                 <el-row>
                     <el-col :span="2">
-                        {{ ReplyItemData.fromusername }}
+                        {{ ReplyItemData.staffName }}
                     </el-col>
                     <el-col :span="1" :offset="1">
                         回复:
                     </el-col>
                     <el-col :span="2" :offset="1">
-                        {{ ReplyItemData.tousername }}
+                        {{ ReplyItemData.replyedName }}
                     </el-col>
                     <el-col :span="12" :offset="1">
-                    {{ ReplyItemData.title }}
+                    {{ ReplyItemData.replycontent }}
                     </el-col>
                     <el-col :span="2" :offset="1">
                         <el-button size="mini" type="primary" @click="onRowbuttonClick(ReplyItemData)">回复</el-button>
@@ -67,7 +67,7 @@ export default {
         };
     },             
     props: {
-        ReplyItemData: Object
+        ReplyItemData: Array
     },
     methods: {
         onRowbuttonClick(data){

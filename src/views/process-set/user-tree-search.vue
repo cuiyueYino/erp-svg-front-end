@@ -95,7 +95,7 @@
                 </el-card>
             </el-form>
             <span slot="footer" class="dialog-footer">
-                <el-button  type="primary" @click="saveConfig">确定</el-button>
+                <el-button  type="primary" @click="handleClose">确定</el-button>
             </span>
         </el-dialog>
     </div>
@@ -188,7 +188,8 @@ export default {
         //关闭当前dialog时给父组件传值
         handleClose(){
             this.ShowFinancVisible=false;
-            this.$emit('changeShow',false);
+            this.$emit('changeShow',this.teldata);
+            this.teldata = [];
         },
         //table选中事件
         onSelectionChange(val) {

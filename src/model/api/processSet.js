@@ -136,9 +136,9 @@ const processSet = {
         return httpReqest.post('api/wfInterfaces/workFlow/processMonitor/getMailDetail', params);
     },
 
-    //获取回复信息
-    getAuditReplyMsg(params){
-        return httpReqest.post('api/wfInterfaces/workFlow/processMonitor/getAuditReplyMsg', params);
+    //获取审批信息及回复信息
+    getAuditAndReplyMsg(params){
+        return httpReqest.post('api/wfInterfaces/workFlow/processMonitor/getAuditAndReplyMsg', params);
     },
 
     //新增审批回复信息
