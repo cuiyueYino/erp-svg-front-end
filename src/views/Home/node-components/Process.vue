@@ -176,6 +176,7 @@ export default {
         getSubprocessList(){
             this.$api.svg.getSubProcessList().then(res=>{
                 this.newData = res.data.data;
+                this.options = [];
                 this.newData.forEach(item => {
                     this.options.push({
                             label:item.fname,

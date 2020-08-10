@@ -21,7 +21,7 @@
             size="small"
             @submit.native.prevent
         >
-        <node-condition :visible = visibleF?(ConditionF?true:false):false :data="editConData?editConData:null" @saveFormData="saveFormData" > </node-condition>
+        <node-condition :visible = visibleF?(ConditionF?true:false):false :data="editConData?editConData:null" @saveFormData="saveConFormData" > </node-condition>
         <node-fork :visible = visibleF?(ForkF?true:false):false :data="editForkData?editForkData:null" @saveFormData="saveForkData" ></node-fork>
         <node-join :visible = visibleF?(JoinF?true:false):false :data="editJoinData?editJoinData:null"  @saveFormData="saveJoinData" ></node-join>
         <node-router-task :visible = visibleF?(TaskF?true:false):false :data="editRouterData?editRouterData:null" @saveFormData="saveRouteData"  ></node-router-task>
@@ -223,15 +223,15 @@ export default {
         },
         // 执行保存配置操作
         saveConfig () {
-            this.$refs.workflowConfigForm.validate(valid => {
-                if (!valid) return; 
-                this.visibleF = false;
-                this.dialogVisible = false;
-                // this.$emit('save', this.formData);
-            });
+            this.visibleF = false;
+            this.dialogVisible = false;
         },
         //手工活动保存
-        saveFormData(e,e2,e3){console.log(e,e2,e3)
+        saveConFormData(e,e2,e3){ console.log(e,e2,e3)
+            if( e.displayName =='' || e.work =='' || e.checkedCities.length ==0 || e2.length==0 ){
+                this.$message.error("保存失败,请填写必填信息");
+                return;
+            }
             this.formData = e;
             this.data.oid = e.oid;
             this.data.mactivity = {
@@ -251,36 +251,24 @@ export default {
                 "id": e.structureId,
             };  
             //参与者
-             switch (e.joinCheckBox) {
-                case 1:
-                    this.data.permission = 1;
-                    this.data.mntNextJoin = 0;
-                    this.data.canSkip = 0;
-                    this.data.multMail = 0;
-                   
-                    break;
-                case 2:
-                    this.data.mntNextJoin = 1;
-                    this.data.permission = 0;
-                    this.data.canSkip = 0;
-                    this.data.multMail = 0;
-                    break;
-                case 3:
-                    this.data.canSkip = 1;
-                    this.data.permission = 0;
-                    this.data.mntNextJoin = 0;
-                    this.data.multMail = 0;
-                    break;
-                case 4:
-                    this.data.multMail = 1;
-                    this.data.permission = 0;
-                    this.data.mntNextJoin = 0;
-                    this.data.canSkip = 0;
-                    break;
-            
-                default:
-                    break;
-            };
+             e.checkedCities.forEach(item => {
+                  switch (item) {
+                    case '由权限控制':
+                        this.data.permission = 1;
+                        break;
+                    case '手工指定下一节点参与者':
+                        this.data.mntNextJoin = 1;
+                        break;
+                    case '可略过':
+                        this.data.canSkip = 1;
+                        break;
+                    case '多封邮件':
+                        this.data.multMail = 1;
+                        break;
+                    default:
+                        break;
+                };
+              })
             //参与-表格
             e2.forEach(item => {
                 this.data.wfParticipator = {
@@ -344,11 +332,21 @@ export default {
                 default:
                     break;
             }
-           
+            this.data.service={
+                "oid": e.baseInputoid?e.baseInputoid:e.oid,
+                "code":e.baseInputcode,
+                "name":e.baseInputServe,
+                "fremark":e.fremark,
+                "expression":e.baseTextarea
+            }
         },
          //审核活动保存
         saveJoinData(e,e1,e2,e3,e4,e5){
             console.log(e,e1,e2,e3,e4,e5);
+             if( e.displayName =='' || e.work =='' || e.checkedCities.length ==0 || e2.length==0 ||e4.length==0 ){
+                this.$message.error("保存失败,请填写必填信息");
+                return;
+            }
             this.data.oid = e.oid;
             this.data.displayName = e.name;
             //业务工作
@@ -390,36 +388,26 @@ export default {
                     break;
             }
              //参与者
-             switch (e.joinCheckBox) {
-                case 1:
-                    this.data.permission = 1;
-                    this.data.mntNextJoin = 0;
-                    this.data.canSkip = 0;
-                    this.data.multMail = 0;
-                   
-                    break;
-                case 2:
-                    this.data.mntNextJoin = 1;
-                    this.data.permission = 0;
-                    this.data.canSkip = 0;
-                    this.data.multMail = 0;
-                    break;
-                case 3:
-                    this.data.canSkip = 1;
-                    this.data.permission = 0;
-                    this.data.mntNextJoin = 0;
-                    this.data.multMail = 0;
-                    break;
-                case 4:
-                    this.data.multMail = 1;
-                    this.data.permission = 0;
-                    this.data.mntNextJoin = 0;
-                    this.data.canSkip = 0;
-                    break;
-            
-                default:
-                    break;
-            };
+              e.checkedCities.forEach(item => {
+                  switch (item) {
+                    case '由权限控制':
+                        this.data.permission = 1;
+                        break;
+                    case '手工指定下一节点参与者':
+                        this.data.mntNextJoin = 1;
+                        break;
+                    case '可略过':
+                        this.data.canSkip = 1;
+                        break;
+                    case '多封邮件':
+                        this.data.multMail = 1;
+                        break;
+                
+                    default:
+                        break;
+                };
+              })
+             
             //参与-表格
             e1.forEach(item => {
                 this.data.wfParticipator = {
@@ -458,7 +446,7 @@ export default {
                 };
             });
             //审核单范围
-             e5.forEach(item => {
+             e3.forEach(item => {
                 this.data.wfViewOtherComments = {
                     wfViewOtherComment:[
                         {
@@ -471,7 +459,7 @@ export default {
             
            
          //决策类型
-          e5.forEach(item => {
+          e4.forEach(item => {
               this.data.decisions = {
                     decision:[
                         {

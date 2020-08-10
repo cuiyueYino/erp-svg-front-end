@@ -67,12 +67,15 @@
             </el-tab-pane>
             <el-tab-pane label="参与者" name="3">
                 <!-- Condition -->
-                <el-radio-group v-model="formData.joinCheckBox" class="joinCheckBox">
+                <el-checkbox-group v-model="checkedCities" label @change="checkboxChange" >
+                    <el-checkbox v-for="item in itemOptions"  :label="item" :key="item">{{item}}</el-checkbox>
+                </el-checkbox-group>
+                <!-- <el-radio-group v-model="formData.joinCheckBox" class="joinCheckBox">
                     <el-radio :label="1">由权限控制</el-radio>
                     <el-radio :label="2">手工指定下一节点参与者</el-radio>
                     <el-radio :label="3">可略过</el-radio>
                     <el-radio :label="4">多封邮件</el-radio>
-                </el-radio-group>
+                </el-radio-group> -->
                 <el-row :gutter="24" class="joinTableBox">
                     <el-col :span="20">
                         <dynamic-table
@@ -80,6 +83,8 @@
                             :table-data="joinusertableData"
                             @selection-change="onJoinUserSelectionChange"
                             v-loading="false"
+                            :height="200"
+                            :isShowPager="false"
                             element-loading-text="加载中"
                         ></dynamic-table>
                     </el-col>
@@ -100,6 +105,8 @@
                             :table-data="tableData"
                             @selection-change="onCopyToSelectionChange"
                             v-loading="false"
+                            :height="200"
+                            :isShowPager="false"
                             element-loading-text="加载中"
                         ></dynamic-table>
                     </el-col>
@@ -232,17 +239,17 @@
             <div v-show="showInfoCheck">
             <!-- 搜索框 -->
              <el-row :gutter="24">
-                  <el-col :span="8">
-                    <el-form-item label="编码" label-width="43px">
+                  <el-col :span="10">
+                    <el-form-item label="编码" label-width="60px">
                         <el-input clearable size="small" v-model="formData.formCode" placeholder="请输入条件值"></el-input>
                     </el-form-item>
                   </el-col> 
-                  <el-col :span="8">
-                    <el-form-item label="名称" label-width="43px">
+                  <el-col :span="10">
+                    <el-form-item label="名称" label-width="60px">
                         <el-input clearable size="small" v-model="formData.formName" placeholder="请输入条件值"></el-input>
                     </el-form-item>
                   </el-col> 
-                  <el-col :span="8">
+                  <!-- <el-col :span="8">
                     <el-form-item label="工作类型" label-width="70px">
                          <el-select v-model="formData.formCtionTypeCon" clearable placeholder="请选择">
                             <el-option
@@ -254,7 +261,7 @@
                         </el-select>
                         
                     </el-form-item>
-                  </el-col> 
+                  </el-col>  -->
              </el-row>
              <el-row :gutter="24">
                 <el-col :span="6" :offset="18">
@@ -334,6 +341,8 @@ export default {
     },
     data () {
         return {
+            itemOptions:['由权限控制', '手工指定下一节点参与者', '可略过', '多封邮件'],
+            checkedCities:['由权限控制'],
             tableLoading:false,
             checked:false,
             checked1:false,
@@ -371,7 +380,6 @@ export default {
                 maxWorkTime:'',
                 autoSubmit:'',
                 autoHurry:'',
-                joinCheckBox:1,
                 timeUnit:'1'
             },
             columns: [
@@ -500,6 +508,7 @@ export default {
         data: {
             handler (obj) {
              if(obj.name === "Join"){console.log( obj)
+                    this.checkedCities = [];
                    this.editData = obj;
                    this.formData.name = this.editData.displayName
                    this.formData.work = this.editData.mactivity.name
@@ -516,9 +525,10 @@ export default {
                    this.formData.timeUnit = this.editData.timeUnit       
                    this.formData.autoSubmit = this.editData.autoSubmit==1?true:false 
                    this.formData.autoHurry = this.editData.autoHurry==1?true:false 
-                   this.formData.joinCheckBox = this.editData.permission=='1'?1:this.editData.mntNextJoin=='1'?2:this.editData.canSkip=='1'?3:this.editData.multMail=='1'?4:null
+                   this.checkedCities.push(this.editData.permission=='1'?'由权限控制':this.editData.mntNextJoin=='1'?'手工指定下一节点参与者':this.editData.canSkip=='1'?'可略过':this.editData.multMail=='1'?'多封邮件':null)
                 //    this.joinusertableData = this.editData.wfParticipator.participator
                     let joinusertable = [];
+                    if( this.editData.wfParticipator.participator.length == 0)return
                    this.editData.wfParticipator.participator.forEach(item=>{
                        switch (item.type) {
                            case 3://用户
@@ -585,6 +595,7 @@ export default {
                    }
                    console.log(this.joinusertableData,joinusertable);
                     let tableDataNewSet = []
+                    if( this.editData.wfCopyTo.copyTo.length == 0)return
                     this.editData.wfCopyTo.copyTo.forEach(item=>{
                        switch (item.type) {
                            case 3://用户
@@ -692,20 +703,44 @@ export default {
                 // setTimeout(() => {
                 //     this.$refs.nameInput.focus();
                 // }, 100);
-            }else{
+            }else{console.log(this.decisionSelection)
+                  this.formData.checkedCities = this.checkedCities;
+                  let tableData3Chose = this.decisionSelection
                     this.$emit(
                     "saveFormData",
                     this.formData,
                     this.joinusertableData,
                     this.tableData,
                     this.tableData2,
-                    this.tableData3,
+                    tableData3Chose,
                     this.gridData,
                     ); 
             }
         },
     },
     methods: {
+         checkboxChange(e){
+            switch (e[e.length-1]) {
+            case "由权限控制":
+                    for(let i =0 ; i<e.length; i++){
+                        if( e[i] == "可略过" ){
+                            e.splice(i,1)
+                        }
+                    }
+                break;
+            case "可略过":
+                    for(let j =0 ; j<e.length; j++){
+                        if( e[j] == "由权限控制" ){
+                            e.splice(j,1)
+                        }
+                    }
+                break;
+            default:
+                break;
+            }
+        this.checkedCities = e;
+        console.log(this.checkedCities)
+        },
          basehandleClick(tab, event) {
             this.baseActiveNameStr = tab.label;
         },
@@ -958,7 +993,7 @@ export default {
         },
         //决策类型-多选
         onSelectionDecision(val){
-            this.decisionSelection = val;
+            this.decisionSelection = val;console.log(this.decisionSelection)
         },
         //审核单范围-多选
         onJoinSelectionChange(val){
@@ -1101,7 +1136,7 @@ export default {
          //分页、下一页
         onCurrentChange(val){
              this.pageNum = val;
-            this.workSearch('')
+            this.workSearch('审核工作')
         },
     }
 };

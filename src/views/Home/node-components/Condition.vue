@@ -46,12 +46,15 @@
         </el-tab-pane>
         <el-tab-pane label="参与者" name="3">
           <!-- Condition -->
-          <el-radio-group v-model="joinCheckBox" class="joinCheckBox">
+          <el-checkbox-group v-model="checkedCities" label @change="checkboxChange" >
+            <el-checkbox v-for="item in itemOptions"  :label="item" :key="item">{{item}}</el-checkbox>
+          </el-checkbox-group>
+          <!-- <el-radio-group v-model="joinCheckBox" class="joinCheckBox">
             <el-radio :label="1">由权限控制</el-radio>
             <el-radio :label="2">手工指定下一节点参与者</el-radio>
             <el-radio :label="3">可略过</el-radio>
             <el-radio :label="4">多封邮件</el-radio>
-          </el-radio-group>
+          </el-radio-group> -->
           <el-row :gutter="24" class="joinTableBox">
             <el-col :span="20">
               <dynamic-table
@@ -59,6 +62,8 @@
                 :table-data="joinusertableData"
                 @selection-change="onSelectionjoinuserChange"
                 v-loading="false"
+                :height="200"
+                :isShowPager="false"
                 element-loading-text="加载中"
               ></dynamic-table>
             </el-col>
@@ -78,6 +83,8 @@
                 :table-data="CCtableData"
                 @selection-change="onSelectionChangeCC"
                 v-loading="false"
+                :height="200"
+                :isShowPager="false"
                 element-loading-text="加载中"
               ></dynamic-table>
             </el-col>
@@ -285,6 +292,7 @@ export default {
     data: {
       handler(obj) {
       if(obj.name === "Condition"){console.log(obj)
+          this.checkedCities = [];
           this.editData = obj;
           this.displayName = this.editData.displayName
           this.formData.work = this.editData.mactivity.name
@@ -296,7 +304,7 @@ export default {
           // this.formData.structure = this.editData.orgUnit?this.editData.orgUnit.id:''
           // this.formData.checked = this.editData.hidden==1?true:false
           this.formData.fremark = this.editData.fremark
-          this.joinCheckBox = this.editData.permission=='1'?1:this.editData.mntNextJoin=='1'?2:this.editData.canSkip=='1'?3:this.editData.multMail=='1'?4:null
+          this.checkedCities.push(this.editData.permission=='1'?'由权限控制':this.editData.mntNextJoin=='1'?'手工指定下一节点参与者':this.editData.canSkip=='1'?'可略过':this.editData.multMail=='1'?'多封邮件':null)
           let tableDataNewSet = []
           this.editData.wfCopyTo.copyTo.forEach(item=>{
               switch (item.type) {
@@ -442,13 +450,13 @@ export default {
       if (bool) {
       } else {
         this.formData.displayName = this.displayName;
-        this.formData.joinCheckBox = this.joinCheckBox;
+        this.formData.checkedCities = this.checkedCities;
         this.formData.fremark = this.fremark;
         this.$emit(
           "saveFormData",
           this.formData,
           this.joinusertableData,
-          this.CCtableData
+          this.CCtableData,
         ); console.log( this.joinusertableData)
       }
     },
@@ -468,6 +476,8 @@ export default {
   },
   data() {
     return {
+      itemOptions:['由权限控制', '手工指定下一节点参与者', '可略过', '多封邮件'],
+      checkedCities:['由权限控制'],
       editData:{},
       fremark:"",
       displayName: "",
@@ -656,6 +666,28 @@ export default {
   },
   methods: {
     handleClick(tab, event) {},
+    checkboxChange(e){
+        switch (e[e.length-1]) {
+          case "由权限控制":
+                for(let i =0 ; i<e.length; i++){
+                    if( e[i] == "可略过" ){
+                        e.splice(i,1)
+                    }
+                }
+            break;
+          case "可略过":
+                for(let j =0 ; j<e.length; j++){
+                    if( e[j] == "由权限控制" ){
+                        e.splice(j,1)
+                    }
+                }
+            break;
+          default:
+            break;
+        }
+      this.checkedCities = e;
+      // console.log(this.checkedCities)
+    },
     basehandleClick(tab, event) {
       this.baseActiveNameStr = tab.label;
     },
@@ -1004,6 +1036,9 @@ export default {
 }
 /deep/ .el-form-item__content {
   display: flex;
+}
+.el-checkbox-group{
+      padding-left: 2px;
 }
 .icon-search {
   width: 24px;

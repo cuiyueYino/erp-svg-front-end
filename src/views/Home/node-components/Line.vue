@@ -55,11 +55,11 @@
                     </el-tab-pane>
                     <el-tab-pane label="调用服务" name="4">
                          <el-form-item label="条件" :label-width="formLabelWidth">
-                            <el-input placeholder="请选择" v-model="baseInput" :disabled="true"> </el-input>
+                            <el-input placeholder="请选择" v-model="formData.baseInputServe" :disabled="true"> </el-input>
                             <img class="icon-search" src="../../../assets/img/search.svg"  @click="baseInputTable('服务','服务查询')">
                         </el-form-item>
                         <el-form-item label="条件表达式" :label-width="formLabelWidth">
-                            <el-input type="textarea" v-model="baseTextarea"></el-input>
+                            <el-input type="textarea" v-model="formData.baseTextarea"></el-input>
                         </el-form-item>
                     </el-tab-pane>
                    
@@ -221,7 +221,9 @@ export default {
              if(obj.name === "Line"){console.log(obj)
                 this.editData = obj;
                 this.formData.code = this.editData.code
+                this.formData.oid = this.editData.oid
                 this.formData.fremark = this.editData.fremark
+                this.formData.baseTextarea = this.editData.expression
                 this.formData.name = this.editData.displayName
                 switch (this.editData.decisionType ) {
                 case 1:
@@ -257,6 +259,9 @@ export default {
                 //     this.$refs.nameInput.focus();
                 // }, 100);
             }else{
+                this.formData.baseInputoid= this.multipleSelection[0].foid
+                this.formData.baseInputcode= this.multipleSelection[0].fcode
+                this.formData.baseInputServe= this.multipleSelection[0].fname
                 this.$emit(
                     "saveLineData",
                     this.formData,
@@ -294,6 +299,9 @@ export default {
         },
         baseInputTable(str,title){ 
             this.dialogTableVisible = true;
+            this.baseInputTitle = title;
+            this.baseInputType = str;
+            this.workSearchTable()
         },
          //业务工作-新增
         gridDataAdd(){
@@ -301,7 +309,8 @@ export default {
                 this.$message.error('请正确选择');
                 return
             }
-            this.formData.work = this.multipleSelection[0].fname
+            this.formData= this.multipleSelection[0];
+            this.formData.baseInputServe= this.multipleSelection[0].fname
              this.dialogTableVisible = false;
              //console.log(this.formData.work )
         },

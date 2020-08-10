@@ -542,7 +542,7 @@ export default {
                     this.$message.success('保存成功');
                     sessionStorage.setItem("eidtMsg",null);
                 }else{
-                    this.$message.error("保存失败,请填写完整填写");
+                    this.$message.error("保存失败,请填写完整信息");
                 }
              
             },error=>{
@@ -613,7 +613,7 @@ export default {
                     this.$message.success('保存成功');
                     sessionStorage.setItem("eidtMsg",null);
                 }else{
-                    this.$message.error("保存失败,请填写完整填写");
+                    this.$message.error("保存失败,请填写完整信息");
                 }
             },error=>{
                 console.log(error)
