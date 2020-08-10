@@ -695,7 +695,7 @@ export default {
                         }
                     }
                 }
-            })
+            });
             newObj.push(...newEnd);
             this.dataObj = newObj;
             this.MMworkflowNodes=[];
@@ -704,13 +704,17 @@ export default {
                 this.workflowNodes.push(this.dataObj[k]);
                 this.MMworkflowNodes.push(this.dataObj[k]);  
             }
-            console.log(this.MMworkflowNodes)
+            
         }else{
             this.isEditF = false;
             this.isNewF = true;
             this.workflowNodes = [
                 ...TerminalNode()
-            ]
+            ];
+            this.MMworkflowNodes = [
+                ...TerminalNode()
+            ];
+            console.log(this.MMworkflowNodes)
         }
        })
 
@@ -770,7 +774,7 @@ export default {
             }
         },
         // 点击线名字事件
-        selectedNodeClick(item){
+        selectedNodeClick(item){//debugger
             let newData = []
             for(let k =0 ; k<this.dataObj.length; k++){
                 newData  = this.dataObj[k].transition;//debugger

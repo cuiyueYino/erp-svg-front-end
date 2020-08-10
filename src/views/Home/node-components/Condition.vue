@@ -305,7 +305,7 @@ export default {
                           fUsercode: "用户",
                           fUsername: item.user.name,
                           fUserRemake: item.expression,
-                          fUseroid:item.user.foid,
+                          fUseroid:item.user.oid,
                           oid:item.oid,
                           type:item.type,
                           typeName:'user',
@@ -316,7 +316,7 @@ export default {
                           fUsercode: "角色",
                           fUsername: item.role.name,
                           fUserRemake: item.expression,
-                          fUseroid:item.role.foid,
+                          fUseroid:item.role.oid,
                           oid:item.oid,
                           type:item.type,
                           typeName:'role',
@@ -327,7 +327,7 @@ export default {
                           fUsercode:  "服务",
                           fUsername: item.service.name,
                           fUserRemake: item.expression,
-                          fUseroid:item.service.foid,
+                          fUseroid:item.service.oid,
                           oid:item.oid,
                           type:item.type,
                           typeName:'service',
@@ -338,7 +338,7 @@ export default {
                           fUsercode: "职务",
                           fUsername: item.position.name,
                           fUserRemake: item.expression,
-                          fUseroid:item.position.foid,
+                          fUseroid:item.position.oid,
                           oid:item.oid,
                           type:item.type,
                           typeName:'position',
@@ -349,7 +349,7 @@ export default {
                           fUsercode: "表达式",
                           fUsername: item.expression.name,
                           fUserRemake: item.expression,
-                          fUseroid:item.expression.foid,
+                          fUseroid:item.expression.oid,
                           oid:item.oid,
                           type:item.type,
                           typeName:'expression',
@@ -371,7 +371,7 @@ export default {
                           fUsercode: "用户",
                           fUsername: item.user.name,
                           fUserRemake: item.expression,
-                          fUseroid:item.user.foid,
+                          fUseroid:item.user.oid,
                           oid:item.oid,
                           type:item.type,
                           typeName:'user',
@@ -382,7 +382,7 @@ export default {
                           fUsercode:  "角色",
                           fUsername: item.role.name,
                           fUserRemake: item.expression,
-                          fUseroid:item.role.foid,
+                          fUseroid:item.role.oid,
                           oid:item.oid,
                           type:item.type,
                           typeName:'role',
@@ -393,7 +393,7 @@ export default {
                           fUsercode: "服务",
                           fUsername: item.service.name,
                           fUserRemake: item.expression,
-                          fUseroid:item.service.foid,
+                          fUseroid:item.service.oid,
                           oid:item.oid,
                           type:item.type,
                           typeName:'service',
@@ -404,7 +404,7 @@ export default {
                           fUsercode: "职务",
                           fUsername: item.position.name,
                           fUserRemake: item.expression,
-                          fUseroid:item.position.foid,
+                          fUseroid:item.position.oid,
                           oid:item.oid,
                           type:item.type,
                           typeName:'position',
@@ -415,7 +415,7 @@ export default {
                           fUsercode: "表达式",
                           fUsername: item.expression.name,
                           fUserRemake: item.expression,
-                          fUseroid:item.expression.foid,
+                          fUseroid:item.expression.oid,
                           oid:item.oid,
                           type:item.type,
                           typeName:'expression',
@@ -449,7 +449,7 @@ export default {
           this.formData,
           this.joinusertableData,
           this.CCtableData
-        ); //console.log( this.formData)
+        ); console.log( this.joinusertableData)
       }
     },
     checked(val) {
@@ -669,6 +669,7 @@ export default {
             roleObj = this.roleReq;
             roleObj.type = 2;
             roleObj.typeName = "role";
+            roleObj.fUseroid = roleObj.foid;
             roleObj.fUsername = roleObj.name;
             roleObj.fUsercode = this.baseActiveNameStr;
             roleObj.fUserRemake = roleObj.role_expression;
@@ -681,6 +682,7 @@ export default {
             UroleObj.oid = this.UserListReq.userid;
             UroleObj.type = 3;
             UroleObj.typeName = "user";
+            UroleObj.fUseroid = UroleObj.foid;
             UroleObj.fUsername = UroleObj.fname;
             UroleObj.fUsercode = this.baseActiveNameStr;
             UroleObj.fUserRemake = UroleObj.fenglishname;
@@ -693,6 +695,7 @@ export default {
             SroleObj.type = 4;
             SroleObj.typeName = "service";
             SroleObj.fUsername = SroleObj.fname;
+            SroleObj.fUseroid = SroleObj.foid;
             SroleObj.fUsercode = this.baseActiveNameStr;
             SroleObj.fUserRemake = SroleObj.fenglishname;
             this.joinusertableData.push(SroleObj);
@@ -704,6 +707,7 @@ export default {
             ProleObj.type = 6;
             ProleObj.typeName = "position";
             ProleObj.fUsername = ProleObj.fname;
+            ProleObj.fUseroid = ProleObj.foid;
             ProleObj.fUsercode = this.baseActiveNameStr;
             ProleObj.fUserRemake = ProleObj.fenglishname;
             this.joinusertableData.push(ProleObj);
@@ -714,6 +718,7 @@ export default {
             BroleObj.type = 5;
             BroleObj.typeName = "expression";
             BroleObj.fUsername = this.baseTextarea;
+            BroleObj.fUseroid = BroleObj.foid;
             BroleObj.fUsercode = this.baseActiveNameStr;
             BroleObj.fUserRemake = "";
             this.joinusertableData.push(BroleObj);
@@ -726,6 +731,7 @@ export default {
             roleObj = this.roleReq; //console.log(roleObj)
             roleObj.type = 2;
             roleObj.typeName = "role";
+            roleObj.fUseroid = roleObj.foid;
             roleObj.fUsername = roleObj.name;
             roleObj.fUsercode = this.baseActiveNameStr;
             roleObj.fUserRemake = roleObj.role_expression;
@@ -737,6 +743,7 @@ export default {
             UroleObj = this.UserListReq;
             UroleObj.type = 3;
             UroleObj.typeName = "user";
+            UroleObj.fUseroid = UroleObj.foid;
             UroleObj.fUsername = UroleObj.fname;
             UroleObj.fUsercode = this.baseActiveNameStr;
             UroleObj.fUserRemake = UroleObj.fenglishname;
@@ -749,6 +756,7 @@ export default {
             SroleObj.type = 4;
             SroleObj.typeName = "service";
             SroleObj.fUsername = SroleObj.fname;
+            SroleObj.fUseroid = SroleObj.foid;
             SroleObj.fUsercode = this.baseActiveNameStr;
             SroleObj.fUserRemake = SroleObj.fenglishname;
             this.CCtableData.push(SroleObj);
@@ -760,6 +768,7 @@ export default {
             ProleObj.type = 6;
             ProleObj.typeName = "position";
             ProleObj.fUsername = ProleObj.fname;
+            ProleObj.fUseroid = ProleObj.foid;
             ProleObj.fUsercode = this.baseActiveNameStr;
             ProleObj.fUserRemake = ProleObj.fenglishname;
             this.CCtableData.push(ProleObj);
@@ -769,6 +778,7 @@ export default {
             let BroleObj = {};
             BroleObj.type = 5;
             BroleObj.typeName = "expression";
+             BroleObj.fUseroid = BroleObj.foid;
             BroleObj.fUsername = this.baseTextarea;
             BroleObj.fUsercode = this.baseActiveNameStr;
             BroleObj.fUserRemake = "";

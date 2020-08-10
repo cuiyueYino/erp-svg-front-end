@@ -538,8 +538,13 @@ export default {
             // 打开配置对话框   
             // this.dialogSaveVisible = true;
             this.$api.svg.addSvg(data).then(res=>{
-              console.log(res)
-              sessionStorage.setItem("eidtMsg",null);
+                if( res.data.data.msg == 'success' ){
+                    this.$message.success('保存成功');
+                    sessionStorage.setItem("eidtMsg",null);
+                }else{
+                    this.$message.error("保存失败,请填写完整填写");
+                }
+             
             },error=>{
                 console.log(error)
             })
@@ -604,8 +609,12 @@ export default {
             // 打开配置对话框   
             this.dialogSaveVisible = true;
             this.$api.svg.addSvg(data).then(res=>{
-              console.log(res)
-              sessionStorage.setItem("eidtMsg",null);
+                if( res.data.data.msg == 'success' ){
+                    this.$message.success('保存成功');
+                    sessionStorage.setItem("eidtMsg",null);
+                }else{
+                    this.$message.error("保存失败,请填写完整填写");
+                }
             },error=>{
                 console.log(error)
             })

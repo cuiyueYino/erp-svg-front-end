@@ -12,7 +12,7 @@
         <el-tabs v-model="activeName" @tab-click="handleClick">
             <el-tab-pane label="基本信息" name="1">
                  <el-form-item label="编码" :label-width="formLabelWidth" prop="code">
-                    <el-input ref="nameInput" v-model="formData.code" autocomplete="off" clearable></el-input>
+                    <el-input ref="nameInput" v-model="formData.code" @input="change($event)" autocomplete="off" clearable></el-input>
                 </el-form-item>
                 <el-form-item label="名称" :label-width="formLabelWidth" prop="name">
                     <el-input  v-model="formData.name" autocomplete="off" clearable></el-input>
@@ -30,7 +30,7 @@
                     <el-checkbox v-model="checked"></el-checkbox>
                 </el-form-item> -->
                 <el-form-item label="描述：" :label-width="formLabelWidth">
-                    <el-input maxlength="1000" clearable  autosize show-word-limit type="textarea" v-model="formData.fremark"></el-input>
+                    <el-input maxlength="1000" clearable @input="change($event)"  autosize show-word-limit type="textarea" v-model="formData.fremark"></el-input>
                 </el-form-item>
             </el-tab-pane>
            <el-tab-pane label="流转条件" name="2">
@@ -220,8 +220,8 @@ export default {
             handler (obj) {
              if(obj.name === "Line"){console.log(obj)
                 this.editData = obj;
-                this.formData.code = this.editData.linefcode
-                this.formData.fremark = this.editData.lineremark
+                this.formData.code = this.editData.code
+                this.formData.fremark = this.editData.fremark
                 this.formData.name = this.editData.displayName
                 switch (this.editData.decisionType ) {
                 case 1:
@@ -253,9 +253,9 @@ export default {
         visible (bool) {
             this.dialogVisible = bool;
             if (bool) {
-                setTimeout(() => {
-                    this.$refs.nameInput.focus();
-                }, 100);
+                // setTimeout(() => {
+                //     this.$refs.nameInput.focus();
+                // }, 100);
             }else{
                 this.$emit(
                     "saveLineData",
@@ -272,6 +272,9 @@ export default {
         })
     },
     methods: {
+        change(e){
+            this.$forceUpdate()
+        },
         // 取消配置操作
         cancelConfig () {
             this.dialogVisible = false;
