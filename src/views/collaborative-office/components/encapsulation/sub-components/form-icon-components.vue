@@ -72,7 +72,7 @@
 					<el-button type="primary" plain @click="resetForm('formInlineTNameJob')" class="search-all">重置</el-button>
 				</el-form-item>
 			</el-form>
-			<el-table :row-class-name="tableRowClassName" @row-click="clickRow" :data="dataCon.context" border>
+			<el-table highlight-current-row @row-click="clickRow" :data="dataCon.context" border>
 				<el-table-column prop="fcode" label="编码" align="center"></el-table-column>
 				<el-table-column prop="fname" label="名称" align="center"></el-table-column>
 				<el-table-column prop="fremark" label="描述" align="center"></el-table-column>
@@ -197,23 +197,6 @@
 					}
 				}
 			},
-			// 选中背景色
-			tableRowClassName({
-				row,
-				rowIndex
-			}) {
-				var color = ""
-				if(this.showFig == "user" || this.showFig == "jobSet") {
-					if(row.foid == this.backCon.value) {
-						color = "warning-row"
-					}
-				} else if(this.showFig == "personnel") {
-					if(row.toid == this.backCon.value) {
-						color = "warning-row"
-					}
-				}
-				return color;
-			},
 			//选中行，backCon是返回的值，全部变成label和value的形式
 			clickRow(row) {
 				if(this.showFig == "user" || this.showFig == "jobSet") {
@@ -232,10 +215,6 @@
 	.treeDivClass {
 		height: 600px;
 		overflow: auto;
-	}
-	
-	.el-table>>>.warning-row {
-		background-color: #ffe48d;
 	}
 	
 	>>>.el-dialog__body {

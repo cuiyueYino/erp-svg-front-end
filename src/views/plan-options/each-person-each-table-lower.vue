@@ -37,6 +37,9 @@ export default {
             tableData:[],
             columns:[
                     {
+                        type: 'selection'
+                    },
+                    {
                         key: 'key1',
                         title: '状态'
                     },

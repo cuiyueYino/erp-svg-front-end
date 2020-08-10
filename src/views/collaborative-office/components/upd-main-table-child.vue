@@ -203,7 +203,7 @@
 			</el-dialog>
 			<!--弹出框-->
 			<el-dialog title="服务" top="1vh" :destroy-on-close="true" center :visible.sync="dialogVisible_TServiceByParams" width="60%">
-				<el-table :row-class-name="tableRowClassName" @row-click="clickRow" :data="tServiceByParams" border>
+				<el-table size="small" highlight-current-row @row-click="clickRow" :data="tServiceByParams" border>
 					<el-table-column prop="fcode" label="服务编码"></el-table-column>
 					<el-table-column :formatter="ftypeShow" prop="ftype" label="服务类型"></el-table-column>
 					<el-table-column prop="fname" label="服务名称"></el-table-column>
@@ -909,17 +909,6 @@
 			toFieldContent(row) {
 				this.dialogVisible = true
 			},
-			// 选中背景色
-			tableRowClassName({
-				row,
-				rowIndex
-			}) {
-				var color = ""
-				if(row.foid == this.tServiceByParamsCon.foid) {
-					color = "warning-row"
-				}
-				return color;
-			},
 			//选中行
 			clickRow(row) {
 				console.log(row)
@@ -933,11 +922,6 @@
 		color: red;
 		font-size: 20px;
 	}
-	
-	.el-table>>>.warning-row {
-		background-color: #ffe48d;
-	}
-	
 	>>>.el-card {
 		margin-bottom: 10px;
 	}

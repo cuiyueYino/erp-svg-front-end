@@ -2,7 +2,7 @@
 	<div style="height: 85vh; overflow-y:scroll">
 		<el-card class="box-card">
 			<el-row>
-				<el-col :span="23">工作事项模板主表</el-col>
+				<el-col :span="23">工作事项</el-col>
 				<el-col :span="1" style="text-align: right;">
 					<el-button type="danger" @click="$parent.toSelect()" size="mini" icon="el-icon-close"></el-button>
 				</el-col>
@@ -14,6 +14,10 @@
 						<el-option v-for="item in CompanyData" :key="item.id" :label="item.name" :value="item">
 						</el-option>
 					</el-select>
+				</el-col>
+				<el-col v-if="showSeeOrUpd == 3" :span="6" style="text-align: right;">
+					<el-button @click="submitForm(2)" type="success" size="mini" icon="el-icon-check">提交</el-button>
+					<el-button @click="submitForm(1)" type="success" size="mini" icon="el-icon-check">暂存</el-button>
 				</el-col>
 			</el-row>
 			<formAndTable :dis="showSeeOrUpd" showAdd="2" ref="child" :form-data="conData"></formAndTable>
@@ -33,7 +37,7 @@
 		props: {
 			//值
 			context: Object,
-			showSeeOrUpd : String
+			showSeeOrUpd: String
 		},
 		data() {
 			return {
@@ -44,6 +48,10 @@
 					top: {},
 					bottom: []
 				},
+				//主表tableName
+				tableName: "",
+				//主表ID
+				tempId: "",
 				//全部服务
 				tServiceByParams: JSON.parse(localStorage.getItem('tServiceByParams')),
 				//全部公司
@@ -65,13 +73,99 @@
 			})
 			this.getDialogVisible()
 		},
-		methods: { //选择模板
+		methods: {
+			//提交/暂存
+			submitForm(status) {
+				//校验所有必填字段
+				if(this.$refs.child.onSubmit()) {
+					//获取返回字段的合集
+					var backData = {
+						jsonStr: this.$refs.child.conData
+					}
+					/*
+					 * 存入外层信息
+					 * */
+					//单据编号
+					console.log(this.$refs.child.conData)
+					backData.voucherId = JSON.parse(JSON.stringify(backData.jsonStr.voucherId))
+						
+					//标题
+					backData.title = JSON.parse(JSON.stringify(backData.jsonStr.title))
+					//经办人
+					backData.gestor = JSON.parse(JSON.stringify(backData.jsonStr.gestor))
+					//经办部门
+					backData.gestorDept = JSON.parse(JSON.stringify(backData.jsonStr.gestorDept))
+					//经办时间
+					
+					backData.voucherTime = JSON.parse(JSON.stringify(backData.jsonStr.voucherTime))
+					//公司code
+				
+					backData.companyCode = this.company.code
+					//登陆人
+					backData.creator = localStorage.getItem('ms_userId')
+					//暂存1 提交2
+					backData.status = status
+					//主表名称
+					backData.tableName = this.tableName
+					//主表Id
+					backData.tempId = this.tempId
+					backData.srcId = JSON.parse(JSON.stringify(this.$refs.child.conData.id))
+					backData.oprStatus = 2
+					
+					/*
+					 * 存入里层信息
+					 * */
+					//状态
+					backData.jsonStr.status = status
+					//公司ID
+					backData.jsonStr.company = this.company.id
+					/*
+					 * 删除所有显示内容  _NameShow
+					 * */
+					//复制数据（保证删除后页面显示不删除）
+					var con = JSON.parse(JSON.stringify(backData.jsonStr))
+					for(var key in con) {
+						//找到里层（子表）数据
+						if(typeof(con[key]) == "object") {
+							//循环删除里层的显示数据
+							con[key].forEach(item => {
+								//后台要的子表ID
+								this.$set(item, "tempSubId", key)
+								for(var keyItem in item) {
+									if(keyItem.indexOf("_NameShow") != -1) {
+										item[keyItem] = undefined
+									}
+									if(keyItem.indexOf("state") != -1) {
+										item[keyItem] = undefined
+									}
+								}
+							})
+						}
+						//删除外层（主表）的显示数据
+						if(key.indexOf("_NameShow") != -1) {
+							con[key] = undefined
+						}
+					}
+					//后台需要json格式的数据 
+					backData.jsonStr = JSON.stringify(con)
+					this.$api.collaborativeOffice.updateWorkItem(backData).then(data => {
+						if(this.dataBack(data, "修改成功")) {
+							this.$parent.toSelect()
+						}
+					})
+				} else {
+					this.goOut("请填写必填的数据")
+				}
+			},
+			//选择模板
 			getDialogVisible() {
 				//获取模板详细数据
 				this.$api.collaborativeOffice.findById({
 					id: this.context.tempId
 				}).then(data => {
 					//整理传入子组件的数据top 主表  bottom 子表
+					this.tempId = this.context.tempId
+					this.tableName = data.data.data.workItemTemp.tableName
 					this.conData.top = data.data.data.workItemTemp
 					this.$set(this.conData.top, "wholeData", this.context)
 					this.conData.bottom = data.data.data.workItemTempSub
@@ -86,7 +180,7 @@
 					})
 				})
 			},
-			//子表数据整理
+			//数据整理
 			preview(rowConList, rowIndex, state) {
 				var cur = []
 				let obj = {};
@@ -262,10 +356,6 @@
 	.el-icon-star-on:before {
 		color: red;
 		font-size: 20px;
-	}
-	
-	.el-table>>>.warning-row {
-		background-color: #ffe48d;
 	}
 	
 	>>>.el-card {

@@ -55,7 +55,7 @@
 			</el-row>
 
 			<el-form :model="ruleForm" :rules="rulesTable" ref="ruleFormTable">
-				<el-table height="400" :data="ruleForm.lines" border style="width: 100%">
+				<el-table size="small" height="400" :data="ruleForm.lines" border style="width: 100%">
 					<el-table-column prop="date" label="数据库字段名" align="center">
 						<template slot-scope="scope">
 							<el-form-item :prop="'lines[' + scope.$index + '].field'" :rules="rulesTable.field">
@@ -108,7 +108,7 @@
 		</el-card>
 		<!--弹出框-->
 		<el-dialog title="工作事项模板主表分类" center :visible.sync="dialogVisible" width="40%">
-			<el-table :row-class-name="tableRowClassName" @row-click="clickRow" :data="fieldBrowseList" border>
+			<el-table size="small" highlight-current-row @row-click="clickRow" :data="fieldBrowseList" border>
 				<el-table-column prop="code" label="编码"></el-table-column>
 				<el-table-column prop="name" label="名称"></el-table-column>
 			</el-table>
@@ -358,17 +358,6 @@
 				this.fieldContent.fieldContentName = this.rowClick.name
 				this.dialogVisible = false
 			},
-			// 选中背景色
-			tableRowClassName({
-				row,
-				rowIndex
-			}) {
-				var color = ""
-				if(row.id == this.rowClick.id) {
-					color = "warning-row"
-				}
-				return color;
-			},
 			//选中行
 			clickRow(row) {
 				this.rowClick = row
@@ -386,9 +375,6 @@
 		font-size: 20px;
 	}
 	
-	.el-table>>>.warning-row {
-		background-color: #ffe48d;
-	}
 	
 	>>>.el-card {
 		/*margin-bottom: 10px;*/
