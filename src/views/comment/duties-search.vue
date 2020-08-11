@@ -255,7 +255,26 @@ export default {
             let fromdata={};
             fromdata.page=val;
             fromdata.size=this.pageSize;
-            fromdata.fcompanyoid=localStorage.getItem('ms_companyId');
+            let namevalueS=this.dialog.name;
+            if(namevalueS && namevalueS!=''){
+                fromdata.fname=this.dialog.name;
+            }
+            let codevalueS=this.dialog.codeNomber;
+            if(codevalueS && codevalueS!=''){
+                fromdata.fcode=this.dialog.codeNomber;
+            }
+            let compvalueS=this.dialog.company;
+            if(compvalueS && compvalueS!=''){
+                fromdata.fcompanyoid=this.dialog.company;
+            }
+            let fstatusS=this.dialog.fstatus;
+            if(fstatusS && fstatusS!=''){
+                fromdata.fstatus=this.dialog.fstatus;
+            }
+            let fpostype=this.dialog.fpositiontype;
+            if(fpostype && fpostype!=''){
+                fromdata.fpositiontype=this.dialog.fpositiontype;
+            }
             this.$api.jobUserManagement.getTableData(fromdata).then(response => {
                 let responsevalue = response;
                 if (responsevalue) {
@@ -287,11 +306,11 @@ export default {
             fromdata.size=this.pageSize;
             let namevalueS=this.dialog.name;
             if(namevalueS && namevalueS!=''){
-                fromdata.name=this.dialog.name;
+                fromdata.fname=this.dialog.name;
             }
             let codevalueS=this.dialog.codeNomber;
             if(codevalueS && codevalueS!=''){
-                fromdata.code=this.dialog.codeNomber;
+                fromdata.fcode=this.dialog.codeNomber;
             }
             let compvalueS=this.dialog.company;
             if(compvalueS && compvalueS!=''){
@@ -305,7 +324,7 @@ export default {
             if(fpostype && fpostype!=''){
                 fromdata.fpositiontype=this.dialog.fpositiontype;
             }
-            this.$api.jobUserManagement.getTableData(form).then(response => {
+            this.$api.jobUserManagement.getTableData(fromdata).then(response => {
                 let responsevalue = response;
                 if (responsevalue) {
                     let returndata = responsevalue.data.data;
@@ -337,7 +356,6 @@ export default {
                 if(selectOption.length >1){
                     this.$message.error('只能选择一行!');
                 }else{
-                    console.log(selectOption)
                     //返回选中的父组件选中的row,并修某些改值
                     this.rowDUTSDataObj.awardcreditbreed=selectOption[0].fcode;
                     this.rowDUTSDataObj.awardcreditbreedname=selectOption[0].fname;
@@ -349,10 +367,6 @@ export default {
                 this.$message.error('请选择一行数据!');
             }
         },
-        //高级查询
-        onHandleMoreSearch(){
-            this.MoreSearchVisible = false;
-        }
     },
     watch:{
         rowDUTStype(oldVal,newVal){
@@ -361,6 +375,7 @@ export default {
             this.title=rowDataObj.nametitle;
             this.formdata.searchName=rowDataObj.finanrowId;
             this.rowFincename=rowDataObj.finanrowname;
+            this.dialog={};
             let fromdata={};
             fromdata.page=this.pageNum;
             fromdata.size=this.pageSize;

@@ -350,7 +350,7 @@ export default {
         //获取人员数据
         getUserData(data){
             let fromdata = data;
-            this.$api.processSet.getUserTreeData(fromdata).then(res=>{
+            this.$api.processSet.getUserTree(fromdata).then(res=>{
                 let resData=res.data.data;
                 let resDataArr= eval("("+resData+")");
                 this.gridData=resDataArr.JsonInfo;
@@ -372,7 +372,7 @@ export default {
             this.saveType=this.rowUTSDataObj.FunctionType;
             let fromdata={};
             fromdata.queryType='org';
-            this.$api.processSet.getUserTreeData(fromdata).then(res=>{
+            this.$api.processSet.getUserTree(fromdata).then(res=>{
                 let resData=res.data.data;
                 let resDataArr= eval("("+resData+")");
                 this.treeData = resDataArr;

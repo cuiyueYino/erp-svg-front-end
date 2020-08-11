@@ -79,14 +79,7 @@ const processSet = {
     },
     //公司部门人员树
     getUserTreeData(params){
-        var valueS='?';
-        for(var item in params){
-            valueS+=item+"="+params[item]+"&";
-        }
-        if(valueS.slice(valueS.length-1,valueS.length) ==="&"){
-            valueS=valueS.slice(0,valueS.length-1);
-        }
-        return httpReqest.get('/api/wfInterfaces/workFlow/findCompanyDeptStaffInfoByOrgUnitIdFromRedis'+valueS);
+        return httpReqest.post('/api/interfaces/staffManage/getStaffTree', params);
     },
     //待办事项-转发
     setencyclic(params){
@@ -211,7 +204,14 @@ const processSet = {
     },
     //删除流程业务
     delProBusData(params){
-        return httpReqest.post('/api/wfInterfaces/workFlow/delProcessBussinessList', params);
+        var valueS='?';
+        for(var item in params){
+            valueS+=item+"="+params[item]+"&";
+        }
+        if(valueS.slice(valueS.length-1,valueS.length) ==="&"){
+            valueS=valueS.slice(0,valueS.length-1);
+        }
+        return httpReqest.get('/api/wfInterfaces/workFlow/delProcessBussinessList'+valueS);
     },
     //获取某一条流程业务数据
     getProBusData(params){
