@@ -502,7 +502,7 @@ export default {
       }
       console.log(this.searchForm);
       this.isEdit = true;
-      this.getTableData("");
+      this.getTableData("foid");
       this.queryFormVisible = true;
     },
     queryPositionType(data) {
