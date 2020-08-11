@@ -127,7 +127,6 @@ export default {
             handler (obj) {
                 if(obj.type === "Subprocess" || obj.name === "Subprocess"){console.log(obj)
                 this.editData = obj;
-                this.formData.checked = this.editData.hidden==1?true:false;
                 this.formData.fremark = this.editData.fremark;
                 this.formData.name = this.editData.displayName;
                 this.formData.code = this.editData.code;
@@ -283,7 +282,7 @@ export default {
 <style  lang="scss" scoped>
 /deep/ .el-dialog__body{
     padding:20px !important;
-    max-height: 500px !important;
+    max-height: 580px !important;
 }
  /deep/ .el-dialog__header{
      display: block !important;

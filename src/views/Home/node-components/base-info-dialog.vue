@@ -13,6 +13,7 @@
 
         <el-form
             v-if="type !== '用户'"
+            class="formDataClass"
             :model="formData"
             label-width="97px"
             label-suffix="："
@@ -24,18 +25,18 @@
         >
          <!-- 搜索框 -->
              <el-row :gutter="24">
-                  <el-col :span="8" v-show=" type !=='审核'">
+                  <el-col :span="type=='角色'?12:8" v-show=" type !=='审核'">
                     <el-form-item label="编码" label-width="43px">
                         <el-input clearable size="small" v-model="formData.formCode" placeholder="请输入"></el-input>
                     </el-form-item>
                   </el-col> 
-                  <el-col :span="8"  v-show=" type !=='审核'">
+                  <el-col :span="type=='角色'?12:8"  v-show=" type !=='审核'">
                     <el-form-item label="名称" label-width="43px">
                         <el-input clearable size="small" v-model="formData.formName" placeholder="请输入"></el-input>
                     </el-form-item>
                   </el-col> 
                  
-                  <el-col :span="8" v-show="type !=='服务' && type !=='审核'">
+                  <el-col :span="8" v-show="type !=='服务' && type !=='审核'  && type !=='角色'">
                     <el-form-item label="状态" label-width="43px">
                          <el-select v-model="formData.formCtionTypeCon" clearable placeholder="请选择">
                             <el-option
@@ -49,12 +50,12 @@
                     </el-form-item>
                   </el-col> 
                 <el-col :span="6" :offset="2" v-show="type ==='服务'">
-                    <el-button type="primary" size="small" plain @click="reWorkSearchTable">重置</el-button>
+                    <el-button type="primary" size="small" plain @click="reWorkSearchTable('workflowConfigForm')">重置</el-button>
                     <el-button type="primary" size="small" plain @click="workSearchTable">搜索</el-button>
                 </el-col>
              </el-row>
              <el-row :gutter="24" >
-                <el-col :span="8" v-show="type !=='服务'  && type !=='审核'">
+                <el-col :span="type=='角色'?12:8" v-show="type !=='服务'  && type !=='审核'">
                     <el-form-item :label="type ==='职务'?'公司':'角色类别'" :label-width="type ==='职务'?'43px':'70px'">
                          <el-select v-model="formData.formCtionRole" clearable placeholder="请选择">
                             <el-option
@@ -99,8 +100,8 @@
                     </el-form-item>
                   </el-col>  -->
                   </span>
-                <el-col :span="6" v-show="type !=='服务'">
-                    <el-button type="primary" size="small" plain @click="reWorkSearchTable">重置</el-button>
+                <el-col :span="6" :offset="type=='角色'?6:0" v-show="type !=='服务'" >
+                    <el-button type="primary" size="small" plain @click="reWorkSearchTable('workflowConfigForm')">重置</el-button>
                     <el-button type="primary" size="small" plain @click="workSearchTable">搜索</el-button>
                 </el-col>
              </el-row>
@@ -195,7 +196,13 @@ export default {
             // 对话框显示标识
             dialogVisible: this.visible,
             // 配置表单数据
-            formData: {},
+            formData: {
+                formName:'',
+                formCode:'',
+                formRoleName:'',
+                formCtionRole:'',
+                formCtionTypeCon:'',
+            },
             gridData:[],
             searchgridData:[],
             multipleSelection: [],
@@ -274,7 +281,19 @@ export default {
                     this.total = res.data.data.total;
                 },error=>{
                     console.log(error)
-                })
+                });
+                //角色查询
+                // this.$api.RoleManagement.findRoleTypeList(fromdata).then(res => {
+                //      res.data.forEach(item => {
+                //         this.formData.roleoptions.push({
+                //             label:item.name,
+                //             value:item.id,
+                //         })
+                //      });
+                    
+                // }),error=>{
+                //     console.log(error)
+                // }
             }
             //用户查询
             if(this.type ==="用户"){
@@ -386,7 +405,7 @@ export default {
                     },
                     {
                         key: 'fremark',
-                        title: '备注'
+                        title: '描述'
                     },
                 ];
                 this.gridData =[];
@@ -484,7 +503,12 @@ export default {
                 this.gridData=this.searchgridData;
             }
         },
-        reWorkSearchTable(){
+        reWorkSearchTable(formName){
+            this.$refs[formName].validate((valid) => {
+                if (!valid) {
+                     return false;
+                } 
+            });
             if(this.type ==="服务"){
                 let fromdata={};
                 fromdata.page=this.pageNum;
@@ -733,7 +757,7 @@ export default {
 <style  lang="scss" scoped>
 /deep/ .el-dialog__body{
     padding:20px !important;
-    max-height: 500px !important;
+    max-height: 580px !important;
 }
 .user-class{
     /deep/ .el-form-item__label{
@@ -763,5 +787,9 @@ export default {
     /deep/ .el-input{
         width: 50% !important;
     }
+}
+.formDataClass{
+    min-height: 90px !important;
+    margin-bottom: 10px;
 }
 </style>

@@ -8,6 +8,7 @@
       ref="formData"
       class="dataForm"
       :model="formData"
+      label-position="left"
     >
       <el-tabs v-model="activeName" @tab-click="handleClick">
         <el-tab-pane label="基本信息" name="1">
@@ -188,17 +189,17 @@
           <!-- 搜索框 -->
           <el-row :gutter="24">
             <el-col :span="8">
-              <el-form-item label="编码" label-width="43px">
+              <el-form-item label="编码 " label-width="43px">
                 <el-input clearable size="small" v-model="formData.formCode" placeholder="请输入"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="8">
-              <el-form-item label="名称" label-width="43px">
+              <el-form-item label="名称 " label-width="43px">
                 <el-input clearable size="small" v-model="formData.formName" placeholder="请输入"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="8">
-              <el-form-item label="工作类型" label-width="70px">
+              <el-form-item label="工作类型 " label-width="70px">
                 <el-select v-model="formData.formCtionTypeCon" clearable placeholder="请选择">
                   <el-option
                     v-for="item in options"
@@ -906,9 +907,11 @@ export default {
         fromdata.fname = this.formData.formName;
       }
       if (this.formData.formCtionTypeCon) {
-        fromdata.fmfunctiontypecon = this.formData.formCtionTypeCon;
+        fromdata.fmfunctiontypecon = Number(this.formData.formCtionTypeCon);
+      }else{
+        fromdata.fmfunctiontypecon = 1;
       }
-      fromdata.fmfunctiontypecon = 1;
+      
       fromdata.page = this.pageNum;
       fromdata.size = this.pageSize;
       this.gridData = [];
@@ -1017,7 +1020,7 @@ export default {
 <style  lang="scss" scoped>
 /deep/ .el-dialog__body {
   padding: 20px !important;
-  max-height: 500px !important;
+  max-height: 580px !important;
 }
 /deep/ .el-dialog__header {
   display: block !important;

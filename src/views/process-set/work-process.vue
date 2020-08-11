@@ -61,7 +61,7 @@
                 <el-form-item label="子流程：" :label-width="formLabelWidth"> 
                     <el-checkbox v-model="checked"></el-checkbox>
                 </el-form-item>
-                <el-form-item label="描述：" :label-width="formLabelWidth">
+                <el-form-item label="描述：" :label-width="formLabelWidth"  prop="fremark">
                     <el-input maxlength="1000" show-word-limit autosize type="textarea" v-model="form.fremark"></el-input>
                 </el-form-item>
                 </el-col>
@@ -113,11 +113,11 @@ export default {
                 title: '名称'
             },
             {
-                key: 'fsubprocess',
+                key: 'fsubprocessName',
                 title: '子流程'
             },
             {
-                key: 'fstatus',
+                key: 'fstatusName',
                 title: '状态'
             }
         ],
@@ -140,7 +140,7 @@ export default {
          rules: {
           fcode: [
             { required: true, message: '请输入编码', trigger: 'blur' },
-            { min: 1, max: 100, message: '长度在 1 到 50 个字符', trigger: 'blur' }
+            { min: 1, max: 50, message: '长度在 1 到 50 个字符', trigger: 'blur' }
           ],
            fname: [
             { required: true, message: '请输入名称', trigger: 'blur' },
@@ -159,7 +159,6 @@ export default {
         })
     },
     computed:{
-        
     },
     watch:{
         dialogFormVisible(val){
@@ -212,28 +211,6 @@ export default {
             this.$api.processSet.getTableData(data).then(res=>{
                 this.tableData = res.data.data.rows
                  this.total = res.data.data.total
-                for(let i in this.tableData){
-                    switch ( this.tableData[i].fstatus) {
-                        case 3:
-                             this.tableData[i].fstatus = '生效'
-                             break;
-                        case 8:
-                             this.tableData[i].fstatus = '禁用'
-                             break;
-                        default:
-                            break;
-                    }
-                    switch ( this.tableData[i].fsubprocess) {
-                    case 1:
-                            this.tableData[i].fsubprocess = '是'
-                            break;
-                    case 0:
-                            this.tableData[i].fsubprocess = '否'
-                            break;
-                    default:
-                        break;
-                }
-                }
             },error=>{
                 console.log(error)
             })
