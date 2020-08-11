@@ -399,7 +399,6 @@ export default {
     //分页、下一页
     onCurrentChange(val) {
       this.pageNum = val;
-      this.isEdit = true;
       this.getTableData("");
     },
     //多选
@@ -520,14 +519,13 @@ export default {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
       }).then((action) => {
-        
+
       });
     },
     // 显示全部信息
     resetForm(formName) {
       this.$refs[formName].resetFields();
       this.pageNum = 1;
-      this.isEdit = true;
       this.getTableData("");
     },
     // 获取列表数据

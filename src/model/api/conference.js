@@ -21,7 +21,7 @@ const confMangement = {
 
     // 删除会议室
     deleteConfOffice(params) {
-        return httpReqest.get('/api/interfaces/confMnt/findTodayApplyList?foid=' + params);
+        return httpReqest.get('/api/interfaces/confOffice/deleteConfOffice?foid=' + params);
     },
 
     // 获取有效会议室列表

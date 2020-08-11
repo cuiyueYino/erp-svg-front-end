@@ -38,19 +38,17 @@
         </el-row>
       </el-card>
       <el-form>
-        <div style="height:350px;overflow:auto">
-          <dynamic-table
-            :columns="columns"
-            :table-data="tableData"
-            :total="total"
-            :page-num="pageNum"
-            :page-size="pageSize"
-            @current-change="onCurrentChange"
-            @selection-change="onSelectionChange"
-            v-loading="false"
-            element-loading-text="加载中"
-          ></dynamic-table>
-        </div>
+        <dynamic-table
+          :columns="columns"
+          :table-data="tableData"
+          :total="total"
+          :page-num="pageNum"
+          :page-size="pageSize"
+          @current-change="onCurrentChange"
+          @selection-change="onSelectionChange"
+          v-loading="false"
+          element-loading-text="加载中"
+        ></dynamic-table>
         <el-row :gutter="20"></el-row>
       </el-form>
     </el-dialog>
@@ -58,212 +56,212 @@
 </template>
 
 <script>
-import DynamicTable from "../../components/common/dytable/dytable.vue";
+  import DynamicTable from "../../components/common/dytable/dytable.vue";
 
-export default {
-  name: "staffTreeSearch",
-  components: {
-    DynamicTable,
-  },
-  props: {
-    fcompanyid: {
-      type: String,
-      default: "_DefaultCompanyOId",
+  export default {
+    name: "staffTreeSearch",
+    components: {
+      DynamicTable,
     },
-    fstartdate: {
-      type: String,
-      default: "",
-    },
-    fenddate: {
-      type: String,
-      default: "",
-    },
-    fvolume: {
-      type: Number,
-      default: 0,
-    },
-    // 配置对话框显示标识
-    visible: {
-      type: Boolean,
-      default: false,
-    },
-    type: {
-      type: String,
-      defaule: "1",
-    },
-  },
-  data() {
-    return {
-      pageNum: 1,
-      pageSize: 10,
-      total: 20,
-      form: {
-        select: "",
-        selectVal: "",
+    props: {
+      fcompanyid: {
+        type: String,
+        default: "_DefaultCompanyOId",
       },
-      // 关闭对话框配置
-      closeConfig: false,
-      // 对话框显示标识
-      dialogVisible: this.visible,
-      multipleSelection: [],
-      tableData: [],
-      columns: [
-        {
-          type: "selection",
-        },
-        {
-          key: "fcode",
-          title: "编码",
-        },
-        {
-          key: "fname",
-          title: "名称",
-        },
-        {
-          key: "fsite",
-          title: "地点",
-        },
-        {
-          key: "fvolume",
-          title: "容量",
-        },
-        {
-          key: "fdevice",
-          title: "设备",
-        },
-        {
-          key: "fremark",
-          title: "描述",
-        },
-      ],
-    };
-  },
-  computed: {},
-  watch: {
-    // 对话框显示 自动聚焦name输入框
-    visible(bool) {
-      this.dialogVisible = bool;
-      let data = {};
-      if (this.type == "1") {
-        this.getTableData(data);
-      } else if (this.type == "2") {
-        this.getTableDataAll(data);
-      }
+      fstartdate: {
+        type: String,
+        default: "",
+      },
+      fenddate: {
+        type: String,
+        default: "",
+      },
+      fvolume: {
+        type: Number,
+        default: 0,
+      },
+      // 配置对话框显示标识
+      visible: {
+        type: Boolean,
+        default: false,
+      },
+      type: {
+        type: String,
+        defaule: "1",
+      },
     },
-  },
-  methods: {
-    //分页、下一页
-    onCurrentChange(val) {
-      this.pageNum = val;
-      let data = {};
-      if (this.type == "1") {
-        this.getTableData(data);
-      } else if (this.type == "2") {
-        this.getTableDataAll(data);
-      }
-    },
-    //多选
-    onSelectionChange(val) {
-      this.multipleSelection = val;
-      if (this.multipleSelection.length > 1) {
-        this.$message.error("只能选择一个");
-        return;
-      }
-    },
-    // 查询
-    searchKey() {
-      let params = this.form.select;
-      let data = {
-        [params]: this.form.selectVal,
+    data() {
+      return {
+        pageNum: 1,
+        pageSize: 10,
+        total: 20,
+        form: {
+          select: "",
+          selectVal: "",
+        },
+        // 关闭对话框配置
+        closeConfig: false,
+        // 对话框显示标识
+        dialogVisible: this.visible,
+        multipleSelection: [],
+        tableData: [],
+        columns: [
+          {
+            type: "selection",
+          },
+          {
+            key: "fcode",
+            title: "编码",
+          },
+          {
+            key: "fname",
+            title: "名称",
+          },
+          {
+            key: "fsite",
+            title: "地点",
+          },
+          {
+            key: "fvolume",
+            title: "容量",
+          },
+          {
+            key: "fdevice",
+            title: "设备",
+          },
+          {
+            key: "fremark",
+            title: "描述",
+          },
+        ],
       };
-      if (this.type == "1") {
-        this.getTableData(data);
-      } else if (this.type == "2") {
-        this.getTableDataAll(data);
-      }
     },
-    // 查询有效会议室列表数据
-    getTableData(data) {
-      data.page = this.pageNum;
-      data.size = this.pageSize;
-      data.fcompany = this.fcompanyid;
-      data.fstartdate = this.fstartdate;
-      data.fenddate = this.fenddate;
-      data.fvolume =Number(this.fvolume);
-      this.$api.confMangement.getAvailableConfOffice(data).then(
-        (res) => {
-          if (res.data.code == 0) {
-            this.tableData = res.data.data.rows;
-            this.total = res.data.data.total;
-          } else {
-            this.$message.error(res.data.msg);
-          }
-        },
-        (error) => {
-          console.log(error);
+    computed: {},
+    watch: {
+      // 对话框显示 自动聚焦name输入框
+      visible(bool) {
+        this.dialogVisible = bool;
+        let data = {};
+        if (this.type == "1") {
+          this.getTableData(data);
+        } else if (this.type == "2") {
+          this.getTableDataAll(data);
         }
-      );
+      },
     },
-    // 查询会议室列表数据
-    getTableDataAll(data) {
-      data.page = this.pageNum;
-      data.size = this.pageSize;
-      data.fcompany = this.fcompanyid;
-      this.$api.confMangement.getConfOfficeList(data).then(
-        (res) => {
-          if (res.data.code == 0) {
-            this.tableData = res.data.data.rows;
-            this.total = res.data.data.total;
-          } else {
-            this.$message.error(res.data.msg);
-          }
-        },
-        (error) => {
-          console.log(error);
+    methods: {
+      //分页、下一页
+      onCurrentChange(val) {
+        this.pageNum = val;
+        let data = {};
+        if (this.type == "1") {
+          this.getTableData(data);
+        } else if (this.type == "2") {
+          this.getTableDataAll(data);
         }
-      );
-    },
-    // 保存
-    saveConfig() {
-      if (this.multipleSelection.length != 1) {
-        this.$message.error("请选择一条数据进行编辑");
-        return;
-      }
-      let serchData = this.multipleSelection[0];
-      this.$emit("closeDialog", serchData);
-    },
+      },
+      //多选
+      onSelectionChange(val) {
+        this.multipleSelection = val;
+        if (this.multipleSelection.length > 1) {
+          this.$message.error("只能选择一个");
+          return;
+        }
+      },
+      // 查询
+      searchKey() {
+        let params = this.form.select;
+        let data = {
+          [params]: this.form.selectVal,
+        };
+        if (this.type == "1") {
+          this.getTableData(data);
+        } else if (this.type == "2") {
+          this.getTableDataAll(data);
+        }
+      },
+      // 查询有效会议室列表数据
+      getTableData(data) {
+        data.page = this.pageNum;
+        data.size = this.pageSize;
+        data.fcompany = this.fcompanyid;
+        data.fstartdate = this.fstartdate;
+        data.fenddate = this.fenddate;
+        data.fvolume = Number(this.fvolume);
+        this.$api.confMangement.getAvailableConfOffice(data).then(
+          (res) => {
+            if (res.data.code == 0) {
+              this.tableData = res.data.data.rows;
+              this.total = res.data.data.total;
+            } else {
+              this.$message.error(res.data.msg);
+            }
+          },
+          (error) => {
+            console.log(error);
+          }
+        );
+      },
+      // 查询会议室列表数据
+      getTableDataAll(data) {
+        data.page = this.pageNum;
+        data.size = this.pageSize;
+        data.fcompany = this.fcompanyid;
+        this.$api.confMangement.getConfOfficeList(data).then(
+          (res) => {
+            if (res.data.code == 0) {
+              this.tableData = res.data.data.rows;
+              this.total = res.data.data.total;
+            } else {
+              this.$message.error(res.data.msg);
+            }
+          },
+          (error) => {
+            console.log(error);
+          }
+        );
+      },
+      // 保存
+      saveConfig() {
+        if (this.multipleSelection.length != 1) {
+          this.$message.error("请选择一条数据进行编辑");
+          return;
+        }
+        let serchData = this.multipleSelection[0];
+        this.$emit("closeDialog", serchData);
+      },
 
-    // 关闭模态框时子组件传值给父组件
-    closeDialog() {
-      let serchData = [];
-      this.$emit("closeDialog", serchData);
+      // 关闭模态框时子组件传值给父组件
+      closeDialog() {
+        let serchData = [];
+        this.$emit("closeDialog", serchData);
+      },
     },
-  },
-};
+  };
 </script>
 <style lang="less" scoped>
-/deep/ .selectVal .el-input__inner {
-  width: 100%;
-}
+  /deep/ .selectVal .el-input__inner {
+    width: 100%;
+  }
 
-/deep/ .el-card__body {
-  padding: 6px !important;
-}
+  /deep/ .el-card__body {
+    padding: 6px !important;
+  }
 
-/deep/ .el-dialog {
-  width: 40% !important;
-}
+  /deep/ .el-dialog {
+    width: 40% !important;
+  }
 
-/deep/ .el-dialog__header {
-  padding: 15px 20px 0px !important;
-}
+  /deep/ .el-dialog__header {
+    padding: 15px 20px 0px !important;
+  }
 
-/deep/ .el-dialog__body {
-  padding: 12px 20px !important;
-}
+  /deep/ .el-dialog__body {
+    padding: 12px 20px !important;
+  }
 
-.box-card:first-child {
-  margin-bottom: 16px;
-  height: 53px;
-}
+  .box-card:first-child {
+    margin-bottom: 16px;
+    height: 53px;
+  }
 </style>
