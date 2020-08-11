@@ -164,8 +164,16 @@ class ITEMData {
 								title: '工作事项',
 							},
 							{
-								index: 'workItemsToGrantAuthorization',
+								index: 'workItemsToGrant',
 								title: '工作事项模板授权',
+								subs:[{
+										index: 'templateAuthorizationRole',
+										title: '模板角色授权',
+									},{
+										index: 'templateAuthorizationPersonnel',
+										title: '模板人员授权',
+									}
+								]
 							}
 						]
 					},

@@ -125,7 +125,7 @@
 				rules: {
 					title: [{
 						required: true,
-						message: '请输入子表分类编码',
+						message: '请输入标题',
 						trigger: 'change'
 					}]
 				},
@@ -565,7 +565,6 @@
 								var conNow = await this.$api.collaborativeOffice.findTServiceItemByParams(listChild.colList[i2].serviceNow).then(data => {
 									return new Promise(resolve => {
 										//把根据‘不同的服务’获取到的返回值从新赋值，都是id和name的形式，方便调用
-										console.log(listChild.colList[i2].serviceNow.fcode)
 										switch(listChild.colList[i2].serviceNow.fcode) {
 											case "service09":
 											case "service08":
@@ -649,7 +648,6 @@
 							page: 1,
 							size: 10
 						}).then(data => {
-							console.log(data)
 							this.$set(this.dataCon, "context", data.data.data.rows)
 							this.$set(this.dataCon, "currentTotal", data.data.data.total)
 						})
@@ -661,7 +659,6 @@
 							page: 1,
 							size: 10
 						}).then(data => {
-							console.log(data)
 							this.$set(this.dataCon, "context", data.data.data.rows)
 							this.$set(this.dataCon, "currentTotal", data.data.data.total)
 						})

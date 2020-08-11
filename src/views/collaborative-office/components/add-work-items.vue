@@ -2,10 +2,7 @@
 	<div style="height: 88vh; overflow-y:scroll">
 		<el-card class="box-card">
 			<el-row style="margin-bottom: 10px;">
-				<el-col :span="23">工作事项模板主表</el-col>
-				<el-col :span="1" style="text-align: right;">
-					<el-button type="danger" @click="$parent.toSelect()" size="mini" icon="el-icon-close"></el-button>
-				</el-col>
+				<el-col style="text-align: center;" :span="24">工作事项模板主表</el-col>
 			</el-row>
 			<el-row style="margin-bottom: 10px;">
 				<el-col :span="18">
@@ -17,8 +14,9 @@
 				</el-col>
 				<el-col :span="6" style="text-align: right;">
 					<el-button v-if="showFig" @click="submitForm(2)" type="success" size="mini" icon="el-icon-check">提交</el-button>
-					<el-button v-if="showFig" @click="submitForm(1)" type="success" size="mini" icon="el-icon-check">暂存</el-button>
-					<el-button @click="dialogVisible =  true" type="success" size="mini" icon="el-icon-check">选择模板</el-button>
+					<el-button v-if="showFig" @click="submitForm(1)" type="success" size="mini" icon="el-icon-finished">暂存</el-button>
+					<el-button @click="dialogVisible =  true" type="success" size="mini" icon="el-icon-s-promotion">选择模板</el-button>
+					<el-button type="danger" @click="$parent.toSelect()" size="mini" icon="el-icon-close">返回</el-button>
 				</el-col>
 			</el-row>
 			<formAndTable dis="2" showAdd="1" ref="child" :form-data="conData"></formAndTable>
@@ -155,6 +153,7 @@
 					backData.jsonStr = JSON.stringify(con)
 					this.$api.collaborativeOffice.apiUrl("workItem/insertWorkItem", backData).then(data => {
 						if(this.dataBack(data, "新增成功")) {
+							this.$refs.child.toUpload(data.data.data)
 							this.$parent.toSelect()
 						}
 					})

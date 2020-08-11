@@ -1,51 +1,50 @@
 <template>
-	<div>
+	<el-card class="box-card">
 		<div v-if="!showFigForm">
-			<el-card class="box-card">
-				<el-row>
-					<el-col :span="23">工作事项模板主表</el-col>
-					<el-col :span="1" style="text-align: right;">
-						<el-button type="danger" @click="$parent.toSelect()" size="mini" icon="el-icon-close"></el-button>
-					</el-col>
-				</el-row>
-				<el-row>
-					<el-col :span="18">
-						公司：
-						<el-select :disabled="showFigSee" size='mini' v-model="ruleForm.company" placeholder="公司">
-							<el-option v-for="item in CompanyData" :key="item.id" :label="item.name" :value="item.id">
-							</el-option>
-						</el-select>
-					</el-col>
-					<el-col v-if="!showFigSee" :span="6" style="text-align: right;">
-						<el-button @click="submitForm(2)" type="success" size="mini" icon="el-icon-check">提交</el-button>
-						<el-button @click="submitForm(1)" type="success" size="mini" icon="el-icon-check">暂存</el-button>
-						<el-button @click="preview()" type="success" size="mini" icon="el-icon-check">预览</el-button>
-					</el-col>
-				</el-row>
-			</el-card>
-			<el-card class="box-card">
+			<el-row>
+				<el-col :span="24" style="text-align: center;">工作事项模板主表</el-col>
+			</el-row>
+			<el-row style="margin-top: 10px;">
+				<el-col :span="18">
+					公司：
+					<el-select :disabled="showFigSee" size='mini' v-model="ruleForm.company" placeholder="公司">
+						<el-option v-for="item in CompanyData" :key="item.id" :label="item.name" :value="item.id">
+						</el-option>
+					</el-select>
+				</el-col>
+				<el-col v-if="!showFigSee" :span="6" style="text-align: right;">
+					<el-button @click="submitForm(2)" type="success" size="mini" icon="el-icon-check">提交</el-button>
+					<el-button @click="submitForm(1)" type="primary" size="mini" icon="el-icon-finished">暂存</el-button>
+					<el-button @click="preview()" type="primary" plain size="mini" icon="el-icon-view">预览</el-button>
+					<el-button type="danger" @click="$parent.toSelect()" size="mini" icon="el-icon-close">返回</el-button>
+				</el-col>
+				<el-col v-if="showFigSee" :span="6" style="text-align: right;">
+					<el-button type="danger" @click="$parent.toSelect()" size="mini" icon="el-icon-close">返回</el-button>
+				</el-col>
+			</el-row>
+			<el-card style="margin-top: 10px;">
 				<el-form size="mini" label-width="80px" :inline="true" :rules="rules" ref="ruleForm" :model="ruleForm" class="demo-form-inline">
 					<el-row>
 						<el-col :span="6">
 							<el-form-item prop="code" label="主表编码">
-								<el-input style="width: 110%;" clearable :disabled="showFigSee" v-model="ruleForm.code" maxlength="50" placeholder="主表编码"></el-input>
+								<el-input style="width: 150%;" clearable :disabled="showFigSee" v-model="ruleForm.code" maxlength="50" placeholder="主表编码"></el-input>
 							</el-form-item>
 						</el-col>
 						<el-col :span="6">
 							<el-form-item prop="name" label="主表名称">
-								<el-input style="width: 110%;" clearable :disabled="showFigSee" v-model="ruleForm.name" maxlength="50" placeholder="主表名称"></el-input>
+								<el-input style="width: 150%;" clearable :disabled="showFigSee" v-model="ruleForm.name" maxlength="50" placeholder="主表名称"></el-input>
 							</el-form-item>
 						</el-col>
 						<el-col :span="6">
 							<el-form-item prop="workItemTypeName" label="主表分类">
-								<el-input style="width: 110%;" disabled placeholder="主表分类" v-model="ruleForm.workItemTypeName">
+								<el-input style="width: 150%;" disabled placeholder="主表分类" v-model="ruleForm.workItemTypeName">
 									<el-button :disabled="showFigSee" @click="dialogVisible = true" slot="append" icon="el-icon-search"></el-button>
 								</el-input>
 							</el-form-item>
 						</el-col>
 						<el-col :span="6">
 							<el-form-item label="描述">
-								<el-input clearable :disabled="showFigSee" style="width: 130%;" type="textarea" :rows="1" maxlength="1500" v-model="ruleForm.remark" placeholder="描述"></el-input>
+								<el-input clearable :disabled="showFigSee" style="width: 150%;" type="textarea" :rows="1" maxlength="1500" v-model="ruleForm.remark" placeholder="描述"></el-input>
 							</el-form-item>
 						</el-col>
 					</el-row>
@@ -53,9 +52,9 @@
 			</el-card>
 			<el-card class="box-card">
 				<el-row>
-					<el-col>工作事项模板主表行</el-col>
+					<el-col style="text-align: center;">工作事项模板主表行</el-col>
 				</el-row>
-				<el-form :model="ruleForm" :rules="rulesTable" ref="ruleFormTable">
+				<el-form  style="margin-top: 10px;" :model="ruleForm" :rules="rulesTable" ref="ruleFormTable">
 					<el-table size="small" height="600" :data="ruleForm.lines" border style="width: 100%">
 						<el-table-column prop="field" label="数据库字段名" align="center" width="120">
 							<template slot-scope="scope">
@@ -90,13 +89,6 @@
 								</el-form-item>
 							</template>
 						</el-table-column>
-						<!--<el-table-column label="字段内容" align="center" width="140">
-							<template slot-scope="scope">
-								<el-form-item>
-									<el-input disabled v-model="scope.row.fieldContentName"></el-input>
-								</el-form-item>
-							</template>
-						</el-table-column>-->
 						<el-table-column prop="show" label="是否显示" align="center">
 							<template slot-scope="scope">
 								<el-form-item>
@@ -187,7 +179,7 @@
 				</el-row>
 			</formAndTable>
 		</div>
-	</div>
+	</el-card>
 </template>
 <script>
 	//工作事项模板主表分类
@@ -270,11 +262,17 @@
 						required: true,
 						message: "请输入显示顺序",
 						trigger: "change"
+					}, {
+						pattern: /^\+?[1-9][0-9]*$/,
+						message: '可输入非零正整数'
 					}],
 					showNum: [{
 						required: true,
 						message: "请填写显示行数",
 						trigger: "change"
+					}, {
+						pattern: /^\+?[1-9][0-9]*$/,
+						message: '可输入非零正整数'
 					}],
 				},
 				//字段类型
@@ -517,7 +515,6 @@
 							this.goOut("请选择主表分类")
 						}
 					}
-					console.log(this.conData.top)
 				});
 			},
 			//选择主表分类

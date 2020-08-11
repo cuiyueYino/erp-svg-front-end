@@ -10,8 +10,10 @@ const enumerationList = () =>
 	import('./enumerationList.vue');
 const workItems = () =>
 	import('./work-items.vue');
-const workItemsToGrantAuthorization = () =>
-	import('./work-items-to-grant-authorization.vue');
+const templateAuthorizationRole = () =>
+	import('./template-authorization-role.vue');
+const templateAuthorizationPersonnel = () =>
+	import('./template-authorization-personnel.vue');
 const seeWorkItem = () =>
 	import('../../views/collaborative-office/components/see-work-items-other.vue');
 
@@ -64,11 +66,19 @@ const InsideMail = [{
 		}
 	},
 	{
-		path: 'workItemsToGrantAuthorization',
-		name: 'workItemsToGrantAuthorization',
-		component: workItemsToGrantAuthorization,
+		path: 'templateAuthorizationRole',
+		name: 'templateAuthorizationRole',
+		component: templateAuthorizationRole,
 		meta: {
-			title: '工作事项模板授权'
+			title: '工作事项模板授权角色'
+		}
+	},
+	{
+		path: 'templateAuthorizationPersonnel',
+		name: 'templateAuthorizationPersonnel',
+		component: templateAuthorizationPersonnel,
+		meta: {
+			title: '工作事项模板授权人员'
 		}
 	},
 	{

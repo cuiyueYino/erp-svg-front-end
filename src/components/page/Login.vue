@@ -96,9 +96,9 @@
 
 					/*
 					 * 孟鹏飞 2020-08-06
-					 * 
+					 *
 					 * 登陆时调用工作事项内的查询接口，并放置于本地缓存
-					 * 
+					 *
 					 * */
 					//最上端公司选择
 					this.$api.collaborativeOffice.getCompanyData().then(data => {
@@ -127,7 +127,6 @@
 					}).then(data => {
 
 						localStorage.setItem('staffList', JSON.stringify(data.data.data.rows));
-						console.log(JSON.parse(localStorage.getItem('staffList')))
 					})
 					//用户
 					this.$api.collaborativeOffice.findConList("userManage/findUserBypage", {
@@ -135,7 +134,6 @@
 						size: 100000
 					}).then(data => {
 						localStorage.setItem('userList', JSON.stringify(data.data.data.rows));
-						console.log(JSON.parse(localStorage.getItem('userList')))
 					})
 					//职务
 					this.$api.collaborativeOffice.findConList("positionmnt/findPositionList", {
@@ -143,8 +141,20 @@
 						size: 100000
 					}).then(data => {
 						localStorage.setItem('positionList', JSON.stringify(data.data.data.rows));
-						console.log(JSON.parse(localStorage.getItem('positionList')))
 					})
+
+
+
+          // 登录时获取员工树信息
+          let fromData = {};
+          fromData.id = this.fcompanyid;
+          this.$api.confMangement.getStaffTreeList(fromData).then(res => {
+            let resData = res.data.data;
+            let resDataArr = eval("(" + resData + ")");
+            localStorage.setItem('conf_staffTree', JSON.stringify(resDataArr));
+            console.log("conf_staffTree：>>>>>>>>>>>>");
+            console.log(JSON.parse(localStorage.getItem('conf_staffTree')));
+          })
 
 					this.$router.push('/');
 				} else {
@@ -182,7 +192,7 @@
 		background-image: url(../../assets/img/Logo-title.png);
 		background-size: 100%;
 	}
-	
+
 	.ms-title {
 		width: 100%;
 		line-height: 50px;
@@ -191,7 +201,7 @@
 		color: #000;
 		border-bottom: 1px solid #ddd;
 	}
-	
+
 	.ms-login {
 		position: absolute;
 		left: 50%;
@@ -201,29 +211,29 @@
 		border-radius: 5px;
 		overflow: hidden;
 	}
-	
+
 	.ms-content01 {
 		background: rgba(255, 255, 255, 0.3);
 	}
-	
+
 	.ms-content {
 		padding: 30px 30px;
 	}
-	
+
 	.login-btn {
 		text-align: center;
 	}
-	
+
 	.login-btn button {
 		width: 100%;
 		height: 36px;
 		margin-bottom: 10px;
 	}
-	
+
 	.ms-title01 {
 		margin-bottom: 50px;
 	}
-	
+
 	.login-tips {
 		font-size: 12px;
 		line-height: 30px;

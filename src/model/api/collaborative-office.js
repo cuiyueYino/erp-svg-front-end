@@ -119,6 +119,10 @@ const collaborativeOffice = {
 	updateWorkItem(params) {
 		return httpReqest.post('/api/interfaces/workItem/updateWorkItem', params);
 	},
+	//工作事项修改   必填字段：srcId、oprStatus（主表、明细行都需要）
+	uploadFile(params) {        
+		return httpReqest.post('/api/interfaces/attachment/uploadFile', params);    
+	},
 	//根据ID查询工作事项模版主表
 	getWorkItemTempModel(params) {
 		var valueS = '?';
@@ -174,7 +178,7 @@ const collaborativeOffice = {
 		}
 		return httpReqest.get('/api/interfaces/workItemAuth/findRoleByWorkItem' + valueS);
 	},
-	//通过权限查询模版
+	//通过角色查询模版
 	findWorkItemByRoleId(params) {
 		var valueS = '?';
 		for(var item in params) {
@@ -184,6 +188,28 @@ const collaborativeOffice = {
 			valueS = valueS.slice(0, valueS.length - 1);
 		}
 		return httpReqest.get('/api/interfaces/workItemAuth/findWorkItemByRoleId' + valueS);
+	},
+	//通过人员查询模版
+	findWorkItemByUser(params) {
+		var valueS = '?';
+		for(var item in params) {
+			valueS += item + "=" + params[item] + "&";
+		}
+		if(valueS.slice(valueS.length - 1, valueS.length) === "&") {
+			valueS = valueS.slice(0, valueS.length - 1);
+		}
+		return httpReqest.get('/api/interfaces/workItemAuthUser/findWorkItemByUser' + valueS);
+	},
+	//通过模板查询人员
+	findUserByWorkItem(params) {
+		var valueS = '?';
+		for(var item in params) {
+			valueS += item + "=" + params[item] + "&";
+		}
+		if(valueS.slice(valueS.length - 1, valueS.length) === "&") {
+			valueS = valueS.slice(0, valueS.length - 1);
+		}
+		return httpReqest.get('/api/interfaces/workItemAuthUser/findUserByWorkItem' + valueS);
 	},
 	//api手动输入接口名称
 	apiUrl(url, params) {

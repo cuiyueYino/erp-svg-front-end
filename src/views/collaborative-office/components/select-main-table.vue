@@ -5,7 +5,7 @@
 				<el-col :span="14">
 					<el-form label-width="10px" :model="formInline" class="demo-form-inline">
 						<el-row>
-							<el-col :span="8">
+							<el-col :span="6">
 								<el-form-item>
 									<el-select style="width: 100%;" clearable @change="selectChange" v-model="value" value-key="id">
 										<el-option v-for="item in formInlineList" :key="item.id" :label="item.name" :value="item">
@@ -13,30 +13,31 @@
 									</el-select>
 								</el-form-item>
 							</el-col>
-							<el-col :span="8">
+							<el-col :span="6">
 								<el-form-item>
 									<el-input clearable v-model="selectData"></el-input>
 								</el-form-item>
 							</el-col>
-							<el-col :span="4">
+							<el-col :span="6">
 								<el-form-item>
 									<el-button type="primary" @click="$refs.pageNation.toBegin()">搜索</el-button>
+									<el-button type="primary" @click="toClear()">重置</el-button>
 								</el-form-item>
 							</el-col>
 						</el-row>
 					</el-form>
 				</el-col>
 				<el-col v-show="show != '1'" style="text-align: right;" :span="10">
-					<el-button @click="$parent.toAdd('1')" icon="el-icon-delete" type="success">新增</el-button>
-					<el-button @click="toUpd()" icon="el-icon-delete" type="success">修改</el-button>
-					<el-button @click="updateStatus(3)" icon="el-icon-delete" type="primary">生效</el-button>
+					<el-button @click="$parent.toAdd('1')" icon="el-icon-plus" type="success">新增</el-button>
+					<el-button @click="toUpd()" icon="el-icon-edit" type="warning">修改</el-button>
+					<el-button @click="updateStatus(3)" icon="el-icon-check" type="primary">生效</el-button>
 					<el-button @click="updateStatus(7)" icon="el-icon-delete" type="danger">禁用</el-button>
-					<el-button @click="toSee()" icon="el-icon-delete" type="primary" plain>查看</el-button>
+					<el-button @click="toSee()" icon="el-icon-view" type="primary" plain>查看</el-button>
 				</el-col>
 			</el-row>
 		</el-card>
 		<el-card class="box-card">
-			<el-table size="small" height="500" highlight-current-row @row-click="clickRow" :data="tableData" border>
+			<el-table size="small" @row-dblclick="rowDblClick" :height="$GLOBAL.tableHeight" highlight-current-row @row-click="clickRow" :data="tableData" border>
 				<el-table-column :formatter="statusShow" prop="status" label="状态" align="center"></el-table-column>
 				<el-table-column prop="code" label="主表编码" align="center"></el-table-column>
 				<el-table-column prop="name" label="主表名称" align="center"></el-table-column>
@@ -60,10 +61,7 @@
 			return {
 				value: "",
 				selectData: "",
-				formInlineList: [{
-					id: "status",
-					name: "状态"
-				}, {
+				formInlineList: [ {
 					id: "code",
 					name: "主表编码"
 				}, {
@@ -95,6 +93,11 @@
 			this.toSelect()
 		},
 		methods: {
+			rowDblClick(row) {
+				if(typeof(this.$parent.$parent.getDialogVisible) == "function") {
+					this.$parent.$parent.getDialogVisible()
+				}
+			},
 			selectChange(data) {
 				this.selectCon = data.id
 				this.toSelectData = JSON.parse(JSON.stringify(this.formInline))
@@ -106,7 +109,6 @@
 					this.$api.collaborativeOffice.getWorkItemTempModel({
 						id: this.rowClickId
 					}).then(data => {
-						console.log(data)
 						this.$parent.toAdd('3', data.data.data)
 					})
 				}
@@ -152,7 +154,6 @@
 					this.$api.collaborativeOffice.getWorkItemTempModel({
 						id: this.rowClickId
 					}).then(data => {
-						console.log(data.data.data)
 						this.$parent.toUpd(data.data.data)
 					})
 				}
@@ -185,6 +186,11 @@
 				this.rowClickId = row.id
 				this.rowClick = row
 			},
+			toClear(){
+				this.selectData = ""
+				this.value = ""
+				this.toSelect()
+			}
 		}
 	}
 </script>

@@ -5,7 +5,7 @@
 				<el-row>
 					<el-col :span="6">
 						<el-form-item prop="name">
-							<el-input clearable v-model="formInline.name"  placeholder="角色名称"></el-input>
+							<el-input clearable v-model="formInline.name"placeholder="人员名称"></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :span="10">
@@ -26,15 +26,19 @@
 			</el-form>
 			<vxe-table border ref="multipleTable" size="small" highlight-current-row @cell-click="clickRow" height="700" :data="roleList">
 				<vxe-table-column v-if="showFig == 1" type="checkbox" width="60"></vxe-table-column>
-				<vxe-table-column field="code" title="角色编码"></vxe-table-column>
-				<vxe-table-column field="name" title="角色名称"></vxe-table-column>
-				<vxe-table-column field="companyName" title="角色名称"></vxe-table-column>
+				<vxe-table-column field="tcode" title="人员编码"></vxe-table-column>
+				<vxe-table-column field="tname" title="人员名称"></vxe-table-column>
+				<vxe-table-column field="tcompanyname" title="公司名称"></vxe-table-column>
 			</vxe-table>
 		</el-card>
 	</div>
 </template>
 <script>
+	import pageNation from '../pageNation';
 	export default {
+		components: {
+			pageNation
+		},
 		props: {
 			roleCon: Object,
 			showFig: String
@@ -42,16 +46,11 @@
 		data() {
 			return {
 				formInline: {
-					name: ""
+					name: "",
+					page: 1,
+					size: 1000000
 				},
-				tableData: [],
-				currentTotal: 0,
 				roleList: [],
-				medianValue: {},
-				value: "",
-				selectData: "",
-				selectCon: "",
-				toSelectData: {},
 				roleIds: [],
 				rowClick: {},
 				conList: []
@@ -64,9 +63,9 @@
 			getAll() {
 				var list = JSON.parse(JSON.stringify(this.$refs.multipleTable.getCheckboxRecords()))
 				this.roleList = JSON.parse(JSON.stringify(this.conList))
-				this.roleList.forEach((item, index) => {
-					list.forEach(val => {
-						if(val.id == item.id) {
+				this.roleList.forEach((item,index) =>{
+					list.forEach(val =>{
+						if(val.toid == item.toid){
 							this.$refs.multipleTable.toggleCheckboxRow(this.roleList[index]);
 						}
 					})
@@ -78,10 +77,9 @@
 			},
 			check() {
 				this.$refs.multipleTable.setAllCheckboxRow(false)
-				this.roleList = JSON.parse(JSON.stringify(this.conList))
 				this.roleList.forEach((item, index) => {
 					for(var i = 0; i < this.roleCon.list.length; i++) {
-						if(this.roleCon.list[i] == item.id) {
+						if(this.roleCon.list[i] == item.toid) {
 							this.$refs.multipleTable.toggleCheckboxRow(this.roleList[index]);
 						}
 					}
@@ -90,10 +88,10 @@
 			workItemAuthRole() {
 				this.roleIds = []
 				this.$refs.multipleTable.getCheckboxRecords().forEach(item => {
-					this.roleIds.push(item.id)
+					this.roleIds.push(item.toid)
 				})
-				this.$api.collaborativeOffice.apiUrl("workItemAuth/workItemAuthRole", {
-					roleIds: this.roleIds,
+				this.$api.collaborativeOffice.apiUrl("workItemAuthUser/authUserToWorkItem", {
+					userIdList: this.roleIds,
 					workItemId: this.roleCon.id
 				}).then(data => {
 					if(this.dataBack(data, "授权成功")) {
@@ -106,8 +104,8 @@
 				this.$parent.$parent.$parent.$parent.$parent.role()
 			},
 			getRoleList() {
-				this.$api.collaborativeOffice.apiUrl("role/findByParams", this.formInline).then(data => {
-					this.conList = data.data.data
+				this.$api.collaborativeOffice.apiUrl("staffManage/findStaffByPage", this.formInline).then(data => {
+					this.conList = data.data.data.rows
 					this.roleList = JSON.parse(JSON.stringify(this.conList))
 				})
 			},
@@ -115,10 +113,10 @@
 			clickRow(row) {
 				this.rowClick = row.row
 				if(this.showFig == 2) {
-					this.$api.collaborativeOffice.findWorkItemByRoleId({
-						roleId: row.row.id
+					this.$api.collaborativeOffice.findWorkItemByUser({
+						userId: row.row.toid
 					}).then(data => {
-						this.$emit("getCon", data.data.data, row.row.id)
+						this.$emit("getCon", data.data.data, row.row.toid)
 					})
 				}
 			},

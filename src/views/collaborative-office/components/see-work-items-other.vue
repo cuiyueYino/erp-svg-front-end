@@ -1,8 +1,14 @@
+<!--
+	工作流查看用
+-->
+
+
+
 <template>
 	<div style="height: 85vh; overflow-y:scroll">
 		<el-card class="box-card">
 			<el-row>
-				<el-col :span="23">工作事项</el-col>
+				<el-col style="text-align: center;" :span="24">工作事项</el-col>
 			</el-row>
 			<el-row>
 				<el-col :span="18">
@@ -79,9 +85,7 @@
 					 * 存入外层信息
 					 * */
 					//单据编号
-					console.log(this.$refs.child.conData)
 					backData.voucherId = JSON.parse(JSON.stringify(backData.jsonStr.voucherId))
-
 					//标题
 					backData.title = JSON.parse(JSON.stringify(backData.jsonStr.title))
 					//经办人

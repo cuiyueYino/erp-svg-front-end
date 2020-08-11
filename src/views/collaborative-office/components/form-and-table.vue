@@ -5,12 +5,19 @@
 				<slot></slot>
 			</formIcon>
 		</el-card>
+		<el-row style="text-align: center;margin-bottom: 10px;">
+			工作事项模板子表
+		</el-row>
 		<el-tabs v-model="activeName" type="border-card">
 			<el-tab-pane :label="item.showName" v-for="(item,index) in formData.bottom" :name="item.id" :key="index">
 				<formIcon :dis="dis" :showAdd="showAdd" :key="count" ref="refCon" show="2" v-if="item.type == 1" :form-data="item"></formIcon>
 				<tableDynamic :dis="dis" :key="count" ref="refCon" v-else :form-data="item"></tableDynamic>
 			</el-tab-pane>
-			<el-tab-pane name="wobuxinnengchongfu" label="附件">1</el-tab-pane>
+			<el-tab-pane name="wobuxinnengchongfu" label="附件">
+				<el-upload :auto-upload="false" :on-change="getFile" :on-remove="delFile" multiple :data="uploadData" ref="upload" class="upload-demo" action="" :file-list="fileList">
+					<el-button size="small" type="primary">点击上传</el-button>
+				</el-upload>
+			</el-tab-pane>
 		</el-tabs>
 	</div>
 </template>
@@ -42,7 +49,13 @@
 		data() {
 			return {
 				count: 0,
-				conData: {}
+				conData: {},
+				fileList: [],
+				uploadData: {
+					userCode: "user1",
+					meauCode: "workItem",
+					voucherId: ""
+				}
 			};
 		},
 		computed: {
@@ -62,9 +75,36 @@
 				set() {}
 			}
 		},
-		created() {
-		},
+		created() {},
 		methods: {
+			getFile(file, fileList) {
+				const isLt2M = file.size / 1024 / 1024 < 20;
+				if(isLt2M) {
+					this.fileList.push(file.raw)
+				} else {
+					this.$message.error('上传大小不能超过 20MB!');
+					for(var i = 0; i < fileList.length; i++) {
+						if(fileList[i].uid == file.uid) {
+							fileList.splice(i, 1)
+						}
+					}
+				}
+			},
+			delFile(file, fileList) {
+				this.fileList = fileList
+			},
+			toUpload(id) {   
+				this.fileList.forEach(item => {  
+					var formData  = new  FormData();
+					formData.append('userCode', "user1");
+					formData.append('meauCode', "workItem");
+					formData.append('voucherId', id);
+					formData.append('file', item);
+					this.$api.collaborativeOffice.uploadFile(formData).then(data => {
+						console.log(data)
+					})
+				})
+			},
 			onSubmit() {
 				var state = true
 				if(!this.$refs.mainTableChild.onSubmit()) {
@@ -98,5 +138,12 @@
 </script>
 
 <style scoped>
-
+	>>>.el-upload--text {
+		height: 30px!important;
+		width: 80px!important;
+	}
+	
+	.upload-btn {
+		display: inline-block;
+	}
 </style>

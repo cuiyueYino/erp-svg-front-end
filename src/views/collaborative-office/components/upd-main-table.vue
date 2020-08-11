@@ -3,10 +3,7 @@
 		<div v-if="!showFigForm">
 			<el-card class="box-card">
 				<el-row>
-					<el-col :span="23">工作事项模板主表</el-col>
-					<el-col :span="1" style="text-align: right;">
-						<el-button type="danger" @click="$parent.toSelect()" size="mini" icon="el-icon-close"></el-button>
-					</el-col>
+					<el-col style="text-align: center;" :span="24">工作事项模板主表</el-col>
 				</el-row>
 				<el-row>
 					<el-col :span="18">
@@ -18,8 +15,9 @@
 					</el-col>
 					<el-col :span="6" style="text-align: right;">
 						<el-button @click="submitForm(2)" type="success" size="mini" icon="el-icon-check">提交</el-button>
-						<el-button @click="submitForm(1)" type="success" size="mini" icon="el-icon-check">暂存</el-button>
-						<el-button @click="preview()" type="success" size="mini" icon="el-icon-check">预览</el-button>
+						<el-button @click="submitForm(1)" type="primary" size="mini" icon="el-icon-finished">暂存</el-button>
+						<el-button @click="preview()" type="primary" plain size="mini" icon="el-icon-view">预览</el-button>
+						<el-button type="danger" @click="$parent.toSelect()" size="mini" icon="el-icon-close">返回</el-button>
 					</el-col>
 				</el-row>
 			</el-card>
@@ -53,10 +51,10 @@
 			</el-card>
 			<el-card class="box-card">
 				<el-row>
-					<el-col>工作事项模板主表行</el-col>
+					<el-col style="text-align: center;">工作事项模板主表行</el-col>
 				</el-row>
-				<el-form :model="ruleForm" :rules="rulesTable" ref="ruleFormTable">
-					<el-table size="small" height="400" :data="ruleForm.lines" border style="width: 100%">
+				<el-form style="margin-top: 10px;" :model="ruleForm" :rules="rulesTable" ref="ruleFormTable">
+					<el-table size="small" height="600" :data="ruleForm.lines" border style="width: 100%">
 						<el-table-column prop="field" label="数据库字段名" align="center" width="120">
 							<template slot-scope="scope">
 								<el-form-item>
@@ -630,7 +628,6 @@
 			},
 			//选中行
 			clickRow(row) {
-				console.log(row)
 				this.tServiceByParamsCon = row
 			},
 		}

@@ -467,11 +467,13 @@ export default {
       this.$api.jobUserManagement
         .deletePositionTypeTableData(this.multipleSelection[0].foid)
         .then(res => {
-          if ((res.data.code == 0)) {
+          if (res.data.code == 0) {
             this.$message.success("删除成功!");
             this.isEdit = false;
             //刷新表格
             this.getPositionTypeTableData("");
+          }else{
+            this.$message.error(res.data.msg);
           }
         }),
         error => {

@@ -60,7 +60,7 @@
             </div>
             <div class="second-li">
               <label
-                :class="item.fconfshow == null ? 'unusingConf-fontStyle confFirst_style' : 'usingConf-fontStyle confFirst_style'">{{item.fname}}</label>
+                :class="item.fconfshow == null ? 'unUsingConf-fontStyle confFirst_style' : 'usingConf-fontStyle confFirst_style'">{{item.fname}}</label>
             </div>
             <div v-if="item.fconfshow != null" class="third-li">
               <el-tooltip
@@ -88,6 +88,38 @@
       </el-row>
     </div>
 
+    <!-- 超时弹出框 -->
+    <div class="out-time-visible" v-show="outTimeVisible">
+      <div class="el-dialog__header">
+        <slot name="title">
+          <span class="el-dialog__title">超时时间</span>
+        </slot>
+        <button
+          type="button"
+          class="el-dialog__headerbtn"
+          aria-label="Close"
+          v-if="showClose"
+          @click="handleClose">
+          <i class="el-dialog__close el-icon el-icon-close"></i>
+        </button>
+      </div>
+      <el-col class="out-time-body">
+        <label>会议超时至：</label>
+        <el-time-picker
+          class="dateSelect_outTime"
+          v-model="fouttime"
+          format="HH:mm"
+          value-format="yyyy-MM-dd HH:mm"
+          size="small"
+          :clearable="false"
+          :editable="false"
+        ></el-time-picker>
+      </el-col>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" size="mini" @click="confirm('fouttime')">确 定</el-button>
+        <el-button size="mini" @click="cancel()">取 消</el-button>
+      </div>
+    </div>
     <!-- 会议模态框 -->
     <el-form :model="formProcess" ref="formProcess">
       <conference-apply-search
@@ -135,7 +167,8 @@
         buttonShow: false,
         isOutTime: false,
         dialogVisible: false,
-        fouttime: new Date(2016, 9, 10, 18, 40),
+        outTimeVisible: false,
+        fouttime: "",
         fconfid: "",
         companyName: "福佳集团",
         fcompanyid: "_DefaultCompanyOId",
@@ -145,6 +178,7 @@
         tableData: [],
         imgSrc: "",
         backgroundImg: "",
+        showClose: true,
       };
     },
     methods: {
@@ -174,6 +208,9 @@
         };
         this.value2 = date.year + "-" + date.month + "-" + date.date;
       },
+      handleClose() {
+        this.outTimeVisible = false;
+      },
       // 开始，结束，超时
       editStatus(fstatus) {
         let data = {}
@@ -192,12 +229,15 @@
         }
         if (fstatus == 2) {
           // 超时
+          data.fconfapplyid = confShow.fconfapplyid;
+          data.fconfid = this.clickData.foid;
           data.fouttime = this.fouttime;
         }
         this.$api.confMangement.editConfMnt(data).then(
           (res) => {
             if (res.data.code == 0) {
               this.$message.success("设置成功");
+              this.outTimeVisible = false;
               //刷新页面
               this.getTableData();
             } else {
@@ -209,9 +249,7 @@
           }
         );
       },
-      outTime() {
 
-      },
       // 会议模态框
       showConf(item) {
         this.fconfid = item.foid;
@@ -269,6 +307,35 @@
             console.log(error);
           }
         );
+      },
+      // 超时弹出框
+      outTime() {
+        if (this.clickData.fconfshow == null) {
+          this.$message.error("当前会议室没有开始状态的会议！");
+          return;
+        }
+        this.fouttime = "";
+        this.outTimeVisible = true;
+      },
+      // 超时确认
+      confirm(fouttime){
+        let endDate = this.clickData.fconfshow.fenddate.replace('T',' ').substring(0,16);
+        console.log("结束时间：" + endDate);
+        console.log("超时时间：" + this.fouttime);
+        if(this.fouttime == null || this.fouttime == ""){
+          this.$message.error("超时时间不可为空！");
+          return;
+        }
+        if(this.fouttime <= endDate){
+          this.$message.error("超时时间需大于会议结束时间！");
+          return;
+        }
+        this.editStatus(2);
+      },
+      // 超时取消
+      cancel(){
+        this.outTimeVisible = false;
+        this.fouttime = "";
       },
       // 关闭模态框
       closeConf() {
@@ -350,4 +417,6 @@
     background-color: #2989ff !important;
     color: #f9fbff;
   }
+
+
 </style>

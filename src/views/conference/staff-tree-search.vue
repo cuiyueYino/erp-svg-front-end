@@ -89,6 +89,9 @@ export default {
       // 对话框显示标识
       dialogVisible: this.visible,
       treeData: [],
+      fromData: {
+        id: this.fcompanyid
+      },
       strictly: false,
       defaultProps: {
         label: "fname",
@@ -104,24 +107,28 @@ export default {
       this.treeData = [];
       if (this.title == "用户查询") {
         this.strictly = false;
-        let fromdata = {};
-        fromdata.id = this.fcompanyid;
-        this.$api.confMangement.getStaffTreeList(fromdata).then(
-          (res) => {
-            let resData = res.data.data;
-            let resDataArr = eval("(" + resData + ")");
-            this.treeData = resDataArr;
-          },
-          (error) => {
-            console.log(error);
-          }
-        );
+        let staffTree = JSON.parse(localStorage.getItem('conf_staffTree'));
+        if(staffTree != null){
+          this.treeData = staffTree;
+        }else{
+          this.$api.confMangement.getStaffTreeList(this.fromData).then(
+            (res) => {
+              let resData = res.data.data;
+              let resDataArr = eval("(" + resData + ")");
+              this.treeData = resDataArr;
+            },
+            (error) => {
+              console.log(error);
+            }
+          );
+        }
       } else if (this.title == "组织机构查询") {
         this.strictly = true;
-        let fromdata = {};
-        fromdata.orgUnitId = this.fcompanyid;
-        fromdata.queryType = "org";
-        this.$api.confMangement.getOrgunitTree(fromdata).then(
+        let fromData = {
+          orgUnitId: this.fcompanyid,
+          queryType: "org"
+        };
+        this.$api.confMangement.getOrgunitTree(fromData).then(
           (res) => {
             let resData = res.data.data;
             let resDataArr = eval("(" + resData + ")");
@@ -138,10 +145,8 @@ export default {
     // 查询
     searchKey() {
       if (this.title == "用户查询") {
-        let fromdata = {};
-        fromdata.id = this.fcompanyid;
-        fromdata.name = this.form.selectVal;
-        this.$api.confMangement.getStaffTreeList(fromdata).then(
+        this.fromData.name = this.form.selectVal;
+        this.$api.confMangement.getStaffTreeList(this.fromData).then(
           (res) => {
             let resData = res.data.data;
             let resDataArr = eval("(" + resData + ")");
@@ -152,10 +157,11 @@ export default {
           }
         );
       } else if (this.title == "组织机构查询") {
-        let fromdata = {};
-        fromdata.orgUnitId = this.fcompanyid;
-        fromdata.queryType = "org";
-        this.$api.confMangement.getOrgunitTree(fromdata).then(
+        let fromData = {
+          orgUnitId: this.fcompanyid,
+          queryType: "org"
+        };
+        this.$api.confMangement.getOrgunitTree(fromData).then(
           (res) => {
             let resData = res.data.data;
             let resDataArr = eval("(" + resData + ")");

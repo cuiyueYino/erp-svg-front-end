@@ -92,14 +92,14 @@ export default {
     },
     //获取职务类型
     queryPositionType() {
-      let data;
-      data = {
+      let data = {
         page: this.pageNum,
         size: this.pageSize,
       };
       this.$api.jobUserManagement.getPositionTypeTableData(data).then((res) => {
         if (res.data.code == 0) {
           this.tableTypeData = res.data.data.rows;
+          this.total = res.data.data.total;
         } else {
           this.$message.error(res.data.msg);
         }
@@ -161,6 +161,7 @@ export default {
       this.$api.jobUserManagement.getPositionTypeTableData(data).then((res) => {
         if (res.data.code == 0) {
           this.tableTypeData = res.data.data.rows;
+          this.total = res.data.data.total;
         } else {
           this.$message.error(res.data.msg);
         }
