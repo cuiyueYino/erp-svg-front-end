@@ -254,6 +254,12 @@ export default {
             let formDataA ={};
             formDataA.page=val;
             formDataA.size=this.pageSize;
+            let data =this.NodeClickObj;
+            if(data.children){
+                formDataA.parentId=data.id;
+            }else{
+                formDataA.id=data.id;
+            }
             formDataA.company=this.formInline.company;
             this.searchMenutable(formDataA);
         },

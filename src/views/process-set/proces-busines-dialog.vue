@@ -307,7 +307,7 @@ export default {
             this.dialogVisible = bool;
             if(this.type =='用户'){
                 let fromdata={};
-                fromdata.queryType='';
+                fromdata.id='_DefaultCompanyOId';
                 this.getUserTreeData(fromdata);
                 let Roledata={};
                 Roledata.queryType='';
@@ -329,9 +329,10 @@ export default {
         getUserTreeData(data){
             let fromdata=data;
             this.$api.processSet.getUserTreeData(fromdata).then(res=>{
+                
                 let resData=res.data.data;
                 let resDataArr= eval("("+resData+")");
-                this.treeData = resDataArr.JsonInfo;
+                this.treeData = resDataArr;
             },error=>{
                 console.log(error)
             })
@@ -389,24 +390,27 @@ export default {
         //tree 改写样式
         renderContent(h, { node, data, store }) {
             if(data){
-                if(data.types =="1"){
-                    return(
-                        <span class="custom-tree-node">
-                            <span><i class="el-icon-folder-opened"></i></span>
-                            <span style="margin-left: 5px;">{node.data.fname}</span>
-                        </span>
-                    )
-                }else if(data.types=="2"){
-                    return(
-                        <span class="custom-tree-node">
-                            <span><i class="el-icon-user-solid"></i></span>
-                            <span style="margin-left: 5px;">{node.data.fname}</span>
-                        </span>
-                    )
+                if(data.fstruid){
+                    let fstruid =data.fstruid; 
+                    if(fstruid.length > 5){
+                        return(
+                            <span class="custom-tree-node">
+                                <span><i class="el-icon-folder-opened"></i></span>
+                                <span style="margin-left: 5px;">{node.data.fname}</span>
+                            </span>
+                        )
+                    }else{
+                        return(
+                            <span class="custom-tree-node">
+                                <span><i class="el-icon-folder"></i></span>
+                                <span style="margin-left: 5px;">{node.data.fname}</span>
+                            </span>
+                        ) 
+                    }
                 }else{
                     return(
                         <span class="custom-tree-node">
-                            <span><i class="el-icon-folder-opened"></i></span>
+                            <span><i class="el-icon-user-solid"></i></span>
                             <span style="margin-left: 5px;">{node.data.fname}</span>
                         </span>
                     )
@@ -421,8 +425,7 @@ export default {
         //查询人员
         searchKey(){
             let fromdata={};
-            fromdata.queryType='';
-            fromdata.queryKey=this.searchKeyW;
+            fromdata.name=this.searchKeyW;
             this.getUserTreeData(fromdata);
         },
         //重置role table
