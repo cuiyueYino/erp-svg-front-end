@@ -36,7 +36,7 @@
                     <el-checkbox v-model="formData.checked"></el-checkbox>
                 </el-form-item> -->
                 <el-form-item label="描述：" :label-width="formLabelWidth">
-                    <el-input maxlength="1000"  autosize show-word-limit type="textarea" v-model="formData.fremark"></el-input>
+                    <el-input maxlength="500"  autosize show-word-limit type="textarea" v-model="formData.fremark"></el-input>
                 </el-form-item>
                 <!-- Condition END-->
             </el-tab-pane>
@@ -58,10 +58,10 @@
                     </el-radio-group>
                 </el-form-item>
                  <el-form-item  :label-width="formLabelWidth" prop="autoSubmit">
-                    <el-checkbox v-model="formData.autoSubmit">超过最大时间系统自动提交审批</el-checkbox>
+                    <el-checkbox v-model="formData.autoSubmit" @change="changeAutoSubmit">超过最大时间系统自动提交审批</el-checkbox>
                 </el-form-item>
                 <el-form-item  :label-width="formLabelWidth" prop="autoHurry">
-                    <el-checkbox v-model="formData.autoHurry">超过最大时间系统自动发送催办消息</el-checkbox>
+                    <el-checkbox v-model="formData.autoHurry"  @change="changeAutoHurry">超过最大时间系统自动发送催办消息</el-checkbox>
                 </el-form-item>
                  <!-- Condition END-->
             </el-tab-pane>
@@ -241,12 +241,12 @@
              <el-row :gutter="24">
                   <el-col :span="10">
                     <el-form-item label="编码" label-width="60px">
-                        <el-input clearable size="small" v-model="formData.formCode" placeholder="请输入条件值"></el-input>
+                        <el-input clearable size="small" v-model="formData.formCode" placeholder="请输入"></el-input>
                     </el-form-item>
                   </el-col> 
                   <el-col :span="10">
                     <el-form-item label="名称" label-width="60px">
-                        <el-input clearable size="small" v-model="formData.formName" placeholder="请输入条件值"></el-input>
+                        <el-input clearable size="small" v-model="formData.formName" placeholder="请输入"></el-input>
                     </el-form-item>
                   </el-col> 
                   <!-- <el-col :span="8">
@@ -719,6 +719,18 @@ export default {
         },
     },
     methods: {
+        changeAutoSubmit(val){
+            if(val){
+               this.formData.autoHurry = false
+            }
+            console.log(val)
+        },
+        changeAutoHurry(val){
+            if(val){
+               this.formData.autoSubmit = false
+            }
+            console.log(val)
+        },
          checkboxChange(e){
             switch (e[e.length-1]) {
             case "由权限控制":

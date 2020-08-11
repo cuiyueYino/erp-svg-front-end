@@ -500,8 +500,11 @@ export default {
         //子流程
         saveProcessData(e){
             console.log(e)
+             if( e.name =='' || !e.refWfProcess || e.code ==''  ){
+                this.$message.error("保存失败,请填写必填信息");
+                return;
+            }
             this.data.oid = e.oid;
-            this.data.hidden = e.checked?1:0;
             this.data.refWfProcess = e.refWfProcess;
             this.data.fremark = e.fremark;
             this.data.displayName = e.name;

@@ -20,14 +20,14 @@
             size="small"
             @submit.native.prevent
         >
-         <el-form-item label="业务编码" >
-            <el-input clearable size="small" v-model="formData.fcode" placeholder="请输入条件值"></el-input>
+         <el-form-item label="业务编码" prop="fcode">
+            <el-input clearable size="small" v-model="formData.fcode" placeholder="请输入"></el-input>
         </el-form-item>
-        <el-form-item label="业务名称" >
-            <el-input clearable size="small" v-model="formData.fname" placeholder="请输入条件值"></el-input>
+        <el-form-item label="业务名称" prop="fname">
+            <el-input clearable size="small" v-model="formData.fname" placeholder="请输入"></el-input>
         </el-form-item>
-         <el-form-item label="业务数据" >
-            <el-input clearable size="small" v-model="formData.prosessData" placeholder="请输入条件值"></el-input>
+         <el-form-item label="业务数据" prop="prosessData">
+            <el-input clearable size="small" v-model="formData.prosessData" placeholder="请输入"></el-input>
             <img class="icon-search" @click="baseInputTable('审核','业务数据查询 ')" src="../../../assets/img/search.svg">
         </el-form-item>
         <el-form-item label="描述" >
@@ -42,7 +42,7 @@
          
           <el-row :gutter="20">
             <el-col :span="13" style="text-align: right;margin-top: 18px;">
-                <el-button  size="small" @click="saveConfig">确定</el-button>
+                <el-button  size="small" @click="saveConfig('workflowConfigForm')">确定</el-button>
             </el-col>
             
         </el-row>
@@ -107,9 +107,9 @@ export default {
             multipleSelection: [],
              // 配置表单校验规则
             configRules: {
-                name: { required: true, message: '请输入英文名', trigger: 'blur' },
-                displayName: { required: true, message: '请输入名称', trigger: 'blur' },
-                performType: { required: true, message: '请选择参与类型', trigger: 'change' }
+                fname: { required: true, message: '请输入名称', trigger: 'blur' },
+                fcode: { required: true, message: '请输入编码', trigger: 'blur' },
+                prosessData: { required: true, message: '请选择业务数据', trigger: 'change' }
             },
         };
     },
@@ -148,14 +148,22 @@ export default {
         workSearchTable(){
 
         },
-        saveConfig(){
-            this.$api.svg.addProcessActivity(this.formData).then(res=>{
-                if(res.data.data.msg == 'success'){
-                     this.$emit('closeDialog')
+        saveConfig(formName){
+             this.$refs[formName].validate((valid) => {
+                if (valid) {
+                    this.$api.svg.addProcessActivity(this.formData).then(res=>{
+                        if(res.data.data.msg == 'success'){
+                            this.$emit('closeDialog')
+                        }
+                    },error=>{
+                    console.log(error)
+                    })
+                } else {
+                    console.log('error submit!!');
+                    return false;
                 }
-            },error=>{
-            console.log(error)
-            })
+                });
+           
            
         },
         onCurrentChange(){

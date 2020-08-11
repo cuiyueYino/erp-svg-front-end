@@ -65,12 +65,12 @@
                    </el-col>
                     <el-col :span="22" :offset="2">
                             <el-form-item label="业务工作" label-width="120px">
-                                <el-input clearable v-model="DataForm.activityName" placeholder="请输入条件值" class="Carfiles"></el-input>
+                                <el-input clearable v-model="DataForm.activityName" placeholder="请输入" class="Carfiles"></el-input>
                             </el-form-item>
                     </el-col>
                      <el-col :span="22" :offset="2">
                             <el-form-item label="主题" label-width="120px">
-                                <el-input clearable  v-model="DataForm.subject" placeholder="请输入条件值" class="Carfiles"></el-input>
+                                <el-input clearable  v-model="DataForm.subject" placeholder="请输入" class="Carfiles"></el-input>
                             </el-form-item>
                      </el-col>
                       <el-col :span="22" :offset="2">
@@ -87,7 +87,7 @@
                       </el-col>
                        <el-col :span="22" :offset="2">
                             <el-form-item label="发起人" label-width="120px">
-                                <el-input clearable  v-model="DataForm.displaystartMan" placeholder="请输入条件值" class="Carfiles"></el-input>
+                                <el-input clearable  v-model="DataForm.displaystartMan" placeholder="请输入" class="Carfiles"></el-input>
                                  <img class="icon-search"  
                                     @click="MoreSearchPS(DataForm)"
                                     src="../../assets/img/search.svg">

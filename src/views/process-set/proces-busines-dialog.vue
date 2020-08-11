@@ -55,12 +55,12 @@
              <el-row :gutter="12">
                 <el-col :span="8" >
                     <el-form-item label="编码" label-width="70px">
-                        <el-input clearable size="small" v-model="formData.formCode" placeholder="请输入条件值"></el-input>
+                        <el-input clearable size="small" v-model="formData.formCode" placeholder="请输入"></el-input>
                     </el-form-item>
                 </el-col> 
                 <el-col :span="8"  >
                     <el-form-item label="名称" label-width="70px">
-                        <el-input clearable size="small" v-model="formData.formName" placeholder="请输入条件值"></el-input>
+                        <el-input clearable size="small" v-model="formData.formName" placeholder="请输入"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="6" v-if="type === '用户'">

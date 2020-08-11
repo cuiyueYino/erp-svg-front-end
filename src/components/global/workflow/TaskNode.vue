@@ -60,7 +60,7 @@
             placement="top"
             v-model="taskData.visible"
         >
-            <h4>您确定删除[{{taskData.data.displayName}}]吗？</h4>
+            <h4>您确定删除[{{taskData.data.displayName.substring(0,10)}}]吗？</h4>
             <div style="text-align: center;">
                 <el-button size="mini" type="primary" @click="$emit('delete');taskData.visible = false">确定</el-button>
                 <el-button size="mini" type="danger" @click="taskData.visible = false">取消</el-button>

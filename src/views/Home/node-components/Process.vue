@@ -12,10 +12,10 @@
             <el-tabs v-model="activeName" @tab-click="handleClick">
                 <el-tab-pane label="基本信息" name="1">
                     <el-form-item label="编码" :label-width="formLabelWidth" prop="code">
-                        <el-input ref="nameInput" v-model="formData.code" autocomplete="off" clearable></el-input>
+                        <el-input ref="nameInput" v-model="formData.code" @input="change($event)" autocomplete="off" clearable></el-input>
                     </el-form-item>
                     <el-form-item label="名称" :label-width="formLabelWidth" prop="name">
-                        <el-input ref="nameInput" v-model="formData.name" autocomplete="off" clearable></el-input>
+                        <el-input ref="nameInput" v-model="formData.name" @input="change($event)" autocomplete="off" clearable></el-input>
                     </el-form-item>
                      <el-form-item  label="引用流程" :label-width="formLabelWidth" prop="company">
                         <el-select v-model="formData.company" value-key="value" >
@@ -31,7 +31,7 @@
                         <el-checkbox v-model="checked"></el-checkbox>
                     </el-form-item> -->
                     <el-form-item label="描述：" :label-width="formLabelWidth">
-                        <el-input maxlength="1000" clearable  autosize show-word-limit type="textarea" v-model="formData.fremark"></el-input>
+                        <el-input maxlength="500" clearable  @input="change($event)" autosize show-word-limit type="textarea" v-model="formData.fremark"></el-input>
                     </el-form-item>
                 </el-tab-pane>
             </el-tabs>
@@ -84,9 +84,12 @@ export default {
             closeConfig: false,
             // 配置表单校验规则
             configRules: {
-                name: { required: true, message: '请输入英文名', trigger: 'blur' },
-                displayName: { required: true, message: '请输入名称', trigger: 'blur' },
-                performType: { required: true, message: '请选择参与类型', trigger: 'change' }
+                name: { required: true, message: '请输入名称', trigger: 'blur' },
+                code: { required: true, message: '请输入编码', trigger: 'blur' },
+                performType: { required: true, message: '请选择参与类型', trigger: 'change' },
+                company: [
+                    { required: true, message: '请选择子流程', trigger: 'change' }
+                ],
             },
             // 对话框显示标识
             dialogVisible: this.visible,
@@ -128,7 +131,6 @@ export default {
                 this.formData.fremark = this.editData.fremark;
                 this.formData.name = this.editData.displayName;
                 this.formData.code = this.editData.code;
-                
                 this.options = [{
                             label:this.editData.refWfProcess.name,
                             value:this.editData.refWfProcess.oid,
@@ -150,7 +152,6 @@ export default {
             this.dialogVisible = bool;
             if (bool) {
             }else {
-                this.formData.checked = this.checked;
                 this.newData.forEach(item => {
                     if(item.foid == this.formData.company){
                         this.formData.refWfProcess = {
@@ -172,6 +173,9 @@ export default {
         this.getSubprocessList();
     },
     methods: {
+          change(e){
+            this.$forceUpdate()
+        },
         // 获取子流程列表
         getSubprocessList(){
             this.$api.svg.getSubProcessList().then(res=>{

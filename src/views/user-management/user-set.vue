@@ -11,14 +11,14 @@
       <el-row :gutter="24">
         <el-col :span="24">
             <el-form-item label="登录账号：" label-width="94px"  prop="fcode">
-              <el-input clearable size="small" v-model="searchForm.fcode" placeholder="请输入条件值"></el-input>
+              <el-input clearable size="small" v-model="searchForm.fcode" placeholder="请输入"></el-input>
             </el-form-item>
             <el-form-item label="名称：" label-width="80px" prop="fname">
-              <el-input clearable size="small" v-model="searchForm.fname" placeholder="请输入条件值"></el-input>
+              <el-input clearable size="small" v-model="searchForm.fname" placeholder="请输入"></el-input>
             </el-form-item>
 
             <el-form-item label="用户部门：" label-width="90px" prop="departmentname">
-              <el-input clearable size="small" v-model="searchForm.departmentname" placeholder="请输入条件值"></el-input>
+              <el-input clearable size="small" v-model="searchForm.departmentname" placeholder="请输入"></el-input>
               
             </el-form-item>
            <el-form-item label="禁用：" label-width="100px" prop="fforbid">

@@ -2,7 +2,7 @@
     <div class="svgmian">
         <div class="clearfloat"></div>
         <!-- 弹窗 -->
-        <el-button type="text" @click="dialogTableVisible = true">打开嵌套表格的 Dialog</el-button>
+        <!-- <el-button type="text" @click="dialogTableVisible = true"></el-button> -->
 
         <el-dialog 
         :fullscreen="true"
@@ -64,7 +64,7 @@
                         >
                             保存
                         </el-button>
-                        <el-button
+                        <!-- <el-button
                             size="mini"
                             type="text"
                             :disabled="workflowNodes.filter(item => Object.keys(item).length > 0).length === 2"
@@ -72,7 +72,7 @@
                             @click="cleanUp"
                         >
                             清空
-                        </el-button>
+                        </el-button> -->
                         <el-button
                             size="mini"
                             type="text"

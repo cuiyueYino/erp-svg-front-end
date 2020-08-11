@@ -21,7 +21,7 @@
                 placement="top"
                 v-model="item.visible"
             >
-                <p>您确定删除[{{item.data.displayName}}]吗？</p>
+                <p>您确定删除[{{item.data.displayName.substring(0,10)}}]吗？</p>
                 <div style="text-align: center;">
                     <el-button size="mini" type="primary" @click="$emit('delete', item);item.visible = false">确定</el-button>
                     <el-button size="mini" type="danger" @click="item.visible = false">取消</el-button>

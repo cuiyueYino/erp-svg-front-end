@@ -24,7 +24,7 @@
                         <el-checkbox v-model="join"></el-checkbox>
                     </el-form-item>
                     <el-form-item label="描述：" :label-width="formLabelWidth">
-                        <el-input maxlength="1000" clearable  autosize show-word-limit type="textarea" v-model="formData.fremark"></el-input>
+                        <el-input maxlength="500" clearable  autosize show-word-limit type="textarea" v-model="formData.fremark"></el-input>
                     </el-form-item>
                 </el-tab-pane>
             </el-tabs>

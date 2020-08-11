@@ -26,12 +26,12 @@
              <el-row :gutter="24">
                   <el-col :span="8" v-show=" type !=='审核'">
                     <el-form-item label="编码" label-width="43px">
-                        <el-input clearable size="small" v-model="formData.formCode" placeholder="请输入条件值"></el-input>
+                        <el-input clearable size="small" v-model="formData.formCode" placeholder="请输入"></el-input>
                     </el-form-item>
                   </el-col> 
                   <el-col :span="8"  v-show=" type !=='审核'">
                     <el-form-item label="名称" label-width="43px">
-                        <el-input clearable size="small" v-model="formData.formName" placeholder="请输入条件值"></el-input>
+                        <el-input clearable size="small" v-model="formData.formName" placeholder="请输入"></el-input>
                     </el-form-item>
                   </el-col> 
                  
@@ -76,7 +76,7 @@
                 </el-col>  -->
                  <el-col :span="10" v-show="type ==='职务'" class="job-class">
                      <el-form-item label="职务类型" label-width="70px">
-                     <el-input clearable size="small" v-model="formData.formRoleName" placeholder="请输入条件值"></el-input>
+                     <el-input clearable size="small" v-model="formData.formRoleName" placeholder="请输入"></el-input>
                     <img class="icon-search" src="../../../assets/img/search.svg" >
                  </el-form-item>
                   
@@ -85,19 +85,19 @@
                   <span v-show="type ==='审核'">
                     <el-col :span="12">
                     <el-form-item label="编码" label-width="56px">
-                        <el-input clearable size="small" v-model="formData.formCode" placeholder="请输入条件值"></el-input>
+                        <el-input clearable size="small" v-model="formData.formCode" placeholder="请输入"></el-input>
                     </el-form-item>
                   </el-col> 
                   <el-col :span="12">
                     <el-form-item label="名称" label-width="56px">
-                        <el-input clearable size="small" v-model="formData.formName" placeholder="请输入条件值"></el-input>
+                        <el-input clearable size="small" v-model="formData.formName" placeholder="请输入"></el-input>
                     </el-form-item>
                   </el-col> 
-                  <el-col :span="12">
+                  <!-- <el-col :span="12">
                     <el-form-item label="超类编码" label-width="84px">
                         <el-input clearable size="small" v-model="formData.formName" placeholder="请输入条件值"></el-input>
                     </el-form-item>
-                  </el-col> 
+                  </el-col>  -->
                   </span>
                 <el-col :span="6" v-show="type !=='服务'">
                     <el-button type="primary" size="small" plain @click="reWorkSearchTable">重置</el-button>
@@ -621,6 +621,27 @@ export default {
                     console.log(error)
                 })
             }
+             if(this.type ==="审核"){
+                let fromdata={};
+                fromdata.page=this.pageNum;
+                fromdata.size=this.pageSize;
+                let formCode=this.formData.formCode;
+                if(formCode){
+                    fromdata.fcode=formCode;
+                }
+                let formName=this.formData.formName;
+                if(formName){
+                    fromdata.fname=formName;
+                }
+                this.$api.svg.getProcessData(fromdata).then(res=>{
+                    let resData=res.data.data.rows;
+                    this.gridData = resData;
+                    this.pageNum = res.data.data.page;
+                    this.total = res.data.data.total;
+                },error=>{
+                    console.log(error)
+                })
+            }
         },
         saveConfig(){
             let selectOption= this.multipleSelection;
@@ -687,7 +708,22 @@ export default {
                     console.log(error)
                 })
             }
+             if(this.type ==="审核"){
+                let fromdata={};
+                fromdata.page=val;
+                fromdata.size=this.pageSize
+                this.$api.svg.getProcessData(fromdata).then(res=>{
+                    let resData=res.data.data.rows;
+                    this.gridData = resData;
+                    this.pageNum = res.data.data.page;
+                    this.total = res.data.data.total;
+                },error=>{
+                    console.log(error)
+                })
+            }
+        
         },
+        
         onSelectionChange(val){
             this.multipleSelection = val;
         },
