@@ -1,8 +1,46 @@
+/*总背景色*/
+.wrapper {
+    background: aliceblue;
+}
+
+/*搜索栏*/
 .box-card {
     margin: 16px 30px;
     height: 80px;
 }
 
+.header-button {
+    border: 1px solid #2989ff !important;
+    border-radius: 3px 0px 0px 3px !important;
+    font-size: 12px;
+    color: rgba(41, 137, 255, 1);
+}
+
+.bt-style {
+    background-color: transparent;
+    background-repeat: no-repeat;
+    width: 100px;
+    height: 31px;
+    border: none;
+    background-size: 79% 100%;
+    cursor: pointer;
+    color: white;
+    outline: none;
+}
+
+.bt-start {
+    background-image: url("./el-icon-start.png");
+}
+
+.bt-end {
+    background-image: url("./el-icon-end.png");
+}
+
+.bt-outTime {
+    background-image: url("./el-icon-outtime.png");
+}
+
+/*列表页*/
 .row-list {
     border: 1px solid #EBEEF5;
     background-color: #FFF;
@@ -15,12 +53,38 @@
     box-shadow: 0 2px 12px 0 rgba(0, 0, 0, .1);
     height: 730px;
     overflow: auto;
+    background-image: url("./background-img.png");
+    background-size: 100% 100%;
 }
 
-.wrapper {
-    background: aliceblue;
+/*超时模态框*/
+.out-time-visible{
+    width: 20%;
+    height: 185px;
+    position: absolute;
+    top: 43%;
+    left: 40%;
+    border-radius: 6px;
+    background: #FFF;
+    border: 1px solid rgb(205 209 214);
 }
 
+.out-time-body{
+    width: 95%;
+    margin: 40px 0px 0px 20px;
+}
+
+.dateSelect_outTime {
+    border-radius: 5px;
+    width: 134px !important
+}
+
+.dialog-footer{
+    height: 35px;
+    padding: 108px 0px 8px 120px;
+}
+
+/*会议室展示块*/
 .module {
     width: 350px;
     height: 255px;
@@ -57,7 +121,6 @@
     background-image: url("./el-icon-using-check.png");
 }
 
-
 .usingConf-fontStyle {
     font-family: Microsoft YaHei;
     font-weight: 800;
@@ -65,7 +128,7 @@
     display: inline-block;
 }
 
-.unusingConf-fontStyle {
+.unUsingConf-fontStyle {
     font-family: Microsoft YaHei;
     font-weight: 800;
     color: #FFFFFF;
@@ -121,20 +184,7 @@
     position: absolute;
 }
 
-.timeDialog {
-    width: 183px !important;
-    position: absolute;
-    left: 10%;
-    top: 20%;
-}
-
-.header-button {
-    border: 1px solid #2989ff !important;
-    border-radius: 3px 0px 0px 3px !important;
-    font-size: 12px;
-    color: rgba(41, 137, 255, 1);
-}
-
+/*会议室展示块 编号样式*/
 .mark-style {
     width: 50px;
     height: 50px;
@@ -167,28 +217,3 @@
     background: #639BE7;
     color: #86DBEB;
 }
-
-.bt-style {
-    background-color: transparent;
-    background-repeat: no-repeat;
-    width: 100px;
-    height: 31px;
-    border: none;
-    background-size: 79% 100%;
-    cursor: pointer;
-    color: white;
-    outline: none;
-}
-
-.bt-start {
-    background-image: url("./el-icon-start.png");
-}
-
-.bt-end {
-    background-image: url("./el-icon-end.png");
-}
-
-.bt-outTime {
-    background-image: url("./el-icon-outtime.png");
-}
-
