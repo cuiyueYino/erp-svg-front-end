@@ -61,10 +61,7 @@
 			return {
 				value: "",
 				selectData: "",
-				formInlineList: [{
-					id: "status",
-					name: "状态"
-				}, {
+				formInlineList: [ {
 					id: "code",
 					name: "主表编码"
 				}, {

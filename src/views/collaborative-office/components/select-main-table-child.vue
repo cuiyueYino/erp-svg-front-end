@@ -68,9 +68,6 @@
 				selectData: "",
 				selectCon: "",
 				formInlineList: [{
-					id: "status",
-					name: "状态"
-				}, {
 					id: "code",
 					name: "子表编码"
 				}, {
@@ -213,7 +210,7 @@
 				this.rowClickId = row.id
 				this.rowClick = row
 			},
-			toClear(){
+			toClear() {
 				this.selectData = ""
 				this.value = ""
 				this.toSelect()
