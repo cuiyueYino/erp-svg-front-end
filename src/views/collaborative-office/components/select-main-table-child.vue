@@ -18,20 +18,21 @@
 									<el-input clearable v-model="selectData"></el-input>
 								</el-form-item>
 							</el-col>
-							<el-col :span="3">
+							<el-col :span="6">
 								<el-form-item>
 									<el-button type="primary" @click="$refs.pageNation.toBegin()">搜索</el-button>
+									<el-button type="primary" @click="toClear()">重置</el-button>
 								</el-form-item>
 							</el-col>
 						</el-row>
 					</el-form>
 				</el-col>
 				<el-col style="text-align: right;" :span="10">
-					<el-button @click="$parent.toAdd('1')" icon="el-icon-delete" type="success">新增</el-button>
-					<el-button @click="toUpd()" icon="el-icon-delete" type="success">修改</el-button>
-					<el-button @click="updateStatus(3)" icon="el-icon-delete" type="primary">生效</el-button>
+					<el-button @click="$parent.toAdd('1')" icon="el-icon-plus" type="success">新增</el-button>
+					<el-button @click="toUpd()" icon="el-icon-edit" type="warning">修改</el-button>
+					<el-button @click="updateStatus(3)" icon="el-icon-check" type="primary">生效</el-button>
 					<el-button @click="updateStatus(7)" icon="el-icon-delete" type="danger">禁用</el-button>
-					<el-button @click="toSee()" icon="el-icon-delete" type="primary" plain>查看</el-button>
+					<el-button @click="toSee()" icon="el-icon-view" type="primary" plain>查看</el-button>
 				</el-col>
 			</el-row>
 		</el-card>
@@ -135,7 +136,6 @@
 					this.$api.collaborativeOffice.getWorkItemTempSubModel({
 						id: this.rowClickId
 					}).then(data => {
-						console.log(data)
 						this.$parent.toAdd('3', data.data.data)
 					})
 				}
@@ -181,7 +181,6 @@
 					this.$api.collaborativeOffice.getWorkItemTempSubModel({
 						id: this.rowClickId
 					}).then(data => {
-						console.log(data.data.data)
 						this.$parent.toUpd(data.data.data)
 					})
 				}
@@ -205,7 +204,6 @@
 					this.toSelectData[this.selectCon] = this.selectData
 				}
 				this.$api.collaborativeOffice.apiUrl("workItemTempSub/findWorkItemTempSubPage", this.toSelectData).then(data => {
-					console.log(data)
 					this.tableData = data.data.data.rows
 					this.currentTotal = data.data.data.total
 				})
@@ -215,6 +213,11 @@
 				this.rowClickId = row.id
 				this.rowClick = row
 			},
+			toClear(){
+				this.selectData = ""
+				this.value = ""
+				this.toSelect()
+			}
 		}
 	}
 </script>

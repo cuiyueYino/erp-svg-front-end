@@ -393,7 +393,6 @@
 							this.formData.conList[i2].serviceNow.fid = id
 							//循环查询
 							var conNow = await this.$api.collaborativeOffice.findTServiceItemByParams(this.formData.conList[i2].serviceNow).then(data => {
-								console.log(data)
 								return new Promise(resolve => {
 									//把根据‘不同的服务’获取到的返回值从新赋值，都是id和name的形式，方便调用
 									switch(this.formData.conList[i2].serviceNow.fcode) {

@@ -1,58 +1,52 @@
 <template>
 	<el-card>
 		<el-row>
-			<el-col :span="23">工作事项模板子表分类</el-col>
-			<el-col style="text-align: right;" :span="1">
-				<el-button type="danger" @click="$parent.toSelect()" size="mini" icon="el-icon-close"></el-button>
-			</el-col>
+			<el-col style="text-align: center;" :span="24">工作事项模板子表分类</el-col>
 		</el-row>
-		<el-row>
-			<el-col :span="22">
+		<el-row style="margin-top: 10px;">
+			<el-col :span="18">
 				公司：
 				<el-select :disabled="showFigAll" size='mini' v-model="ruleForm.company" placeholder="公司">
 					<el-option v-for="item in CompanyData" :key="item.id" :label="item.name" :value="item.id">
 					</el-option>
 				</el-select>
 			</el-col>
-			<el-col style="text-align: right;" :span="2">
+			<el-col style="text-align: right;" :span="6">
 				<el-button @click="submitForm('ruleForm','ruleFormTable')" v-show="!showFigAll" type="success" size="mini" icon="el-icon-check">提交</el-button>
+				<el-button type="danger" @click="$parent.toSelect()" size="mini" icon="el-icon-close">返回</el-button>
 			</el-col>
 		</el-row>
 		<el-card style="margin-top: 10px;">
 			<el-form size="mini" label-width="120px" :inline="true" :rules="rules" ref="ruleForm" :model="ruleForm" class="demo-form-inline">
 				<el-row>
-					<el-col :span="8">
+					<el-col :span="6">
 						<el-form-item prop="code" label="子表分类编码">
-							<el-input clearable :disabled="showFigAll" v-model="ruleForm.code" maxlength="50" placeholder="子表分类编码"></el-input>
+							<el-input style="width: 150%;" clearable :disabled="showFigAll" v-model="ruleForm.code" maxlength="50" placeholder="子表分类编码"></el-input>
 						</el-form-item>
 					</el-col>
-					<el-col :span="8">
+					<el-col :span="6">
 						<el-form-item prop="name" label="子表分类名称">
-							<el-input clearable :disabled="showFigAll" v-model="ruleForm.name" maxlength="50" placeholder="子表分类名称"></el-input>
+							<el-input style="width: 150%;" clearable :disabled="showFigAll" v-model="ruleForm.name" maxlength="50" placeholder="子表分类名称"></el-input>
 						</el-form-item>
 					</el-col>
-					<el-col :span="8">
+					<el-col :span="6">
 						<el-form-item prop="tableName" label="数据库表名">
-							<el-input clearable :disabled="showFig || showFigAll" v-model="ruleForm.tableName" maxlength="50" placeholder="数据库表名"></el-input>
+							<el-input style="width: 150%;" clearable :disabled="showFig || showFigAll" v-model="ruleForm.tableName" maxlength="50" placeholder="数据库表名"></el-input>
 						</el-form-item>
 					</el-col>
-				</el-row>
-				<el-row>
-					<el-form-item label="描述">
-						<el-input clearable :disabled="showFigAll" style="width: 1100px;" type="textarea" maxlength="1500" v-model="ruleForm.remark" placeholder="描述"></el-input>
-					</el-form-item>
+					<el-col :span="6">
+						<el-form-item label="描述">
+							<el-input clearable :disabled="showFigAll" style="width: 150%;" :rows="1" type="textarea" maxlength="1500" v-model="ruleForm.remark" placeholder="描述"></el-input>
+						</el-form-item>
+					</el-col>
 				</el-row>
 			</el-form>
 		</el-card>
 		<el-card style="margin-top: 10px;">
 			<el-row>
-				<el-col :span="22">工作事项模板子表分类行</el-col>
-				<el-col style="text-align: right;" :span="2">
-					<el-button v-show="!showFigAll" @click="toAddTable" type="success" icon="el-icon-plus">新增</el-button>
-				</el-col>
+				<el-col style="text-align: center;" :span="24">工作事项模板子表分类行</el-col>
 			</el-row>
-
-			<el-form :model="ruleForm" :rules="rulesTable" ref="ruleFormTable">
+			<el-form style="margin-top: 10px;" :model="ruleForm" :rules="rulesTable" ref="ruleFormTable">
 				<el-table size="small" height="600" :data="ruleForm.lines" border style="width: 100%">
 					<el-table-column prop="date" label="数据库字段名" align="center">
 						<template slot-scope="scope">
@@ -95,6 +89,9 @@
 						</template>
 					</el-table-column>
 					<el-table-column v-if="!showFigAll" prop="date" label="操作" width="120" align="center">
+						<template slot="header" slot-scope="scope">
+							<el-button @click="toAddTable" type="success" icon="el-icon-plus">新增</el-button>
+						</template>
 						<template slot-scope="scope">
 							<el-form-item v-if="!scope.row.showFig">
 								<el-button @click="toDelTable(scope.$index)" type="error">删除</el-button>
@@ -284,7 +281,6 @@
 						this.$refs.ruleFormTable.validate((valid) => {
 							if(valid) {
 								if(this.showFig) {
-									console.log(this.ruleForm)
 									this.$api.collaborativeOffice.apiUrl("workItemTypeSub/updateWorkItemTypeSubModel", this.ruleForm).then(data => {
 										if(this.dataBack(data, "修改成功")) {
 											this.$parent.toSelect()
@@ -315,7 +311,6 @@
 					})
 				} else {
 					this.$api.collaborativeOffice.findList().then(data => {
-						console.log(data)
 						this.fieldBrowseList = data.data.data
 					})
 				}

@@ -2,12 +2,9 @@
 	<div style="height: 85vh; overflow-y:scroll">
 		<el-card class="box-card">
 			<el-row>
-				<el-col :span="23">工作事项</el-col>
-				<el-col :span="1" style="text-align: right;">
-					<el-button type="danger" @click="$parent.toSelect()" size="mini" icon="el-icon-close"></el-button>
-				</el-col>
+				<el-col style="text-align: center;" :span="24">工作事项</el-col>
 			</el-row>
-			<el-row>
+			<el-row style="margin-bottom: 10px;">
 				<el-col :span="18">
 					公司：
 					<el-select disabled size='mini' value-key="id" v-model="company" placeholder="公司">
@@ -15,9 +12,10 @@
 						</el-option>
 					</el-select>
 				</el-col>
-				<el-col v-if="showSeeOrUpd == 3" :span="6" style="text-align: right;">
+				<el-col style="text-align: right;" v-if="showSeeOrUpd == 3" :span="6">
 					<el-button @click="submitForm(2)" type="success" size="mini" icon="el-icon-check">提交</el-button>
 					<el-button @click="submitForm(1)" type="success" size="mini" icon="el-icon-check">暂存</el-button>
+					<el-button type="danger" @click="$parent.toSelect()" size="mini" icon="el-icon-close"></el-button>
 				</el-col>
 			</el-row>
 			<formAndTable :dis="showSeeOrUpd" showAdd="2" ref="child" :form-data="conData"></formAndTable>
@@ -86,9 +84,7 @@
 					 * 存入外层信息
 					 * */
 					//单据编号
-					console.log(this.$refs.child.conData)
 					backData.voucherId = JSON.parse(JSON.stringify(backData.jsonStr.voucherId))
-
 					//标题
 					backData.title = JSON.parse(JSON.stringify(backData.jsonStr.title))
 					//经办人

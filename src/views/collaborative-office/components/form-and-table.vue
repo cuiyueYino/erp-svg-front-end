@@ -5,6 +5,9 @@
 				<slot></slot>
 			</formIcon>
 		</el-card>
+		<el-row style="text-align: center;margin-bottom: 10px;">
+			工作事项模板子表
+		</el-row>
 		<el-tabs v-model="activeName" type="border-card">
 			<el-tab-pane :label="item.showName" v-for="(item,index) in formData.bottom" :name="item.id" :key="index">
 				<formIcon :dis="dis" :showAdd="showAdd" :key="count" ref="refCon" show="2" v-if="item.type == 1" :form-data="item"></formIcon>

@@ -18,24 +18,25 @@
 									<el-input clearable v-model="selectData"></el-input>
 								</el-form-item>
 							</el-col>
-							<el-col :span="10" v-else>
+							<el-col :span="8" v-else>
 								<el-form-item>
 									<el-date-picker value-format="yyyy-MM-dd" v-model="value1" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期"></el-date-picker>
 								</el-form-item>
 							</el-col>
-							<el-col :span="3">
+							<el-col :span="5">
 								<el-form-item>
 									<el-button type="primary" @click="toSelect">搜索</el-button>
+									<el-button type="primary" @click="toClear">重置</el-button>
 								</el-form-item>
 							</el-col>
 						</el-row>
 					</el-form>
 				</el-col>
 				<el-col v-show="show != '1'" style="text-align: right;" :span="10">
-					<el-button @click="$parent.toAdd('1')" icon="el-icon-delete" type="success">新增</el-button>
-					<el-button @click="toUpd()" icon="el-icon-delete" type="success">修改</el-button>
+					<el-button @click="$parent.toAdd('1')" icon="el-icon-plus" type="success">新增</el-button>
+					<el-button @click="toUpd()" icon="el-icon-edit" type="warning">修改</el-button>
 					<el-button @click="del()" icon="el-icon-delete" type="danger">删除</el-button>
-					<el-button @click="toSee()" icon="el-icon-delete" type="primary" plain>查看</el-button>
+					<el-button @click="toSee()" icon="el-icon-view" type="primary" plain>查看</el-button>
 				</el-col>
 			</el-row>
 		</el-card>
@@ -128,7 +129,6 @@
 						tempId: this.rowClick.tempId,
 						tableName: this.rowClick.tableName
 					}).then(data => {
-						console.log(data)
 						if(this.dataBack(data)) {
 							this.$parent.toSee(JSON.parse(data.data.data), this.rowClick.tempId, "1")
 						}
@@ -166,7 +166,6 @@
 						tempId: this.rowClick.tempId,
 						tableName: this.rowClick.tableName
 					}).then(data => {
-						console.log(data)
 						this.$parent.toSee(JSON.parse(data.data.data), this.rowClick.tempId, "3")
 					})
 				}
@@ -196,7 +195,6 @@
 					toGet.endTime = this.value1[1]
 				}
 				this.$api.collaborativeOffice.findPage(toGet).then(data => {
-					console.log(data)
 					this.tableData = data.data.data.rows
 					this.currentTotal = data.data.data.total
 				})
@@ -205,6 +203,11 @@
 			clickRow(row) {
 				this.rowClick = row
 			},
+			toClear(){
+				this.selectData = ""
+				this.value = ""
+				this.toSelect()
+			}
 		}
 	}
 </script>

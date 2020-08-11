@@ -127,7 +127,6 @@
 					}).then(data => {
 
 						localStorage.setItem('staffList', JSON.stringify(data.data.data.rows));
-						console.log(JSON.parse(localStorage.getItem('staffList')))
 					})
 					//用户
 					this.$api.collaborativeOffice.findConList("userManage/findUserBypage", {
@@ -135,7 +134,6 @@
 						size: 100000
 					}).then(data => {
 						localStorage.setItem('userList', JSON.stringify(data.data.data.rows));
-						console.log(JSON.parse(localStorage.getItem('userList')))
 					})
 					//职务
 					this.$api.collaborativeOffice.findConList("positionmnt/findPositionList", {
@@ -143,7 +141,6 @@
 						size: 100000
 					}).then(data => {
 						localStorage.setItem('positionList', JSON.stringify(data.data.data.rows));
-						console.log(JSON.parse(localStorage.getItem('positionList')))
 					})
 
 

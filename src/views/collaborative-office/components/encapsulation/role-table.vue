@@ -1,33 +1,34 @@
 <template>
 	<div>
 		<el-card class="box-card">
-			<el-form style="margin-bottom: 10px;" label-width="10px" :model="formInline" class="demo-form-inline">
+			<el-form style="margin-bottom: 10px;" ref="formInline" label-width="10px" :model="formInline" class="demo-form-inline">
 				<el-row>
-					<el-col :span="8">
-						<el-form-item>
-							<el-input clearable v-model="formInline.name"></el-input>
+					<el-col :span="6">
+						<el-form-item prop="name">
+							<el-input clearable v-model="formInline.name"  placeholder="角色名称"></el-input>
 						</el-form-item>
 					</el-col>
-					<el-col :span="8">
+					<el-col :span="10">
 						<el-form-item>
 							<el-button type="primary" @click="getRoleList()">搜索</el-button>
-							<el-button v-if="showFig == 1" type="primary" @click="getAll()">全部</el-button>
-							<el-button v-if="showFig == 1" type="primary" @click="getConList()">已选中</el-button>
+							<el-button type="primary" plain @click="$refs.formInline.resetFields();getRoleList()">重置</el-button>
+							<el-button v-if="showFig == 1" type="primary"plain @click="getAll()">全部</el-button>
+							<el-button v-if="showFig == 1" type="primary"plain @click="getConList()">已选中</el-button>
 						</el-form-item>
 					</el-col>
 					<el-col v-if="showFig == 1" :span="8" style="text-align: right;">
 						<el-form-item>
-							<el-button type="primary" @click="switchChild()">切换维度</el-button>
-							<el-button type="primary" @click="workItemAuthRole()">确定</el-button>
+							<el-button type="warning" icon="el-icon-refresh" @click="switchChild()">切换维度</el-button>
+							<el-button type="success" icon="el-icon-check" @click="workItemAuthRole()">确定</el-button>
 						</el-form-item>
 					</el-col>
 				</el-row>
 			</el-form>
-			<vxe-table border ref="multipleTable" size="small" highlight-current-row @cell-click="clickRow" max-height="700" :data="roleList">
+			<vxe-table border ref="multipleTable" size="small" highlight-current-row @cell-click="clickRow" height="700" :data="roleList">
 				<vxe-table-column v-if="showFig == 1" type="checkbox" width="60"></vxe-table-column>
-				<vxe-table-column field="code" title="人员编码"></vxe-table-column>
-				<vxe-table-column field="name" title="人员名称"></vxe-table-column>
-				<vxe-table-column field="companyName" title="公司名称"></vxe-table-column>
+				<vxe-table-column field="code" title="角色编码"></vxe-table-column>
+				<vxe-table-column field="name" title="角色名称"></vxe-table-column>
+				<vxe-table-column field="companyName" title="角色名称"></vxe-table-column>
 			</vxe-table>
 		</el-card>
 	</div>
@@ -81,7 +82,6 @@
 				this.roleList.forEach((item, index) => {
 					for(var i = 0; i < this.roleCon.list.length; i++) {
 						if(this.roleCon.list[i] == item.id) {
-							console.log(item.id)
 							this.$refs.multipleTable.toggleCheckboxRow(this.roleList[index]);
 						}
 					}

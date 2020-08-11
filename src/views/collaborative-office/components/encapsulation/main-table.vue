@@ -1,33 +1,35 @@
 <template>
 	<div>
 		<el-card class="box-card">
-			<el-form style="margin-bottom: 10px;" label-width="10px" :model="formInline" class="demo-form-inline">
+			<el-form style="margin-bottom: 10px;" ref="formInline" label-width="10px" :model="formInline" class="demo-form-inline">
 				<el-row>
-					<el-col :span="4">
-						<el-form-item>
-							<el-input clearable v-model="formInline.name"></el-input>
+					<el-col :span="6">
+						<el-form-item prop="name">
+							<el-input clearable v-model="formInline.name" placeholder="主表模板名称"></el-input>
 						</el-form-item>
 					</el-col>
-					<el-col :span="8">
+					<el-col :span="10">
 						<el-form-item>
 							<el-button type="primary" @click="toSelect()">搜索</el-button>
-							<el-button v-if="showFig == 2" type="primary" @click="getAll()">全部</el-button>
-							<el-button v-if="showFig == 2" type="primary" @click="getConList()">已选中</el-button>
+							<el-button type="primary" plain @click="$refs.formInline.resetFields();toSelect()">重置</el-button>
+							<el-button v-if="showFig == 2" type="primary"plain @click="getAll()">全部</el-button>
+							<el-button v-if="showFig == 2" type="primary"plain @click="getConList()">已选中</el-button>
 						</el-form-item>
 					</el-col>
-					<el-col v-if="showFig == 2" :span="12" style="text-align: right;">
+					<el-col v-if="showFig == 2" :span="8" style="text-align: right;">
 						<el-form-item>
-							<el-button type="primary" @click="switchChild()">切换维度</el-button>
-							<el-button type="primary" @click="roleAuthWorkItem()">确定</el-button>
+							<el-button type="warning" icon="el-icon-refresh" @click="switchChild()">切换维度</el-button>
+							<el-button type="success" icon="el-icon-check" @click="roleAuthWorkItem()">确定</el-button>
 						</el-form-item>
 					</el-col>
 				</el-row>
 			</el-form>
-			<vxe-table border ref="multipleTable" size="small" highlight-current-row @cell-click="clickRow" max-height="700" :data="tableData">
+			<vxe-table border ref="multipleTable" size="small" highlight-current-row @cell-click="clickRow" height="700" :data="tableData">
 				<vxe-table-column v-if="showFig == 2" type="checkbox" width="60"></vxe-table-column>
-				<vxe-table-column field="code" title="人员编码"></vxe-table-column>
-				<vxe-table-column field="name" title="人员名称"></vxe-table-column>
-				<vxe-table-column field="workItemTypeName" title="公司名称"></vxe-table-column>
+				<vxe-table-column field="code" title="主表模板编码"></vxe-table-column>
+				<vxe-table-column field="name" title="主表模板名称"></vxe-table-column>
+				<vxe-table-column field="workItemTypeName" title="主表模板分类"></vxe-table-column>
+				<vxe-table-column field="remark" title="描述"></vxe-table-column>
 			</vxe-table>
 		</el-card>
 	</div>
@@ -57,7 +59,6 @@
 		methods: {
 			getAll() {
 				var list = JSON.parse(JSON.stringify(this.$refs.multipleTable.getCheckboxRecords()))
-				console.log(list)
 				this.tableData = JSON.parse(JSON.stringify(this.conList))
 				this.tableData.forEach((item, index) => {
 					list.forEach(val => {
@@ -138,7 +139,6 @@
 							this.$api.collaborativeOffice.findRoleByWorkItem({
 								workItemId: row.row.id
 							}).then(data => {
-								console.log(data)
 								this.$emit("getCon", data.data.data, row.row.id)
 							})
 						}
