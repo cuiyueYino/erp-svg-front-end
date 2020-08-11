@@ -1,26 +1,24 @@
 <template>
-	<div>
-		<el-card class="elCard">
-			<el-row>
-				<el-col :span="23">工作事项模板主表分类</el-col>
-				<el-col style="text-align: right;" :span="1">
-					<el-button type="danger" @click="$parent.toSelect()" size="mini" icon="el-icon-close"></el-button>
-				</el-col>
-			</el-row>
-			<el-row>
-				<el-col :span="22">
-					公司：
-					<el-select :disabled="showFigAll" size='mini' v-model="ruleForm.company" placeholder="公司">
-						<el-option v-for="item in CompanyData" :key="item.id" :label="item.name" :value="item.id">
-						</el-option>
-					</el-select>
-				</el-col>
-				<el-col style="text-align: right;" :span="2">
-					<el-button @click="submitForm('ruleForm','ruleFormTable')" v-show="!showFigAll" type="success" size="mini" icon="el-icon-check">提交</el-button>
-				</el-col>
-			</el-row>
-		</el-card>
-		<el-card>
+	<el-card>
+		<el-row>
+			<el-col :span="23">工作事项模板主表分类</el-col>
+			<el-col style="text-align: right;" :span="1">
+				<el-button type="danger" @click="$parent.toSelect()" size="mini" icon="el-icon-close"></el-button>
+			</el-col>
+		</el-row>
+		<el-row>
+			<el-col :span="22">
+				公司：
+				<el-select :disabled="showFigAll" size='mini' v-model="ruleForm.company" placeholder="公司">
+					<el-option v-for="item in CompanyData" :key="item.id" :label="item.name" :value="item.id">
+					</el-option>
+				</el-select>
+			</el-col>
+			<el-col style="text-align: right;" :span="2">
+				<el-button @click="submitForm('ruleForm','ruleFormTable')" v-show="!showFigAll" type="success" size="mini" icon="el-icon-check">提交</el-button>
+			</el-col>
+		</el-row>
+		<el-card style="margin-top: 10px;">
 			<el-form size="mini" label-width="120px" :inline="true" :rules="rules" ref="ruleForm" :model="ruleForm" class="demo-form-inline">
 				<el-row>
 					<el-col :span="8">
@@ -46,7 +44,7 @@
 				</el-row>
 			</el-form>
 		</el-card>
-		<el-card>
+		<el-card style="margin-top: 10px;">
 			<el-row>
 				<el-col :span="22">工作事项模板主表分类行</el-col>
 				<el-col style="text-align: right;" :span="2">
@@ -55,7 +53,7 @@
 			</el-row>
 
 			<el-form :model="ruleForm" :rules="rulesTable" ref="ruleFormTable">
-				<el-table size="small" height="600" :data="ruleForm.lines" border style="width: 100%">
+				<el-table size="small" height="550" :data="ruleForm.lines" border style="width: 100%">
 					<el-table-column prop="date" label="数据库字段名" align="center">
 						<template slot-scope="scope">
 							<el-form-item :prop="'lines[' + scope.$index + '].field'" :rules="rulesTable.field">
@@ -117,7 +115,7 @@
 				<el-button type="primary" @click="fieldContentSave">确 定</el-button>
 			</div>
 		</el-dialog>
-	</div>
+	</el-card>
 </template>
 <script>
 	export default {
@@ -336,15 +334,10 @@
 	}
 </script>
 <style scoped="scoped">
-	.elCard {
-		background-color: #409EFF;
-	}
-	
 	.el-icon-star-on:before {
 		color: red;
 		font-size: 20px;
 	}
-	
 	
 	>>>.el-card {
 		/*margin-bottom: 10px;*/

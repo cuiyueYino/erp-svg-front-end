@@ -3,25 +3,19 @@
 		<el-card class="box-card">
 			<el-form style="margin-bottom: 10px;" label-width="10px" :model="formInline" class="demo-form-inline">
 				<el-row>
-					<el-col :span="7">
+					<el-col :span="4">
 						<el-form-item>
-							<el-select style="width: 100%;" clearable @change="selectChange" v-model="value" value-key="id">
-								<el-option v-for="item in formInlineList" :key="item.id" :label="item.name" :value="item">
-								</el-option>
-							</el-select>
+							<el-input clearable v-model="formInline.name"></el-input>
 						</el-form-item>
 					</el-col>
-					<el-col :span="7">
-						<el-form-item>
-							<el-input clearable v-model="selectData"></el-input>
-						</el-form-item>
-					</el-col>
-					<el-col :span="2">
+					<el-col :span="8">
 						<el-form-item>
 							<el-button type="primary" @click="toSelect()">搜索</el-button>
+							<el-button v-if="showFig == 2" type="primary" @click="getAll()">全部</el-button>
+							<el-button v-if="showFig == 2" type="primary" @click="getConList()">已选中</el-button>
 						</el-form-item>
 					</el-col>
-					<el-col v-if="showFig == 2" :span="8" style="text-align: right;">
+					<el-col v-if="showFig == 2" :span="12" style="text-align: right;">
 						<el-form-item>
 							<el-button type="primary" @click="switchChild()">切换维度</el-button>
 							<el-button type="primary" @click="roleAuthWorkItem()">确定</el-button>
@@ -29,13 +23,12 @@
 					</el-col>
 				</el-row>
 			</el-form>
-			<el-table size="small" highlight-current-row ref="multipleTable" height="700"  @row-click="clickRow" :data="tableData" border @selection-change="handleSelectionChange">
-				<el-table-column v-if="showFig == 2" type="selection" width="40" align="center"></el-table-column>
-				<el-table-column prop="code" label="主表编码" align="center"></el-table-column>
-				<el-table-column prop="name" label="主表名称" align="center"></el-table-column>
-				<el-table-column prop="workItemTypeName" label="主表分类" align="center"></el-table-column>
-				<el-table-column prop="remark" label="描述" align="center"></el-table-column>
-			</el-table>
+			<vxe-table border ref="multipleTable" size="small" highlight-current-row @cell-click="clickRow" max-height="700" :data="tableData">
+				<vxe-table-column v-if="showFig == 2" type="checkbox" width="60"></vxe-table-column>
+				<vxe-table-column field="code" title="人员编码"></vxe-table-column>
+				<vxe-table-column field="name" title="人员名称"></vxe-table-column>
+				<vxe-table-column field="workItemTypeName" title="公司名称"></vxe-table-column>
+			</vxe-table>
 		</el-card>
 	</div>
 </template>
@@ -47,61 +40,73 @@
 		},
 		data() {
 			return {
-				value: "",
-				selectData: "",
-				formInlineList: [{
-					id: "status",
-					name: "状态"
-				}, {
-					id: "code",
-					name: "主表编码"
-				}, {
-					id: "name",
-					name: "主表名称"
-				}, {
-					id: "workItemTypeName",
-					name: "主表分类"
-				}, {
-					id: "remark",
-					name: "描述"
-				}],
-				formInline: {},
+				formInline: {
+					name: ''
+				},
 				tableData: [],
 				selectCon: "",
 				toSelectData: {},
 				rowClick: {},
-				tableList:[]
+				tableList: [],
+				conList: []
 			}
 		},
 		created() {
 			this.toSelect()
 		},
 		methods: {
+			getAll() {
+				var list = JSON.parse(JSON.stringify(this.$refs.multipleTable.getCheckboxRecords()))
+				console.log(list)
+				this.tableData = JSON.parse(JSON.stringify(this.conList))
+				this.tableData.forEach((item, index) => {
+					list.forEach(val => {
+						if(val.id == item.id) {
+							this.$refs.multipleTable.toggleCheckboxRow(this.tableData[index]);
+						}
+					})
+				})
+			},
+			getConList() {
+				this.tableData = []
+				this.tableData = this.$refs.multipleTable.getCheckboxRecords()
+
+			},
 			check() {
-				this.$refs.multipleTable.clearSelection();
-				this.tableData.filter(item => {
+				this.$refs.multipleTable.setAllCheckboxRow(false)
+				this.tableData.forEach((item, index) => {
 					for(var i = 0; i < this.roleCon.list.length; i++) {
 						if(this.roleCon.list[i] == item.id) {
-							this.$refs.multipleTable.toggleRowSelection(item);
+							this.$refs.multipleTable.toggleCheckboxRow(this.tableData[index]);
 						}
 					}
 				})
 			},
 			roleAuthWorkItem() {
-				this.$api.collaborativeOffice.apiUrl("workItemAuth/roleAuthWorkItem", {
-					roleId: this.roleCon.id,
-					workItemIds: this.tableList
-				}).then(data => {
-					if(this.dataBack(data, "授权成功")) {
-						this.$parent.$parent.$parent.$parent.refresh()
-					}
-				})
-			},
-			handleSelectionChange(val) {
 				this.tableList = []
-				val.forEach(item => {
+				this.$refs.multipleTable.getCheckboxRecords().forEach(item => {
 					this.tableList.push(item.id)
 				})
+				if(this.$parent.$parent.$parent.$parent.$parent.tabViews == "PersonnelToMainTable") {
+					this.$api.collaborativeOffice.apiUrl("workItemAuthUser/authWorkItemToUser", {
+						userId: this.roleCon.id,
+						itemIdList: this.tableList
+					}).then(data => {
+						if(this.dataBack(data, "授权成功")) {
+							this.$parent.$parent.$parent.$parent.refresh()
+						}
+					})
+				} else {
+					this.$api.collaborativeOffice.apiUrl("workItemAuth/roleAuthWorkItem", {
+						roleId: this.roleCon.id,
+						workItemIds: this.tableList
+					}).then(data => {
+						if(this.dataBack(data, "授权成功")) {
+							this.$parent.$parent.$parent.$parent.refresh()
+						}
+					})
+				}
+
 			},
 			switchChild() {
 				this.$parent.$parent.$parent.$parent.$parent.mainTable()
@@ -113,35 +118,46 @@
 			},
 			//搜索
 			toSelect() {
-				if(typeof(this.toSelectData[this.selectCon]) != "undefined") {
-					this.toSelectData[this.selectCon] = this.selectData
-				}
-				this.$api.collaborativeOffice.apiUrl("workItemTemp/findByParams", this.toSelectData).then(data => {
-					console.log(data)
-					this.tableData = data.data.data
+				this.$api.collaborativeOffice.apiUrl("workItemTemp/findByParams", this.formInline).then(data => {
+					this.conList = data.data.data
+					this.tableData = JSON.parse(JSON.stringify(this.conList))
 				})
 			},
 			//选中行
 			clickRow(row) {
-				this.rowClick = row
-				if(this.showFig == 1) {
-					this.$api.collaborativeOffice.findRoleByWorkItem({
-						workItemId: row.id
-					}).then(data => {
-						console.log(data)
-						this.$emit("getCon", data.data.data, row.id)
-					})
+				if(row.row.id != this.rowClick.id) {
+					this.rowClick = row.row
+					if(this.showFig == 1) {
+						if(this.$parent.$parent.$parent.$parent.$parent.tabViews == "mainTableToPersonnel") {
+							this.$api.collaborativeOffice.findUserByWorkItem({
+								workItemId: row.row.id
+							}).then(data => {
+								this.$emit("getCon", data.data.data, row.row.id)
+							})
+						} else {
+							this.$api.collaborativeOffice.findRoleByWorkItem({
+								workItemId: row.row.id
+							}).then(data => {
+								console.log(data)
+								this.$emit("getCon", data.data.data, row.row.id)
+							})
+						}
+					}
 				}
 			},
-			clear(){
+			clear() {
 				this.rowClick = {}
+				this.$emit("getCon", {}, "")
 			}
 		}
 	}
 </script>
 
 <style scoped>
-	
+	>>>.vxe-table--header {
+		background-color: rgb(148, 185, 205);
+		color: white;
+	}
 	.box-card:first-child {
 		margin-bottom: 16px;
 	}

@@ -155,6 +155,7 @@
 					backData.jsonStr = JSON.stringify(con)
 					this.$api.collaborativeOffice.apiUrl("workItem/insertWorkItem", backData).then(data => {
 						if(this.dataBack(data, "新增成功")) {
+							this.$refs.child.toUpload(data.data.data)
 							this.$parent.toSelect()
 						}
 					})

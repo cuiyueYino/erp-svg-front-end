@@ -36,7 +36,7 @@
 			</el-row>
 		</el-card>
 		<el-card class="box-card">
-			<el-table size="small" height="500" highlight-current-row @row-click="clickRow" :data="tableData" border>
+			<el-table size="small" @row-dblclick="rowDblClick" :height="$GLOBAL.tableHeight" highlight-current-row @row-click="clickRow" :data="tableData" border>
 				<el-table-column :formatter="statusShow" prop="status" label="状态" align="center"></el-table-column>
 				<el-table-column prop="code" label="主表编码" align="center"></el-table-column>
 				<el-table-column prop="name" label="主表名称" align="center"></el-table-column>
@@ -95,6 +95,11 @@
 			this.toSelect()
 		},
 		methods: {
+			rowDblClick(row) {
+				if(typeof(this.$parent.$parent.getDialogVisible) == "function") {
+					this.$parent.$parent.getDialogVisible()
+				}
+			},
 			selectChange(data) {
 				this.selectCon = data.id
 				this.toSelectData = JSON.parse(JSON.stringify(this.formInline))

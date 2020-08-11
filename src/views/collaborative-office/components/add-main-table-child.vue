@@ -1,29 +1,27 @@
 <template>
-	<div>
+	<el-card class="box-card">
 		<div v-if="!showFigForm">
-			<el-card class="box-card">
-				<el-row>
-					<el-col :span="23">工作事项模板子表-新增</el-col>
-					<el-col :span="1" style="text-align: right;">
-						<el-button type="danger" @click="$parent.toSelect()" size="mini" icon="el-icon-close"></el-button>
-					</el-col>
-				</el-row>
-				<el-row>
-					<el-col :span="18">
-						公司：
-						<el-select :disabled="showFigSee" size='mini' v-model="ruleForm.company" placeholder="公司">
-							<el-option v-for="item in CompanyData" :key="item.id" :label="item.name" :value="item.id">
-							</el-option>
-						</el-select>
-					</el-col>
-					<el-col v-if="!showFigSee" :span="6" style="text-align: right;">
-						<el-button @click="submitForm(2)" type="success" size="mini" icon="el-icon-check">提交</el-button>
-						<el-button @click="submitForm(1)" type="success" size="mini" icon="el-icon-check">暂存</el-button>
-						<el-button @click="preview()" type="success" size="mini" icon="el-icon-check">预览</el-button>
-					</el-col>
-				</el-row>
-			</el-card>
-			<el-card class="box-card">
+			<el-row>
+				<el-col :span="23">工作事项模板子表-新增</el-col>
+				<el-col :span="1" style="text-align: right;">
+					<el-button type="danger" @click="$parent.toSelect()" size="mini" icon="el-icon-close"></el-button>
+				</el-col>
+			</el-row>
+			<el-row>
+				<el-col :span="18">
+					公司：
+					<el-select :disabled="showFigSee" size='mini' v-model="ruleForm.company" placeholder="公司">
+						<el-option v-for="item in CompanyData" :key="item.id" :label="item.name" :value="item.id">
+						</el-option>
+					</el-select>
+				</el-col>
+				<el-col v-if="!showFigSee" :span="6" style="text-align: right;">
+					<el-button @click="submitForm(2)" type="success" size="mini" icon="el-icon-check">提交</el-button>
+					<el-button @click="submitForm(1)" type="success" size="mini" icon="el-icon-check">暂存</el-button>
+					<el-button @click="preview()" type="success" size="mini" icon="el-icon-check">预览</el-button>
+				</el-col>
+			</el-row>
+			<el-card style="margin-top: 10px;">
 				<el-form size="mini" label-width="80px" :inline="true" :rules="rules" ref="ruleForm" :model="ruleForm" class="demo-form-inline">
 					<el-row>
 						<el-col :span="6">
@@ -78,7 +76,7 @@
 					</el-row>
 				</el-form>
 			</el-card>
-			<el-card class="box-card">
+			<el-card style="margin-top: 10px;">
 				<el-row>
 					<el-col>工作事项模板子表行</el-col>
 				</el-row>
@@ -222,7 +220,7 @@
 				</el-row>
 			</formAndTable>
 		</div>
-	</div>
+	</el-card>
 </template>
 <script>
 	//工作事项模板子表分类
@@ -309,23 +307,29 @@
 					}],
 					workItemTempName: [{
 						required: true,
-						message: '请选择子表分类',
+						message: '请选择主表',
 						trigger: 'change'
 					}],
 					showName: [{
 						required: true,
-						message: '请选择子表分类',
+						message: '请输入显示名称',
 						trigger: 'change'
+					}, {
+						pattern: /^[a-z_A-Z0-9-\.!@#\$%\\\^&\*\)\(\+=\{\}\[\]\/",'<>~\·`\?:;|]+$/,
+						message: '可输入英文、数字、英文符号，限制长度50字节'
 					}],
 					type: [{
 						required: true,
-						message: '请选择子表分类',
+						message: '请选择子表类型',
 						trigger: 'change'
 					}],
 					orderNum: [{
 						required: true,
 						message: '请选择子表分类',
 						trigger: 'change'
+					}, {
+						pattern: /^\+?[1-9][0-9]*$/,
+						message: '可输入非零正整数'
 					}]
 				},
 				//校验规则-table
@@ -339,11 +343,17 @@
 						required: true,
 						message: "请输入显示顺序",
 						trigger: "change"
+					}, {
+						pattern: /^\+?[1-9][0-9]*$/,
+						message: '可输入非零正整数'
 					}],
 					showNum: [{
 						required: true,
 						message: "请填写显示行数",
 						trigger: "change"
+					}, {
+						pattern: /^\+?[1-9][0-9]*$/,
+						message: '可输入非零正整数'
 					}],
 				},
 				//字段类型

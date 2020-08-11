@@ -125,7 +125,7 @@
 				rules: {
 					title: [{
 						required: true,
-						message: '请输入子表分类编码',
+						message: '请输入标题',
 						trigger: 'change'
 					}]
 				},
