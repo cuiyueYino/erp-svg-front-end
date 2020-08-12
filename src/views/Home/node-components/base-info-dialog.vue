@@ -36,7 +36,7 @@
                     </el-form-item>
                   </el-col> 
                  
-                  <el-col :span="8" v-show="type !=='服务' && type !=='审核'  && type !=='角色'">
+                  <el-col :span="8" v-show="type !=='服务' && type !=='审核'  && type !=='角色' && type !=='职务' ">
                     <el-form-item label="状态" label-width="43px" prop="formCtionTypeCon">
                          <el-select v-model="formData.formCtionTypeCon" clearable placeholder="请选择">
                             <el-option
@@ -55,8 +55,8 @@
                 </el-col>
              </el-row>
              <el-row :gutter="24" >
-                <el-col :span="type=='角色'?12:8" v-show="type !=='服务'  && type !=='审核'">
-                    <el-form-item :label="type ==='职务'?'公司':'角色类别'" :label-width="type ==='职务'?'43px':'70px'"  prop="formCtionRole">
+                <el-col :span="type=='角色'?12:8" v-show="type !=='服务'  && type !=='审核' && type !=='职务'">
+                    <el-form-item :label="'角色类别'" :label-width="'70px'"  prop="formCtionRole">
                          <el-select v-model="formData.formCtionRole" clearable placeholder="请选择">
                             <el-option
                             v-for="item in roleoptions"
@@ -75,13 +75,13 @@
                     </el-radio-group>
                  </el-form-item>
                 </el-col>  -->
-                 <el-col :span="10" v-show="type ==='职务'" class="job-class">
+                 <!-- <el-col :span="10" v-show="type ==='职务'" class="job-class">
                      <el-form-item label="职务类型" label-width="70px" prop="formRoleName">
                      <el-input clearable size="small" v-model="formData.formRoleName" placeholder="请输入"></el-input>
                     <img class="icon-search" src="../../../assets/img/search.svg" >
                  </el-form-item>
                   
-                </el-col> 
+                </el-col>  -->
                  <!-- 审核-业务数据 -->
                   <span v-show="type ==='审核'">
                     <el-col :span="12">
@@ -100,7 +100,7 @@
                     </el-form-item>
                   </el-col>  -->
                   </span>
-                <el-col :span="6" :offset="type=='角色'?6:0" v-show="type !=='服务'" >
+                <el-col :span="6" :offset="type=='角色'?6:type =='职务'?18:0" v-show="type !=='服务'" >
                     <el-button type="primary" size="small" plain @click="reWorkSearchTable('workflowConfigForm')">重置</el-button>
                     <el-button type="primary" size="small" plain @click="workSearchTable">搜索</el-button>
                 </el-col>
