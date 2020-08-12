@@ -28,6 +28,11 @@ const svg = {
         return httpReqest.get('/api/wfInterfaces/workFlow/findSubWfProcessInfoList');
     },
 
+     //查询角色列表
+     getRolesMsg(){
+        return httpReqest.get('/api/wfInterfaces/workFlow/getRoleTypeCon');
+    },
+
 };
 
 export default svg;

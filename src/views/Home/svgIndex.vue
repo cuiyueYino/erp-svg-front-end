@@ -2,7 +2,7 @@
     <div class="svgmian">
         <div class="clearfloat"></div>
         <!-- 弹窗 -->
-        <el-button type="text" @click="dialogTableVisible = true">打开嵌套表格的 Dialog</el-button>
+        <el-button type="text" @click="dialogTableVisible = true"></el-button>
         <el-dialog 
         :fullscreen="true"
         :close-on-press-escape="false"

@@ -192,7 +192,7 @@ export default {
                     //
                     let nodeObj = {};
                     const nodeConfig = NodeConfig();
-                    debugger
+                    // debugger
                     if(MMWFNodes && MMWFNodes.length >0){
                         nodeObj =MMWFNodes[j];
                         nodeObj.type=upperCase(localName);
