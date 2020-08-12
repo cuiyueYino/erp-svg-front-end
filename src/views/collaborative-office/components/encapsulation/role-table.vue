@@ -24,7 +24,7 @@
 					</el-col>
 				</el-row>
 			</el-form>
-			<vxe-table border ref="multipleTable" size="small" highlight-current-row @cell-click="clickRow" height="700" :data="roleList">
+			<vxe-table border :loading="loading" ref="multipleTable" align="center" size="small" highlight-current-row @cell-click="clickRow" height="700" :data="roleList">
 				<vxe-table-column v-if="showFig == 1" type="checkbox" width="60"></vxe-table-column>
 				<vxe-table-column field="code" title="角色编码"></vxe-table-column>
 				<vxe-table-column field="name" title="角色名称"></vxe-table-column>
@@ -41,6 +41,7 @@
 		},
 		data() {
 			return {
+				loading : true,
 				formInline: {
 					name: ""
 				},
@@ -107,6 +108,7 @@
 			},
 			getRoleList() {
 				this.$api.collaborativeOffice.apiUrl("role/findByParams", this.formInline).then(data => {
+					this.loading = false
 					this.conList = data.data.data
 					this.roleList = JSON.parse(JSON.stringify(this.conList))
 				})

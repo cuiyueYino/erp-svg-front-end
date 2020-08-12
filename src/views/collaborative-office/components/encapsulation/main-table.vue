@@ -24,7 +24,7 @@
 					</el-col>
 				</el-row>
 			</el-form>
-			<vxe-table border ref="multipleTable" size="small" highlight-current-row @cell-click="clickRow" height="700" :data="tableData">
+			<vxe-table border ref="multipleTable" align="center" size="small" highlight-current-row @cell-click="clickRow" height="700" :data="tableData">
 				<vxe-table-column v-if="showFig == 2" type="checkbox" width="60"></vxe-table-column>
 				<vxe-table-column field="code" title="主表模板编码"></vxe-table-column>
 				<vxe-table-column field="name" title="主表模板名称"></vxe-table-column>

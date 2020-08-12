@@ -24,7 +24,7 @@
 					</el-col>
 				</el-row>
 			</el-form>
-			<vxe-table border ref="multipleTable" size="small" highlight-current-row @cell-click="clickRow" height="700" :data="roleList">
+			<vxe-table border :loading="loading" ref="multipleTable" align="center" size="small" highlight-current-row @cell-click="clickRow" height="700" :data="roleList">
 				<vxe-table-column v-if="showFig == 1" type="checkbox" width="60"></vxe-table-column>
 				<vxe-table-column field="tcode" title="人员编码"></vxe-table-column>
 				<vxe-table-column field="tname" title="人员名称"></vxe-table-column>
@@ -45,6 +45,7 @@
 		},
 		data() {
 			return {
+				loading : true,
 				formInline: {
 					name: "",
 					page: 1,
@@ -105,6 +106,7 @@
 			},
 			getRoleList() {
 				this.$api.collaborativeOffice.apiUrl("staffManage/findStaffByPage", this.formInline).then(data => {
+					this.loading = false
 					this.conList = data.data.data.rows
 					this.roleList = JSON.parse(JSON.stringify(this.conList))
 				})
