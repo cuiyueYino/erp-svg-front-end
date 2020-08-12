@@ -347,8 +347,8 @@ export default {
         case true:
           data = {
             [params]: this.multipleSelection[0].foid,
-            page: this.pageNum,
-            size: this.pageSize
+            page: 1,
+            size: 10
           };
           break;
         case false:

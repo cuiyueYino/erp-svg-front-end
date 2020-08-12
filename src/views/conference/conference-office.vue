@@ -400,7 +400,7 @@ export default {
     onCurrentChange(val) {
       this.isEdit = false;
       this.pageNum = val;
-      this.getTableData("");
+      this.getTableData(this.form.select);
     },
     //多选
     onSelectionChange(val) {
@@ -412,7 +412,6 @@ export default {
     },
     // 搜索
     onSubmit() {
-      console.log(this.form.select);
       this.isEdit = false;
       this.pageNum = 1;
       this.getTableData(this.form.select);
@@ -538,8 +537,8 @@ export default {
           // 修改
           data = {
             [params]: this.multipleSelection[0].foid,
-            page: this.pageNum,
-            size: this.pageSize,
+            page: 1,
+            size: 10,
           };
           break;
         case false:

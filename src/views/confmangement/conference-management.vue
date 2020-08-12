@@ -5,13 +5,12 @@
       <el-row :gutter="24">
         <el-col :span="6">
           <el-button size="small" plain class="header-button">公司</el-button>
-          <el-select size="small" v-model="fcompanyid" placeholder="福佳集团" class="comSelect" @change="search()">
+          <el-select size="small" v-model="value" placeholder="福佳集团" class="comSelect" @change="search(value)">
             <el-option
               v-for="item in options"
-              :key="item.foid"
+              :key="item.id"
               :label="item.name"
               :value="item.id"
-              :fcompanyid="item.foid"
               :disabled="item.disabled"
             ></el-option>
           </el-select>
@@ -151,13 +150,18 @@
         this.getTableData();
       });
     },
-    watch: {},
+    watch: {
+      value(id){
+        this.fcompanyid = id;
+      }
+    },
     data() {
       return {
         tagsList: [],
         collapse: false,
         inject: ['bus'],
         options: [],
+        value:"",
         value1: "",
         value2: "",
         nowDate: "",
@@ -188,7 +192,8 @@
         this.getTableData("");
       },
       // 查询
-      search() {
+      search(value) {
+        this.fcompanyid = value;
         this.getTableData();
       },
       // 显示功能按钮
@@ -418,5 +423,29 @@
     color: #f9fbff;
   }
 
+  /deep/ .el-input__inner {
+    &::placeholder {
+      color: #f9fbff;
+    }
 
+    &::-webkit-input-placeholder {
+      /* WebKit browsers 适配谷歌 */
+      color: #f9fbff;
+    }
+
+    &:-moz-placeholder {
+      /* Mozilla Firefox 4 to 18 适配火狐 */
+      color: #f9fbff;
+    }
+
+    &::-moz-placeholder {
+      /* Mozilla Firefox 19+ 适配火狐 */
+      color: #f9fbff;
+    }
+
+    &:-ms-input-placeholder {
+      /* Internet Explorer 10+  适配ie*/
+      color: #f9fbff;
+    }
+  }
 </style>
