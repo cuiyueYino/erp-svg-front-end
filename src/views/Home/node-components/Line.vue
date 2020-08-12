@@ -9,13 +9,13 @@
                 :model="formData"
                 >
         <!-- TAB页 -->
-        <el-tabs v-model="activeName" @tab-click="handleClick">
+        <el-tabs v-model="activeName" >
             <el-tab-pane label="基本信息" name="1">
                  <el-form-item label="编码" :label-width="formLabelWidth" prop="code">
                     <el-input ref="nameInput" v-model="formData.code" @input="change($event)" autocomplete="off" clearable></el-input>
                 </el-form-item>
                 <el-form-item label="名称" :label-width="formLabelWidth" prop="name">
-                    <el-input  v-model="formData.name" autocomplete="off" clearable></el-input>
+                    <el-input  v-model="formData.name" autocomplete="off" @input="change($event)" clearable></el-input>
                 </el-form-item>
                  <!-- <el-form-item label="起点" :label-width="formLabelWidth" >
                     <el-input v-model="formData.workData" autocomplete="off"></el-input>
@@ -259,15 +259,18 @@ export default {
                 //     this.$refs.nameInput.focus();
                 // }, 100);
             }else{
-                this.formData.baseInputoid= this.multipleSelection[0].foid
-                this.formData.baseInputcode= this.multipleSelection[0].fcode
-                this.formData.baseInputServe= this.multipleSelection[0].fname
+                // this.formData.baseInputoid= this.multipleSelection[0].foid
+                // this.formData.baseInputcode= this.multipleSelection[0].fcode
+                // this.formData.baseInputServe= this.multipleSelection[0].fname
                 this.$emit(
                     "saveLineData",
                     this.formData,
                     this.gridDatax
                 ); 
             }
+        },
+        baseActiveName(val){
+            this.baseTextarea = ''
         }
     },
     created(){

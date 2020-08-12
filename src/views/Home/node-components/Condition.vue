@@ -214,7 +214,7 @@
           <el-row :gutter="24">
             <el-col :span="6" :offset="18">
               <el-button type="primary" size="small" plain @click="reWorkSearchTable">重置</el-button>
-              <el-button type="primary" size="small" plain @click="workSearchTable">搜索</el-button>
+              <el-button type="primary" size="small" plain @click="workSearchTableBtn">搜索</el-button>
             </el-col>
           </el-row>
           <!-- 表格 -->
@@ -916,8 +916,13 @@ export default {
     onSelectionWorkChange(val) {
       this.WorkmultipleSelection = val;
     },
+    workSearchTableBtn(){
+      this.pageNum = 1
+      this.workSearchTable();
+    },
     // 业务工作-获取表格数据-重置
     reWorkSearchTable() {
+       this.pageNum = 1
       this.formData = [];
       this.workSearchTable();
     },
@@ -932,6 +937,7 @@ export default {
     },
     // 业务工作-获取表格数据
     workSearchTable() {
+     
       this.dialogTableVisible = true;
       this.tableLoading = true;
       let fromdata = {};

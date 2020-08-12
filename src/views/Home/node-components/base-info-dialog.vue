@@ -51,7 +51,7 @@
                   </el-col> 
                 <el-col :span="6" :offset="2" v-show="type ==='服务'">
                     <el-button type="primary" size="small" plain @click="reWorkSearchTable('workflowConfigForm')">重置</el-button>
-                    <el-button type="primary" size="small" plain @click="workSearchTable">搜索</el-button>
+                    <el-button type="primary" size="small" plain @click="workSearchTableBtn">搜索</el-button>
                 </el-col>
              </el-row>
              <el-row :gutter="24" >
@@ -102,7 +102,7 @@
                   </span>
                 <el-col :span="6" :offset="type=='角色'?6:type =='职务'?18:0" v-show="type !=='服务'" >
                     <el-button type="primary" size="small" plain @click="reWorkSearchTable('workflowConfigForm')">重置</el-button>
-                    <el-button type="primary" size="small" plain @click="workSearchTable">搜索</el-button>
+                    <el-button type="primary" size="small" plain @click="workSearchTableBtn">搜索</el-button>
                 </el-col>
              </el-row>
                
@@ -504,8 +504,13 @@ export default {
                 this.gridData=this.searchgridData;
             }
         },
+        workSearchTableBtn(){
+        this.pageNum = 1
+        this.workSearchTable();
+        },
         reWorkSearchTable(formName){
              this.$refs[formName].resetFields();
+             this.pageNum = 1
             // this.$refs[formName].validate((valid) => {
             //     if (!valid) {
             //          return false;

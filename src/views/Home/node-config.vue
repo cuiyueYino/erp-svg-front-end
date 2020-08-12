@@ -343,7 +343,7 @@ export default {
          //审核活动保存
         saveJoinData(e,e1,e2,e3,e4,e5){
             console.log(e,e1,e2,e3,e4,e5);
-             if( e.displayName =='' || e.work =='' || e.checkedCities.length ==0 || e2.length==0 ||e4.length==0 ){
+             if( e.displayName =='' || e.work =='' || e.checkedCities.length ==0  || e4.length==0 ){
                 this.$message.error("保存失败,请填写必填信息");
                 return;
             }
