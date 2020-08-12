@@ -691,6 +691,41 @@ export default {
     },
     basehandleClick(tab, event) {
       this.baseActiveNameStr = tab.label;
+      switch (this.baseActiveNameStr) {
+        case "角色":
+              this.UserListReq = {};
+              this.serveReq = {};
+              this.posLReq = {};
+              this.baseTextarea = ''
+          break;
+        case "用户":
+              this.roleReq = {};
+              this.serveReq = {};
+              this.posLReq = {};
+              this.baseTextarea = ''
+          break;
+        case "服务":
+              this.roleReq = {};
+              this.UserListReq = {};
+              this.posLReq = {};
+              this.baseTextarea = ''
+          break;
+        case "表达式":
+              this.roleReq = {};
+              this.UserListReq = {};
+              this.posLReq = {};
+              this.serveReq = {};
+          break;
+        case "职务":
+              this.roleReq = {};
+              this.UserListReq = {};
+              this.baseTextarea = ''
+              this.serveReq = {};
+          break;
+      
+        default:
+          break;
+      }
     },
     //业务工作-新增
     gridDataAdd() {

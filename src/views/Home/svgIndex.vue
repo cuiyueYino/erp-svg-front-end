@@ -2,241 +2,236 @@
     <div class="svgmian">
         <div class="clearfloat"></div>
         <!-- 弹窗 -->
-        <!-- <el-button type="text" @click="dialogTableVisible = true"></el-button> -->
-
+        <el-button type="text" @click="dialogTableVisible = true"></el-button>
         <el-dialog 
         :fullscreen="true"
         :close-on-press-escape="false"
         :visible.sync="dialogTableVisible">
-
-        <div
-            class="svgBox"
-            @click="backgroundClick($event)"
-            @dragover.prevent
-        >
-            <!-- 操作面板 -->
-            <div :style="styleObj">
-                <el-card
-                    style="width: 300px;"
-                    class="work-flow-operate-panel"
-                    :body-style="{padding: '4px'}"
-                >
-                    <div
-                        slot="header"
-                        style="text-align: right;"
-                        class="work-flow-operate-header"
-                        @mousedown="dragPanel($event)"
+            <div
+                class="svgBox"
+                @click="backgroundClick($event)"
+                @dragover.prevent
+            >
+                <!-- 操作面板 -->
+                <div :style="styleObj">
+                    <el-card
+                        style="width: 300px;"
+                        class="work-flow-operate-panel"
+                        :body-style="{padding: '4px'}"
                     >
-                        <!-- 操作按钮 -->
-                        <!-- <el-button
-                            type="text"
-                            size="mini"
-                            icon="el-icon-download"
-                            @click="compileXMLToObj(dataObj)"
+                        <div
+                            slot="header"
+                            style="text-align: right;"
+                            class="work-flow-operate-header"
+                            @mousedown="dragPanel($event)"
                         >
-                            加载
-                        </el-button> -->
-                          <el-button
-                            type="text"
-                            size="mini"
-                            icon="el-icon-circle-close"
-                            @click="dialogTableVisible = false"
+                            <!-- 操作按钮 -->
+                            <!-- <el-button
+                                type="text"
+                                size="mini"
+                                icon="el-icon-download"
+                                @click="compileXMLToObj(dataObj)"
+                            >
+                                加载
+                            </el-button> -->
+                            <el-button
+                                type="text"
+                                size="mini"
+                                icon="el-icon-circle-close"
+                                @click="dialogTableVisible = false"
+                            >关闭</el-button>
+                            <el-button
+                                v-show="isEditF"
+                                size="mini"
+                                type="text"
+                                :disabled="saveBtnStatus"
+                                icon="el-icon-upload"
+                                @click="saveEditWorkflow(workflowNodes)"
+                            >
+                                保存
+                            </el-button>
+                            <el-button
+                                v-show="isNewF"
+                                size="mini"
+                                type="text"
+                                :disabled="saveBtnStatus"
+                                icon="el-icon-upload"
+                                @click="saveNewWorkflow(workflowNodes)"
+                            >
+                                保存
+                            </el-button>
+                            <el-button
+                                size="mini"
+                                type="text"
+                                :disabled="workflowNodes.filter(item => Object.keys(item).length > 0).length === 2"
+                                icon="el-icon-plus-cleanup"
+                                @click="cleanUp"
+                            >
+                                清空
+                            </el-button>
+                            <el-button
+                                size="mini"
+                                type="text"
+                            icon="el-icon-zoom-in"
+                                @click="bigger"
+                            >
+                                放大
+                            </el-button>
+                            <el-button
+                                size="mini"
+                                type="text"
+                                icon="el-icon-zoom-out"
+                                @click="smaller"
+                            >
+                                缩小
+                            </el-button>
+                        </div>
+                        <!-- 节点面板 -->
+                        <ul class="select-nodes">
+                            <li
+                                v-for="(item, index) in nodes"
+                                :key="index"
+                                class="workflow-nodes"
+                                draggable
+                                @dragstart="dragStartEvent($event)"
+                                @dragend="handlerDragEnd($event, item)"
+                                :style="item.name=='子流程'?(isSubProcess?'hiddenSubProcess':'showSubProcess'):'showSubProcess'"
+                            >
+                                <a class="workflow-nodes" v-if="item.name=='子流程'?(isSubProcess?false:true):true">
+                                    <i :class="item.icon"></i>
+                                    <span>{{item.name}}</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </el-card>
+                </div>
+                <!-- 画图区域 -->
+                <template v-for="(node, index) in workflowNodes">
+                    <!-- 端点节点 -->
+                    <terminal-node
+                        :key="index"
+                        v-if="node.type === 'Start' || node.type === 'End'"
+                        :allowIn="node.options.allowIn"
+                        :allowOut="node.options.allowOut"
+                        :node-text="node.data.displayName"
+                        :selected="selectedNode === node"
+                        :x="node.options.x"
+                        :y="node.options.y"
+                        :color="node.options.color"
+                        :drag="node.options.draggable"
+                        @click-node="clickNode(node)"
+                        @mousedown="(target, point) => handleMousedown(target, point, node)"
+                        @mouseenter="(target, point) => handleMouseEnter(target, point, node)"
+                        @dragmove="(left, top) => {node.options.x = left;node.options.y = top;}"
+                        @edit="dialogVisible = true;saveFlag = 'node'"
+                    >
+                    </terminal-node>
+                    <!-- 任务节点 -->
+                    <task-node
+                        :key="index"
+                        v-else-if="node.type === 'Task'"
+                        :width="node.options.width"
+                        :height="node.options.height"
+                        :data="node"
+                        :color="node.options.color"
+                        :selected="selectedNode === node"
+                        :x="node.options.x"
+                        :y="node.options.y"
+                        :drag="node.options.draggable"
+                        @click-node="clickNode(node)"
+                        @edit="dialogVisible = true;saveFlag = 'node'"
+                        @delete="deleteNode(index)"
+                        @dragmove="(left, top) => {node.options.x = left;node.options.y = top;}"
+                        @mousedown="(target, point) => handleMousedown(target, point, node)"
+                        @mouseenter="(target, point) => handleMouseEnter(target, point, node)"
+                    >
+                    </task-node>
+                    <!-- 条件节点 -->
+                    <condition-node
+                        :key="index"
+                        v-else-if="node.type === 'Condition'  || node.type === 'Subprocess' || node.type === 'Fork' || node.type === 'Join' "
+                        :icon="node.type === 'Condition'?'el-icon-user':node.type === 'Fork'?'el-icon-plus-supply-chain':
+                        node.type === 'Join'?'el-icon-plus-param': ''"
+                        :width="node.options.width"
+                        :height="node.options.height"
+                        :color="node.options.color"
+                        :selected="selectedNode === node"
+                        :x="node.options.x"
+                        :y="node.options.y"
+                        :data="node"
+                        :drag="node.options.draggable"
+                        @click-node="clickNode(node)"
+                        @edit="dialogVisible = true;saveFlag = 'node'"
+                        @delete="deleteNode(index)"
+                        @dragmove="(left, top) => {node.options.x = left;node.options.y = top;}"
+                        @mousedown="(target, point) => handleMousedown(target, point, node)"
+                        @mouseenter="(target, point) => handleMouseEnter(target, point, node)"
+                    >
+                    </condition-node>
+                </template>
+                <!-- 连线区域 -->
+                <svg class="workflow-draw-panel" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" version="1.1">
+                    <defs>
+                        <marker
+                            id='arrow_end_active'
+                            refX='0'
+                            refY='0'
+                            markerWidth='10'
+                            markerHeight='10'
+                            orient='auto'
+                            viewBox='0, -4, 12, 12'
                         >
-                            关闭
-                        </el-button>
-                        <el-button
-                            v-show="isEditF"
-                            size="mini"
-                            type="text"
-                            :disabled="saveBtnStatus"
-                            icon="el-icon-upload"
-                            @click="saveEditWorkflow(workflowNodes)"
+                            <path d='M0 -4 L0 4 L10 0' style='fill: #409EFF' stroke-width='0'></path>
+                        </marker>
+                        <marker
+                            id='arrow_end'
+                            refX='0'
+                            refY='0'
+                            markerWidth='10'
+                            markerHeight='10'
+                            orient='auto'
+                            viewBox='0, -4, 12, 12'
                         >
-                            保存
-                        </el-button>
-                         <el-button
-                            v-show="isNewF"
-                            size="mini"
-                            type="text"
-                            :disabled="saveBtnStatus"
-                            icon="el-icon-upload"
-                            @click="saveNewWorkflow(workflowNodes)"
-                        >
-                            保存
-                        </el-button>
-                        <!-- <el-button
-                            size="mini"
-                            type="text"
-                            :disabled="workflowNodes.filter(item => Object.keys(item).length > 0).length === 2"
-                            icon="el-icon-plus-cleanup"
-                            @click="cleanUp"
-                        >
-                            清空
-                        </el-button> -->
-                        <el-button
-                            size="mini"
-                            type="text"
-                        icon="el-icon-zoom-in"
-                            @click="bigger"
-                        >
-                            放大
-                        </el-button>
-                        <el-button
-                            size="mini"
-                            type="text"
-                            icon="el-icon-zoom-out"
-                            @click="smaller"
-                        >
-                            缩小
-                        </el-button>
-                    </div>
-                    <!-- 节点面板 -->
-                    <ul class="select-nodes">
-                        <li
-                            v-for="(item, index) in nodes"
-                            :key="index"
-                            class="workflow-nodes"
-                            draggable
-                            @dragstart="dragStartEvent($event)"
-                            @dragend="handlerDragEnd($event, item)"
-                            :style="item.name=='子流程'?(isSubProcess?'hiddenSubProcess':'showSubProcess'):'showSubProcess'"
-                        >
-                            <a class="workflow-nodes" v-if="item.name=='子流程'?(isSubProcess?false:true):true">
-                                <i :class="item.icon"></i>
-                                <span>{{item.name}}</span>
-                            </a>
-                        </li>
-                    </ul>
-                </el-card>
+                            <path d='M0 -4 L0 4 L10 0' style='fill: #606266' stroke-width='0'></path>
+                        </marker>
+                    </defs>
+                    <!-- 辅助连接线 -->
+                    <polyline
+                        :points='assistedLine'
+                        style='fill: none;stroke: #409EFF;stroke-width: 2'
+                        marker-end='url(#arrow_end_active)'
+                    />
+                    <!-- 节点连接线 -->
+                    <polyline
+                        v-for="(line, pos) in lineData"
+                        :key="pos"
+                        :points="line.coordinate"
+                        style='fill: none;stroke: #606266;stroke-width: 2'
+                        marker-end='url(#arrow_end)'
+                    />
+                </svg>
+                <!-- 连接线文字 -->
+                <link-text
+                    :data="lineData"
+                    :selected.sync="selectedNode"
+                    @config="linkLineConfig"
+                    @delete="linkLineDelete"
+                    @selected-node-click="selectedNodeClick"
+                >
+                </link-text>
+                <!-- 配置节点表单 -->
+                <config-form
+                    :visible.sync="dialogVisible"
+                    :type="nodeType"
+                    :data="selectedNode.data"
+                    @save="handleSaveEvent"
+                    @cancel="selectedNode = {}"
+                >
+                </config-form>
             </div>
-            <!-- 画图区域 -->
-            <template v-for="(node, index) in workflowNodes">
-                <!-- 端点节点 -->
-                <terminal-node
-                    :key="index"
-                    v-if="node.type === 'Start' || node.type === 'End'"
-                    :allowIn="node.options.allowIn"
-                    :allowOut="node.options.allowOut"
-                    :node-text="node.data.displayName"
-                    :selected="selectedNode === node"
-                    :x="node.options.x"
-                    :y="node.options.y"
-                    :color="node.options.color"
-                    :drag="node.options.draggable"
-                    @click-node="clickNode(node)"
-                    @mousedown="(target, point) => handleMousedown(target, point, node)"
-                    @mouseenter="(target, point) => handleMouseEnter(target, point, node)"
-                    @dragmove="(left, top) => {node.options.x = left;node.options.y = top;}"
-                    @edit="dialogVisible = true;saveFlag = 'node'"
-                >
-                </terminal-node>
-                <!-- 任务节点 -->
-                <task-node
-                    :key="index"
-                    v-else-if="node.type === 'Task'"
-                    :width="node.options.width"
-                    :height="node.options.height"
-                    :data="node"
-                    :color="node.options.color"
-                    :selected="selectedNode === node"
-                    :x="node.options.x"
-                    :y="node.options.y"
-                    :drag="node.options.draggable"
-                    @click-node="clickNode(node)"
-                    @edit="dialogVisible = true;saveFlag = 'node'"
-                    @delete="deleteNode(index)"
-                    @dragmove="(left, top) => {node.options.x = left;node.options.y = top;}"
-                    @mousedown="(target, point) => handleMousedown(target, point, node)"
-                    @mouseenter="(target, point) => handleMouseEnter(target, point, node)"
-                >
-                </task-node>
-                <!-- 条件节点 -->
-                <condition-node
-                    :key="index"
-                    v-else-if="node.type === 'Condition'  || node.type === 'Subprocess' || node.type === 'Fork' || node.type === 'Join' "
-                    :icon="node.type === 'Condition'?'el-icon-user':node.type === 'Fork'?'el-icon-plus-supply-chain':
-                    node.type === 'Join'?'el-icon-plus-param': ''"
-                    :width="node.options.width"
-                    :height="node.options.height"
-                    :color="node.options.color"
-                    :selected="selectedNode === node"
-                    :x="node.options.x"
-                    :y="node.options.y"
-                    :data="node"
-                    :drag="node.options.draggable"
-                    @click-node="clickNode(node)"
-                    @edit="dialogVisible = true;saveFlag = 'node'"
-                    @delete="deleteNode(index)"
-                    @dragmove="(left, top) => {node.options.x = left;node.options.y = top;}"
-                    @mousedown="(target, point) => handleMousedown(target, point, node)"
-                    @mouseenter="(target, point) => handleMouseEnter(target, point, node)"
-                >
-                </condition-node>
-            </template>
-            <!-- 连线区域 -->
-            <svg class="workflow-draw-panel" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" version="1.1">
-                <defs>
-                    <marker
-                        id='arrow_end_active'
-                        refX='0'
-                        refY='0'
-                        markerWidth='10'
-                        markerHeight='10'
-                        orient='auto'
-                        viewBox='0, -4, 12, 12'
-                    >
-                        <path d='M0 -4 L0 4 L10 0' style='fill: #409EFF' stroke-width='0'></path>
-                    </marker>
-                    <marker
-                        id='arrow_end'
-                        refX='0'
-                        refY='0'
-                        markerWidth='10'
-                        markerHeight='10'
-                        orient='auto'
-                        viewBox='0, -4, 12, 12'
-                    >
-                        <path d='M0 -4 L0 4 L10 0' style='fill: #606266' stroke-width='0'></path>
-                    </marker>
-                </defs>
-                <!-- 辅助连接线 -->
-                <polyline
-                    :points='assistedLine'
-                    style='fill: none;stroke: #409EFF;stroke-width: 2'
-                    marker-end='url(#arrow_end_active)'
-                />
-                <!-- 节点连接线 -->
-                <polyline
-                    v-for="(line, pos) in lineData"
-                    :key="pos"
-                    :points="line.coordinate"
-                    style='fill: none;stroke: #606266;stroke-width: 2'
-                    marker-end='url(#arrow_end)'
-                />
-            </svg>
-            <!-- 连接线文字 -->
-            <link-text
-                :data="lineData"
-                :selected.sync="selectedNode"
-                @config="linkLineConfig"
-                @delete="linkLineDelete"
-                @selected-node-click="selectedNodeClick"
-            >
-            </link-text>
-            <!-- 配置节点表单 -->
-            <config-form
-                :visible.sync="dialogVisible"
-                :type="nodeType"
-                :data="selectedNode.data"
-                @save="handleSaveEvent"
-                @cancel="selectedNode = {}"
-            >
-            </config-form>
-        </div>
-</el-dialog>
+        </el-dialog>
     </div>
 </template>
-
 <script>
 /**
 * @description: 工作流程设计器首页
@@ -262,7 +257,7 @@ export default {
         return {
             isEditF:false,
             isNewF:false,
-             dialogSaveVisible:false,
+            dialogSaveVisible:false,
               // 关闭对话框配置
             closeConfig: false,
             dataObj:{},
@@ -325,415 +320,397 @@ export default {
         }
     },
     mounted () {
-       this.$nextTick(()=>{//debugger
-            //console.log(this.dataObj)
+        this.$nextTick(()=>{
             if(this.dataObj.lines.line.length >0){
-            this.isEditF = true;
-            this.isNewF = false;
-            let newObj=[];
-            let newFork=[];
-            let newTask=[];
-            let newJoin=[];
-            let newProcess=[];
-            let newCondition=[];
-            let newRouter=[];
-            let newStart=[];
-            let newEnd=[];
-            let newLine=[];
-            // 查看/编辑 载入数据
-             for(let i in this.dataObj.lines.line){
-                newLine.push(
-                    {
-                        type: 'Line',
-                        oid:this.dataObj.lines.line[i].linefoid,
-                        linefrom:this.dataObj.lines.line[i].linefrom,
-                        data: {
-                            linefcode:this.dataObj.lines.line[i].linefcode,
-                            decisionType:this.dataObj.lines.line[i].linedecisontype,
-                            lineremark:this.dataObj.lines.line[i].lineremark,
-                            lineexpression:this.dataObj.lines.line[i].lineexpression,
-                            lineotherwise:this.dataObj.lines.line[i].lineotherwise,
-                            name: 'Line',
+                this.isEditF = true;
+                this.isNewF = false;
+                let newObj=[];
+                let newFork=[];
+                let newTask=[];
+                let newJoin=[];
+                let newProcess=[];
+                let newCondition=[];
+                let newRouter=[];
+                let newStart=[];
+                let newEnd=[];
+                let newLine=[];
+                // 查看/编辑 载入数据
+                for(let i in this.dataObj.lines.line){
+                    newLine.push(
+                        {
+                            type: 'Line',
                             oid:this.dataObj.lines.line[i].linefoid,
-                            displayName: this.dataObj.lines.line[i].linefname,
-                        },
-                        from:{
-                            data:{
-                                 name: this.dataObj.lines.line[i].from.type,
-                                 displayName: this.dataObj.lines.line[i].from.name
+                            linefrom:this.dataObj.lines.line[i].linefrom,
+                            data: {
+                                linefcode:this.dataObj.lines.line[i].linefcode,
+                                decisionType:this.dataObj.lines.line[i].linedecisontype,
+                                lineremark:this.dataObj.lines.line[i].lineremark,
+                                lineexpression:this.dataObj.lines.line[i].lineexpression,
+                                lineotherwise:this.dataObj.lines.line[i].lineotherwise,
+                                name: 'Line',
+                                oid:this.dataObj.lines.line[i].linefoid,
+                                displayName: this.dataObj.lines.line[i].linefname,
                             },
-                            options:this.dataObj.lines.line[i].from.options,
-                            target: this.dataObj.lines.line[i].from.target,
-                            point:this.dataObj.lines.line[i].from.point,
-                        },
-                        to:{
-                             data:{
-                                 name: this.dataObj.lines.line[i].to.type,
-                                 displayName: this.dataObj.lines.line[i].to.name,
+                            from:{
+                                data:{
+                                    name: this.dataObj.lines.line[i].from.type,
+                                    displayName: this.dataObj.lines.line[i].from.name
+                                },
+                                options:this.dataObj.lines.line[i].from.options,
+                                target: this.dataObj.lines.line[i].from.target,
+                                point:this.dataObj.lines.line[i].from.point,
                             },
-                            options:this.dataObj.lines.line[i].to.options,
-                            point:this.dataObj.lines.line[i].to.point,
-                            target: this.dataObj.lines.line[i].to.target,
-                        },
+                            to:{
+                                data:{
+                                    name: this.dataObj.lines.line[i].to.type,
+                                    displayName: this.dataObj.lines.line[i].to.name,
+                                },
+                                options:this.dataObj.lines.line[i].to.options,
+                                point:this.dataObj.lines.line[i].to.point,
+                                target: this.dataObj.lines.line[i].to.target,
+                            },
+                        }
+                    )
+                };
+                for(let i in this.dataObj.nodes.wfProcessor){
+                    switch (this.dataObj.nodes.wfProcessor[i].type) {
+                        case "Join":
+                                newJoin.push(
+                                    {
+                                        data: {
+                                            mactivity : this.dataObj.nodes.wfProcessor[i].mactivity?{
+                                                "code": this.dataObj.nodes.wfProcessor[i].mactivity.code,
+                                                "oid": this.dataObj.nodes.wfProcessor[i].mactivity.oid,
+                                                "name": this.dataObj.nodes.wfProcessor[i].mactivity.name,
+                                            }:{},
+                                            dataType : this.dataObj.nodes.wfProcessor[i].dataType?{
+                                                "code": this.dataObj.nodes.wfProcessor[i].dataType.code,
+                                                "oid": this.dataObj.nodes.wfProcessor[i].dataType.oid,
+                                                "name": this.dataObj.nodes.wfProcessor[i].dataType.name,
+                                            }:{},
+                                            decisions :{
+                                                decision:this.dataObj.nodes.wfProcessor[i].decisions.decision
+                                            },
+                                            srcActivity : this.dataObj.nodes.wfProcessor[i].srcActivity?{
+                                                "code": this.dataObj.nodes.wfProcessor[i].srcActivity.code,
+                                                "oid": this.dataObj.nodes.wfProcessor[i].srcActivity.oid,
+                                                "name": this.dataObj.nodes.wfProcessor[i].srcActivity.name,
+                                            }:{},
+                                            wfCopyTo :{
+                                                copyTo:this.dataObj.nodes.wfProcessor[i].wfCopyTo.copyTo
+                                            },
+                                            wfParticipator :{
+                                                participator:this.dataObj.nodes.wfProcessor[i].wfParticipator.participator
+                                            },
+                                            wfViewOtherComments :{
+                                                wfViewOtherComment:this.dataObj.nodes.wfProcessor[i].wfViewOtherComments.wfViewOtherComment
+                                            },
+                                            oid:this.dataObj.nodes.wfProcessor[i].oid,
+                                            fremark: this.dataObj.nodes.wfProcessor[i].fremark,
+                                            hidden: this.dataObj.nodes.wfProcessor[i].hidden,
+                                            maxWorkTime: this.dataObj.nodes.wfProcessor[i].maxWorkTime,
+                                            mntNextJoin: this.dataObj.nodes.wfProcessor[i].mntNextJoin,
+                                            multMail: this.dataObj.nodes.wfProcessor[i].multMail,
+                                            nodetype: this.dataObj.nodes.wfProcessor[i].nodetype,
+                                            orgUnit: this.dataObj.nodes.wfProcessor[i].orgUnit,
+                                            rollbackService: this.dataObj.nodes.wfProcessor[i].rollbackService,
+                                            timeUnit: this.dataObj.nodes.wfProcessor[i].timeUnit,
+                                            wfAuditType: this.dataObj.nodes.wfProcessor[i].wfAuditType,
+                                            autoHurry: this.dataObj.nodes.wfProcessor[i].autoHurry,
+                                            autoSubmit: this.dataObj.nodes.wfProcessor[i].autoSubmit,
+                                            permission: this.dataObj.nodes.wfProcessor[i].permission,
+                                            canSkip: this.dataObj.nodes.wfProcessor[i].canSkip,
+                                            code: this.dataObj.nodes.wfProcessor[i].code,
+                                            creator: this.dataObj.nodes.wfProcessor[i].creator,
+                                            name:'Join',
+                                            displayName: this.dataObj.nodes.wfProcessor[i].name,
+                                        },
+                                        type: 'Join',
+                                        name: this.dataObj.nodes.wfProcessor[i].name,
+                                        oid:this.dataObj.nodes.wfProcessor[i].oid,
+                                        icon: 'el-icon-plus-param',
+                                        transition: [],
+                                        options: {
+                                            width: 120,
+                                            height: 76,
+                                            visible: false,
+                                            color: '#909399',
+                                            x: Number(this.dataObj.nodes.wfProcessor[i].x),
+                                            y: Number(this.dataObj.nodes.wfProcessor[i].y),
+                                            draggable: true
+                                        }
+                                    }
+                                )
+                            break;
+                        case "Condition":
+                                newCondition.push(
+                                    {
+                                        data: {
+                                            mactivity : {
+                                                "code": this.dataObj.nodes.wfProcessor[i].mactivity.code,
+                                                "oid": this.dataObj.nodes.wfProcessor[i].mactivity.oid,
+                                                "name": this.dataObj.nodes.wfProcessor[i].mactivity.name,
+                                            },
+                                            dataType : this.dataObj.nodes.wfProcessor[i].dataType?{
+                                                "code": this.dataObj.nodes.wfProcessor[i].dataType.code,
+                                                "oid": this.dataObj.nodes.wfProcessor[i].dataType.oid,
+                                                "name": this.dataObj.nodes.wfProcessor[i].dataType.name,
+                                            }:{},
+                                            decisions :this.dataObj.nodes.wfProcessor[i].decisions?{
+                                                decision:this.dataObj.nodes.wfProcessor[i].decisions.decision
+                                            }:{},
+                                            srcActivity : this.dataObj.nodes.wfProcessor[i].srcActivity?{
+                                                "code": this.dataObj.nodes.wfProcessor[i].srcActivity.code,
+                                                "oid": this.dataObj.nodes.wfProcessor[i].srcActivity.oid,
+                                                "name": this.dataObj.nodes.wfProcessor[i].srcActivity.name,
+                                            }:{},
+                                            wfCopyTo :{
+                                                copyTo:this.dataObj.nodes.wfProcessor[i].wfCopyTo.copyTo
+                                            },
+                                            wfParticipator :{
+                                                participator:this.dataObj.nodes.wfProcessor[i].wfParticipator.participator
+                                            },
+                                            wfViewOtherComments :{
+                                                wfViewOtherComment:this.dataObj.nodes.wfProcessor[i].wfViewOtherComments.wfViewOtherComment
+                                            },
+                                            oid:this.dataObj.nodes.wfProcessor[i].oid,
+                                            autoHurry:this.dataObj.nodes.wfProcessor[i].autoHurry,
+                                            autoSubmit: this.dataObj.nodes.wfProcessor[i].autoSubmit,
+                                            permission: this.dataObj.nodes.wfProcessor[i].permission,
+                                            canSkip: this.dataObj.nodes.wfProcessor[i].canSkip,
+                                            code: this.dataObj.nodes.wfProcessor[i].code,
+                                            creator: this.dataObj.nodes.wfProcessor[i].creator,
+                                            fremark: this.dataObj.nodes.wfProcessor[i].fremark,
+                                            hidden: this.dataObj.nodes.wfProcessor[i].hidden,
+                                            maxWorkTime: this.dataObj.nodes.wfProcessor[i].maxWorkTime,
+                                            mntNextJoin: this.dataObj.nodes.wfProcessor[i].mntNextJoin,
+                                            multMail: this.dataObj.nodes.wfProcessor[i].multMail,
+                                            nodetype: this.dataObj.nodes.wfProcessor[i].nodetype,
+                                            orgUnit: this.dataObj.nodes.wfProcessor[i].orgUnit,
+                                            rollbackService: this.dataObj.nodes.wfProcessor[i].rollbackService,
+                                            timeUnit: this.dataObj.nodes.wfProcessor[i].timeUnit,
+                                            wfAuditType: this.dataObj.nodes.wfProcessor[i].wfAuditType,
+                                            name: 'Condition',
+                                            displayName: this.dataObj.nodes.wfProcessor[i].name,
+                                            
+                                        },
+                                        type: 'Condition',
+                                        name: this.dataObj.nodes.wfProcessor[i].name,
+                                        oid:this.dataObj.nodes.wfProcessor[i].oid,
+                                        icon: 'el-icon-user',
+                                        transition: [],
+                                        options: {
+                                            width: 120,
+                                            height: 76,
+                                            visible: false,
+                                            color: '#f39c43',
+                                            x: Number(this.dataObj.nodes.wfProcessor[i].x),
+                                            y: Number(this.dataObj.nodes.wfProcessor[i].y),
+                                            draggable: true
+                                        }
+                                    }
+                                )
+                            break;
+                    
+                        default:
+                            break;
                     }
-                )
-            };
-            for(let i in this.dataObj.nodes.wfProcessor){
-                switch (this.dataObj.nodes.wfProcessor[i].type) {
-                    case "Join":
-                             newJoin.push(
-                                {
-                                    data: {
-                                        mactivity : this.dataObj.nodes.wfProcessor[i].mactivity?{
-                                            "code": this.dataObj.nodes.wfProcessor[i].mactivity.code,
-                                            "oid": this.dataObj.nodes.wfProcessor[i].mactivity.oid,
-                                            "name": this.dataObj.nodes.wfProcessor[i].mactivity.name,
-                                        }:{},
-                                        dataType : this.dataObj.nodes.wfProcessor[i].dataType?{
-                                            "code": this.dataObj.nodes.wfProcessor[i].dataType.code,
-                                            "oid": this.dataObj.nodes.wfProcessor[i].dataType.oid,
-                                            "name": this.dataObj.nodes.wfProcessor[i].dataType.name,
-                                        }:{},
-                                        decisions :{
-                                            decision:this.dataObj.nodes.wfProcessor[i].decisions.decision
-                                        },
-                                        srcActivity : this.dataObj.nodes.wfProcessor[i].srcActivity?{
-                                            "code": this.dataObj.nodes.wfProcessor[i].srcActivity.code,
-                                            "oid": this.dataObj.nodes.wfProcessor[i].srcActivity.oid,
-                                            "name": this.dataObj.nodes.wfProcessor[i].srcActivity.name,
-                                        }:{},
-                                        wfCopyTo :{
-                                            copyTo:this.dataObj.nodes.wfProcessor[i].wfCopyTo.copyTo
-                                        },
-                                        wfParticipator :{
-                                            participator:this.dataObj.nodes.wfProcessor[i].wfParticipator.participator
-                                        },
-                                        wfViewOtherComments :{
-                                            wfViewOtherComment:this.dataObj.nodes.wfProcessor[i].wfViewOtherComments.wfViewOtherComment
-                                        },
-                                        oid:this.dataObj.nodes.wfProcessor[i].oid,
-                                        fremark: this.dataObj.nodes.wfProcessor[i].fremark,
-                                        hidden: this.dataObj.nodes.wfProcessor[i].hidden,
-                                        maxWorkTime: this.dataObj.nodes.wfProcessor[i].maxWorkTime,
-                                        mntNextJoin: this.dataObj.nodes.wfProcessor[i].mntNextJoin,
-                                        multMail: this.dataObj.nodes.wfProcessor[i].multMail,
-                                        nodetype: this.dataObj.nodes.wfProcessor[i].nodetype,
-                                        orgUnit: this.dataObj.nodes.wfProcessor[i].orgUnit,
-                                        rollbackService: this.dataObj.nodes.wfProcessor[i].rollbackService,
-                                        timeUnit: this.dataObj.nodes.wfProcessor[i].timeUnit,
-                                        wfAuditType: this.dataObj.nodes.wfProcessor[i].wfAuditType,
-                                        autoHurry: this.dataObj.nodes.wfProcessor[i].autoHurry,
-                                        autoSubmit: this.dataObj.nodes.wfProcessor[i].autoSubmit,
-                                        permission: this.dataObj.nodes.wfProcessor[i].permission,
-                                        canSkip: this.dataObj.nodes.wfProcessor[i].canSkip,
-                                        code: this.dataObj.nodes.wfProcessor[i].code,
-                                        creator: this.dataObj.nodes.wfProcessor[i].creator,
-                                        name:'Join',
-                                        displayName: this.dataObj.nodes.wfProcessor[i].name,
-                                    },
-                                    type: 'Join',
-                                    name: this.dataObj.nodes.wfProcessor[i].name,
-                                    oid:this.dataObj.nodes.wfProcessor[i].oid,
-                                    icon: 'el-icon-plus-param',
-                                    transition: [],
-                                    options: {
-                                        width: 120,
-                                        height: 76,
-                                        visible: false,
-                                        color: '#909399',
-                                        x: Number(this.dataObj.nodes.wfProcessor[i].x),
-                                        y: Number(this.dataObj.nodes.wfProcessor[i].y),
-                                        draggable: true
-                                    }
-                                }
-                            )
-                        break;
-                    case "Condition":
-                             newCondition.push(
-                                {
-                                    data: {
-                                        mactivity : {
-                                            "code": this.dataObj.nodes.wfProcessor[i].mactivity.code,
-                                            "oid": this.dataObj.nodes.wfProcessor[i].mactivity.oid,
-                                            "name": this.dataObj.nodes.wfProcessor[i].mactivity.name,
-                                        },
-                                        dataType : this.dataObj.nodes.wfProcessor[i].dataType?{
-                                            "code": this.dataObj.nodes.wfProcessor[i].dataType.code,
-                                            "oid": this.dataObj.nodes.wfProcessor[i].dataType.oid,
-                                            "name": this.dataObj.nodes.wfProcessor[i].dataType.name,
-                                        }:{},
-                                        decisions :this.dataObj.nodes.wfProcessor[i].decisions?{
-                                            decision:this.dataObj.nodes.wfProcessor[i].decisions.decision
-                                        }:{},
-                                        srcActivity : this.dataObj.nodes.wfProcessor[i].srcActivity?{
-                                            "code": this.dataObj.nodes.wfProcessor[i].srcActivity.code,
-                                            "oid": this.dataObj.nodes.wfProcessor[i].srcActivity.oid,
-                                            "name": this.dataObj.nodes.wfProcessor[i].srcActivity.name,
-                                        }:{},
-                                        wfCopyTo :{
-                                            copyTo:this.dataObj.nodes.wfProcessor[i].wfCopyTo.copyTo
-                                        },
-                                        wfParticipator :{
-                                            participator:this.dataObj.nodes.wfProcessor[i].wfParticipator.participator
-                                        },
-                                        wfViewOtherComments :{
-                                            wfViewOtherComment:this.dataObj.nodes.wfProcessor[i].wfViewOtherComments.wfViewOtherComment
-                                        },
-                                        oid:this.dataObj.nodes.wfProcessor[i].oid,
-                                        autoHurry:this.dataObj.nodes.wfProcessor[i].autoHurry,
-                                        autoSubmit: this.dataObj.nodes.wfProcessor[i].autoSubmit,
-                                        permission: this.dataObj.nodes.wfProcessor[i].permission,
-                                        canSkip: this.dataObj.nodes.wfProcessor[i].canSkip,
-                                        code: this.dataObj.nodes.wfProcessor[i].code,
-                                        creator: this.dataObj.nodes.wfProcessor[i].creator,
-                                        fremark: this.dataObj.nodes.wfProcessor[i].fremark,
-                                        hidden: this.dataObj.nodes.wfProcessor[i].hidden,
-                                        maxWorkTime: this.dataObj.nodes.wfProcessor[i].maxWorkTime,
-                                        mntNextJoin: this.dataObj.nodes.wfProcessor[i].mntNextJoin,
-                                        multMail: this.dataObj.nodes.wfProcessor[i].multMail,
-                                        nodetype: this.dataObj.nodes.wfProcessor[i].nodetype,
-                                        orgUnit: this.dataObj.nodes.wfProcessor[i].orgUnit,
-                                        rollbackService: this.dataObj.nodes.wfProcessor[i].rollbackService,
-                                        timeUnit: this.dataObj.nodes.wfProcessor[i].timeUnit,
-                                        wfAuditType: this.dataObj.nodes.wfProcessor[i].wfAuditType,
-                                        name: 'Condition',
-                                        displayName: this.dataObj.nodes.wfProcessor[i].name,
-                                        
-                                    },
-                                    type: 'Condition',
-                                    name: this.dataObj.nodes.wfProcessor[i].name,
-                                    oid:this.dataObj.nodes.wfProcessor[i].oid,
-                                    icon: 'el-icon-user',
-                                    transition: [],
-                                    options: {
-                                        width: 120,
-                                        height: 76,
-                                        visible: false,
-                                        color: '#f39c43',
-                                        x: Number(this.dataObj.nodes.wfProcessor[i].x),
-                                        y: Number(this.dataObj.nodes.wfProcessor[i].y),
-                                        draggable: true
-                                    }
-                                }
-                            )
-                        break;
-                
-                    default:
-                        break;
-                }
-                
-            };
-             for(let i in this.dataObj.nodes.wfRouter){
-                newRouter.push(
-                     {
-                        data: {
-                            dataType : this.dataObj.nodes.wfRouter[i].dataType?{
-                                "code": this.dataObj.nodes.wfRouter[i].dataType.code,
-                                "oid": this.dataObj.nodes.wfRouter[i].dataType.oid,
-                                "name": this.dataObj.nodes.wfRouter[i].dataType.name,
-                            }:{},
-                            fremark: this.dataObj.nodes.wfRouter[i].fremark,
-                            hidden: this.dataObj.nodes.wfRouter[i].hidden,
-                            join: this.dataObj.nodes.wfRouter[i].join,
-                            code: this.dataObj.nodes.wfRouter[i].code,
-                            name: 'Task',
+                    
+                };
+                for(let i in this.dataObj.nodes.wfRouter){
+                    newRouter.push(
+                        {
+                            data: {
+                                dataType : this.dataObj.nodes.wfRouter[i].dataType?{
+                                    "code": this.dataObj.nodes.wfRouter[i].dataType.code,
+                                    "oid": this.dataObj.nodes.wfRouter[i].dataType.oid,
+                                    "name": this.dataObj.nodes.wfRouter[i].dataType.name,
+                                }:{},
+                                fremark: this.dataObj.nodes.wfRouter[i].fremark,
+                                hidden: this.dataObj.nodes.wfRouter[i].hidden,
+                                join: this.dataObj.nodes.wfRouter[i].join,
+                                code: this.dataObj.nodes.wfRouter[i].code,
+                                name: 'Task',
+                                oid:this.dataObj.nodes.wfRouter[i].oid,
+                                displayName: this.dataObj.nodes.wfRouter[i].name,
+                            },
+                            type: 'Task',
+                            name: this.dataObj.nodes.wfRouter[i].name,
                             oid:this.dataObj.nodes.wfRouter[i].oid,
-                            displayName: this.dataObj.nodes.wfRouter[i].name,
-                        },
-                        type: 'Task',
-                        name: this.dataObj.nodes.wfRouter[i].name,
-                        oid:this.dataObj.nodes.wfRouter[i].oid,
-                        icon: 'el-icon-setting',
+                            icon: 'el-icon-setting',
+                            transition: [],
+                            options: {
+                                width: 40,
+                                height: 40,
+                                visible: false,
+                                color: '#25a3fd',
+                                x: Number(this.dataObj.nodes.wfRouter[i].x),
+                                y: Number(this.dataObj.nodes.wfRouter[i].y),
+                                draggable: true
+                            }
+                        }
+                    )
+                };
+                for(let i in this.dataObj.nodes.wfProcessorAuto){
+                    newFork.push(
+                        {
+                            data: {
+                                dataType : this.dataObj.nodes.wfProcessorAuto[i].dataType?{
+                                    "code": this.dataObj.nodes.wfProcessorAuto[i].dataType.code,
+                                    "oid": this.dataObj.nodes.wfProcessorAuto[i].dataType.oid,
+                                    "name": this.dataObj.nodes.wfProcessorAuto[i].dataType.name,
+                                }:{},
+                                wfAuditType: this.dataObj.nodes.wfProcessorAuto[i].wfAuditType,
+                                fremark: this.dataObj.nodes.wfProcessorAuto[i].fremark,
+                                hidden: this.dataObj.nodes.wfProcessorAuto[i].hidden,
+                                join: this.dataObj.nodes.wfProcessorAuto[i].join,
+                                name: 'Fork',
+                                oid:this.dataObj.nodes.wfProcessorAuto[i].oid,
+                                displayName: this.dataObj.nodes.wfProcessorAuto[i].name,
+                                
+                            },
+                            type: 'Fork',
+                            name: this.dataObj.nodes.wfProcessorAuto[i].name,
+                            oid:this.dataObj.nodes.wfProcessorAuto[i].oid,
+                            icon: 'el-icon-setting',
+                            transition: [],
+                            options: {
+                                width: 120,
+                                height: 76,
+                                visible: false,
+                                color: '#25a3fd',
+                                x: Number(this.dataObj.nodes.wfProcessorAuto[i].x),
+                                y: Number(this.dataObj.nodes.wfProcessorAuto[i].y),
+                                draggable: true
+                            }
+                        }
+                    )
+                    
+                };
+                for(let i in this.dataObj.nodes.wfSubProces){
+                    newProcess.push(
+                        {
+                            data: {
+                                refWfProcess : this.dataObj.nodes.wfSubProces[i].refWfProcess?{
+                                    "code": this.dataObj.nodes.wfSubProces[i].refWfProcess.code,
+                                    "oid": this.dataObj.nodes.wfSubProces[i].refWfProcess.oid,
+                                    "name": this.dataObj.nodes.wfSubProces[i].refWfProcess.name,
+                                }:{},
+                                fremark: this.dataObj.nodes.wfSubProces[i].fremark,
+                                hidden: this.dataObj.nodes.wfSubProces[i].hidden,
+                                code: this.dataObj.nodes.wfSubProces[i].code,
+                                name: 'Subprocess',
+                                oid:this.dataObj.nodes.wfSubProces[i].oid,
+                                displayName: this.dataObj.nodes.wfSubProces[i].name,
+                            },
+                            type: 'Subprocess',
+                            name: this.dataObj.nodes.wfSubProces[i].name,
+                            oid:this.dataObj.nodes.wfSubProces[i].oid,
+                            icon: 'el-icon-connection',
+                            transition: [],
+                            options: {
+                                width: 120,
+                                height: 76,
+                                visible: false,
+                                color: '#9389fb',
+                                x: Number(this.dataObj.nodes.wfSubProces[i].x),
+                                y: Number(this.dataObj.nodes.wfSubProces[i].y),
+                                draggable: true
+                            }
+                        }
+                    )
+                };
+           
+                newStart.push(
+                    {
+                        type: 'Start',
+                        oid:this.dataObj.nodes.wfStarter[0].oid,
                         transition: [],
                         options: {
-                            width: 40,
-                            height: 40,
-                            visible: false,
-                            color: '#25a3fd',
-                            x: Number(this.dataObj.nodes.wfRouter[i].x),
-                            y: Number(this.dataObj.nodes.wfRouter[i].y),
-                            draggable: true
-                        }
-                    }
-                )
-            };
-            for(let i in this.dataObj.nodes.wfProcessorAuto){
-                newFork.push(
-                     {
+                            draggable: true,
+                            x: Number(this.dataObj.nodes.wfStarter[0].x),
+                            y: Number(this.dataObj.nodes.wfStarter[0].y),
+                            width: 100,
+                            height: 100,
+                            color: '#67C23A',
+                            allowIn: false,
+                            allowOut: true
+                        },
                         data: {
-                            dataType : this.dataObj.nodes.wfProcessorAuto[i].dataType?{
-                                "code": this.dataObj.nodes.wfProcessorAuto[i].dataType.code,
-                                "oid": this.dataObj.nodes.wfProcessorAuto[i].dataType.oid,
-                                "name": this.dataObj.nodes.wfProcessorAuto[i].dataType.name,
-                            }:{},
-                            wfAuditType: this.dataObj.nodes.wfProcessorAuto[i].wfAuditType,
-                            fremark: this.dataObj.nodes.wfProcessorAuto[i].fremark,
-                            hidden: this.dataObj.nodes.wfProcessorAuto[i].hidden,
-                            join: this.dataObj.nodes.wfProcessorAuto[i].join,
-                            name: 'Fork',
-                            oid:this.dataObj.nodes.wfProcessorAuto[i].oid,
-                            displayName: this.dataObj.nodes.wfProcessorAuto[i].name,
+                            name: 'Start',
+                            oid:this.dataObj.nodes.wfStarter[0].oid,
+                            displayName: this.dataObj.nodes.wfStarter[0].name,
+                        },
+                        key: 'Start'
+                    }
+                );
+                newEnd.push(
+                    {
+                        type: 'End',
+                        oid:this.dataObj.nodes.wfEnder[0].oid,
+                        options: {
+                            draggable: true,
+                            x: Number(this.dataObj.nodes.wfEnder[0].x),
+                            y: Number(this.dataObj.nodes.wfEnder[0].y),
+                            width: 100,
+                            height: 100,
+                            color: '#F56C6C',
+                            allowIn: true,
+                            allowOut: false
+                        },
+                        data: {
+                            name: 'End',
+                            oid:this.dataObj.nodes.wfEnder[0].oid,
+                            displayName: this.dataObj.nodes.wfEnder[0].name,
                             
                         },
-                        type: 'Fork',
-                        name: this.dataObj.nodes.wfProcessorAuto[i].name,
-                        oid:this.dataObj.nodes.wfProcessorAuto[i].oid,
-                        icon: 'el-icon-setting',
-                        transition: [],
-                        options: {
-                            width: 120,
-                            height: 76,
-                            visible: false,
-                            color: '#25a3fd',
-                            x: Number(this.dataObj.nodes.wfProcessorAuto[i].x),
-                            y: Number(this.dataObj.nodes.wfProcessorAuto[i].y),
-                            draggable: true
-                        }
+                        key: 'End'
                     }
                 )
-                
-            };
-             for(let i in this.dataObj.nodes.wfSubProces){
-                newProcess.push(
-                     {
-                        data: {
-                            refWfProcess : this.dataObj.nodes.wfSubProces[i].refWfProcess?{
-                                "code": this.dataObj.nodes.wfSubProces[i].refWfProcess.code,
-                                "oid": this.dataObj.nodes.wfSubProces[i].refWfProcess.oid,
-                                "name": this.dataObj.nodes.wfSubProces[i].refWfProcess.name,
-                            }:{},
-                            fremark: this.dataObj.nodes.wfSubProces[i].fremark,
-                            hidden: this.dataObj.nodes.wfSubProces[i].hidden,
-                            code: this.dataObj.nodes.wfSubProces[i].code,
-                            name: 'Subprocess',
-                            oid:this.dataObj.nodes.wfSubProces[i].oid,
-                            displayName: this.dataObj.nodes.wfSubProces[i].name,
-                        },
-                        type: 'Subprocess',
-                        name: this.dataObj.nodes.wfSubProces[i].name,
-                        oid:this.dataObj.nodes.wfSubProces[i].oid,
-                        icon: 'el-icon-connection',
-                        transition: [],
-                        options: {
-                            width: 120,
-                            height: 76,
-                            visible: false,
-                            color: '#9389fb',
-                            x: Number(this.dataObj.nodes.wfSubProces[i].x),
-                            y: Number(this.dataObj.nodes.wfSubProces[i].y),
-                            draggable: true
+            
+                newObj = [
+                    ...newStart,
+                    ...newRouter,
+                    ...newCondition,
+                    ...newFork,
+                    ...newJoin,
+                    ...newProcess,
+                ]
+                newObj.name = this.dataObj.name
+                newObj.displayName = this.dataObj.name;
+                // 更改节点信息 同步更新终点为当前配置节点的to属性
+                newObj.forEach(item=>{
+                    for( let i = 0; i < newLine.length; i++ ){
+                        if(newLine[i].linefrom){
+                            if(item.oid === newLine[i].linefrom ){
+                                item.transition.push(newLine[i]);
+                            }
                         }
                     }
-                )
-            };
-           
-            newStart.push(
-                {
-                    type: 'Start',
-                    oid:this.dataObj.nodes.wfStarter[0].oid,
-                    transition: [],
-                    options: {
-                        draggable: true,
-                        x: Number(this.dataObj.nodes.wfStarter[0].x),
-                        y: Number(this.dataObj.nodes.wfStarter[0].y),
-                        width: 100,
-                        height: 100,
-                        color: '#67C23A',
-                        allowIn: false,
-                        allowOut: true
-                    },
-                    data: {
-                        name: 'Start',
-                        oid:this.dataObj.nodes.wfStarter[0].oid,
-                        displayName: this.dataObj.nodes.wfStarter[0].name,
-                    },
-                    key: 'Start'
+                });
+                newObj.push(...newEnd);
+                this.dataObj = newObj;
+                this.MMworkflowNodes=[];
+                for(let k =0 ; k<this.dataObj.length; k++){
+                    //this.workflowNodes.push(this.dataObj[k]);
+                    this.MMworkflowNodes.push(this.dataObj[k]);  
                 }
-            );
-             newEnd.push(
-                {
-                    type: 'End',
-                    oid:this.dataObj.nodes.wfEnder[0].oid,
-                    options: {
-                        draggable: true,
-                        x: Number(this.dataObj.nodes.wfEnder[0].x),
-                        y: Number(this.dataObj.nodes.wfEnder[0].y),
-                         width: 100,
-                         height: 100,
-                         color: '#F56C6C',
-                         allowIn: true,
-                         allowOut: false
-                    },
-                    data: {
-                        name: 'End',
-                        oid:this.dataObj.nodes.wfEnder[0].oid,
-                        displayName: this.dataObj.nodes.wfEnder[0].name,
-                        
-                    },
-                    key: 'End'
-                }
-            )
-            
-            
-            
-            newObj = [
-                ...newStart,
-                ...newRouter,
-                ...newCondition,
-                ...newFork,
-                ...newJoin,
-                ...newProcess,
-            ]
-            newObj.name = this.dataObj.name
-            newObj.displayName = this.dataObj.name;
-            // 更改节点信息 同步更新终点为当前配置节点的to属性
-            newObj.forEach(item=>{
-                for( let i = 0; i < newLine.length; i++ ){
-                    if(newLine[i].linefrom){
-                        if(item.oid === newLine[i].linefrom ){
-                            item.transition.push(newLine[i]);
-                        }
-                    }
-                }
-            });
-            newObj.push(...newEnd);
-            this.dataObj = newObj;
-            this.MMworkflowNodes=[];
-            this.compileXMLToObj(this.dataObj);
-            for(let k =0 ; k<this.dataObj.length; k++){
-                this.workflowNodes.push(this.dataObj[k]);
-                this.MMworkflowNodes.push(this.dataObj[k]);  
+                this.compileXMLToObj(this.dataObj);
+            }else{
+                this.isEditF = false;
+                this.isNewF = true;
+                this.workflowNodes = [
+                    ...TerminalNode()
+                ];
+                this.MMworkflowNodes = [
+                    ...TerminalNode()
+                ];
+                console.log(this.MMworkflowNodes)
             }
-            
-        }else{
-            this.isEditF = false;
-            this.isNewF = true;
-            this.workflowNodes = [
-                ...TerminalNode()
-            ];
-            this.MMworkflowNodes = [
-                ...TerminalNode()
-            ];
-            console.log(this.MMworkflowNodes)
-        }
-       })
-
-        // // 监听键盘事件
-        // document.addEventListener('keyup', (event) => {
-        //     const evt = window.event || event;
-        //     const keyCode = evt.keyCode;
-        //     if (Object.keys(this.selectedNode).length === 0 || this.workflowNodes.length === 0) return;
-        //     //
-        //     if (keyCode === 46) {
-        //         const index = this.workflowNodes.indexOf(this.selectedNode);
-        //         this.workflowNodes.splice(index, 1);
-        //     } else if (keyCode === 90 && evt.ctrlKey) {
-        //         // this.workflowNodes.splice(this.workflowNodes.length - 1, 1);
-        //     }
-        // });
+        })
     },
     updated(){
-       this.workflowNodes=this.MMworkflowNodes; 
+       ///this.workflowNodes=this.MMworkflowNodes; 
     },
     destroyed () {
         // document.removeEventListener('keyup');
@@ -753,15 +730,15 @@ export default {
             this.set(); 
         },
         // 放大页面
-         bigger(){
+        bigger(){
             this.size = this.size + 0.1;  
             this.set(); 
         },
         // 设置页面大小
-         set() {  
+        set() {  
             document.getElementsByClassName('svgBox')[0].style.zoom = this.size;
             document.body.style.cssText += '; -moz-transform: scale(' + this.size + ');-moz-transform-origin: 0 0; ';     //
-        }, 
+        },
         // 点击背景面板执行事件
         backgroundClick (event) {//console.log(event)
             const evt = window.event || event;
@@ -891,7 +868,6 @@ export default {
                 visible: false,
                 key: key
             });
-           // console.log(this.workflowNodes)
             // this.$set(this.workflowNodes, len, {
             //     ...item,
             //     visible: false,
@@ -912,9 +888,8 @@ export default {
             this.endPoint = [point[0] + cx, point[1] + cy];
         },
     }
-};
+}
 </script>
-
 <style lang="scss" scoped>
 /deep/ .el-dialog__body{
     padding:0;

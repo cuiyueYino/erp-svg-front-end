@@ -221,6 +221,7 @@ export default {
             this.title=rowDataObj.nametitle;
             this.formdata.searchName=rowDataObj.finanrowId;
             this.rowFincename=rowDataObj.finanrowname;
+            this.dialog={};
             let formData ={};
             formData.page=this.pageNum;
             formData.size=this.pageSize;

@@ -26,18 +26,18 @@
          <!-- 搜索框 -->
              <el-row :gutter="24">
                   <el-col :span="type=='角色'?12:8" v-show=" type !=='审核'">
-                    <el-form-item label="编码" label-width="43px">
+                    <el-form-item label="编码" label-width="43px" prop="formCode">
                         <el-input clearable size="small" v-model="formData.formCode" placeholder="请输入"></el-input>
                     </el-form-item>
                   </el-col> 
                   <el-col :span="type=='角色'?12:8"  v-show=" type !=='审核'">
-                    <el-form-item label="名称" label-width="43px">
+                    <el-form-item label="名称" label-width="43px"  prop="formName">
                         <el-input clearable size="small" v-model="formData.formName" placeholder="请输入"></el-input>
                     </el-form-item>
                   </el-col> 
                  
-                  <el-col :span="8" v-show="type !=='服务' && type !=='审核'  && type !=='角色'">
-                    <el-form-item label="状态" label-width="43px">
+                  <el-col :span="8" v-show="type !=='服务' && type !=='审核'  && type !=='角色' && type !=='职务' ">
+                    <el-form-item label="状态" label-width="43px" prop="formCtionTypeCon">
                          <el-select v-model="formData.formCtionTypeCon" clearable placeholder="请选择">
                             <el-option
                             v-for="item in options"
@@ -55,8 +55,8 @@
                 </el-col>
              </el-row>
              <el-row :gutter="24" >
-                <el-col :span="type=='角色'?12:8" v-show="type !=='服务'  && type !=='审核'">
-                    <el-form-item :label="type ==='职务'?'公司':'角色类别'" :label-width="type ==='职务'?'43px':'70px'">
+                <el-col :span="type=='角色'?12:8" v-show="type !=='服务'  && type !=='审核' && type !=='职务'">
+                    <el-form-item :label="'角色类别'" :label-width="'70px'"  prop="formCtionRole">
                          <el-select v-model="formData.formCtionRole" clearable placeholder="请选择">
                             <el-option
                             v-for="item in roleoptions"
@@ -75,22 +75,22 @@
                     </el-radio-group>
                  </el-form-item>
                 </el-col>  -->
-                 <el-col :span="10" v-show="type ==='职务'" class="job-class">
-                     <el-form-item label="职务类型" label-width="70px">
+                 <!-- <el-col :span="10" v-show="type ==='职务'" class="job-class">
+                     <el-form-item label="职务类型" label-width="70px" prop="formRoleName">
                      <el-input clearable size="small" v-model="formData.formRoleName" placeholder="请输入"></el-input>
                     <img class="icon-search" src="../../../assets/img/search.svg" >
                  </el-form-item>
                   
-                </el-col> 
+                </el-col>  -->
                  <!-- 审核-业务数据 -->
                   <span v-show="type ==='审核'">
                     <el-col :span="12">
-                    <el-form-item label="编码" label-width="56px">
+                    <el-form-item label="编码" label-width="56px"  prop="formCode">
                         <el-input clearable size="small" v-model="formData.formCode" placeholder="请输入"></el-input>
                     </el-form-item>
                   </el-col> 
                   <el-col :span="12">
-                    <el-form-item label="名称" label-width="56px">
+                    <el-form-item label="名称" label-width="56px"  prop="formName">
                         <el-input clearable size="small" v-model="formData.formName" placeholder="请输入"></el-input>
                     </el-form-item>
                   </el-col> 
@@ -100,7 +100,7 @@
                     </el-form-item>
                   </el-col>  -->
                   </span>
-                <el-col :span="6" :offset="type=='角色'?6:0" v-show="type !=='服务'" >
+                <el-col :span="6" :offset="type=='角色'?6:type =='职务'?18:0" v-show="type !=='服务'" >
                     <el-button type="primary" size="small" plain @click="reWorkSearchTable('workflowConfigForm')">重置</el-button>
                     <el-button type="primary" size="small" plain @click="workSearchTable">搜索</el-button>
                 </el-col>
@@ -253,11 +253,11 @@ export default {
                         title: '名称'
                     },
                     {
-                        key: 'role_expression',
+                        key: 'roleTypeName',
                         title: '角色类别'
                     },
                     {
-                        key: 'sortOrder',
+                        key: 'remark',
                         title: '描述'
                     },
                     // {
@@ -283,17 +283,17 @@ export default {
                     console.log(error)
                 });
                 //角色查询
-                // this.$api.RoleManagement.findRoleTypeList(fromdata).then(res => {
-                //      res.data.forEach(item => {
-                //         this.formData.roleoptions.push({
-                //             label:item.name,
-                //             value:item.id,
-                //         })
-                //      });
-                    
-                // }),error=>{
-                //     console.log(error)
-                // }
+                this.$api.svg.getRolesMsg().then(res => {
+                    let getMsg = res.data.data
+                    for( let i  in getMsg){
+                        this.roleoptions.push({
+                            label:getMsg[i] ,
+                            value:i ,
+                        })
+                    }                    
+                }),error=>{
+                    console.log(error)
+                }
             }
             //用户查询
             if(this.type ==="用户"){
@@ -451,6 +451,7 @@ export default {
                     console.log(error)
                 })
             }
+            this.$refs['workflowConfigForm'].resetFields();
         }
     },
     methods: {
@@ -504,11 +505,12 @@ export default {
             }
         },
         reWorkSearchTable(formName){
-            this.$refs[formName].validate((valid) => {
-                if (!valid) {
-                     return false;
-                } 
-            });
+             this.$refs[formName].resetFields();
+            // this.$refs[formName].validate((valid) => {
+            //     if (!valid) {
+            //          return false;
+            //     } 
+            // });
             if(this.type ==="服务"){
                 let fromdata={};
                 fromdata.page=this.pageNum;
@@ -592,7 +594,7 @@ export default {
                 }
                 let formCtionRole=this.formData.formCtionRole;
                 if(formCtionRole){
-                    fromdata.portalRole=formCtionRole;
+                    fromdata.roleTypeId=formCtionRole;
                 }
                 let formradio=this.radio;
                 if(formradio){
