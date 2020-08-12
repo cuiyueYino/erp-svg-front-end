@@ -504,11 +504,12 @@ export default {
             }
         },
         reWorkSearchTable(formName){
-            this.$refs[formName].validate((valid) => {
-                if (!valid) {
-                     return false;
-                } 
-            });
+             this.$refs[formName].resetFields();
+            // this.$refs[formName].validate((valid) => {
+            //     if (!valid) {
+            //          return false;
+            //     } 
+            // });
             if(this.type ==="服务"){
                 let fromdata={};
                 fromdata.page=this.pageNum;
