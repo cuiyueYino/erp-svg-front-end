@@ -5,7 +5,7 @@
 				<el-col :span="14">
 					<el-form label-width="10px" :model="formInline" class="demo-form-inline">
 						<el-row>
-							<el-col :span="6">
+							<el-col :span="4">
 								<el-form-item>
 									<el-select clearable v-model="value" value-key="id">
 										<el-option v-for="item in formInlineList" :key="item.id" :label="item.name" :value="item.id">
@@ -13,17 +13,17 @@
 									</el-select>
 								</el-form-item>
 							</el-col>
-							<el-col :span="6" v-if="value != 'time'">
+							<el-col :span="4" v-if="value != 'time'">
 								<el-form-item>
 									<el-input clearable v-model="selectData"></el-input>
 								</el-form-item>
 							</el-col>
-							<el-col :span="8" v-else>
+							<el-col :span="10" v-else>
 								<el-form-item>
 									<el-date-picker value-format="yyyy-MM-dd" v-model="value1" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期"></el-date-picker>
 								</el-form-item>
 							</el-col>
-							<el-col :span="5">
+							<el-col :span="6">
 								<el-form-item>
 									<el-button type="primary" @click="toSelect">搜索</el-button>
 									<el-button type="primary" @click="toClear">重置</el-button>

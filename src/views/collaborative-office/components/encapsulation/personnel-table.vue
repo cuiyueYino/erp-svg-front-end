@@ -105,9 +105,9 @@
 				this.$parent.$parent.$parent.$parent.$parent.role()
 			},
 			getRoleList() {
-				this.$api.collaborativeOffice.apiUrl("staffManage/findStaffByPage", this.formInline).then(data => {
+				this.$api.collaborativeOffice.apiUrl("staffManage/findStaffsNoPage", this.formInline).then(data => {
 					this.loading = false
-					this.conList = data.data.data.rows
+					this.conList = data.data.data
 					this.roleList = JSON.parse(JSON.stringify(this.conList))
 				})
 			},

@@ -21,13 +21,11 @@
 							<!--时间控件-->
 							<el-date-picker value-format="yyyy-MM-dd HH:mm:ss" format="yyyy-MM-dd HH:mm:ss" type="datetime" v-if="item.fieldTypeName == 'timeControl' && item.show" style="width: 100%;" v-model="ruleForm[item.field]"></el-date-picker>
 							<!-- 下拉框 -->
-							<el-select v-if="item.fieldTypeName=='select' && item.show" style="width: 100%;" v-model="scope.row[item.field]" :multiple="item.choice" clearable :disabled="!item.edit" :placeholder="item.placeholder">
+							<el-select v-if="item.fieldTypeName=='select' && item.show" style="width: 100%;" v-model="scope.row[item.field]" clearable :disabled="!item.edit" :placeholder="item.placeholder">
 								<el-option v-for="itemSelect in item.resList" :key="itemSelect.id" :label="itemSelect.name" :value="itemSelect.id" />
 							</el-select>
 							<!--复选框-->
-							<el-checkbox-group v-if="item.fieldTypeName=='checkBox' && item.show" style="width: 100%;" v-model="scope.row[item.field]" :disabled="!item.edit">
-								<el-checkbox label="复选框 A"></el-checkbox>
-							</el-checkbox-group>
+							<el-checkbox true-label='1' false-label='0' v-if="item.fieldTypeName == 'checkBox' && item.show" style="width: 100%;" v-model="scope.row[item.field]" :disabled="!item.edit"></el-checkbox>
 						</el-form-item>
 					</template>
 				</el-table-column>
@@ -42,13 +40,15 @@
 			</el-table>
 		</el-form>
 		<!--弹出框-->
-		<el-dialog :title="titleShow" top="1vh" destroy-on-close center :visible.sync="dialogVisible" width="80%">
-			<formIconComponents ref="child" :showFig="showCon" :dataCon="dataCon"></formIconComponents>
-			<div slot="footer" class="dialog-footer">
-				<el-button @click="dialogVisible=false">取 消</el-button>
-				<el-button type="primary" @click="getDialogVisible">确 定</el-button>
-			</div>
-		</el-dialog>
+		<div v-if="dialogVisible">
+			<el-dialog :title="titleShow" top="1vh" destroy-on-close center :visible.sync="dialogVisible" width="80%">
+				<formIconComponents ref="child" :showFig="showCon" :dataCon="dataCon"></formIconComponents>
+				<div slot="footer" class="dialog-footer">
+					<el-button @click="dialogVisible = false">取 消</el-button>
+					<el-button type="primary" @click="getDialogVisible">确 定</el-button>
+				</div>
+			</el-dialog>
+		</div>
 		<!--弹出框-工作流-->
 		<workflowDialog ref="childWork"></workflowDialog>
 	</div>
@@ -127,11 +127,6 @@
 				this.$set(this.rowNow, "oprStatus", 1)
 				if(this.dis == 2) {
 					this.ruleForm.lines.push(JSON.parse(JSON.stringify(this.rowNow)))
-				} else if(this.dis == 3) {
-					this.ruleForm.lines.forEach(item => {
-						this.$set(item, "oprStatus", 2)
-						this.$set(item, "tableName", this.formData.tableName)
-					})
 				}
 				this.getrulesList()
 			}
@@ -155,6 +150,10 @@
 						this.ruleForm.lines = this.formData.wholeData[key]
 						this.formData.conList.forEach(item => {
 							this.ruleForm.lines.forEach(val => {
+								if(this.dis == 3) {
+									this.$set(val, "oprStatus", 2)
+									this.$set(val, "tableName", this.formData.tableName)
+								}
 								for(var keyVal in val) {
 									if(item.fieldType == 4 && item.field == keyVal) {
 										val[keyVal] = parseInt(val[keyVal])
@@ -165,56 +164,112 @@
 									if(item.fieldType == 1 && item.field == keyVal) {
 										switch(item.toSelect.id) {
 											case "1":
-												item.browseBoxList[0].children.forEach(itemChild => {
-													if(itemChild.foid == val[keyVal]) {
-														this.$set(val, keyVal + "_NameShow", itemChild.fname)
-													}
+												var nameList = ""
+												var idList = val[keyVal].split(',')
+												idList.forEach((val, indexVal) => {
+													item.browseBoxList.forEach(itemChild => {
+														if(itemChild.foid == val) {
+															if(indexVal == idList.length - 1) {
+																nameList = nameList + itemChild.fname
+															} else {
+																nameList = nameList + itemChild.fname + ","
+															}
+														}
+													})
 												})
+												this.$set(val, keyVal + "_NameShow", nameList)
+												break;
 											case "2":
-												item.browseBoxList[0].children.forEach(itemChild => {
-													if(typeof(itemChild.children) != "undefined") {
-														itemChild.children.forEach(itemChild2 => {
-															if(itemChild2.foid == val[keyVal]) {
-																this.$set(val, keyVal + "_NameShow", itemChild.fname)
-															}
-														})
-													}
-												})
-											case "3":
-												item.browseBoxList[0].children.forEach(itemChild => {
-													if(typeof(itemChild.children) != "undefined") {
-														itemChild.children.forEach(itemChild2 => {
-															if(typeof(itemChild2.children) != "undefined") {
-																itemChild2.children.forEach(itemChild3 => {
-																	if(itemChild3.foid == val[keyVal]) {
-																		this.$set(val, keyVal + "_NameShow", itemChild.fname)
+												var nameList = ""
+												var idList = val[keyVal].split(',')
+												idList.forEach((val, indexVal) => {
+													item.browseBoxList.forEach(itemChild => {
+														if(typeof(itemChild.children) != "undefined") {
+															itemChild.children.forEach(itemChild2 => {
+																if(itemChild2.foid == val) {
+																	if(indexVal == idList.length - 1) {
+																		nameList = nameList + itemChild2.fname
+																	} else {
+																		nameList = nameList + itemChild2.fname + ","
 																	}
-																})
-															}
-														})
-													}
+																}
+															})
+														}
+													})
 												})
+												this.$set(val, keyVal + "_NameShow", nameList)
+												break;
+											case "3":
+												var nameList = ""
+												var idList = val[keyVal].split(',')
+												idList.forEach((val, indexVal) => {
+													item.browseBoxList.forEach(itemChild => {
+														if(typeof(itemChild.children) != "undefined") {
+															itemChild.children.forEach(itemChild2 => {
+																if(typeof(itemChild2.children) != "undefined") {
+																	itemChild2.children.forEach(itemChild3 => {
+																		if(itemChild3.foid == val) {
+																			if(indexVal == idList.length - 1) {
+																				nameList = nameList + itemChild3.fname
+																			} else {
+																				nameList = nameList + itemChild3.fname + ","
+																			}
+																		}
+																	})
+																}
+															})
+														}
+													})
+												})
+												this.$set(val, keyVal + "_NameShow", nameList)
 												break;
 											case "4":
-												this.staffList.forEach(itemChild => {
-													if(itemChild.toid == val[keyVal]) {
-														this.$set(val, keyVal + "_NameShow", itemChild.tname)
-													}
+												var nameList = ""
+												var idList = val[keyVal].split(',')
+												idList.forEach((val, indexVal) => {
+													this.staffList.forEach(itemChild => {
+														if(itemChild.toid == val) {
+															if(indexVal == idList.length - 1) {
+																nameList = nameList + itemChild.tname
+															} else {
+																nameList = nameList + itemChild.tname + ","
+															}
+														}
+													})
 												})
+												this.$set(val, keyVal + "_NameShow", nameList)
 												break;
 											case "5":
-												this.userList.forEach(itemChild => {
-													if(itemChild.foid == val[keyVal]) {
-														this.$set(val, keyVal + "_NameShow", itemChild.fname)
-													}
+												var nameList = ""
+												var idList = val[keyVal].split(',')
+												idList.forEach((val, indexVal) => {
+													this.userList.forEach(itemChild => {
+														if(itemChild.foid == val) {
+															if(indexVal == idList.length - 1) {
+																nameList = nameList + itemChild.fname
+															} else {
+																nameList = nameList + itemChild.fname + ","
+															}
+														}
+													})
 												})
+												this.$set(val, keyVal + "_NameShow", nameList)
 												break;
 											case "6":
-												this.positionList.forEach(itemChild => {
-													if(itemChild.foid == val[keyVal]) {
-														this.$set(val, keyVal + "_NameShow", itemChild.fname)
-													}
+												var nameList = ""
+												var idList = val[keyVal].split(',')
+												idList.forEach((val, indexVal) => {
+													this.positionList.forEach(itemChild => {
+														if(itemChild.foid == val) {
+															if(indexVal == idList.length - 1) {
+																nameList = nameList + itemChild.fname
+															} else {
+																nameList = nameList + itemChild.fname + ","
+															}
+														}
+													})
 												})
+												this.$set(val, keyVal + "_NameShow", nameList)
 												break;
 											case "7":
 												dataList.forEach(itemChild => {
@@ -368,13 +423,42 @@
 			},
 			//弹出框确定
 			getDialogVisible() {
+				var dataBack = this.$refs.child.getDataBack()
+				if(!this.dialogVisibleCon.choice) {
+					if(dataBack.length > 1) {
+						this.goOut("请单选")
+						return
+					}
+				} else {
+					var label = ""
+					var value = ""
+					dataBack.forEach((item, index) => {
+						if(index == dataBack.length - 1) {
+							if(this.showCon == "personnel") {
+								label = label + item.tname
+								value = value + item.toid
+							} else {
+								label = label + item.fname
+								value = value + item.foid
+							}
+						} else {
+							if(this.showCon == "personnel") {
+								label = label + item.tname + ","
+								value = value + item.toid + ","
+							} else {
+								label = label + item.fname + ","
+								value = value + item.foid + ","
+							}
+						}
+					})
+				}
 				//获取子组件返回的id和name
-				this.$set(this.tableRowCon, this.dialogVisibleCon.field + '_NameShow', this.$refs.child.backCon.label)
-				this.$set(this.tableRowCon, this.dialogVisibleCon.field, this.$refs.child.backCon.value)
+				this.$set(this.tableRowCon, this.dialogVisibleCon.field + '_NameShow', label)
+				this.$set(this.tableRowCon, this.dialogVisibleCon.field, value)
 				//如果有联动查询的数据
-				if(this.dialogVisibleCon.parameterList.length != 0) {
+				if(typeof(this.dialogVisibleCon.parameterList) != "undefined" && this.dialogVisibleCon.parameterList.length != 0) {
 					//调用toGetServiceNow（绑定的联动改变字段，获取的选中id）
-					this.toGetServiceNow(this.dialogVisibleCon.parameterList, this.$refs.child.backCon.value)
+					this.toGetServiceNow(this.dialogVisibleCon.parameterList, value)
 				}
 				this.dialogVisible = false
 			},
@@ -468,23 +552,14 @@
 					case "4":
 						this.showCon = "personnel"
 						this.titleShow = "人员"
-						this.$set(this.dataCon, "context", this.staffList.slice(0, 10))
-						this.$set(this.dataCon, "currentTotal", this.staffList.length)
 						break;
 					case "5":
 						this.showCon = "user"
 						this.titleShow = "用户"
-						this.$set(this.dataCon, "context", this.userList.slice(0, 10))
-						this.$set(this.dataCon, "currentTotal", this.userList.length)
 						break;
 					case "6":
 						this.showCon = "jobSet"
 						this.titleShow = "职务"
-						this.$set(this.dataCon, "context", this.positionList.slice(0, 10))
-						this.$set(this.dataCon, "currentTotal", this.positionList.length)
-						break;
-					case "7":
-						return "dateControl"
 						break;
 				}
 			},

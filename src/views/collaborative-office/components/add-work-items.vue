@@ -328,7 +328,7 @@
 									list[0].children[i].children = []
 								}
 							}
-							item.browseBoxList = list
+							item.browseBoxList = list[0].children
 							//部门
 						} else if(item.toSelect.id == 2) {
 							//删除职位信息
@@ -339,10 +339,10 @@
 									})
 								}
 							})
-							item.browseBoxList = list
+							item.browseBoxList = list[0].children
 							//职位（无需删除，保留原数据）
 						} else if(item.toSelect.id == 3) {
-							item.browseBoxList = list
+							item.browseBoxList = list[0].children
 						}
 						return "browseBox"
 						break;

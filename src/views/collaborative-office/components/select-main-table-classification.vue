@@ -3,7 +3,7 @@
 		<el-card class="box-card">
 			<el-row :gutter="24">
 				<el-col :span="14">
-					<el-form label-width="10px"  ref="formInline" :model="formInline" class="demo-form-inline">
+					<el-form label-width="10px" ref="formInline" :model="formInline" class="demo-form-inline">
 						<el-row>
 							<el-col :span="4">
 								<el-form-item prop="status">
@@ -116,7 +116,9 @@
 			//双击选中
 			rowDblClick(row) {
 				if(typeof(this.parent.getSelectMainTableClassification) == "function") {
-						this.parent.getSelectMainTableClassification()
+					this.parent.getSelectMainTableClassification()
+				} else if(typeof(this.$parent.$parent.getSelectMainTableClassification) == "function") {
+					this.$parent.$parent.getSelectMainTableClassification()
 				}
 			},
 			//查看

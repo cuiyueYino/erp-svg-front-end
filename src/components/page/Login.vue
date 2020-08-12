@@ -125,7 +125,6 @@
 						page: 1,
 						size: 100000
 					}).then(data => {
-
 						localStorage.setItem('staffList', JSON.stringify(data.data.data.rows));
 					})
 					//用户

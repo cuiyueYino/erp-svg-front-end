@@ -15,7 +15,10 @@
 				<el-col style="text-align: right;" v-if="showSeeOrUpd == 3" :span="6">
 					<el-button @click="submitForm(2)" type="success" size="mini" icon="el-icon-check">提交</el-button>
 					<el-button @click="submitForm(1)" type="success" size="mini" icon="el-icon-check">暂存</el-button>
-					<el-button type="danger" @click="$parent.toSelect()" size="mini" icon="el-icon-close"></el-button>
+					<el-button type="danger" @click="$parent.toSelect()" size="mini" icon="el-icon-close">返回</el-button>
+				</el-col>
+				<el-col style="text-align: right;" v-if="showSeeOrUpd != 3" :span="6">
+					<el-button type="danger" @click="$parent.toSelect()" size="mini" icon="el-icon-close">返回</el-button>
 				</el-col>
 			</el-row>
 			<formAndTable :dis="showSeeOrUpd" showAdd="2" ref="child" :form-data="conData"></formAndTable>
@@ -299,7 +302,7 @@
 									list[0].children[i].children = []
 								}
 							}
-							item.browseBoxList = list
+							item.browseBoxList = list[0].children
 							//部门
 						} else if(item.toSelect.id == 2) {
 							//删除职位信息
@@ -310,10 +313,10 @@
 									})
 								}
 							})
-							item.browseBoxList = list
+							item.browseBoxList = list[0].children
 							//职位（无需删除，保留原数据）
 						} else if(item.toSelect.id == 3) {
-							item.browseBoxList = list
+							item.browseBoxList = list[0].children
 						}
 						return "browseBox"
 						break;

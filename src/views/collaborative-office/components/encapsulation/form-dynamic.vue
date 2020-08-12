@@ -55,28 +55,26 @@
 							<!--时间控件-->
 							<el-date-picker value-format="yyyy-MM-dd HH:mm:ss" format="yyyy-MM-dd HH:mm:ss" type="datetime" v-if="item.fieldTypeName == 'timeControl' && item.show" style="width: 100%;" v-model="ruleForm[item.field]"></el-date-picker>
 							<!-- 下拉框 -->
-							<el-select v-if="item.fieldTypeName == 'select' && item.show" style="width: 100%;" v-model="ruleForm[item.field]" :multiple="item.choice" clearable :disabled="!item.edit" :placeholder="item.placeholder">
+							<el-select v-if="item.fieldTypeName == 'select' && item.show" style="width: 100%;" v-model="ruleForm[item.field]" clearable :disabled="!item.edit" :placeholder="item.placeholder">
 								<el-option v-for="itemSelect in item.resList" :key="itemSelect.id" :label="itemSelect.name" :value="itemSelect.id" />
 							</el-select>
 							<!--复选框-->
-							<el-checkbox-group v-if="item.fieldTypeName == 'checkBox' && item.show" style="width: 100%;" v-model="ruleForm[item.field]" :disabled="!item.edit">
-								<el-checkbox label="复选框 A"></el-checkbox>
-							</el-checkbox-group>
+							<el-checkbox true-label='1' false-label='0' v-if="item.fieldTypeName == 'checkBox' && item.show" style="width: 100%;" v-model="ruleForm[item.field]" :disabled="!item.edit"></el-checkbox>
 						</el-form-item>
 					</div>
 				</el-col>
 			</el-row>
 		</el-form>
 		<!--弹出框-->
-		<el-dialog :title="titleShow" top="1vh" destroy-on-close center :visible.sync="dialogVisible" width="80%">
-			<!--<div class="dialogCss">-->
-			<formIconComponents ref="child" :showFig="showCon" :dataCon="dataCon"></formIconComponents>
-			<!--</div>-->
-			<div slot="footer" class="dialog-footer">
-				<el-button @click="dialogVisible = false">取 消</el-button>
-				<el-button type="primary" @click="getDialogVisible">确 定</el-button>
-			</div>
-		</el-dialog>
+		<div v-if="dialogVisible">
+			<el-dialog :title="titleShow" top="1vh" destroy-on-close center :visible.sync="dialogVisible" width="80%">
+				<formIconComponents ref="child" :showFig="showCon" :dataCon="dataCon"></formIconComponents>
+				<div slot="footer" class="dialog-footer">
+					<el-button @click="dialogVisible = false">取 消</el-button>
+					<el-button type="primary" @click="getDialogVisible">确 定</el-button>
+				</div>
+			</el-dialog>
+		</div>
 		<!--弹出框-工作流-->
 		<workflowDialog ref="childWork"></workflowDialog>
 	</div>
@@ -236,6 +234,7 @@
 			}
 		},
 		methods: {
+			//工作流打开新页面
 			toNew(id) {
 				this.$api.collaborativeOffice.findDataBySrcId({
 					srcId: id,
@@ -312,61 +311,117 @@
 									switch(item.toSelect.id) {
 										case "1":
 											//公司
-											item.browseBoxList[0].children.forEach(itemChild => {
-												if(itemChild.foid == valObject[key]) {
-													this.$set(this.ruleForm, key + "_NameShow", itemChild.fname)
-												}
+											var nameList = ""
+											var idList = valObject[key].split(',')
+											idList.forEach((val, indexVal) => {
+												item.browseBoxList.forEach(itemChild => {
+													if(itemChild.foid == val) {
+														if(indexVal == idList.length - 1) {
+															nameList = nameList + itemChild.fname
+														} else {
+															nameList = nameList + itemChild.fname + ","
+														}
+													}
+												})
 											})
+											this.$set(this.ruleForm, key + "_NameShow", nameList)
+											break;
 										case "2":
 											//部门
-											item.browseBoxList[0].children.forEach(itemChild => {
-												if(typeof(itemChild.children) != "undefined") {
-													itemChild.children.forEach(itemChild2 => {
-														if(itemChild2.foid == valObject[key]) {
-															this.$set(this.ruleForm, key + "_NameShow", itemChild2.fname)
-														}
-													})
-												}
+											var nameList = ""
+											var idList = valObject[key].split(',')
+											idList.forEach((val, indexVal) => {
+												item.browseBoxList.forEach(itemChild => {
+													if(typeof(itemChild.children) != "undefined") {
+														itemChild.children.forEach(itemChild2 => {
+															if(itemChild2.foid == val) {
+																if(indexVal == idList.length - 1) {
+																	nameList = nameList + itemChild2.fname
+																} else {
+																	nameList = nameList + itemChild2.fname + ","
+																}
+															}
+														})
+													}
+												})
 											})
+											this.$set(this.ruleForm, key + "_NameShow", nameList)
+											break;
 										case "3":
 											//职位
-											item.browseBoxList[0].children.forEach(itemChild => {
-												if(typeof(itemChild.children) != "undefined") {
-													itemChild.children.forEach(itemChild2 => {
-														if(typeof(itemChild2.children) != "undefined") {
-															itemChild2.children.forEach(itemChild3 => {
-																if(itemChild3.foid == valObject[key]) {
-																	this.$set(this.ruleForm, key + "_NameShow", itemChild3.fname)
-																}
-															})
-														}
-													})
-												}
+											var nameList = ""
+											var idList = valObject[key].split(',')
+											idList.forEach((val, indexVal) => {
+												item.browseBoxList.forEach(itemChild => {
+													if(typeof(itemChild.children) != "undefined") {
+														itemChild.children.forEach(itemChild2 => {
+															if(typeof(itemChild2.children) != "undefined") {
+																itemChild2.children.forEach(itemChild3 => {
+																	if(itemChild3.foid == val) {
+																		if(indexVal == idList.length - 1) {
+																			nameList = nameList + itemChild3.fname
+																		} else {
+																			nameList = nameList + itemChild3.fname + ","
+																		}
+																	}
+																})
+															}
+														})
+													}
+												})
 											})
+											this.$set(this.ruleForm, key + "_NameShow", nameList)
 											break;
 										case "4":
 											//人员
-											this.staffList.forEach(itemChild => {
-												if(itemChild.toid == valObject[key]) {
-													this.$set(this.ruleForm, key + "_NameShow", itemChild.tname)
-												}
+											var nameList = ""
+											var idList = valObject[key].split(',')
+											idList.forEach((val, indexVal) => {
+												this.staffList.forEach(itemChild => {
+													if(itemChild.toid == val) {
+														if(indexVal == idList.length - 1) {
+															nameList = nameList + itemChild.tname
+														} else {
+															nameList = nameList + itemChild.tname + ","
+														}
+													}
+												})
 											})
+											this.$set(this.ruleForm, key + "_NameShow", nameList)
 											break;
 										case "5":
 											//用户
-											this.userList.forEach(itemChild => {
-												if(itemChild.foid == valObject[key]) {
-													this.$set(this.ruleForm, key + "_NameShow", itemChild.fname)
-												}
+											var nameList = ""
+											var idList = valObject[key].split(',')
+											idList.forEach((val, indexVal) => {
+												this.userList.forEach(itemChild => {
+													if(itemChild.foid == val) {
+														if(indexVal == idList.length - 1) {
+															nameList = nameList + itemChild.fname
+														} else {
+															nameList = nameList + itemChild.fname + ","
+														}
+													}
+												})
 											})
+											this.$set(this.ruleForm, key + "_NameShow", nameList)
 											break;
 										case "6":
 											//职务
-											this.positionList.forEach(itemChild => {
-												if(itemChild.foid == valObject[key]) {
-													this.$set(this.ruleForm, key + "_NameShow", itemChild.fname)
-												}
+											var nameList = ""
+											var idList = valObject[key].split(',')
+											idList.forEach((val, indexVal) => {
+												this.positionList.forEach(itemChild => {
+													if(itemChild.foid == val) {
+														if(indexVal == idList.length - 1) {
+															nameList = nameList + itemChild.fname
+														} else {
+															nameList = nameList + itemChild.fname + ","
+														}
+													}
+												})
 											})
+											this.$set(this.ruleForm, key + "_NameShow", nameList)
 											break;
 											//工作流
 										case "7":
@@ -536,13 +591,43 @@
 			},
 			//除了工作流其他弹出框确定
 			getDialogVisible() {
+				var dataBack = this.$refs.child.getDataBack()
+				if(!this.dialogVisibleCon.choice) {
+					if(dataBack.length > 1) {
+						this.goOut("请单选")
+						return
+					}
+				} else {
+					var label = ""
+					var value = ""
+					dataBack.forEach((item, index) => {
+						if(index == dataBack.length - 1) {
+							if(this.showCon == "personnel") {
+
+								label = label + item.tname
+								value = value + item.toid
+							} else {
+								label = label + item.fname
+								value = value + item.foid
+							}
+						} else {
+							if(this.showCon == "personnel") {
+								label = label + item.tname + ","
+								value = value + item.toid + ","
+							} else {
+								label = label + item.fname + ","
+								value = value + item.foid + ","
+							}
+						}
+					})
+				}
 				//获取子组件返回的id和name
-				this.$set(this.ruleForm, this.dialogVisibleCon.field + '_NameShow', this.$refs.child.backCon.label)
-				this.$set(this.ruleForm, this.dialogVisibleCon.field, this.$refs.child.backCon.value)
+				this.$set(this.ruleForm, this.dialogVisibleCon.field + '_NameShow', label)
+				this.$set(this.ruleForm, this.dialogVisibleCon.field, value)
 				//如果有联动查询的数据
-				if(this.dialogVisibleCon.parameterList.length != 0) {
+				if(typeof(this.dialogVisibleCon.parameterList) != "undefined" && this.dialogVisibleCon.parameterList.length != 0) {
 					//调用toGetServiceNow（绑定的联动改变字段，获取的选中id）
-					this.toGetServiceNow(this.dialogVisibleCon.parameterList, this.$refs.child.backCon.value)
+					this.toGetServiceNow(this.dialogVisibleCon.parameterList, value)
 				}
 				this.dialogVisible = false
 			},
@@ -614,6 +699,8 @@
 				 * 判断浏览框内显示的内容，并放入数据（公司，部门，职位在上层已经查询出来，直接放里面就行，
 				 * 其他数据需要接口查询后才能显示
 				 */
+				//单选/多选
+				this.$set(this.dataCon, "choice", row.choice)
 				switch(row.toSelect.id) {
 					case "1":
 						this.showCon = "organization"
@@ -633,35 +720,14 @@
 					case "4":
 						this.showCon = "personnel"
 						this.titleShow = "人员"
-						this.$api.collaborativeOffice.findConList("staffManage/findStaffByPage", {
-							page: 1,
-							size: 10
-						}).then(data => {
-							this.$set(this.dataCon, "context", data.data.data.rows)
-							this.$set(this.dataCon, "currentTotal", data.data.data.total)
-						})
 						break;
 					case "5":
 						this.showCon = "user"
 						this.titleShow = "用户"
-						this.$api.collaborativeOffice.findConList("userManage/findUserBypage", {
-							page: 1,
-							size: 10
-						}).then(data => {
-							this.$set(this.dataCon, "context", data.data.data.rows)
-							this.$set(this.dataCon, "currentTotal", data.data.data.total)
-						})
 						break;
 					case "6":
 						this.showCon = "jobSet"
 						this.titleShow = "职务"
-						this.$api.collaborativeOffice.findConList("positionmnt/findPositionList", {
-							page: 1,
-							size: 10
-						}).then(data => {
-							this.$set(this.dataCon, "context", data.data.data.rows)
-							this.$set(this.dataCon, "currentTotal", data.data.data.total)
-						})
 						break;
 				}
 			},

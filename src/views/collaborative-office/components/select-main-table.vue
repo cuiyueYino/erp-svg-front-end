@@ -95,7 +95,10 @@
 		methods: {
 			rowDblClick(row) {
 				if(typeof(this.$parent.$parent.getDialogVisible) == "function") {
-					this.$parent.$parent.getDialogVisible()
+					this.$parent.$parent.getDialogVisible(true)
+				}
+				if(typeof(this.$parent.$parent.$parent.getDialogVisible) == "function") {
+					this.$parent.$parent.$parent.getDialogVisible(true)
 				}
 			},
 			selectChange(data) {
