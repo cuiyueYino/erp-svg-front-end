@@ -398,6 +398,7 @@ export default {
   methods: {
     //分页、下一页
     onCurrentChange(val) {
+      this.isEdit = false;
       this.pageNum = val;
       this.getTableData("");
     },
@@ -525,6 +526,7 @@ export default {
     // 显示全部信息
     resetForm(formName) {
       this.$refs[formName].resetFields();
+      this.isEdit = false;
       this.pageNum = 1;
       this.getTableData("");
     },
@@ -608,6 +610,7 @@ export default {
                 .then((res) => {
                   if (res.data.code == 0) {
                     this.addFormVisible = false;
+                    this.isEdit = false;
                     this.$message.success("新增成功");
                     //刷新表格
                     this.getTableData("");

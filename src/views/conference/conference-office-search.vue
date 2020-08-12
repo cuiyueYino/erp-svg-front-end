@@ -37,20 +37,17 @@
           </el-col>
         </el-row>
       </el-card>
-      <el-form>
-        <dynamic-table
-          :columns="columns"
-          :table-data="tableData"
-          :total="total"
-          :page-num="pageNum"
-          :page-size="pageSize"
-          @current-change="onCurrentChange"
-          @selection-change="onSelectionChange"
-          v-loading="false"
-          element-loading-text="加载中"
-        ></dynamic-table>
-        <el-row :gutter="20"></el-row>
-      </el-form>
+      <dynamic-table
+        :columns="columns"
+        :table-data="tableData"
+        :total="total"
+        :page-num="pageNum"
+        :page-size="pageSize"
+        @current-change="onCurrentChange"
+        @selection-change="onSelectionChange"
+        v-loading="false"
+        element-loading-text="加载中"
+      ></dynamic-table>
     </el-dialog>
   </div>
 </template>
@@ -258,6 +255,10 @@
 
   /deep/ .el-dialog__body {
     padding: 12px 20px !important;
+  }
+
+  /deep/ .el-table .cell{
+    overflow: inherit !important;
   }
 
   .box-card:first-child {

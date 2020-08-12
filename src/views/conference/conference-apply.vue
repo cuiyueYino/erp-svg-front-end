@@ -1192,7 +1192,7 @@
       resetForm(formName) {
         this.$refs[formName].resetFields();
         this.pageNum = 1;
-        this.isEdit = true;
+        this.isEdit = false;
         this.getTableData("");
       },
       // 获取列表数据
