@@ -114,7 +114,7 @@
     line-height: 70px;
   }
   .header .logo {
-    background-image: url(./conferenceHeader.png);
+    background-image: url(./img/conferenceHeader.png);
     width: 295px;
     height: 34px;
     position: absolute;
