@@ -207,7 +207,6 @@ export default {
             finandata.fpid=this.documentFpid;
             finandata.nametitle="文档类别维护新增";
             finandata.NewOrEditFlag="NEW";
-            debugger
             finandata.flevel= ( this.documentLevel == null || this.documentLevel == '' )? '一级': '二级';
             this.rowNMMDataObj=finandata;
         },

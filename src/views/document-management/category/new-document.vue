@@ -30,7 +30,7 @@
                             </el-form-item>
                         </el-col>
                         <el-col :span="10" :offset="2">
-                            <el-form-item label="显示顺序">
+                            <el-form-item label="显示顺序" prop="forder">
                                 <el-input v-model="formdata.forder" :disabled="isEdit" ></el-input>
                             </el-form-item>
                         </el-col>
@@ -104,30 +104,37 @@ export default {
                 this.$message.error('请输入编号!');
                 SaveFlag=false
             }
-            if(this.formdata.fname){
-                fromDataS.fname=this.formdata.fname;
-                SaveFlag=true;
-            }else{
-                this.$message.error('请输入名称!');
-                SaveFlag=false
+            if(SaveFlag){
+                if(this.formdata.fname){
+                    fromDataS.fname=this.formdata.fname;
+                    SaveFlag=true;
+                }else{
+                    this.$message.error('请输入名称!');
+                    SaveFlag=false
+                }
             }
-            if(this.formdata.forder){
-                fromDataS.forder=this.formdata.forder;
-                SaveFlag=true;
-            }else{
-                this.$message.error('请输入显示顺序!');
-                SaveFlag=false
+            if(SaveFlag){
+                if(this.formdata.forder){
+                    fromDataS.forder=this.formdata.forder;
+                    SaveFlag=true;
+                }else{
+                    this.$message.error('请输入显示顺序!');
+                    SaveFlag=false
+                }
             }
             if(this.NewOrEditFlag==="NEW"){
                 fromDataS.creator=localStorage.getItem('ms_userId');
             }else{
                 fromDataS.handler=localStorage.getItem('ms_userId');
             }
-            if(this.NewOrEditFlag==="NEW"){
-                this.saveNewMenu(fromDataS);
-            }else{
-                this.saveEditmenu(fromDataS);
+            if(SaveFlag){
+                if(this.NewOrEditFlag==="NEW"){
+                    this.saveNewMenu(fromDataS);
+                }else{
+                    this.saveEditmenu(fromDataS);
+                }
             }
+            
         },
         //根据ID查询文档类别
         findDocCategoryById(data){
@@ -155,6 +162,7 @@ export default {
         },
         //新建文档类别提交
         saveNewMenu(data){
+            debugger;
             if(true == data.fisportalshow){
                 data.fisportalshow = '1';
             } else {
