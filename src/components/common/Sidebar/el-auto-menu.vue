@@ -31,6 +31,10 @@ export default {
     created() {
         let roleId= localStorage.getItem('ms_roleId');
         if(roleId ==='0' || roleId ==='1'){
+            //测试发布
+            this.innerData=new ITEM().ITEMAUAT;
+        }else if(roleId ==='2'){
+            //财务迁移
             this.innerData=new ITEM().ITEMAdmin;
         }else{
             this.innerData=new ITEM().ITEMother;

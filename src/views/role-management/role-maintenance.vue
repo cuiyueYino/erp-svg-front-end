@@ -281,6 +281,13 @@ export default {
                             <span style="margin-left: 5px;">{node.data.name}</span>
                         </span>
                     )
+                }else{
+                    return(
+                        <span class="custom-tree-node">
+                            <span><i class="el-icon-document"></i></span>
+                            <span style="margin-left: 5px;">{node.data.name}</span>
+                        </span>
+                    )
                 }
             }  
         },

@@ -1,0 +1,219 @@
+/*总背景色*/
+.wrapper {
+    background: aliceblue;
+}
+
+/*搜索栏*/
+.box-card {
+    margin: 16px 30px;
+    height: 80px;
+}
+
+.header-button {
+    border: 1px solid #2989ff !important;
+    border-radius: 3px 0px 0px 3px !important;
+    font-size: 12px;
+    color: rgba(41, 137, 255, 1);
+}
+
+.bt-style {
+    background-color: transparent;
+    background-repeat: no-repeat;
+    width: 100px;
+    height: 31px;
+    border: none;
+    background-size: 79% 100%;
+    cursor: pointer;
+    color: white;
+    outline: none;
+}
+
+.bt-start {
+    background-image: url("./img/el-icon-start.png");
+}
+
+.bt-end {
+    background-image: url("./img/el-icon-end.png");
+}
+
+.bt-outTime {
+    background-image: url("./img/el-icon-outtime.png");
+}
+
+/*列表页*/
+.row-list {
+    border: 1px solid #EBEEF5;
+    background-color: #FFF;
+    color: #303133;
+    -webkit-transition: .3s;
+    transition: .3s;
+    border-radius: 4px;
+    margin: 16px 30px;
+    padding: 20px;
+    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, .1);
+    height: 730px;
+    overflow: auto;
+    background-image: url("./img/background-img.png");
+    background-size: 100% 100%;
+}
+
+/*超时模态框*/
+.out-time-visible{
+    width: 20%;
+    height: 185px;
+    position: absolute;
+    top: 43%;
+    left: 40%;
+    border-radius: 6px;
+    background: #FFF;
+    border: 1px solid rgb(205 209 214);
+}
+
+.out-time-body{
+    width: 95%;
+    margin: 40px 0px 0px 20px;
+}
+
+.dateSelect_outTime {
+    border-radius: 5px;
+    width: 134px !important
+}
+
+.dialog-footer{
+    height: 35px;
+    padding: 108px 0px 8px 120px;
+}
+
+/*会议室展示块*/
+.module {
+    width: 350px;
+    height: 255px;
+    float: left;
+    margin: 60px 90px;
+    cursor: pointer;
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+}
+
+.leisure-click {
+    box-shadow: 0px 25px 30px 0px #8fbfe6;
+    border-radius: 10px;
+}
+
+.using-click {
+    box-shadow: 0px 25px 30px 0px #eac18c;
+    border-radius: 10px;
+}
+
+.background-img-1 {
+    background-image: url("./img/el-icon-leisure.png");
+}
+
+.background-img-2 {
+    background-image: url("./img/el-icon-leisure-check.png");
+}
+
+.background-img-3 {
+    background-image: url("./img/el-icon-using.png");
+}
+
+.background-img-4 {
+    background-image: url("./img/el-icon-using-check.png");
+}
+
+.usingConf-fontStyle {
+    font-family: Microsoft YaHei;
+    font-weight: 800;
+    color: #FF5B01;
+    display: inline-block;
+}
+
+.unUsingConf-fontStyle {
+    font-family: Microsoft YaHei;
+    font-weight: 800;
+    color: #FFFFFF;
+    display: inline-block;
+}
+
+.confFirst_style {
+    font-size: 25px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.confSecond_style {
+    font-size: 14px;
+    font-weight: 800;
+    padding-right: 10px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    width: 80px;
+}
+
+.confThird_style {
+    font-size: 14px;
+    padding-right: 0px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    width: 50px;
+}
+
+.confFour_style {
+    font-size: 14px;
+    padding-right: 0px;
+}
+
+.second-li {
+    width: 130px;
+    margin: 110px;
+    position: absolute;
+    text-align: center;
+}
+
+.third-li {
+    width: 190px;
+    margin: 150px 90px;
+    position: absolute;
+}
+
+.four-li {
+    width: 90px;
+    margin: 180px 135px;
+    position: absolute;
+}
+
+/*会议室展示块 编号样式*/
+.mark-style {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    position: absolute;
+    margin: 40px 152px;
+    text-align: -webkit-center;
+    line-height: 50px;
+    font-size: 30px;
+    font-family: Microsoft YaHei;
+    font-weight: bold;
+}
+
+.mark-using {
+    background: #FFF3D8;
+    color: #FFC743;
+}
+
+.mark-using-click {
+    background: #FF9000;
+    color: #FFC743;
+}
+
+.mark-un-using {
+    background: #DAF9FF;
+    color: #9DDDF7;
+}
+
+.mark-un-using-click {
+    background: #639BE7;
+    color: #86DBEB;
+}

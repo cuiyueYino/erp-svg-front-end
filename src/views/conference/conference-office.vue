@@ -398,8 +398,9 @@ export default {
   methods: {
     //分页、下一页
     onCurrentChange(val) {
+      this.isEdit = false;
       this.pageNum = val;
-      this.getTableData("");
+      this.getTableData(this.form.select);
     },
     //多选
     onSelectionChange(val) {
@@ -411,7 +412,6 @@ export default {
     },
     // 搜索
     onSubmit() {
-      console.log(this.form.select);
       this.isEdit = false;
       this.pageNum = 1;
       this.getTableData(this.form.select);
@@ -457,6 +457,7 @@ export default {
         (res) => {
           if (res.data.code == 0) {
             this.$message.success("修改成功");
+            this.isEdit = false;
             //刷新表格
             this.getTableData("");
           } else {
@@ -518,12 +519,13 @@ export default {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
       }).then((action) => {
-        
+
       });
     },
     // 显示全部信息
     resetForm(formName) {
       this.$refs[formName].resetFields();
+      this.isEdit = false;
       this.pageNum = 1;
       this.getTableData("");
     },
@@ -535,8 +537,8 @@ export default {
           // 修改
           data = {
             [params]: this.multipleSelection[0].foid,
-            page: this.pageNum,
-            size: this.pageSize,
+            page: 1,
+            size: 10,
           };
           break;
         case false:
@@ -607,6 +609,7 @@ export default {
                 .then((res) => {
                   if (res.data.code == 0) {
                     this.addFormVisible = false;
+                    this.isEdit = false;
                     this.$message.success("新增成功");
                     //刷新表格
                     this.getTableData("");

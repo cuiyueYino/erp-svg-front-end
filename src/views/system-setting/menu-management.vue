@@ -115,6 +115,7 @@ export default {
             treeData:[],
             firstnode:[],
             multipleSelection:[],
+            NodeClickObj:{},
             defaultProps: {
                 children: 'children',
                 label: 'name'
@@ -165,14 +166,21 @@ export default {
         },
         //创建菜单详情页
         createMainte(){
-            this.rowNMMtype = true;
-            let finandata={};
-            finandata.finanrowname="";
-            finandata.finanrowId="";
-            finandata.nametitle="菜单管理";
-            finandata.NewOrEditFlag="NEW";
-            finandata.company=this.formInline.company;
-            this.rowNMMDataObj=finandata;
+            let NodeCheckData=this.NodeClickObj;
+            if(NodeCheckData.id){
+                this.rowNMMtype = true;
+                let finandata={};
+                finandata.finanrowname="";
+                finandata.finanrowId="";
+                finandata.nametitle="菜单管理";
+                finandata.NewOrEditFlag="NEW";
+                finandata.parentId=NodeCheckData.id;
+                finandata.strutid=NodeCheckData.strutid;
+                finandata.company=this.formInline.company;
+                this.rowNMMDataObj=finandata;
+            }else{
+                this.$message.error("请选择父菜单!");
+            } 
         },
         //修改菜单详情
         editMainte(){
@@ -217,6 +225,13 @@ export default {
                             <span style="margin-left: 5px;">{node.data.name}</span>
                         </span>
                     )
+                }else{
+                    return(
+                        <span class="custom-tree-node">
+                            <span><i class="el-icon-document"></i></span>
+                            <span style="margin-left: 5px;">{node.data.name}</span>
+                        </span>
+                    )
                 }
             }  
         },
@@ -230,6 +245,7 @@ export default {
             }else{
                 fromdata.id=data.id;
             }
+            this.NodeClickObj=data;
             fromdata.company=this.formInline.company;
             this.searchMenutable(fromdata);
         },
@@ -238,6 +254,12 @@ export default {
             let formDataA ={};
             formDataA.page=val;
             formDataA.size=this.pageSize;
+            let data =this.NodeClickObj;
+            if(data.children){
+                formDataA.parentId=data.id;
+            }else{
+                formDataA.id=data.id;
+            }
             formDataA.company=this.formInline.company;
             this.searchMenutable(formDataA);
         },

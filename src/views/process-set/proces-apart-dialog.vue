@@ -25,12 +25,12 @@
              <el-row :gutter="24">
                   <el-col :span="8" >
                     <el-form-item label="编码" label-width="70px">
-                        <el-input clearable size="small" v-model="formData.formCode" placeholder="请输入条件值"></el-input>
+                        <el-input clearable size="small" v-model="formData.formCode" placeholder="请输入"></el-input>
                     </el-form-item>
                   </el-col> 
                   <el-col :span="8"  >
                     <el-form-item label="名称" label-width="70px">
-                        <el-input clearable size="small" v-model="formData.formName" placeholder="请输入条件值"></el-input>
+                        <el-input clearable size="small" v-model="formData.formName" placeholder="请输入"></el-input>
                     </el-form-item>
                   </el-col> 
                   <el-col :span="8">
@@ -235,7 +235,7 @@ export default {
 <style  lang="scss" scoped>
 /deep/ .el-dialog__body{
     padding:20px !important;
-    max-height: 500px !important;
+    max-height: 580px !important;
 }
 /deep/ .el-input{
          width: 100% !important;

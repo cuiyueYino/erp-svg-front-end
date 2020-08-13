@@ -21,7 +21,7 @@
                 placement="top"
                 v-model="item.visible"
             >
-                <p>您确定删除[{{item.data.displayName}}]吗？</p>
+                <p>您确定删除[{{item.data.displayName.substring(0,10)}}]吗？</p>
                 <div style="text-align: center;">
                     <el-button size="mini" type="primary" @click="$emit('delete', item);item.visible = false">确定</el-button>
                     <el-button size="mini" type="danger" @click="item.visible = false">取消</el-button>
@@ -73,11 +73,19 @@ export default {
     },
     computed: {},
     watch: {
+         // 监听配置数据变化
+        data: {
+            handler (obj) {
+                // console.log(obj)
+            },
+            deep: true,
+            immediate: true
+        },
         // 监听选中连接线数据变化
         selected: {
             handler (obj) {
                 this.selectedNode = obj;
-                // console.log(this.data)
+                //  console.log(this.data)
             },
             deep: true,
             immediate: true
@@ -95,7 +103,7 @@ export default {
     methods: {
         selectedNodeClick(item){
             this.selectedNode = item;
-            console.log(this.selectedNode)
+            this.$emit('selected-node-click',item);
         },
     }
 };

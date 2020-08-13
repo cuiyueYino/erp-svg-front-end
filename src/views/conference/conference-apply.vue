@@ -5,18 +5,34 @@
       <el-row :gutter="24">
         <el-col :span="15">
           <el-form :inline="true" :model="form" ref="form" class="demo-form-inline">
-            <el-col :span="3">
+            <el-col :span="4">
               <el-form-item prop="select">
                 <el-select v-model="form.select" placeholder="请选择">
+                  <el-option label="公司" value="fcompanyname"></el-option>
                   <el-option label="编码" value="fcode"></el-option>
                   <el-option label="名称" value="fname"></el-option>
-                  <el-option label="地点" value="fsite"></el-option>
-                  <el-option label="描述" value="fremark"></el-option>
+                  <el-option label="会议室" value="fconfname"></el-option>
+                  <el-option label="参会人数" value="fcpmcount"></el-option>
+                  <el-option label="是否公开" value="fovert"></el-option>
+                  <el-option label="起始时间" value="fstartdate"></el-option>
+                  <el-option label="结束时间" value="fenddate"></el-option>
                 </el-select>
               </el-form-item>
             </el-col>
             <el-form-item prop="selectVal">
-              <el-input clearable v-model="form.selectVal" placeholder="请输入任意查询内容"></el-input>
+              <el-input v-if="isNormal" clearable v-model="form.selectVal" placeholder="请输入任意查询内容"></el-input>
+              <el-date-picker
+                v-if="isDate"
+                clearable
+                v-model="form.selectVal"
+                value-format="yyyy-MM-dd HH:mm"
+                type="date"
+                placeholder="选择日期"
+              ></el-date-picker>
+              <el-select v-if="isOvert" v-model="form.selectVal" placeholder="请选择">
+                <el-option label="是" value="0"></el-option>
+                <el-option label="否" value="1"></el-option>
+              </el-select>
             </el-form-item>
             <el-form-item>
               <el-button type="primary" plain @click="onSubmit">搜索</el-button>
@@ -27,23 +43,10 @@
           </el-form>
         </el-col>
         <el-col :span="9" style="text-align: right;">
-          <el-button type="success" plain class="el-icon-plus" size="medium" @click="add">新增</el-button>
-          <el-button
-            type="warning"
-            plain
-            class="el-icon-edit"
-            size="medium"
-            @click="toEdit('修改')"
-          >修改</el-button>
-          <el-button
-            type="primary"
-            plain
-            class="el-icon-unlock"
-            size="medium"
-            @click="toUpdate(0)"
-          >生效</el-button>
-          <el-button type="primary" plain class="el-icon-lock" size="medium" @click="toUpdate(1)">禁用</el-button>
-          <el-button type="danger" plain class="el-icon-delete" size="medium" @click="deleteMsg">删除</el-button>
+          <el-button type="success" plain class="el-icon-plus" size="medium" @click="add">新建</el-button>
+          <el-button type="warning" plain class="el-icon-edit" size="medium" @click="toEdit">修改</el-button>
+          <el-button type="primary" plain class="el-icon-unlock" size="medium" @click="toRevise">修订</el-button>
+          <el-button type="danger" plain class="el-icon-delete" size="medium" @click="cancelMsg">取消</el-button>
           <el-button type="primary" plain class="el-icon-search" size="medium" @click="queryMsg">查看</el-button>
         </el-col>
       </el-row>
@@ -62,625 +65,415 @@
         element-loading-text="加载中"
       ></dynamic-table>
     </el-card>
-    <!-- 提交弹出框 -->
-    <el-dialog
-      :title="isEdit?'编辑会议室':'新建会议室'"
-      class="add-office"
-      center
-      :visible.sync="addFormVisible"
-      :close-on-click-modal="false"
-    >
-      <el-form :model="searchForm" :rules="rules" ref="searchForm" style="margin-right: 60px;">
-        <el-row :gutter="24">
-          <el-col :span="12">
-            <el-form-item
-              label="公司："
-              :label-width="formLabelWidth"
-              style="position:relative;"
-              prop="fcompany"
-            >
-              <el-input
-                v-model="searchForm.fcompanyname"
-                autocomplete="off"
-                size="small"
-                @focus="baseInputTable('用户','组织结构查询')"
-              ></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="编码：" :label-width="formLabelWidth" prop="fcode">
-              <el-input v-model="searchForm.fcode" size="small" autocomplete="off"></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="名称：" :label-width="formLabelWidth" prop="fname">
-              <el-input v-model="searchForm.fname" size="small" autocomplete="off"></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="容量：" :label-width="formLabelWidth" prop="fvolume">
-              <el-input v-model="searchForm.fvolume" size="small" autocomplete="off"></el-input>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-form-item label="地点：" :label-width="formLabelWidth" prop="fsite">
-            <el-input
-              maxlength="3000"
-              size="small"
-              show-word-limit
-              autosize
-              type="textarea"
-              v-model="searchForm.fsite"
-            ></el-input>
-          </el-form-item>
-        </el-row>
-        <el-row>
-          <el-form-item label="设备：" :label-width="formLabelWidth" prop="fdevice">
-            <el-input
-              maxlength="3000"
-              size="small"
-              show-word-limit
-              autosize
-              type="textarea"
-              v-model="searchForm.fdevice"
-            ></el-input>
-          </el-form-item>
-        </el-row>
-        <el-row>
-          <el-form-item label="描述：" :label-width="formLabelWidth" prop="fremark">
-            <el-input
-              maxlength="3000"
-              size="small"
-              show-word-limit
-              autosize
-              type="textarea"
-              v-model="searchForm.fremark"
-            ></el-input>
-          </el-form-item>
-        </el-row>
-      </el-form>
-
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="addFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="addSubmit('searchForm')">提 交</el-button>
-      </div>
-    </el-dialog>
-    <!-- 查看弹出框 -->
-    <el-dialog
-      :title="'查看会议室'"
-      class="query-office"
-      center
-      :visible.sync="queryFormVisible"
-      :close-on-click-modal="false"
-    >
-      <el-form :model="searchForm" :rules="rules" ref="searchForm" style="margin-right: 60px;">
-        <el-row :gutter="24">
-          <el-col :span="12">
-            <el-form-item
-              label="公司："
-              :label-width="formLabelWidth"
-              style="position:relative;"
-              prop="fcompany"
-            >
-              <el-input
-                v-model="searchForm.fcompanyname"
-                autocomplete="off"
-                size="small"
-                :disabled="true"
-                @focus="baseInputTable('用户','组织结构查询')"
-              ></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="编码：" :label-width="formLabelWidth" prop="fcode">
-              <el-input :disabled="true" v-model="searchForm.fcode" size="small" autocomplete="off"></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="名称：" :label-width="formLabelWidth" prop="fname">
-              <el-input :disabled="true" v-model="searchForm.fname" size="small" autocomplete="off"></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="容量：" :label-width="formLabelWidth" prop="fvolume">
-              <el-input
-                :disabled="true"
-                v-model="searchForm.fvolume"
-                size="small"
-                autocomplete="off"
-              ></el-input>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-form-item label="地点：" :label-width="formLabelWidth" prop="fsite">
-            <el-input
-              maxlength="3000"
-              size="small"
-              show-word-limit
-              autosize
-              type="textarea"
-              :disabled="true"
-              v-model="searchForm.fsite"
-            ></el-input>
-          </el-form-item>
-        </el-row>
-        <el-row>
-          <el-form-item label="设备：" :label-width="formLabelWidth" prop="fdevice">
-            <el-input
-              maxlength="3000"
-              size="small"
-              show-word-limit
-              autosize
-              :disabled="true"
-              type="textarea"
-              v-model="searchForm.fdevice"
-            ></el-input>
-          </el-form-item>
-        </el-row>
-        <el-row>
-          <el-form-item label="描述：" :label-width="formLabelWidth" prop="fremark">
-            <el-input
-              maxlength="3000"
-              size="small"
-              show-word-limit
-              autosize
-              :disabled="true"
-              type="textarea"
-              v-model="searchForm.fremark"
-            ></el-input>
-          </el-form-item>
-        </el-row>
-      </el-form>
-    </el-dialog>
-
+    <!-- 新增，修改，修订，查看模态框 -->
     <el-form :model="formProcess" ref="formProcess">
-      <!-- 第三层弹窗 -->
-      <base-info-dialog
+      <conference-apply-dialog
         class="children-dialog"
-        :visible="baseInputTableF"
-        :type="baseInputType"
-        :title="baseInputTitle"
-        @closeDialog="closeBaseInfo"
-      ></base-info-dialog>
+        :title="title"
+        :visible="dialogVisible"
+        :foid="foid"
+        @closeDialog="closeApplyDialog"
+      ></conference-apply-dialog>
     </el-form>
   </div>
 </template>
 
 <script>
-import DynamicTable from "../../components/common/dytable/dytable.vue";
-import baseInfoDialog from "../Home/node-components/base-info-dialog";
+  import DynamicTable from "../../components/common/dytable/dytable.vue";
+  import conferenceApplyDialog from "../conference/conference-apply-dialog";
 
-export default {
-  name: "confOffice",
-  components: {
-    DynamicTable,
-    baseInfoDialog,
-  },
-  data() {
-    let checkInt = (rule, value, callback) => {
-      if (Number(value) && value % 1 === 0) {
-        callback();
-      } else {
-        return callback(new Error("请输入整数！"));
-      }
-    };
-    return {
-      isEdit: false,
-      addFormVisible: false,
-      queryFormVisible: false,
-      baseInputTableF: false,
-      pageNum: 1,
-      pageSize: 10,
-      total: 20,
-      baseInputTitle: "",
-      baseInputType: "",
-      formLabelWidth: "120px",
-      formProcess: {},
-      tableData: [],
-      multipleSelection: [],
-      form: {
-        select: [],
-        selectVal: "",
-      },
-      value: "_DefaultCompanyOId",
-      searchForm: {
-        fcode: "",
-        fname: "",
-        fvolume: "",
-        fsite: "",
-        fdevice: "",
-        fremark: "",
-        fstatus: "",
-        fcompany: "_DefaultCompanyOId",
-        fcompanyname: "福佳集团",
-      },
-      columns: [
-        {
-          type: "selection",
-        },
-        {
-          key: "fcode",
-          title: "编码",
-        },
-        {
-          key: "fname",
-          title: "名称",
-        },
-        {
-          key: "fsite",
-          title: "地点",
-        },
-        {
-          key: "fvolume",
-          title: "容量",
-        },
-        {
-          key: "fdevice",
-          title: "设备",
-        },
-        {
-          key: "fremark",
-          title: "描述",
-        },
-        {
-          key: "fstatus",
-          title: "状态",
-        },
-      ],
-      rules: {
-        fcompany: [
-          { required: true, message: "请输入公司", trigger: "blur" },
-          {
-            min: 1,
-            max: 100,
-            message: "长度在 1 到 50 个字符",
-            trigger: "blur",
-          },
-        ],
-        fcode: [
-          { required: true, message: "请输入编码", trigger: "blur" },
-          {
-            min: 1,
-            max: 100,
-            message: "长度在 1 到 50 个字符",
-            trigger: "blur",
-          },
-        ],
-        fname: [
-          { required: true, message: "请输入名称", trigger: "blur" },
-          {
-            min: 1,
-            max: 100,
-            message: "长度在 1 到 100 个字符",
-            trigger: "blur",
-          },
-        ],
-        fvolume: [{ validator: checkInt, trigger: "blur" }],
-        fsite: [
-          { required: false, message: "请输入地点", trigger: "blur" },
-          {
-            min: 1,
-            max: 3000,
-            message: "长度在 1 到 3000 个字符",
-            trigger: "blur",
-          },
-        ],
-        fdevice: [
-          { required: false, message: "请输入设备", trigger: "blur" },
-          {
-            min: 1,
-            max: 3000,
-            message: "长度在 1 到 3000 个字符",
-            trigger: "blur",
-          },
-        ],
-        fdevice: [
-          { required: false, message: "请输入描述", trigger: "blur" },
-          {
-            min: 1,
-            max: 3000,
-            message: "长度在 1 到 3000 个字符",
-            trigger: "blur",
-          },
-        ],
-      },
-    };
-  },
-  created() {
-    this.$nextTick(() => {
-      this.getTableData("");
-    });
-  },
-  computed: {},
-  watch: {},
-  methods: {
-    //分页、下一页
-    onCurrentChange(val) {
-      this.pageNum = val;
-      this.getTableData("");
+  export default {
+    name: "confOffice",
+    components: {
+      DynamicTable,
+      conferenceApplyDialog,
     },
-    //多选
-    onSelectionChange(val) {
-      this.multipleSelection = val;
-      if (this.multipleSelection.length > 1) {
-        this.$message.error("只能选择一个");
-        return;
-      }
-    },
-    // 搜索
-    onSubmit() {
-      console.log(this.form.select);
-      this.isEdit = false;
-      this.pageNum = 1;
-      this.getTableData(this.form.select);
-    },
-    // 新增
-    add() {
-      this.searchForm = {
-        fcode: "",
-        fname: "",
-        fvolume: "",
-        fsite: "",
-        fdevice: "",
-        fremark: "",
-        fstatus: "",
-        fcompany: "_DefaultCompanyOId",
-        fcompanyname: "福佳集团",
+    data() {
+      return {
+        isDate: false,
+        isNormal: true,
+        isOvert: false,
+        dialogVisible: false,
+        pageNum: 1,
+        pageSize: 10,
+        total: 20,
+        title: "",
+        foid: "",
+        formProcess: {},
+        tableData: [],
+        multipleSelection: [],
+        form: {
+          select: [],
+          selectVal: "",
+        },
+        columns: [
+          {
+            type: "selection",
+          },
+          {
+            key: "fstatusValue",
+            title: "状态",
+          },
+          {
+            key: "fcode",
+            title: "编码",
+          },
+          {
+            key: "fname",
+            title: "名称",
+          },
+          {
+            key: "fconfname",
+            title: "会议室",
+          },
+          {
+            key: "fconvenername",
+            title: "召集人",
+          },
+          {
+            key: "fconvenerdeptname",
+            title: "召集人部门",
+          },
+          {
+            key: "fcontactname",
+            title: "联系人",
+          },
+          {
+            key: "fcontactdeptname",
+            title: "联系人部门",
+          },
+          {
+            key: "fphone",
+            title: "联系方式",
+          },
+          {
+            key: "fcpmcount",
+            title: "参会人数(人)",
+          },
+          {
+            key: "fstartdate",
+            title: "起始时间",
+          },
+          {
+            key: "fenddate",
+            title: "结束时间",
+          },
+          {
+            key: "fovertValue",
+            title: "是否公开",
+          },
+          {
+            key: "fexternalVaule",
+            title: "是否对外",
+          },
+          {
+            key: "fimportanceValue",
+            title: "重要程度",
+          },
+        ],
+
       };
-      this.addFormVisible = true;
-      this.pageNum = 1;
-      this.isEdit = false;
     },
-    // 修改
-    toEdit(params) {
-      if (this.multipleSelection.length != 1) {
-        this.$message.error("请选择一条数据进行编辑");
-        return;
-      }
-      this.isEdit = true;
-      this.getTableData("foid");
-      this.addFormVisible = true;
-    },
-    // 生效，禁用
-    toUpdate(params) {
-      if (this.multipleSelection.length != 1) {
-        this.$message.error("请选择一条数据进行编辑");
-        return;
-      }
-      let data = {
-        foid: this.multipleSelection[0].foid,
-        fstatus: params,
-      };
-      this.$api.confMangement.editConfOffice(data).then(
-        (res) => {
-          if (res.data.code == 0) {
-            this.$message.success("修改成功");
-            //刷新表格
-            this.getTableData("");
-          } else {
-            this.$message.error(res.data.msg);
-          }
-        },
-        (error) => {
-          console.log(error);
-        }
-      );
-    },
-    // 删除
-    deleteMsg() {
-      if (this.multipleSelection.length != 1) {
-        this.$message.error("请选择一条数据进行编辑");
-        return;
-      }
-      this.$confirm("确实要删除当前选择的记录吗?", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning",
-      })
-        .then(() => {
-          this.$api.confMangement
-            .deleteConfOffice(this.multipleSelection[0].foid)
-            .then((res) => {
-              if (res.data.code == 0) {
-                this.$message.success("删除成功!");
-                this.isEdit = false;
-                //刷新表格
-                this.getTableData("");
-              } else {
-                let errorMsg = res.data.msg;
-                const h = this.$createElement;
-                let params = h("p", null, [
-                  h("span", null, ""),
-                  h("p", null, errorMsg),
-                ]);
-                this.errorOpen(params);
-              }
-            }),
-            (error) => {
-              console.log(error);
-            };
-        })
-        .catch(() => {
-          this.$message({
-            type: "info",
-            message: "已取消删除",
-          });
-        });
-    },
-    // 错误提示框
-    errorOpen(params) {
-      this.$msgbox({
-        title: "错误",
-        message: params,
-        showCancelButton: false,
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-      }).then((action) => {
-        
+    created() {
+      this.$nextTick(() => {
+        this.getTableData("");
       });
     },
-    // 显示全部信息
-    resetForm(formName) {
-      this.$refs[formName].resetFields();
-      this.pageNum = 1;
-      this.getTableData("");
+    computed: {
+      querySelect() {
+        return this.form.select;
+      },
     },
-    // 获取列表数据
-    getTableData(params) {
-      let data;
-      switch (this.isEdit) {
-        case true:
-          // 修改
-          data = {
-            [params]: this.multipleSelection[0].foid,
-            page: this.pageNum,
-            size: this.pageSize,
-          };
-          break;
-        case false:
-          // 新增
-          data = {
-            [params]: this.form.selectVal,
-            page: this.pageNum,
-            size: this.pageSize,
-          };
-          break;
-
-        default:
-          break;
-      }
-      this.$api.confMangement.getConfOfficeList(data).then(
-        (res) => {
-          if (this.isEdit) {
-            this.searchForm = res.data.data.rows[0];
-          } else {
+    watch: {
+      querySelect(val) {
+        this.form.selectVal = null;
+        if (val == "fstartdate" || val == "fenddate") {
+          // 开始，结束时间查询时
+          this.isDate = true;
+          this.isNormal = false;
+          this.isOvert = false;
+        } else if (val == "fovert") {
+          // 是否公开查询时
+          this.isOvert = true;
+          this.isDate = false;
+          this.isNormal = false;
+        } else {
+          this.isNormal = true;
+          this.isDate = false;
+          this.isOvert = false;
+        }
+      },
+    },
+    methods: {
+      //分页、下一页
+      onCurrentChange(val) {
+        this.pageNum = val;
+        this.getTableData(this.form.select);
+      },
+      //多选
+      onSelectionChange(val) {
+        this.multipleSelection = val;
+        if (this.multipleSelection.length > 1) {
+          this.$message.error("只能选择一个");
+          return;
+        }
+      },
+      // 搜索
+      onSubmit() {
+        this.pageNum = 1;
+        this.getTableData(this.form.select);
+      },
+      // 获取列表数据
+      getTableData(params) {
+        let data = {
+          [params]: this.form.selectVal,
+          page: this.pageNum,
+          size: this.pageSize,
+        };
+        this.$api.confMangement.getApplyList(data).then(
+          (res) => {
             let taData = res.data.data.rows;
             for (let i in taData) {
+              // 状态 0：暂存 1：提交 2：生效 3：作废
               switch (taData[i].fstatus) {
-                case 1:
-                  taData[i].fstatus = "禁用";
-                  break;
                 case 0:
-                  taData[i].fstatus = "生效";
+                  taData[i].fstatusValue = "暂存";
+                  break;
+                case 1:
+                  taData[i].fstatusValue = "提交";
+                  break;
+                case 2:
+                  taData[i].fstatusValue = "生效";
+                  break;
+                case 3:
+                  taData[i].fstatusValue = "作废";
+                  break;
+                default:
+                  break;
+              }
+              // 是否公开 0：公开 1：不公开
+              switch (taData[i].fovert) {
+                case 0:
+                  taData[i].fovertValue = "是";
+                  break;
+                case 1:
+                  taData[i].fovertValue = "否";
+                  break;
+                default:
+                  break;
+              }
+              // 是否对外 0：对内 1：对外
+              switch (taData[i].fexternal) {
+                case 0:
+                  taData[i].fexternalVaule = "否";
+                  break;
+                case 1:
+                  taData[i].fexternalVaule = "是";
+                  break;
+                default:
+                  break;
+              }
+              // 重要程度 0：一般 1：重要
+              switch (taData[i].fimportance) {
+                case 0:
+                  taData[i].fimportanceValue = "一般";
+                  break;
+                case 1:
+                  taData[i].fimportanceValue = "重要";
                   break;
                 default:
                   break;
               }
             }
+            this.searchForm = {};
             this.total = res.data.data.total;
             this.tableData = taData;
+            console.log(this.tableData);
+          },
+          (error) => {
+            console.log(error);
           }
-        },
-        (error) => {
-          console.log(error);
+        );
+      },
+      // 新增
+      add() {
+        this.pageNum = 1;
+        this.title = '新建会议申请';
+        this.dialogVisible = true;
+      },
+      // 修改
+      toEdit() {
+        if (this.multipleSelection.length != 1) {
+          this.$message.error("请选择一条数据进行编辑");
+          return;
         }
-      );
-    },
-    // 提交
-    addSubmit(formName) {
-      this.$refs[formName].validate((valid) => {
-        if (valid) {
-          switch (this.isEdit) {
-            case true:
-              this.$api.confMangement
-                .submitConfOffice(this.searchForm)
-                .then((res) => {
-                  if (res.data.code == 0) {
-                    this.addFormVisible = false;
-                    this.isEdit = false;
-                    this.$message.success("修改成功");
-                    //刷新表格
-                    this.getTableData("");
-                  } else {
-                    this.$message.error(res.data.msg);
-                  }
-                }),
-                (error) => {
-                  console.log(error);
-                };
-              break;
-            case false:
-              this.$api.confMangement
-                .submitConfOffice(this.searchForm)
-                .then((res) => {
-                  if (res.data.code == 0) {
-                    this.addFormVisible = false;
-                    this.$message.success("新增成功");
-                    //刷新表格
-                    this.getTableData("");
-                  } else {
-                    this.$message.error(res.data.msg);
-                  }
-                }),
-                (error) => {
-                  console.log(error);
-                };
-              break;
-
-            default:
-              break;
-          }
-        } else {
-          console.log("error submit!!");
-          return false;
+        if (this.multipleSelection[0].fstatusValue != "暂存") {
+          this.$message.error("只有暂存状态的数据可以修改");
+          return;
         }
-      });
+        this.foid = this.multipleSelection[0].foid;
+        this.title = '修改会议申请';
+        this.dialogVisible = true;
+      },
+      // 修订
+      toRevise() {
+        if (this.multipleSelection.length != 1) {
+          this.$message.error("请选择一条数据进行编辑");
+          return;
+        }
+        if (this.multipleSelection[0].fstatusValue != "生效") {
+          this.$message.error("只有生效状态的数据可以修改");
+          return;
+        }
+        this.foid = this.multipleSelection[0].foid;
+        this.title = '修订会议申请';
+        this.dialogVisible = true;
+      },
+      // 取消
+      cancelMsg() {
+        if (this.multipleSelection.length != 1) {
+          this.$message.error("请选择一条数据进行编辑");
+          return;
+        }
+        this.$confirm("确实要取消当前选择的记录吗?", "提示", {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning",
+        })
+          .then(() => {
+            this.$api.confMangement
+              .cancelConfApply(this.multipleSelection[0].foid)
+              .then((res) => {
+                if (res.data.code == 0) {
+                  this.$message.success("已取消!");
+                  //刷新表格
+                  this.getTableData("");
+                } else {
+                  let errorMsg = res.data.msg;
+                  const h = this.$createElement;
+                  let params = h("p", null, [
+                    h("span", null, ""),
+                    h("p", null, errorMsg),
+                  ]);
+                  this.errorOpen(params);
+                }
+              }),
+              (error) => {
+                console.log(error);
+              };
+          })
+          .catch(() => {
+            this.$message({
+              type: "info",
+              message: "已取消删除",
+            });
+          });
+      },
+      // 错误提示框
+      errorOpen(params) {
+        this.$msgbox({
+          title: "错误",
+          message: params,
+          showCancelButton: false,
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+        }).then((action) => {
+        });
+      },
+      // 显示全部信息
+      resetForm(formName) {
+        this.$refs[formName].resetFields();
+        this.pageNum = 1;
+        this.getTableData("");
+      },
+      //查看
+      queryMsg() {
+        if (this.multipleSelection.length != 1) {
+          this.$message.error("请选择一条数据查看详情");
+          return;
+        }
+        this.foid = this.multipleSelection[0].foid;
+        this.title = '查看会议申请';
+        this.dialogVisible = true;
+      },
+      // 关闭模态框
+      closeApplyDialog(data) {
+        this.dialogVisible = false;
+        this.getTableData("");
+      },
     },
-    //查看
-    queryMsg() {
-      if (this.multipleSelection.length != 1) {
-        this.$message.error("请选择一条数据查看详情");
-        return;
-      }
-      this.isEdit = true;
-      this.getTableData("foid");
-      this.queryFormVisible = true;
-    },
-    // 打开组织架构弹窗
-    baseInputTable(str, title) {
-      this.baseInputTableF = true;
-      this.baseInputTitle = title;
-      this.baseInputType = str;
-    },
-    // 关闭组织架构弹窗
-    closeBaseInfo(data, dialogtitle, type) {
-      if (data.length > 0) {
-        this.searchForm.fcompany = data[0].foid;
-        this.searchForm.fcompanyname = data[0].fname;
-      }
-      this.baseInputTableF = false;
-    },
-  },
-};
+  };
 </script>
+
 <style lang="scss" scoped>
-/deep/ .el-textarea .el-input__count {
-  background: #fff0;
-}
-/deep/ .el-select {
-  width: 100%;
-}
+  /deep/ .el-textarea .el-input__count {
+    background: #fff0;
+  }
 
-/deep/ .el-confOffice {
-  padding-left: 0px !important;
-  padding-top: 6px;
-}
+  /deep/ .el-select {
+    width: 100%;
+  }
 
-/deep/ .el-table__fixed-right::before {
-  background-color: revert;
-}
+  /deep/ .el-col {
+    padding-right: 6px !important;
+  }
 
-.box-card:first-child {
-  margin-bottom: 16px;
-}
-.icon-search {
-  width: 24px;
-  height: auto;
-  position: absolute;
-  top: 8px;
-  left: 230px;
-  cursor: pointer;
-}
+  /deep/ .el-confOffice {
+    padding-left: 0px !important;
+    padding-top: 6px;
+  }
+
+  /deep/ .el-table__fixed-right::before {
+    background-color: revert;
+  }
+
+  /deep/ .el-positionType {
+    padding-left: 0px !important;
+    padding-top: 6px;
+  }
+
+  /deep/ .el-internalmans {
+    padding-left: 0px !important;
+    padding-top: 10px;
+  }
+
+  /deep/ .el-form-item .el-form-item__label {
+    padding-left: 13px;
+    text-align: left;
+  }
+
+  /deep/ .unfocus .el-textarea__inner {
+    background-color: #e4e7ed;
+    color: #606266;
+  }
+
+  /deep/ .unfocus .el-input__inner {
+    background-color: #e4e7ed;
+    color: #606266;
+  }
+
+  /deep/ .el-input.is-disabled .el-input__inner {
+    color: #606266;
+  }
+
+  /deep/ .el-textarea.is-disabled .el-textarea__inner {
+    color: #606266;
+  }
+
+  .el-internalMansName_ {
+    padding: 10px 0 0 0 !important;
+  }
+
+  .box-card:first-child {
+    margin-bottom: 16px;
+  }
+
+  .icon-search {
+    width: 24px;
+    height: auto;
+    position: absolute;
+    top: 8px;
+    left: 230px;
+    cursor: pointer;
+  }
 </style>

@@ -50,24 +50,24 @@
                 <el-form-item label="名称：" :label-width="formLabelWidth" prop="fname">
                     <el-input v-model="form.fname" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="组织结构" :label-width="formLabelWidth" style="position:relative;">
+                <!-- <el-form-item label="组织结构" :label-width="formLabelWidth" style="position:relative;">
                     <el-input v-model="form.structure" autocomplete="off"></el-input>
                     <img
                     class="icon-search"
                     src="../../assets/img/search.svg"
                     @click="baseInputTable('用户','组织结构查询')"
                     />
-                </el-form-item>
+                </el-form-item> -->
                 <el-form-item label="子流程：" :label-width="formLabelWidth"> 
                     <el-checkbox v-model="checked"></el-checkbox>
                 </el-form-item>
-                <el-form-item label="描述：" :label-width="formLabelWidth">
+                <el-form-item label="描述：" :label-width="formLabelWidth"  prop="fremark">
                     <el-input maxlength="1000" show-word-limit autosize type="textarea" v-model="form.fremark"></el-input>
                 </el-form-item>
                 </el-col>
             </el-form>
             <div slot="footer" class="dialog-footer">
-                <el-button @click="dialogFormVisible = false">取 消</el-button>
+                <el-button @click="closeDialog('form')">取 消</el-button>
                 <el-button type="primary" @click="addSubmit('form')">确 定</el-button>
             </div>
         </el-dialog>
@@ -113,11 +113,11 @@ export default {
                 title: '名称'
             },
             {
-                key: 'fsubprocess',
+                key: 'fsubprocessName',
                 title: '子流程'
             },
             {
-                key: 'fstatus',
+                key: 'fstatusName',
                 title: '状态'
             }
         ],
@@ -132,13 +132,15 @@ export default {
           delivery: false,
           type: [],
           resource: '',
-          fremark: ''
+          fremark: '',
+          fcode:'',
+          fname:'',
         },
         formLabelWidth: '120px',
          rules: {
           fcode: [
             { required: true, message: '请输入编码', trigger: 'blur' },
-            { min: 1, max: 100, message: '长度在 1 到 50 个字符', trigger: 'blur' }
+            { min: 1, max: 50, message: '长度在 1 到 50 个字符', trigger: 'blur' }
           ],
            fname: [
             { required: true, message: '请输入名称', trigger: 'blur' },
@@ -157,9 +159,19 @@ export default {
         })
     },
     computed:{
-        
+    },
+    watch:{
+        dialogFormVisible(val){
+            if(!val){
+                this.$refs['form'].resetFields();
+            }
+        }
     },
     methods:{
+        closeDialog(formName){
+            this.dialogFormVisible = false;
+            this.$refs[formName].resetFields();
+        },
         //多选
         onSelectionChange(val) {//console.log(val)
             this.multipleSelection = val;
@@ -178,7 +190,7 @@ export default {
         },
          closeBaseInfo(data, dialogtitle, type) {
             if (data.length > 0) {
-                this.form.structure = data[0].fname;
+                // this.form.structure = data[0].fname;
                 this.form.structurecode = data[0].fcode;
                 this.form.structureId = data[0].foid;
             }
@@ -199,28 +211,6 @@ export default {
             this.$api.processSet.getTableData(data).then(res=>{
                 this.tableData = res.data.data.rows
                  this.total = res.data.data.total
-                for(let i in this.tableData){
-                    switch ( this.tableData[i].fstatus) {
-                        case 3:
-                             this.tableData[i].fstatus = '禁用'
-                             break;
-                        case 8:
-                             this.tableData[i].fstatus = '生效'
-                             break;
-                        default:
-                            break;
-                    }
-                    switch ( this.tableData[i].fsubprocess) {
-                    case 1:
-                            this.tableData[i].fsubprocess = '是'
-                            break;
-                    case 0:
-                            this.tableData[i].fsubprocess = '否'
-                            break;
-                    default:
-                        break;
-                }
-                }
             },error=>{
                 console.log(error)
             })
@@ -284,10 +274,10 @@ export default {
             
             switch (status.fstatus) {
                 case '生效':
-                    status.fstatus = 3
+                    status.fstatus = 8
                     break;
                 case '禁用':
-                    status.fstatus = 8
+                    status.fstatus = 3
                     break;
                 default:
                     break;

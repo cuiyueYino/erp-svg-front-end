@@ -14,6 +14,15 @@ export default {
 		Vue.prototype.goOut = function(error) {
 			this.$message.error(error);
 		};
+		//警告框弹出
+		Vue.prototype.goOut2 = function(error) {
+			this.$message({
+				showClose: true,
+				message: error,
+				type: 'error',
+				duration: 0
+			});
+		};
 		//成功框弹出
 		Vue.prototype.goOk = function(success) {
 			this.$message.success(success);
@@ -41,6 +50,31 @@ export default {
 				return false
 			}
 		};
+		//获取当前时间
+		Vue.prototype.getTimeNow = function() {
+			return new Date().getFullYear() +
+				"-" +
+				(new Date().getMonth() + 1) +
+				"-" +
+				new Date().getDate() +
+				" " +
+				this.appendZero(new Date().getHours()) +
+				":" +
+				this.appendZero(new Date().getMinutes()) +
+				":" +
+				this.appendZero(new Date().getSeconds())
+		};
+		//时间戳转正常格式
+		Vue.prototype.conversionTime = function(youData) {
+			var time = new Date(youData)
+			var year = time.getFullYear(); //取得4位数的年份
+			var month = time.getMonth() + 1; //取得日期中的月份，其中0表示1月，11表示12月
+			var date = time.getDate(); //返回日期月份中的天数（1到31）
+			var hour = time.getHours(); //返回日期中的小时数（0到23）
+			var minute = time.getMinutes(); //返回日期中的分钟数（0到59）
+			var second = time.getSeconds(); //返回日期中的秒数（0到59）
+			return year + "-" + month + "-" + date + " " + hour + ":" + minute + ":" + second;
+		};
 		//对象非空
 		Vue.prototype.noObject = function(val) {
 			if(JSON.stringify(val) == "{}") {
@@ -53,11 +87,16 @@ export default {
 		//后台返回值
 		Vue.prototype.dataBack = function(data, val) {
 			console.log(data)
-			if(data.data.code == 0) {
-				if(val != "") {
-					this.goOk(val)
+			if(data.status == 200 && data.data.code == 0) {
+				if(data.data.data == "") {
+					this.goOut("返回数据为空")
+					return false
+				} else {
+					if(typeof(val) != "undefined" && val != "") {
+						this.goOk(val)
+					}
+					return true
 				}
-				return true
 			} else {
 				this.goOut(data.data.msg)
 				return false

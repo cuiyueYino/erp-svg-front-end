@@ -311,6 +311,7 @@ export default {
     //分页、下一页
     onCurrentChange(val) {
       this.pageNum = val;
+      this.isEdit = false;
       this.getTableData("");
     },
     // 搜索
@@ -323,6 +324,7 @@ export default {
     resetForm(formName) {
       this.$refs[formName].resetFields();
       this.pageNum = 1;
+      this.isEdit = false;
       this.getTableData("");
     },
     // 获取表格数据
@@ -332,8 +334,8 @@ export default {
         case true:
           data = {
             [params]: this.multipleSelection[0].foid,
-            page: this.pageNum,
-            size: this.pageSize,
+            page: 1,
+            size: 10,
           };
           break;
         case false:
@@ -368,6 +370,7 @@ export default {
             this.searchForm.fpositionname = this.searchForm.fpositiontype
           } else {
             this.tableData = res.data.data.rows;
+            this.total = res.data.data.total;
           }
           for (let i in this.tableData) {
             switch (this.tableData[i].fstatus) {
@@ -391,7 +394,7 @@ export default {
                 break;
             }
           }
-          this.total = res.data.data.total;
+
         },
         (error) => {
           console.log(error);
@@ -502,7 +505,7 @@ export default {
       }
       console.log(this.searchForm);
       this.isEdit = true;
-      this.getTableData("");
+      this.getTableData("foid");
       this.queryFormVisible = true;
     },
     queryPositionType(data) {

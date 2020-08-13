@@ -10,9 +10,9 @@
                 <el-select v-model="form.select" placeholder="请选择">
                   <el-option label="名称" value="tname"></el-option>
                   <el-option label="编码" value="tcode"></el-option>
-                  <el-option label="职位" value="ffirmposition"></el-option>
+                  <el-option label="职位" value="ffirmpositionname"></el-option>
                   <el-option label="描述" value="tdescription"></el-option>
-                  <el-option label="公司" value="tcompanyoid"></el-option>
+                  <el-option label="公司" value="tcompanyname"></el-option>
                   <el-option label="部门" value="tdepartmentname"></el-option>
                   <el-option label="在职状态" value="fpositionstate"></el-option>
                   <el-option label="是否兼职" value="tispluralism"></el-option>
@@ -479,6 +479,7 @@ export default {
         }),error => {
           console.log(error);
         }
+        
      },
     addDepart(){
       this.userVisible = false;
@@ -721,7 +722,8 @@ export default {
       }),
       error => {
         console.log(error);
-    };
+      };
+      this.isEdit = false;
     }
   }
 };

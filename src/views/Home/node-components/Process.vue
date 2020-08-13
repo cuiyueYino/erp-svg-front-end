@@ -1,17 +1,24 @@
 <template>
 <!-- 弹出框内容 -->
         <div v-show="visible">
+            <el-form
+                label-width="110px"
+                :rules="configRules"
+                ref="formData"
+                class="dataForm"
+                :model="formData"
+                >
             <!-- TAB页 -->
             <el-tabs v-model="activeName" @tab-click="handleClick">
                 <el-tab-pane label="基本信息" name="1">
-                    <el-form-item label="编码" :label-width="formLabelWidth" prop="name">
-                        <el-input ref="nameInput" v-model="formData.code" autocomplete="off" clearable></el-input>
+                    <el-form-item label="编码" :label-width="formLabelWidth" prop="code">
+                        <el-input ref="nameInput" v-model="formData.code" @input="change($event)" autocomplete="off" clearable></el-input>
                     </el-form-item>
                     <el-form-item label="名称" :label-width="formLabelWidth" prop="name">
-                        <el-input ref="nameInput" v-model="formData.name" autocomplete="off" clearable></el-input>
+                        <el-input ref="nameInput" v-model="formData.name" @input="change($event)" autocomplete="off" clearable></el-input>
                     </el-form-item>
-                     <el-form-item label="引用流程" prop="company">
-                        <el-select v-model="formdata.company" value-key="value" >
+                     <el-form-item  label="引用流程" :label-width="formLabelWidth" prop="company">
+                        <el-select v-model="formData.company" value-key="value" >
                             <el-option
                                 v-for="item in options"
                                 :key="item.value"
@@ -20,14 +27,15 @@
                             ></el-option>
                         </el-select>
                     </el-form-item>
-                    <el-form-item label="隐藏" :label-width="formLabelWidth">
+                    <!-- <el-form-item label="隐藏" :label-width="formLabelWidth">
                         <el-checkbox v-model="checked"></el-checkbox>
-                    </el-form-item>
+                    </el-form-item> -->
                     <el-form-item label="描述：" :label-width="formLabelWidth">
-                        <el-input maxlength="1000" clearable  autosize show-word-limit type="textarea" v-model="formData.fremark"></el-input>
+                        <el-input maxlength="500" clearable  @input="change($event)" autosize show-word-limit type="textarea" v-model="formData.fremark"></el-input>
                     </el-form-item>
                 </el-tab-pane>
             </el-tabs>
+            </el-form>
         </div>
 </template>
 
@@ -76,17 +84,26 @@ export default {
             closeConfig: false,
             // 配置表单校验规则
             configRules: {
-                name: { required: true, message: '请输入英文名', trigger: 'blur' },
-                displayName: { required: true, message: '请输入名称', trigger: 'blur' },
-                performType: { required: true, message: '请选择参与类型', trigger: 'change' }
+                name: { required: true, message: '请输入名称', trigger: 'blur' },
+                code: { required: true, message: '请输入编码', trigger: 'blur' },
+                performType: { required: true, message: '请选择参与类型', trigger: 'change' },
+                company: [
+                    { required: true, message: '请选择子流程', trigger: 'change' }
+                ],
             },
             // 对话框显示标识
             dialogVisible: this.visible,
             // 配置表单数据
-            formData: this.data,
+            formData: {
+                code:'',
+                name:'',
+                company:''
+            },
         gridData:[],
-        formdata:{},
+        formData:{},
         options: [],
+        editData:{},
+        newData:[],
         };
     },
     computed: {
@@ -98,7 +115,8 @@ export default {
                 Fork: '自由活动配置',
                 Join: '审核活动配置',
                 Task: '路由配置',
-                Line: '连接线配置'
+                Line: '连接线配置',
+                // Subprocess:'子流程配置'
             };
             return typeConfig[this.type] || '保存工作流';
         }
@@ -107,8 +125,19 @@ export default {
         // 监听配置数据源
         data: {
             handler (obj) {
-                this.formData = JSON.parse(JSON.stringify(obj));
+                if(obj.type === "Subprocess" || obj.name === "Subprocess"){console.log(obj)
+                this.editData = obj;
+                this.formData.fremark = this.editData.fremark;
+                this.formData.name = this.editData.displayName;
+                this.formData.code = this.editData.code;
+                this.options = [{
+                            label:this.editData.refWfProcess.name,
+                            value:this.editData.refWfProcess.oid,
+                            code:this.editData.refWfProcess.code
+                        }];
+                this.formData.company = this.editData.refWfProcess.oid;
                 // console.log( this.formData)
+                }
             },
             deep: true,
             immediate: true
@@ -118,15 +147,20 @@ export default {
             this.$emit('update:visible', bool);
         },
         // 对话框显示 自动聚焦name输入框
-        visible (bool) {
+        visible (bool) {console.log(bool)
             this.dialogVisible = bool;
             if (bool) {
-                // setTimeout(() => {
-                //     this.$refs.nameInput.focus();
-                // }, 100);
             }else {
-                this.formData.checked = this.checked;
-                this.formData.join = this.join;
+                this.newData.forEach(item => {
+                    if(item.foid == this.formData.company){
+                        this.formData.refWfProcess = {
+                            "oid": item.foid,
+                            "code":item.fcode,
+                            "name":  item.fname
+                     }
+                    }
+                });
+               
                 this.$emit(
                 "saveFormData",
                 this.formData
@@ -134,7 +168,29 @@ export default {
             }
         }
     },
+    created(){
+        this.getSubprocessList();
+    },
     methods: {
+          change(e){
+            this.$forceUpdate()
+        },
+        // 获取子流程列表
+        getSubprocessList(){
+            this.$api.svg.getSubProcessList().then(res=>{
+                this.newData = res.data.data;
+                this.options = [];
+                this.newData.forEach(item => {
+                    this.options.push({
+                            label:item.fname,
+                            value:item.foid,
+                            code:item.fcode
+                        })
+                });//console.log(this.options)
+            },error=>{
+                console.log(error)
+            })
+        },
         // 取消配置操作
         cancelConfig () {
             this.dialogVisible = false;
@@ -226,7 +282,7 @@ export default {
 <style  lang="scss" scoped>
 /deep/ .el-dialog__body{
     padding:20px !important;
-    max-height: 500px !important;
+    max-height: 580px !important;
 }
  /deep/ .el-dialog__header{
      display: block !important;
@@ -246,6 +302,12 @@ export default {
  /deep/ .el-form-item__content{
          display: flex;
  }
+ /deep/ .el-select {
+  width: 100%;
+   /deep/ .el-input{
+         width: 70%;
+ }
+}
  .icon-search{
      width: 24px;
      height: auto;

@@ -20,10 +20,26 @@
                         </el-col>
                     </el-row>
                     <el-row :gutter="24">
-                        <COOTaskPage  :rowCOOTaskDataObj="rowCOOTaskDataObj" :rowCOOTasktype="rowCOOTasktype" @changeShow="showLookOrUpdate"/>
-                        <ComANPPage  :rowCOMAPDataObj="rowCOMAPDataObj" :rowCOMAPtype="rowCOMAPtype" @changeShow="showLookOrUpdate"/>
+                        <ComAnnDetaiPage  :rowComPanDetaiDataObj="rowComPanDetaiDataObj" :rowComPanDetaitype="rowComPanDetaitype" @changeShow="showLookOrUpdate"/>
                         <TempTaskPage  :rowTEMTaskDataObj="rowTEMTaskDataObj" :rowTEMTasktype="rowTEMTasktype" @changeShow="showLookOrUpdate"/>
-                    </el-row>
+                        <EachPerEachJobDetailPage  :rowEACHPerEachJobDetDataObj="rowEACHPerEachJobDetDataObj" :rowEACHPerEachJobDettype="rowEACHPerEachJobDettype" @changeShow="showLookOrUpdate"/>
+                        <DepartYearEncPlanDetailPage  :rowDepartYearEncPlanDetailDataObj="rowDepartYearEncPlanDetailDataObj" :rowDepartYearEncPlanDetailtype="rowDepartYearEncPlanDetailtype" @changeShow="showLookOrUpdate"/>
+                        <EncBenefitsIndDetailPage  :rowEncBenefitsIndDetailDataObj="rowEncBenefitsIndDetailDataObj" :rowEncBenefitsIndDetailtype="rowEncBenefitsIndDetailtype" @changeShow="showLookOrUpdate"/>
+                        <EachPerEachTableReportPage  :rowEachPerEachTableReportDataObj="rowEachPerEachTableReportDataObj" :rowEachPerEachTableReporttype="rowEachPerEachTableReporttype" @changeShow="showLookOrUpdate"/>
+                        <EachPerEachTableInvalidPage  :rowEachPerEachTableInvalidDataObj="rowEachPerEachTableInvalidDataObj" :rowEachPerEachTableInvalidtype="rowEachPerEachTableInvalidtype" @changeShow="showLookOrUpdate"/>
+                        <EachPerEachTablePersonPage  :rowEachPerEachTablePersonDataObj="rowEachPerEachTablePersonDataObj" :rowEachPerEachTablePersontype="rowEachPerEachTablePersontype" @changeShow="showLookOrUpdate"/>
+                        <EachPerEachTableDelayPage  :rowEachPerEachTableDelayDataObj="rowEachPerEachTableDelayDataObj" :rowEachPerEachTableDelaytype="rowEachPerEachTableDelaytype" @changeShow="showLookOrUpdate"/>
+                        <EachPerEachTableAssPage  :rowEachPerEachTableAssDataObj="rowEachPerEachTableAssDataObj" :rowEachPerEachTableAsstype="rowEachPerEachTableAsstype" @changeShow="showLookOrUpdate"/>
+                        <EachPerEachTableEntrustPage  :rowEachPerEachTableEntrustDataObj="rowEachPerEachTableEntrustDataObj" :rowEachPerEachTableEntrusttype="rowEachPerEachTableEntrusttype" @changeShow="showLookOrUpdate"/>
+                        <EachPerEachTableDetailPage  :rowEachPerEachTableDetailDataObj="rowEachPerEachTableDetailDataObj" :rowEachPerEachTableDetailtype="rowEachPerEachTableDetailtype" @changeShow="showLookOrUpdate"/>
+                        <EachPerEachTableLowerPage  :rowEachPerEachTableLowerDataObj="rowEachPerEachTableLowerDataObj" :rowEachPerEachTableLowertype="rowEachPerEachTableLowertype" @changeShow="showLookOrUpdate"/>
+                        <DepartAnnPlanDetPage  :rowDepartAnnPlanDetDataObj="rowDepartAnnPlanDetDataObj" :rowDepartAnnPlanDettype="rowDepartAnnPlanDettype" @changeShow="showLookOrUpdate"/>
+                        <DepartMonPlanDetPage  :rowDepartMonPlanDetDataObj="rowDepartMonPlanDetDataObj" :rowDepartMonPlanDettype="rowDepartMonPlanDettype" @changeShow="showLookOrUpdate"/>
+                        <EmpApprTabDetailPage  :rowEmpApprTabDetailDataObj="rowEmpApprTabDetailDataObj" :rowEmpApprTabDetailtype="rowEmpApprTabDetailtype" @changeShow="showLookOrUpdate"/>
+                        <EmpApprTabNumDetailPage  :rowEmpApprTabNumDetailDataObj="rowEmpApprTabNumDetailDataObj" :rowEmpApprTabNumDetailtype="rowEmpApprTabNumDetailtype" @changeShow="showLookOrUpdate"/>
+                        <CooTaskDetailPage  :rowCooTaskDetailDataObj="rowCooTaskDetailDataObj" :rowCooTaskDetailtype="rowCooTaskDetailtype" @changeShow="showLookOrUpdate"/>
+                        <EachPerEachTableAdjPage  :rowEachPerEachTableAdjDataObj="rowEachPerEachTableAdjDataObj" :rowEachPerEachTableAdjtype="rowEachPerEachTableAdjtype" @changeShow="showLookOrUpdate"/>
+                    </el-row>  
                     <el-row>
                         <el-col :span="22">
                             <processnodelist :rowDataprocessObj="rowDataprocessObj"  @changeShow="showprocessData"/> 
@@ -62,11 +78,28 @@
 import DynamicTable from '../../components/common/dytable/dytable.vue';
 import proData from '../../components/common/proData/proData';
 import processnodelist from '../../views/comment/process-node-list.vue';//流程相关
-import COOTaskPage from '../plan-options/cooperate-task.vue';//配合任务
-import ComANPPage from '../plan-options/company-Annual-plan.vue';//公司年度计划汇总
-import TempTaskPage from '../plan-options/temporary-task.vue';//临时任务配发
+import ComAnnDetaiPage from '../plan-options/company-Annual-plan-detail.vue';//公司年度计划汇总 C
+import TempTaskPage from '../plan-options/temporary-task.vue';//临时任务派发 E
 import creditEnclFilelist from '../comment/enclosure-file.vue';
 import baseInfoDialog from './user-tree-search.vue';//转发加签委托人员选择
+import EachPerEachJobDetailPage from '../plan-options/each-person-each-job-detail.vue';//一岗一表 F
+import DepartYearEncPlanDetailPage from '../plan-options/depart-year-enc-plan-detail.vue';//部门年度经济指标计划 Q
+import EncBenefitsIndDetailPage from '../plan-options/enc-benefits-indicators-detail.vue';//经济效益指标 R
+import EachPerEachTableDelayPage from '../plan-options/each-person-each-table-delay.vue';//一人一表任务表（延期）I
+import EachPerEachTableAssPage from '../plan-options/each-person-each-table-assessment.vue';//一人一表任务表（自评）H
+import EachPerEachTableAdjPage from '../plan-options/each-person-each-table-adjust.vue';//一人一表任务表（任务调整）K
+import EachPerEachTableReportPage from '../plan-options/each-person-each-table-report.vue';//一人一表任务表（报备）G
+import EachPerEachTableInvalidPage from '../plan-options/each-person-each-table-invalid.vue';//一人一表任务表（作废）J
+import EachPerEachTablePersonPage from '../plan-options/each-person-each-table-person.vue';//一人一表任务表（人员变更）L
+import EachPerEachTableEntrustPage from '../plan-options/each-person-each-table-entrust.vue';//一人一表任务表（任务委托）M
+import EachPerEachTableDetailPage from '../plan-options/each-person-each-table-detail.vue';//一人一表任务表（查看功能）O
+import EachPerEachTableLowerPage from '../plan-options/each-person-each-table-lower.vue';//一人一表任务表（下级任务功能）N
+import DepartAnnPlanDetPage from '../plan-options/department-annual-plan-detail.vue';//部门年度计划  B
+import DepartMonPlanDetPage from '../plan-options/department-month-plan-detail.vue';//部门月度计划  D
+import EmpApprTabDetailPage from '../plan-options/employees-appraisal-table-detail.vue';//员工考评表 P
+import EmpApprTabNumDetailPage from '../plan-options/employees-appraisal-table-num-detail.vue';//员工考评表汇总 S
+import CooTaskDetailPage from '../plan-options/cooperate-task-detail.vue';// 配合任务  A
+
 export default {
     props: {
         rowWAADataObj: Object,
@@ -79,11 +112,27 @@ export default {
     components: {
         DynamicTable,
         creditEnclFilelist,
-        COOTaskPage,
-        ComANPPage,
+        ComAnnDetaiPage,
         processnodelist,
         baseInfoDialog,
-        TempTaskPage
+        TempTaskPage,
+        EachPerEachJobDetailPage,
+        DepartYearEncPlanDetailPage,
+        EncBenefitsIndDetailPage,
+        EachPerEachTableDelayPage,
+        EachPerEachTableAssPage,
+        EachPerEachTableAdjPage,
+        EachPerEachTableReportPage,
+        EachPerEachTableInvalidPage,
+        EachPerEachTablePersonPage,
+        EachPerEachTableEntrustPage,
+        EachPerEachTableDetailPage,
+        EachPerEachTableLowerPage,
+        DepartAnnPlanDetPage,
+        DepartMonPlanDetPage,
+        EmpApprTabDetailPage,
+        EmpApprTabNumDetailPage,
+        CooTaskDetailPage    
     },
     inject: ['reload'],
     data: function() {   
@@ -100,15 +149,49 @@ export default {
             },
             rowUTStype:false,
             rowCOOTasktype:false,
-            rowCOMAPtype:false,
+            rowComPanDetaitype:false,
             financingEFListtype:false,
             rowTEMTasktype:false,
+            rowEACHPerEachJobDettype:false,
+            rowDepartYearEncPlanDetailtype:false,
+            rowEncBenefitsIndDetailtype:false,
+            rowEachPerEachTableDelaytype:false,
+            rowEachPerEachTableAsstype:false,
+            rowEachPerEachTableReporttype:false,
+            rowEachPerEachTableInvalidtype:false,
+            rowEachPerEachTablePersontype:false,
+            rowEachPerEachTableEntrusttype:false,
+            rowEachPerEachTableDetailtype:false,
+            rowEachPerEachTableLowertype:false,
+            rowDepartAnnPlanDettype:false,
+            rowDepartMonPlanDettype:false,
+            rowEmpApprTabDetailtype:false,
+            rowEmpApprTabNumDetailtype:false,
+            rowCooTaskDetailtype:false,
+            rowEachPerEachTableAdjtype:false,
             rowUTSDataObj:{},
             rowDataprocessObj: {},
             rowCOOTaskDataObj: {},
-            rowCOMAPDataObj: {},
+            rowComPanDetaiDataObj: {},
             rowEFListDataObj: {},
             rowTEMTaskDataObj: {},
+            rowEACHPerEachJobDetDataObj: {},
+            rowDepartYearEncPlanDetailDataObj: {},
+            rowEncBenefitsIndDetailDataObj: {},
+            rowEachPerEachTableDelayDataObj: {},
+            rowEachPerEachTableReportDataObj: {},
+            rowEachPerEachTableInvalidDataObj: {},
+            rowEachPerEachTablePersonDataObj: {},
+            rowEachPerEachTableAssDataObj: {},
+            rowEachPerEachTableEntrustDataObj: {},
+            rowEachPerEachTableDetailDataObj: {},
+            rowEachPerEachTableLowerDataObj: {},
+            rowDepartAnnPlanDetDataObj:{},
+            rowDepartMonPlanDetDataObj:{},
+            rowEmpApprTabDetailDataObj:{},
+            rowEmpApprTabNumDetailDataObj:{},
+            rowCooTaskDetailDataObj:{},
+            rowEachPerEachTableAdjDataObj:{},
             pageNum: 1,
             pageSize: 10,
             total: 20,
@@ -120,9 +203,26 @@ export default {
         //关闭当前dialog时给父组件传值
         handleClose(){
             this.rowCOOTasktype=false;
-            this.rowCOMAPtype=false;
+            this.rowComPanDetaitype=false;
             this.financingEFListtype=false;
             this.rowTEMTasktype=false;
+            this.rowEACHPerEachJobDettype=false;
+            this.rowDepartYearEncPlanDetailtype=false;
+            this.rowEncBenefitsIndDetailtype=false;
+            this.rowEachPerEachTableDelaytype=false;
+            this.rowEachPerEachTableAsstype=false;
+            this.rowEachPerEachTableReporttype=false;
+            this.rowEachPerEachTableInvalidtype=false;
+            this.rowEachPerEachTablePersontype=false;
+            this.rowEachPerEachTableEntrusttype=false;
+            this.rowEachPerEachTableDetailtype=false;
+            this.rowEachPerEachTableLowertype=false;
+            this.rowDepartAnnPlanDettype=false;
+            this.rowDepartMonPlanDettype=false;
+            this.rowEmpApprTabDetailtype=false;
+            this.rowEmpApprTabNumDetailtype=false;
+            this.rowCooTaskDetailtype=false;
+            this.rowEachPerEachTableAdjtype=false;
             this.reload();
             this.$emit('changeShow',false);
         },
@@ -172,11 +272,43 @@ export default {
         //判断
         DisplayOrHide(data){
             if(data === '显示A'){
-                this.rowCOOTasktype=true;
+                this.rowCooTaskDetailtype=true;
             }else if(data === '显示B'){
-                this.rowCOMAPtype=true;
+                this.rowDepartAnnPlanDettype=true;
             }else if(data === '显示C'){
+                this.rowComPanDetaitype=true;
+            } else if(data === '显示D'){
+                this.rowDepartMonPlanDettype=true;
+            } else if(data === '显示E'){
                 this.rowTEMTasktype=true;
+            } else if(data === '显示F'){
+                this.rowEACHPerEachJobDettype=true;
+            } else if(data === '显示G'){
+                this.rowEachPerEachTableReporttype=true;
+            } else if(data === '显示H'){
+                this.rowEachPerEachTableAsstype=true;
+            } else if(data === '显示I'){
+                this.rowEachPerEachTableDelaytype=true;
+            } else if(data === '显示J'){
+                this.rowEachPerEachTableInvalidtype=true;
+            } else if(data === '显示K'){
+                this.rowEachPerEachTableAdjtype=true;
+            } else if(data === '显示L'){
+                this.rowEachPerEachTablePersontype=true;
+            } else if(data === '显示M'){
+                this.rowEachPerEachTableEntrusttype=true;
+            } else if(data === '显示N'){
+                this.rowEachPerEachTableLowertype=true;
+            } else if(data === '显示O'){
+                this.rowEachPerEachTableDetailtype=true;
+            } else if(data === '显示P'){
+                this.rowEmpApprTabDetailtype=true;
+            } else if(data === '显示Q'){
+                this.rowDepartYearEncPlanDetailtype=true;
+            } else if(data === '显示R'){
+                this.rowEncBenefitsIndDetailtype=true;
+            } else if(data === '显示S'){
+                this.rowEmpApprTabNumDetailtype=true;
             }
         },
         //转发按钮点击事件
@@ -238,7 +370,7 @@ export default {
                 let responsevalue = response;
                 if (responsevalue) {
                     let returndata = responsevalue.data;
-                    this.DisplayOrHide("显示C")
+                    this.DisplayOrHide("显示K")
                 } else {
                     this.$message.success('数据库没有该条数据!');
                 }

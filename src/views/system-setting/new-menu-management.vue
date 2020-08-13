@@ -74,7 +74,7 @@
                 </el-card>
             </el-form>
             <span slot="footer" class="dialog-footer">
-                <el-button @click="ShowFinancVisible = false">取 消</el-button>
+                <el-button @click="handleClose">取 消</el-button>
                 <el-button type="primary" @click="onHandleSave">保存</el-button>
             </span>
         </el-dialog>
@@ -91,6 +91,7 @@ export default {
     components: {
       busActpage,
     },
+    inject: ['reload'],
     data(){
         return{
             ShowFinancVisible:false,
@@ -160,6 +161,10 @@ export default {
             }else{
                 fromDataS.handler=localStorage.getItem('ms_userId');
             }
+            if(this.formdata.activityName){  
+            }else{
+                fromDataS.activityId='';
+            }
             if(this.NewOrEditFlag==="NEW"){
                 this.saveNewMenu(fromDataS);
             }else{
@@ -175,7 +180,7 @@ export default {
             }
             if(data.selectBADataObj){
                 this.formdata.activityName=data.selectBADataObj.fname;
-                this.formdata.activity=data.selectBADataObj.foid;
+                this.formdata.activityId=data.selectBADataObj.foid;
             }
         },
         //根据ID查询菜单
@@ -230,7 +235,9 @@ export default {
             this.NewOrEditFlag=this.rowNMMDataObj.NewOrEditFlag;
             if(this.rowNMMDataObj.NewOrEditFlag==="NEW"){
                 this.formdata={};
-                this.formdata.company=this.rowNMMDataObj.company;   
+                this.formdata.company=this.rowNMMDataObj.company;
+                this.formdata.parentId=this.rowNMMDataObj.parentId;
+                this.formdata.strutid=this.rowNMMDataObj.strutid;   
             }else{
                 let fromdataA={};
                 fromdataA.id=this.rowNMMDataObj.MenuID;

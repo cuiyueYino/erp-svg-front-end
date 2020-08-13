@@ -323,18 +323,21 @@ export default {
     //分页、下一页
     onCurrentChange(val) {
       this.pageNum = val;
+      this.isEdit = false;
       this.getPositionTypeTableData("");
     },
     // 搜索
     onSubmit() {
       console.log(this.form.select);
       this.pageNum = 1;
+      this.isEdit = false;
       this.getPositionTypeTableData(this.form.select);
     },
     // 显示全部信息
     resetForm(formName) {
       this.$refs[formName].resetFields();
       this.pageNum = 1;
+      this.isEdit = false;
       this.getPositionTypeTableData("");
     },
     // 获取表格数据
@@ -344,8 +347,8 @@ export default {
         case true:
           data = {
             [params]: this.multipleSelection[0].foid,
-            page: this.pageNum,
-            size: this.pageSize
+            page: 1,
+            size: 10
           };
           break;
         case false:
@@ -365,6 +368,7 @@ export default {
             this.searchForm = res.data.data.rows[0];
           } else {
             this.tableData = res.data.data.rows;
+            this.total = res.data.data.total;
           }
           for (let i in this.tableData) {
             switch (this.tableData[i].fstatus) {
@@ -378,7 +382,7 @@ export default {
                 break;
             }
           }
-          this.total = res.data.data.total;
+
         },
         error => {
           console.log(error);
@@ -437,6 +441,7 @@ export default {
                 .then(res => {
                   if (res.data.code == 0) {
                     this.addFormVisible = false;
+                    this.isEdit = false;
                     this.$message.success("新增成功");
                     //刷新表格
                     this.getPositionTypeTableData("");
@@ -467,11 +472,13 @@ export default {
       this.$api.jobUserManagement
         .deletePositionTypeTableData(this.multipleSelection[0].foid)
         .then(res => {
-          if ((res.data.code == 0)) {
+          if (res.data.code == 0) {
             this.$message.success("删除成功!");
             this.isEdit = false;
             //刷新表格
             this.getPositionTypeTableData("");
+          }else{
+            this.$message.error(res.data.msg);
           }
         }),
         error => {

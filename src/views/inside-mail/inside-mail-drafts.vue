@@ -7,15 +7,37 @@
                         <el-option label="发送者" value="senderName"></el-option>
                         <el-option label="主题" value="subject"></el-option>
                         <el-option label="内容" value="content"></el-option>
+                        <el-option label="发送时间" value="sendTime"></el-option>
                     </el-select>
                 </el-col>
                 <el-col :span="5">
-                    <el-input v-model="form.selectVal"  placeholder="根据标题或内容搜索"  prefix-icon="el-icon-search" size="mini" clearable />
+                    <el-input  v-if="isNormal" v-model="form.selectVal"  placeholder="根据标题或内容搜索"  prefix-icon="el-icon-search" size="mini" clearable />
+                    <el-date-picker
+                        v-if="isDate"
+                        clearable
+                        v-model="form.startTime"
+                        value-format="yyyy-MM-dd"
+                        type="date"
+                        placeholder="选择开始日期"
+                        size="mini"
+                        style="width:140px">
+                    </el-date-picker>
+                    <el-date-picker
+                        v-if="isDate"
+                        clearable
+                        v-model="form.endTime"
+                        value-format="yyyy-MM-dd"
+                        type="date"
+                        placeholder="选择结束日期"
+                        size="mini"
+                        style="width:140px">
+                    </el-date-picker>
                 </el-col >
-                <el-col :span="3">
+                <el-col :span="4">
                     <el-button el-button type="primary" @click="search" icon="el-icon-search" size="mini">搜索</el-button>
+                    <el-button type="primary" plain class="el-icon-paperclip" @click="showAll" size="mini">显示全部</el-button>
                 </el-col>
-                <el-col :span="14" style="text-align: right;">
+                <el-col :span="13" style="text-align: right;">
                     <el-button type="primary" plain class="el-icon-edit" @click="edit" size="mini">编辑</el-button>
                     <el-button type="info" plain class="el-icon-reading" @click="read" size="mini">查看</el-button>
                     <el-button type="danger" plain class="el-icon-delete" @click="deleteMsg" size="mini">删除</el-button>
@@ -25,6 +47,7 @@
         <!-- 表格 -->
         <el-card>
             <dynamic-table
+                ref="dataTable"
                 :columns="columns"
                 :table-data="tableData"
                 :total="total"
@@ -33,7 +56,8 @@
                 v-loading="false"
                 @current-change="onCurrentChange"
                 @selection-change = "selection"
-                element-loading-text="加载中">
+                element-loading-text="加载中"
+                @Row-Click="clickRow">
             </dynamic-table>
         </el-card>
     </div>
@@ -47,11 +71,18 @@ export default {
             name: 'insideMailDrafts',
             pageNum: 1,
             pageSize: 10,
-            total: 100,
+            total: 0,
+
+            userName: localStorage.getItem('ms_username'),
+            userId: localStorage.getItem('ms_userId'),
             form : {
                 select:[],
-                selectVal: ""
+                selectVal: "",
+                endTime:'',
+                startTime:''
             },
+            isDate: false,
+            isNormal: true,
             columns: [
                 {
                 type: "selection"
@@ -107,6 +138,7 @@ export default {
         getDraftMail(){
             //表格查询基础参数
             let reqParam={
+                // owner: this.userId,
                 owner: 'BFPID000000LSN000E',
                 page: this.pageNum,
                 size: this.pageSize
@@ -116,7 +148,7 @@ export default {
             //查询结果处理
             this.$api.insideMail.getDraftMail(reqParam).then(
                 res => {
-                    if(res.data.code==0){
+                    if(this.dataBack(res,"")){
                         this.tableData = res.data.data.rows;
                         this.total = res.data.data.total;
                         for(var i=0,len=this.tableData.length; i<len;i++ ){
@@ -131,8 +163,6 @@ export default {
                                 break;              
                             }
                         }
-                    }else{
-                        this.$message.error(res.data.msg)
                     };
                 }
             );
@@ -144,13 +174,30 @@ export default {
         search() {
             //清空共享参数，拼装需要的参数
             this.emptyParam();
-            this.params = {
-                [this.form.select] : this.form.selectVal,
-            };
+            if(this.isDate){
+                this.params={
+                    startTime : this.form.startTime,
+                    endTime : this.form.endTime
+                };
+            }else{
+                this.params={
+                    [this.form.select] : this.form.selectVal
+                };
+            }
             this.pageNum = 1;
             // 刷新列表
             this.getDraftMail();
         },
+
+        /**
+         * 显示全部
+         */
+        showAll() {
+            this.emptyParam();
+            this.pageNum = 1;
+            this.getDraftMail();
+        },
+
         /**
          * 清空共享参数列表
          */
@@ -177,11 +224,9 @@ export default {
             };
             this.$api.insideMail.getMailById(reqParam).then(
                 res => {
-                if(res.data.code==0){
+                if(this.dataBack(res,"")){
                     let data = res.data.data;
-                    this.$parent.$parent.$parent.toNewMail(data);
-                }else{
-                    this.$message.error(res.data.msg)
+                    this.$parent.$parent.$parent.toPage(data,"newMail");
                 };
                 }
             )
@@ -221,17 +266,36 @@ export default {
             });
             this.$api.insideMail.modifyMail(reqParam).then(
                 res => {
-                if(res.data.code==0){
-                    this.$message.success("删除成功")
+                if(this.dataBack(res,"删除成功")){
                     // 刷新表格
                     this.getDraftMail();
-                }else{
-                    this.$message.error(res.data.msg)
                 };  
                 },
             );
         },
+        clickRow(val) {
+            //  选中点击
+            this.$refs.dataTable.toggleRowSelection(val);
+        },
 
+    },
+    computed: {
+        querySelect() {
+        return this.form.select;
+        },
+    },
+    watch: {
+        querySelect(val) {
+        this.form.selectVal = null;
+        if (val == "sendTime") {
+            // 开始，结束时间查询时
+            this.isDate = true;
+            this.isNormal = false;
+        } else {
+            this.isNormal = true;
+            this.isDate = false;
+        }
+        },
     },
 }
 </script>

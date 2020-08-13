@@ -11,14 +11,14 @@
       <el-row :gutter="24">
         <el-col :span="24">
             <el-form-item label="登录账号：" label-width="94px"  prop="fcode">
-              <el-input clearable size="small" v-model="searchForm.fcode" placeholder="请输入条件值"></el-input>
+              <el-input clearable size="small" v-model="searchForm.fcode" placeholder="请输入"></el-input>
             </el-form-item>
             <el-form-item label="名称：" label-width="80px" prop="fname">
-              <el-input clearable size="small" v-model="searchForm.fname" placeholder="请输入条件值"></el-input>
+              <el-input clearable size="small" v-model="searchForm.fname" placeholder="请输入"></el-input>
             </el-form-item>
 
             <el-form-item label="用户部门：" label-width="90px" prop="departmentname">
-              <el-input clearable size="small" v-model="searchForm.departmentname" placeholder="请输入条件值"></el-input>
+              <el-input clearable size="small" v-model="searchForm.departmentname" placeholder="请输入"></el-input>
               
             </el-form-item>
            <el-form-item label="禁用：" label-width="100px" prop="fforbid">
@@ -82,7 +82,7 @@
                     <el-form-item label="密码：" :label-width="formLabelWidth" prop="fpassword">
                     <el-input v-model="form.fpassword" type="password" size="small"  ></el-input>
                     </el-form-item>
-                    <el-form-item label="使用者：" :label-width="formLabelWidth">
+                    <el-form-item label="使用者：" :label-width="formLabelWidth" prop="fstaff">
                     <el-input v-model="form.fstaff" :disabled="isEdit && !isReset" size="small"  autocomplete="off"></el-input>
                     <img class="icon-search" v-show="!isEdit || isReset" src="../../assets/img/search.svg" @click="addDepart()" />
                     </el-form-item>
@@ -108,7 +108,7 @@
                 </el-col>
                 </el-row>
                 <el-row :span="21">
-                   <el-form-item label="描述：" :label-width="formLabelWidth">
+                   <el-form-item label="描述：" :label-width="formLabelWidth" prop="fremark">
                         <el-input
                             maxlength="1000"
                             size="small" 
@@ -137,8 +137,8 @@
         element-loading-text="加载中"
       ></dynamic-table>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="addSubmit('form')">保 存</el-button>
+        <el-button @click="closeDialog('form')">取 消</el-button>
+        <el-button  @click="addSubmit('form')">保 存</el-button>
       </div>
     </el-dialog>
     <!-- 使用者弹窗 -->
@@ -154,8 +154,10 @@
         <el-tree
              class="filter-tree"
             :data="treeData"
+             v-loading="loading"
+             element-loading-text="拼命加载中"
             :props="defaultProps"
-            default-expand-all
+            :default-expand-all="false"
             accordion
             :filter-node-method="filterNode"
             ref="tree"
@@ -208,6 +210,7 @@ export default {
   data() {
     const {contantSelect} = this;
     return {
+      loading: false,
       dialogFormVisible: false,
       userForbidenVisible: false,
       userVisible:false,
@@ -298,7 +301,7 @@ export default {
         fremark: ""
       },
       searchForm: {
-         fcode: "cuiyue",
+        fcode: "",
         fname: "",
         departmentname: "",
         fforbid: "",
@@ -368,6 +371,9 @@ export default {
    watch: {
      dialogFormVisible(val){
          this.newIndex = null;
+         if(!val){
+              this.$refs['form'].resetFields();
+          }
      },
       filterText(val) {
         this.$refs.tree.filter(val);
@@ -424,6 +430,11 @@ export default {
     },
 
   methods: {
+    closeDialog(formName){
+      this.dialogFormVisible = false;
+      this.$refs[formName].resetFields();
+      
+    },
     filterNode(value, data) {
       if (!value) return true;
       return data.label.indexOf(value) !== -1;
@@ -502,6 +513,7 @@ export default {
     add() {
       this.dialogFormVisible = true;
       this.isEdit = false;
+      this.tableData2 = [];
     },
     sureDepart(){
       this.userVisible = false
@@ -518,43 +530,51 @@ export default {
               console.log(error);
             };
     },
+    getChildData(data){
+      let childData = [];
+       data.forEach(itemStaff=>{
+         childData.push({
+              // departmentname:getData[j].name,
+              staffOid:itemStaff.staffOid,
+              name:itemStaff.staffName,
+              label: itemStaff.staffName + ' [ '+ itemStaff.firmpositiName + ' ]' ,
+         })
+        })
+        this.loading = false;
+         return childData;
+    },
+    getChildrenList(data){
+      let childrenList = [];
+      data.forEach(items=>{
+        childrenList.push({
+            label: items.name,
+             children: this.getChildData(items.staff)
+        })
+      })
+      return childrenList;
+    },
     // 人员-树状图
     addDepart(){
+      this.loading = true;
       this.userVisible = true;
       let data= {
-                  "id":this.form.fcompanyoid
+            "id":this.form.fcompanyoid
       }
-            this.$api.jobUserManagement.addDepartData(data).then(res => {
-                  if (res.status == '200' ) {
-                  let getData;
-                  this.getTreeData = res.data.data.department;
-                  this.treeData = [
-                      {
-                        label:res.data.data.name,
-                        children: []
-                      }
-                    ]
-                  this.getTreeData.forEach((item,index) => {
-                    getData = item.staff[0];
-                    this.treeData[0].children.push(
-                      
-                            {
-                                label: getData.departmentName ,
-                                  children: [{
-                                    staffOid:getData.staffOid,
-                                    departmentname:getData.departmentName,
-                                    name:getData.staffName,
-                                    label: getData.staffName + ' [ '+ getData.firmpositiName + ' ]' ,
-                                }],
-                            }
-                        
-                    )
-                  }) 
-                  }
-          }),
-            error => {
-              console.log(error);
-            };
+      this.$api.jobUserManagement.addDepartData(data).then(res => {
+        if (res.status == '200' ) {
+            let getData = [];
+            this.getTreeData = Array.from(res.data.data);
+            this.getTreeData.forEach(item=>{
+              getData.push( item.department);
+               this.treeData.push( {
+                  label:item.name,
+                  children : this.getChildrenList(item.department)
+               })
+             })
+        }
+      }),error => {
+        console.log(error);
+      };
     },
     // 人员列表-新增
     addSubmit(formName) {
@@ -573,31 +593,34 @@ export default {
                 }
             });
             console.log(this.tableData2,newTableRow)
-            switch (newTableRow.foperationcontent) {
-              case '其他':
-                    newTableRow.content = 3
-                    newTableRow.cause = 3
-                break;
-              case '封号':
-                    newTableRow.content = 1
-                    newTableRow.cause = 1
-                break;
-              case '启用':
-                    newTableRow.content = 2
-                    newTableRow.cause = 2
-                break;
+            if(newTableRow){
+               switch (newTableRow.foperationcontent) {
+                  case '其他':
+                        newTableRow.content = 3
+                        newTableRow.cause = 3
+                    break;
+                  case '封号':
+                        newTableRow.content = 1
+                        newTableRow.cause = 1
+                    break;
+                  case '启用':
+                        newTableRow.content = 2
+                        newTableRow.cause = 2
+                    break;
 
-              default:
-                break;
+                  default:
+                    break;
+                }
+              this.form.tuseroperationrecordReqVo = {
+                fcompanyoid:this.form.fcompanyoid,
+                fcreator :'BFPID000000LQW0007',
+                foperationtime:newTableRow.foperationtime,
+                foperationcontent:newTableRow.content,
+                foperationcause:newTableRow.cause,
+                
+              }
             }
-            this.form.tuseroperationrecordReqVo = {
-              fcompanyoid:this.form.fcompanyoid,
-              fcreator :'BFPID000000LQW0007',
-              foperationtime:newTableRow.foperationtime,
-              foperationcontent:newTableRow.content,
-              foperationcause:newTableRow.cause,
-              
-            }
+           
           }else{
               //不修改表格
               this.form.tuseroperationrecordReqVo = {}
@@ -609,6 +632,7 @@ export default {
                   if ((res.data.data.msg = "success")) {
                     this.dialogFormVisible = false;
                     this.$message.success("修改成功");
+                    this.$refs[formName].resetFields();
                     //刷新表格
                     this.getTableData();
                   }
@@ -622,6 +646,7 @@ export default {
                   if (res.data.data.msg = "success") {
                     this.dialogFormVisible = false;
                     this.$message.success("新增成功");
+                    this.$refs[formName].resetFields();
                     //刷新表格
                     this.getTableData();
                   }else{

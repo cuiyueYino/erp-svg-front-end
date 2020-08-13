@@ -25,14 +25,14 @@
                 </body>
             </foreignObject>
             </svg>
-        <el-button
+        <!-- <el-button
             :class="{'edit-btn': true}"
             size="mini"
             circle
             @click="$emit('edit')"
             icon="el-icon-edit"
         >
-        </el-button>
+        </el-button> -->
         <!--  -->
         <link-anchor
             v-for="(link, index) in linkAnchor"

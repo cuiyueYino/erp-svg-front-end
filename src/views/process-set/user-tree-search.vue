@@ -95,7 +95,7 @@
                 </el-card>
             </el-form>
             <span slot="footer" class="dialog-footer">
-                <el-button  type="primary" @click="saveConfig">确定</el-button>
+                <el-button  type="primary" @click="handleClose">确定</el-button>
             </span>
         </el-dialog>
     </div>
@@ -188,7 +188,8 @@ export default {
         //关闭当前dialog时给父组件传值
         handleClose(){
             this.ShowFinancVisible=false;
-            this.$emit('changeShow',false);
+            this.$emit('changeShow',this.teldata);
+            this.teldata = [];
         },
         //table选中事件
         onSelectionChange(val) {
@@ -349,7 +350,7 @@ export default {
         //获取人员数据
         getUserData(data){
             let fromdata = data;
-            this.$api.processSet.getUserTreeData(fromdata).then(res=>{
+            this.$api.processSet.getUserTree(fromdata).then(res=>{
                 let resData=res.data.data;
                 let resDataArr= eval("("+resData+")");
                 this.gridData=resDataArr.JsonInfo;
@@ -371,7 +372,7 @@ export default {
             this.saveType=this.rowUTSDataObj.FunctionType;
             let fromdata={};
             fromdata.queryType='org';
-            this.$api.processSet.getUserTreeData(fromdata).then(res=>{
+            this.$api.processSet.getUserTree(fromdata).then(res=>{
                 let resData=res.data.data;
                 let resDataArr= eval("("+resData+")");
                 this.treeData = resDataArr;

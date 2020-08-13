@@ -88,7 +88,7 @@
                             @row-click="selectRow">
                             <el-table-column prop="fcode" size="small" label="登录账户" ></el-table-column>
                             <el-table-column prop="fname" size="small" label="用户名称" ></el-table-column>
-                            <el-table-column prop="fcompanyoid" size="small" label="公司名称" ></el-table-column>
+                            <el-table-column prop="fcompanyname" size="small" label="公司名称" ></el-table-column>
                         </el-table>
                         <div class="pagination" v-if="UsertableData.length >0">
                             <el-pagination
@@ -113,7 +113,7 @@
                             @row-click="selectroleLRow">
                             <el-table-column prop="code" size="small" label="角色编码" ></el-table-column>
                             <el-table-column prop="name" size="small" label="角色名称" ></el-table-column>
-                            <el-table-column prop="company" size="small" label="公司名称" ></el-table-column>
+                            <el-table-column prop="companyName" size="small" label="公司名称" ></el-table-column>
                         </el-table>
                         <div class="pagination" v-if="roleLtableData.length >0">
                             <el-pagination
@@ -139,7 +139,7 @@
                             <el-table-column type="selection" min-width="5%"></el-table-column>
                             <el-table-column prop="code" size="small" label="角色编码" ></el-table-column>
                             <el-table-column prop="name" size="small" label="角色名称" ></el-table-column>
-                            <el-table-column prop="company" size="small" label="公司名称" ></el-table-column>
+                            <el-table-column prop="companyName" size="small" label="公司名称" ></el-table-column>
                         </el-table>
                         <div class="pagination" v-if="RoletableData.length >0">
                             <el-pagination
@@ -163,7 +163,7 @@
                             <el-table-column type="selection" min-width="5%"></el-table-column>
                             <el-table-column prop="fcode" size="small" label="登录账户" ></el-table-column>
                             <el-table-column prop="fname" size="small" label="用户名称" ></el-table-column>
-                            <el-table-column prop="company" size="small" label="公司名称" ></el-table-column>
+                            <el-table-column prop="fcompanyname" size="small" label="公司名称" ></el-table-column>
                         </el-table>
                         <div class="pagination" v-if="UserLtableData.length >0">
                             <el-pagination
@@ -211,44 +211,10 @@ export default {
             UserselectedRow: [],
             roleLselectedList: [],
             roleLselectedRow: [],
-            Rolecolumns: [
-                {
-                    type: 'selection'
-                },
-                {
-                    key: 'code',
-                    title: '角色编码'
-                },
-                {
-                    key: 'name',
-                    title: '角色名称'
-                },
-                {
-                    key: 'company',
-                    title: '公司名称'
-                },
-            ],
             roleLtableData:[],
             RoletableData:[],
             RoleselectData:[],
             RUserLselectData:[],
-            UserLcolumns: [
-                {
-                    type: 'selection'
-                },
-                {
-                    key: 'fcode',
-                    title: ''
-                },
-                {
-                    key: 'fname',
-                    title: '用户名称'
-                },
-                {
-                    key: 'fcompanyoid',
-                    title: '公司名称'
-                },
-            ],
             UserLtableData:[],
             leftData:[],
             rightData:[],
@@ -384,7 +350,7 @@ export default {
                 }else if(this.formInline.regionleft=="code"){
                     fromdata.fcode=this.formInline.searchValueleft;
                 }else if(this.formInline.regionleft=="company"){
-                    fromdata.fcompanyoid=this.formInline.searchValueleft;
+                    fromdata.fcompanyname=this.formInline.searchValueleft;
                 }
                 this.getUserData(fromdata);
             }else{
@@ -396,7 +362,7 @@ export default {
                 }else if(this.formInline.regionleft=="code"){
                     fromdataU.code=this.formInline.searchValueleft;
                 }else if(this.formInline.regionleft=="company"){
-                    fromdataU.company=this.formInline.searchValueleft;
+                    fromdataU.companyName=this.formInline.searchValueleft;
                 }
                 this.searchRole(fromdataU);
             }
@@ -416,7 +382,7 @@ export default {
                 }else if(this.formInline.regionRight=="code"){
                     fromdataU.code=this.formInline.searchValueright;
                 }else if(this.formInline.regionRight=="company"){
-                    fromdataU.company=this.formInline.searchValueright;
+                    fromdataU.companyName=this.formInline.searchValueright;
                 }
                 this.searchRole(fromdataU);
             }else{
@@ -428,7 +394,7 @@ export default {
                 }else if(this.formInline.regionRight=="code"){
                     fromdata.fcode=this.formInline.searchValueright;
                 }else if(this.formInline.regionRight=="company"){
-                    fromdata.fcompanyoid=this.formInline.searchValueright;
+                    fromdata.fcompanyname=this.formInline.searchValueright;
                 }
                 this.getUserData(fromdata);
             }
@@ -469,8 +435,6 @@ export default {
             this.disShowPager=true;
             this.ALLSelectFlage=false;
             //切换维度前清空搜索条件
-            this.formInline.regionleft='';
-            this.formInline.regionRight='';
             this.formInline.searchValueleft='';
             this.formInline.searchValueright='';
             this.UserselectedList=[];
@@ -489,6 +453,8 @@ export default {
                 this.leftData=this.UserData;
                 this.rightData=this.roleData;
             }
+            //this.formInline.regionleft='';
+            //this.formInline.regionRight='';
             let fromdata={};
             fromdata.page=this.pageNum;
             fromdata.size=this.pageSize;
@@ -619,27 +585,33 @@ export default {
                 let  fromdataU={};
                 fromdataU.page=this.pageNum;
                 fromdataU.size=this.pageSize1;
-                let RoleRSelect=this.RoleselectData;
-                fromdataU.roleIds=RoleRSelect;
+                if(this.RoleselectData.length >0){
+                    let RoleRSelect=this.RoleselectData;
+                    fromdataU.roleIds=RoleRSelect;
+                }
                 this.searchRole(fromdataU);
             }else{
-                this.UserSelectDataPage(this.pageNum,this.pageSize,this.RUserLselectData);
+                if(this.RUserLselectData.length >0){
+                    this.UserSelectDataPage(this.pageNum,this.pageSize,this.RUserLselectData);
+                }
             }
         },
         //人员已选中处理分页
         UserSelectDataPage(pageNum,size,data){
             let USerSelectData=[];
             USerSelectData=data;
-            let UserIDStr='';
-            for(var i=0;i<USerSelectData.length;i++){
-                if(i>=(pageNum-1)*size && i<(pageNum*size)){
-                    UserIDStr+=USerSelectData[i]+",";
+            if(USerSelectData){
+                let UserIDStr='';
+                for(var i=0;i<USerSelectData.length;i++){
+                    if(i>=(pageNum-1)*size && i<(pageNum*size)){
+                        UserIDStr+=USerSelectData[i]+",";
+                    }
                 }
+                UserIDStr=UserIDStr.slice(0,UserIDStr.length-1);
+                let  fromdataU={};
+                fromdataU.userIds=UserIDStr;
+                this.getUserDataByID(fromdataU,USerSelectData.length);
             }
-            UserIDStr=UserIDStr.slice(0,UserIDStr.length-1);
-            let  fromdataU={};
-            fromdataU.userIds=UserIDStr;
-            this.getUserDataByID(fromdataU,USerSelectData.length);
         },
         //右侧角色选中去重
         getRRoleSelectedList(id){

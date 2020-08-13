@@ -45,7 +45,7 @@
                         <el-col :span="6" class="elColCenter">类型</el-col>
                         <el-col :span="6" class="elColCenter">等于</el-col>
                         <el-col :span="6">
-                            <el-select v-model="DataForm.WFMtype" size="mini">
+                            <el-select v-model="DataForm.status" size="mini">
                                 <el-option
                                     v-for="item in WFMtypeoptions"
                                     :key="item.value"
@@ -59,12 +59,12 @@
                         <el-col :span="6" class="elColCenter">来源单据公司</el-col>
                         <el-col :span="6" class="elColCenter">等于</el-col>
                         <el-col :span="6">
-                            <el-select v-model="DataForm.WFMtype" size="mini">
+                            <el-select v-model="DataForm.companyId" size="mini">
                                 <el-option
-                                    v-for="item in WFMtypeoptions"
-                                    :key="item.value"
-                                    :label="item.label"
-                                    :value="item.value"
+                                    v-for="item in conmpanyList"
+                                    :key="item.id"
+                                    :label="item.name"
+                                    :value="item.id"
                                 ></el-option>
                             </el-select>
                         </el-col>
@@ -73,12 +73,12 @@
                         <el-col :span="6" class="elColCenter">业务数据</el-col>
                         <el-col :span="6" class="elColCenter">等于</el-col>
                         <el-col :span="6">
-                            <el-select v-model="DataForm.WFMtype" size="mini">
+                            <el-select v-model="DataForm.mclassId" size="mini">
                                 <el-option
-                                    v-for="item in WFMtypeoptions"
-                                    :key="item.value"
-                                    :label="item.label"
-                                    :value="item.value"
+                                    v-for="item in tmClassList"
+                                    :key="item.foid"
+                                    :label="item.fname"
+                                    :value="item.foid"
                                 ></el-option>
                             </el-select>
                         </el-col>
@@ -87,14 +87,14 @@
                         <el-col :span="6" class="elColCenter">业务工作</el-col>
                         <el-col :span="6"  class="elColCenter">左右匹配</el-col>
                         <el-col :span="6">
-                        <el-input v-model="DataForm.documentNo" size="mini"></el-input>
+                        <el-input v-model="DataForm.factivityName" size="mini"></el-input>
                         </el-col>
                     </el-row>
                     <el-row class="elrowStyle" size="mini">
                         <el-col :span="6" class="elColCenter">主题</el-col>
                         <el-col :span="6"  class="elColCenter">左右匹配</el-col>
                         <el-col :span="6">
-                        <el-input v-model="DataForm.documentNo" size="mini"></el-input>
+                        <el-input v-model="DataForm.subject" size="mini"></el-input>
                         </el-col>
                     </el-row>
                     <el-row class="elrowStyle" >
@@ -102,7 +102,7 @@
                         <el-col :span="6"  class="elColCenter">大于等于</el-col>
                         <el-col :span="6">
                             <el-date-picker
-                                v-model="DataForm.docDateStart"
+                                v-model="DataForm.freceiveTimeGt"
                                 type="datetime"
                                 size="mini"
                                 default-time="12:00:00"
@@ -115,7 +115,7 @@
                         <el-col :span="6"  class="elColCenter">小于等于</el-col>
                         <el-col :span="6">
                             <el-date-picker
-                                v-model="DataForm.docDateStart"
+                                v-model="DataForm.freceiveTimeLt"
                                 type="datetime"
                                 size="mini"
                                 default-time="12:00:00"
@@ -127,10 +127,10 @@
                         <el-col :span="6" class="elColCenter">发起人</el-col>
                         <el-col :span="6"  class="elColCenter">等于</el-col>
                         <el-col :span="5">
-                        <el-input v-model="DataForm.documentNo" size="mini"></el-input>
+                        <el-input v-model="DataForm.selectOptionName" size="mini" clearable @clear="cleareAddresser()"></el-input>
                         </el-col>
-                        <el-col :span="1">
-                        <el-button type="primary" size="mini" icon="el-icon-search" @click="MoreSearchPS(DataForm)"></el-button>
+                        <el-col :span="4">
+                            <el-button type="primary" size="mini" icon="el-icon-search" @click="MoreSearchPS(DataForm)"></el-button>
                         </el-col>
                     </el-row>
                     <el-row class="elrowStyle" >
@@ -138,7 +138,7 @@
                         <el-col :span="6"  class="elColCenter">大于等于</el-col>
                         <el-col :span="6">
                             <el-date-picker
-                                v-model="DataForm.docDateStart"
+                                v-model="DataForm.createTimeGt"
                                 type="datetime"
                                 size="mini"
                                 default-time="12:00:00"
@@ -151,7 +151,7 @@
                         <el-col :span="6"  class="elColCenter">小于等于</el-col>
                         <el-col :span="6">
                             <el-date-picker
-                                v-model="DataForm.docDateStart"
+                                v-model="DataForm.createTimeLt"
                                 type="datetime"
                                 size="mini"
                                 default-time="12:00:00"
@@ -163,15 +163,29 @@
                         <el-col :span="6" class="elColCenter">超时</el-col>
                         <el-col :span="6"  class="elColCenter">等于</el-col>
                         <el-col :span="6">
-                            <el-radio v-model="DataForm.radio" label="1">是</el-radio>
-                            <el-radio v-model="DataForm.radio" label="2">否</el-radio>
+                            <el-radio v-model="DataForm.timeOut" label="0">是</el-radio>
+                            <el-radio v-model="DataForm.timeOut" label="1">否</el-radio>
                         </el-col>
                     </el-row>
                 </el-card>
             </el-form>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="dialogWFMVisible = false">取 消</el-button>
-                <el-button type="primary" @click="addSubmit('form')">确 定</el-button>
+                <el-button type="primary" @click="onSubmit('form')">确 定</el-button>
+            </div>
+        </el-dialog>
+        <el-dialog title="删除邮件" :visible.sync="dialogFormVisible">
+            <el-form :model="deleteForm">   
+                <el-form-item :label-width="formLabelWidth">
+                    <el-radio v-model="deleteForm.radio" label="1">只删除选中邮件</el-radio>
+                </el-form-item>
+                <el-form-item :label-width="formLabelWidth">
+                    <el-radio v-model="deleteForm.radio" label="2">删除源单据所有邮件、流转记录并回收源单据</el-radio>
+                </el-form-item>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="dialogFormVisible = false">取 消</el-button>
+                <el-button type="primary" @click="deleteConfirm">确 定</el-button>
             </div>
         </el-dialog>
         <PSpage  :rowPSDataObj="rowPSDataObj" :rowPStype="rowPStype" @changeShow="showORhideForPS"/>
@@ -183,7 +197,7 @@
 <script>
 import DynamicTable from '../../components/common/dytable/dytable.vue';
 import PSpage from '../comment/personnel-search.vue';
-import LWMworkflowpage from './look-workflow-monitoring';
+import LWMworkflowpage from './look-workflow-monitoring.vue';
 import CWMworkflowpage from './circulation-workflow-monitoring.vue'
 export default {
     name:'workProcess',
@@ -196,88 +210,126 @@ export default {
             rowPSDataObj:{},
             rowLWMDataObj:{},
             rowCWMDataObj:{},
+            dialogFormVisible:false,
             pageNum: 1,
             pageSize: 10,
-            total: 20,
+            total: '',
             labelPosition: 'left',
+            deleteForm:{
+                radio:'1'
+            },
             columns: [
                 {
                     type: 'selection'
                 },
                 {
-                    key: 'fcode',
+                    key: 'statusStr',
                     title: '状态'
                 },
                 {
-                    key: 'fcode',
+                    key: 'statusTyp',
                     title: '类型'
                 },
                 {
-                    key: 'fcode',
+                    key: 'metaClassName',
                     title: '单据类型'
                 },
                 {
-                    key: 'fcode',
+                    key: 'destNodeName',
                     title: '业务工作'
                 },
                 {
-                    key: 'fcode',
+                    key: 'startMan',
                     title: '发起人'
                 },
                 {
-                    key: 'fcode',
+                    key: 'startTime',
                     title: '发起时间'
                 },
                 {
-                    key: 'fcode',
+                    key: 'subject',
                     title: '主题'
                 },
                 {
-                    key: 'fcode',
+                    key: 'addresser',
                     title: '上一节点'
                 },
                 {
-                    key: 'fcode',
+                    key: 'receiveTime',
                     title: '审批人接收时间'
                 },
                 {
-                    key: 'fcode',
+                    key: 'standardTime',
                     title: '标准用时'
                 },
                 {
-                    key: 'fcode',
+                    key: 'handleTime',
                     title: '已耗时'
                 },{
-                    key: 'fcode',
+                    key: 'encyclicMan',
                     title: '转发人'
                 },
                 {
-                    key: 'fcode',
+                    key: 'encyclicTime',
                     title: '转发时间'
                 },
                 {
-                    key: 'fcode',
+                    key: 'transmitMan',
                     title: '委托人'
                 },
                 {
-                    key: 'fcode',
+                    key: 'transmitTime',
                     title: '委托时间'
                 }
             ],
             tableData:[],
             multipleSelection: [],
             checked:false,
-            DataForm: {
-                WFMtype: '',
-                radio: 1,
-                date1: '',
-                date2: '',
-                delivery: false,
-                type: [],
-                resource: '',
-                fremark: ''
+            statusType:{
+                
             },
-            WFMtypeoptions:[],
+            DataForm: {
+                status: '',
+                selectOptionName:'',
+                companyId: '',
+                mclassId: '',
+                factivityName: '',
+                subject: '',
+                freceiveTimeLt: '',
+                freceiveTimeLt:'',
+                promoterStaffId:'',
+                createTimeLt: '',
+                createTimeGt: '',
+                timeOut:''
+            },
+            WFMtypeoptions:[
+                {
+                    value:'0',
+                    label:'--'
+                },
+                {
+                    value:'1',
+                    label:'待办'
+                },
+                {
+                    value:'2',
+                    label:'作废'
+                },
+                {
+                    value:'3',
+                    label:'已办'
+                },
+                {
+                    value:'4',
+                    label:'抄送'
+                },
+                {
+                    value:'5',
+                    label:'其他'
+                }
+            ],
+            conmpanyList:[],//公司列表
+            tmClassList:[],//业务数据列表
             formLabelWidth: '120px',
         };
     },
@@ -296,6 +348,7 @@ export default {
         
     },
     methods:{
+        
         //多选
         onSelectionChange(val) {
             this.multipleSelection = val;
@@ -307,49 +360,63 @@ export default {
         },
         //刷新
         refresh(){
+             this.getTableData('')
         },
         //查看
         Tolook(){
-            /*let selectOption= this.multipleSelection;
+            let selectOption = this.multipleSelection;
             if(selectOption.length >0){
                 if(selectOption.length >1){
                     this.$message.error('只能选择一行!');
                 }else{
                     this.rowLWMtype=true;
                     let finandata={};
-                    finandata.finanrowname="";
-                    finandata.finanrowId=selectOption[0].id;
+                    finandata.foid=selectOption[0].foid;
+                    finandata.srcOid=selectOption[0].srcOid;
+                    finandata.operationType=false;
+                    finandata.lookflag = 'look'
                     finandata.nametitle="工作流监控";
                     this.rowLWMDataObj=finandata;
                 }
             }else{
                 this.$message.error('请选择一行你要查看的数据!');
-            }*/
-            this.rowLWMtype = true;
-            let finandata={};
-            finandata.finanrowname="";
-            finandata.finanrowId="";
-            finandata.nametitle="工作流监控";
-            finandata.lookflag="look";
-            this.rowLWMDataObj=finandata;
+            }
         },
         //查看返回处理
-        showORhidelookpage(data){
-            if(data === false){
+        showORhidelookpage(result){
+            if(result){
                 this.rowLWMtype = false
-            }else{
-                this.rowLWMtype = true
+                this.refresh()
+            } else {
+                this.rowLWMtype = false
             }
         },
         //流转
         circulation(){
-            this.rowCWMtype = true;
-            let finandata={};
-            finandata.finanrowname="";
-            finandata.finanrowId="";
-            finandata.nametitle="工作流监控";
-            finandata.lookflag="update";
-            this.rowCWMDataObj=finandata;
+            // this.rowCWMtype = true;
+            // let finandata={};
+            // finandata.finanrowname="";
+            // finandata.finanrowId="";
+            // finandata.nametitle="工作流监控";
+            // finandata.lookflag="update";
+            // this.rowCWMDataObj=finandata;
+
+            let selectOption = this.multipleSelection;
+            if(selectOption.length >0){
+                if(selectOption.length >1){
+                    this.$message.error('只能选择一行!');
+                }else{
+                    this.rowCWMtype=true;
+                    let finandata={};
+                    finandata.foid=selectOption[0].foid;
+                    finandata.srcOid=selectOption[0].srcOid;
+                    finandata.operationType=false;
+                    finandata.nametitle="工作流监控";
+                    this.rowCWMDataObj=finandata;
+                }
+            }else{
+                this.$message.error('请选择一行你要查看的数据!');
+            }
         },
         //流转返回处理
         showORhideCpage(data){
@@ -362,48 +429,65 @@ export default {
         //查询
         search(){
             this.dialogWFMVisible=true;
+            
+            //获取公司列表
+            this.$api.processSet.getCompanyData().then(res=>{
+                let array = res.data.data.rows;
+                let defaultOption = {
+                    id:'0',
+                    name:'--'
+                };
+                array.unshift(defaultOption);
+                this.conmpanyList = array;
+            },error=>{
+                console.log(error)
+            })
+
+            //获取业务数据列表
+            this.$api.processSet.getTmClass().then(res=>{
+                let array = res.data.data;
+                let defaultOption = {
+                    foid:'0',
+                    fname:'--'
+                };
+                array.unshift(defaultOption);
+                this.tmClassList = array;
+            },error=>{
+                console.log(error)
+            })
         },
         // 搜索
         onSubmit(){
-            this.getTableData(this.formCode);
+            this.dialogWFMVisible=false;
+            this.pageNum = 0;
+            this.pageSize = 10;
+            this.getTableData();
         },
         getAll(){
             this.getTableData('')
         },
         // 获取表格数据
         getTableData(params){
+            if(this.DataForm.status == 0){
+                this.DataForm.status = null;
+            }
+            if(this.DataForm.companyId == 0){
+                this.DataForm.companyId = null;
+            }
+            if(this.DataForm.mclassId == 0){
+                this.DataForm.mclassId = null;
+            }
             let data = {
-                fcode: params,
+                findFilter:this.DataForm,
                 page:this.pageNum,
                 size:this.pageSize
             };
-            /*this.$api.processSet.getTableData(data).then(res=>{
-                this.tableData = res.data.data.rows
-                for(let i in this.tableData){
-                    switch ( this.tableData[i].fstatus) {
-                        case 3:
-                             this.tableData[i].fstatus = '禁用'
-                             break;
-                        case 8:
-                             this.tableData[i].fstatus = '生效'
-                             break;
-                        default:
-                            break;
-                    }
-                    switch ( this.tableData[i].fsubprocess) {
-                    case 1:
-                            this.tableData[i].fsubprocess = '是'
-                            break;
-                    case 0:
-                            this.tableData[i].fsubprocess = '否'
-                            break;
-                    default:
-                        break;
-                }
-                }
+            this.$api.processSet.getMailInfo(data).then(res=>{
+                this.total = res.data.data.total;
+                this.tableData = res.data.data.rows;
             },error=>{
                 console.log(error)
-            })*/
+            })
         },
         //提交
         addSubmit(formName){
@@ -411,34 +495,52 @@ export default {
         },
         //删除
         deleteMsg(){
-            if(this.multipleSelection.length > 1){
-                this.$message.error('只能选择一个删除');
-                return;
+            let selectOption = this.multipleSelection;
+            if(selectOption.length >0){
+                if(selectOption.length > 1){
+                    this.$message.error('只能选择一个删除');
+                    return;
+                } else {
+                    this.dialogFormVisible=true;
+                }
+            } else {
+                this.$message.error('请选择一行需要删除的数据!');
             }
+            
+        },
+        deleteConfirm(){
+            this.dialogFormVisible=false;
+            let data = {
+                removeType:this.deleteForm.radio,
+                mailInfo:{
+                    foid:this.multipleSelection[0].foid
+                }
+            }
+
+            this.$api.processSet.removeMail(data).then(res=>{
+                this.refresh()
+            },error=>{
+                console.log(error)
+            })
         },
         toEdit(){
-           /*let selectOption= this.multipleSelection;
+           let selectOption = this.multipleSelection;
             if(selectOption.length >0){
                 if(selectOption.length >1){
                     this.$message.error('只能选择一行!');
-                }else{
+                }  else{
                     this.rowLWMtype=true;
                     let finandata={};
-                    finandata.finanrowname="";
-                    finandata.finanrowId=selectOption[0].id;
+                    finandata.foid=selectOption[0].foid;
+                    finandata.srcOid=selectOption[0].srcOid;
+                    finandata.operationType=false;
+                    finandata.lookflag = 'edit';
                     finandata.nametitle="工作流监控";
                     this.rowLWMDataObj=finandata;
                 }
             }else{
                 this.$message.error('请选择一行你要查看的数据!');
-            }*/
-            this.rowLWMtype = true;
-            let finandata={};
-            finandata.finanrowname="";
-            finandata.finanrowId="";
-            finandata.nametitle="工作流监控";
-            finandata.lookflag="edit";
-            this.rowLWMDataObj=finandata;  
+            }
         },
         //查询发起人员
         MoreSearchPS(data){
@@ -451,12 +553,12 @@ export default {
         },
         //获取人员查询结果
         showORhideForPS(data){
-            if(data === false){
-                this.rowPStype = false
-            }else{
-                this.rowPStype = true
-            }
+            this.rowPStype = false
         },
+        //清空发起人
+        cleareAddresser(){
+            this.DataForm.promoterStaffId='';
+        }
     },
 }
 </script>

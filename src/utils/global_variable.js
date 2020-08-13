@@ -81,7 +81,7 @@ const fieldTypeList = [{
 	label: '日期控件'
 }, {
 	id: '8',
-	label: '时间控件'
+	label: '日期时间控件'
 }, {
 	id: '9',
 	label: '枚举项'
@@ -89,10 +89,12 @@ const fieldTypeList = [{
 	id: '10',
 	label: '复选框'
 }]
-
+const tableHeight = 550
 export default {
 	//富文本
 	editorOption,
 	//字段类型
-	fieldTypeList
+	fieldTypeList,
+	//table高度
+	tableHeight
 }

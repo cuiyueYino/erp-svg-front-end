@@ -9,13 +9,13 @@
                 :model="formData"
                 >
         <!-- TAB页 -->
-        <el-tabs v-model="activeName" @tab-click="handleClick">
+        <el-tabs v-model="activeName" >
             <el-tab-pane label="基本信息" name="1">
                  <el-form-item label="编码" :label-width="formLabelWidth" prop="code">
-                    <el-input ref="nameInput" v-model="formData.code" autocomplete="off" clearable></el-input>
+                    <el-input ref="nameInput" v-model="formData.code" @input="change($event)" autocomplete="off" clearable></el-input>
                 </el-form-item>
                 <el-form-item label="名称" :label-width="formLabelWidth" prop="name">
-                    <el-input  v-model="formData.name" autocomplete="off" clearable></el-input>
+                    <el-input  v-model="formData.name" autocomplete="off" @input="change($event)" clearable></el-input>
                 </el-form-item>
                  <!-- <el-form-item label="起点" :label-width="formLabelWidth" >
                     <el-input v-model="formData.workData" autocomplete="off"></el-input>
@@ -30,7 +30,7 @@
                     <el-checkbox v-model="checked"></el-checkbox>
                 </el-form-item> -->
                 <el-form-item label="描述：" :label-width="formLabelWidth">
-                    <el-input maxlength="1000" clearable  autosize show-word-limit type="textarea" v-model="formData.fremark"></el-input>
+                    <el-input maxlength="1000" clearable @input="change($event)"  autosize show-word-limit type="textarea" v-model="formData.fremark"></el-input>
                 </el-form-item>
             </el-tab-pane>
            <el-tab-pane label="流转条件" name="2">
@@ -55,11 +55,11 @@
                     </el-tab-pane>
                     <el-tab-pane label="调用服务" name="4">
                          <el-form-item label="条件" :label-width="formLabelWidth">
-                            <el-input placeholder="请选择" v-model="baseInput" :disabled="true"> </el-input>
+                            <el-input placeholder="请选择" v-model="formData.baseInputServe" :disabled="true"> </el-input>
                             <img class="icon-search" src="../../../assets/img/search.svg"  @click="baseInputTable('服务','服务查询')">
                         </el-form-item>
                         <el-form-item label="条件表达式" :label-width="formLabelWidth">
-                            <el-input type="textarea" v-model="baseTextarea"></el-input>
+                            <el-input type="textarea" v-model="formData.baseTextarea"></el-input>
                         </el-form-item>
                     </el-tab-pane>
                    
@@ -78,12 +78,12 @@
              <el-row :gutter="24">
                   <el-col :span="8">
                     <el-form-item label="编码" label-width="43px">
-                        <el-input clearable size="small" v-model="formData.formCode" placeholder="请输入条件值"></el-input>
+                        <el-input clearable size="small" v-model="formData.formCode" placeholder="请输入"></el-input>
                     </el-form-item>
                   </el-col> 
                   <el-col :span="8">
                     <el-form-item label="名称" label-width="43px">
-                        <el-input clearable size="small" v-model="formData.formName" placeholder="请输入条件值"></el-input>
+                        <el-input clearable size="small" v-model="formData.formName" placeholder="请输入"></el-input>
                     </el-form-item>
                   </el-col> 
                   <el-col :span="8" >
@@ -217,14 +217,32 @@ export default {
     watch: {
         // 监听配置数据源
         data: {
-            handler (obj) {console.log(obj)
-                this.formData = JSON.parse(JSON.stringify(obj));
-                console.log( this.formData,this.data);
-                if( this.data.displayName !== '新建连接' ){
-                    this.formData.name  = this.data.displayName;
-                }else{
-                    this.formData.name  = ''
-                }
+            handler (obj) {
+             if(obj.name === "Line"){console.log(obj)
+                this.editData = obj;
+                this.formData.code = this.editData.code
+                this.formData.oid = this.editData.oid
+                this.formData.fremark = this.editData.fremark
+                this.formData.baseTextarea = this.editData.expression
+                this.formData.name = this.editData.displayName
+                switch (this.editData.decisionType ) {
+                case 1:
+                        this.formData.decisionType = '同意'
+                    break;
+                case 2:
+                        this.formData.decisionType = '不同意'
+                    break;
+                case 3:
+                        this.formData.decisionType = '待处理'
+                    break;
+                case 4:
+                        this.formData.decisionType = '其他'
+                    break;
+            
+                default:
+                    break;
+            }
+             }
             },
             deep: true,
             immediate: true
@@ -237,16 +255,22 @@ export default {
         visible (bool) {
             this.dialogVisible = bool;
             if (bool) {
-                setTimeout(() => {
-                    this.$refs.nameInput.focus();
-                }, 100);
+                // setTimeout(() => {
+                //     this.$refs.nameInput.focus();
+                // }, 100);
             }else{
+                // this.formData.baseInputoid= this.multipleSelection[0].foid
+                // this.formData.baseInputcode= this.multipleSelection[0].fcode
+                // this.formData.baseInputServe= this.multipleSelection[0].fname
                 this.$emit(
                     "saveLineData",
                     this.formData,
                     this.gridDatax
                 ); 
             }
+        },
+        baseActiveName(val){
+            this.baseTextarea = ''
         }
     },
     created(){
@@ -256,6 +280,9 @@ export default {
         })
     },
     methods: {
+        change(e){
+            this.$forceUpdate()
+        },
         // 取消配置操作
         cancelConfig () {
             this.dialogVisible = false;
@@ -275,6 +302,9 @@ export default {
         },
         baseInputTable(str,title){ 
             this.dialogTableVisible = true;
+            this.baseInputTitle = title;
+            this.baseInputType = str;
+            this.workSearchTable()
         },
          //业务工作-新增
         gridDataAdd(){
@@ -282,7 +312,8 @@ export default {
                 this.$message.error('请正确选择');
                 return
             }
-            this.formData.work = this.multipleSelection[0].fname
+            this.formData= this.multipleSelection[0];
+            this.formData.baseInputServe= this.multipleSelection[0].fname
              this.dialogTableVisible = false;
              //console.log(this.formData.work )
         },
@@ -350,7 +381,7 @@ export default {
 <style  lang="scss" scoped>
 /deep/ .el-dialog__body{
     padding:20px !important;
-    max-height: 500px !important;
+    max-height: 580px !important;
 }
  /deep/ .el-dialog__header{
      display: block !important;

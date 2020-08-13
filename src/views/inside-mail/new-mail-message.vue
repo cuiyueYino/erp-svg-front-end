@@ -12,11 +12,12 @@
             label-width="100px"
             class="dataForm"
             size="mini"
+            :rules="rules"
             :label-position="labelPosition">
             <el-row>
                 <el-col :span="14">
                     <el-form-item label="主送" prop="addresseeName">
-                        <el-input clearable size="small" v-model="formData.addresseeName"></el-input>
+                        <el-input size="small" v-model="formData.addresseeName" readonly></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="6">
@@ -28,7 +29,7 @@
             <el-row v-if="ShoWAddCC==true">
                 <el-col :span="14">
                     <el-form-item label="抄送" prop="duplicateName">
-                        <el-input clearable size="small" v-model="formData.duplicateName" disabled></el-input>
+                        <el-input size="small" v-model="formData.duplicateName" disabled></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="6">
@@ -88,7 +89,7 @@
                 ref="tree"
                 
                 show-checkbox
-                node-key="oid"
+                node-key="foid"
                 :default-checked-keys="defautChecked"
                 :props="defaultProps">
                 </el-tree>
@@ -136,21 +137,17 @@ export default {
                 }
             },
             formData:{
+                id:'',
                 subjcet:'',
-                senderName:'',
                 addresseeName: '',
                 duplicateName: '',
-                addresseeList: {
-                    oid: '',
-                    name: ''
-                },
-                duplicateList: {
-                    oid: '',
-                    name: ''
-                },
+                addresseeList: [],
+                duplicateList: [],
             },
             defautltAddressee: [],
             defautltDuplicate: [],
+            sender: localStorage.getItem('ms_userId'),
+            senderName: localStorage.getItem('ms_username'),
             treeTpye : '',
 
             ShoWAddCC:false,
@@ -164,10 +161,18 @@ export default {
             treeSearchVal: '',
             defaultProps: {
                 children: 'children',
-                label: 'name'
+                label: 'fname'
             },
             defautChecked:[],
-            // [{oid:'BFPID000000LSN000E',name:'聂立虹'},{oid:'BFPID000000LSN000M',name:'李阳'}],
+
+            rules: {
+               /*  subject: [
+                    { required: true, message: "请输入主题", trigger: "blur" }
+                ],
+                addresseeName: [
+                    { required: true, message: "请选择主送人", trigger: "blur" }
+                ] */
+            }
         }
     },
     created(){
@@ -215,15 +220,22 @@ export default {
          */
         editCDD(){
             let reqParam = {
+                id: this.formData.id,
                 subject:this.formData.subject,
                 content:this.content,
-                sender:'',
-                senderName:'',
+                // sender: this.sender,
+                // senderName: this.senderName,
+                sender:'BFPID000000LSN000E',
+                senderName:'聂立虹',
                 status:2,
                 addresseeList:this.formData.addresseeList,
                 duplicateList:this.formData.duplicateList
             }
-            this.$api.insideMail.getSendMail(reqParam)
+            this.$api.insideMail.sendInsideMail(reqParam).then(res=>{
+                if(this.dataBack(res,"发送成功")){
+                    this.$parent.$parent.$parent.toPage(null,"outbox");
+                };
+            })
         },
 
         /**
@@ -231,15 +243,22 @@ export default {
          */
         saveCDD(){
             let reqParam = {
+                id: this.formData.id,
                 subject:this.formData.subject,
                 content:this.content,
-                sender:'',
-                senderName:'',
+                // sender: this.sender,
+                // senderName: this.senderName,
+                sender:'BFPID000000LSN000E',
+                senderName:'聂立虹',
                 status:1,
                 addresseeList:this.formData.addresseeList,
                 duplicateList:this.formData.duplicateList
             }
-
+            this.$api.insideMail.sendInsideMail(reqParam).then(res=>{
+                if(this.dataBack(res,"成功存储")){
+                    this.$parent.$parent.$parent.toPage(null,"drafts");
+                };
+            })
         },
         /**
          * 添加 主送/抄送用户点击事件
@@ -251,13 +270,14 @@ export default {
             let param = {
                 name: this.treeSearchVal
             }
-           
-            this.$api.jobUserManagement.addDepartData(param).then(res => {
-                if(res.data.code === 0){
-                    let data = res.data.data;
-                    this.treeData = this.makeTree(data);
-                }else{
-                    this.$message.error(res.data.msg)
+        //    addDepartData getStaffTree
+            this.$api.jobUserManagement.getStaffTree(param).then(res => {
+                if(this.dataBack(res,"")){
+                    let reqData =eval('(' +res.data.data+ ')') ;
+                    // let reqData =res.data.data ;
+                    // this.treeData = this.makeTree(reqData);
+                    console.log(reqData)
+                    this.treeData = reqData;
                 }
             })
             if(data=="addressee"){
@@ -278,7 +298,23 @@ export default {
          * 清空 主送/抄送用户点击事件
          */
         clearAddToUser(data){
-            console.log(data)
+            if(data=="addressee"){
+                this.formData.addresseeName = '';
+                if(this.defautltAddressee!=null&&this.defautltAddressee.length!=0){
+                    this.defautltAddressee.length = 0;
+                }
+                 if(this.addresseeList!=null&&this.addresseeList.length!=0){
+                    this.addresseeList.length = 0;
+                }
+            }else if(data=="duplicate"){
+               this.formData.duplicateName = '';
+                if(this.defautltDuplicate!=null&&this.defautltDuplicate.length!=0){
+                    this.defautltDuplicate.length = 0;
+                }
+                 if(this.duplicateList!=null&&this.duplicateList.length!=0){
+                    this.duplicateList.length = 0;
+                }
+            }
         },
 
         /**
@@ -317,9 +353,24 @@ export default {
          */
         persetParam(){
             if(this.perData!=null){
+                let resData = this.perData;
+                this.formData.id = this.perData.id,
                 this.content = this.perData.content,
-                this.formData.subject= this.perData.subject
-                this.formData.addresseeName = this.perData.addresseeName
+                this.formData.subject= resData.subject
+                this.formData.addresseeList = this.perData.addresseeList
+                this.formData.duplicateList = this.perData.duplicateList
+                 // 主送人自动勾选数据,名字回显
+                let addresseeName= '';
+                let defautltAddressee=[];
+                for(let i in this.perData.addresseeList){
+                    addresseeName += this.perData.addresseeList[i].fname+",";
+                    defautltAddressee.push(this.perData.addresseeList[i].foid);
+                }
+                if(addresseeName!=''){
+                    addresseeName = addresseeName.slice(0,addresseeName.length-1);
+                }
+                this.formData.addresseeName = addresseeName;
+                this.defautltAddressee = defautltAddressee;
             }
            this.$parent.$parent.$parent.clearPerData();
         },
@@ -330,36 +381,35 @@ export default {
         choiceTree(){
             if(this.treeTpye=="addressee"){
                 let staffList = this.$refs.tree.getCheckedNodes(true)
-                this.formData.addresseeList = staffList;
                 let nameString= '';
                 let checkId=[];
                 // 自动勾选数据,名字回显
                 for(let i=0;i<staffList.length;i++){
-                    nameString += staffList[i].name+",";
-                    checkId.push(staffList[i].oid);
+                    nameString += staffList[i].fname+",";
+                    checkId.push(staffList[i].foid);
                 };
                 if(nameString!=''){
                     nameString = nameString.slice(0,nameString.length-1);
                 }
                 this.formData.addresseeName = nameString;
                 this.defautltAddressee = checkId;
-                this.addresseeList = staffList;
+                this.formData.addresseeList = staffList;
 
             }else if(this.treeTpye=="duplicate"){
                 let staffList = this.$refs.tree.getCheckedNodes(true)
-                this.formData.duplicateList = staffList;
+               
                 let nameString= '';
                 let checkId=[];
                 for(let i=0;i<staffList.length;i++){
-                    nameString += staffList[i].name+",";
-                    checkId.push(staffList[i].oid);
+                    nameString += staffList[i].fname+",";
+                    checkId.push(staffList[i].foid);
                 };
                 if(nameString!=''){
                     nameString = nameString.slice(0,nameString.length-1);
                 }
                 this.formData.duplicateName = nameString;
                 this.defautltDuplicate = checkId;
-                this.duplicateList = staffList;
+                this.formData.duplicateList = staffList;
             }
 
             this.dialogTree= false;
@@ -379,21 +429,21 @@ export default {
                     let treeStaffList = [];
                     for(let m=0;m<staffList.length;m++){
                         let treeSraff = {
-                            oid : staffList[m].staffOid,
-                            name : staffList[m].staffName
+                            foid : staffList[m].staffOid,
+                            fname : staffList[m].staffName
                         }
                         treeStaffList.push(treeSraff);
                     }
                     let department = {
-                        oid: departmentList[n].id,
-                        name: departmentList[n].name,
+                        foid: departmentList[n].id,
+                        fname: departmentList[n].name,
                         children: treeStaffList
                     }
                     treeDepartmentList.push(department);
                 }
                 let group = {
-                    oid: data[i].oid,
-                    name: data[i].name,
+                    foid: data[i].oid,
+                    fname: data[i].name,
                     children: treeDepartmentList,
                 }
                 treeData.push(group);

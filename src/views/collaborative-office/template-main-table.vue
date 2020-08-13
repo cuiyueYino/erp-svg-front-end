@@ -6,10 +6,12 @@
 <script>
 	import selectMainTable from '../../views/collaborative-office/components/select-main-table';
 	import addMainTable from '../../views/collaborative-office/components/add-main-table';
+	import updMainTable from '../../views/collaborative-office/components/upd-main-table';
 	export default {
 		components: {
 			selectMainTable,
-			addMainTable
+			addMainTable,
+			updMainTable
 		},
 		data() {
 			return {
@@ -20,8 +22,11 @@
 		},
 		created() {},
 		methods: {
-			toAdd(showFigNum,context) {
+			toAdd() {
 				this.tabViews = "addMainTable"
+			},
+			toUpd(context,showFigNum) {
+				this.tabViews = "updMainTable"
 				this.showFigNum = showFigNum
 				this.context = context
 			},

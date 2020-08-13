@@ -5,6 +5,7 @@
         :title="title"
         :visible.sync="dialogVisible"
         :modal="false"
+        :show-close="false"
         :close-on-click-modal="closeConfig"
         :close-on-press-escape="closeConfig"
         width="600px"
@@ -20,11 +21,11 @@
             size="small"
             @submit.native.prevent
         >
-        <node-condition :visible = visibleF?(ConditionF?true:false):false :data="editConData?editConData:null" @saveFormData="saveFormData" > </node-condition>
-        <node-fork :visible = visibleF?(ForkF?true:false):false @saveFormData="saveForkData" ></node-fork>
-        <node-join :visible = visibleF?(JoinF?true:false):false @saveFormData="saveJoinData" ></node-join>
-        <node-router-task :visible = visibleF?(TaskF?true:false):false @saveFormData="saveRouteData"  ></node-router-task>
-         <node-process :visible = visibleF?(ProcessF?true:false):false @saveFormData="saveRouteData"  ></node-process>
+        <node-condition :visible = visibleF?(ConditionF?true:false):false :data="editConData?editConData:null" @saveFormData="saveConFormData" > </node-condition>
+        <node-fork :visible = visibleF?(ForkF?true:false):false :data="editForkData?editForkData:null" @saveFormData="saveForkData" ></node-fork>
+        <node-join :visible = visibleF?(JoinF?true:false):false :data="editJoinData?editJoinData:null"  @saveFormData="saveJoinData" ></node-join>
+        <node-router-task :visible = visibleF?(TaskF?true:false):false :data="editRouterData?editRouterData:null" @saveFormData="saveRouteData"  ></node-router-task>
+        <node-process :visible = visibleF?(ProcessF?true:false):false :data="sditProcessData?sditProcessData:null"  @saveFormData="saveProcessData"  ></node-process>
         <node-line :visible = visibleF?(LineF?true:false):false :data="editLineData?editLineData:null" @saveLineData="saveLineData" ></node-line>
          </el-form>
           <el-row :gutter="20">
@@ -32,7 +33,7 @@
                 <el-button  size="small" @click="saveConfig">保存</el-button>
             </el-col>
             <el-col :span="12">
-                <el-button size="small" @click="cancelConfig">取消</el-button>
+                <el-button size="small" @click="saveConfig">取消</el-button>
             </el-col>
         </el-row>
     </el-dialog>
@@ -108,6 +109,10 @@ export default {
             },
             editLineData:{},
             editConData:{},
+            editRouterData:{},
+            editForkData:{},
+            editJoinData:{},
+            sditProcessData:{},
         };
     },
     computed: {
@@ -120,7 +125,7 @@ export default {
                 Join: '审核活动配置',
                 Task: '路由配置',
                 Line: '连接线配置',
-                Process: '子流程配置',
+                Subprocess: '子流程配置',
             };
             return typeConfig[this.type] || '保存工作流';
         }
@@ -129,15 +134,16 @@ export default {
         // 监听配置数据源
         data: {
             handler (obj) {
-                this.formData = JSON.parse(JSON.stringify(obj));//console.log(this.formData,obj)
+                this.formData = JSON.parse(JSON.stringify(obj));console.log(this.formData,obj)
                 switch (this.formData.name) {
                     case "Task":
+                        this.TaskF = true
                         this.ConditionF =false
                         this.JoinF =false
                         this.ForkF =false
-                        this.TaskF = true
                         this.LineF =false
                         this.ProcessF =false
+                        this.editRouterData = this.formData
                         break;
                     case "Fork":
                         this.ConditionF =false
@@ -146,6 +152,7 @@ export default {
                         this.TaskF = false
                         this.LineF =false
                         this.ProcessF =false
+                        this.editForkData = this.formData
                         break;
                     case "Join":
                         this.ConditionF =false
@@ -154,6 +161,7 @@ export default {
                         this.TaskF = false
                         this.LineF =false
                         this.ProcessF =false
+                        this.editJoinData = this.formData
                         break;
                     case "Condition":
                         this.ConditionF =true
@@ -174,13 +182,14 @@ export default {
                         this.editLineData = this.formData
                         
                         break;
-                    case "Process":
+                    case "Subprocess":
                         this.ProcessF =true;
                         this.JoinF =false
                         this.ForkF =false
                         this.TaskF = false
                         this.ConditionF =false
                         this.LineF =false
+                        this.sditProcessData = this.formData
                         
                         break;
                 
@@ -209,21 +218,22 @@ export default {
         // 取消配置操作
         cancelConfig () {
             this.dialogVisible = false;
-            this.$refs.workflowConfigForm.resetFields();
+            // this.$refs.workflowConfigForm.resetFields();
             this.$emit('cancel');
         },
         // 执行保存配置操作
         saveConfig () {
-            this.$refs.workflowConfigForm.validate(valid => {
-                if (!valid) return; 
-                this.visibleF = false;
-                this.dialogVisible = false;
-                // this.$emit('save', this.formData);
-            });
+            this.visibleF = false;
+            this.dialogVisible = false;
         },
         //手工活动保存
-        saveFormData(e,e2,e3){console.log(e,e2,e3)
+        saveConFormData(e,e2,e3){ console.log(e,e2,e3)
+            if( e.displayName =='' || e.work =='' || e.checkedCities.length ==0 || e2.length==0 ){
+                this.$message.error("保存失败,请填写必填信息");
+                return;
+            }
             this.formData = e;
+            this.data.oid = e.oid;
             this.data.mactivity = {
                 "code": e.workCode,
                 "oid": e.workId,
@@ -241,47 +251,35 @@ export default {
                 "id": e.structureId,
             };  
             //参与者
-             switch (e.joinCheckBox) {
-                case 1:
-                    this.data.permission = 1;
-                    this.data.mntNextJoin = 0;
-                    this.data.canSkip = 0;
-                    this.data.multMail = 0;
-                   
-                    break;
-                case 2:
-                    this.data.mntNextJoin = 1;
-                    this.data.permission = 0;
-                    this.data.canSkip = 0;
-                    this.data.multMail = 0;
-                    break;
-                case 3:
-                    this.data.canSkip = 1;
-                    this.data.permission = 0;
-                    this.data.mntNextJoin = 0;
-                    this.data.multMail = 0;
-                    break;
-                case 4:
-                    this.data.multMail = 1;
-                    this.data.permission = 0;
-                    this.data.mntNextJoin = 0;
-                    this.data.canSkip = 0;
-                    break;
-            
-                default:
-                    break;
-            };
+             e.checkedCities.forEach(item => {
+                  switch (item) {
+                    case '由权限控制':
+                        this.data.permission = 1;
+                        break;
+                    case '手工指定下一节点参与者':
+                        this.data.mntNextJoin = 1;
+                        break;
+                    case '可略过':
+                        this.data.canSkip = 1;
+                        break;
+                    case '多封邮件':
+                        this.data.multMail = 1;
+                        break;
+                    default:
+                        break;
+                };
+              })
             //参与-表格
             e2.forEach(item => {
                 this.data.wfParticipator = {
-                    participator:[
+                     participator:[
                         {
-                            "oid":item.oid,
+                            "oid":item.oid?item.oid:'',
                             //6:表示 选择的是职务
                             "type": item.type,
                             //表达式的值 
                              [item.typeName]:{
-                                "oid": item.oid,
+                                "oid": item.fUseroid?item.fUseroid:item.oid,
                                 "code":item.fUsercode,
                                 "name":item.fUsername
                             },
@@ -295,11 +293,11 @@ export default {
                 this.data.wfCopyTo = {
                     copyTo:[
                         {
-                            "oid":item.oid,
+                           "oid":item.oid?item.oid:'',
                             "type": item.type,
                             //表达式的值 
                             [item.typeName]:{
-                                "oid": item.foid,
+                                "oid": item.oid?item.oid:item.foid,
                                 "code":item.fUsercode,
                                 "name":item.fUsername
                             },
@@ -313,6 +311,8 @@ export default {
         //连接线保存
         saveLineData(e){
             console.log(e);
+            this.data.oid = e.oid;
+            this.data.code =e.linefcode;
             this.data.displayName = e.name;
             this.data.fremark = e.fremark;
             switch (e.name ) {
@@ -332,11 +332,22 @@ export default {
                 default:
                     break;
             }
-           
+            this.data.service={
+                "oid": e.baseInputoid?e.baseInputoid:e.oid,
+                "code":e.baseInputcode,
+                "name":e.baseInputServe,
+                "fremark":e.fremark,
+                "expression":e.baseTextarea
+            }
         },
          //审核活动保存
         saveJoinData(e,e1,e2,e3,e4,e5){
             console.log(e,e1,e2,e3,e4,e5);
+             if( e.displayName =='' || e.work =='' || e.checkedCities.length ==0  || e4.length==0 ){
+                this.$message.error("保存失败,请填写必填信息");
+                return;
+            }
+            this.data.oid = e.oid;
             this.data.displayName = e.name;
             //业务工作
             this.data.mactivity = {
@@ -357,25 +368,11 @@ export default {
                 "oid": e.fmclassOid,
                 "name": e.fmclassName,
             };
-            //组织结构
-            this.data.orgUnit = {
-                "id": e.structureId,
-            };
-            this.data.hidden = e.checked?1:0;
             this.data.autoSubmit = e.autoSubmit?1:0;
             this.data.autoHurry = e.autoHurry?1:0;
             this.data.fremark = e.fremark;
             this.data.maxWorkTime = e.maxWorkTime;
-            switch (e.timeUnit) {
-                case '小时':
-                     this.data.timeUnit = 1
-                    break;
-                case '天':
-                     this.data.timeUnit = 2
-                    break;
-                default:
-                    break;
-            };
+            this.data.timeUnit = 1;
             //审批类型:1:普通,2:并行,3:串行
              switch (e.wfAuditType) {
                 case '普通审批':
@@ -391,47 +388,37 @@ export default {
                     break;
             }
              //参与者
-             switch (e.joinCheckBox) {
-                case 1:
-                    this.data.permission = 1;
-                    this.data.mntNextJoin = 0;
-                    this.data.canSkip = 0;
-                    this.data.multMail = 0;
-                   
-                    break;
-                case 2:
-                    this.data.mntNextJoin = 1;
-                    this.data.permission = 0;
-                    this.data.canSkip = 0;
-                    this.data.multMail = 0;
-                    break;
-                case 3:
-                    this.data.canSkip = 1;
-                    this.data.permission = 0;
-                    this.data.mntNextJoin = 0;
-                    this.data.multMail = 0;
-                    break;
-                case 4:
-                    this.data.multMail = 1;
-                    this.data.permission = 0;
-                    this.data.mntNextJoin = 0;
-                    this.data.canSkip = 0;
-                    break;
-            
-                default:
-                    break;
-            };
+              e.checkedCities.forEach(item => {
+                  switch (item) {
+                    case '由权限控制':
+                        this.data.permission = 1;
+                        break;
+                    case '手工指定下一节点参与者':
+                        this.data.mntNextJoin = 1;
+                        break;
+                    case '可略过':
+                        this.data.canSkip = 1;
+                        break;
+                    case '多封邮件':
+                        this.data.multMail = 1;
+                        break;
+                
+                    default:
+                        break;
+                };
+              })
+             
             //参与-表格
             e1.forEach(item => {
                 this.data.wfParticipator = {
                     participator:[
                         {
-                            "oid":item.oid,
+                            "oid":item.oid?item.oid:'',
                             //6:表示 选择的是职务
                             "type": item.type,
                             //表达式的值 
                              [item.typeName]:{
-                                "oid": item.oid,
+                                "oid": item.fUseroid?item.fUseroid:item.oid,
                                 "code":item.fUsercode,
                                 "name":item.fUsername
                             },
@@ -445,11 +432,11 @@ export default {
                 this.data.wfCopyTo = {
                     copyTo:[
                         {
-                            "oid":item.oid,
+                           "oid":item.oid?item.oid:'',
                             "type": item.type,
                             //表达式的值 
                             [item.typeName]:{
-                                "oid": item.oid,
+                                "oid": item.oid?item.oid:item.foid,
                                 "code":item.fUsercode,
                                 "name":item.fUsername
                             },
@@ -459,27 +446,34 @@ export default {
                 };
             });
             //审核单范围
-            this.data.wfViewOtherComments = {
-                wfViewOtherComment:[
-                    {
-                        // "oid":12312,
-						// "wfProcessor":"BFPID000000P4F001" -- 选中哪个的审批结点的id
-                    }
-                ]
-            },
+             e3.forEach(item => {
+                this.data.wfViewOtherComments = {
+                    wfViewOtherComment:[
+                        {
+                            "oid":'',
+                            "wfProcessor": item.wfProcessor //-- 选中哪个的审批结点的id
+                        }
+                    ]
+                }
+             })
+            
            
          //决策类型
-         this.data.decisions = {
-             decision:[
-                 {
-                    "decisionType": e4[0].decisionType,
-                    "decisionText": e4[0].decisionText,
-				}
-             ]
-         }
+          e4.forEach(item => {
+              this.data.decisions = {
+                    decision:[
+                        {
+                            "decisionType": item.decisionType,
+                            "decisionText": item.decisionText,
+                        }
+                    ]
+                }
+          })
+         
         },
         //自由活动
         saveForkData(e){
+            this.data.oid = e.oid;
               this.data.mactivity = {
                 "code": e.workCode,
                 "oid": e.workId,
@@ -495,9 +489,23 @@ export default {
             this.data.displayName = e.name;
         },
          //路由
-        saveRouteData(e){
+        saveRouteData(e){console.log(e)
+            this.data.oid = e.oid;
             this.data.hidden = e.checked?1:0;
             this.data.join = e.join?1:0;
+            this.data.fremark = e.fremark;
+            this.data.displayName = e.name;
+            this.data.code = e.code;
+        },
+        //子流程
+        saveProcessData(e){
+            console.log(e)
+             if( e.name =='' || !e.refWfProcess || e.code ==''  ){
+                this.$message.error("保存失败,请填写必填信息");
+                return;
+            }
+            this.data.oid = e.oid;
+            this.data.refWfProcess = e.refWfProcess;
             this.data.fremark = e.fremark;
             this.data.displayName = e.name;
             this.data.code = e.code;
@@ -508,7 +516,7 @@ export default {
 <style  lang="scss" scoped>
 /deep/ .el-dialog__body{
     padding:20px !important;
-    max-height: 500px !important;
+    max-height: 580px !important;
 }
  /deep/ .el-dialog__header{
      display: block !important;

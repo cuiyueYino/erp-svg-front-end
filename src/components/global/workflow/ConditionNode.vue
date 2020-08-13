@@ -25,7 +25,7 @@
                         </li> -->
                         <li class="condition-node__text">
                             <!-- <span class="info-label condition-info__label">显示名：</span> -->
-                            <span class="info-item condition-info__item"><i :class="icon"></i>{{conditionData.data.displayName}}</span>
+                            <span  class="info-item condition-info__item"><i :class="icon"></i>{{conditionData.data.displayName}}</span>
                         </li>
                     </ul>
                 </body>
@@ -43,7 +43,7 @@
             placement="top"
             v-model="conditionData.visible"
         >
-            <p>您确定删除[{{conditionData.data.displayName}}]吗？</p>
+            <p>您确定删除[{{conditionData.data.displayName.substring(0,10)}}]吗？</p>
             <div style="text-align: center;">
                 <el-button size="mini" type="primary" @click="$emit('delete');conditionData.visible = false">确定</el-button>
                 <el-button size="mini" type="danger" @click="conditionData.visible = false">取消</el-button>

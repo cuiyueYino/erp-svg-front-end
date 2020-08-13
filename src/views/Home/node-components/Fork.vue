@@ -26,7 +26,7 @@
                     <el-checkbox v-model="formData.checked"></el-checkbox>
                 </el-form-item>
                 <el-form-item label="描述：" :label-width="formLabelWidth">
-                    <el-input maxlength="1000" clearable  autosize show-word-limit type="textarea" v-model="formData.fremark"></el-input>
+                    <el-input maxlength="500" clearable  autosize show-word-limit type="textarea" v-model="formData.fremark"></el-input>
                 </el-form-item>
                 <!-- Condition END-->
             </el-tab-pane>
@@ -61,17 +61,17 @@
             <!-- 搜索框 -->
              <el-row :gutter="24">
                   <el-col :span="8">
-                    <el-form-item label="编码" label-width="43px">
-                        <el-input clearable size="small" v-model="formData.formCode" placeholder="请输入条件值"></el-input>
+                    <el-form-item label="编码 " label-width="43px">
+                        <el-input clearable size="small" v-model="formData.formCode" placeholder="请输入"></el-input>
                     </el-form-item>
                   </el-col> 
                   <el-col :span="8">
-                    <el-form-item label="名称" label-width="43px">
-                        <el-input clearable size="small" v-model="formData.formName" placeholder="请输入条件值"></el-input>
+                    <el-form-item label="名称 " label-width="43px">
+                        <el-input clearable size="small" v-model="formData.formName" placeholder="请输入"></el-input>
                     </el-form-item>
                   </el-col> 
                   <el-col :span="8">
-                    <el-form-item label="工作类型" label-width="70px">
+                    <el-form-item label="工作类型 " label-width="70px">
                          <el-select v-model="formData.formCtionTypeCon" clearable placeholder="请选择">
                             <el-option
                             v-for="item in options"
@@ -237,6 +237,7 @@ export default {
         gridData:[],
         multipleSelection: [],
         options: [],
+        editData:{},
         };
     },
     computed: {
@@ -257,8 +258,18 @@ export default {
         // 监听配置数据源
         data: {
             handler (obj) {
-                this.formData = JSON.parse(JSON.stringify(obj));
-                // console.log( this.formData)
+                if(obj.name === "Fork"){console.log( obj)
+                    this.editData = obj;
+                    this.formData.name = this.editData.displayName
+                    this.formData.work = this.editData.mactivity?this.editData.mactivity.name:'' 
+                    this.formData.workId = this.editData.mactivity.oid
+                    this.formData.workCode = this.editData.mactivity.code
+                    this.formData.workData = this.editData.dataType.name
+                    this.formData.workDataId = this.editData.dataType.oid
+                    this.formData.workDataCode = this.editData.dataType.code
+                    this.formData.checked = this.editData.hidden==1?true:false
+                    this.formData.fremark = this.editData.fremark    
+                }
             },
             deep: true,
             immediate: true
@@ -378,7 +389,7 @@ export default {
 <style  lang="scss" scoped>
 /deep/ .el-dialog__body{
     padding:20px !important;
-    max-height: 500px !important;
+    max-height: 580px !important;
 }
  /deep/ .el-dialog__header{
      display: block !important;

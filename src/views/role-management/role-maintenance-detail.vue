@@ -11,7 +11,7 @@
             >
                 <el-card>
                     <el-row>
-                        <el-col :span="6">
+                        <el-col :span="8">
                             <div class="El-tree">
                                 <el-tree
                                     :data="treeData"
@@ -24,7 +24,7 @@
                                 </el-tree>
                             </div>
                         </el-col>
-                        <el-col :span="14" :offset="3">
+                        <el-col :span="14" :offset="1">
                             <dynamic-table
                                 :columns="columns"
                                 :table-data="tableData"
@@ -42,7 +42,7 @@
                 </el-card>
             </el-form>
             <span slot="footer" class="dialog-footer">
-                <el-button @click="ShowFinancVisible = false">取 消</el-button>
+                <el-button @click="handleClose">取 消</el-button>
                 <el-button type="primary" @click="onHandleSave">确认</el-button>
             </span>
         </el-dialog>
@@ -121,6 +121,13 @@ export default {
                         </span>
                     )
                 }else if(data.type==3){
+                    return(
+                        <span class="custom-tree-node">
+                            <span><i class="el-icon-document"></i></span>
+                            <span style="margin-left: 5px;">{node.data.name}</span>
+                        </span>
+                    )
+                }else{
                     return(
                         <span class="custom-tree-node">
                             <span><i class="el-icon-document"></i></span>

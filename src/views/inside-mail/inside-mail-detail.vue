@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div >
         <el-form 
             :model="formData" 
             label-width="100px"
@@ -30,7 +30,7 @@
             <el-row>
                 <el-col :span="14">
                     <el-form-item label="主题" prop="subject">
-                        <el-input  size="small" v-model="formData.subject" readonly></el-input>
+                        <el-input  size="small" v-model="formData.subject"  readonly></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>
@@ -49,6 +49,7 @@
                                 v-model="content"
                                 ref="myQuillEditor"
                                 :options="editorOption"
+                                style="height:400px"
                                 @blur="onEditorBlur($event)"
                                 @focus="onEditorFocus($event)"
                                 @change="onEditorChange($event)"
@@ -63,7 +64,7 @@
             <br/>
             <el-row>
                 <el-col :span="14">
-                    <el-button type="primary" @click="$parent.$parent.$parent.goBack();" icon="" size="mini">返回</el-button>
+                    <el-button type="primary" @click="$parent.$parent.goBack();" icon="" size="mini">返回</el-button>
                 </el-col>
             </el-row>
         </el-form>
@@ -124,6 +125,9 @@ export default {
         console.log("进入信息详情");
     },
     methods: {
+        /**
+         * 获取详情
+         */
         getDetail(){
             if(this.id!=null&&this.id!=''){
                 console.log(this.id);
@@ -131,7 +135,7 @@ export default {
                     id: this.id
                 }
                 this.$api.insideMail.getMailById(reqParam).then(res => {
-                    if(res.data.code==0){
+                    if(this.dataBack(res,"")){
                         let data = res.data.data;
                         this.formData.senderName = data.senderName;
                         this.formData.subject = data.subject;
@@ -141,8 +145,6 @@ export default {
                         this.formData.duplicateList = data.duplicateList;
                         this.formData.sendTime = data.sendTime;
                         this.content = data.content;
-                    }else{
-                        this.$message.error(res.data.msg)
                     };
                 })
             }
@@ -168,5 +170,4 @@ export default {
 }
 </script>
 <style scoped>
-
 </style>

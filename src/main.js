@@ -22,6 +22,11 @@ import 'components/index.js';
 import * as helpers from 'helpers';
 //公共方法
 import base from './utils/base.js';
+import 'xe-utils'
+import VXETable from 'vxe-table'
+import 'vxe-table/lib/index.css'
+
+Vue.use(VXETable)
 Vue.use(base);
 //全局变量文件
 import globalVariable from './utils/global_variable.js';
@@ -45,19 +50,19 @@ Vue.use(Print);//注册打印
 
 // 使用钩子函数对路由进行权限跳转
 router.beforeEach((to, from, next) => {
-    document.title = `福佳集团 | ${to.meta.title} `;
-    const token = localStorage.getItem('ms_tokenId');
-    if (!token && to.path !== '/login') {
-        next('/login');
-    } else if (to.meta.permission) {
-        // 如果是管理员权限则可进入，这里只是简单的模拟管理员权限而已
-        role === 'admin' ? next() : next('/403');
-    } else {
-        next();
-    }
+	document.title = `福佳集团 | ${to.meta.title} `;
+	const token = localStorage.getItem('ms_tokenId');
+	if(!token && to.path !== '/login') {
+		next('/login');
+	} else if(to.meta.permission) {
+		// 如果是管理员权限则可进入，这里只是简单的模拟管理员权限而已
+		role === 'admin' ? next() : next('/403');
+	} else {
+		next();
+	}
 });
 new Vue({
-    router,
-    store,
-    render: h => h(App)
+	router,
+	store,
+	render: h => h(App)
 }).$mount('#app');
