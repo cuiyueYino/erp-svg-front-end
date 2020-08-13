@@ -508,7 +508,11 @@ export default {
         data: {
             handler (obj) {
              if(obj.name === "Join"){console.log( obj)
-                    this.checkedCities = [];
+                    if(!obj.oid){
+                        this.checkedCities = ['由权限控制'];
+                    }else{
+                        this.checkedCities = [];
+                    }
                    this.editData = obj;
                    this.formData.name = this.editData.displayName
                    this.formData.work = this.editData.mactivity.name

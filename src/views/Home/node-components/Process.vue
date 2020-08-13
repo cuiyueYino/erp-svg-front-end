@@ -86,7 +86,6 @@ export default {
             configRules: {
                 name: { required: true, message: '请输入名称', trigger: 'blur' },
                 code: { required: true, message: '请输入编码', trigger: 'blur' },
-                performType: { required: true, message: '请选择参与类型', trigger: 'change' },
                 company: [
                     { required: true, message: '请选择子流程', trigger: 'change' }
                 ],
@@ -100,7 +99,6 @@ export default {
                 company:''
             },
         gridData:[],
-        formData:{},
         options: [],
         editData:{},
         newData:[],

@@ -19,13 +19,13 @@
                     <el-input v-model="formData.work" autocomplete="off"></el-input>
                     <img class="icon-search" @click="workSearch" src="../../../assets/img/search.svg">
                 </el-form-item>
-                <el-form-item label="业务数据" :label-width="formLabelWidth" >
+                <el-form-item label="业务数据" :label-width="formLabelWidth" prop="workData">
                     <el-input v-model="formData.workData" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="隐藏" :label-width="formLabelWidth">
+                <!-- <el-form-item label="隐藏" :label-width="formLabelWidth" prop="work">
                     <el-checkbox v-model="formData.checked"></el-checkbox>
-                </el-form-item>
-                <el-form-item label="描述：" :label-width="formLabelWidth">
+                </el-form-item> -->
+                <el-form-item label="描述：" :label-width="formLabelWidth" prop="fremark">
                     <el-input maxlength="500" clearable  autosize show-word-limit type="textarea" v-model="formData.fremark"></el-input>
                 </el-form-item>
                 <!-- Condition END-->
@@ -165,14 +165,19 @@ export default {
             closeConfig: false,
             // 配置表单校验规则
             configRules: {
-                work: { required: true, message: "请选择业务工作", trigger: "blur" },
+                work: { required: true, message: "请选择业务工作", trigger: ['blur', 'change']},
                 name: { required: true, message: "请输入名称", trigger: "blur" },
                 performType: { required: true, message: '请选择参与类型', trigger: 'change' }
             },
             // 对话框显示标识
             dialogVisible: this.visible,
             // 配置表单数据
-            formData: this.data,
+            formData: {
+                work:"",
+                workData:"",
+                name:'',
+                fremark:'',
+            },
             // task参与类型
             typeOpt: [
                 {

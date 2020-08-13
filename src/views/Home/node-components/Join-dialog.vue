@@ -126,6 +126,7 @@ export default {
             console.log(data);
         },
         closeDialog(){
+             this.$refs['workflowConfigForm'].resetFields();
             this.$emit('closeDialog')
         },
         baseInputTable(str,title){ 

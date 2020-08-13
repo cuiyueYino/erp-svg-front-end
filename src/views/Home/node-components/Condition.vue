@@ -14,7 +14,7 @@
         <el-tab-pane label="基本信息" name="1">
           <!-- Condition -->
           <el-form-item label="名称" :label-width="formLabelWidth" prop="displayName">
-            <el-input ref="nameInput" v-model="displayName" autocomplete="off"></el-input>
+            <el-input ref="nameInput" v-model="formData.displayName" autocomplete="off"></el-input>
           </el-form-item>
           <el-form-item label="业务工作" :label-width="formLabelWidth" prop="work">
             <el-input v-model="formData.work" autocomplete="off"></el-input>
@@ -295,7 +295,7 @@ export default {
       if(obj.name === "Condition"){console.log(obj)
           this.checkedCities = [];
           this.editData = obj;
-          this.displayName = this.editData.displayName
+          this.formData.displayName = this.editData.displayName
           this.formData.work = this.editData.mactivity.name
           this.formData.workId = this.editData.mactivity.oid
           this.formData.workCode = this.editData.mactivity.code
@@ -354,11 +354,12 @@ export default {
                       })
                       break;
                   case 5://表达式
+                  
                       tableDataNewSet.push({
                           fUsercode: "表达式",
-                          fUsername: item.expression.name,
-                          fUserRemake: item.expression,
-                          fUseroid:item.expression.oid,
+                          fUsername: item.expression.name || '',
+                          fUserRemake: item.expression|| '',
+                          fUseroid:item.expression.oid|| '',
                           oid:item.oid,
                           type:item.type,
                           typeName:'expression',
@@ -422,9 +423,8 @@ export default {
                   case 5://表达式
                           joinusertable.push({
                           fUsercode: "表达式",
-                          fUsername: item.expression.name,
-                          fUserRemake: item.expression,
-                          fUseroid:item.expression.oid,
+                          fUserRemake: item.expression|| '',
+                          fUseroid:item.oid|| '',
                           oid:item.oid,
                           type:item.type,
                           typeName:'expression',
@@ -488,6 +488,7 @@ export default {
         canSkip: null,
         multMail: null,
         work:"",
+        displayName:'',
 
       },
       baseInputType: "",
@@ -508,7 +509,7 @@ export default {
       closeConfig: false,
       // 配置表单校验规则
       configRules: {
-        work: { required: true, message: "请选择业务工作", trigger: "blur" },
+        work: { required: true, message: "请选择业务工作", trigger: ['blur', 'change']},
         displayName: { required: true, message: "请输入名称", trigger: "blur" },
         performType: {
           required: true,
