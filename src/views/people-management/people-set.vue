@@ -668,14 +668,18 @@ export default {
                 
           }else{
               this.$api.jobUserManagement.addPeopleMsg(this.peopleForm).then(res => {
-                  if ((res.data.data.msg = "success")) {
+                debugger;
+                  if (res.data.code == 0) {
                     this.dialogFormVisible = false;
                     this.$message.success("新增成功");
                     //刷新表格
                     this.getTableData("");
+                  } else {
+                    this.$message.error(res.data.msg);
                   }
                 }),
                   error => {
+                    console.log(res.data.code);
                     console.log(error);
                   };
                 }
