@@ -272,7 +272,7 @@ export default {
                  return;
             };
             
-            switch (status.fstatus) {
+            switch (status.fstatusName) {
                 case '生效':
                     status.fstatus = 8
                     break;
@@ -287,11 +287,13 @@ export default {
                 status  : status.fstatus
             }
             this.$api.processSet.effectOrDisable(data).then(res=>{
-                    if(res.data.data.msg = "success"){
+                    if(res.data.code == 0){
                         this.$message.success('操作成功');
                         //刷新表格
                         this.getTableData('')
                        
+                    } else {
+                        this.$message.error(res.data.msg);
                     }
                 }),error=>{
                     console.log(error);
