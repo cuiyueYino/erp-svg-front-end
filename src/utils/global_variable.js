@@ -89,7 +89,7 @@ const fieldTypeList = [{
 	id: '10',
 	label: '复选框'
 }]
-const tableHeight = 650
+const tableHeight = 550
 export default {
 	//富文本
 	editorOption,

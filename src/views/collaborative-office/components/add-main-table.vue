@@ -2,23 +2,20 @@
 	<el-card class="box-card">
 		<div v-if="!showFigForm">
 			<el-row>
-				<el-col :span="24" style="text-align: center;">工作事项模板主表</el-col>
+				<el-col :span="24" style="text-align: center;">工作事项模板主表-新增</el-col>
 			</el-row>
 			<el-row style="margin-top: 10px;">
 				<el-col :span="18">
 					公司：
-					<el-select :disabled="showFigSee" size='mini' v-model="ruleForm.company" placeholder="公司">
+					<el-select size='mini' v-model="ruleForm.company" placeholder="公司">
 						<el-option v-for="item in CompanyData" :key="item.id" :label="item.name" :value="item.id">
 						</el-option>
 					</el-select>
 				</el-col>
-				<el-col v-if="!showFigSee" :span="6" style="text-align: right;">
+				<el-col :span="6" style="text-align: right;">
 					<el-button @click="submitForm(2)" type="success" size="mini" icon="el-icon-check">提交</el-button>
 					<el-button @click="submitForm(1)" type="primary" size="mini" icon="el-icon-finished">暂存</el-button>
 					<el-button @click="preview()" type="primary" plain size="mini" icon="el-icon-view">预览</el-button>
-					<el-button type="danger" @click="$parent.toSelect()" size="mini" icon="el-icon-close">返回</el-button>
-				</el-col>
-				<el-col v-if="showFigSee" :span="6" style="text-align: right;">
 					<el-button type="danger" @click="$parent.toSelect()" size="mini" icon="el-icon-close">返回</el-button>
 				</el-col>
 			</el-row>
@@ -27,24 +24,24 @@
 					<el-row>
 						<el-col :span="6">
 							<el-form-item prop="code" label="主表编码">
-								<el-input style="width: 150%;" clearable :disabled="showFigSee" v-model="ruleForm.code" maxlength="50" placeholder="主表编码"></el-input>
+								<el-input style="width: 150%;" clearable  v-model="ruleForm.code" maxlength="50" placeholder="主表编码"></el-input>
 							</el-form-item>
 						</el-col>
 						<el-col :span="6">
 							<el-form-item prop="name" label="主表名称">
-								<el-input style="width: 150%;" clearable :disabled="showFigSee" v-model="ruleForm.name" maxlength="50" placeholder="主表名称"></el-input>
+								<el-input style="width: 150%;" clearable  v-model="ruleForm.name" maxlength="50" placeholder="主表名称"></el-input>
 							</el-form-item>
 						</el-col>
 						<el-col :span="6">
 							<el-form-item prop="workItemTypeName" label="主表分类">
 								<el-input style="width: 150%;" disabled placeholder="主表分类" v-model="ruleForm.workItemTypeName">
-									<el-button :disabled="showFigSee" @click="dialogVisible = true" slot="append" icon="el-icon-search"></el-button>
+									<el-button  @click="dialogVisible = true" slot="append" icon="el-icon-search"></el-button>
 								</el-input>
 							</el-form-item>
 						</el-col>
 						<el-col :span="6">
 							<el-form-item label="描述">
-								<el-input clearable :disabled="showFigSee" style="width: 150%;" type="textarea" :rows="1" maxlength="1500" v-model="ruleForm.remark" placeholder="描述"></el-input>
+								<el-input clearable  style="width: 150%;" type="textarea" :rows="1" maxlength="1500" v-model="ruleForm.remark" placeholder="描述"></el-input>
 							</el-form-item>
 						</el-col>
 					</el-row>
@@ -83,7 +80,7 @@
 						<el-table-column prop="lengthType" label="字段长度类型" align="center" width="180">
 							<template slot-scope="scope">
 								<el-form-item :prop="'lines[' + scope.$index + '].lengthType'" :rules="rulesTable.lengthType">
-									<el-select :disabled="showFigSee" style="width: 100%;" v-model="scope.row.lengthType" placeholder="字段长度类型">
+									<el-select  style="width: 100%;" v-model="scope.row.lengthType" placeholder="字段长度类型">
 										<el-option v-for="item in lengthTypeList" :key="item.id" :label="item.name" :value="item.id"></el-option>
 									</el-select>
 								</el-form-item>
@@ -92,42 +89,42 @@
 						<el-table-column prop="show" label="是否显示" align="center">
 							<template slot-scope="scope">
 								<el-form-item>
-									<el-checkbox :disabled="showFigSee" v-model="scope.row.show"></el-checkbox>
+									<el-checkbox  v-model="scope.row.show"></el-checkbox>
 								</el-form-item>
 							</template>
 						</el-table-column>
 						<el-table-column prop="orderNum" label="显示顺序" align="center">
 							<template slot-scope="scope">
 								<el-form-item :prop="'lines[' + scope.$index + '].orderNum'" :rules="rulesTable.orderNum">
-									<el-input :disabled="showFigSee" v-model="scope.row.orderNum" placeholder=""></el-input>
+									<el-input  v-model="scope.row.orderNum" placeholder=""></el-input>
 								</el-form-item>
 							</template>
 						</el-table-column>
 						<el-table-column prop="showNum" label="显示行数" align="center">
 							<template slot-scope="scope">
 								<el-form-item :prop="'lines[' + scope.$index + '].showNum'" :rules="rulesTable.showNum">
-									<el-input :disabled="showFigSee" v-model="scope.row.showNum" placeholder=""></el-input>
+									<el-input  v-model="scope.row.showNum" placeholder=""></el-input>
 								</el-form-item>
 							</template>
 						</el-table-column>
 						<el-table-column prop="required" label="是否必填" align="center">
 							<template slot-scope="scope">
 								<el-form-item>
-									<el-checkbox :disabled="showFigSee" v-model="scope.row.required"></el-checkbox>
+									<el-checkbox  v-model="scope.row.required"></el-checkbox>
 								</el-form-item>
 							</template>
 						</el-table-column>
 						<el-table-column prop="choice" label="是否多选" align="center">
 							<template slot-scope="scope">
 								<el-form-item>
-									<el-checkbox :disabled="showFigSee" v-model="scope.row.choice"></el-checkbox>
+									<el-checkbox  v-model="scope.row.choice"></el-checkbox>
 								</el-form-item>
 							</template>
 						</el-table-column>
 						<el-table-column prop="edit" label="是否可编辑" align="center">
 							<template slot-scope="scope">
 								<el-form-item>
-									<el-checkbox :disabled="showFigSee" v-model="scope.row.edit"></el-checkbox>
+									<el-checkbox  v-model="scope.row.edit"></el-checkbox>
 								</el-form-item>
 							</template>
 						</el-table-column>
@@ -135,7 +132,7 @@
 							<template slot-scope="scope">
 								<el-form-item>
 									<el-input disabled v-model="scope.row.serviceCon">
-										<el-button :disabled="showFigSee" @click="findTServiceByParams(scope.row)" slot="append" icon="el-icon-search"></el-button>
+										<el-button  @click="findTServiceByParams(scope.row)" slot="append" icon="el-icon-search"></el-button>
 									</el-input>
 								</el-form-item>
 							</template>
@@ -143,7 +140,7 @@
 						<el-table-column prop="parameter" label="参数" align="center" width="200">
 							<template slot-scope="scope">
 								<el-form-item>
-									<el-input :disabled="showFigSee" v-model="scope.row.parameter" placeholder="参数"></el-input>
+									<el-input  v-model="scope.row.parameter" placeholder="参数"></el-input>
 								</el-form-item>
 							</template>
 						</el-table-column>
@@ -193,8 +190,6 @@
 			formAndTable
 		},
 		props: {
-			//查看
-			showFigNum: String,
 			//值
 			context: Object
 		},
@@ -213,8 +208,6 @@
 				}],
 				//切换子组件
 				showFigForm: false,
-				//查看-置灰
-				showFigSee: false,
 				//弹出框-工作事项模板主表分类
 				dialogVisible: false,
 				//弹出框-服务
@@ -352,11 +345,6 @@
 			}
 		},
 		created() {
-			//showFigNum 等于 “3” 为查看
-			if(this.showFigNum == "3") {
-				this.showFigSee = true
-				this.ruleForm = this.context
-			}
 			this.CompanyData.forEach(item => {
 				if(item.name == "福佳集团") {
 					this.ruleForm.company = item.id
@@ -454,10 +442,9 @@
 							this.ruleForm.lines.forEach((item, index1) => {
 								item.parameterList = []
 								//时间控件计算差值
-								if(item.serviceId == 5) {
 									this.ruleForm.lines.forEach(itemChild => {
 										//通过‘-’符号确定需要计算的两边
-										if(!this.noNull(itemChild.parameter) && itemChild.parameter.indexOf('-') != -1) {
+										if(item.serviceId == 5 && !this.noNull(itemChild.parameter) && itemChild.parameter.indexOf('-') != -1) {
 											//left right 分别是需要计算的两个值的字段名称
 											var index = itemChild.parameter.indexOf('-')
 											var left = itemChild.parameter.substring(0, index)
@@ -477,7 +464,6 @@
 										}
 
 									})
-								}
 								//行序按照填写排序
 								item.fieldTypeName = this.fieldTypeShow(item)
 								if(obj[item.showNum]) {
