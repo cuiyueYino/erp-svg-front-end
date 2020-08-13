@@ -271,7 +271,6 @@ export default {
                 this.$message.error('请选择一项操作');
                  return;
             };
-            
             switch (status.fstatusName) {
                 case '生效':
                     status.fstatus = 8
