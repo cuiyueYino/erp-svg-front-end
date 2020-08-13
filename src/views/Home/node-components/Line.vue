@@ -29,7 +29,7 @@
                 <el-form-item label="隐藏" :label-width="formLabelWidth">
                     <el-checkbox v-model="checked"></el-checkbox>
                 </el-form-item> -->
-                <el-form-item label="描述：" :label-width="formLabelWidth">
+                <el-form-item label="描述：" :label-width="formLabelWidth" prop="fremark">
                     <el-input maxlength="1000" clearable @input="change($event)"  autosize show-word-limit type="textarea" v-model="formData.fremark"></el-input>
                 </el-form-item>
             </el-tab-pane>
@@ -177,7 +177,11 @@ export default {
             // 对话框显示标识
             dialogVisible: this.visible,
             // 配置表单数据
-            formData: this.data,
+            formData: {
+                name:'',
+                code:'',
+                fremark:''
+            },
             columns: [
             {
                 type: 'selection'

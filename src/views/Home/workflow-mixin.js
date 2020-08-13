@@ -540,7 +540,7 @@ export default {
             //
             this.$set(this.selectedNode, 'data', this.workflowData);
             // 打开配置对话框   
-            // this.dialogSaveVisible = true;
+            this.dialogSaveVisible = true;
             this.$api.svg.addSvg(data).then(res=>{
                 if( res.data.data.msg == 'success' ){
                     this.$message.success('保存成功');
@@ -609,7 +609,7 @@ export default {
             //
             this.$set(this.selectedNode, 'data', this.workflowData);
             // 打开配置对话框   
-            /*this.dialogSaveVisible = true;
+            this.dialogSaveVisible = true;
             this.$api.svg.addSvg(data).then(res=>{
                 if( res.data.data.msg == 'success' ){
                     this.$message.success('保存成功');
@@ -619,7 +619,7 @@ export default {
                 }
             },error=>{
                 console.log(error)
-            })*/
+            })
             console.log(workflowNodes)
         }
     }

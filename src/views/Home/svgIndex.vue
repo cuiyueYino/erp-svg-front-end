@@ -60,7 +60,7 @@
                             >
                                 保存
                             </el-button>
-                            <el-button
+                            <!-- <el-button
                                 size="mini"
                                 type="text"
                                 :disabled="workflowNodes.filter(item => Object.keys(item).length > 0).length === 2"
@@ -68,7 +68,7 @@
                                 @click="cleanUp"
                             >
                                 清空
-                            </el-button>
+                            </el-button> -->
                             <el-button
                                 size="mini"
                                 type="text"

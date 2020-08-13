@@ -459,6 +459,7 @@ export default {
             
            
          //决策类型
+         let decisionsList = []
           e4.forEach(item => {
               this.data.decisions = {
                     decision:[
@@ -468,7 +469,9 @@ export default {
                         }
                     ]
                 }
+            this.data.decisions.decision.push(decisionsList)
           })
+
          
         },
         //自由活动
