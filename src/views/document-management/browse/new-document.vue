@@ -97,6 +97,7 @@ export default {
     },
     data(){
         return{
+            atctiveName:'first',
             tableData:[],
             pageNum: 1,
             pageSize: 10,
@@ -152,6 +153,7 @@ export default {
         },
         //滑块切换
         handleClick(tab){
+            debugger;
             var tabsname =tab.paneName;
             if(tabsname){
                 if(tabsname ==="first"){
