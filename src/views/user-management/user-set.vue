@@ -629,12 +629,14 @@ export default {
               this.form.fstaff = this.form.staffId; 
               this.newIndex = null
               this.$api.jobUserManagement.updateUserTableData(this.form).then(res=>{
-                  if ((res.data.data.msg = "success")) {
+                  if (res.data.code == 0) {
                     this.dialogFormVisible = false;
                     this.$message.success("修改成功");
                     this.$refs[formName].resetFields();
                     //刷新表格
                     this.getTableData();
+                  } else {
+                    this.$message.error(res.data.msg);
                   }
               }),
              error => {
@@ -657,7 +659,6 @@ export default {
                     console.log(error);
                   };
           }
-         
         } else {
           console.log("error submit!!");
           return false;
