@@ -41,7 +41,7 @@
 			</el-row>
 		</el-card>
 		<el-card class="box-card">
-			<el-table size="small" :height="$GLOBAL.tableHeight" highlight-current-row @row-click="clickRow" :data="tableData" border>
+			<el-table size="small" @row-dblclick="rowDblClick" :height="$GLOBAL.tableHeight" highlight-current-row @row-click="clickRow" :data="tableData" border>
 				<el-table-column :formatter="statusShow" prop="status" label="状态" width="100" align="center"></el-table-column>
 				<el-table-column prop="voucherId" label="单据编号" align="center"></el-table-column>
 				<el-table-column prop="title" label="标题" align="center"></el-table-column>
@@ -107,6 +107,11 @@
 			this.toSelect()
 		},
 		methods: {
+			rowDblClick(row) {
+				if(typeof(this.$parent.$parent.getDialogVisible) == "function") {
+					this.$parent.$parent.getDialogVisible()
+				}
+			},
 			//删除
 			del() {
 				if(this.getRowClickId()) {
@@ -203,7 +208,7 @@
 			clickRow(row) {
 				this.rowClick = row
 			},
-			toClear(){
+			toClear() {
 				this.selectData = ""
 				this.value = ""
 				this.toSelect()

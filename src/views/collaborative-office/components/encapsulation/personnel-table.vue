@@ -4,14 +4,14 @@
 			<el-form style="margin-bottom: 10px;" ref="formInline" label-width="10px" :model="formInline" class="demo-form-inline">
 				<el-row>
 					<el-col :span="6">
-						<el-form-item prop="name">
-							<el-input clearable v-model="formInline.name"placeholder="人员名称"></el-input>
+						<el-form-item prop="tname">
+							<el-input clearable v-model="formInline.tname"placeholder="人员名称"></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :span="10">
 						<el-form-item>
-							<el-button type="primary" @click="getRoleList()">搜索</el-button>
-							<el-button type="primary" plain @click="$refs.formInline.resetFields();getRoleList()">重置</el-button>
+							<el-button type="primary" @click="getRoleList();loading=true">搜索</el-button>
+							<el-button type="primary" plain @click="$refs.formInline.resetFields();getRoleList();loading=true">重置</el-button>
 							<el-button v-if="showFig == 1" type="primary"plain @click="getAll()">全部</el-button>
 							<el-button v-if="showFig == 1" type="primary"plain @click="getConList()">已选中</el-button>
 						</el-form-item>
@@ -47,9 +47,7 @@
 			return {
 				loading : true,
 				formInline: {
-					name: "",
-					page: 1,
-					size: 1000000
+					tname: ""
 				},
 				roleList: [],
 				roleIds: [],
@@ -87,6 +85,10 @@
 				})
 			},
 			workItemAuthRole() {
+				if(typeof(this.roleCon.id) == "undefined"){
+					this.goOut("请选择数据")
+					return
+				}
 				this.roleIds = []
 				this.$refs.multipleTable.getCheckboxRecords().forEach(item => {
 					this.roleIds.push(item.toid)

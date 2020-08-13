@@ -5,15 +5,15 @@
 				<el-row>
 					<el-col :span="6">
 						<el-form-item prop="name">
-							<el-input clearable v-model="formInline.name"  placeholder="角色名称"></el-input>
+							<el-input clearable v-model="formInline.name" placeholder="角色名称"></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :span="10">
 						<el-form-item>
-							<el-button type="primary" @click="getRoleList()">搜索</el-button>
-							<el-button type="primary" plain @click="$refs.formInline.resetFields();getRoleList()">重置</el-button>
-							<el-button v-if="showFig == 1" type="primary"plain @click="getAll()">全部</el-button>
-							<el-button v-if="showFig == 1" type="primary"plain @click="getConList()">已选中</el-button>
+							<el-button type="primary" @click="getRoleList();loading=true">搜索</el-button>
+							<el-button type="primary" plain @click="$refs.formInline.resetFields();getRoleList();loading=true">重置</el-button>
+							<el-button v-if="showFig == 1" type="primary" plain @click="getAll()">全部</el-button>
+							<el-button v-if="showFig == 1" type="primary" plain @click="getConList()">已选中</el-button>
 						</el-form-item>
 					</el-col>
 					<el-col v-if="showFig == 1" :span="8" style="text-align: right;">
@@ -41,7 +41,7 @@
 		},
 		data() {
 			return {
-				loading : true,
+				loading: true,
 				formInline: {
 					name: ""
 				},
@@ -89,6 +89,10 @@
 				})
 			},
 			workItemAuthRole() {
+				if(typeof(this.roleCon.id) == "undefined") {
+					this.goOut("请选择数据")
+					return
+				}
 				this.roleIds = []
 				this.$refs.multipleTable.getCheckboxRecords().forEach(item => {
 					this.roleIds.push(item.id)

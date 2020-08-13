@@ -22,13 +22,12 @@
 		},
 		created() {},
 		methods: {
-			toAdd(showFigNum,context) {
+			toAdd() {
 				this.tabViews = "addMainTable"
-				this.showFigNum = showFigNum
-				this.context = context
 			},
-			toUpd(context) {
+			toUpd(context,showFigNum) {
 				this.tabViews = "updMainTable"
+				this.showFigNum = showFigNum
 				this.context = context
 			},
 			toSelect() {

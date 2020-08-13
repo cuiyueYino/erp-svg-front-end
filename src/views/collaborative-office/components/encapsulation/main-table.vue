@@ -12,8 +12,8 @@
 						<el-form-item>
 							<el-button type="primary" @click="toSelect()">搜索</el-button>
 							<el-button type="primary" plain @click="$refs.formInline.resetFields();toSelect()">重置</el-button>
-							<el-button v-if="showFig == 2" type="primary"plain @click="getAll()">全部</el-button>
-							<el-button v-if="showFig == 2" type="primary"plain @click="getConList()">已选中</el-button>
+							<el-button v-if="showFig == 2" type="primary" plain @click="getAll()">全部</el-button>
+							<el-button v-if="showFig == 2" type="primary" plain @click="getConList()">已选中</el-button>
 						</el-form-item>
 					</el-col>
 					<el-col v-if="showFig == 2" :span="8" style="text-align: right;">
@@ -84,6 +84,10 @@
 				})
 			},
 			roleAuthWorkItem() {
+				if(typeof(this.roleCon.id) == "undefined") {
+					this.goOut("请选择数据")
+					return
+				}
 				this.tableList = []
 				this.$refs.multipleTable.getCheckboxRecords().forEach(item => {
 					this.tableList.push(item.id)
@@ -158,6 +162,7 @@
 		background-color: rgb(148, 185, 205);
 		color: white;
 	}
+	
 	.box-card:first-child {
 		margin-bottom: 16px;
 	}
