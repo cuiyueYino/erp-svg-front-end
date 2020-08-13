@@ -305,37 +305,6 @@ class ITEMData {
 					title: '个人门户',
 				}]
 			},
-			{
-				index: 'collaborativeOffice',
-				title: '协同办公',
-				subs: [{
-					index: 'workItems',
-					title: '工作事项',
-					subs: [{
-						index: 'templateMainTable',
-						title: '工作事项模板主表分类',
-					}],
-					index: 'documentManagement',
-					title: '文档管理',
-					subs: [{
-							index: 'docCategory',
-							title: '文档类别维护'
-						},
-						{
-							index: 'docManage',
-							title: '文档管理'
-						},
-						{
-							index: 'docAuthority',
-							title: '文档授权'
-						},
-						{
-							index: 'docBrowse',
-							title: '文档浏览'
-						}
-					]
-				}]
-			}
 		];
 		this.ITEMother = [{
 			index: 'Business',
