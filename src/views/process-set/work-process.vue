@@ -261,6 +261,7 @@ export default {
                     console.log(error);
                 }
         },
+        
          //生效/禁用
         effectOrDisableMsg(){
             let status = this.multipleSelection[0];
