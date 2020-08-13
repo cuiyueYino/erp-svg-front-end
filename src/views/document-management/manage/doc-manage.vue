@@ -36,8 +36,8 @@
                                 </el-form>
                             </el-col>
                             <el-col :span="16">
-                                <el-button type="success" icon="el-icon-refresh" plain @click="createDocumentCategory">新建</el-button> 
-                                <el-button type="success" icon="el-icon-refresh" plain @click="editDocumentCategory()" >修改</el-button>
+                                <el-button type="success" icon="el-icon-plus" plain @click="createDocumentCategory">新建</el-button> 
+                                <el-button type="success" icon="el-icon-edit" plain @click="editDocumentCategory()" >修改</el-button>
                                 <el-button type="primary" icon="el-icon-top" plain @click="operateDocumentCategory(1)">置顶</el-button>
                                 <el-button type="primary" icon="el-icon-bottom" plain @click="operateDocumentCategory(2)">取消置顶</el-button>
                                 <el-button type="primary" icon="el-icon-star-on" plain @click="operateDocumentCategory(3)">发布</el-button>

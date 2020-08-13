@@ -36,9 +36,9 @@
                                 </el-form>
                             </el-col>
                             <el-col :span="9" :offset="3">
-                                <el-button type="success" icon="el-icon-refresh" plain @click="createDocumentCategory">新建</el-button> 
-                                <el-button type="success" icon="el-icon-refresh" plain @click="editDocumentCategory">修改</el-button>
-                                <el-button type="danger" icon="el-icon-notebook-2" plain @click="removeDocumentCategory">删除</el-button>
+                                <el-button type="success" icon="el-icon-plus" plain @click="createDocumentCategory">新建</el-button> 
+                                <el-button type="success" icon="el-icon-edit" plain @click="editDocumentCategory">修改</el-button>
+                                <el-button type="danger" icon="el-icon-delete" plain @click="removeDocumentCategory">删除</el-button>
                                 <el-button type="primary" icon="el-icon-notebook-2" plain @click="showDocumentCategory">查看</el-button>
                             </el-col>
                         </el-row>
