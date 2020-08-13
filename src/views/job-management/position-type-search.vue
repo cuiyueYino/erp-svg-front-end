@@ -113,6 +113,8 @@ export default {
     handleClose() {
       //返回选中的父组件选中的row,并修某些改值
       this.$emit("changeShow", this.rowPOSSDataObj, false);
+      this.pageNum = 1;
+      this.pageSize = 5;
     },
 
     onHandleMoreSave() {

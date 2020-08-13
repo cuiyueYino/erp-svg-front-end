@@ -259,7 +259,8 @@ export default {
       searchForm: {
         fname: "",
         fcode: "",
-        fremark: ""
+        fremark: "",
+        fcreator: localStorage.getItem('ms_userId'),
       },
       userForm: {},
       options: [],
