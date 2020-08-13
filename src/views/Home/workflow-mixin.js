@@ -541,17 +541,17 @@ export default {
             this.$set(this.selectedNode, 'data', this.workflowData);
             // 打开配置对话框   
             this.dialogSaveVisible = true;
-            // this.$api.svg.addSvg(data).then(res=>{
-            //     if( res.data.data.msg == 'success' ){
-            //         this.$message.success('保存成功');
-            //         sessionStorage.setItem("eidtMsg",null);
-            //     }else{
-            //         this.$message.error("保存失败,请填写完整信息");
-            //     }
+            this.$api.svg.addSvg(data).then(res=>{
+                if( res.data.data.msg == 'success' ){
+                    this.$message.success('保存成功');
+                    sessionStorage.setItem("eidtMsg",null);
+                }else{
+                    this.$message.error("保存失败,请填写完整信息");
+                }
              
-            // },error=>{
-            //     console.log(error)
-            // })
+            },error=>{
+                console.log(error)
+            })
         },
         // 编辑-点击保存工作流按钮执行事件
         saveEditWorkflow (workflowNodes) {
