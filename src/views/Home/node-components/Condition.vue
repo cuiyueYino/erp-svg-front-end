@@ -293,151 +293,156 @@ export default {
     data: {
       handler(obj) {
       if(obj.name === "Condition"){console.log(obj)
-          this.checkedCities = [];
-          this.editData = obj;
-          this.formData.displayName = this.editData.displayName
-          this.formData.work = this.editData.mactivity.name
-          this.formData.workId = this.editData.mactivity.oid
-          this.formData.workCode = this.editData.mactivity.code
-          this.formData.workData = this.editData.dataType.name
-          this.formData.workDataId = this.editData.dataType.oid
-          this.formData.workDataCode = this.editData.dataType.code
-          // this.formData.structure = this.editData.orgUnit?this.editData.orgUnit.id:''
-          // this.formData.checked = this.editData.hidden==1?true:false
-          this.formData.fremark = this.editData.fremark
-          this.checkedCities.push(this.editData.permission=='1'?'由权限控制':this.editData.mntNextJoin=='1'?'手工指定下一节点参与者':this.editData.canSkip=='1'?'可略过':this.editData.multMail=='1'?'多封邮件':null)
-          let tableDataNewSet = []
-          this.editData.wfCopyTo.copyTo.forEach(item=>{
-              switch (item.type) {
-                  case 3://用户
-                      tableDataNewSet.push({
-                          fUsercode: "用户",
-                          fUsername: item.user.name,
-                          fUserRemake: item.expression,
-                          fUseroid:item.user.oid,
-                          oid:item.oid,
-                          type:item.type,
-                          typeName:'user',
-                      })
-                      break;
-                  case 2://角色
-                      tableDataNewSet.push({
-                          fUsercode: "角色",
-                          fUsername: item.role.name,
-                          fUserRemake: item.expression,
-                          fUseroid:item.role.oid,
-                          oid:item.oid,
-                          type:item.type,
-                          typeName:'role',
-                      })
-                      break;
-                    case 4://服务
-                      tableDataNewSet.push({
-                          fUsercode:  "服务",
-                          fUsername: item.service.name,
-                          fUserRemake: item.expression,
-                          fUseroid:item.service.oid,
-                          oid:item.oid,
-                          type:item.type,
-                          typeName:'service',
-                      })
-                      break;
-                  case 6://职务
-                      tableDataNewSet.push({
-                          fUsercode: "职务",
-                          fUsername: item.position.name,
-                          fUserRemake: item.expression,
-                          fUseroid:item.position.oid,
-                          oid:item.oid,
-                          type:item.type,
-                          typeName:'position',
-                      })
-                      break;
-                  case 5://表达式
-                  
-                      tableDataNewSet.push({
-                          fUsercode: "表达式",
-                          fUsername: item.expression.name || '',
-                          fUserRemake: item.expression|| '',
-                          fUseroid:item.expression.oid|| '',
-                          oid:item.oid,
-                          type:item.type,
-                          typeName:'expression',
-                      })
-                      break;
-              
-                  default:
-                      break;
-              }
-          });
-            if( this.CCtableData.length === 0 && tableDataNewSet.length !== 0){
-                this.CCtableData.push(tableDataNewSet[0])
-              }
-           let joinusertable = [];
-          this.editData.wfParticipator.participator.forEach(item=>{
-              switch (item.type) {
-                  case 3://用户
-                      joinusertable.push({
-                          fUsercode: "用户",
-                          fUsername: item.user.name,
-                          fUserRemake: item.expression,
-                          fUseroid:item.user.oid,
-                          oid:item.oid,
-                          type:item.type,
-                          typeName:'user',
-                      })
-                      break;
-                  case 2://角色
-                      joinusertable.push({
-                          fUsercode:  "角色",
-                          fUsername: item.role.name,
-                          fUserRemake: item.expression,
-                          fUseroid:item.role.oid,
-                          oid:item.oid,
-                          type:item.type,
-                          typeName:'role',
-                      })
-                      break;
-                  case 4://服务
-                      joinusertable.push({
-                          fUsercode: "服务",
-                          fUsername: item.service.name,
-                          fUserRemake: item.expression,
-                          fUseroid:item.service.oid,
-                          oid:item.oid,
-                          type:item.type,
-                          typeName:'service',
-                      })
-                      break;
-                  case 6://职务
-                      joinusertable.push({
-                          fUsercode: "职务",
-                          fUsername: item.position.name,
-                          fUserRemake: item.expression,
-                          fUseroid:item.position.oid,
-                          oid:item.oid,
-                          type:item.type,
-                          typeName:'position',
-                      })
-                      break;
-                  case 5://表达式
-                          joinusertable.push({
-                          fUsercode: "表达式",
-                          fUserRemake: item.expression|| '',
-                          fUseroid:item.oid|| '',
-                          oid:item.oid,
-                          type:item.type,
-                          typeName:'expression',
-                      })
-                      break;
-                  default:
-                      break;
-              }
-          });
-          if( this.joinusertableData.length === 0 && joinusertable.length !== 0){
-              this.joinusertableData.push(joinusertable[0])
+          if(!obj.id){
+              this.formData.displayName = obj.displayName
+          }else{
+                this.checkedCities = [];
+                this.editData = obj;
+                this.formData.displayName = this.editData.displayName
+                this.formData.work = this.editData.mactivity.name
+                this.formData.workId = this.editData.mactivity.oid
+                this.formData.workCode = this.editData.mactivity.code
+                this.formData.workData = this.editData.dataType.name
+                this.formData.workDataId = this.editData.dataType.oid
+                this.formData.workDataCode = this.editData.dataType.code
+                // this.formData.structure = this.editData.orgUnit?this.editData.orgUnit.id:''
+                // this.formData.checked = this.editData.hidden==1?true:false
+                this.formData.fremark = this.editData.fremark
+                this.checkedCities.push(this.editData.permission=='1'?'由权限控制':this.editData.mntNextJoin=='1'?'手工指定下一节点参与者':this.editData.canSkip=='1'?'可略过':this.editData.multMail=='1'?'多封邮件':null)
+                let tableDataNewSet = []
+                this.editData.wfCopyTo.copyTo.forEach(item=>{
+                    switch (item.type) {
+                        case 3://用户
+                            tableDataNewSet.push({
+                                fUsercode: "用户",
+                                fUsername: item.user.name,
+                                fUserRemake: item.expression,
+                                fUseroid:item.user.oid,
+                                oid:item.oid,
+                                type:item.type,
+                                typeName:'user',
+                            })
+                            break;
+                        case 2://角色
+                            tableDataNewSet.push({
+                                fUsercode: "角色",
+                                fUsername: item.role.name,
+                                fUserRemake: item.expression,
+                                fUseroid:item.role.oid,
+                                oid:item.oid,
+                                type:item.type,
+                                typeName:'role',
+                            })
+                            break;
+                          case 4://服务
+                            tableDataNewSet.push({
+                                fUsercode:  "服务",
+                                fUsername: item.service.name,
+                                fUserRemake: item.expression,
+                                fUseroid:item.service.oid,
+                                oid:item.oid,
+                                type:item.type,
+                                typeName:'service',
+                            })
+                            break;
+                        case 6://职务
+                            tableDataNewSet.push({
+                                fUsercode: "职务",
+                                fUsername: item.position.name,
+                                fUserRemake: item.expression,
+                                fUseroid:item.position.oid,
+                                oid:item.oid,
+                                type:item.type,
+                                typeName:'position',
+                            })
+                            break;
+                        case 5://表达式
+                        
+                            tableDataNewSet.push({
+                                fUsercode: "表达式",
+                                fUsername: item.expression.name || '',
+                                fUserRemake: item.expression|| '',
+                                fUseroid:item.expression.oid|| '',
+                                oid:item.oid,
+                                type:item.type,
+                                typeName:'expression',
+                            })
+                            break;
+                    
+                        default:
+                            break;
+                    }
+                });
+                  if( this.CCtableData.length === 0 && tableDataNewSet.length !== 0){
+                      this.CCtableData.push(tableDataNewSet[0])
+                    }
+                let joinusertable = [];
+                this.editData.wfParticipator.participator.forEach(item=>{
+                    switch (item.type) {
+                        case 3://用户
+                            joinusertable.push({
+                                fUsercode: "用户",
+                                fUsername: item.user.name,
+                                fUserRemake: item.expression,
+                                fUseroid:item.user.oid,
+                                oid:item.oid,
+                                type:item.type,
+                                typeName:'user',
+                            })
+                            break;
+                        case 2://角色
+                            joinusertable.push({
+                                fUsercode:  "角色",
+                                fUsername: item.role.name,
+                                fUserRemake: item.expression,
+                                fUseroid:item.role.oid,
+                                oid:item.oid,
+                                type:item.type,
+                                typeName:'role',
+                            })
+                            break;
+                        case 4://服务
+                            joinusertable.push({
+                                fUsercode: "服务",
+                                fUsername: item.service.name,
+                                fUserRemake: item.expression,
+                                fUseroid:item.service.oid,
+                                oid:item.oid,
+                                type:item.type,
+                                typeName:'service',
+                            })
+                            break;
+                        case 6://职务
+                            joinusertable.push({
+                                fUsercode: "职务",
+                                fUsername: item.position.name,
+                                fUserRemake: item.expression,
+                                fUseroid:item.position.oid,
+                                oid:item.oid,
+                                type:item.type,
+                                typeName:'position',
+                            })
+                            break;
+                        case 5://表达式
+                                joinusertable.push({
+                                fUsercode: "表达式",
+                                fUserRemake: item.expression|| '',
+                                fUseroid:item.oid|| '',
+                                oid:item.oid,
+                                type:item.type,
+                                typeName:'expression',
+                            })
+                            break;
+                        default:
+                            break;
+                    }
+                });
+                if( this.joinusertableData.length === 0 && joinusertable.length !== 0){
+                    this.joinusertableData.push(joinusertable[0])
+                }
+            }
           }
-      }
+          
       },
       deep: true,
       immediate: true

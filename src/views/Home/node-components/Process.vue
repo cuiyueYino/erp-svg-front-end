@@ -124,18 +124,22 @@ export default {
         data: {
             handler (obj) {
                 if(obj.type === "Subprocess" || obj.name === "Subprocess"){console.log(obj)
-                this.editData = obj;
-                this.formData.fremark = this.editData.fremark;
-                this.formData.name = this.editData.displayName;
-                this.formData.code = this.editData.code;
-                this.options = [{
-                            label:this.editData.refWfProcess.name,
-                            value:this.editData.refWfProcess.oid,
-                            code:this.editData.refWfProcess.code
-                        }];
-                this.formData.company = this.editData.refWfProcess.oid;
-                // console.log( this.formData)
+                if(!obj.id){
+                    this.formData.name = obj.displayName
+                }else{
+                    this.editData = obj;
+                    this.formData.fremark = this.editData.fremark;
+                    this.formData.name = this.editData.displayName;
+                    this.formData.code = this.editData.code;
+                    this.options = [{
+                                label:this.editData.refWfProcess.name,
+                                value:this.editData.refWfProcess.oid,
+                                code:this.editData.refWfProcess.code
+                            }];
+                    this.formData.company = this.editData.refWfProcess.oid;
+                    // console.log( this.formData)
                 }
+              }  
             },
             deep: true,
             immediate: true
