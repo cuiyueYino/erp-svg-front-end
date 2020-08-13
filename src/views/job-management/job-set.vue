@@ -230,6 +230,7 @@ export default {
         fpositiontype: "",
         fpositionname: "",
         fremark: "",
+        fcreator: localStorage.getItem('ms_userId'),
       },
       userForm: {},
       options: [],
@@ -410,6 +411,7 @@ export default {
         fpositiontype: "",
         fpositionname: "",
         fremark: "",
+        fcreator: localStorage.getItem('ms_userId'),
       };
       this.pageNum = 1;
       this.isEdit = false;

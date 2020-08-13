@@ -295,6 +295,7 @@ export default {
         fstatus: "",
         fcompany: "_DefaultCompanyOId",
         fcompanyname: "福佳集团",
+        fcreator: localStorage.getItem('ms_userId'),
       },
       columns: [
         {
@@ -428,6 +429,7 @@ export default {
         fstatus: "",
         fcompany: "_DefaultCompanyOId",
         fcompanyname: "福佳集团",
+        fcreator: localStorage.getItem('ms_userId'),
       };
       this.addFormVisible = true;
       this.pageNum = 1;
