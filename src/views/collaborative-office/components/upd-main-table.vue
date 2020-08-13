@@ -3,7 +3,7 @@
 		<div v-if="!showFigForm">
 			<el-card class="box-card">
 				<el-row>
-					<el-col style="text-align: center;" :span="24">工作事项模板主表</el-col>
+					<el-col style="text-align: center;" :span="24">{{getTitle()}}</el-col>
 				</el-row>
 				<el-row>
 					<el-col :span="18">
@@ -13,16 +13,19 @@
 							</el-option>
 						</el-select>
 					</el-col>
-					<el-col :span="6" style="text-align: right;">
+					<el-col v-if="showFigNum == 2" :span="6" style="text-align: right;">
 						<el-button @click="submitForm(2)" type="success" size="mini" icon="el-icon-check">提交</el-button>
 						<el-button @click="submitForm(1)" type="primary" size="mini" icon="el-icon-finished">暂存</el-button>
 						<el-button @click="preview()" type="primary" plain size="mini" icon="el-icon-view">预览</el-button>
 						<el-button type="danger" @click="$parent.toSelect()" size="mini" icon="el-icon-close">返回</el-button>
 					</el-col>
+					<el-col v-else :span="6" style="text-align: right;">
+						<el-button type="danger" @click="$parent.toSelect()" size="mini" icon="el-icon-close">返回</el-button>
+					</el-col>
 				</el-row>
 			</el-card>
 			<el-card class="box-card">
-				<el-form size="mini" label-width="80px" :inline="true" :rules="rules" ref="ruleForm" :model="ruleForm" class="demo-form-inline">
+				<el-form size="mini" :disabled=" showFigNum == 1" label-width="80px" :inline="true" :rules="rules" ref="ruleForm" :model="ruleForm" class="demo-form-inline">
 					<el-row>
 						<el-col :span="6">
 							<el-form-item prop="code" label="主表编码">
@@ -53,7 +56,7 @@
 				<el-row>
 					<el-col style="text-align: center;">工作事项模板主表行</el-col>
 				</el-row>
-				<el-form style="margin-top: 10px;" :model="ruleForm" :rules="rulesTable" ref="ruleFormTable">
+				<el-form :disabled=" showFigNum == 1" style="margin-top: 10px;" :model="ruleForm" :rules="rulesTable" ref="ruleFormTable">
 					<el-table size="small" height="600" :data="ruleForm.lines" border style="width: 100%">
 						<el-table-column prop="field" label="数据库字段名" align="center" width="120">
 							<template slot-scope="scope">
@@ -197,7 +200,8 @@
 			formAndTable
 		},
 		props: {
-			context: Object
+			context: Object,
+			showFigNum: String
 		},
 		data() {
 			return {
@@ -361,6 +365,13 @@
 			})
 		},
 		methods: {
+			getTitle(){
+				if(this.showFigNum == 1){
+					return "工作事项模板主表-查看"
+				}else{
+					return "工作事项模板主表-修改"
+				}
+			},
 			//服务类型
 			ftypeShow(row) {
 				switch(row.ftype) {
@@ -459,32 +470,30 @@
 							let obj = {};
 							//循环判断是否有添加服务的字段名
 							this.ruleForm.lines.forEach((item, index1) => {
-								if(item.serviceId == 5) {
-									item.parameterList = []
-									//时间控件计算差值
-									this.ruleForm.lines.forEach(itemChild => {
-										//通过‘-’符号确定需要计算的两边
-										if(!this.noNull(itemChild.parameter) && itemChild.parameter.indexOf('-') != -1) {
-											//left right 分别是需要计算的两个值的字段名称
-											var index = itemChild.parameter.indexOf('-')
-											var left = itemChild.parameter.substring(0, index)
-											var right = itemChild.parameter.substring(index + 1)
-											//两个字段都要添加属性parameterList，里面存储需要计算的字段名和需要显示的字段名child
-											if(left == item.field || right == item.field) {
-												item.parameterList = {}
-												item.parameterList.left = left
-												item.parameterList.right = right
-												item.parameterList.child = itemChild.field
-											}
-										} else {
-											//发现被添加服务的字段后，绑定双方
-											if(itemChild.parameter == item.field) {
-												item.parameterList.push(itemChild.field)
-											}
+								item.parameterList = []
+								//时间控件计算差值
+								this.ruleForm.lines.forEach(itemChild => {
+									//通过‘-’符号确定需要计算的两边
+									if(item.serviceId == 5 && !this.noNull(itemChild.parameter) && itemChild.parameter.indexOf('-') != -1) {
+										//left right 分别是需要计算的两个值的字段名称
+										var index = itemChild.parameter.indexOf('-')
+										var left = itemChild.parameter.substring(0, index)
+										var right = itemChild.parameter.substring(index + 1)
+										//两个字段都要添加属性parameterList，里面存储需要计算的字段名和需要显示的字段名child
+										if(left == item.field || right == item.field) {
+											item.parameterList = {}
+											item.parameterList.left = left
+											item.parameterList.right = right
+											item.parameterList.child = itemChild.field
 										}
+									} else {
+										//发现被添加服务的字段后，绑定双方
+										if(itemChild.parameter == item.field) {
+											item.parameterList.push(itemChild.field)
+										}
+									}
 
-									})
-								}
+								})
 								//行序按照填写排序
 								item.fieldTypeName = this.fieldTypeShow(item)
 								if(obj[item.showNum]) {

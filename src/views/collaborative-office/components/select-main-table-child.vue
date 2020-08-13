@@ -28,7 +28,7 @@
 					</el-form>
 				</el-col>
 				<el-col style="text-align: right;" :span="10">
-					<el-button @click="$parent.toAdd('1')" icon="el-icon-plus" type="success">新增</el-button>
+					<el-button @click="$parent.toAdd()" icon="el-icon-plus" type="success">新增</el-button>
 					<el-button @click="toUpd()" icon="el-icon-edit" type="warning">修改</el-button>
 					<el-button @click="updateStatus(3)" icon="el-icon-check" type="primary">生效</el-button>
 					<el-button @click="updateStatus(7)" icon="el-icon-delete" type="danger">禁用</el-button>
@@ -133,7 +133,7 @@
 					this.$api.collaborativeOffice.getWorkItemTempSubModel({
 						id: this.rowClickId
 					}).then(data => {
-						this.$parent.toAdd('3', data.data.data)
+						this.$parent.toUpd(data.data.data,'1')
 					})
 				}
 			},
@@ -178,7 +178,7 @@
 					this.$api.collaborativeOffice.getWorkItemTempSubModel({
 						id: this.rowClickId
 					}).then(data => {
-						this.$parent.toUpd(data.data.data)
+						this.$parent.toUpd(data.data.data,"2")
 					})
 				}
 			},

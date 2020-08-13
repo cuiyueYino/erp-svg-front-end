@@ -597,34 +597,35 @@
 						this.goOut("请单选")
 						return
 					}
-				} else {
-					var label = ""
-					var value = ""
-					dataBack.forEach((item, index) => {
-						if(index == dataBack.length - 1) {
-							if(this.showCon == "personnel") {
-
-								label = label + item.tname
-								value = value + item.toid
-							} else {
-								label = label + item.fname
-								value = value + item.foid
-							}
-						} else {
-							if(this.showCon == "personnel") {
-								label = label + item.tname + ","
-								value = value + item.toid + ","
-							} else {
-								label = label + item.fname + ","
-								value = value + item.foid + ","
-							}
-						}
-					})
 				}
+				var label = ""
+				var value = ""
+				console.log(dataBack)
+				dataBack.forEach((item, index) => {
+					if(index == dataBack.length - 1) {
+						console.log(1)
+						if(this.showCon == "personnel") {
+							label = label + item.tname
+							value = value + item.toid
+						} else {
+							label = label + item.fname
+							value = value + item.foid
+						}
+					} else {
+						if(this.showCon == "personnel") {
+							label = label + item.tname + ","
+							value = value + item.toid + ","
+						} else {
+							label = label + item.fname + ","
+							value = value + item.foid + ","
+						}
+					}
+				})
 				//获取子组件返回的id和name
 				this.$set(this.ruleForm, this.dialogVisibleCon.field + '_NameShow', label)
 				this.$set(this.ruleForm, this.dialogVisibleCon.field, value)
 				//如果有联动查询的数据
+				console.log(this.dialogVisibleCon)
 				if(typeof(this.dialogVisibleCon.parameterList) != "undefined" && this.dialogVisibleCon.parameterList.length != 0) {
 					//调用toGetServiceNow（绑定的联动改变字段，获取的选中id）
 					this.toGetServiceNow(this.dialogVisibleCon.parameterList, value)
