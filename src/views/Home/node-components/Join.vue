@@ -507,13 +507,13 @@ export default {
         // 监听配置数据源
         data: {
             handler (obj) {
-             if(obj.name === "Join"){console.log( obj)
+             if(obj.name === "Join"){ console.log( obj)
                     if(!obj.oid){
                         this.checkedCities = ['由权限控制'];
+                         this.formData.name = obj.displayName
                     }else{
-                        this.checkedCities = [];
-                    }
-                   this.editData = obj;
+                    this.checkedCities = [];
+                    this.editData = obj;
                    this.formData.name = this.editData.displayName
                    this.formData.work = this.editData.mactivity.name
                     this.formData.workId = this.editData.mactivity.oid
@@ -691,7 +691,9 @@ export default {
                             this.$refs.decisionTable.toggleRowSelection(row);
                         });
                     
-             }
+             
+                    }
+             }  
             },
             deep: true,
             immediate: true
@@ -783,7 +785,8 @@ export default {
             if(this.activeName == '5'){//debugger
                   this.tableData2 =[]
                 let allData = JSON.parse( sessionStorage.getItem('allData') );
-                allData.forEach(item=>{
+                if(allData.length>0){
+                     allData.forEach(item=>{
                     if(item.type == 'Join'&& (item.data.displayName !== this.formData.name) ){
                         this.tableData2.push({
                             fname:item.data.displayName,
@@ -799,6 +802,7 @@ export default {
                         // })
                     }
                 })
+                }
             }   
             
         },

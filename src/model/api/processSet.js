@@ -73,7 +73,7 @@ const processSet = {
     getaddresserSearch(params){
         return httpReqest.post('/api/wfInterfaces/workFlow/addresserSearch', params);
     },
-    //查找业务数据workFlow/getProcessClass
+    //查找业务数据
     getProcessClass(params){
         return httpReqest.post('/api/wfInterfaces/workFlow/getProcessClass', params);
     },

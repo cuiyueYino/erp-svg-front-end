@@ -451,7 +451,10 @@ export default {
                     console.log(error)
                 })
             }
-            this.$refs['workflowConfigForm'].resetFields();
+            if(!bool){
+                this.$refs['workflowConfigForm'].resetFields();
+            }
+            
         }
     },
     methods: {

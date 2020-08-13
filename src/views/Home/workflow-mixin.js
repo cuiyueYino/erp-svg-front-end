@@ -30,7 +30,7 @@ export default {
         },
         // 计算生成连接线数组
         lineData: {
-            get () {console.log(this.linkData);//debugger
+            get () {//console.log(this.linkData);//debugger
                 this.linkData.map(item => {
                     if (Object.keys(item).length > 2) {//console.log(item)
                         // 添加连接线类型
