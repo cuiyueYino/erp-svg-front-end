@@ -679,7 +679,6 @@ export default {
                   }
                 }),
                   error => {
-                    console.log(res.data.code);
                     console.log(error);
                   };
                 }
