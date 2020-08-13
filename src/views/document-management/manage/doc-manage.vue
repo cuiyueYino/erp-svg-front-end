@@ -15,7 +15,7 @@
                 <el-col :span="18" :offset="1">
                     <el-card class="box-card">
                         <el-row :gutter="24">
-                            <el-col :span="12">
+                            <el-col :span="8">
                                 <el-form :inline="true"  class="demo-form-inline">
                                     <el-col :span="8">
                                         <el-select v-model="formInline.document" @change="selectChange" placeholder="-请选择-" clearable>
@@ -35,10 +35,13 @@
                                     </el-col>
                                 </el-form>
                             </el-col>
-                            <el-col :span="9" :offset="3">
+                            <el-col :span="16">
                                 <el-button type="success" icon="el-icon-refresh" plain @click="createDocumentCategory">新建</el-button> 
-                                <el-button type="success" icon="el-icon-refresh" plain @click="editDocumentCategory">修改</el-button>
-                                <el-button type="danger" icon="el-icon-notebook-2" plain @click="removeDocumentCategory">删除</el-button>
+                                <el-button type="success" icon="el-icon-refresh" plain @click="editDocumentCategory()" >修改</el-button>
+                                <el-button type="primary" icon="el-icon-top" plain @click="operateDocumentCategory(1)">置顶</el-button>
+                                <el-button type="primary" icon="el-icon-bottom" plain @click="operateDocumentCategory(2)">取消置顶</el-button>
+                                <el-button type="primary" icon="el-icon-star-on" plain @click="operateDocumentCategory(3)">发布</el-button>
+                                <el-button type="primary" icon="el-icon-star-off" plain @click="operateDocumentCategory(4)">取消发布</el-button>
                                 <el-button type="primary" icon="el-icon-notebook-2" plain @click="showDocumentCategory">查看</el-button>
                             </el-col>
                         </el-row>
@@ -78,6 +81,7 @@ export default {
     inject: ['reload'],
     data(){
         return{
+            flag: '',
             documentLevel: '',
             documentFpid:'',
             input: '',
@@ -101,21 +105,30 @@ export default {
                     title: '名称'
                 },
                 {
-                    key: 'fisportalshow',
-                    title: '是否门户显示'
-                },
-                {
-                    key: 'flevel',
-                    title: '文档类别等级'
-                },
-                {
-                    key: 'forder',
-                    title: '显示顺序'
-                },
-                {
                     key: 'fdescription',
                     title: '描述'
                 },
+                {
+                    key: 'fcreatorname',
+                    title: '创建人'
+                },
+                {
+                    key: 'fcreatetime',
+                    title: '创建时间'
+                },
+                {
+                    key: 'fpublishername',
+                    title: '发布人'
+                },
+                {
+                    key: 'fpublishtime',
+                    title: '发布时间'
+                },
+                {
+                    key: 'fdocstatus',
+                    title: '状态'
+                },
+                
             ],
             tableData:[],
             treeData:[],
@@ -135,7 +148,7 @@ export default {
         this.searchMenutable(fromdata);
     },
     mounted(){
-        //生成文档类别树结构
+        //生成文档管理树结构
         this.maketree();
     },
     methods:{
@@ -158,31 +171,31 @@ export default {
         selectChange(data){
             this.formInline.document=data;
         },
-        //删除文档类别维护
-        removeDocumentCategory(){
-            let SelectData=this.multipleSelection;
-            if(SelectData.length > 1){
-                this.$message.error("只能选择一个!");
-            }else{
-                if(SelectData[0]){
-                    let fromdata={};
-                    fromdata.id=SelectData[0].foid;
-                    this.$api.documentManagement.deleteDocumentCategory(fromdata).then(response => {
-                        let responsevalue = response;
-                        if (responsevalue.data.data.msg=="success") {
-                            this.$message.success('删除成功!');
-                            this.reload();
-                        } else {
-                            this.$message.error(responsevalue.data.msg);
-                        }
-                    });
-                }else{
-                    this.$message.error("请选择一行数据!");
-                }
-            }
-            maketree();
-        },
-        //查看文档类别维护
+        //删除文档管理
+        // removeDocumentCategory(){
+        //     let SelectData=this.multipleSelection;
+        //     if(SelectData.length > 1){
+        //         this.$message.error("只能选择一个!");
+        //     }else{
+        //         if(SelectData[0]){
+        //             let fromdata={};
+        //             fromdata.id=SelectData[0].foid;
+        //             this.$api.documentManagement.deleteDocumentCategory(fromdata).then(response => {
+        //                 let responsevalue = response;
+        //                 if (responsevalue.data.data.msg=="success") {
+        //                     this.$message.success('删除成功!');
+        //                     this.reload();
+        //                 } else {
+        //                     this.$message.error(responsevalue.data.msg);
+        //                 }
+        //             });
+        //         }else{
+        //             this.$message.error("请选择一行数据!");
+        //         }
+        //     }
+        //     maketree();
+        // },
+        //查看文档管理
         showDocumentCategory(){
             let SelectData=this.multipleSelection;
             if(SelectData.length > 1){
@@ -191,7 +204,7 @@ export default {
                 if(SelectData[0]){
                     this.rowNMMtype = true;
                     let finandata={};
-                    finandata.nametitle="文档类别维护查看";
+                    finandata.nametitle="文档管理查看";
                     finandata.NewOrEditFlag="SHOW";
                     finandata.foid=SelectData[0].foid;
                     this.rowNMMDataObj=finandata;
@@ -200,18 +213,16 @@ export default {
                 }
             }
         },
-        //新增文档类别维护
+        //新增文档管理
         createDocumentCategory(){
             this.rowNMMtype = true;
             let finandata={};
             finandata.fpid=this.documentFpid;
-            finandata.nametitle="文档类别维护新增";
+            finandata.nametitle="文档管理新增";
             finandata.NewOrEditFlag="NEW";
-            debugger
-            finandata.flevel= ( this.documentLevel == null || this.documentLevel == '' )? '一级': '二级';
             this.rowNMMDataObj=finandata;
         },
-        //修改文档类别维护
+        //修改文档管理
         editDocumentCategory(){
             let SelectData=this.multipleSelection;
             if(SelectData.length > 1){
@@ -220,10 +231,120 @@ export default {
                 if(SelectData[0]){
                     this.rowNMMtype = true;
                     let finandata={};
-                    finandata.nametitle="文档类别维护编辑";
+                    finandata.nametitle="文档管理编辑";
                     finandata.NewOrEditFlag="EDIT";
                     finandata.foid=SelectData[0].foid;
                     this.rowNMMDataObj=finandata;
+                }else{
+                    this.$message.error("请选择一行数据!");
+                }
+            }
+        },
+        //置顶 文档管理
+        operateDocumentCategory(param){
+            let SelectData=this.multipleSelection;
+            if(SelectData.length > 1){
+                this.$message.error("只能选择一个!");
+            }else{
+                if(SelectData[0]){
+                    let finandata={};
+                    if(1 == param){
+                        finandata.fistop="1";
+                    } else if(2 == param){
+                        finandata.fistop="2";
+                    } else if(3 == param){
+                        finandata.fdocstatus="3";
+                    } else if(4 == param){
+                        finandata.fdocstatus="2";
+                    }
+                    finandata.foid=SelectData[0].foid;
+                    this.$api.documentManagement.updateDocumentManage(finandata).then(response => {
+                        let responsevalue = response;
+                        if (responsevalue.data.data) {
+                            this.$message.success('修改成功!');
+                            this.reload();
+                        } else {
+                            this.$message.error(responsevalue.data.msg);
+                        }
+                    });
+
+
+                }else{
+                    this.$message.error("请选择一行数据!");
+                }
+            }
+        },
+        //取消置顶
+        unTopDocumentCategory(){
+            debugger;
+            let SelectData=this.multipleSelection;
+            if(SelectData.length > 1){
+                this.$message.error("只能选择一个!");
+            }else{
+                if(SelectData[0]){
+                    let finandata={};
+                    finandata.fistop="2";
+                    finandata.foid=SelectData[0].foid;
+                    this.$api.documentManagement.updateDocumentManage(finandata).then(response => {
+                        let responsevalue = response;
+                        if (responsevalue.data.data) {
+                            this.$message.success('修改成功!');
+                        } else {
+                            this.$message.error(responsevalue.data.msg);
+                        }
+                    });
+
+
+                }else{
+                    this.$message.error("请选择一行数据!");
+                }
+            }
+        },
+        //已发布
+        publishDocumentCategory(){
+            let SelectData=this.multipleSelection;
+            if(SelectData.length > 1){
+                this.$message.error("只能选择一个!");
+            }else{
+                if(SelectData[0]){
+                    let finandata={};
+                    finandata.fdocstatus="3";
+                    finandata.foid=SelectData[0].foid;
+                    this.$api.documentManagement.updateDocumentManage(finandata).then(response => {
+                        let responsevalue = response;
+                        if (responsevalue.data.data) {
+                            this.$message.success('修改成功!');
+                        } else {
+                            this.$message.error(responsevalue.data.msg);
+                        }
+                    });
+
+
+                }else{
+                    this.$message.error("请选择一行数据!");
+                }
+            }
+        },
+        //取消发布
+        unpublishDocumentCategory(){
+            let SelectData=this.multipleSelection;
+            if(SelectData.length > 1){
+                this.$message.error("只能选择一个!");
+            }else{
+                if(SelectData[0]){
+                    let finandata={};
+                    finandata.fdocstatus="2";
+                    finandata.foid=SelectData[0].foid;
+                    this.$api.documentManagement.updateDocumentManage(finandata).then(response => {
+                        let responsevalue = response;
+                        if (responsevalue.data.data) {
+                            this.$message.success('修改成功!');
+                        } else {
+                            this.$message.error(responsevalue.data.msg);
+                        }
+                    });
+
+
                 }else{
                     this.$message.error("请选择一行数据!");
                 }
@@ -303,7 +424,7 @@ export default {
         //分页查询菜单
         searchMenutable(data){
             let fromdata=data;
-            this.$api.documentManagement.findDocumentCategoryByPage(fromdata).then(response => {
+            this.$api.documentManagement.findDocumentManageByPage(fromdata).then(response => {
                 let responsevalue = response;
                 if (responsevalue) {
                     let returndata = responsevalue.data;
@@ -315,12 +436,32 @@ export default {
                         } else if(2 == tableArr[i].flevel){
                             tableArr[i].flevel = '二级';
                         }
+                        //时间格式化
+                        if(tableArr[i].fcreatetime){
+                            tableArr[i].fcreatetime = this.formateDate(tableArr[i].fcreatetime);
+                        }
+                        if(tableArr[i].fpublishtime){
+                            tableArr[i].fpublishtime= this.formateDate(tableArr[i].fpublishtime);
+                        }
                     }
                     this.total=returndata.data.total;
                 } else {
                     this.$message.success('数据库没有该条数据!');
                 }
             }); 
+        },
+        //格式化日期
+        formateDate(date){
+            let datetime= new Date(date);
+            return new Date(Date.UTC(
+                    datetime.getFullYear(),
+                    datetime.getMonth(),
+                    datetime.getDate(),
+                    datetime.getHours(),
+                    datetime.getMinutes(),
+                    datetime.getSeconds()))
+                    .toISOString()
+                    .slice(0, 19).replace('T',' ');
         },
         
     }

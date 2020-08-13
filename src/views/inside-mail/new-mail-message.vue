@@ -190,21 +190,21 @@ export default {
     }, 
     methods:{
         //滑块切换
-        handleClick(tab){
-            var tabsname =tab.paneName;
-            if(tabsname){
-                if(tabsname ==="first"){
-                    //
-                }else if(tabsname ==="second"){
-                    //
-                    this.financingCVMListtype=true;
-                }else{
-                    //附件列表
-                    this.financingEFListtype=true;
+        // handleClick(tab){
+        //     var tabsname =tab.paneName;
+        //     if(tabsname){
+        //         if(tabsname ==="first"){
+        //             //
+        //         }else if(tabsname ==="second"){
+        //             //
+        //             this.financingCVMListtype=true;
+        //         }else{
+        //             //附件列表
+        //             this.financingEFListtype=true;
                     
-                }
-            }
-        },
+        //         }
+        //     }
+        // },
         //附件
         showFileData(data){
             this.FiletableData=data;
