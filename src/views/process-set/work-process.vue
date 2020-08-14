@@ -186,6 +186,8 @@ export default {
             this.getTableData(this.formCode);
         },
         getAll(){
+            // 清空搜索框数据
+            this.formCode = '';
             this.getTableData('')
         },
          closeBaseInfo(data, dialogtitle, type) {
@@ -252,10 +254,12 @@ export default {
                  return;
             };
             this.$api.processSet.deleteMsg(this.multipleSelection[0].foid).then(res=>{
-                    if(res.data.data.msg = "success"){
+                    if(res.data.msg == "success"){
                         this.$message.success('删除成功');
                         //刷新表格
                         this.getTableData('')
+                    } else {
+                        this.$message.error(res.data.msg);
                     }
                 }),error=>{
                     console.log(error);
