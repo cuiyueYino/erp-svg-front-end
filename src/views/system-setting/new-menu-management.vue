@@ -60,7 +60,7 @@
                     <el-row>
                         <el-col :span="22">
                             <el-form-item label="链接">
-                                <el-input type="textarea" v-model="formdata.url" :rows="1" ></el-input>
+                                <el-input type="textarea" v-model="formdata.pictureUrl" :rows="1" ></el-input>
                             </el-form-item>
                         </el-col>
                     </el-row>
