@@ -244,6 +244,7 @@ export default {
              });
 
         },
+        
         //删除
         deleteMsg(){
             debugger;
