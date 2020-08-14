@@ -20,7 +20,7 @@
               </el-form-item>
             </el-col>
             <el-form-item prop="selectVal">
-              <el-input clearable v-model="form.selectVal" placeholder="请输入任意查询内容"></el-input>
+              <el-input clearable v-model="form.selectFormVal" placeholder="请输入任意查询内容"></el-input>
             </el-form-item>
 
             <el-form-item>
@@ -314,7 +314,8 @@ export default {
       checked: false,
       form: {
         select: [],
-        selectVal: ""
+        selectVal: "",
+        selectFormVal: '',
       },
       peopleForm: {
         tcompanyoid: "",
@@ -560,16 +561,14 @@ export default {
           break;
         case false:
           if (params == "fpositionstate") {
-            switch (this.form.selectVal) {
-              case "在" || "在职":
+            if (this.form.selectFormVal == '' || (((this.form.selectFormVal).indexOf('在职') != -1 || (this.form.selectFormVal).indexOf('在') != -1) && ((this.form.selectFormVal).indexOf('离职') != -1 || (this.form.selectFormVal).indexOf('离') != -1))) {
+                this.form.selectVal = "";
+            } else if((this.form.selectFormVal).indexOf('在职') != -1 || (this.form.selectFormVal).indexOf('在') != -1 ) {
                 this.form.selectVal = "1";
-                break;
-              case "离" || "离职":
+            } else if((this.form.selectFormVal).indexOf('离职') != -1 || (this.form.selectFormVal).indexOf('离') != -1 ) {
                 this.form.selectVal = "0";
-                break;
-
-              default:
-                break;
+            } else {
+              this.form.selectVal = "2";
             }
           }
            if (params == "tispluralism") {
