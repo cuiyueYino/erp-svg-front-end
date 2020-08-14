@@ -12,7 +12,7 @@
         <el-tabs v-model="activeName" >
             <el-tab-pane label="基本信息" name="1">
                  <el-form-item label="编码" :label-width="formLabelWidth" prop="code">
-                    <el-input ref="nameInput" v-model="formData.code" @input="change($event)" autocomplete="off" clearable></el-input>
+                    <el-input v-model="formData.code" @input="change($event)" autocomplete="off" clearable></el-input>
                 </el-form-item>
                 <el-form-item label="名称" :label-width="formLabelWidth" prop="name">
                     <el-input  v-model="formData.name" autocomplete="off" @input="change($event)" clearable></el-input>
@@ -77,17 +77,17 @@
           :visible.sync="dialogTableVisible">
              <el-row :gutter="24">
                   <el-col :span="8">
-                    <el-form-item label="编码" label-width="43px">
+                    <el-form-item label="编码" label-width="43px" prop="formCode">
                         <el-input clearable size="small" v-model="formData.formCode" placeholder="请输入"></el-input>
                     </el-form-item>
                   </el-col> 
                   <el-col :span="8">
-                    <el-form-item label="名称" label-width="43px">
+                    <el-form-item label="名称" label-width="43px"  prop="formName">
                         <el-input clearable size="small" v-model="formData.formName" placeholder="请输入"></el-input>
                     </el-form-item>
                   </el-col> 
                   <el-col :span="8" >
-                    <el-button type="primary" size="small" plain @click="reWorkSearchTable">重置</el-button>
+                    <el-button type="primary" size="small" plain @click="reWorkSearchTable('formData')">重置</el-button>
                     <el-button type="primary" size="small" plain @click="workSearchTable">搜索</el-button>
                 </el-col>
              </el-row>
@@ -172,7 +172,6 @@ export default {
             configRules: {
                 name: { required: true, message: '请输入名称', trigger: 'blur' },
                 code: { required: true, message: '请输入编码', trigger: 'blur' },
-                performType: { required: true, message: '请选择参与类型', trigger: 'change' }
             },
             // 对话框显示标识
             dialogVisible: this.visible,
@@ -180,7 +179,9 @@ export default {
             formData: {
                 name:'',
                 code:'',
-                fremark:''
+                fremark:'',
+                formCode:'',
+                formName:''
             },
             columns: [
             {
@@ -222,6 +223,7 @@ export default {
         // 监听配置数据源
         data: {
             handler (obj) {
+            
              if(obj.name === "Line"){console.log(obj)
                 this.editData = obj;
                 this.formData.code = this.editData.code
@@ -255,17 +257,23 @@ export default {
         dialogVisible (bool) {
             this.$emit('update:visible', bool);
         },
+        dialogTableVisible(val){
+            if(!val){
+                this.$refs['formData'].resetFields();
+            }
+        },
         // 对话框显示 自动聚焦name输入框
         visible (bool) {
             this.dialogVisible = bool;
             if (bool) {
+                this.$refs['formData'].resetFields();
                 // setTimeout(() => {
                 //     this.$refs.nameInput.focus();
                 // }, 100);
             }else{
-                // this.formData.baseInputoid= this.multipleSelection[0].foid
-                // this.formData.baseInputcode= this.multipleSelection[0].fcode
-                // this.formData.baseInputServe= this.multipleSelection[0].fname
+                let codeData = this.formData.code
+                this.formData.code = codeData
+                console.log(this.formData)
                 this.$emit(
                     "saveLineData",
                     this.formData,
@@ -308,7 +316,7 @@ export default {
             this.dialogTableVisible = true;
             this.baseInputTitle = title;
             this.baseInputType = str;
-            this.workSearchTable()
+            this.workSearchTable('')
         },
          //业务工作-新增
         gridDataAdd(){
@@ -319,7 +327,7 @@ export default {
             this.formData= this.multipleSelection[0];
             this.formData.baseInputServe= this.multipleSelection[0].fname
              this.dialogTableVisible = false;
-             //console.log(this.formData.work )
+            
         },
         add(){
 
@@ -333,8 +341,9 @@ export default {
             this.multipleSelection = val;
         },
           // 业务工作-获取表格数据-重置
-        reWorkSearchTable(){
-            this.formData = []
+        reWorkSearchTable(formName){
+            this.$refs[formName].resetFields();
+            this.pageNum = 1
             this.workSearchTable()
         },
          workSearch(){
@@ -345,7 +354,6 @@ export default {
         },
         // 业务工作-获取表格数据
         workSearchTable(){
-            
             this.tableLoading = true;
              let data = {
                 fcode: this.formData.formCode,
@@ -357,7 +365,7 @@ export default {
             this.$api.processSet.workSearchData(data).then(res=>{
                 this.tableLoading = false;
                 this.gridData = res.data.data.rows
-                
+                this.total = res.data.data.total
                 
             },error=>{
                 console.log(error)
@@ -377,7 +385,7 @@ export default {
          //分页、下一页
         onCurrentChange(val){
              this.pageNum = val;
-            this.workSearch('')
+            this.workSearchTable('')
         },
     }
 };

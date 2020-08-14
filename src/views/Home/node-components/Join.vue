@@ -265,7 +265,7 @@
              </el-row>
              <el-row :gutter="24">
                 <el-col :span="6" :offset="18">
-                    <el-button type="primary" size="small" plain @click="reWorkSearchTable">重置</el-button>
+                    <el-button type="primary" size="small" plain @click="reWorkSearchTable('formData')">重置</el-button>
                     <el-button type="primary" size="small" plain @click="workSearchTable('')">搜索</el-button>
                 </el-col>
              </el-row>
@@ -706,9 +706,7 @@ export default {
         visible (bool) {
             this.dialogVisible = bool;
             if (bool) {
-                // setTimeout(() => {
-                //     this.$refs.nameInput.focus();
-                // }, 100);
+                this.$refs['formData'].resetFields();
             }else{console.log(this.decisionSelection)
                   this.formData.checkedCities = this.checkedCities;
                   let tableData3Chose = this.decisionSelection
@@ -1052,8 +1050,9 @@ export default {
             
         },
           // 业务工作-获取表格数据-重置
-        reWorkSearchTable(){
-            this.formData = []
+        reWorkSearchTable(formName){
+             this.$refs[formName].resetFields();
+            this.pageNum = 1
             this.workSearchTable('')
         },
          baseInputTable(str,title){ 

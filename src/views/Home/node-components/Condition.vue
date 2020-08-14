@@ -213,7 +213,7 @@
           </el-row>
           <el-row :gutter="24">
             <el-col :span="6" :offset="18">
-              <el-button type="primary" size="small" plain @click="reWorkSearchTable">重置</el-button>
+              <el-button type="primary" size="small" plain @click="(reWorkSearchTable('formData'))">重置</el-button>
               <el-button type="primary" size="small" plain @click="workSearchTableBtn">搜索</el-button>
             </el-col>
           </el-row>
@@ -454,6 +454,7 @@ export default {
     // 对话框显示 自动聚焦name输入框
     visible(bool) {
       if (bool) {
+        this.$refs['formData'].resetFields();
       } else {
         this.formData.displayName = this.displayName;
         this.formData.checkedCities = this.checkedCities;
@@ -927,9 +928,10 @@ export default {
       this.workSearchTable();
     },
     // 业务工作-获取表格数据-重置
-    reWorkSearchTable() {
+    reWorkSearchTable(formName) {
+       this.$refs[formName].resetFields();
        this.pageNum = 1
-      this.formData = [];
+      
       this.workSearchTable();
     },
     //业务工作弹窗

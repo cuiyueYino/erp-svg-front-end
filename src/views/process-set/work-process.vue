@@ -62,7 +62,7 @@
                     <el-checkbox v-model="checked"></el-checkbox>
                 </el-form-item>
                 <el-form-item label="描述：" :label-width="formLabelWidth"  prop="fremark">
-                    <el-input maxlength="1000" show-word-limit autosize type="textarea" v-model="form.fremark"></el-input>
+                    <el-input maxlength="500" show-word-limit autosize type="textarea" v-model="form.fremark"></el-input>
                 </el-form-item>
                 </el-col>
             </el-form>

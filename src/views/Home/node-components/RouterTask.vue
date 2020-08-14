@@ -198,9 +198,7 @@ export default {
         visible (bool) {
             this.dialogVisible = bool;
             if (bool) {
-                // setTimeout(() => {
-                //     this.$refs.nameInput.focus();
-                // }, 100);
+                this.$refs['formData'].resetFields();
             }else {
                 this.formData.checked = this.checked;
                 this.formData.join = this.join;
