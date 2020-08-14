@@ -386,7 +386,7 @@ export default {
   },
   created() {
     this.$nextTick(() => {
-      this.getTableData("");
+      this.getTableData("页面初期化");
     });
   },
   computed: {},
@@ -590,6 +590,9 @@ export default {
             page: this.pageNum,
             size: this.pageSize
           };
+          if(params == '页面初期化') {
+            data['fpositionstate'] = 1;
+          }
           break;
 
         default:
