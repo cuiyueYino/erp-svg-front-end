@@ -271,7 +271,8 @@ export default {
               })
             //参与-表格
             let wfParticipatorObj;
-            if(this.data.wfParticipator){    
+            if(this.data.wfParticipator){
+                this.data.wfParticipator.participator=[];    
             }else{
                 this.data.wfParticipator={
                     participator:[]
@@ -295,7 +296,8 @@ export default {
             });
             //抄送-表格
             let  copyToObj;
-            if(this.data.wfCopyTo){    
+            if(this.data.wfCopyTo){
+                this.data.wfCopyTo.copyTo=[];    
             }else{
                 this.data.wfCopyTo={
                     copyTo:[]
@@ -425,7 +427,8 @@ export default {
              
             //参与-表格
             let  participatorObj;
-            if(this.data.wfParticipator){    
+            if(this.data.wfParticipator){
+                this.data.wfParticipator.participator=[];   
             }else{
                 this.data.wfParticipator={
                     participator:[]
@@ -450,7 +453,8 @@ export default {
             
             //抄送-表格
             let  copyToObj;
-            if(this.data.wfCopyTo){    
+            if(this.data.wfCopyTo){
+                this.data.wfCopyTo.copyTo=[];    
             }else{
                 this.data.wfCopyTo={
                     copyTo:[]
