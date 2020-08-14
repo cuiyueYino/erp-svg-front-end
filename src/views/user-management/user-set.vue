@@ -29,8 +29,8 @@
             </el-form-item>
             <el-form-item label="状态：" label-width="100px" prop="fstatus">
                 <el-radio-group v-model="searchForm.fstatus">
-                    <el-radio :label="7">有效</el-radio>
-                    <el-radio :label="3">禁用</el-radio>
+                    <el-radio :label="3">有效</el-radio>
+                    <el-radio :label="7">禁用</el-radio>
                 </el-radio-group>
             </el-form-item>
              
