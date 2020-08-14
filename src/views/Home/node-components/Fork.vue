@@ -291,7 +291,7 @@ export default {
         visible (bool) {
             this.dialogVisible = bool;
             if (bool) {
-                this.$refs['formData'].resetFields();
+                // this.$refs['formData'].resetFields();
             }else {
                 this.$emit(
                 "saveFormData",

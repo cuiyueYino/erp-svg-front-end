@@ -292,8 +292,10 @@ export default {
     // 监听配置数据源
     data: {
       handler(obj) {
-      if(obj.name === "Condition"){console.log(obj)
-          if(!obj.id){
+      if(obj.name === "Condition"){
+        //  this.$refs['formData'].resetFields();
+        console.log(obj)
+          if(!obj.oid){
               this.formData.displayName = obj.displayName
           }else{
                 this.checkedCities = [];
@@ -454,9 +456,8 @@ export default {
     // 对话框显示 自动聚焦name输入框
     visible(bool) {
       if (bool) {
-        this.$refs['formData'].resetFields();
+       
       } else {
-        this.formData.displayName = this.displayName;
         this.formData.checkedCities = this.checkedCities;
         this.formData.fremark = this.fremark;
         this.$emit(

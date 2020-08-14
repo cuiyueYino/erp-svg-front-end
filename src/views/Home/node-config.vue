@@ -270,9 +270,9 @@ export default {
                 };
               })
             //参与-表格
+            let wfParticipatorObj;
             e2.forEach(item => {
-                this.data.wfParticipator = {
-                     participator:[
+                     wfParticipatorObj = 
                         {
                             "oid":item.oid?item.oid:'',
                             //6:表示 选择的是职务
@@ -285,13 +285,12 @@ export default {
                             },
                             "expression":item.fUserRemake
                         }
-                    ]
-                };
+                this.data.wfParticipator.participator.push(wfParticipatorObj)
             });
             //抄送-表格
+            let  copyToObj;
             e3.forEach(item => {
-                this.data.wfCopyTo = {
-                    copyTo:[
+                copyToObj =
                         {
                            "oid":item.oid?item.oid:'',
                             "type": item.type,
@@ -303,16 +302,20 @@ export default {
                             },
                             "expression":item.fUserRemake
                         }
-                    ]
-                };
+                this.data.wfCopyTo.copyTo.push(copyToObj)
             });
             this.dialogVisible = false;
         },
         //连接线保存
         saveLineData(e){
             console.log(e);
+             if( e.displayName =='' || e.code ==''){
+                this.$message.error("保存失败,请填写必填信息");
+                return;
+            }
             this.data.oid = e.oid;
-            this.data.code =e.linefcode;
+            // this.data.code =e.linefcode;
+            this.data.code =e.code;
             this.data.displayName = e.name;
             this.data.fremark = e.fremark;
             switch (e.name ) {
@@ -409,9 +412,9 @@ export default {
               })
              
             //参与-表格
+            let  participatorObj;
             e1.forEach(item => {
-                this.data.wfParticipator = {
-                    participator:[
+              participatorObj=
                         {
                             "oid":item.oid?item.oid:'',
                             //6:表示 选择的是职务
@@ -424,13 +427,13 @@ export default {
                             },
                             "expression":item.fUserRemake
                         }
-                    ]
-                };
+                this.data.wfParticipator.participator.push(participatorObj)
             });
+            
             //抄送-表格
+             let  copyToObj;
             e2.forEach(item => {
-                this.data.wfCopyTo = {
-                    copyTo:[
+                    copyToObj =
                         {
                            "oid":item.oid?item.oid:'',
                             "type": item.type,
@@ -442,34 +445,29 @@ export default {
                             },
                             "expression":item.fUserRemake
                         }
-                    ]
-                };
+                this.data.wfCopyTo.copyTo.push(copyToObj)
             });
             //审核单范围
+            let  wfViewOtherCommentObj;
              e3.forEach(item => {
-                this.data.wfViewOtherComments = {
-                    wfViewOtherComment:[
+                    wfViewOtherCommentObj=
                         {
                             "oid":'',
                             "wfProcessor": item.wfProcessor //-- 选中哪个的审批结点的id
                         }
-                    ]
-                }
+                this.data.wfViewOtherComments.wfViewOtherComment.push(wfViewOtherCommentObj)
              })
             
            
          //决策类型
-         let decisionsList = []
+         let decisionsObj;
           e4.forEach(item => {
-              this.data.decisions = {
-                    decision:[
-                        {
-                            "decisionType": item.decisionType,
-                            "decisionText": item.decisionText,
-                        }
-                    ]
+            decisionsObj = 
+                {
+                    "decisionType": item.decisionType,
+                    "decisionText": item.decisionText,
                 }
-            this.data.decisions.decision.push(decisionsList)
+            this.data.decisions.decision.push(decisionsObj)
           })
 
          

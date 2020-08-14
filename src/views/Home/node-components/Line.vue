@@ -266,7 +266,7 @@ export default {
         visible (bool) {
             this.dialogVisible = bool;
             if (bool) {
-                this.$refs['formData'].resetFields();
+                // this.$refs['formData'].resetFields();
                 // setTimeout(() => {
                 //     this.$refs.nameInput.focus();
                 // }, 100);

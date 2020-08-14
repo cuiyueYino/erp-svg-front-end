@@ -152,7 +152,7 @@ export default {
         visible (bool) {console.log(bool)
             this.dialogVisible = bool;
             if (bool) {
-                this.$refs['formData'].resetFields();
+                // this.$refs['formData'].resetFields();
             }else {
                 this.newData.forEach(item => {
                     if(item.foid == this.formData.company){

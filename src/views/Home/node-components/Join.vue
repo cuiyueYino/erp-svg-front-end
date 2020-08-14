@@ -706,7 +706,7 @@ export default {
         visible (bool) {
             this.dialogVisible = bool;
             if (bool) {
-                this.$refs['formData'].resetFields();
+                // this.$refs['formData'].resetFields();
             }else{console.log(this.decisionSelection)
                   this.formData.checkedCities = this.checkedCities;
                   let tableData3Chose = this.decisionSelection
