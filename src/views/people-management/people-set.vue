@@ -106,12 +106,14 @@
               </el-select>
             </el-form-item>
             <el-form-item label="部门：" :label-width="formLabelWidth" prop="tdepartmentname">
-              <el-input v-model="peopleForm.tdepartmentname" size="small" autocomplete="off"></el-input>
-              <img
-                class="icon-search"
-                src="../../assets/img/search.svg"
-                @click="baseInputData('选择部门')"
-              />
+              <el-row>
+                <el-col :span="21">
+                  <el-input v-model="peopleForm.tdepartmentname" size="small" autocomplete="off"></el-input>
+                </el-col>
+                <el-col :span="3">
+                  <el-button type="primary" size="mini" icon="el-icon-search" @click="baseInputData('选择部门')"></el-button>
+                </el-col>
+              </el-row>
             </el-form-item>
           </el-col>
           <el-col :span="11">
@@ -122,12 +124,14 @@
               <el-input v-model="peopleForm.tname" size="small" autocomplete="off"></el-input>
             </el-form-item>
             <el-form-item label="职位：" :label-width="formLabelWidth" prop="ffirmpositionname">
-              <el-input v-model="peopleForm.ffirmpositionname" size="small" autocomplete="off"></el-input>
-              <img
-                class="icon-search"
-                src="../../assets/img/search.svg"
-                @click="baseInputData('选择职位')"
-              />
+              <el-row>
+                <el-col :span="21">
+                  <el-input v-model="peopleForm.ffirmpositionname" size="small" autocomplete="off"></el-input>
+                </el-col>
+                <el-col :span="3">
+                  <el-button type="primary" size="mini" icon="el-icon-search" @click="baseInputData('选择职位')"></el-button>
+                </el-col>
+              </el-row>
             </el-form-item>
           </el-col>
           <el-col :span="22">
