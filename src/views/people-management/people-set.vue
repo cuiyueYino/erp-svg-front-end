@@ -668,7 +668,6 @@ export default {
                 
           }else{
               this.$api.jobUserManagement.addPeopleMsg(this.peopleForm).then(res => {
-                debugger;
                   if (res.data.code == 0) {
                     this.dialogFormVisible = false;
                     this.$message.success("新增成功");
@@ -709,24 +708,33 @@ export default {
 
     //编辑
     toEdit() {
-      this.dialogFormVisible = true;
-      this.isEdit = true;
-      this.$api.jobUserManagement.addPeopleData(this.multipleSelection[0].toid).then(res=>{
-          if (res.status == '200' ) {
-              let newData;
-              newData = JSON.parse(JSON.stringify(res.data.data));
-              this.editFormData =  res.data.data;
-              this.peopleForm = newData;
-              this.peopleForm.ffirmposition = res.data.data.ffirmpositionname;
-              this.peopleForm.tcompanyoid = res.data.data.tcompanyname;
-              this.tableData3 = res.data.data.pluralismModels == null?[]:res.data.data.pluralismModels ;
-              // console.log(this.editFormData,res.data.data,newData )
-         }
-      }),
-      error => {
-        console.log(error);
-      };
-      this.isEdit = false;
+      if(this.multipleSelection){
+          if(this.multipleSelection.length == 0){
+              this.$message.error('请选择一项');
+          } else{
+             this.dialogFormVisible = true;
+             this.isEdit = true;
+            this.$api.jobUserManagement.addPeopleData(this.multipleSelection[0].toid).then(res=>{
+                if (res.status == '200' ) {
+                    let newData;
+                    newData = JSON.parse(JSON.stringify(res.data.data));
+                    this.editFormData =  res.data.data;
+                    this.peopleForm = newData;
+                    this.peopleForm.ffirmposition = res.data.data.ffirmpositionname;
+                    this.peopleForm.tcompanyoid = res.data.data.tcompanyname;
+                    this.tableData3 = res.data.data.pluralismModels == null?[]:res.data.data.pluralismModels ;
+                    // console.log(this.editFormData,res.data.data,newData )
+              }
+            }),
+            error => {
+              console.log(error);
+            };
+            this.isEdit = false;
+          }
+      }else {
+          this.$message.error('请选择一项');
+      }
+      
     }
   }
 };

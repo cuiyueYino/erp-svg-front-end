@@ -13,12 +13,12 @@
                 <el-card>
                     <el-row>
                         <el-col :span="10">
-                            <el-form-item label="编码" >
+                            <el-form-item label="编码" prop="fcode">
                                 <el-input v-model="formdata.fcode" :disabled="isEdit" ></el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="10" :offset="2">
-                            <el-form-item label="名称" >
+                            <el-form-item label="名称" prop="fname">
                                 <el-input v-model="formdata.fname" :disabled="isEdit"></el-input>
                             </el-form-item>
                         </el-col>
@@ -271,22 +271,26 @@ export default {
                 this.$message.error('请输入编号!');
                 SaveFlag=false
             }
-            if(this.formdata.fname){
-                fromDataS.fname=this.formdata.fname;
-                SaveFlag=true;
-            }else{
-                this.$message.error('请输入名称!');
-                SaveFlag=false
+            if(SaveFlag){
+                if(this.formdata.fname){
+                    fromDataS.fname=this.formdata.fname;
+                    SaveFlag=true;
+                }else{
+                    this.$message.error('请输入名称!');
+                    SaveFlag=false
+                }
             }
             if(this.NewOrEditFlag==="NEW"){
                 fromDataS.creator=localStorage.getItem('ms_userId');
             }else{
                 fromDataS.handler=localStorage.getItem('ms_userId');
             }
-            if(this.NewOrEditFlag==="NEW"){
-                this.saveNewMenu(fromDataS);
-            }else{
-                this.saveEditmenu(fromDataS);
+            if(SaveFlag){
+                if(this.NewOrEditFlag==="NEW"){
+                    this.saveNewMenu(fromDataS);
+                }else{
+                    this.saveEditmenu(fromDataS);
+                }
             }
         },
         //根据 ID 查询文档管理
