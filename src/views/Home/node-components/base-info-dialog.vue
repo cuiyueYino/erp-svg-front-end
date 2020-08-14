@@ -452,7 +452,10 @@ export default {
                 })
             }
             if(!bool){
-                this.$refs['workflowConfigForm'].resetFields();
+                if(this.$refs['workflowConfigForm']){
+                    this.$refs['workflowConfigForm'].resetFields();
+                }
+                
             }
             
         }

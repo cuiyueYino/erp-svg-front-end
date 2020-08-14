@@ -271,6 +271,12 @@ export default {
               })
             //参与-表格
             let wfParticipatorObj;
+            if(this.data.wfParticipator){    
+            }else{
+                this.data.wfParticipator={
+                    participator:[]
+                }
+            }
             e2.forEach(item => {
                      wfParticipatorObj = 
                         {
@@ -289,6 +295,12 @@ export default {
             });
             //抄送-表格
             let  copyToObj;
+            if(this.data.wfCopyTo){    
+            }else{
+                this.data.wfCopyTo={
+                    copyTo:[]
+                }
+            }
             e3.forEach(item => {
                 copyToObj =
                         {
@@ -413,6 +425,12 @@ export default {
              
             //参与-表格
             let  participatorObj;
+            if(this.data.wfParticipator){    
+            }else{
+                this.data.wfParticipator={
+                    participator:[]
+                }
+            }
             e1.forEach(item => {
               participatorObj=
                         {
@@ -431,7 +449,13 @@ export default {
             });
             
             //抄送-表格
-             let  copyToObj;
+            let  copyToObj;
+            if(this.data.wfCopyTo){    
+            }else{
+                this.data.wfCopyTo={
+                    copyTo:[]
+                }
+            }
             e2.forEach(item => {
                     copyToObj =
                         {

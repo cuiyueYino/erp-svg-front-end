@@ -758,7 +758,8 @@ export default {
             UroleObj.oid = this.UserListReq.userid;
             UroleObj.type = 3;
             UroleObj.typeName = "user";
-            UroleObj.fUseroid = UroleObj.foid;
+            //UroleObj.fUseroid = UroleObj.foid;
+            UroleObj.fUseroid = this.UserListReq.userid;
             UroleObj.fUsername = UroleObj.fname;
             UroleObj.fUsercode = this.baseActiveNameStr;
             UroleObj.fUserRemake = UroleObj.fenglishname;
@@ -819,7 +820,8 @@ export default {
             UroleObj = this.UserListReq;
             UroleObj.type = 3;
             UroleObj.typeName = "user";
-            UroleObj.fUseroid = UroleObj.foid;
+            //UroleObj.fUseroid = UroleObj.foid;
+            UroleObj.fUseroid = UroleObj.userid;
             UroleObj.fUsername = UroleObj.fname;
             UroleObj.fUsercode = this.baseActiveNameStr;
             UroleObj.fUserRemake = UroleObj.fenglishname;
