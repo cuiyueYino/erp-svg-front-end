@@ -310,7 +310,7 @@ export default {
                             "type": item.type,
                             //表达式的值 
                             [item.typeName]:{
-                                "oid": item.oid?item.oid:item.foid,
+                                "oid": item.fUseroid?item.fUseroid:item.oid,
                                 "code":item.fUsercode,
                                 "name":item.fUsername
                             },
@@ -467,7 +467,7 @@ export default {
                             "type": item.type,
                             //表达式的值 
                             [item.typeName]:{
-                                "oid": item.oid?item.oid:item.foid,
+                                "oid": item.fUseroid?item.fUseroid:item.oid,
                                 "code":item.fUsercode,
                                 "name":item.fUsername
                             },
