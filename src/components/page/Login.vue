@@ -65,6 +65,7 @@
 									userId: data.data.principal.accountId
 								}).then(data2 => {
 									//菜单放入本地缓存,并跳转首页
+//									sessionStorage.setItem("menuList", JSON.stringify(data2.data.data[0].subs));
 									sessionStorage.setItem("menuList", JSON.stringify(data2.data.data));
 									this.$router.push("/");
 								})
@@ -85,6 +86,8 @@
 								//获取员工树信息
 								this.getStaffTreeList()
 							})
+						}).catch(val => {
+							this.goOut(val.data.error_description)
 						})
 					} else {
 						this.$message.error("请输入用户名和密码!");

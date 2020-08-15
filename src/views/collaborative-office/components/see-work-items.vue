@@ -21,7 +21,7 @@
 					<el-button type="danger" @click="$parent.toSelect()" size="mini" icon="el-icon-close">返回</el-button>
 				</el-col>
 			</el-row>
-			<formAndTable :dis="showSeeOrUpd" showAdd="2" ref="child" :form-data="conData"></formAndTable>
+			<formAndTable :files="context.files" :dis="showSeeOrUpd" showAdd="2" ref="child" :form-data="conData"></formAndTable>
 		</el-card>
 	</div>
 </template>
@@ -149,6 +149,7 @@
 					backData.jsonStr = JSON.stringify(con)
 					this.$api.collaborativeOffice.updateWorkItem(backData).then(data => {
 						if(this.dataBack(data, "修改成功")) {
+							this.$refs.child.toUpload(this.context.id)
 							this.$parent.toSelect()
 						}
 					})
