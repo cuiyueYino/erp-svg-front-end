@@ -521,6 +521,11 @@ export default {
         },
         // 新增-点击保存工作流按钮执行事件
         saveNewWorkflow (workflowNodes) {console.log(workflowNodes) 
+            workflowNodes.forEach((item,index)=>{
+                if(item == null){
+                    workflowNodes.splice(index,1)
+                }
+            })
             let editMsg = JSON.parse( sessionStorage.getItem("eidtMsg") );
             let data = {
                     "code": editMsg.code,
@@ -557,6 +562,9 @@ export default {
         saveEditWorkflow (workflowNodes) {
             let editMsg = JSON.parse( sessionStorage.getItem("eidtMsg") );
             workflowNodes.forEach(item => {
+                if(item == null){
+                    workflowNodes.splice(index,1)
+                }
                 if(item.oid){
                     item.key = item.oid 
                 }
