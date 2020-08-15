@@ -51,7 +51,7 @@
                         </el-form-item>
                     </el-tab-pane>
                     <el-tab-pane label="调用服务" name="4">
-                         <el-form-item label="条件" :label-width="formLabelWidth"  prop="baseInputServe">
+                         <el-form-item label="条件" :label-width="formLabelWidth"  >
                             <el-input placeholder="请选择" v-model="formData.baseInputServe" :disabled="true"> </el-input>
                             <img class="icon-search" src="../../../assets/img/search.svg"  @click="baseInputTable('服务','服务查询')">
                         </el-form-item>
@@ -226,7 +226,6 @@ export default {
         // 监听配置数据源
         data: {
             handler (obj) {
-            
              if(obj.name === "Line"){
                 console.log(obj)
                 this.editData = obj;
@@ -361,10 +360,11 @@ export default {
                 this.$message.error('请正确选择');
                 return
             }
-            this.formData= this.multipleSelection[0];
-            this.formData.baseInputServe= this.multipleSelection[0].fname
+            this.formData.serviceOid= this.multipleSelection[0].foid;
+            this.formData.serviceCode= this.multipleSelection[0].fcode;
+            this.formData.baseInputServe = this.multipleSelection[0].fname;
             this.dialogTableVisible = false;
-            
+            // console.log(this.formData,this.multipleSelection[0].fname)
         },
         add(){
 
