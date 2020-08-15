@@ -36,29 +36,26 @@
            <el-tab-pane label="流转条件" name="2">
                 <el-tabs v-model="baseActiveName" type="card" @tab-click="handleClick">
                     <el-tab-pane label="无条件" name="1">
-                       
-                        <el-form-item label="条件表达式" :label-width="formLabelWidth">
-                            <el-input type="textarea" disabled v-model="baseTextarea"></el-input>
+                        <el-form-item label="条件表达式" :label-width="formLabelWidth" prop="unconditional">
+                            <el-input type="textarea" disabled v-model="formData.unconditional"></el-input>
                         </el-form-item>
                     </el-tab-pane>
                     <el-tab-pane label="有条件" name="2">
-                       
-                        <el-form-item label="条件表达式" :label-width="formLabelWidth">
-                            <el-input type="textarea"  v-model="baseTextarea"></el-input>
+                        <el-form-item label="条件表达式" :label-width="formLabelWidth" prop="conditional">
+                            <el-input type="textarea"  v-model="formData.conditional"></el-input>
                         </el-form-item>
                     </el-tab-pane>
                     <el-tab-pane label="[否则]条件" name="3">
-                       
-                        <el-form-item label="条件表达式" :label-width="formLabelWidth">
-                            <el-input type="textarea" disabled v-model="baseTextarea"></el-input>
+                        <el-form-item label="条件表达式" :label-width="formLabelWidth" prop="otherwise">
+                            <el-input type="textarea" disabled v-model="formData.otherwise"></el-input>
                         </el-form-item>
                     </el-tab-pane>
                     <el-tab-pane label="调用服务" name="4">
-                         <el-form-item label="条件" :label-width="formLabelWidth">
+                         <el-form-item label="条件" :label-width="formLabelWidth"  prop="baseInputServe">
                             <el-input placeholder="请选择" v-model="formData.baseInputServe" :disabled="true"> </el-input>
                             <img class="icon-search" src="../../../assets/img/search.svg"  @click="baseInputTable('服务','服务查询')">
                         </el-form-item>
-                        <el-form-item label="条件表达式" :label-width="formLabelWidth">
+                        <el-form-item label="条件表达式" :label-width="formLabelWidth" prop="baseTextarea"> 
                             <el-input type="textarea" v-model="formData.baseTextarea"></el-input>
                         </el-form-item>
                     </el-tab-pane>
@@ -164,6 +161,9 @@ export default {
             total: 20,
             baseTextarea:'',
             baseInput:'',
+            unconditional:'',
+            conditional:'',
+            otherwise:'',
             activeName: '1',
             formLabelWidth: '120px',
             // 关闭对话框配置
@@ -181,7 +181,9 @@ export default {
                 code:'',
                 fremark:'',
                 formCode:'',
-                formName:''
+                formName:'',
+                baseTextarea:'',
+                baseInputServe:''
             },
             dialogData: {},
             columns: [
@@ -233,6 +235,12 @@ export default {
                 this.formData.fremark = this.editData.lineremark
                 this.formData.baseTextarea = this.editData.lineexpression
                 this.formData.name = this.editData.displayName
+                this.formData.conditional = this.editData.lineexpression?this.editData.lineexpression:''
+                this.formData.otherwise = this.editData.lineotherwise?this.editData.lineotherwise:''
+                this.formData.baseInputServe = this.editData.service?this.editData.service.name:''
+                this.formData.baseTextarea = this.editData.service?this.editData.service.expression:''
+                this.formData.serviceOid = this.editData.service?this.editData.service.oid:''
+                this.formData.serviceCode = this.editData.service?this.editData.service.code:''
                 switch (this.editData.decisionType ) {
                     case 1:
                             this.formData.decisionType = '同意'
@@ -273,6 +281,7 @@ export default {
                 //     this.$refs.nameInput.focus();
                 // }, 100);
             }else{
+                
                 let codeData = this.formData.code
                 this.formData.code = codeData
                 console.log(this.formData)
@@ -312,6 +321,32 @@ export default {
             });
         },
         handleClick(tab, event) {
+            switch (this.baseActiveName) {
+                case '1':
+                        this.formData.conditional =''
+                        this.formData.otherwise ='0'
+                        this.formData.baseTextarea = ''
+                    break;
+                case '2':
+                        this.formData.unconditional =''
+                        this.formData.otherwise ='0'
+                        this.formData.baseTextarea = ''
+                    break;
+                case '3':
+                        this.formData.otherwise = '1'
+                        this.formData.unconditional =''
+                        this.formData.conditional =''
+                        this.formData.baseTextarea = ''
+                    break;
+                case '4':
+                        this.formData.unconditional =''
+                        this.formData.conditional =''
+                        this.formData.otherwise = '0'
+                    break;
+            
+                default:
+                    break;
+            }
             // console.log(tab, event);
         },
         baseInputTable(str,title){ 

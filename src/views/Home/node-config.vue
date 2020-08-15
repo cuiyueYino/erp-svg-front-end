@@ -328,7 +328,8 @@ export default {
                 return;
             }
             this.data.oid = e.oid;
-            // this.data.code =e.linefcode;
+            this.data.otherwise =e.otherwise;
+            this.data.expression =e.conditional;
             this.data.code =e.code;
             this.data.displayName = e.name;
             this.data.fremark = e.fremark;
@@ -350,10 +351,9 @@ export default {
                     break;
             }
             this.data.service={
-                "oid": e.baseInputoid?e.baseInputoid:e.oid,
-                "code":e.baseInputcode,
+                "oid": e.serviceOid?e.serviceOid:e.oid,
+                "code":e.serviceCode,
                 "name":e.baseInputServe,
-                "fremark":e.fremark,
                 "expression":e.baseTextarea
             }
         },

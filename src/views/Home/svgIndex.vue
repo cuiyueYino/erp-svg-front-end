@@ -348,6 +348,7 @@ export default {
                                 lineremark:this.dataObj.lines.line[i].lineremark,
                                 lineexpression:this.dataObj.lines.line[i].lineexpression,
                                 lineotherwise:this.dataObj.lines.line[i].lineotherwise,
+                                service:this.dataObj.lines.line[i].service,
                                 name: 'Line',
                                 oid:this.dataObj.lines.line[i].linefoid,
                                 displayName: this.dataObj.lines.line[i].linefname,
