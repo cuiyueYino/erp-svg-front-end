@@ -244,8 +244,10 @@ export default {
              });
 
         },
+        
         //删除
         deleteMsg(){
+            debugger;
             if(this.multipleSelection.length > 1){
                  this.$message.error('只能选择一个删除');
                  return;
@@ -254,7 +256,7 @@ export default {
                  return;
             };
             this.$api.processSet.deleteMsg(this.multipleSelection[0].foid).then(res=>{
-                    if(res.data.msg == "success"){
+                    if(res.data.code == 0){
                         this.$message.success('删除成功');
                         //刷新表格
                         this.getTableData('')

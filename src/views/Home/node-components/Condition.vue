@@ -825,6 +825,7 @@ export default {
             UroleObj.type = 3;
             UroleObj.typeName = "user";
             //UroleObj.fUseroid = UroleObj.foid;
+            UroleObj.oid = UroleObj.userid;
             UroleObj.fUseroid = UroleObj.userid;
             UroleObj.fUsername = UroleObj.fname;
             UroleObj.fUsercode = this.baseActiveNameStr;
