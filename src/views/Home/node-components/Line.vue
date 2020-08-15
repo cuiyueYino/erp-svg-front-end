@@ -183,6 +183,7 @@ export default {
                 formCode:'',
                 formName:''
             },
+            dialogData: {},
             columns: [
             {
                 type: 'selection'
@@ -224,30 +225,31 @@ export default {
         data: {
             handler (obj) {
             
-             if(obj.name === "Line"){console.log(obj)
+             if(obj.name === "Line"){
+                console.log(obj)
                 this.editData = obj;
-                this.formData.code = this.editData.code
+                this.formData.code = this.editData.linefcode
                 this.formData.oid = this.editData.oid
-                this.formData.fremark = this.editData.fremark
-                this.formData.baseTextarea = this.editData.expression
+                this.formData.fremark = this.editData.lineremark
+                this.formData.baseTextarea = this.editData.lineexpression
                 this.formData.name = this.editData.displayName
                 switch (this.editData.decisionType ) {
-                case 1:
-                        this.formData.decisionType = '同意'
-                    break;
-                case 2:
-                        this.formData.decisionType = '不同意'
-                    break;
-                case 3:
-                        this.formData.decisionType = '待处理'
-                    break;
-                case 4:
-                        this.formData.decisionType = '其他'
-                    break;
-            
-                default:
-                    break;
-            }
+                    case 1:
+                            this.formData.decisionType = '同意'
+                        break;
+                    case 2:
+                            this.formData.decisionType = '不同意'
+                        break;
+                    case 3:
+                            this.formData.decisionType = '待处理'
+                        break;
+                    case 4:
+                            this.formData.decisionType = '其他'
+                        break;
+                
+                    default:
+                        break;
+                }
              }
             },
             deep: true,
@@ -326,7 +328,7 @@ export default {
             }
             this.formData= this.multipleSelection[0];
             this.formData.baseInputServe= this.multipleSelection[0].fname
-             this.dialogTableVisible = false;
+            this.dialogTableVisible = false;
             
         },
         add(){

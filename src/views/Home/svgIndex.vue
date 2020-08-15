@@ -299,6 +299,7 @@ export default {
             },
             // 绘制工作流节点数组
             workflowNodes: [],
+            LineDataList:[],
             MMworkflowNodes: [],
         };
     },
@@ -688,6 +689,7 @@ export default {
                         }
                     }
                 });
+                this.LineDataList=newLine;
                 newObj.push(...newEnd);
                 this.dataObj = newObj;
                 this.MMworkflowNodes=[];
@@ -702,6 +704,7 @@ export default {
                 this.workflowNodes = [
                     ...TerminalNode()
                 ];
+                this.LineDataList=[];
                 this.MMworkflowNodes = [
                     ...TerminalNode()
                 ];
@@ -754,17 +757,17 @@ export default {
         selectedNodeClick(item){//debugger
             let newData = []
             for(let k =0 ; k<this.dataObj.length; k++){
-                newData  = this.dataObj[k].transition;//debugger
+                newData  = this.dataObj[k].transition;//
                 if(newData){
                     for(let j =0 ; j<newData.length; j++){
                         if(item.data.displayName == newData[j].data.displayName){
                             item.data = newData[j].data
-                            item.data.oid =newData[j].oid
+                            //item.data.oid =newData[j].data.oid
                         }
                     }
                 }
             }
-            //  console.log(this.lineData,item)
+            //console.log(this.lineData,item)
         },
         // 点击节点事件
         clickNode (node) {
