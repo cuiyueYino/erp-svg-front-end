@@ -227,7 +227,8 @@ export default {
             this.dialogVisible = false;
         },
         //手工活动保存
-        saveConFormData(e,e2,e3){ console.log(e,e2,e3)
+        saveConFormData(e,e2,e3){ 
+            console.log(e,e2,e3)
             if( e.displayName =='' || e.work =='' || e.checkedCities.length ==0 || e2.length==0 ){
                 this.$message.error("保存失败,请填写必填信息");
                 return;
