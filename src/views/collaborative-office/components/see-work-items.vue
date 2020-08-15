@@ -106,6 +106,8 @@
 					backData.status = status
 					//主表名称
 					backData.tableName = this.tableName
+					//主表字段
+					backData.activityId = this.activityId
 					//主表Id
 					backData.tempId = this.tempId
 					backData.srcId = JSON.parse(JSON.stringify(this.$refs.child.conData.id))
@@ -163,6 +165,8 @@
 				this.$api.collaborativeOffice.findById({
 					id: this.context.tempId
 				}).then(data => {
+					console.log(data)
+					this.activityId = data.data.data.workItemTemp.activityId
 					//整理传入子组件的数据top 主表  bottom 子表
 					this.tempId = this.context.tempId
 					this.tableName = data.data.data.workItemTemp.tableName

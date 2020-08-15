@@ -82,6 +82,7 @@
 			}
 		},
 		created() {
+			console.log(this.files)
 			if(this.files.length != 0) {
 				this.files.forEach(item => {
 					var a = {
@@ -110,6 +111,7 @@
 				if(typeof(file.id) != "undefined") {
 					this.delFiles.push(file.id)
 				}
+				console.log(this.delFiles)
 				this.fileList = fileList
 			},
 			downFiles(file) {
@@ -160,11 +162,12 @@
 						formData.append('voucherId', id);
 						formData.append('file', item);
 						this.$api.collaborativeOffice.uploadFile(formData).then(data => {})
-					} else {
-						this.$api.collaborativeOffice.deleteInfo({
-							id: item.id
-						}).then(data => {})
 					}
+				})
+				this.delFiles.forEach(item => {
+					this.$api.collaborativeOffice.deleteInfo({
+						id: item
+					}).then(data => {})
 				})
 			},
 			onSubmit() {
