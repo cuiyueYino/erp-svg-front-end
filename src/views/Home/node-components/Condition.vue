@@ -464,12 +464,14 @@ export default {
       } else {
         this.formData.checkedCities = this.checkedCities;
         this.formData.fremark = this.fremark;
+        console.log(this.joinusertableData)
+        console.log(this.CCtableData)
         this.$emit(
           "saveFormData",
           this.formData,
           this.joinusertableData,
           this.CCtableData,
-        ); console.log( this.joinusertableData)
+        ); 
       }
     },
     checked(val) {
@@ -759,7 +761,6 @@ export default {
           if (this.UserListReq.fname) {
             let UroleObj = {};
             UroleObj = this.UserListReq;
-            UroleObj.oid = this.UserListReq.userid;
             UroleObj.type = 3;
             UroleObj.typeName = "user";
             //UroleObj.fUseroid = UroleObj.foid;
@@ -825,7 +826,6 @@ export default {
             UroleObj.type = 3;
             UroleObj.typeName = "user";
             //UroleObj.fUseroid = UroleObj.foid;
-            UroleObj.oid = UroleObj.userid;
             UroleObj.fUseroid = UroleObj.userid;
             UroleObj.fUsername = UroleObj.fname;
             UroleObj.fUsercode = this.baseActiveNameStr;
@@ -861,7 +861,7 @@ export default {
             let BroleObj = {};
             BroleObj.type = 5;
             BroleObj.typeName = "expression";
-             BroleObj.fUseroid = BroleObj.foid;
+            BroleObj.fUseroid = BroleObj.foid;
             BroleObj.fUsername = this.baseTextarea;
             BroleObj.fUsercode = this.baseActiveNameStr;
             BroleObj.fUserRemake = "";

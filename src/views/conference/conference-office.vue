@@ -432,7 +432,6 @@ export default {
         fcreator: localStorage.getItem('ms_userId'),
       };
       this.addFormVisible = true;
-      this.pageNum = 1;
       this.isEdit = false;
     },
     // 修改
@@ -612,6 +611,7 @@ export default {
                   if (res.data.code == 0) {
                     this.addFormVisible = false;
                     this.isEdit = false;
+                    this.pageNum = 1;
                     this.$message.success("新增成功");
                     //刷新表格
                     this.getTableData("");

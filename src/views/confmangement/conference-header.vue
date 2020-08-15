@@ -63,7 +63,7 @@
     },
     computed: {
       username() {
-        let username = localStorage.getItem('ms_name');
+        let username = localStorage.getItem('conf_ms_name');
         return username ? username : this.name;
       }
     },
@@ -71,51 +71,11 @@
     methods: {
       // 登出
       loginOut(){
-        localStorage.removeItem('ms_roleId');
-        localStorage.removeItem('ms_username');
-        localStorage.removeItem('ms_name');
-        localStorage.removeItem('ms_userId');
+        localStorage.removeItem('conf_ms_username');
+        localStorage.removeItem('conf_ms_name');
+        localStorage.removeItem('conf_ms_userId');
         this.$router.push('/confMnt/login');
       },
-      // 用户名下拉菜单选择事件
-      /*handleCommand(command) {
-        if (command == 'loginout') {
-          localStorage.removeItem('ms_roleId');
-          localStorage.removeItem('ms_username');
-          localStorage.removeItem('ms_name');
-          localStorage.removeItem('ms_userId');
-          this.$router.push('/login');
-        } else if (command == 'change') {
-          this.dialogVisible = true;
-        }
-      },*/
-      // 全屏事件
-      /*handleFullScreen() {
-        let element = document.documentElement;
-        if (this.fullscreen) {
-          if (!document.exitFullscreen) {
-            document.exitFullscreen();
-          } else if (document.webkitCancelFullScreen) {
-            document.webkitCancelFullScreen();
-          } else if (document.mozCancelFullScreen) {
-            document.mozCancelFullScreen();
-          } else if (document.msExitFullscreen) {
-            document.msExitFullscreen();
-          }
-        } else {
-          if (element.requestFullscreen) {
-            element.requestFullscreen();
-          } else if (element.webkitRequestFullScreen) {
-            element.webkitRequestFullScreen();
-          } else if (element.mozRequestFullScreen) {
-            element.mozRequestFullScreen();
-          } else if (element.msRequestFullscreen) {
-            // IE11
-            element.msRequestFullscreen();
-          }
-        }
-        this.fullscreen = !this.fullscreen;
-      }*/
     },
     mounted() {
       if (document.body.clientWidth < 1500) {

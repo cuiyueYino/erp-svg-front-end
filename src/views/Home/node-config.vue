@@ -227,7 +227,8 @@ export default {
             this.dialogVisible = false;
         },
         //手工活动保存
-        saveConFormData(e,e2,e3){ console.log(e,e2,e3)
+        saveConFormData(e,e2,e3){ 
+            console.log(e,e2,e3)
             if( e.displayName =='' || e.work =='' || e.checkedCities.length ==0 || e2.length==0 ){
                 this.$message.error("保存失败,请填写必填信息");
                 return;
@@ -310,7 +311,7 @@ export default {
                             "type": item.type,
                             //表达式的值 
                             [item.typeName]:{
-                                "oid": item.oid?item.oid:item.foid,
+                                "oid": item.fUseroid?item.fUseroid:item.oid,
                                 "code":item.fUsercode,
                                 "name":item.fUsername
                             },
@@ -467,7 +468,7 @@ export default {
                             "type": item.type,
                             //表达式的值 
                             [item.typeName]:{
-                                "oid": item.oid?item.oid:item.foid,
+                                "oid": item.fUseroid?item.fUseroid:item.oid,
                                 "code":item.fUsercode,
                                 "name":item.fUsername
                             },

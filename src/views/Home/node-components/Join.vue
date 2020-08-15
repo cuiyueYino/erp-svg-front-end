@@ -855,7 +855,8 @@ export default {
                     UroleObj.typeName = "user";
                     UroleObj.oid = this.UserListReq.userid;
                     UroleObj.fUsername = UroleObj.fname;
-                    UroleObj.fUseroid = UroleObj.foid;
+                    //UroleObj.fUseroid = UroleObj.foid;
+                    UroleObj.fUseroid=this.UserListReq.userid;
                     UroleObj.fUsercode = this.baseActiveNameStr;
                     UroleObj.fUserRemake = UroleObj.fenglishname;
                     this.joinusertableData.push(UroleObj);
@@ -914,7 +915,8 @@ export default {
                     UroleObj = this.UserListReq;
                     UroleObj.type = 3;
                     UroleObj.typeName = "user";
-                    UroleObj.fUseroid = UroleObj.foid;
+                    //UroleObj.fUseroid = UroleObj.foid;
+                    UroleObj.fUseroid=this.UserListReq.userid;
                     UroleObj.fUsername = UroleObj.fname;
                     UroleObj.fUsercode = this.baseActiveNameStr;
                     UroleObj.fUserRemake = UroleObj.fenglishname;

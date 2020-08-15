@@ -753,6 +753,7 @@
                 if (res.data.code == 0) {
                   this.dialogVisible = false;
                   this.closeDialog();
+                  this.pageNum = 1;
                   this.$message.success("提交成功");
                 } else {
                   this.$message.error(res.data.msg);
@@ -779,6 +780,7 @@
                 if (res.data.code == 0) {
                   this.dialogVisible = false;
                   this.closeDialog();
+                  this.pageNum = 1;
                   this.$message.success("暂存成功");
                 } else {
                   this.$message.error(res.data.msg);
