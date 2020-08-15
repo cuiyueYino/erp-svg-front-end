@@ -5,15 +5,15 @@
 				<el-row>
 					<el-col :span="6">
 						<el-form-item prop="tname">
-							<el-input clearable v-model="formInline.tname"placeholder="人员名称"></el-input>
+							<el-input clearable v-model="formInline.tname" placeholder="人员名称"></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :span="10">
 						<el-form-item>
 							<el-button type="primary" @click="getRoleList();loading=true">搜索</el-button>
 							<el-button type="primary" plain @click="$refs.formInline.resetFields();getRoleList();loading=true">重置</el-button>
-							<el-button v-if="showFig == 1" type="primary"plain @click="getAll()">全部</el-button>
-							<el-button v-if="showFig == 1" type="primary"plain @click="getConList()">已选中</el-button>
+							<el-button v-if="showFig == 1" type="primary" plain @click="getAll()">全部</el-button>
+							<el-button v-if="showFig == 1" type="primary" plain @click="getConList()">已选中</el-button>
 						</el-form-item>
 					</el-col>
 					<el-col v-if="showFig == 1" :span="8" style="text-align: right;">
@@ -28,7 +28,7 @@
 				<vxe-table-column v-if="showFig == 1" type="checkbox" width="60"></vxe-table-column>
 				<vxe-table-column field="tcode" title="人员编码"></vxe-table-column>
 				<vxe-table-column field="tname" title="人员名称"></vxe-table-column>
-				<vxe-table-column field="tcompanyname" title="公司名称"></vxe-table-column>
+				<vxe-table-column field="tcompanyName" title="公司名称"></vxe-table-column>
 			</vxe-table>
 		</el-card>
 	</div>
@@ -45,9 +45,11 @@
 		},
 		data() {
 			return {
-				loading : true,
+				loading: true,
 				formInline: {
-					tname: ""
+					tname: "",
+					workItemId:""
+					
 				},
 				roleList: [],
 				roleIds: [],
@@ -60,32 +62,29 @@
 		},
 		methods: {
 			getAll() {
-				var list = JSON.parse(JSON.stringify(this.$refs.multipleTable.getCheckboxRecords()))
-				this.roleList = JSON.parse(JSON.stringify(this.conList))
-				this.roleList.forEach((item,index) =>{
-					list.forEach(val =>{
-						if(val.toid == item.toid){
-							this.$refs.multipleTable.toggleCheckboxRow(this.roleList[index]);
-						}
-					})
-				})
+				this.check()
 			},
 			getConList() {
 				this.roleList = []
 				this.roleList = this.$refs.multipleTable.getCheckboxRecords()
 			},
 			check() {
-				this.$refs.multipleTable.setAllCheckboxRow(false)
-				this.roleList.forEach((item, index) => {
-					for(var i = 0; i < this.roleCon.list.length; i++) {
-						if(this.roleCon.list[i] == item.toid) {
+				this.loading = true
+				this.$api.collaborativeOffice.findUserAuthByWorkItem({
+					workItemId: this.roleCon.id
+				}).then(data => {
+					console.log(data)
+					this.loading = false
+					this.roleList = data.data.data
+					this.roleList.forEach((item, index) => {
+						if(item.exist == 1) {
 							this.$refs.multipleTable.toggleCheckboxRow(this.roleList[index]);
 						}
-					}
+					})
 				})
 			},
 			workItemAuthRole() {
-				if(typeof(this.roleCon.id) == "undefined"){
+				if(typeof(this.roleCon.id) == "undefined") {
 					this.goOut("请选择数据")
 					return
 				}
@@ -107,7 +106,8 @@
 				this.$parent.$parent.$parent.$parent.$parent.role()
 			},
 			getRoleList() {
-				this.$api.collaborativeOffice.apiUrl("staffManage/findStaffsNoPage", this.formInline).then(data => {
+				this.$api.collaborativeOffice.findUserAuthByWorkItem(this.formInline).then(data => {
+					console.log(data)
 					this.loading = false
 					this.conList = data.data.data
 					this.roleList = JSON.parse(JSON.stringify(this.conList))

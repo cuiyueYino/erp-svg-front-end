@@ -258,7 +258,20 @@
 					//row.parameter 计算公式 
 					let result = computed(row.parameter, this.ruleForm)
 					if(result.successCon) {
-						this.ruleForm[row.field] = result.con
+						this.formData.rowList.forEach(item =>{
+							item.colList.forEach(val =>{
+								if(val.field == row.field){
+									console.log(1)
+									if(val.fieldType == 4){
+										this.ruleForm[row.field] = result.con.toFixed(0)
+									}else if(val.fieldType == 5){
+										this.ruleForm[row.field] = result.con.toFixed(4)
+									}else{
+										this.ruleForm[row.field] = result.con
+									}
+								}
+							})
+						})
 					} else {
 						this.goOut2("数据或者公式不全" + "\n计算数据:" + result.errorCon)
 					}
@@ -625,7 +638,6 @@
 				this.$set(this.ruleForm, this.dialogVisibleCon.field + '_NameShow', label)
 				this.$set(this.ruleForm, this.dialogVisibleCon.field, value)
 				//如果有联动查询的数据
-				console.log(this.dialogVisibleCon)
 				if(typeof(this.dialogVisibleCon.parameterList) != "undefined" && this.dialogVisibleCon.parameterList.length != 0) {
 					//调用toGetServiceNow（绑定的联动改变字段，获取的选中id）
 					this.toGetServiceNow(this.dialogVisibleCon.parameterList, value)

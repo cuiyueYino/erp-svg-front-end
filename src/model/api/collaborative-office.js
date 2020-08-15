@@ -168,7 +168,7 @@ const collaborativeOffice = {
 		return httpReqest.get('/api/interfaces/workItem/findById' + valueS);
 	},
 	//通过模版查询权限
-	findRoleByWorkItem(params) {
+	findRoleAuthByWorkItem(params) {
 		var valueS = '?';
 		for(var item in params) {
 			valueS += item + "=" + params[item] + "&";
@@ -176,7 +176,7 @@ const collaborativeOffice = {
 		if(valueS.slice(valueS.length - 1, valueS.length) === "&") {
 			valueS = valueS.slice(0, valueS.length - 1);
 		}
-		return httpReqest.get('/api/interfaces/workItemAuth/findRoleByWorkItem' + valueS);
+		return httpReqest.get('/api/interfaces/workItemAuth/findRoleAuthByWorkItem' + valueS);
 	},
 	//通过角色查询模版
 	findWorkItemByRoleId(params) {
@@ -201,7 +201,7 @@ const collaborativeOffice = {
 		return httpReqest.get('/api/interfaces/workItemAuthUser/findWorkItemByUser' + valueS);
 	},
 	//通过模板查询人员
-	findUserByWorkItem(params) {
+	findUserAuthByWorkItem(params) {
 		var valueS = '?';
 		for(var item in params) {
 			valueS += item + "=" + params[item] + "&";
@@ -209,7 +209,7 @@ const collaborativeOffice = {
 		if(valueS.slice(valueS.length - 1, valueS.length) === "&") {
 			valueS = valueS.slice(0, valueS.length - 1);
 		}
-		return httpReqest.get('/api/interfaces/workItemAuthUser/findUserByWorkItem' + valueS);
+		return httpReqest.get('/api/interfaces/workItemAuthUser/findUserAuthByWorkItem' + valueS);
 	},
 	//api手动输入接口名称
 	apiUrl(url, params) {
