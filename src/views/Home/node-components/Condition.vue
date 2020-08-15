@@ -359,7 +359,6 @@ export default {
                             })
                             break;
                         case 5://表达式
-                        
                             tableDataNewSet.push({
                                 fUsercode: "表达式",
                                 fUsername: item.expression.name || '',
@@ -376,8 +375,11 @@ export default {
                     }
                 });
                   if( this.CCtableData.length === 0 && tableDataNewSet.length !== 0){
-                      this.CCtableData.push(tableDataNewSet[0])
+                       tableDataNewSet.forEach(item=>{
+                          this.CCtableData.push(item)
+                       })
                     }
+                    console.log(this.CCtableData,'@@@@@@@@',tableDataNewSet)
                 let joinusertable = [];
                 this.editData.wfParticipator.participator.forEach(item=>{
                     switch (item.type) {
@@ -440,7 +442,9 @@ export default {
                     }
                 });
                 if( this.joinusertableData.length === 0 && joinusertable.length !== 0){
-                    this.joinusertableData.push(joinusertable[0])
+                  joinusertable.forEach(item=>{
+                          this.joinusertableData.push(item)
+                       })
                 }
             }
           }
@@ -627,7 +631,7 @@ export default {
           title: "生成关系"
         }
       ],
-      tableData: [],
+      // tableData: [],
       tableData2: [],
       gridData: [],
       multipleSelection: [],

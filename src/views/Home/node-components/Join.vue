@@ -594,9 +594,11 @@ export default {
                                break;
                        }
                    });
-                   if( this.joinusertableData.length === 0  && joinusertable.length !== 0){
-                        this.joinusertableData.push(joinusertable[0])
-                   }
+                   if( this.joinusertableData.length === 0 && joinusertable.length !== 0){
+                        joinusertable.forEach(item=>{
+                            this.joinusertableData.push(item)
+                        })
+                    }
                    console.log(this.joinusertableData,joinusertable);
                     let tableDataNewSet = []
                     if( this.editData.wfCopyTo.copyTo.length == 0)return
@@ -663,7 +665,9 @@ export default {
                        }
                    });
                     if( this.tableData.length === 0 && tableDataNewSet.length !== 0){
-                        this.tableData.push(tableDataNewSet[0])
+                        tableDataNewSet.forEach(item=>{
+                          this.tableData.push(item)
+                       })
                     }
                    this.tableData2 = this.editData.wfViewOtherComments.wfViewOtherComment
                     switch (this.editData.wfAuditType) {
