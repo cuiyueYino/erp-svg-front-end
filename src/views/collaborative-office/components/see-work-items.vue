@@ -106,7 +106,7 @@
 					backData.status = status
 					//主表名称
 					backData.tableName = this.tableName
-					//主表字段
+					//主表字段-业务活动ID
 					backData.activityId = this.activityId
 					//主表Id
 					backData.tempId = this.tempId

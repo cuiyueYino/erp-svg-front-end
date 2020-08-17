@@ -180,10 +180,10 @@
 						this.gestorDeptName = localStorage.getItem('ms_userDepartName')
 
 						//这面写的是固定值，后期需要改
-						//this.$set(this.ruleForm, "gestor", localStorage.getItem('ms_userId'))
-						//this.$set(this.ruleForm, "gestorDept", localStorage.getItem('ms_userDepartId'))
-						this.$set(this.ruleForm, "gestor", "BFPID000000LSN01ZA")
-						this.$set(this.ruleForm, "gestorDept", "BFPID000000LRS001C")
+						this.$set(this.ruleForm, "gestor", localStorage.getItem('ms_userId'))
+						this.$set(this.ruleForm, "gestorDept", localStorage.getItem('ms_userDepartId'))
+						//this.$set(this.ruleForm, "gestor", "BFPID000000LSN01ZA")
+						//this.$set(this.ruleForm, "gestorDept", "BFPID000000LRS001C")
 
 						//置空无需填写的数据
 						this.$set(this.ruleForm, "voucherId", "")
@@ -217,8 +217,10 @@
 							this.$set(this.ruleForm, "voucherTime", this.conversionTime(this.formData.wholeData.voucherTime))
 
 							//要改！！！！
-							this.$set(this.ruleForm, "gestor", "BFPID000000LSN01ZA")
-							this.$set(this.ruleForm, "gestorDept", "BFPID000000LRS001C")
+							this.$set(this.ruleForm, "gestor", localStorage.getItem('ms_userId'))
+							this.$set(this.ruleForm, "gestorDept", localStorage.getItem('ms_userDepartId'))
+							//this.$set(this.ruleForm, "gestor", "BFPID000000LSN01ZA")
+							//this.$set(this.ruleForm, "gestorDept", "BFPID000000LRS001C")
 						}
 						this.$set(this.ruleForm, "oprStatus", 2)
 						this.$set(this.ruleForm, "id", this.formData.wholeData.id)
@@ -258,15 +260,15 @@
 					//row.parameter 计算公式 
 					let result = computed(row.parameter, this.ruleForm)
 					if(result.successCon) {
-						this.formData.rowList.forEach(item =>{
-							item.colList.forEach(val =>{
-								if(val.field == row.field){
+						this.formData.rowList.forEach(item => {
+							item.colList.forEach(val => {
+								if(val.field == row.field) {
 									console.log(1)
-									if(val.fieldType == 4){
+									if(val.fieldType == 4) {
 										this.ruleForm[row.field] = result.con.toFixed(0)
-									}else if(val.fieldType == 5){
+									} else if(val.fieldType == 5) {
 										this.ruleForm[row.field] = result.con.toFixed(4)
-									}else{
+									} else {
 										this.ruleForm[row.field] = result.con
 									}
 								}
