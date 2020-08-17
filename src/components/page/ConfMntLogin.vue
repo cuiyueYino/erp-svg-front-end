@@ -18,7 +18,7 @@
             </el-input>
           </el-form-item>
           <el-form-item>
-            <el-checkbox v-model="checked" style="color: #c1c1e0;">记住我的登录信息</el-checkbox>
+            <el-checkbox v-model="remember" style="color: #c1c1e0;">记住我的登录信息</el-checkbox>
           </el-form-item>
           <div class="login-btn">
             <el-button type="primary" @click="submitForm()">登录</el-button>
@@ -30,6 +30,7 @@
 </template>
 
 <script>
+  let Base64 = require('js-base64').Base64;
 
   export default {
     data: function () {
@@ -43,8 +44,18 @@
           username: [{required: true, message: '请输入用户名', trigger: 'blur'}],
           password: [{required: true, message: '请输入密码', trigger: 'blur'}]
         },
-        checked: false
+        remember: false
       };
+    },
+    created() {
+      // 在页面加载时从cookie获取登录信息
+      let username = this.getCookie("username");
+      let password = Base64.decode(this.getCookie("password"));
+      if(username != null && username != "" && password != null && password != ""){
+        this.param.username = username;
+        this.param.password = password;
+        this.remember = true;
+      }
     },
     methods: {
       submitForm() {
@@ -71,7 +82,9 @@
                 localStorage.setItem('conf_ms_companyId', data.data.principal.companyId);
                 //公司名称
                 localStorage.setItem('conf_ms_companyName', data.data.principal.companyName);
-              })
+              });
+              // 储存登录信息
+              this.setUserInfo();
             }, (error) => {
               this.$message.error(error.data.error_description);
             })
@@ -80,6 +93,40 @@
           }
         });
       },
+      setUserInfo() {
+        // 判断用户是否勾选记住密码，如果勾选，向cookie中储存登录信息，
+        // 如果没有勾选，储存的信息为空
+        if (this.remember) {
+          this.setCookie("username", this.param.username);
+          // base64加密密码
+          let passWord = Base64.encode(this.param.password);
+          this.setCookie("password", passWord);
+          this.setCookie("remember", this.remember);
+        } else {
+          this.setCookie("account", "")
+          this.setCookie("password", "")
+        }
+      },
+      // 获取cookie
+      getCookie(key) {
+        if (document.cookie.length > 0) {
+          var start = document.cookie.indexOf(key + '=')
+          if (start !== -1) {
+            start = start + key.length + 1
+            var end = document.cookie.indexOf(';', start)
+            if (end === -1) end = document.cookie.length
+            return unescape(document.cookie.substring(start, end))
+          }
+        }
+        return ''
+      },
+      // 保存cookie
+      setCookie(cName, value, expiredays) {
+        var exdate = new Date();
+        exdate.setDate(exdate.getDate() + expiredays);
+        document.cookie = cName + '=' + decodeURIComponent(value) +
+          ((expiredays == null) ? '' : ';expires=' + exdate.toGMTString());
+      }
     }
   };
 </script>
