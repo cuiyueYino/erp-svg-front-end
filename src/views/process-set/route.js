@@ -37,7 +37,7 @@ const PROJECT = [
         name: 'taskStructure',
         component: outline2,
         meta: {
-            title: '一岗一表'
+            title: '任务结构编制'
         }
     },
     {

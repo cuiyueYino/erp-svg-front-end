@@ -24,11 +24,13 @@ export default {
         z-index:999;
     }
     .taskStructure {
-        margin-top: -60px;
         z-index: 0;
         position: absolute;
     }
     .tags {
         z-index:999;
+    }
+    .taskStructure .page-heading  {
+        padding-top:0px !important;
     }
 </style>
