@@ -110,10 +110,10 @@
       // 获取cookie
       getCookie(key) {
         if (document.cookie.length > 0) {
-          var start = document.cookie.indexOf(key + '=')
+          let start = document.cookie.indexOf(key + '=')
           if (start !== -1) {
             start = start + key.length + 1
-            var end = document.cookie.indexOf(';', start)
+            let end = document.cookie.indexOf(';', start)
             if (end === -1) end = document.cookie.length
             return unescape(document.cookie.substring(start, end))
           }
@@ -122,10 +122,10 @@
       },
       // 保存cookie
       setCookie(cName, value, expiredays) {
-        var exdate = new Date();
-        exdate.setDate(exdate.getDate() + expiredays);
+        let exDate = new Date();
+        exDate.setDate(exDate.getDate() + expiredays);
         document.cookie = cName + '=' + decodeURIComponent(value) +
-          ((expiredays == null) ? '' : ';expires=' + exdate.toGMTString());
+          ((expiredays == null) ? '' : ';expires=' + exDate.toUTCString());
       }
     }
   };
