@@ -1,5 +1,5 @@
 <template>
-	<div v-if="isOa">
+	<div v-if="!isOa">
 		<el-submenu v-if="menuItemData.subs" :index="typeof(menuItemData.url) == 'undefined' ? Math.random().toString() : menuItemData.url">
 			<template slot="title">
 				<i :class="menuItemData.pictureUrl"></i>
