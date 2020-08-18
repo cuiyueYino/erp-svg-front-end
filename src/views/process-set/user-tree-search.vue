@@ -182,6 +182,13 @@ export default {
                             <span style="margin-left: 5px;">{node.data.fname}</span>
                         </span>
                     )
+                }else{
+                    return(
+                        <span class="custom-tree-node">
+                            <span><i class="el-icon-document"></i></span>
+                            <span style="margin-left: 5px;">{node.data.fname}</span>
+                        </span>
+                    )
                 }
             }  
         },
@@ -353,8 +360,13 @@ export default {
             this.$api.processSet.getUserTree(fromdata).then(res=>{
                 let resData=res.data.data;
                 let resDataArr= eval("("+resData+")");
-                this.gridData=resDataArr.JsonInfo;
-                this.total=resDataArr.pageInfo.total;
+                if(resDataArr.JsonInfo){
+                    this.gridData=resDataArr.JsonInfo;
+                    this.total=resDataArr.pageInfo.total;
+                }else{
+                    this.gridData=[];
+                    this.total=0;
+                } 
             },error=>{
                 console.log(error)
             })  
