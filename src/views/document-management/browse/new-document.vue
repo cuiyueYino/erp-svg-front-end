@@ -73,6 +73,23 @@
                         <el-tab-pane label="附件" name="second">
                             <enclosurefile :rowDataFileObj="rowDataFileObj" @changeShow="showFileData" />
                         </el-tab-pane>
+                        <el-tab-pane label="              " disabled ></el-tab-pane>
+                        <el-tab-pane label="              " disabled ></el-tab-pane>
+                        <el-tab-pane label="              " disabled ></el-tab-pane>
+                        <el-tab-pane label="              " disabled ></el-tab-pane>
+                        <el-tab-pane label="              " disabled ></el-tab-pane>
+                        <el-tab-pane label="              " disabled ></el-tab-pane>
+                        <el-tab-pane label="              " disabled ></el-tab-pane>
+                        <el-tab-pane label="              " disabled ></el-tab-pane>
+                        <el-tab-pane label="              " disabled ></el-tab-pane>
+                        <el-tab-pane label="              " disabled ></el-tab-pane>
+                        <el-tab-pane label="              " disabled ></el-tab-pane>
+                        <el-tab-pane label="              " disabled ></el-tab-pane>
+                        <el-tab-pane label="              " disabled ></el-tab-pane>
+                        <el-tab-pane label="              " disabled ></el-tab-pane>
+                        <el-tab-pane label="              " disabled ></el-tab-pane>
+                        <el-tab-pane label="              " disabled ></el-tab-pane>
+                        <el-tab-pane :label="readCount"  name="four" disabled ></el-tab-pane>
                     </el-tabs>
                 </el-card>
             </el-form>
@@ -97,6 +114,7 @@ export default {
     },
     data(){
         return{
+            readCount:"",
             atctiveName:'first',
             tableData:[],
             pageNum: 1,
@@ -198,6 +216,10 @@ export default {
                     let returndata = responsevalue.data;
                     let tableDataArr=returndata.data;
                     this.formdata = tableDataArr;
+                    //阅读量赋值label：重新加载 dom
+                    this.$nextTick(() => {
+                        this.readCount = "阅读量:("+this.formdata.freadcount+")";
+                    });
                 } else {
                     this.$message.success('查询失败!');
                 }
@@ -251,19 +273,12 @@ export default {
             this.ShowFinancVisible=this.rowNMMtype;
             this.title=this.rowNMMDataObj.nametitle;
             this.NewOrEditFlag=this.rowNMMDataObj.NewOrEditFlag;
-            if(this.rowNMMDataObj.NewOrEditFlag==="NEW"){
-                this.formdata={};
-                this.formdata.flevel=this.rowNMMDataObj.flevel; 
-                this.formdata.fcreator = localStorage.getItem('ms_username');
-                this.formdata.fcreatetime =new Date() ;
-            } else if (this.rowNMMDataObj.NewOrEditFlag==="EDIT"){
-                let fromdataA={};
-                fromdataA.foid=this.rowNMMDataObj.foid;
-                this.findDocManageById(fromdataA);
-            } else if (this.rowNMMDataObj.NewOrEditFlag==="SHOW"){
+            if (this.rowNMMDataObj.NewOrEditFlag==="SHOW"){
                 this.isShow = false;
                 this.isEdit = true;
                 let fromdataA={};
+                fromdataA.from= '2';
+                fromdataA.fuserid = localStorage.getItem('ms_userId'),
                 fromdataA.foid=this.rowNMMDataObj.foid;
                 this.findDocManageById(fromdataA);
             }

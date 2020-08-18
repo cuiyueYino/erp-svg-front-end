@@ -82,6 +82,21 @@
                                 </el-row>
                               </el-card>
                         </el-tab-pane>
+                        <el-tab-pane label="              " disabled ></el-tab-pane>
+                        <el-tab-pane label="              " disabled ></el-tab-pane>
+                        <el-tab-pane label="              " disabled ></el-tab-pane>
+                        <el-tab-pane label="              " disabled ></el-tab-pane>
+                        <el-tab-pane label="              " disabled ></el-tab-pane>
+                        <el-tab-pane label="              " disabled ></el-tab-pane>
+                        <el-tab-pane label="              " disabled ></el-tab-pane>
+                        <el-tab-pane label="              " disabled ></el-tab-pane>
+                        <el-tab-pane label="              " disabled ></el-tab-pane>
+                        <el-tab-pane label="              " disabled ></el-tab-pane>
+                        <el-tab-pane label="              " disabled ></el-tab-pane>
+                        <el-tab-pane label="              " disabled ></el-tab-pane>
+                        <el-tab-pane label="              " disabled ></el-tab-pane>
+                        <el-tab-pane label="              " disabled ></el-tab-pane>
+                        <el-tab-pane :label="readCount"  name="four" disabled ></el-tab-pane>
                     </el-tabs>
                 </el-card>
             </el-form>
@@ -114,6 +129,7 @@ export default {
     },
     data(){
         return{
+             readCount:"",
             // ------------文本编辑器---BEGIN-------------------------------------------------------------------------
             // fcontent: '',
             editorOption: {
@@ -230,6 +246,7 @@ export default {
         onEditorChange() {}, 
         //分页查询菜单
         searchMenutable(data){
+            debugger
             let creator = localStorage.getItem('ms_userId');
             let fromdata=data;
             this.$api.documentManagement.getDocumentRecordByMasterid(fromdata).then(response => {
@@ -298,10 +315,15 @@ export default {
             let formDataA =data;
             this.$api.documentManagement.findDocumentManageById(formDataA).then(response => {
                 let responsevalue = response;
+                debugger;
                 if (responsevalue.data.data) {
                     let returndata = responsevalue.data;
                     let tableDataArr=returndata.data;
                     this.formdata = tableDataArr;
+                    //阅读量赋值label：重新加载 dom
+                    this.$nextTick(() => {
+                        this.readCount = "阅读量:("+this.formdata.freadcount+")";
+                    });
                 } else {
                     this.$message.success('查询失败!');
                 }
@@ -485,13 +507,16 @@ export default {
                 this.formdata.fcreatetime =new Date() ;
             } else if (this.rowNMMDataObj.NewOrEditFlag==="EDIT"){
                 let fromdataA={};
+                fromdataA.from= '3';
                 fromdataA.foid=this.rowNMMDataObj.foid;
                 this.findDocManageById(fromdataA);
             } else if (this.rowNMMDataObj.NewOrEditFlag==="SHOW"){
                 this.isShow = false;
                 this.isEdit = true;
                 let fromdataA={};
+                fromdataA.fuserid = localStorage.getItem('ms_userId'),
                 fromdataA.foid=this.rowNMMDataObj.foid;
+                fromdataA.from= '2';
                 this.findDocManageById(fromdataA);
             }
         }
@@ -518,9 +543,6 @@ export default {
 </style>
 <style lang='scss'>
 .ql-editor{
-    height:500px;
-}
-.dynamic-table{
     height:500px;
 }
 </style>
