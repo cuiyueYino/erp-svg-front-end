@@ -9,7 +9,7 @@
 		<div class="header-right">
 			<div class="header-user-con">
 				<!-- 进入系统 -->
-				<div class="el-icon-monitor to-oa" @click="toOa">
+				<div v-if="showFig" class="el-icon-monitor to-oa" @click="toOa">
 					<span>进入系统</span>
 				</div>
 			</div>
@@ -54,6 +54,9 @@
 			username() {
 				let username = localStorage.getItem('ms_username');
 				return username ? username : this.name;
+			},
+			showFig() {
+				return JSON.parse(sessionStorage.getItem("oaMenu"))
 			}
 		},
 		inject: ['bus'],
