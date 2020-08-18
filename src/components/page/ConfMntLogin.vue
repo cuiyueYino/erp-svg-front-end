@@ -3,20 +3,22 @@
     <div class="ms-login">
       <div class="ms-content01">
         <div class="ms-title">会议室管理系统</div>
-        <el-form :model="param" :rules="rules" ref="login" label-width="0px" class="ms-content">
+        <el-form :model="param" :rules="rules" ref="conf_login" label-width="0px" class="ms-content">
           <el-form-item prop="username">
             <el-input v-model="param.username" placeholder="请输入用户名">
-              <el-button class="login-input" tabindex=-1 slot="prepend" size="mini"><img src="../../views/confmangement/img/login-user.png" sizes="mini"></el-button>
+              <el-button class="login-input" tabindex=-1 slot="prepend" size="mini"><img
+                src="../../views/confmangement/img/login-user.png" sizes="mini"></el-button>
             </el-input>
           </el-form-item>
           <el-form-item prop="password">
             <el-input type="password" placeholder="请输入密码" v-model="param.password"
                       @keyup.enter.native="submitForm()">
-              <el-button class="login-input" tabindex=-1 slot="prepend" size="small"><img src="../../views/confmangement/img/login-password.png" sizes="mini"></el-button>
+              <el-button class="login-input" tabindex=-1 slot="prepend" size="small"><img
+                src="../../views/confmangement/img/login-password.png" sizes="mini"></el-button>
             </el-input>
           </el-form-item>
           <el-form-item>
-            <el-checkbox v-model="checked" style="color: #c1c1e0;">记住我的登录信息</el-checkbox>
+            <el-checkbox v-model="remember" style="color: #c1c1e0;">记住我的登录信息</el-checkbox>
           </el-form-item>
           <div class="login-btn">
             <el-button type="primary" @click="submitForm()">登录</el-button>
@@ -28,11 +30,13 @@
 </template>
 
 <script>
+  let Base64 = require('js-base64').Base64;
 
   export default {
     data: function () {
       return {
         param: {
+          grant_type: 'password',
           username: '',
           password: ''
         },
@@ -40,85 +44,89 @@
           username: [{required: true, message: '请输入用户名', trigger: 'blur'}],
           password: [{required: true, message: '请输入密码', trigger: 'blur'}]
         },
-        checked: false
+        remember: false
       };
+    },
+    created() {
+      // 在页面加载时从cookie获取登录信息
+      let username = this.getCookie("username");
+      let password = Base64.decode(this.getCookie("password"));
+      if(username != null && username != "" && password != null && password != ""){
+        this.param.username = username;
+        this.param.password = password;
+        this.remember = true;
+      }
     },
     methods: {
       submitForm() {
-        var usernameS = this.param.username;
-        var passwordS = this.param.password;
-        // if(!usernameS){
-        //     this.$message.error("请输入用户名!");
-        // }
-        // if(!passwordS){
-        //     this.$message.error("请输入密码!");
-        // }
-        if (usernameS && passwordS) {
-          //     let paramdata={};
-          //     paramdata.username=usernameS;
-          //     paramdata.password=passwordS;
-          //     paramdata.grant_type = 'password';
-          //     this.$api.common.getToken(paramdata).then((response)=>{
-          //         var responsevalue=response;
-          //         if(responsevalue){
-          //             if(responsevalue.data && responsevalue.data !=""){
-          //                 let returndata =responsevalue.data;
-          //                 localStorage.setItem('ms_tokenId',  returndata.access_token);
-          // this.getUserInfo()
-          //             }else{
-          //                 this.$message.error("请输入正确用户名和密码!");
-          //                 return false;
-          //             }
-          //         }else{
-          //             this.$message.error("请输入正确用户名和密码!");
-          //             return false;
-          //         }
-          //     });
-
-          localStorage.setItem('ms_username', '王世超');
-          localStorage.setItem('ms_name', '王世超');
-          if (usernameS === 'OA') {
-            localStorage.setItem('ms_roleId', '3');
-          } else if (usernameS === 'CW') {
-            //财务
-            localStorage.setItem('ms_roleId', '2');
+        localStorage.removeItem('ms_tokenId');
+        //校验用户名和密码
+        this.$refs.conf_login.validate((valid) => {
+          if (valid) {
+            //获取token
+            this.$api.common.login(this.param).then(val => {
+              //存入本地缓存,登陆后的每次接口调用都要带着token
+              localStorage.setItem('ms_tokenId', val.data.access_token);
+              this.$router.push('/confMnt');
+              //根据token查询登陆人的信息并存入缓存
+              this.$api.common.getUserInfo().then(data => {
+                //用户ID
+                localStorage.setItem('conf_ms_userId', data.data.principal.accountId);
+                //用户名称
+                localStorage.setItem('conf_ms_username', data.data.principal.fullname);
+                //部门ID
+                localStorage.setItem('conf_ms_userDepartId', data.data.principal.deptmentId);
+                //部门名称
+                localStorage.setItem('conf_ms_userDepartName', data.data.principal.deptmentName);
+                //公司ID
+                localStorage.setItem('conf_ms_companyId', data.data.principal.companyId);
+                //公司名称
+                localStorage.setItem('conf_ms_companyName', data.data.principal.companyName);
+              });
+              // 储存登录信息
+              this.setUserInfo();
+            }, (error) => {
+              this.$message.error(error.data.error_description);
+            })
           } else {
-            localStorage.setItem('ms_roleId', '0');
+            this.$message.error("请输入用户名和密码!");
           }
-          localStorage.setItem('ms_userId', 'BFPID000000LR40002');
-          //localStorage.setItem('ms_userId',  'BFPID000000OV60NOU');
-          //localStorage.setItem('ms_userId',  'BFPID000000M4J0I62');
-          //localStorage.setItem('ms_userId',  'BFPID000000OV60NO8');
-          //用户部门
-          localStorage.setItem('ms_userDepartId', 'BFPID12333LSN033N');
-          localStorage.setItem('ms_userDepartName', '集团信息中心');
-          localStorage.setItem('ms_companyId', '_DefaultCompanyOId');
-          localStorage.setItem('ms_tokenId', "9a00a32c-c59c-471d-8638-297e7f00f7f6");
-          //localStorage.setItem('ms_tokenId',  "fcb1eb0d-27e8-4029-befe-a1f3db56cc7a");
-          this.$router.push('/confMnt');
+        });
+      },
+      setUserInfo() {
+        // 判断用户是否勾选记住密码，如果勾选，向cookie中储存登录信息，
+        // 如果没有勾选，储存的信息为空
+        if (this.remember) {
+          this.setCookie("username", this.param.username);
+          // base64加密密码
+          let passWord = Base64.encode(this.param.password);
+          this.setCookie("password", passWord);
+          this.setCookie("remember", this.remember);
         } else {
-          this.$message.error("请输入用户名和密码!");
-          return false;
+          this.setCookie("account", "")
+          this.setCookie("password", "")
         }
       },
-      // 获取登录人信息
-      getUserInfo() {
-        let data = {
-          tel: this.param.username,
-          password: this.param.password
+      // 获取cookie
+      getCookie(key) {
+        if (document.cookie.length > 0) {
+          let start = document.cookie.indexOf(key + '=')
+          if (start !== -1) {
+            start = start + key.length + 1
+            let end = document.cookie.indexOf(';', start)
+            if (end === -1) end = document.cookie.length
+            return unescape(document.cookie.substring(start, end))
+          }
         }
-        this.$api.common.getUserInfo(data).then(res => {
-          let returndata = res.data;
-          localStorage.setItem('ms_data', JSON.stringify(returndata));
-          localStorage.setItem('ms_name', returndata.name);
-          localStorage.setItem('ms_id', returndata.id);
-          localStorage.setItem('ms_username', returndata.username);
-          localStorage.setItem('ms_roleId', returndata.roleId);
-          localStorage.setItem('ms_authId', returndata.authId);
-          this.$router.push('/confManagement');
-          this.$message.success('登录成功');
-        })
+        return ''
       },
+      // 保存cookie
+      setCookie(cName, value, expiredays) {
+        let exDate = new Date();
+        exDate.setDate(exDate.getDate() + expiredays);
+        document.cookie = cName + '=' + decodeURIComponent(value) +
+          ((expiredays == null) ? '' : ';expires=' + exDate.toUTCString());
+      }
     }
   };
 </script>
@@ -133,9 +141,9 @@
   }
 
   .ms-title {
-    height:45px;
-    font-family:Microsoft YaHei;
-    font-weight:bold;
+    height: 45px;
+    font-family: Microsoft YaHei;
+    font-weight: bold;
     width: 100%;
     line-height: 50px;
     text-align: center;
@@ -162,15 +170,15 @@
     text-align: center;
   }
 
-  /deep/ .login-input .el-button{
-    background:rgba(255,255,255,1);
+  /deep/ .login-input .el-button {
+    background: rgba(255, 255, 255, 1);
   }
 
-  /deep/ .el-input__inner{
-    width:250px;
-    height:34px;
-    background:rgba(255,255,255,1);
-    border-radius:2px;
+  /deep/ .el-input__inner {
+    width: 250px;
+    height: 34px;
+    background: rgba(255, 255, 255, 1);
+    border-radius: 2px;
   }
 
   .login-btn button {

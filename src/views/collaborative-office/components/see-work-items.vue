@@ -21,7 +21,7 @@
 					<el-button type="danger" @click="$parent.toSelect()" size="mini" icon="el-icon-close">返回</el-button>
 				</el-col>
 			</el-row>
-			<formAndTable :dis="showSeeOrUpd" showAdd="2" ref="child" :form-data="conData"></formAndTable>
+			<formAndTable :files="context.files" :dis="showSeeOrUpd" showAdd="2" ref="child" :form-data="conData"></formAndTable>
 		</el-card>
 	</div>
 </template>
@@ -106,6 +106,8 @@
 					backData.status = status
 					//主表名称
 					backData.tableName = this.tableName
+					//主表字段-业务活动ID
+					backData.activityId = this.activityId
 					//主表Id
 					backData.tempId = this.tempId
 					backData.srcId = JSON.parse(JSON.stringify(this.$refs.child.conData.id))
@@ -149,6 +151,7 @@
 					backData.jsonStr = JSON.stringify(con)
 					this.$api.collaborativeOffice.updateWorkItem(backData).then(data => {
 						if(this.dataBack(data, "修改成功")) {
+							this.$refs.child.toUpload(this.context.id)
 							this.$parent.toSelect()
 						}
 					})
@@ -162,6 +165,8 @@
 				this.$api.collaborativeOffice.findById({
 					id: this.context.tempId
 				}).then(data => {
+					console.log(data)
+					this.activityId = data.data.data.workItemTemp.activityId
 					//整理传入子组件的数据top 主表  bottom 子表
 					this.tempId = this.context.tempId
 					this.tableName = data.data.data.workItemTemp.tableName

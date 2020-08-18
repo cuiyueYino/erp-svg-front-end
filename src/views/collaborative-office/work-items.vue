@@ -32,10 +32,11 @@
 				this.tabViews = "selectWorkItems"
 			},
 			//查看/修改
-			toSee(context,tempId,state){
+			toSee(context,tempId,state,files){
 				this.context = context
 				this.dis = state
 				this.context.tempId = tempId
+				this.context.files = files
 				this.tabViews = "seeWorkItem"
 			}
 		}

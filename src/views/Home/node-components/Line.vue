@@ -283,6 +283,7 @@ export default {
                 
                 let codeData = this.formData.code
                 this.formData.code = codeData
+                this.formData.linefcode = codeData
                 console.log(this.formData)
                 this.$emit(
                     "saveLineData",

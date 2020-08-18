@@ -55,7 +55,7 @@ const documentManagement = {
     },
     //查询文件管理 by foid
     findDocumentManageById(params){
-        return httpReqest.get(baseURI + 'documentmanage/findDocumentManageById?id='+params.foid);
+        return httpReqest.post(baseURI + 'documentmanage/findDocumentManageById',params);
     },
     //查询操作纪录
     getDocumentRecordByMasterid(params){

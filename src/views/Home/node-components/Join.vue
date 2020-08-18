@@ -44,7 +44,7 @@
                 <!-- Condition -->
                 <el-form-item label="审批类型" :label-width="formLabelWidth" prop="wfAuditType">
                      <el-radio-group v-model="formData.wfAuditType">
-                        <el-radio label="普通审批"></el-radio>
+                        <el-radio label="普通审批" ></el-radio>
                         <el-radio label="并行会签"></el-radio>
                          <el-radio label="串行会签"></el-radio>
                     </el-radio-group>
@@ -124,6 +124,7 @@
                  <dynamic-table
                     :columns="columns2"
                     :table-data="tableData2"
+                    ref="joinTable"
                     @selection-change="onJoinSelectionChange"
                     v-loading="false"
                     :isShowPager="false"
@@ -507,197 +508,216 @@ export default {
         // 监听配置数据源
         data: {
             handler (obj) {
-             if(obj.name === "Join"){ console.log( obj)
+                if(obj.name === "Join"){
+                    console.log( obj)
                     if(!obj.oid){
                         this.checkedCities = ['由权限控制'];
-                         this.formData.name = obj.displayName
+                        this.formData.name = obj.displayName
                     }else{
-                    this.checkedCities = [];
-                    this.editData = obj;
-                   this.formData.name = this.editData.displayName
-                   this.formData.work = this.editData.mactivity.name
-                    this.formData.workId = this.editData.mactivity.oid
-                    this.formData.workCode = this.editData.mactivity.code
-                    this.formData.workData = this.editData.srcActivity.name
-                    this.formData.workDataId = this.editData.srcActivity.oid
-                    this.formData.workDataCode = this.editData.srcActivity.code
-                    this.formData.fmclassOid = this.editData.dataType.oid
-                    this.formData.fmclassCode = this.editData.dataType.code
-                   this.formData.fmclassName = this.editData.dataType.name
-                   this.formData.fremark = this.editData.fremark    
-                   this.formData.maxWorkTime = this.editData.maxWorkTime
-                   this.formData.timeUnit = this.editData.timeUnit       
-                   this.formData.autoSubmit = this.editData.autoSubmit==1?true:false 
-                   this.formData.autoHurry = this.editData.autoHurry==1?true:false 
-                   this.checkedCities.push(this.editData.permission=='1'?'由权限控制':this.editData.mntNextJoin=='1'?'手工指定下一节点参与者':this.editData.canSkip=='1'?'可略过':this.editData.multMail=='1'?'多封邮件':null)
-                //    this.joinusertableData = this.editData.wfParticipator.participator
-                    let joinusertable = [];
-                    if( this.editData.wfParticipator.participator.length == 0)return
-                   this.editData.wfParticipator.participator.forEach(item=>{
-                       switch (item.type) {
-                           case 3://用户
-                                joinusertable.push({
-                                   fUsercode: "用户",
-                                   fUsername: item.user.name,
-                                   fUserRemake: item.expression,
-                                   fUseroid:item.user.oid,
-                                   oid:item.oid,
-                                   type:item.type,
-                                   typeName:'user',
-                               })
-                               break;
-                            case 2://角色
-                                joinusertable.push({
-                                   fUsercode:  "角色",
-                                   fUsername: item.role.name,
-                                   fUserRemake: item.expression,
-                                   fUseroid:item.role.oid,
-                                   oid:item.oid,
-                                   type:item.type,
-                                    typeName:'role',
-                               })
-                               break;
-                            case 4://服务
-                               joinusertable.push({
-                                   fUsercode: "服务",
-                                   fUsername: item.service.name,
-                                   fUserRemake: item.expression,
-                                   fUseroid:item.service.oid,
-                                   oid:item.oid,
-                                   type:item.type,
-                                    typeName:'service',
-                               })
-                               break;
-                            case 6://职务
-                                joinusertable.push({
-                                   fUsercode: "职务",
-                                   fUsername: item.position.name,
-                                   fUserRemake: item.expression,
-                                   fUseroid:item.position.oid,
-                                   oid:item.oid,
-                                   type:item.type,
-                                   typeName:'position',
-                               })
-                               break;
-                            case 5://表达式
-                                   joinusertable.push({
-                                   fUsercode: "表达式",
-                                   fUsername: item.expression.name,
-                                   fUserRemake: item.expression,
-                                   fUseroid:item.expression.oid,
-                                   oid:item.oid,
-                                   type:item.type,
-                                   typeName:'expression',
-                               })
-                               break;
-                           default:
-                               break;
-                       }
-                   });
-                   if( this.joinusertableData.length === 0 && joinusertable.length !== 0){
-                        joinusertable.forEach(item=>{
-                            this.joinusertableData.push(item)
+                        this.checkedCities = [];
+                        this.editData = obj;
+                        this.formData.name = this.editData.displayName
+                        this.formData.work = this.editData.mactivity.name
+                        this.formData.workId = this.editData.mactivity.oid
+                        this.formData.workCode = this.editData.mactivity.code
+                        this.formData.workData = this.editData.srcActivity.name
+                        this.formData.workDataId = this.editData.srcActivity.oid
+                        this.formData.workDataCode = this.editData.srcActivity.code
+                        this.formData.fmclassOid = this.editData.dataType.oid
+                        this.formData.fmclassCode = this.editData.dataType.code
+                        this.formData.fmclassName = this.editData.dataType.name
+                        this.formData.fremark = this.editData.fremark    
+                        this.formData.maxWorkTime = this.editData.maxWorkTime
+                        this.formData.timeUnit = this.editData.timeUnit       
+                        this.formData.autoSubmit = this.editData.autoSubmit==1?true:false 
+                        this.formData.autoHurry = this.editData.autoHurry==1?true:false
+                        switch (this.editData.wfAuditType) {
+                            case 1:
+                                this.formData.wfAuditType = '普通审批'
+                            break;
+                            case 2:
+                                this.formData.wfAuditType = '并行会签'
+                            break;
+                            case 3:
+                                this.formData.wfAuditType = '串行会签'
+                            break;
+                            default:
+                            break;
+                        }
+                        this.checkedCities.push(this.editData.permission=='1'?'由权限控制':this.editData.mntNextJoin=='1'?'手工指定下一节点参与者':this.editData.canSkip=='1'?'可略过':this.editData.multMail=='1'?'多封邮件':null)
+                        //    this.joinusertableData = this.editData.wfParticipator.participator
+                        let joinusertable = [];
+                        if( this.editData.wfParticipator.participator.length == 0){}else{
+                            this.editData.wfParticipator.participator.forEach(item=>{
+                                switch (item.type) {
+                                    case 3://用户
+                                        joinusertable.push({
+                                        fUsercode: "用户",
+                                        fUsername: item.user.name,
+                                        fUserRemake: item.expression,
+                                        fUseroid:item.user.oid,
+                                        oid:item.oid,
+                                        type:item.type,
+                                        typeName:'user',
+                                        })
+                                        break;
+                                    case 2://角色
+                                        joinusertable.push({
+                                        fUsercode:  "角色",
+                                        fUsername: item.role.name,
+                                        fUserRemake: item.expression,
+                                        fUseroid:item.role.oid,
+                                        oid:item.oid,
+                                        type:item.type,
+                                        typeName:'role',
+                                        })
+                                        break;
+                                    case 4://服务
+                                        joinusertable.push({
+                                        fUsercode: "服务",
+                                        fUsername: item.service.name,
+                                        fUserRemake: item.expression,
+                                        fUseroid:item.service.oid,
+                                        oid:item.oid,
+                                        type:item.type,
+                                        typeName:'service',
+                                        })
+                                        break;
+                                    case 6://职务
+                                        joinusertable.push({
+                                        fUsercode: "职务",
+                                        fUsername: item.position.name,
+                                        fUserRemake: item.expression,
+                                        fUseroid:item.position.oid,
+                                        oid:item.oid,
+                                        type:item.type,
+                                        typeName:'position',
+                                        })
+                                        break;
+                                    case 5://表达式
+                                        joinusertable.push({
+                                        fUsercode: "表达式",
+                                        fUsername: item.expression.name,
+                                        fUserRemake: item.expression,
+                                        fUseroid:item.expression.oid,
+                                        oid:item.oid,
+                                        type:item.type,
+                                        typeName:'expression',
+                                        })
+                                        break;
+                                    default:
+                                        break;
+                                }
+                            });
+                        }
+                        
+                        if( this.joinusertableData.length === 0 && joinusertable.length !== 0){
+                            joinusertable.forEach(item=>{
+                                this.joinusertableData.push(item)
+                            })
+                        }
+                        console.log(this.joinusertableData,joinusertable);
+                        let tableDataNewSet = []
+                        if( this.editData.wfCopyTo.copyTo.length == 0){}else{
+                            this.editData.wfCopyTo.copyTo.forEach(item=>{
+                                switch (item.type) {
+                                    case 3://用户
+                                        tableDataNewSet.push({
+                                        fUsercode: "用户",
+                                        fUsername: item.user.name,
+                                        fUserRemake: item.expression,
+                                        fUseroid:item.user.oid,
+                                        oid:item.oid,
+                                        type:item.type,
+                                        typeName:'user',
+                                        })
+                                        break;
+                                    case 2://角色
+                                        tableDataNewSet.push({
+                                        fUsercode: "角色",
+                                        fUsername: item.role.name,
+                                        fUserRemake: item.expression,
+                                        fUseroid:item.role.oid,
+                                        oid:item.oid,
+                                        type:item.type,
+                                        typeName:'role',
+                                        })
+                                        break;
+                                    case 4://服务
+                                        tableDataNewSet.push({
+                                        fUsercode:  "服务",
+                                        fUsername: item.service.name,
+                                        fUserRemake: item.expression,
+                                        fUseroid:item.service.oid,
+                                        oid:item.oid,
+                                        type:item.type,
+                                        typeName:'service',
+                                        })
+                                        break;
+                                    case 6://职务
+                                        tableDataNewSet.push({
+                                        fUsercode: "职务",
+                                        fUsername: item.position.name,
+                                        fUserRemake: item.expression,
+                                        fUseroid:item.position.oid,
+                                        oid:item.oid,
+                                        type:item.type,
+                                        typeName:'position',
+                                        })
+                                        break;
+                                    case 5://表达式
+                                        tableDataNewSet.push({
+                                        fUsercode: "表达式",
+                                        fUsername: item.expression.name,
+                                        fUserRemake: item.expression,
+                                        fUseroid:item.expression.oid,
+                                        oid:item.oid,
+                                        type:item.type,
+                                        typeName:'expression',
+                                        })
+                                        break;
+                                    default:
+                                        break;
+                                }
+                            });
+                        }
+                        
+                        if( this.tableData.length === 0 && tableDataNewSet.length !== 0){
+                            tableDataNewSet.forEach(item=>{
+                                this.tableData.push(item)
+                            })
+                        }
+                        this.$nextTick(()=>{
+                            //设置审核活动决策类型选中
+                            this.tableData3.forEach(row => {
+                                this.editData.decisions.decision.forEach(row1 => {
+                                    if (row1.decisionText === row.decisionText) {
+                                        this.$refs.decisionTable.toggleRowSelection(row,true);
+                                    }
+                                });
+                            })
+                            //设置审核活动选中
+                            this.tableData2.forEach((item)=>{
+                                this.editData.wfViewOtherComments.wfViewOtherComment.forEach(row2 => {
+                                    if (row2.fname === item.fname) {
+                                        this.$refs.joinTable.toggleRowSelection(item,true);
+                                    }
+                                });
+                            })
+                            /*this.editData.decisions.decision.forEach((item)=>{
+                                if(this.tableData3.indexOf(item) >=0){
+                                    debugger
+                                    this.$refs.decisionTable.toggleRowSelection(item,true);//选中所在行
+                                }
+                            })*/
                         })
-                    }
-                   console.log(this.joinusertableData,joinusertable);
-                    let tableDataNewSet = []
-                    if( this.editData.wfCopyTo.copyTo.length == 0)return
-                    this.editData.wfCopyTo.copyTo.forEach(item=>{
-                       switch (item.type) {
-                           case 3://用户
-                               tableDataNewSet.push({
-                                   fUsercode: "用户",
-                                   fUsername: item.user.name,
-                                   fUserRemake: item.expression,
-                                   fUseroid:item.user.oid,
-                                   oid:item.oid,
-                                   type:item.type,
-                                   typeName:'user',
-                               })
-                               break;
-                            case 2://角色
-                               tableDataNewSet.push({
-                                   fUsercode: "角色",
-                                   fUsername: item.role.name,
-                                   fUserRemake: item.expression,
-                                   fUseroid:item.role.oid,
-                                   oid:item.oid,
-                                   type:item.type,
-                                   typeName:'role',
-                               })
-                               break;
-                             case 4://服务
-                               tableDataNewSet.push({
-                                   fUsercode:  "服务",
-                                   fUsername: item.service.name,
-                                   fUserRemake: item.expression,
-                                   fUseroid:item.service.oid,
-                                   oid:item.oid,
-                                   type:item.type,
-                                   typeName:'service',
-                               })
-                               break;
-                            case 6://职务
-                               tableDataNewSet.push({
-                                   fUsercode: "职务",
-                                   fUsername: item.position.name,
-                                   fUserRemake: item.expression,
-                                   fUseroid:item.position.oid,
-                                    oid:item.oid,
-                                    type:item.type,
-                                   typeName:'position',
-                               })
-                               break;
-                            case 5://表达式
-                               tableDataNewSet.push({
-                                   fUsercode: "表达式",
-                                   fUsername: item.expression.name,
-                                   fUserRemake: item.expression,
-                                   fUseroid:item.expression.oid,
-                                   oid:item.oid,
-                                    type:item.type,
-                                   typeName:'expression',
-                               })
-                               break;
-                       
-                           default:
-                               break;
-                       }
-                   });
-                    if( this.tableData.length === 0 && tableDataNewSet.length !== 0){
-                        tableDataNewSet.forEach(item=>{
-                          this.tableData.push(item)
-                       })
-                    }
-                   this.tableData2 = this.editData.wfViewOtherComments.wfViewOtherComment
-                    switch (this.editData.wfAuditType) {
-                        case 1:
-                            this.formData.wfAuditType = '普通审批'
-                            break;
-                        case 2:
-                            this.formData.wfAuditType = '并行会签'
-                            break;
-                        case 3:
-                            this.formData.wfAuditType = '串行会签'
-                            break;
-                        default:
-                            break;
-                    } 
-                    // switch (this.editData.timeUnit) {
-                    //     case 1 || '1':
-                    //         this.formData.timeUnit = '小时'
-                    //         break;
-                    //     default:
-                    //         break;
-                    // };
-                  this.tableData3 = this.editData.decisions.decision
-                       this.tableData3.forEach(row => {
+                        /*this.tableData2 = this.editData.wfViewOtherComments.wfViewOtherComment;
+                        this.tableData3 = this.editData.decisions.decision;
+                        this.tableData3.forEach(row => {
                             this.$refs.decisionTable.toggleRowSelection(row);
-                        });
-                    
-             
+                        });*/
                     }
-             }  
+                }  
             },
             deep: true,
             immediate: true
@@ -785,25 +805,25 @@ export default {
         },
         handleClick() {//console.log(this.formData.name)
             if(this.activeName == '5'){//debugger
-                  this.tableData2 =[]
+                this.tableData2 =[]
                 let allData = JSON.parse( sessionStorage.getItem('allData') );
                 if(allData.length>0){
-                     allData.forEach(item=>{
-                    if(item.type == 'Join'&& (item.data.displayName !== this.formData.name) ){
-                        this.tableData2.push({
-                            fname:item.data.displayName,
-                            ftype:item.data.name,
-                            wfProcessor: item.oid?item.oid:item.key
-                        })
-                        // item.wfViewOtherComments.wfViewOtherComment.forEach(vOcItime=>{
-                        //     vOcItime.push({
-                        //         fname:item.data.displayName,
-                        //         ftype:item.data.name,
-                        //         wfProcessor:vOcItime.wfProcessor
-                        //     })
-                        // })
-                    }
-                })
+                    allData.forEach(item=>{
+                        if(item.type == 'Join'&& (item.data.displayName !== this.formData.name) ){
+                            this.tableData2.push({
+                                fname:item.data.displayName,
+                                ftype:item.data.name,
+                                wfProcessor: item.oid?item.oid:item.key
+                            })
+                            // item.wfViewOtherComments.wfViewOtherComment.forEach(vOcItime=>{
+                            //     vOcItime.push({
+                            //         fname:item.data.displayName,
+                            //         ftype:item.data.name,
+                            //         wfProcessor:vOcItime.wfProcessor
+                            //     })
+                            // })
+                        }
+                    })
                 }
             }   
             

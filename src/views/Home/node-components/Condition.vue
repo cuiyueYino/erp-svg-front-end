@@ -40,7 +40,7 @@
               autosize
               show-word-limit
               type="textarea"
-              v-model="fremark"
+              v-model="formData.fremark"
             ></el-input>
           </el-form-item>
           <!-- Condition END-->
@@ -463,7 +463,7 @@ export default {
        
       } else {
         this.formData.checkedCities = this.checkedCities;
-        this.formData.fremark = this.fremark;
+        this.formData.fremark = this.formData.fremark;
         console.log(this.joinusertableData)
         console.log(this.CCtableData)
         this.$emit(
