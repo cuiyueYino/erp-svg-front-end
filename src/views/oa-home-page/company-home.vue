@@ -1,230 +1,322 @@
 <template>
- <el-container>
-    <el-container>
-        <el-main>
-             <el-card class="box-card">
-                 <span class="tab-title">通知公告</span>
-                 <span class="tab-title-tips">Notice</span>
-                 <el-divider></el-divider>
-                  <el-tabs v-model="activeName" @tab-click="handleClick">
-                        <el-tab-pane label="处理中心" name="1">
-                            <ul class="ul-left">
-                                <li>关于岗位调整公示</li>
-                            </ul>
-                            <ul class="ul-right">
-                                <li>2020-7-30</li>
-                            </ul>
-                        </el-tab-pane>
-                        <el-tab-pane label="消息中心" name="2">
-                        </el-tab-pane>
-                    </el-tabs>
-             </el-card>
-             <el-card class="box-card">
-                 <span class="tab-title">新闻中心</span>
-                 <span class="tab-title-tips">News Center</span>
-                 <el-divider></el-divider>
-                  <el-tabs v-model="activeName" @tab-click="handleClick">
-                        <el-tab-pane label="处理中心" name="1">
-                            <ul class="ul-left">
-                                <li>关于岗位调整公示</li>
-                            </ul>
-                            <ul class="ul-right">
-                                <li>2020-7-30</li>
-                            </ul>
-                        </el-tab-pane>
-                        <el-tab-pane label="消息中心" name="2">
-                        </el-tab-pane>
-                    </el-tabs>
-             </el-card>
-        </el-main>
-    </el-container>
+  <el-container>
+    <el-main>
+      <el-card class="box-card" v-for="(item,idx) in menuList" :key="item.foid">
+        <span class="tab-title">{{item.fname}}</span>
+        <el-divider></el-divider>
+        <el-tabs :v-model="activeName[idx]" @tab-click="handleClick">
+          <el-tab-pane
+            v-for="(childrenItem,index) in item.children"
+            :key="index"
+            :label="childrenItem.fname"
+            :name="index.toString()"
+          >
+            <span v-for="(childListItems,indx) in childList[idx]" class="li-box">
+                <ul class="ul-left" @click="toLook(childListItems)">
+                  <li>{{childListItems.fname}}</li>
+                </ul>
+                <ul class="ul-right" @click="toLook(childListItems)">
+                  <li>{{$Uformat.formatDateTYMD(childListItems.fcreatetime)}}</li>
+                </ul>
+            </span>
+          </el-tab-pane>
+        </el-tabs>
+      </el-card>
+    </el-main>
     <el-aside width="30%">
-        <div class="img1">
-            <div>
-                <img src="../../assets/img/oa2.png">
-                <img src="../../assets/img/oa5.png" class="img5">
-            </div>
+      <div class="img1" @click="toWebsite">
+        <div class="website">
+          <img src="../../assets/img/oa2.png" />
+          <img src="../../assets/img/oa5.png" class="img5" />
         </div>
-        <div class="img2">
-            <div>
-                <img src="../../assets/img/oa4.png">
-                <span>通讯录</span>
-            </div>
+      </div>
+      <div class="img2" @click="toTel">
+        <div class="website">
+          <img src="../../assets/img/oa4.png" />
+          <span>通讯录</span>
         </div>
-        <el-card class="box-card-right">
-             <span class="tab-title">日历</span>
-            <span class="tab-title-tips">Calendar</span>
-             <el-divider></el-divider>
-             <el-calendar v-model="value">
-             </el-calendar>
-        </el-card>
+      </div>
+      <el-card class="box-card-right">
+        <span class="tab-title">日历</span>
+        <span class="tab-title-tips">Calendar</span>
+        <el-divider></el-divider>
+        <el-calendar v-model="value"></el-calendar>
+      </el-card>
     </el-aside>
- </el-container>
+    <el-dialog
+    :title="detailMsg.fname"
+    :visible.sync="dialogVisible"
+    center
+    :close-on-click-modal="false">
+        <span v-html="detailMsg.fcontent" ></span>
+        <span slot="footer" class="dialog-footer">
+            <el-button @click="dialogVisible = false">关 闭</el-button>
+        </span>
+    </el-dialog>
+  </el-container>
 </template>
 
 <script>
 export default {
-    name:'oaCompanyHome',
-    data() {
-        return {
-            activeName: '1',
-            value: new Date()
-        };
-    },
-    components: {
-    },
-    created(){
-        this.$nextTick(()=>{
-
+  name: "oaCompanyHome",
+  data() {
+    return {
+      dialogVisible:false,
+      activeName: "0",
+      value: new Date(),
+      menuList: [],
+      childList: [],
+      detailMsg:[]
+    };
+  },
+  components: {},
+  created() {
+    this.$nextTick(() => {});
+  },
+  watch:{
+      
+  },
+  computed: {},
+  created() {
+    this.$nextTick(() => {
+        this.getMenuList()
+      this.$api.documentManagement
+        .getDocumentCategoryOrgArch()
+        .then((res) => {
+          this.menuList = eval("(" + res.data.data + ")")[0].children; //console.log(this.menuList )
+          if (this.menuList) {
+            this.menuList.forEach((item, index) => {
+              if (item.children) {
+                this.getChildList(item.children[0].foid);
+              }
+            });
+          }
         })
+        .catch((err) => {
+          console.log(err);
+        });
+    });
+  },
+  methods: {
+    handleClick(tab) {
+    //   console.log(tab);
+      this.menuList.forEach((item, index) => {
+        item.children.forEach((childrenItem, idx) => {
+          if (childrenItem.fname == tab.label) {//console.log(childrenItem);
+          let data={
+               fpid: childrenItem.foid,
+                page: 1,
+                size: 10,
+          }
+            this.$api.documentManagement.findDocumentManageByPage(data)
+                .then((res) => {
+                   this.$set(this.childList,index, res.data.data.rows);
+                    // console.log(this.childList)
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+          }
+        });
+      });
     },
-    computed:{
-        
+
+    // 获取二级菜单详情列表
+    async getChildList(item) {
+      let getChildListNew = [];
+      this.childList = [];
+      let data = {
+        "fuserid": item,
+        page: 1,
+        size: 10,
+      };
+      await this.$api.documentManagement
+        .findDocumentManageByPage(data)
+        .then((res) => {
+          this.childList.push(res.data.data.rows);
+          console.log(this.childList); 
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
-    methods:{
-        handleClick(tab, event) {
-        console.log(tab, event);
-      },
-        //删除
-        deleteMsg(){
-            this.$api.processSet.deleteMsg().then(res=>{
-                    if(res.data.data.msg = "success"){
-                        this.$message.success('删除成功');
-                    }
-                }),error=>{
-                    console.log(error);
-                }
-        },
-        
+    //   获取菜单list
+    getMenuList() {
+      this.$api.documentManagement
+        .getDocumentCategoryOrgArch()
+        .then((res) => {
+          this.menuList = eval("(" + res.data.data + ")")[0].children;
+        //   console.log(this.menuList);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
-}
+    toWebsite() {
+      window.open("http://www.fujiagroup.com/");
+    },
+    toTel() {
+      window.open("http://192.168.85.96:8092/file/txl.htm");
+    },
+    //查看页面详情
+    toLook(val) {
+      this.$api.documentManagement.findDocumentManageById(val).then(res => {
+        if (res.data.data) {
+            this.dialogVisible = true;
+            this.detailMsg = res.data.data
+        } else {
+            this.$message.error('查询失败!');
+        }
+      })
+    },
+  },
+};
 </script>
 <style lang="scss" scoped>
-    .el-container{
-        font-family: MicrosoftYaHei;
-        overflow-y: auto;
-        width: 100%;
-        height: 88vh;
-        // margin-bottom: 20px;
-    }
-  .el-aside {
-    color: #333;
-    text-align: center;
-    line-height: 200px;
-    overflow: unset;
-    width: 100%;
+.el-container {
+  font-family: MicrosoftYaHei;
+  overflow-y: auto;
+  overflow-x: hidden;
+  width: 100%;
+  height: 88vh;
+  // margin-bottom: 20px;
+}
+.el-aside {
+  color: #333;
+  text-align: center;
+  line-height: 200px;
+  overflow: unset;
+  width: 100%;
+}
+/deep/ .el-dialog--center .el-dialog__body{
+        overflow: auto;
+}
+.el-main {
+  padding: 0;
+  margin-right: 20px;
+  width: 100%;
+  height: 100%;
+  overflow: unset !important;
+}
+.box-card {
+  display: flex;
+  margin-bottom: 20px;
+  .el-divider--horizontal {
+    margin: 11px 0 0 0;
+    width: 63vw;
   }
-  
-  .el-main {
-    padding: 0;
-    margin-right: 20px;
-    width: 100%;
+  .el-tab-pane {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
   }
-  .box-card{
-      display: flex;
-      margin-bottom: 20px;
-      .el-divider--horizontal{
-        margin:11px 0 0 0;
-        width: 63vw;
-      }
-      .el-tab-pane{
-        display: flex;
-        justify-content: space-between;
-      }
-     /deep/ .el-tabs__nav-wrap::after{
-          display: none !important;
-      }
-       /deep/ .el-tabs__content{
-              width: 96%;
-      }
-      .ul-left{
-        //   float: left;
-      }
-       .ul-right{
-        //   float: right;
-      }
-      ul li{
-          list-style: none;
-      }
+  /deep/ .el-tabs__nav-wrap::after {
+    display: none !important;
   }
-  .tab-title{
-      font-size:18px;
-      color: #2D72C9;
-      line-height:16px;
+  /deep/ .el-tabs__content {
+    width: 96%;
   }
-  .tab-title-tips{
-      color: #B8B8B8;
-      font-size:14px;
-      margin-left: 10px;
+  .ul-left {
+    width: 50%;
   }
-  .img1{
-      background-image: url("../../assets/img/oa1.png");
-        max-width: 520px;
-        height: 270px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        // background-size: cover;
-        // background-position: center;
-        object-fit: cover;
-        object-position: center top;
-        div{
-            display: flex;
-            flex-wrap: wrap;
-            width: 200px;
-            justify-content: center;
-        }
-        img{
-            display: block;
-        }
+  .ul-right {
+    width: 50%;
+    text-align: right;
+  }
+  ul li {
+    list-style: none;
+    cursor: pointer;
+    line-height: 34px;
+  }
+}
+.tab-title {
+  font-size: 18px;
+  color: #2d72c9;
+  line-height: 16px;
+}
+.tab-title-tips {
+  color: #b8b8b8;
+  font-size: 14px;
+  margin-left: 10px;
+}
+.img1 {
+  background-image: url("../../assets/img/oa1.png");
+  max-width: 520px;
+  cursor: pointer;
+  height: 270px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  // background-size: cover;
+  // background-position: center;
+  object-fit: cover;
+  object-position: center top;
+  div {
+    display: flex;
+    flex-wrap: wrap;
+    width: 200px;
+    justify-content: center;
+  }
+  img {
+    display: block;
+  }
+}
+.img2 {
+  background-image: url("../../assets/img/oa3.png");
+  cursor: pointer;
+  max-width: 520px;
+  height: 270px;
+  margin: 15px 0;
+  object-fit: cover;
+  object-position: center top;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  div {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100px;
+    justify-content: center;
+    img {
+      display: block;
     }
-    .img2{
-      background-image: url("../../assets/img/oa3.png");
-        max-width: 520px;
-        height: 270px;
-        margin: 15px 0;
-        object-fit: cover;
-        object-position: center top;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-         div{
-            display: flex;
-            flex-wrap: wrap;
-            width: 100px;
-            justify-content: center;
-            img{
-                display: block;
-            }
-            span{
-                font-size:20px;
-                line-height: 16px;
-                margin-top: 30px;
-                color: #FFFFFF;
-
-            }
-        }
+    span {
+      font-size: 20px;
+      line-height: 16px;
+      margin-top: 30px;
+      color: #ffffff;
     }
-    .box-card-right{
-        display: flex;
-         max-width: 520px;  
-         text-align: left;
-         height: 396px;
-         line-height: 16px;
-         margin-bottom: 20px;
-          .el-divider--horizontal{
-                margin:11px 0 18px 0;
-            }
-        .el-calendar{
-            height: 300px;
-            /deep/ .el-calendar-table .el-calendar-day{
-                height: 34px;
-            }
-        }
+  }
+}
+.box-card-right {
+  display: flex;
+  max-width: 520px;
+  text-align: left;
+  height: 396px;
+  line-height: 16px;
+  margin-bottom: 20px;
+  .el-divider--horizontal {
+    margin: 11px 0 18px 0;
+  }
+  .el-calendar {
+    height: 300px;
+    /deep/ .el-calendar-table .el-calendar-day {
+      height: 34px;
     }
-    .img5{
-        width: 140px;
-        height: 34px;
-        margin-top: 30px;
-    }
+  }
+}
+.img5 {
+  width: 140px;
+  height: 34px;
+  margin-top: 30px;
+}
+.website {
+  cursor: pointer;
+}
+.li-box {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
 </style>

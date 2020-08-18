@@ -339,7 +339,14 @@ class ITEMData {
 			}]
 		}
 	];
-			
+	this.ITEMoa = [{
+		index: 'oaCompanyHome',
+		title: '集团门户',
+		},{
+			index: 'oaPersonalHome',
+			title: '个人门户',
+			} 
+];
 	};
 }
 export default ITEMData;

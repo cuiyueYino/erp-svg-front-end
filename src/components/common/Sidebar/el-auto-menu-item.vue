@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div v-if="isOa">
 		<el-submenu v-if="menuItemData.subs" :index="typeof(menuItemData.url) == 'undefined' ? Math.random().toString() : menuItemData.url">
 			<template slot="title">
 				<i :class="menuItemData.pictureUrl"></i>
@@ -10,6 +10,13 @@
 		<el-menu-item v-else :index="typeof(menuItemData.url) == 'undefined' ? Math.random().toString() : menuItemData.url">
 			<i :class="menuItemData.pictureUrl"></i>
 			<span slot="title">{{ menuItemData.name }}</span>
+		</el-menu-item>
+		
+	</div>
+	<div v-else>
+		 <el-menu-item  :index="menuItemData.index">
+			<!-- <i :class="menuItemData.icon"></i> -->
+			<span slot="title">{{ menuItemData.title }}</span>
 		</el-menu-item>
 	</div>
 </template>
@@ -25,7 +32,8 @@
 			return {};
 		},
 		props: {
-			menuItemData: Object
+			menuItemData: Object,
+			isOa:Boolean
 		}
 	};
 </script>

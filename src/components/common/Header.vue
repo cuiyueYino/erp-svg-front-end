@@ -7,6 +7,12 @@
         </div>
         <div class="logo">福佳集团ERP管理系统</div>
         <div class="header-right">
+             <div class="header-user-con">
+                <!-- 进入系统 -->
+                <div class="el-icon-monitor to-oa" @click="toOa" >
+                   <span>进入系统</span>
+                </div>
+            </div>
             <div class="header-user-con">
                 <!-- 全屏显示 -->
                 <div class="btn-fullscreen" @click="handleFullScreen">
@@ -56,6 +62,9 @@ export default {
     },
     inject: ['bus'],
     methods: {
+        toOa(){
+            this.$router.push('/');
+        },
         // 用户名下拉菜单选择事件
         handleCommand(command) {
             if (command == 'loginout') {
@@ -131,6 +140,7 @@ export default {
 .header-right {
     float: right;
     padding-right: 50px;
+    display: flex;
 }
 .header-user-con {
     display: flex;
@@ -182,5 +192,14 @@ export default {
 }
 .el-dropdown-menu__item {
     text-align: center;
+}
+.to-oa{
+    cursor: pointer;
+    margin-right: 14px;
+        font-size: 21px;
+        span{
+            font-size: 15px;
+            margin-left: 5px;
+        }
 }
 </style>
