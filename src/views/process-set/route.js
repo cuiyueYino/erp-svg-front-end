@@ -6,6 +6,7 @@ const concernsItemlist = () => import('./concerns-item-list.vue');
 const issuedItems =() => import('./issued-items')
 const workdoneItemList =() => import('./work-done-items');
 const recycleBin =()=> import('./recycle-bin')
+const outline2 = () => import('./task-structure.vue');
 const PROJECT = [
     {
         path: 'workProcess',
@@ -29,6 +30,14 @@ const PROJECT = [
         component: todolist,
         meta: {
             title: '待办事项'
+        }
+    },
+    {
+        path: 'taskStructure',
+        name: 'taskStructure',
+        component: outline2,
+        meta: {
+            title: '任务结构编制'
         }
     },
     {

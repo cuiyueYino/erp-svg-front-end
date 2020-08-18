@@ -124,7 +124,7 @@ export default {
         data: {
             handler (obj) {
                 if(obj.type === "Subprocess" || obj.name === "Subprocess"){console.log(obj)
-                if(!obj.id){
+                if(!obj.oid){
                     this.formData.name = obj.displayName
                 }else{
                     this.editData = obj;
@@ -152,6 +152,7 @@ export default {
         visible (bool) {console.log(bool)
             this.dialogVisible = bool;
             if (bool) {
+                // this.$refs['formData'].resetFields();
             }else {
                 this.newData.forEach(item => {
                     if(item.foid == this.formData.company){

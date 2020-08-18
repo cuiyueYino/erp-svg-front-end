@@ -19,7 +19,7 @@
 					<el-button type="danger" @click="$parent.toSelect()" size="mini" icon="el-icon-close">返回</el-button>
 				</el-col>
 			</el-row>
-			<formAndTable dis="2" showAdd="1" ref="child" :form-data="conData"></formAndTable>
+			<formAndTable :files="files" dis="2" showAdd="1" ref="child" :form-data="conData"></formAndTable>
 		</el-card>
 		<!--弹出框-->
 		<el-dialog title="工作事项主板模板" top="1vh" :destroy-on-close="true" center :visible.sync="dialogVisible" width="80%">
@@ -47,6 +47,7 @@
 		},
 		data() {
 			return {
+				files:[],
 				//提交/暂存按钮显示
 				showFig: false,
 				//主表弹出框
@@ -106,6 +107,8 @@
 					backData.voucherTime = JSON.parse(JSON.stringify(backData.jsonStr.voucherTime))
 					//公司code
 					backData.companyCode = this.company.code
+					//主表字段
+					backData.activityId = this.activityId
 					//登陆人
 					backData.creator = localStorage.getItem('ms_userId')
 					//暂存1 提交2
@@ -172,6 +175,7 @@
 				this.$api.collaborativeOffice.findById({
 					id: this.$refs.childMain.rowClick.id
 				}).then(data => {
+					this.activityId = data.data.data.workItemTemp.activityId
 					//主表Name
 					this.tableName = data.data.data.workItemTemp.tableName
 					//整理传入子组件的数据主表top  子表bottom 

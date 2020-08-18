@@ -135,7 +135,13 @@
 						tableName: this.rowClick.tableName
 					}).then(data => {
 						if(this.dataBack(data)) {
-							this.$parent.toSee(JSON.parse(data.data.data), this.rowClick.tempId, "1")
+							this.$api.collaborativeOffice.findlnfosList({
+								voucherId: JSON.parse(data.data.data).id,
+								userCode: localStorage.getItem('ms_userId'),
+								menuCode: "workItem"
+							}).then(val => {
+								this.$parent.toSee(JSON.parse(data.data.data), this.rowClick.tempId, "1", val.data.data)
+							})
 						}
 					})
 				}
@@ -171,7 +177,14 @@
 						tempId: this.rowClick.tempId,
 						tableName: this.rowClick.tableName
 					}).then(data => {
-						this.$parent.toSee(JSON.parse(data.data.data), this.rowClick.tempId, "3")
+						this.$api.collaborativeOffice.findlnfosList({
+							voucherId: JSON.parse(data.data.data).id,
+							userCode: localStorage.getItem('ms_userId'),
+							menuCode: "workItem"
+						}).then(val => {
+							this.$parent.toSee(JSON.parse(data.data.data), this.rowClick.tempId, "3", val.data.data)
+						})
+
 					})
 				}
 			},

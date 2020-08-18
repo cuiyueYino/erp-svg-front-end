@@ -64,62 +64,55 @@
             <el-form :model="form" :rules="rules"  ref="form">
                 <el-row :gutter="22">
                      <el-col :span="11">
-                    <el-form-item label="公司："  :label-width="formLabelWidth" class="pop-select" prop="formCtionTypeCon">
-                        <el-select v-model="form.formCtionTypeCon"
+                    <el-form-item label="公司："  :label-width="formLabelWidth" class="pop-select" prop="tcompanyoid">
+                        <el-select v-model="form.tcompanyoid"
                          size="small"
                          :disabled="isLook"
                           clearable placeholder="请选择">
-                        <el-option
+                          <el-option
                             v-for="item in options"
-                            :key="item.value"
-                            :label="item.label"
-                            :value="item.value"
-                        ></el-option>
+                            :key="item.id"
+                            :label="item.name"
+                            :value="item.id"
+                          ></el-option>
                         </el-select>
                     </el-form-item>
                    <el-form-item label="组名：" :label-width="formLabelWidth" >
-                    <el-input v-model="form.fname" :disabled="isLook" size="small"  maxlength="50" autocomplete="off"></el-input>
+                    <el-input v-model="form.fteamname" :disabled="isLook" size="small"  maxlength="50" autocomplete="off"></el-input>
                     </el-form-item>
-                    <el-form-item label="离职、调转人员：" label-width="134px" prop="fname">
+                    <el-form-item label="离职、调转人员：" label-width="134px" prop="transStaffRelUser">
                       <el-input
                           :disabled="true"
                           type="textarea"
                           autosize
                            size="small"
                           placeholder="请选择组员"
-                          v-model="form.fname">
+                          v-model="form.transStaffRelUser">
                         </el-input>
                     </el-form-item>
                    
                 </el-col>
                  <el-col :span="11">
-                    <el-form-item label="编码：" :label-width="formLabelWidth" prop="fcode">
-                    <el-input v-model="form.fcode" :disabled="isLook" size="small"  autocomplete="off"></el-input>
+                    <el-form-item label="编码：" :label-width="formLabelWidth" prop="fteamid">
+                    <el-input v-model="form.fteamid" :disabled="isLook" size="small"  autocomplete="off"></el-input>
                     </el-form-item>
-                    <el-form-item label="组长：" :label-width="formLabelWidth" prop="fcode">
-                      <el-input v-model="form.fcode" :disabled="isLook" placeholder="请选择组长" size="small"  autocomplete="off"></el-input>
-                        <img class="icon-search" v-show="!isLook" src="../../assets/img/search.svg" @click="baseInputTable('选择组长')" />
+                    <el-form-item label="组长1：" :label-width="formLabelWidth" prop="fteamleader">
+                      <el-input v-model="form.fteamleader" :disabled="isLook" placeholder="请选择组长" size="small"  autocomplete="off"></el-input>
+                        <img class="icon-search" v-show="!isLook" src="../../assets/img/search.svg" @click="baseInputTable(form,'选择组长')" />
                     </el-form-item>
-                      <el-form-item label="组员：" :label-width="formLabelWidth" prop="fname">
-                      <el-input
-                          type="textarea"
-                          autosize
-                          :disabled="isLook"
-                           size="small"
-                          placeholder="请选择组员"
-                          v-model="form.fname">
-                        </el-input>
-                         <img class="icon-search" v-show=" !isLook" src="../../assets/img/search.svg" @click="baseInputTable('选择组员')" />
+                      <el-form-item label="组员：" :label-width="formLabelWidth" prop="staffRelUsers">
+                      <el-input type="textarea" autosize :disabled="isLook" size="small" placeholder="请选择组员" v-model="form.staffRelUsers"></el-input>
+                         <img class="icon-search" v-show=" !isLook" src="../../assets/img/search.svg" @click="baseInputTable(form,'选择组员')" />
                     </el-form-item>
                  </el-col>
                  <el-col :span="22">
-                    <el-form-item label="备注："  maxlength="3000"  :label-width="formLabelWidth" prop="fname">
+                    <el-form-item label="备注："  maxlength="3000"  :label-width="formLabelWidth" prop="fremark">
                       <el-input
                           type="textarea"
                           autosize
                           :disabled="isLook"
                            size="small"
-                          v-model="form.fname">
+                          v-model="form.fremark">
                         </el-input>
                     </el-form-item>
                  </el-col>
@@ -127,30 +120,32 @@
                 
             </el-form>
         
-      <div slot="footer" class="dialog-footer">
+      <div slot="footer" class="dialog-footer">`
         <el-button @click="dialogFormVisible = false">取 消</el-button>
         <el-button type="primary" @click="addSubmit('form')">保 存</el-button>
       </div>
     </el-dialog>
-    <!-- 部门/职位弹窗 -->
+    <!-- 组长/组员弹窗 -->
       <el-dialog :title="choseDepart" 
        top="20px"
       :visible.sync="userVisible"
       :close-on-click-modal="false">
        
        <div v-show="isLeader">
-        <el-input placeholder="输入关键字进行过滤" v-model="filterText">></el-input>
-      
         <!-- 树状图 -->
-        <el-tree
-             class="filter-tree"
-            :data="treeData"
-            :props="defaultProps"
-            default-expand-all
-            :filter-node-method="filterNode"
-            ref="tree"
-            @node-click="handleNodeClick">
-        </el-tree>
+        <div class="El-tree">
+            <el-tree
+                v-loading="treeloading"
+                element-loading-text="拼命加载中"
+                :data="treeData"
+                :props="defaultProps"
+                node-key="foid"
+                :render-content="renderContent"
+                :default-expanded-keys="defaultexpanded"
+                accordion
+                @node-click="handleNodeClick">
+            </el-tree>
+        </div>
        </div>
        <div v-show="isMembers">
           <el-tree
@@ -171,15 +166,29 @@
             <el-button type="primary" @click="addPeople()">确 定</el-button>
         </div>
       </el-dialog>
+      <OPSpage  :rowOPSDataObj="rowOPSDataObj" :rowOPStype="rowOPStype" @changeShow="showORhideForPS"/>
+      <DUTSpage  :rowDUTSDataObj="rowDUTSDataObj" :rowDUTStype="rowDUTStype" @changeShow="showORhideForDUTS"/>
+      <POSserachpage  :rowPOSSDataObj="rowPOSSDataObj" :rowPOSStype="rowPOSStype" @changeShow="showORhideForPOSS"/>
   </div>
 </template>
 
 <script>
 import DynamicTable from "../../components/common/dytable/dytable.vue";
+import OPSpage from '../comment/organization-personnel-search.vue';
+import DUTSpage from '../comment/duties-search.vue';
+import POSserachpage from '../comment/position-search.vue';
 export default {
   name: "workBusiGroup",
   data() {
     return {
+      defaultexpanded:[],
+      treeloading:false,
+      rowOPStype:false,
+      rowOPSDataObj:{},
+      rowDUTStype:false,
+      rowDUTSDataObj:{},
+      rowPOSStype:false,
+      rowPOSSDataObj:{},
       dialogFormVisible: false,
       userVisible:false,
       isEdit:false,
@@ -192,20 +201,6 @@ export default {
       formCode: "",
       filterText: '',
        treeData:[
-        {
-            label: '一级 1',
-            children: [{
-                label: '二级 1-1',
-                children: [{
-                label: '三级 1-1-1'
-                }]
-            }]
-        },{
-            label: '一级 1',
-            children: [{
-                label: '二级 1-1',
-            }]
-        },
             ],
         defaultProps: {
         children: 'children',
@@ -284,14 +279,13 @@ export default {
       multipleSelection: [],
       checked: false,
       form: {
-        name: "",
-        region: "",
-        date1: "",
-        date2: "",
-        delivery: false,
-        type: [],
-        resource: "",
-        fremark: ""
+        fteamleader:'',
+        fteamname: "",
+        fteamid: "",
+        fremark: "",
+        fcompanyoid: "",
+        staffRelUsers: [],
+        transStaffRelUser: [],
       },
       searchForm: {},
       userForm:{},
@@ -299,29 +293,23 @@ export default {
       choseDepart:'',
       formLabelWidth: "120px",
       rules: {
-        fcode: [
+        fteamid: [
           { required: true, message: "请输入编码", trigger: "blur" },
-          {
-            min: 1,
-            max: 100,
-            message: "长度在 1 到 50 个字符",
-            trigger: "blur"
-          }
         ],
-        fname: [
-          { required: true, message: "请输入名称", trigger: "blur" },
-          {
-            min: 1,
-            max: 100,
-            message: "长度在 1 到 100 个字符",
-            trigger: "blur"
-          }
+        fteamleader: [
+          { required: true, message: "请选择组长名称", trigger: "blur" },
+        ],
+        staffRelUsers: [
+          { required: true, message: "请选择组员名称", trigger: "blur" },
         ]
       }
     };
   },
   components: {
-    DynamicTable
+    DynamicTable,
+    DUTSpage,
+    POSserachpage,
+    OPSpage
   },
   created() {
     this.$nextTick(() => {
@@ -334,14 +322,88 @@ export default {
         this.$refs.tree.filter(val);
       }
     },
-
+  mounted() {
+    debugger;
+        this.treeloading = true;
+        this.$api.management.selectAllOrganizationInfo().then(response => {
+            let responsevalue = response;
+            if (responsevalue) {
+                let tabledata=eval('(' + responsevalue.data.data + ')');
+                this.treeData=tabledata;
+            }
+            this.treeloading = false;
+        }); 
+    },
   methods: {
         filterNode(value, data) {
         if (!value) return true;
         return data.label.indexOf(value) !== -1;
       },
-    baseInputTable(Str) {
-      this.userVisible = true;
+    // 查询行政上级，业务上级的返回值处理
+        showORhideForPOSS(data,type){
+            if(type === false){
+                this.rowPOSStype = false;
+            }else{
+                this.rowPOSStype = true;
+            }
+            if(data.SearchData){
+                let Sdata=data.SearchData;
+                if(data.Searchtype =='Multiple'){
+                    let FnameS='';
+                    let FoidS='';
+                    for(var i=0;i<Sdata.length;i++){
+                        FnameS+=Sdata[i].fname+',';
+                        FoidS+=Sdata[i].foid+',';
+                    }
+                    FnameS=FnameS.slice(0,FnameS.length-1);
+                    FoidS=FoidS.slice(0,FoidS.length-1);
+                    this.DutformData.businessLeaderName=FnameS;
+                    this.DutformData.businessLeaderId=FoidS;
+                }else{
+                    this.DutformData.directLeaderName=Sdata[0].fname;
+                    this.DutformData.directLeaderId=Sdata[0].foid;
+                }
+            }
+        },
+        //查询行政上级，业务上级
+        MoreSearchPOSS(data,type){
+            this.rowPOSStype = true;
+            let finandata={};
+            finandata.finanrowname="";
+            finandata.finanrowId="";
+            finandata.nametitle="组织机构维护";
+            finandata.Searchtype=type;
+            this.rowPOSSDataObj=finandata;
+        },
+        renderContent(h, { node, data, store }) {
+            if(data){
+                if(data.ftype =="1"){
+                    return(
+                        <span class="custom-tree-node">
+                            <span><i class="el-icon-office-building"></i></span>
+                            <span style="margin-left: 5px;">{node.label}</span>
+                        </span>
+                    );
+                }else if(data.ftype=="2"){
+                    return(
+                        <span class="custom-tree-node">
+                            <span><i class="el-icon-s-help"></i></span>
+                            <span style="margin-left: 5px;">{node.label}</span>
+                        </span>
+                    );
+                }else if(data.ftype=="3"){
+                    return(
+                        <span class="custom-tree-node">
+                            <span><i class="el-icon-s-check"></i></span>
+                            <span style="margin-left: 5px;">{node.label}</span>
+                        </span>
+                    );
+                }
+            }  
+        },
+    // 选择组长/组员方法
+    baseInputTable(data,Str) {
+      debugger;
       this.choseDepart = Str;
       switch (Str) {
         case "选择组员":
@@ -355,16 +417,137 @@ export default {
         default:
           break;
       }
+        this.rowOPStype = true;
+        let finandata=data;
+        finandata.finanrowname="人员缺省查询方案";
+        finandata.finanrowId="QS_0056";
+        finandata.nametitle="组织机构维护";
+        finandata.UserSearchtype=type;
+        this.rowOPSDataObj=finandata;
     },
+
+    //获取人员查询结果
+        showORhideForPS(data,type){
+          
+            if(type === false){
+                this.rowOPStype = false;
+            }else{
+                this.rowOPStype = true;
+            }
+            if(data.UserSearchtype=='分管领导'){
+                this.DepformData.vicePresidentName=data.selectOptionName;
+                this.DepformData.vicePresidentId=data.selectOptionID;
+            }else{
+                this.DepformData.departmentLeaderName=data.selectOptionName;
+                this.DepformData.departmentLeaderId=data.selectOptionID;
+            }
+        },
+        //查询职务
+        MoreSearchDUTS(data,type){
+            this.rowDUTStype = true;
+            let finandata={};
+            finandata.finanrowname="职务查询方案";
+            finandata.finanrowId="QS_0032";
+            finandata.nametitle="组织机构维护";
+            finandata.UserSearchtype=type;
+            this.rowDUTSDataObj=finandata;
+        },
+        //职务查询结果
+        showORhideForDUTS(data,type){
+            if(type === false){
+                this.rowDUTStype = false;
+            }else{
+                this.rowDUTStype = true;
+            }
+            if(data.UserSearchtype=="职务"){
+                this.DutformData.positonName=data.awardcreditbreedname;
+                this.DutformData.positonId=data.awardcreditbreedId;
+            }
+        },
     searchDepart(){
 
+    },
+    
+    // 获取公司方法
+    getCompany(){
+        this.$api.jobUserManagement.getCompanyData().then(res=>{
+            if(res.status == '200'){
+               this.options = res.data.data.rows
+            }
+        }),error => {
+          console.log(error);
+        }
     },
      //树结构点击事件
     nodeClick(data){
       let treeType=data.type;
     },
-    handleNodeClick(data) {
-            console.log(data);
+    //树结构点击事件
+        handleNodeClick(data) {
+            let treeType=data.ftype;
+            this.NodeClickData=data;
+            if(treeType=="1"){
+                let fromdata={};
+                fromdata.foid=data.foid;
+                this.$api.management.getselectCompanyInfo(fromdata).then(response => {
+                    let responsevalue = response;
+                    if (responsevalue) {
+                        let returndata = responsevalue.data.data;
+                        this.Companyflag=true;
+                        this.Departmentflag=false;
+                        this.Dutiesflag=false;
+                        this.disabled=true;
+                        this.ConformData=returndata;
+                    } else {
+                        this.$message.success('没有查到数据!');
+                    }
+                });
+            }else if(treeType=="2"){
+                let fromdata={};
+                fromdata.foid=data.foid;
+                this.$api.management.selectDepartmentInfo(fromdata).then(response => {
+                    let responsevalue = response;
+                    if (responsevalue) {
+                        let returndata = responsevalue.data.data;
+                        this.Companyflag=false;
+                        this.Departmentflag=true;
+                        this.Dutiesflag=false;
+                        this.disabled=true;
+                        this.DepformData=returndata;
+                    } else {
+                        this.$message.success('没有查到数据!');
+                    }
+                });
+            }else if(treeType=="3"){
+                let fromdata={};
+                fromdata.foid=data.foid;
+                this.$api.management.selectPositionInfo(fromdata).then(response => {
+                    let responsevalue = response;
+                    if (responsevalue) {
+                        let returndata = responsevalue.data.data;
+                        this.Companyflag=false;
+                        this.Departmentflag=false;
+                        this.Dutiesflag=true;
+                        this.disabled=true;
+                        let busLList=returndata.businessLeaderList;
+                        let busLListS='';
+                        let busIDListS='';
+                        if(busLList){
+                            for(let i=0;i<busLList.length;i++){
+                                busLListS+=busLList[i].fname+",";
+                                busIDListS+=busLList[i].foid+",";
+                            }
+                            busLListS=busLListS.slice(0,busLListS.length-1);
+                            busIDListS=busIDListS.slice(0,busIDListS.length-1);
+                            returndata.businessLeaderName=busLListS;
+                            returndata.businessLeaderId=busIDListS;
+                        }
+                        this.DutformData=returndata;
+                    } else {
+                        this.$message.success('没有查到数据!');
+                    }
+                });
+            }
         },
     //多选
     onSelectionChange(val) {
@@ -506,6 +689,7 @@ export default {
             this.isAdd = true;
             this.isEdit = false;
             this.isLook = false;
+            this.getCompany();
             break;
           case '查看':
             this.isLook = true;

@@ -119,9 +119,13 @@ const collaborativeOffice = {
 	updateWorkItem(params) {
 		return httpReqest.post('/api/interfaces/workItem/updateWorkItem', params);
 	},
-	//工作事项修改   必填字段：srcId、oprStatus（主表、明细行都需要）
+	//工作事项上传
 	uploadFile(params) {        
 		return httpReqest.post('/api/interfaces/attachment/uploadFile', params);    
+	},
+	//查询附件
+	findlnfosList(params) {        
+		return httpReqest.post('/api/interfaces/attachment/findInfosList', params);    
 	},
 	//根据ID查询工作事项模版主表
 	getWorkItemTempModel(params) {
@@ -168,7 +172,7 @@ const collaborativeOffice = {
 		return httpReqest.get('/api/interfaces/workItem/findById' + valueS);
 	},
 	//通过模版查询权限
-	findRoleByWorkItem(params) {
+	findRoleAuthByWorkItem(params) {
 		var valueS = '?';
 		for(var item in params) {
 			valueS += item + "=" + params[item] + "&";
@@ -176,7 +180,7 @@ const collaborativeOffice = {
 		if(valueS.slice(valueS.length - 1, valueS.length) === "&") {
 			valueS = valueS.slice(0, valueS.length - 1);
 		}
-		return httpReqest.get('/api/interfaces/workItemAuth/findRoleByWorkItem' + valueS);
+		return httpReqest.get('/api/interfaces/workItemAuth/findRoleAuthByWorkItem' + valueS);
 	},
 	//通过角色查询模版
 	findWorkItemByRoleId(params) {
@@ -201,7 +205,7 @@ const collaborativeOffice = {
 		return httpReqest.get('/api/interfaces/workItemAuthUser/findWorkItemByUser' + valueS);
 	},
 	//通过模板查询人员
-	findUserByWorkItem(params) {
+	findUserAuthByWorkItem(params) {
 		var valueS = '?';
 		for(var item in params) {
 			valueS += item + "=" + params[item] + "&";
@@ -209,7 +213,18 @@ const collaborativeOffice = {
 		if(valueS.slice(valueS.length - 1, valueS.length) === "&") {
 			valueS = valueS.slice(0, valueS.length - 1);
 		}
-		return httpReqest.get('/api/interfaces/workItemAuthUser/findUserByWorkItem' + valueS);
+		return httpReqest.get('/api/interfaces/workItemAuthUser/findUserAuthByWorkItem' + valueS);
+	},
+	//删除附件
+	deleteInfo(params) {
+		var valueS = '?';
+		for(var item in params) {
+			valueS += item + "=" + params[item] + "&";
+		}
+		if(valueS.slice(valueS.length - 1, valueS.length) === "&") {
+			valueS = valueS.slice(0, valueS.length - 1);
+		}
+		return httpReqest.get('/api/interfaces/attachment/deleteInfo' + valueS);
 	},
 	//api手动输入接口名称
 	apiUrl(url, params) {

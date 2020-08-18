@@ -62,7 +62,7 @@
                     <el-checkbox v-model="checked"></el-checkbox>
                 </el-form-item>
                 <el-form-item label="描述：" :label-width="formLabelWidth"  prop="fremark">
-                    <el-input maxlength="1000" show-word-limit autosize type="textarea" v-model="form.fremark"></el-input>
+                    <el-input maxlength="500" show-word-limit autosize type="textarea" v-model="form.fremark"></el-input>
                 </el-form-item>
                 </el-col>
             </el-form>
@@ -186,6 +186,8 @@ export default {
             this.getTableData(this.formCode);
         },
         getAll(){
+            // 清空搜索框数据
+            this.formCode = '';
             this.getTableData('')
         },
          closeBaseInfo(data, dialogtitle, type) {
@@ -242,8 +244,10 @@ export default {
              });
 
         },
+        
         //删除
         deleteMsg(){
+            debugger;
             if(this.multipleSelection.length > 1){
                  this.$message.error('只能选择一个删除');
                  return;
@@ -252,10 +256,12 @@ export default {
                  return;
             };
             this.$api.processSet.deleteMsg(this.multipleSelection[0].foid).then(res=>{
-                    if(res.data.data.msg = "success"){
+                    if(res.data.code == 0){
                         this.$message.success('删除成功');
                         //刷新表格
                         this.getTableData('')
+                    } else {
+                        this.$message.error(res.data.msg);
                     }
                 }),error=>{
                     console.log(error);

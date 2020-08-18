@@ -20,7 +20,7 @@
               </el-form-item>
             </el-col>
             <el-form-item prop="selectVal">
-              <el-input clearable v-model="form.selectVal" placeholder="请输入任意查询内容"></el-input>
+              <el-input clearable v-model="form.selectFormVal" placeholder="请输入任意查询内容"></el-input>
             </el-form-item>
 
             <el-form-item>
@@ -106,12 +106,14 @@
               </el-select>
             </el-form-item>
             <el-form-item label="部门：" :label-width="formLabelWidth" prop="tdepartmentname">
-              <el-input v-model="peopleForm.tdepartmentname" size="small" autocomplete="off"></el-input>
-              <img
-                class="icon-search"
-                src="../../assets/img/search.svg"
-                @click="baseInputData('选择部门')"
-              />
+              <el-row>
+                <el-col :span="21">
+                  <el-input v-model="peopleForm.tdepartmentname" size="small" autocomplete="off"></el-input>
+                </el-col>
+                <el-col :span="3">
+                  <el-button type="primary" size="mini" icon="el-icon-search" @click="baseInputData('选择部门')"></el-button>
+                </el-col>
+              </el-row>
             </el-form-item>
           </el-col>
           <el-col :span="11">
@@ -122,12 +124,14 @@
               <el-input v-model="peopleForm.tname" size="small" autocomplete="off"></el-input>
             </el-form-item>
             <el-form-item label="职位：" :label-width="formLabelWidth" prop="ffirmpositionname">
-              <el-input v-model="peopleForm.ffirmpositionname" size="small" autocomplete="off"></el-input>
-              <img
-                class="icon-search"
-                src="../../assets/img/search.svg"
-                @click="baseInputData('选择职位')"
-              />
+              <el-row>
+                <el-col :span="21">
+                  <el-input v-model="peopleForm.ffirmpositionname" size="small" autocomplete="off"></el-input>
+                </el-col>
+                <el-col :span="3">
+                  <el-button type="primary" size="mini" icon="el-icon-search" @click="baseInputData('选择职位')"></el-button>
+                </el-col>
+              </el-row>
             </el-form-item>
           </el-col>
           <el-col :span="22">
@@ -314,7 +318,8 @@ export default {
       checked: false,
       form: {
         select: [],
-        selectVal: ""
+        selectVal: "",
+        selectFormVal: '',
       },
       peopleForm: {
         tcompanyoid: "",
@@ -386,7 +391,7 @@ export default {
   },
   created() {
     this.$nextTick(() => {
-      this.getTableData("");
+      this.getTableData("页面初期化");
     });
   },
   computed: {},
@@ -560,16 +565,14 @@ export default {
           break;
         case false:
           if (params == "fpositionstate") {
-            switch (this.form.selectVal) {
-              case "在" || "在职":
+            if (this.form.selectFormVal == '' || (((this.form.selectFormVal).indexOf('在职') != -1 || (this.form.selectFormVal).indexOf('在') != -1) && ((this.form.selectFormVal).indexOf('离职') != -1 || (this.form.selectFormVal).indexOf('离') != -1))) {
+                this.form.selectVal = "";
+            } else if((this.form.selectFormVal).indexOf('在职') != -1 || (this.form.selectFormVal).indexOf('在') != -1 ) {
                 this.form.selectVal = "1";
-                break;
-              case "离" || "离职":
+            } else if((this.form.selectFormVal).indexOf('离职') != -1 || (this.form.selectFormVal).indexOf('离') != -1 ) {
                 this.form.selectVal = "0";
-                break;
-
-              default:
-                break;
+            } else {
+              this.form.selectVal = "2";
             }
           }
            if (params == "tispluralism") {
@@ -590,6 +593,9 @@ export default {
             page: this.pageNum,
             size: this.pageSize
           };
+          if(params == '页面初期化') {
+            data['fpositionstate'] = 1;
+          }
           break;
 
         default:
@@ -668,7 +674,6 @@ export default {
                 
           }else{
               this.$api.jobUserManagement.addPeopleMsg(this.peopleForm).then(res => {
-                debugger;
                   if (res.data.code == 0) {
                     this.dialogFormVisible = false;
                     this.$message.success("新增成功");
@@ -709,24 +714,33 @@ export default {
 
     //编辑
     toEdit() {
-      this.dialogFormVisible = true;
-      this.isEdit = true;
-      this.$api.jobUserManagement.addPeopleData(this.multipleSelection[0].toid).then(res=>{
-          if (res.status == '200' ) {
-              let newData;
-              newData = JSON.parse(JSON.stringify(res.data.data));
-              this.editFormData =  res.data.data;
-              this.peopleForm = newData;
-              this.peopleForm.ffirmposition = res.data.data.ffirmpositionname;
-              this.peopleForm.tcompanyoid = res.data.data.tcompanyname;
-              this.tableData3 = res.data.data.pluralismModels == null?[]:res.data.data.pluralismModels ;
-              // console.log(this.editFormData,res.data.data,newData )
-         }
-      }),
-      error => {
-        console.log(error);
-      };
-      this.isEdit = false;
+      if(this.multipleSelection){
+          if(this.multipleSelection.length == 0){
+              this.$message.error('请选择一项');
+          } else{
+             this.dialogFormVisible = true;
+             this.isEdit = true;
+            this.$api.jobUserManagement.addPeopleData(this.multipleSelection[0].toid).then(res=>{
+                if (res.status == '200' ) {
+                    let newData;
+                    newData = JSON.parse(JSON.stringify(res.data.data));
+                    this.editFormData =  res.data.data;
+                    this.peopleForm = newData;
+                    this.peopleForm.ffirmposition = res.data.data.ffirmpositionname;
+                    this.peopleForm.tcompanyoid = res.data.data.tcompanyname;
+                    this.tableData3 = res.data.data.pluralismModels == null?[]:res.data.data.pluralismModels ;
+                    // console.log(this.editFormData,res.data.data,newData )
+              }
+            }),
+            error => {
+              console.log(error);
+            };
+            this.isEdit = false;
+          }
+      }else {
+          this.$message.error('请选择一项');
+      }
+      
     }
   }
 };

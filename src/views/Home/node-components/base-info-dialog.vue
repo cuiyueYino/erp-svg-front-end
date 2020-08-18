@@ -276,6 +276,8 @@ export default {
                         }else{
                             resData[i].AdminS="否";
                         }
+                        resData[i].foid=resData[i].oid;
+                        resData[i].oid="";
                     }
                     this.gridData = resData;
                     this.total = res.data.data.total;
@@ -414,9 +416,18 @@ export default {
                 fromdata.size=this.pageSize
                 this.$api.processSet.positionList(fromdata).then(res=>{
                     let resData=res.data.data.rows;
-                    this.gridData = resData;
-                    this.total = res.data.data.total;
-                    this.totalpage=true;
+                    if(resData && resData.length>0){
+                        for(let i=0;i<resData.length;i++){
+                            resData[i].oid='';
+                        }
+                        this.gridData = resData;
+                        this.total = res.data.data.total;
+                        this.totalpage=true;
+                    }else{
+                        this.gridData = resData;
+                        this.total = res.data.data.total;
+                        this.totalpage=true;
+                    }
                 },error=>{
                     console.log(error)
                 })
@@ -452,7 +463,10 @@ export default {
                 })
             }
             if(!bool){
-                this.$refs['workflowConfigForm'].resetFields();
+                if(this.$refs['workflowConfigForm']){
+                    this.$refs['workflowConfigForm'].resetFields();
+                }
+                
             }
             
         }
@@ -543,6 +557,8 @@ export default {
                         }else{
                             resData[i].AdminS="否";
                         }
+                        resData[i].foid=resData[i].oid;
+                        resData[i].oid="";
                     }
                     this.gridData = resData;
                     this.total = res.data.data.total;
@@ -556,8 +572,17 @@ export default {
                 fromdata1.size=this.pageSize
                 this.$api.processSet.positionList(fromdata1).then(res=>{
                     let resData=res.data.data.rows;
-                    this.gridData = resData;
-                    this.total = res.data.data.total;
+                    if(resData && resData.length>0){
+                        for(let i=0;i<resData.length;i++){
+                            resData[i].oid='';
+                        }
+                        this.gridData = resData;
+                        this.total = res.data.data.total;
+                    }else{
+                        this.gridData = resData;
+                        this.total = res.data.data.total;
+                    }
+                    
                 },error=>{
                     console.log(error)
                 })
@@ -616,6 +641,8 @@ export default {
                         }else{
                             resData[i].AdminS="否";
                         }
+                        resData[i].foid=resData[i].oid;
+                        resData[i].oid="";
                     }
                     this.gridData = resData;
                     this.total = res.data.data.total;
@@ -649,8 +676,16 @@ export default {
                 }
                 this.$api.processSet.positionList(fromdataZW).then(res=>{
                     let resData=res.data.data.rows;
-                    this.gridData = resData;
-                    this.total = res.data.data.total;
+                    if(resData && resData.length>0){
+                        for(let i=0;i<resData.length;i++){
+                            resData[i].oid='';
+                        }
+                        this.gridData = resData;
+                        this.total = res.data.data.total;
+                    }else{
+                        this.gridData = resData;
+                        this.total = res.data.data.total;
+                    }
                 },error=>{
                     console.log(error)
                 })
@@ -708,6 +743,8 @@ export default {
                         }else{
                             resData[i].AdminS="否";
                         }
+                        resData[i].foid=resData[i].oid;
+                        resData[i].oid="";
                     }
                     this.gridData = resData;
                     this.pageNum = res.data.data.page;
@@ -735,9 +772,18 @@ export default {
                 fromdata.size=this.pageSize
                 this.$api.processSet.positionList(fromdata).then(res=>{
                     let resData=res.data.data.rows;
-                    this.gridData = resData;
-                    this.pageNum = res.data.data.page;
-                    this.total = res.data.data.total;
+                    if(resData && resData.length>0){
+                        for(let i=0;i<resData.length;i++){
+                            resData[i].oid='';
+                        }
+                        this.gridData = resData;
+                        this.pageNum = res.data.data.page;
+                        this.total = res.data.data.total;
+                    }else{
+                        this.gridData = resData;
+                        this.pageNum = res.data.data.page;
+                        this.total = res.data.data.total;
+                    }
                 },error=>{
                     console.log(error)
                 })

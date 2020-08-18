@@ -44,7 +44,7 @@
 		</el-card>
 		<el-card style="margin-top: 10px;">
 			<el-row>
-				<el-col style="text-align: center;" :span="22">工作事项模板主表分类行</el-col>
+				<el-col style="text-align: center;" :span="24">工作事项模板主表分类行</el-col>
 			</el-row>
 			<el-form style="margin-top: 10px;" :model="ruleForm" :rules="rulesTable" ref="ruleFormTable">
 				<el-table size="small" height="550" :data="ruleForm.lines" border style="width: 100%">

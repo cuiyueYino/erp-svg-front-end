@@ -28,7 +28,7 @@
 				<vxe-table-column v-if="showFig == 1" type="checkbox" width="60"></vxe-table-column>
 				<vxe-table-column field="code" title="角色编码"></vxe-table-column>
 				<vxe-table-column field="name" title="角色名称"></vxe-table-column>
-				<vxe-table-column field="companyName" title="角色名称"></vxe-table-column>
+				<vxe-table-column field="companyName" title="公司名称"></vxe-table-column>
 			</vxe-table>
 		</el-card>
 	</div>
@@ -43,7 +43,8 @@
 			return {
 				loading: true,
 				formInline: {
-					name: ""
+					name: "",
+					workItemId:""
 				},
 				tableData: [],
 				currentTotal: 0,
@@ -63,29 +64,24 @@
 		},
 		methods: {
 			getAll() {
-				var list = JSON.parse(JSON.stringify(this.$refs.multipleTable.getCheckboxRecords()))
-				this.roleList = JSON.parse(JSON.stringify(this.conList))
-				this.roleList.forEach((item, index) => {
-					list.forEach(val => {
-						if(val.id == item.id) {
-							this.$refs.multipleTable.toggleCheckboxRow(this.roleList[index]);
-						}
-					})
-				})
+				this.check()
 			},
 			getConList() {
 				this.roleList = []
 				this.roleList = this.$refs.multipleTable.getCheckboxRecords()
 			},
 			check() {
-				this.$refs.multipleTable.setAllCheckboxRow(false)
-				this.roleList = JSON.parse(JSON.stringify(this.conList))
-				this.roleList.forEach((item, index) => {
-					for(var i = 0; i < this.roleCon.list.length; i++) {
-						if(this.roleCon.list[i] == item.id) {
+				this.loading = true
+				this.$api.collaborativeOffice.findRoleAuthByWorkItem({
+					workItemId: this.roleCon.id
+				}).then(data => {
+					this.loading = false
+					this.roleList = data.data.data
+					this.roleList.forEach((item, index) => {
+						if(item.exist == 1) {
 							this.$refs.multipleTable.toggleCheckboxRow(this.roleList[index]);
 						}
-					}
+					})
 				})
 			},
 			workItemAuthRole() {
@@ -111,7 +107,8 @@
 				this.$parent.$parent.$parent.$parent.$parent.role()
 			},
 			getRoleList() {
-				this.$api.collaborativeOffice.apiUrl("role/findByParams", this.formInline).then(data => {
+				this.$api.collaborativeOffice.findRoleAuthByWorkItem(this.formInline).then(data => {
+					console.log(data)
 					this.loading = false
 					this.conList = data.data.data
 					this.roleList = JSON.parse(JSON.stringify(this.conList))

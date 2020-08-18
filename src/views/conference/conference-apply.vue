@@ -297,7 +297,6 @@
       },
       // 新增
       add() {
-        this.pageNum = 1;
         this.title = '新建会议申请';
         this.dialogVisible = true;
       },

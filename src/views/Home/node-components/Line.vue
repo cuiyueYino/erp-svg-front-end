@@ -12,7 +12,7 @@
         <el-tabs v-model="activeName" >
             <el-tab-pane label="基本信息" name="1">
                  <el-form-item label="编码" :label-width="formLabelWidth" prop="code">
-                    <el-input ref="nameInput" v-model="formData.code" @input="change($event)" autocomplete="off" clearable></el-input>
+                    <el-input v-model="formData.code" @input="change($event)" autocomplete="off" clearable></el-input>
                 </el-form-item>
                 <el-form-item label="名称" :label-width="formLabelWidth" prop="name">
                     <el-input  v-model="formData.name" autocomplete="off" @input="change($event)" clearable></el-input>
@@ -36,29 +36,26 @@
            <el-tab-pane label="流转条件" name="2">
                 <el-tabs v-model="baseActiveName" type="card" @tab-click="handleClick">
                     <el-tab-pane label="无条件" name="1">
-                       
-                        <el-form-item label="条件表达式" :label-width="formLabelWidth">
-                            <el-input type="textarea" disabled v-model="baseTextarea"></el-input>
+                        <el-form-item label="条件表达式" :label-width="formLabelWidth" prop="unconditional">
+                            <el-input type="textarea" disabled v-model="formData.unconditional"></el-input>
                         </el-form-item>
                     </el-tab-pane>
                     <el-tab-pane label="有条件" name="2">
-                       
-                        <el-form-item label="条件表达式" :label-width="formLabelWidth">
-                            <el-input type="textarea"  v-model="baseTextarea"></el-input>
+                        <el-form-item label="条件表达式" :label-width="formLabelWidth" prop="conditional">
+                            <el-input type="textarea"  v-model="formData.conditional"></el-input>
                         </el-form-item>
                     </el-tab-pane>
                     <el-tab-pane label="[否则]条件" name="3">
-                       
-                        <el-form-item label="条件表达式" :label-width="formLabelWidth">
-                            <el-input type="textarea" disabled v-model="baseTextarea"></el-input>
+                        <el-form-item label="条件表达式" :label-width="formLabelWidth" prop="otherwise">
+                            <el-input type="textarea" disabled v-model="formData.otherwise"></el-input>
                         </el-form-item>
                     </el-tab-pane>
                     <el-tab-pane label="调用服务" name="4">
-                         <el-form-item label="条件" :label-width="formLabelWidth">
+                         <el-form-item label="条件" :label-width="formLabelWidth"  >
                             <el-input placeholder="请选择" v-model="formData.baseInputServe" :disabled="true"> </el-input>
                             <img class="icon-search" src="../../../assets/img/search.svg"  @click="baseInputTable('服务','服务查询')">
                         </el-form-item>
-                        <el-form-item label="条件表达式" :label-width="formLabelWidth">
+                        <el-form-item label="条件表达式" :label-width="formLabelWidth" prop="baseTextarea"> 
                             <el-input type="textarea" v-model="formData.baseTextarea"></el-input>
                         </el-form-item>
                     </el-tab-pane>
@@ -77,17 +74,17 @@
           :visible.sync="dialogTableVisible">
              <el-row :gutter="24">
                   <el-col :span="8">
-                    <el-form-item label="编码" label-width="43px">
+                    <el-form-item label="编码" label-width="43px" prop="formCode">
                         <el-input clearable size="small" v-model="formData.formCode" placeholder="请输入"></el-input>
                     </el-form-item>
                   </el-col> 
                   <el-col :span="8">
-                    <el-form-item label="名称" label-width="43px">
+                    <el-form-item label="名称" label-width="43px"  prop="formName">
                         <el-input clearable size="small" v-model="formData.formName" placeholder="请输入"></el-input>
                     </el-form-item>
                   </el-col> 
                   <el-col :span="8" >
-                    <el-button type="primary" size="small" plain @click="reWorkSearchTable">重置</el-button>
+                    <el-button type="primary" size="small" plain @click="reWorkSearchTable('formData')">重置</el-button>
                     <el-button type="primary" size="small" plain @click="workSearchTable">搜索</el-button>
                 </el-col>
              </el-row>
@@ -164,6 +161,9 @@ export default {
             total: 20,
             baseTextarea:'',
             baseInput:'',
+            unconditional:'',
+            conditional:'',
+            otherwise:'',
             activeName: '1',
             formLabelWidth: '120px',
             // 关闭对话框配置
@@ -172,7 +172,6 @@ export default {
             configRules: {
                 name: { required: true, message: '请输入名称', trigger: 'blur' },
                 code: { required: true, message: '请输入编码', trigger: 'blur' },
-                performType: { required: true, message: '请选择参与类型', trigger: 'change' }
             },
             // 对话框显示标识
             dialogVisible: this.visible,
@@ -180,8 +179,13 @@ export default {
             formData: {
                 name:'',
                 code:'',
-                fremark:''
+                fremark:'',
+                formCode:'',
+                formName:'',
+                baseTextarea:'',
+                baseInputServe:''
             },
+            dialogData: {},
             columns: [
             {
                 type: 'selection'
@@ -222,30 +226,37 @@ export default {
         // 监听配置数据源
         data: {
             handler (obj) {
-             if(obj.name === "Line"){console.log(obj)
+             if(obj.name === "Line"){
+                console.log(obj)
                 this.editData = obj;
-                this.formData.code = this.editData.code
+                this.formData.code = this.editData.linefcode
                 this.formData.oid = this.editData.oid
-                this.formData.fremark = this.editData.fremark
-                this.formData.baseTextarea = this.editData.expression
+                this.formData.fremark = this.editData.lineremark
+                this.formData.baseTextarea = this.editData.lineexpression
                 this.formData.name = this.editData.displayName
+                this.formData.conditional = this.editData.lineexpression?this.editData.lineexpression:''
+                this.formData.otherwise = this.editData.lineotherwise?this.editData.lineotherwise:''
+                this.formData.baseInputServe = this.editData.service?this.editData.service.name:''
+                this.formData.baseTextarea = this.editData.service?this.editData.service.expression:''
+                this.formData.serviceOid = this.editData.service?this.editData.service.oid:''
+                this.formData.serviceCode = this.editData.service?this.editData.service.code:''
                 switch (this.editData.decisionType ) {
-                case 1:
-                        this.formData.decisionType = '同意'
-                    break;
-                case 2:
-                        this.formData.decisionType = '不同意'
-                    break;
-                case 3:
-                        this.formData.decisionType = '待处理'
-                    break;
-                case 4:
-                        this.formData.decisionType = '其他'
-                    break;
-            
-                default:
-                    break;
-            }
+                    case 1:
+                            this.formData.decisionType = '同意'
+                        break;
+                    case 2:
+                            this.formData.decisionType = '不同意'
+                        break;
+                    case 3:
+                            this.formData.decisionType = '待处理'
+                        break;
+                    case 4:
+                            this.formData.decisionType = '其他'
+                        break;
+                
+                    default:
+                        break;
+                }
              }
             },
             deep: true,
@@ -255,17 +266,25 @@ export default {
         dialogVisible (bool) {
             this.$emit('update:visible', bool);
         },
+        dialogTableVisible(val){
+            if(!val){
+                this.$refs['formData'].resetFields();
+            }
+        },
         // 对话框显示 自动聚焦name输入框
         visible (bool) {
             this.dialogVisible = bool;
             if (bool) {
+                // this.$refs['formData'].resetFields();
                 // setTimeout(() => {
                 //     this.$refs.nameInput.focus();
                 // }, 100);
             }else{
-                // this.formData.baseInputoid= this.multipleSelection[0].foid
-                // this.formData.baseInputcode= this.multipleSelection[0].fcode
-                // this.formData.baseInputServe= this.multipleSelection[0].fname
+                
+                let codeData = this.formData.code
+                this.formData.code = codeData
+                this.formData.linefcode = codeData
+                console.log(this.formData)
                 this.$emit(
                     "saveLineData",
                     this.formData,
@@ -302,13 +321,39 @@ export default {
             });
         },
         handleClick(tab, event) {
+            switch (this.baseActiveName) {
+                case '1':
+                        this.formData.conditional =''
+                        this.formData.otherwise ='0'
+                        this.formData.baseTextarea = ''
+                    break;
+                case '2':
+                        this.formData.unconditional =''
+                        this.formData.otherwise ='0'
+                        this.formData.baseTextarea = ''
+                    break;
+                case '3':
+                        this.formData.otherwise = '1'
+                        this.formData.unconditional =''
+                        this.formData.conditional =''
+                        this.formData.baseTextarea = ''
+                    break;
+                case '4':
+                        this.formData.unconditional =''
+                        this.formData.conditional =''
+                        this.formData.otherwise = '0'
+                    break;
+            
+                default:
+                    break;
+            }
             // console.log(tab, event);
         },
         baseInputTable(str,title){ 
             this.dialogTableVisible = true;
             this.baseInputTitle = title;
             this.baseInputType = str;
-            this.workSearchTable()
+            this.workSearchTable('')
         },
          //业务工作-新增
         gridDataAdd(){
@@ -316,10 +361,11 @@ export default {
                 this.$message.error('请正确选择');
                 return
             }
-            this.formData= this.multipleSelection[0];
-            this.formData.baseInputServe= this.multipleSelection[0].fname
-             this.dialogTableVisible = false;
-             //console.log(this.formData.work )
+            this.formData.serviceOid= this.multipleSelection[0].foid;
+            this.formData.serviceCode= this.multipleSelection[0].fcode;
+            this.formData.baseInputServe = this.multipleSelection[0].fname;
+            this.dialogTableVisible = false;
+            // console.log(this.formData,this.multipleSelection[0].fname)
         },
         add(){
 
@@ -333,8 +379,9 @@ export default {
             this.multipleSelection = val;
         },
           // 业务工作-获取表格数据-重置
-        reWorkSearchTable(){
-            this.formData = []
+        reWorkSearchTable(formName){
+            this.$refs[formName].resetFields();
+            this.pageNum = 1
             this.workSearchTable()
         },
          workSearch(){
@@ -345,7 +392,6 @@ export default {
         },
         // 业务工作-获取表格数据
         workSearchTable(){
-            
             this.tableLoading = true;
              let data = {
                 fcode: this.formData.formCode,
@@ -357,7 +403,7 @@ export default {
             this.$api.processSet.workSearchData(data).then(res=>{
                 this.tableLoading = false;
                 this.gridData = res.data.data.rows
-                
+                this.total = res.data.data.total
                 
             },error=>{
                 console.log(error)
@@ -377,7 +423,7 @@ export default {
          //分页、下一页
         onCurrentChange(val){
              this.pageNum = val;
-            this.workSearch('')
+            this.workSearchTable('')
         },
     }
 };

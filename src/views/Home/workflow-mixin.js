@@ -272,28 +272,57 @@ export default {
                     })
                     //
                     const point = this.computedLinkPoint(nodeObj, target);
-                    lineList.push({
-                        from: {
-                            ...obj,
-                            target,
-                            point
-                        },
-                        to: {
-                            data: {
-                                name: toName,
-                                displayName: toDisplayName,
+                    let LDataL=this.LineDataList;
+                    if(LDataL && LDataL.length >0){
+                        for(let j=0;j<LDataL.length;j++){
+                            let LData=LDataL[j];
+                            if(LData.data.displayName == attributes.displayName.nodeValue){
+                                lineList.push({
+                                    from: {
+                                        ...obj,
+                                        target,
+                                        point
+                                    },
+                                    to: {
+                                        data: {
+                                            name: toName,
+                                            displayName: toDisplayName,
+                                        },
+                                        target: toTarget
+                                    },
+                                    data:{
+                                        ...LData.data
+                                    },
+                                    key: attributes.oid.nodeValue,
+                                    lineEdit: true,
+                                    visible: false
+                                });
+                            }
+                        }
+                    }else{
+                        lineList.push({
+                            from: {
+                                ...obj,
+                                target,
+                                point
                             },
-                            target: toTarget
-                        },
-                        data: {
-                            name: attributes.name.nodeValue,
-                            oid: attributes.oid.nodeValue,
-                            displayName: attributes.displayName.nodeValue
-                        },
-                        key: attributes.oid.nodeValue,
-                        lineEdit: true,
-                        visible: false
-                    });
+                            to: {
+                                data: {
+                                    name: toName,
+                                    displayName: toDisplayName,
+                                },
+                                target: toTarget
+                            },
+                            data: {
+                                name: attributes.name.nodeValue,
+                                oid: attributes.oid.nodeValue,
+                                displayName: attributes.displayName.nodeValue
+                            },
+                            key: attributes.oid.nodeValue,
+                            lineEdit: true,
+                            visible: false
+                        });
+                    }
                 }
                 resolve( lineList ) ;
             });
@@ -521,6 +550,11 @@ export default {
         },
         // 新增-点击保存工作流按钮执行事件
         saveNewWorkflow (workflowNodes) {console.log(workflowNodes) 
+            workflowNodes.forEach((item,index)=>{
+                if(item == null){
+                    workflowNodes.splice(index,1)
+                }
+            })
             let editMsg = JSON.parse( sessionStorage.getItem("eidtMsg") );
             let data = {
                     "code": editMsg.code,
@@ -544,7 +578,7 @@ export default {
             this.$api.svg.addSvg(data).then(res=>{
                 if( res.data.data.msg == 'success' ){
                     this.$message.success('保存成功');
-                    sessionStorage.setItem("eidtMsg",null);
+                    //sessionStorage.setItem("eidtMsg",null);
                 }else{
                     this.$message.error("保存失败,请填写完整信息");
                 }
@@ -556,7 +590,10 @@ export default {
         // 编辑-点击保存工作流按钮执行事件
         saveEditWorkflow (workflowNodes) {
             let editMsg = JSON.parse( sessionStorage.getItem("eidtMsg") );
-            workflowNodes.forEach(item => {
+            workflowNodes.forEach((item,index)=>{
+                if(item == null){
+                    workflowNodes.splice(index,1)
+                }
                 if(item.oid){
                     item.key = item.oid 
                 }
@@ -613,7 +650,7 @@ export default {
             this.$api.svg.addSvg(data).then(res=>{
                 if( res.data.data.msg == 'success' ){
                     this.$message.success('保存成功');
-                    sessionStorage.setItem("eidtMsg",null);
+                    //sessionStorage.setItem("eidtMsg",null);
                 }else{
                     this.$message.error("保存失败,请填写完整信息");
                 }

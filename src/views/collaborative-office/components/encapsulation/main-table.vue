@@ -134,17 +134,10 @@
 					this.rowClick = row.row
 					if(this.showFig == 1) {
 						if(this.$parent.$parent.$parent.$parent.$parent.tabViews == "mainTableToPersonnel") {
-							this.$api.collaborativeOffice.findUserByWorkItem({
-								workItemId: row.row.id
-							}).then(data => {
-								this.$emit("getCon", data.data.data, row.row.id)
-							})
+							this.$emit("getCon", row.row.id)
 						} else {
-							this.$api.collaborativeOffice.findRoleByWorkItem({
-								workItemId: row.row.id
-							}).then(data => {
-								this.$emit("getCon", data.data.data, row.row.id)
-							})
+							this.$emit("getCon", row.row.id)
+
 						}
 					}
 				}

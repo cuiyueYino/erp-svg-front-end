@@ -40,7 +40,7 @@
               autosize
               show-word-limit
               type="textarea"
-              v-model="fremark"
+              v-model="formData.fremark"
             ></el-input>
           </el-form-item>
           <!-- Condition END-->
@@ -213,7 +213,7 @@
           </el-row>
           <el-row :gutter="24">
             <el-col :span="6" :offset="18">
-              <el-button type="primary" size="small" plain @click="reWorkSearchTable">重置</el-button>
+              <el-button type="primary" size="small" plain @click="(reWorkSearchTable('formData'))">重置</el-button>
               <el-button type="primary" size="small" plain @click="workSearchTableBtn">搜索</el-button>
             </el-col>
           </el-row>
@@ -292,8 +292,10 @@ export default {
     // 监听配置数据源
     data: {
       handler(obj) {
-      if(obj.name === "Condition"){console.log(obj)
-          if(!obj.id){
+      if(obj.name === "Condition"){
+        //  this.$refs['formData'].resetFields();
+        console.log(obj)
+          if(!obj.oid){
               this.formData.displayName = obj.displayName
           }else{
                 this.checkedCities = [];
@@ -357,7 +359,6 @@ export default {
                             })
                             break;
                         case 5://表达式
-                        
                             tableDataNewSet.push({
                                 fUsercode: "表达式",
                                 fUsername: item.expression.name || '',
@@ -374,8 +375,11 @@ export default {
                     }
                 });
                   if( this.CCtableData.length === 0 && tableDataNewSet.length !== 0){
-                      this.CCtableData.push(tableDataNewSet[0])
+                       tableDataNewSet.forEach(item=>{
+                          this.CCtableData.push(item)
+                       })
                     }
+                    console.log(this.CCtableData,'@@@@@@@@',tableDataNewSet)
                 let joinusertable = [];
                 this.editData.wfParticipator.participator.forEach(item=>{
                     switch (item.type) {
@@ -438,7 +442,9 @@ export default {
                     }
                 });
                 if( this.joinusertableData.length === 0 && joinusertable.length !== 0){
-                    this.joinusertableData.push(joinusertable[0])
+                  joinusertable.forEach(item=>{
+                          this.joinusertableData.push(item)
+                       })
                 }
             }
           }
@@ -454,16 +460,18 @@ export default {
     // 对话框显示 自动聚焦name输入框
     visible(bool) {
       if (bool) {
+       
       } else {
-        this.formData.displayName = this.displayName;
         this.formData.checkedCities = this.checkedCities;
-        this.formData.fremark = this.fremark;
+        this.formData.fremark = this.formData.fremark;
+        console.log(this.joinusertableData)
+        console.log(this.CCtableData)
         this.$emit(
           "saveFormData",
           this.formData,
           this.joinusertableData,
           this.CCtableData,
-        ); console.log( this.joinusertableData)
+        ); 
       }
     },
     checked(val) {
@@ -625,7 +633,7 @@ export default {
           title: "生成关系"
         }
       ],
-      tableData: [],
+      // tableData: [],
       tableData2: [],
       gridData: [],
       multipleSelection: [],
@@ -753,10 +761,10 @@ export default {
           if (this.UserListReq.fname) {
             let UroleObj = {};
             UroleObj = this.UserListReq;
-            UroleObj.oid = this.UserListReq.userid;
             UroleObj.type = 3;
             UroleObj.typeName = "user";
-            UroleObj.fUseroid = UroleObj.foid;
+            //UroleObj.fUseroid = UroleObj.foid;
+            UroleObj.fUseroid = this.UserListReq.userid;
             UroleObj.fUsername = UroleObj.fname;
             UroleObj.fUsercode = this.baseActiveNameStr;
             UroleObj.fUserRemake = UroleObj.fenglishname;
@@ -817,7 +825,8 @@ export default {
             UroleObj = this.UserListReq;
             UroleObj.type = 3;
             UroleObj.typeName = "user";
-            UroleObj.fUseroid = UroleObj.foid;
+            //UroleObj.fUseroid = UroleObj.foid;
+            UroleObj.fUseroid = UroleObj.userid;
             UroleObj.fUsername = UroleObj.fname;
             UroleObj.fUsercode = this.baseActiveNameStr;
             UroleObj.fUserRemake = UroleObj.fenglishname;
@@ -852,7 +861,7 @@ export default {
             let BroleObj = {};
             BroleObj.type = 5;
             BroleObj.typeName = "expression";
-             BroleObj.fUseroid = BroleObj.foid;
+            BroleObj.fUseroid = BroleObj.foid;
             BroleObj.fUsername = this.baseTextarea;
             BroleObj.fUsercode = this.baseActiveNameStr;
             BroleObj.fUserRemake = "";
@@ -927,9 +936,10 @@ export default {
       this.workSearchTable();
     },
     // 业务工作-获取表格数据-重置
-    reWorkSearchTable() {
+    reWorkSearchTable(formName) {
+       this.$refs[formName].resetFields();
        this.pageNum = 1
-      this.formData = [];
+      
       this.workSearchTable();
     },
     //业务工作弹窗

@@ -29,6 +29,7 @@
 		data: function() {
 			return {
 				param: {
+					grant_type: 'password',
 					username: '',
 					password: ''
 				},
@@ -48,135 +49,106 @@
 		},
 		methods: {
 			submitForm() {
-				var usernameS = this.param.username;
-				var passwordS = this.param.password;
-				// if(!usernameS){
-				//     this.$message.error("请输入用户名!");
-				// }
-				// if(!passwordS){
-				//     this.$message.error("请输入密码!");
-				// }
-				if(usernameS && passwordS) {
-					/*let paramdata={};
-					paramdata.grant_type = 'password';
-					paramdata.username=usernameS;
-					paramdata.password=passwordS;
-					localStorage.removeItem("ms_tokenId");
-					console.log(this.$api.common.getTokenData(paramdata))
-					this.$api.common.getTokenData(paramdata).then((response)=>{
-						var responsevalue=response;
-						if(responsevalue){
-							console.log(responsevalue)
-						}else{
-							this.$message.error("请输入正确用户名和密码!");
-							return false;
-						}
-					});*/
-
-					localStorage.setItem('ms_username', '王世超');
-					localStorage.setItem('ms_name', '王世超');
-					if(usernameS === 'OA') {
-						localStorage.setItem('ms_roleId', '3');
-					} else if(usernameS === 'CW') {
-						//财务
-						localStorage.setItem('ms_roleId', '2');
+				//清空本地的缓存
+				localStorage.clear()
+				//校验用户名和密码
+				this.$refs.login.validate((valid) => {
+					if(valid) {
+						//获取token
+						this.$api.common.login(this.param).then(val => {
+							//存入本地缓存,登陆后的每次接口调用都要带着token
+							localStorage.setItem('ms_tokenId', val.data.access_token);
+							//根据token查询登陆人的信息并存入缓存
+							this.$api.common.getUserInfo().then(data => {
+								//通过用户ID查询菜单
+								this.$api.common.findMenuByComputer({
+									userId: data.data.principal.accountId
+								}).then(data2 => {
+									//菜单放入本地缓存,并跳转首页
+//									sessionStorage.setItem("menuList", JSON.stringify(data2.data.data[0].subs));
+									sessionStorage.setItem("menuList", JSON.stringify(data2.data.data));
+									this.$router.push("/");
+								})
+								//用户ID
+								localStorage.setItem('ms_userId', data.data.principal.accountId);
+								//用户名称
+								localStorage.setItem('ms_username', data.data.principal.fullname);
+								//部门ID
+								localStorage.setItem('ms_userDepartId', data.data.principal.deptmentId);
+								//部门名称
+								localStorage.setItem('ms_userDepartName', data.data.principal.deptmentName);
+								//公司ID
+								localStorage.setItem('ms_companyId', data.data.principal.companyId);
+								//公司名称
+								localStorage.setItem('ms_companyName', data.data.principal.companyName);
+								//获取工作事项相关参数
+								this.getContext()
+								//获取员工树信息
+								this.getStaffTreeList()
+							})
+						}).catch(val => {
+							this.goOut(val.data.error_description)
+						})
 					} else {
-						localStorage.setItem('ms_roleId', '0');
+						this.$message.error("请输入用户名和密码!");
 					}
-					localStorage.setItem('ms_userId', 'BFPID000000LR40002');
-					//localStorage.setItem('ms_userId',  'BFPID000000OV60NOU');
-					//localStorage.setItem('ms_userId',  'BFPID000000M4J0I62');
-					//localStorage.setItem('ms_userId',  'BFPID000000OV60NO8');
-					//用户部门
-					localStorage.setItem('ms_userDepartId', 'BFPID12333LSN033N');
-					localStorage.setItem('ms_userDepartName', '集团信息中心');
-					localStorage.setItem('ms_companyId', '_DefaultCompanyOId');
-					localStorage.setItem('ms_tokenId', "9a00a32c-c59c-471d-8638-297e7f00f7f6");
-					//localStorage.setItem('ms_tokenId',  "fcb1eb0d-27e8-4029-befe-a1f3db56cc7a");
-
-					/*
-					 * 孟鹏飞 2020-08-06
-					 *
-					 * 登陆时调用工作事项内的查询接口，并放置于本地缓存
-					 *
-					 * */
-					//最上端公司选择
-					this.$api.collaborativeOffice.getCompanyData().then(data => {
-						localStorage.setItem('CompanyData', JSON.stringify(data.data.data.rows));
-					})
-					//全部枚举
-					this.$api.collaborativeOffice.findList({}).then(data => {
-						localStorage.setItem('selectList', JSON.stringify(data.data.data));
-					})
-					//全部服务
-					this.$api.collaborativeOffice.findTServiceByParams({}).then(data => {
-						localStorage.setItem('tServiceByParams', JSON.stringify(data.data.data));
-					})
-					//工作事项
-					this.$api.collaborativeOffice.getFieldBrowse().then(data => {
-						localStorage.setItem('fieldBrowseList', JSON.stringify(data.data.data));
-					})
-					//公司 部门 职位
-					this.$api.management.selectAllOrganizationInfo().then(data => {
-						localStorage.setItem('allOrganizationInfo', JSON.stringify(eval('(' + data.data.data + ')')));
-					})
-					//人员
-					this.$api.collaborativeOffice.findConList("staffManage/findStaffByPage", {
-						page: 1,
-						size: 100000
-					}).then(data => {
-						localStorage.setItem('staffList', JSON.stringify(data.data.data.rows));
-					})
-					//用户
-					this.$api.collaborativeOffice.findConList("userManage/findUserBypage", {
-						page: 1,
-						size: 100000
-					}).then(data => {
-						localStorage.setItem('userList', JSON.stringify(data.data.data.rows));
-					})
-					//职务
-					this.$api.collaborativeOffice.findConList("positionmnt/findPositionList", {
-						page: 1,
-						size: 100000
-					}).then(data => {
-						localStorage.setItem('positionList', JSON.stringify(data.data.data.rows));
-					})
-
-
-
-          // 登录时获取员工树信息
-          let fromData = {};
-          fromData.id = this.fcompanyid;
-          this.$api.confMangement.getStaffTreeList(fromData).then(res => {
-            let resData = res.data.data;
-            let resDataArr = eval("(" + resData + ")");
-            localStorage.setItem('conf_staffTree', JSON.stringify(resDataArr));
-            console.log("conf_staffTree：>>>>>>>>>>>>");
-            console.log(JSON.parse(localStorage.getItem('conf_staffTree')));
-          })
-
-					this.$router.push('/');
-				} else {
-					this.$message.error("请输入用户名和密码!");
-					return false;
-				}
+				});
 			},
-			// 获取登录人信息
-			getUserInfo() {
-				let data = {
-					tel: this.param.username,
-					password: this.param.password
-				}
-				this.$api.common.getUserInfo(data).then(res => {
-					let returndata = res.data;
-					localStorage.setItem('ms_data', JSON.stringify(returndata));
-					localStorage.setItem('ms_name', returndata.name);
-					localStorage.setItem('ms_id', returndata.id);
-					localStorage.setItem('ms_username', returndata.username);
-					localStorage.setItem('ms_roleId', returndata.roleId);
-					localStorage.setItem('ms_authId', returndata.authId);
-					this.$router.push('/');
-					this.$message.success('登录成功');
+			//登录时获取员工树信息
+			getStaffTreeList() {
+				this.$api.confMangement.getStaffTreeList({}).then(res => {
+					let resData = res.data.data;
+					let resDataArr = eval("(" + resData + ")");
+					localStorage.setItem('conf_staffTree', JSON.stringify(resDataArr));
+				})
+			},
+			/*
+			 * 孟鹏飞 2020-08-06
+			 *
+			 * 登陆时调用工作事项内的查询接口，并放置于本地缓存
+			 *
+			 * */
+			getContext() {
+				//最上端公司选择
+				this.$api.collaborativeOffice.getCompanyData().then(data => {
+					localStorage.setItem('CompanyData', JSON.stringify(data.data.data.rows));
+				})
+				//全部枚举
+				this.$api.collaborativeOffice.findList({}).then(data => {
+					localStorage.setItem('selectList', JSON.stringify(data.data.data));
+				})
+				//全部服务
+				this.$api.collaborativeOffice.findTServiceByParams({}).then(data => {
+					localStorage.setItem('tServiceByParams', JSON.stringify(data.data.data));
+				})
+				//工作事项
+				this.$api.collaborativeOffice.getFieldBrowse().then(data => {
+					localStorage.setItem('fieldBrowseList', JSON.stringify(data.data.data));
+				})
+				//公司 部门 职位
+				this.$api.management.selectAllOrganizationInfo().then(data => {
+					localStorage.setItem('allOrganizationInfo', JSON.stringify(eval('(' + data.data.data + ')')));
+				})
+				//人员
+				this.$api.collaborativeOffice.findConList("staffManage/findStaffByPage", {
+					page: 1,
+					size: 100000
+				}).then(data => {
+					localStorage.setItem('staffList', JSON.stringify(data.data.data.rows));
+				})
+				//用户
+				this.$api.collaborativeOffice.findConList("userManage/findUserBypage", {
+					page: 1,
+					size: 100000
+				}).then(data => {
+					localStorage.setItem('userList', JSON.stringify(data.data.data.rows));
+				})
+				//职务
+				this.$api.collaborativeOffice.findConList("positionmnt/findPositionList", {
+					page: 1,
+					size: 100000
+				}).then(data => {
+					localStorage.setItem('positionList', JSON.stringify(data.data.data.rows));
 				})
 			},
 		}
@@ -191,7 +163,7 @@
 		background-image: url(../../assets/img/Logo-title.png);
 		background-size: 100%;
 	}
-
+	
 	.ms-title {
 		width: 100%;
 		line-height: 50px;
@@ -200,7 +172,7 @@
 		color: #000;
 		border-bottom: 1px solid #ddd;
 	}
-
+	
 	.ms-login {
 		position: absolute;
 		left: 50%;
@@ -210,29 +182,29 @@
 		border-radius: 5px;
 		overflow: hidden;
 	}
-
+	
 	.ms-content01 {
 		background: rgba(255, 255, 255, 0.3);
 	}
-
+	
 	.ms-content {
 		padding: 30px 30px;
 	}
-
+	
 	.login-btn {
 		text-align: center;
 	}
-
+	
 	.login-btn button {
 		width: 100%;
 		height: 36px;
 		margin-bottom: 10px;
 	}
-
+	
 	.ms-title01 {
 		margin-bottom: 50px;
 	}
-
+	
 	.login-tips {
 		font-size: 12px;
 		line-height: 30px;

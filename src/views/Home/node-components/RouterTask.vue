@@ -178,7 +178,8 @@ export default {
         // 监听配置数据源
         data: {
             handler (obj) {
-            if(obj.name === "Task"){console.log(obj)
+            if(obj.name === "Task"){
+                console.log(obj)
                 this.editData = obj;
                 this.formData.code = this.editData.code
                 this.formData.name = this.editData.displayName
@@ -198,9 +199,7 @@ export default {
         visible (bool) {
             this.dialogVisible = bool;
             if (bool) {
-                // setTimeout(() => {
-                //     this.$refs.nameInput.focus();
-                // }, 100);
+                //this.$refs['formData'].resetFields();
             }else {
                 this.formData.checked = this.checked;
                 this.formData.join = this.join;

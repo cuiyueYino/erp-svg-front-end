@@ -103,7 +103,7 @@ export default {
                     title: '是否可见'
                 },
                 {
-                    key: 'url',
+                    key: 'pictureUrl',
                     title: '链接'
                 },
                 {

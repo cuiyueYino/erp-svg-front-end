@@ -38,7 +38,7 @@
                                 type="text"
                                 size="mini"
                                 icon="el-icon-circle-close"
-                                @click="dialogTableVisible = false"
+                                @click="handleClose"
                             >关闭</el-button>
                             <el-button
                                 v-show="isEditF"
@@ -253,6 +253,7 @@ export default {
     props: {},
     components: { configForm },
     mixins: [workflowMixin],
+    inject: ['reload'],
     data () {
         return {
             isEditF:false,
@@ -299,6 +300,7 @@ export default {
             },
             // 绘制工作流节点数组
             workflowNodes: [],
+            LineDataList:[],
             MMworkflowNodes: [],
         };
     },
@@ -347,6 +349,7 @@ export default {
                                 lineremark:this.dataObj.lines.line[i].lineremark,
                                 lineexpression:this.dataObj.lines.line[i].lineexpression,
                                 lineotherwise:this.dataObj.lines.line[i].lineotherwise,
+                                service:this.dataObj.lines.line[i].service,
                                 name: 'Line',
                                 oid:this.dataObj.lines.line[i].linefoid,
                                 displayName: this.dataObj.lines.line[i].linefname,
@@ -560,6 +563,7 @@ export default {
                                     "oid": this.dataObj.nodes.wfProcessorAuto[i].dataType.oid,
                                     "name": this.dataObj.nodes.wfProcessorAuto[i].dataType.name,
                                 }:{},
+                                mactivity:this.dataObj.nodes.wfProcessorAuto[i].mactivity,
                                 wfAuditType: this.dataObj.nodes.wfProcessorAuto[i].wfAuditType,
                                 fremark: this.dataObj.nodes.wfProcessorAuto[i].fremark,
                                 hidden: this.dataObj.nodes.wfProcessorAuto[i].hidden,
@@ -688,6 +692,7 @@ export default {
                         }
                     }
                 });
+                this.LineDataList=newLine;
                 newObj.push(...newEnd);
                 this.dataObj = newObj;
                 this.MMworkflowNodes=[];
@@ -702,6 +707,7 @@ export default {
                 this.workflowNodes = [
                     ...TerminalNode()
                 ];
+                this.LineDataList=[];
                 this.MMworkflowNodes = [
                     ...TerminalNode()
                 ];
@@ -739,6 +745,12 @@ export default {
             document.getElementsByClassName('svgBox')[0].style.zoom = this.size;
             document.body.style.cssText += '; -moz-transform: scale(' + this.size + ');-moz-transform-origin: 0 0; ';     //
         },
+        //关闭当前dialog时给父组件传值
+        handleClose(){
+            //返回选中的父组件选中的row,并修某些改值
+            sessionStorage.setItem("eidtMsg",null);
+            this.dialogTableVisible = false;
+        },
         // 点击背景面板执行事件
         backgroundClick (event) {//console.log(event)
             const evt = window.event || event;
@@ -754,17 +766,17 @@ export default {
         selectedNodeClick(item){//debugger
             let newData = []
             for(let k =0 ; k<this.dataObj.length; k++){
-                newData  = this.dataObj[k].transition;//debugger
+                newData  = this.dataObj[k].transition;//
                 if(newData){
                     for(let j =0 ; j<newData.length; j++){
                         if(item.data.displayName == newData[j].data.displayName){
                             item.data = newData[j].data
-                            item.data.oid =newData[j].oid
+                            //item.data.oid =newData[j].data.oid
                         }
                     }
                 }
             }
-            //  console.log(this.lineData,item)
+            //console.log(this.lineData,item)
         },
         // 点击节点事件
         clickNode (node) {
@@ -841,12 +853,13 @@ export default {
         deleteNode (index) {
             // 获取目标节点
             const target = this.workflowNodes[index];
-            this.workflowNodes.splice(index, 1, {});
+            this.workflowNodes.splice(index, 1);
             this.selectedNode = {};
             // 删除目标节点相关连接线数据
             for (let j = 0, len = this.linkData.length; j < len; j++) {
                 if (this.linkData[j].to.key === target.key || this.linkData[j].from.key === target.key) {
-                    this.linkData.splice(j, 1, {});
+                    this.linkData.splice(j, 1);
+                    j=j-1;
                 }
             }
         },
