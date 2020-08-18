@@ -38,7 +38,7 @@
                                 type="text"
                                 size="mini"
                                 icon="el-icon-circle-close"
-                                @click="dialogTableVisible = false"
+                                @click="handleClose"
                             >关闭</el-button>
                             <el-button
                                 v-show="isEditF"
@@ -253,6 +253,7 @@ export default {
     props: {},
     components: { configForm },
     mixins: [workflowMixin],
+    inject: ['reload'],
     data () {
         return {
             isEditF:false,
@@ -562,6 +563,7 @@ export default {
                                     "oid": this.dataObj.nodes.wfProcessorAuto[i].dataType.oid,
                                     "name": this.dataObj.nodes.wfProcessorAuto[i].dataType.name,
                                 }:{},
+                                mactivity:this.dataObj.nodes.wfProcessorAuto[i].mactivity,
                                 wfAuditType: this.dataObj.nodes.wfProcessorAuto[i].wfAuditType,
                                 fremark: this.dataObj.nodes.wfProcessorAuto[i].fremark,
                                 hidden: this.dataObj.nodes.wfProcessorAuto[i].hidden,
@@ -743,6 +745,12 @@ export default {
             document.getElementsByClassName('svgBox')[0].style.zoom = this.size;
             document.body.style.cssText += '; -moz-transform: scale(' + this.size + ');-moz-transform-origin: 0 0; ';     //
         },
+        //关闭当前dialog时给父组件传值
+        handleClose(){
+            //返回选中的父组件选中的row,并修某些改值
+            sessionStorage.setItem("eidtMsg",null);
+            this.dialogTableVisible = false;
+        },
         // 点击背景面板执行事件
         backgroundClick (event) {//console.log(event)
             const evt = window.event || event;
@@ -845,12 +853,13 @@ export default {
         deleteNode (index) {
             // 获取目标节点
             const target = this.workflowNodes[index];
-            this.workflowNodes.splice(index, 1, {});
+            this.workflowNodes.splice(index, 1);
             this.selectedNode = {};
             // 删除目标节点相关连接线数据
             for (let j = 0, len = this.linkData.length; j < len; j++) {
                 if (this.linkData[j].to.key === target.key || this.linkData[j].from.key === target.key) {
-                    this.linkData.splice(j, 1, {});
+                    this.linkData.splice(j, 1);
+                    j=j-1;
                 }
             }
         },

@@ -332,6 +332,7 @@ export default {
             this.data.otherwise =e.otherwise;
             this.data.expression =e.conditional;
             this.data.code =e.code;
+            this.data.linefcode =e.code;
             this.data.displayName = e.name;
             this.data.fremark = e.fremark;
             switch (e.name ) {
@@ -478,6 +479,13 @@ export default {
             });
             //审核单范围
             let  wfViewOtherCommentObj;
+            if(this.data.wfViewOtherComments){
+                this.data.wfViewOtherComments.wfViewOtherComment=[];    
+            }else{
+                this.data.wfViewOtherComments={
+                    wfViewOtherComment:[]
+                }
+            }
              e3.forEach(item => {
                     wfViewOtherCommentObj=
                         {
@@ -488,16 +496,23 @@ export default {
              })
             
            
-         //决策类型
-         let decisionsObj;
-          e4.forEach(item => {
-            decisionsObj = 
-                {
-                    "decisionType": item.decisionType,
-                    "decisionText": item.decisionText,
+            //决策类型
+            let decisionsObj;
+            if(this.data.decisions){
+                this.data.decisions.decision=[];    
+            }else{
+                this.data.decisions={
+                    decision:[]
                 }
-            this.data.decisions.decision.push(decisionsObj)
-          })
+            }
+            e4.forEach(item => {
+                decisionsObj = 
+                    {
+                        "decisionType": item.decisionType,
+                        "decisionText": item.decisionText,
+                    }
+                this.data.decisions.decision.push(decisionsObj)
+            })
 
          
         },

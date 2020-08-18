@@ -578,7 +578,7 @@ export default {
             this.$api.svg.addSvg(data).then(res=>{
                 if( res.data.data.msg == 'success' ){
                     this.$message.success('保存成功');
-                    sessionStorage.setItem("eidtMsg",null);
+                    //sessionStorage.setItem("eidtMsg",null);
                 }else{
                     this.$message.error("保存失败,请填写完整信息");
                 }
@@ -650,7 +650,7 @@ export default {
             this.$api.svg.addSvg(data).then(res=>{
                 if( res.data.data.msg == 'success' ){
                     this.$message.success('保存成功');
-                    sessionStorage.setItem("eidtMsg",null);
+                    //sessionStorage.setItem("eidtMsg",null);
                 }else{
                     this.$message.error("保存失败,请填写完整信息");
                 }
