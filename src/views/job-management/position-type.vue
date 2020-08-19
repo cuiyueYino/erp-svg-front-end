@@ -398,7 +398,7 @@ export default {
       this.searchForm = {
         fname: "",
         fcode: "",
-        fpositiontype: "",
+        fpositioncategory: "",
         fremark: ""
       };
       this.isEdit = false;
