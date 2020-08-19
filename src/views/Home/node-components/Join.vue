@@ -511,11 +511,13 @@ export default {
                 if(obj.name === "Join"){
                     console.log( obj)
                     if(!obj.oid){
+                         this.formData = {}
                         this.checkedCities = ['由权限控制'];
                         this.formData.name = obj.displayName
                     }else{
                         this.checkedCities = [];
                         this.editData = obj;
+                        this.formData.oid = this.editData.oid;
                         this.formData.name = this.editData.displayName
                         this.formData.work = this.editData.mactivity.name
                         this.formData.workId = this.editData.mactivity.oid
@@ -805,7 +807,7 @@ export default {
         },
         handleClick() {//
             if(this.activeName == '5'){//
-                debugger
+                // debugger
                 this.tableData2 =[]
                 let allData = JSON.parse( sessionStorage.getItem('allData') );
                 console.log(this.formData.name)

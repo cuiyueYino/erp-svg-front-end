@@ -296,10 +296,12 @@ export default {
         //  this.$refs['formData'].resetFields();
         console.log(obj)
           if(!obj.oid){
+             this.formData = {}
               this.formData.displayName = obj.displayName
           }else{
                 this.checkedCities = [];
                 this.editData = obj;
+                this.formData.oid = this.editData.oid;
                 this.formData.displayName = this.editData.displayName
                 this.formData.work = this.editData.mactivity.name
                 this.formData.workId = this.editData.mactivity.oid

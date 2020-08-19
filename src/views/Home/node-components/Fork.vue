@@ -265,9 +265,11 @@ export default {
             handler (obj) {
                 if(obj.name === "Fork"){console.log( obj)
                     if(!obj.oid){
+                         this.formData = {}
                         this.formData.name = obj.displayName
                     }else{
                         this.editData = obj;
+                        this.formData.oid = this.editData.oid;
                         this.formData.name = this.editData.displayName
                         this.formData.work = this.editData.mactivity.name
                         this.formData.workId = this.editData.mactivity.oid

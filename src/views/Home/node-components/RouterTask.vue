@@ -181,6 +181,7 @@ export default {
             if(obj.name === "Task"){
                 console.log(obj)
                 this.editData = obj;
+                this.formData.oid = this.editData.oid;
                 this.formData.code = this.editData.code
                 this.formData.name = this.editData.displayName
                 this.formData.fremark = this.editData.fremark
