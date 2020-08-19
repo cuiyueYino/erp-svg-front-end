@@ -310,7 +310,19 @@ export default {
                 // this.formData.structure = this.editData.orgUnit?this.editData.orgUnit.id:''
                 // this.formData.checked = this.editData.hidden==1?true:false
                 this.formData.fremark = this.editData.fremark
-                this.checkedCities.push(this.editData.permission=='1'?'由权限控制':this.editData.mntNextJoin=='1'?'手工指定下一节点参与者':this.editData.canSkip=='1'?'可略过':this.editData.multMail=='1'?'多封邮件':null)
+                if(this.editData.permission=='1'){
+                  this.checkedCities.push('由权限控制');
+                }
+                if(this.editData.mntNextJoin=='1'){
+                  this.checkedCities.push('手工指定下一节点参与者');
+                }
+                if(this.editData.canSkip=='1'){
+                  this.checkedCities.push('可略过');
+                }
+                if(this.editData.multMail=='1'){
+                  this.checkedCities.push('多封邮件');
+                }
+                //this.checkedCities.push(this.editData.permission=='1'?'由权限控制':this.editData.mntNextJoin=='1'?'手工指定下一节点参与者':this.editData.canSkip=='1'?'可略过':this.editData.multMail=='1'?'多封邮件':null)
                 let tableDataNewSet = []
                 this.editData.wfCopyTo.copyTo.forEach(item=>{
                     switch (item.type) {
@@ -361,8 +373,8 @@ export default {
                         case 5://表达式
                             tableDataNewSet.push({
                                 fUsercode: "表达式",
-                                fUsername: item.expression.name || '',
-                                fUserRemake: item.expression|| '',
+                                fUsername: item.expression|| '',
+                                fUserRemake:'',
                                 fUseroid:item.expression.oid|| '',
                                 oid:item.oid,
                                 type:item.type,
@@ -430,7 +442,8 @@ export default {
                         case 5://表达式
                                 joinusertable.push({
                                 fUsercode: "表达式",
-                                fUserRemake: item.expression|| '',
+                                fUsername: item.expression|| '',
+                                fUserRemake:'',
                                 fUseroid:item.oid|| '',
                                 oid:item.oid,
                                 type:item.type,
