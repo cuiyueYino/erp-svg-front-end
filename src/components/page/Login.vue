@@ -73,7 +73,6 @@
 						this.$api.common.login(this.param).then(val => {
 							//存入本地缓存,登陆后的每次接口调用都要带着token
 							localStorage.setItem('ms_tokenId', val.data.access_token);
-<<<<<<< HEAD
 							//根据token查询登陆人的信息并存入缓存
 							this.$api.common.getUserInfo().then(data => {
 								//用户ID
@@ -94,11 +93,9 @@
 							})
 							
 						})
-=======
 							//跳转门户
 							sessionStorage.setItem("oaMenu", true);
 							this.$router.push("/oaCompanyHome")
-						});
 						// 向html的login方法反动数据 	
 							this.iframeWin.postMessage({
 								cmd: 'sendLoginData',
@@ -108,7 +105,6 @@
 			                    }
 							}, '*');
 						this.handleMessage(this.eventObject);
->>>>>>> 8e63215f0bf61026b3a93940233aabfd6c0b2d6a
 					} else {
 						this.$message.error("请输入用户名和密码!");
 					}
