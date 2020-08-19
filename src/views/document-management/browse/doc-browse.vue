@@ -272,7 +272,7 @@ export default {
         //分页查询菜单
         searchMenutable(data){
             let fromdata=data;
-            fromdata.fuserid = localStorage.getItem('ms_userId');s
+            fromdata.fuserid = localStorage.getItem('ms_userId');
             this.$api.documentManagement.findDocumentManageByPage(fromdata).then(response => {
                 let responsevalue = response;
                 if (responsevalue) {

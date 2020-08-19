@@ -10,7 +10,7 @@
                 :label-position="labelPosition"
             >
                 <el-card>
-                    <el-row :gutter="24">
+                    <el-row :gutter="24" v-show="!isOa">
                         <el-col :span="12" :offset="12">
                             <el-button type="danger" icon="el-icon-circle-plus-outline" plain @click="baseInputTable('加签')">加签</el-button>
                             <el-button type="success" icon="el-icon-share" plain @click="baseInputTable('转发')">转发</el-button>
@@ -107,6 +107,10 @@ export default {
              type: Boolean,
              default: false
         },
+        isOa:{
+                type: Boolean,
+             default: false
+        }
     },
     name: 'basetable',
     components: {
@@ -362,10 +366,12 @@ export default {
     watch:{
         rowWAAtype(oldVal,newVal){
             this.ShowFinancVisible=this.rowWAAtype;
-            this.title=this.rowWAADataObj.nametitle;
-            let finandata=this.rowWAADataObj.selectData;
             let formDataA ={};
-            formDataA.oid=finandata[0].foid;
+            if(!this.isOa){
+                this.title=this.rowWAADataObj.nametitle;
+                let finandata=this.rowWAADataObj.selectData;
+                formDataA.oid=finandata[0].foid;
+            }
             this.$api.processSet.getunhandledTask(formDataA).then(response => {
                 let responsevalue = response;
                 if (responsevalue) {

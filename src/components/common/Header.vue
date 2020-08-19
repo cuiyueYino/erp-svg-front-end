@@ -70,18 +70,7 @@
 						sessionStorage.setItem("menuList", JSON.stringify(data2.data.data));
 						this.$router.push("/");
 					})
-					//用户ID
-					localStorage.setItem('ms_userId', data.data.principal.accountId);
-					//用户名称
-					localStorage.setItem('ms_username', data.data.principal.fullname);
-					//部门ID
-					localStorage.setItem('ms_userDepartId', data.data.principal.deptmentId);
-					//部门名称
-					localStorage.setItem('ms_userDepartName', data.data.principal.deptmentName);
-					//公司ID
-					localStorage.setItem('ms_companyId', data.data.principal.companyId);
-					//公司名称
-					localStorage.setItem('ms_companyName', data.data.principal.companyName);
+					
 					//获取工作事项相关参数
 					this.getContext()
 					//获取员工树信息

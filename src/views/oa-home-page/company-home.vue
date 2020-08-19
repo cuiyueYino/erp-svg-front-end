@@ -12,12 +12,15 @@
             :name="index.toString()"
           >
             <span v-for="(childListItems,indx) in childList[idx]" class="li-box">
-                <ul class="ul-left" @click="toLook(childListItems)">
-                  <li>{{childListItems.fname}}</li>
-                </ul>
-                <ul class="ul-right" @click="toLook(childListItems)">
-                  <li>{{$Uformat.formatDateTYMD(childListItems.fcreatetime)}}</li>
-                </ul>
+              <ul class="ul-left" @click="toLook(childListItems)">
+                <li>
+                  {{childListItems.fname}}
+                  <span class="li-after" v-show="childListItems.fisread=='0'"></span>
+                </li>
+              </ul>
+              <ul class="ul-right" @click="toLook(childListItems)">
+                <li>{{$Uformat.formatDateTYMD(childListItems.fcreatetime)}}</li>
+              </ul>
             </span>
           </el-tab-pane>
         </el-tabs>
@@ -44,14 +47,15 @@
       </el-card>
     </el-aside>
     <el-dialog
-    :title="detailMsg.fname"
-    :visible.sync="dialogVisible"
-    center
-    :close-on-click-modal="false">
-        <span v-html="detailMsg.fcontent" ></span>
-        <span slot="footer" class="dialog-footer">
-            <el-button @click="dialogVisible = false">关 闭</el-button>
-        </span>
+      :title="detailMsg.fname"
+      :visible.sync="dialogVisible"
+      center
+      :close-on-click-modal="false"
+    >
+      <span v-html="detailMsg.fcontent"></span>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="closeDialog">关 闭</el-button>
+      </span>
     </el-dialog>
   </el-container>
 </template>
@@ -80,24 +84,32 @@ export default {
   created() {
     this.$nextTick(() => {
         this.getMenuList()
-      this.$api.documentManagement
-        .getDocumentCategoryOrgArch()
-        .then((res) => {
-          this.menuList = eval("(" + res.data.data + ")")[0].children; //console.log(this.menuList )
-          if (this.menuList) {
-            this.menuList.forEach((item, index) => {
-              if (item.children) {
-                this.getChildList(item.children[0].foid);
-              }
-            });
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+        this.firstGetMenu();
     });
   },
   methods: {
+    async firstGetMenu(){
+      let getItems = []
+       this.$api.documentManagement
+        .getDocumentCategoryOrgArch()
+        .then((res) => {
+          this.menuList = eval("(" + res.data.data + ")")[0].children; //console.log(this.menuList )
+          if (this.menuList) { 
+            this.menuList.forEach((item, index) => {
+              if(item.children){
+                  getItems.push( this.firstGetItem(item.children[0].foid) )
+              }
+             Promise.all(getItems).then(res=>{
+                  this.childList = res
+             })
+            })     
+          }
+        })
+    },
+    async firstGetItem(data){
+      let getDetail = await this.getChildList(data)
+      return getDetail
+    },
     handleClick(tab) {
     //   console.log(tab);
       this.menuList.forEach((item, index) => {
@@ -105,6 +117,7 @@ export default {
           if (childrenItem.fname == tab.label) {//console.log(childrenItem);
           let data={
                fpid: childrenItem.foid,
+               fuserid:localStorage.getItem('ms_userId'),
                 page: 1,
                 size: 10,
           }
@@ -122,23 +135,27 @@ export default {
     },
 
     // 获取二级菜单详情列表
-    async getChildList(item) {
+     async getChildList(item) {//console.log(item)
       let getChildListNew = [];
       this.childList = [];
+      let getItems = [];
       let data = {
-        "fuserid": item,
+        fpid: item,
+        fuserid:localStorage.getItem('ms_userId'),
         page: 1,
         size: 10,
       };
-      await this.$api.documentManagement
-        .findDocumentManageByPage(data)
-        .then((res) => {
-          this.childList.push(res.data.data.rows);
-          console.log(this.childList); 
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+       return new Promise((resolve,reject)=>{
+          this.$api.documentManagement.findDocumentManageByPage(data)
+          .then((res) => { 
+               resolve(res.data.data.rows)
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+         
+          })
+      
     },
     //   获取菜单list
     getMenuList() {
@@ -152,6 +169,17 @@ export default {
           console.log(err);
         });
     },
+    closeDialog(){
+        this.detailMsg.fisread = '1'
+            this.childList.forEach((items,index)=>{
+                items.forEach((item,idx)=>{
+                    if( item.foid == this.detailMsg.foid ){
+                        this.$set(items,idx, this.detailMsg);
+                        this.dialogVisible = false
+                    }
+                })
+        });
+    },
     toWebsite() {
       window.open("http://www.fujiagroup.com/");
     },
@@ -159,8 +187,13 @@ export default {
       window.open("http://192.168.85.96:8092/file/txl.htm");
     },
     //查看页面详情
-    toLook(val) {
-      this.$api.documentManagement.findDocumentManageById(val).then(res => {
+    toLook(val) {console.log(val)
+    let data ={
+        "from": "1",
+        "foid": val.foid,
+        "fuserid": localStorage.getItem('ms_userId')
+        }
+      this.$api.documentManagement.findDocumentManageById(data).then(res => {
         if (res.data.data) {
             this.dialogVisible = true;
             this.detailMsg = res.data.data
@@ -188,8 +221,8 @@ export default {
   overflow: unset;
   width: 100%;
 }
-/deep/ .el-dialog--center .el-dialog__body{
-        overflow: auto;
+/deep/ .el-dialog--center .el-dialog__body {
+  overflow: auto;
 }
 .el-main {
   padding: 0;
@@ -215,6 +248,14 @@ export default {
   }
   /deep/ .el-tabs__content {
     width: 96%;
+  }
+  .li-after {
+    display: inline-block;
+    margin: 0 0 4px 4px;
+    width: 6px;
+    height: 6px;
+    background-color: red;
+    border-radius: 4px;
   }
   .ul-left {
     width: 50%;

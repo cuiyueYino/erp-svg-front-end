@@ -58,9 +58,25 @@
 						this.$api.common.login(this.param).then(val => {
 							//存入本地缓存,登陆后的每次接口调用都要带着token
 							localStorage.setItem('ms_tokenId', val.data.access_token);
-							//跳转门户
-							sessionStorage.setItem("oaMenu", true);
-							this.$router.push("/oaCompanyHome")
+							//根据token查询登陆人的信息并存入缓存
+							this.$api.common.getUserInfo().then(data => {
+								//用户ID
+								localStorage.setItem('ms_userId', data.data.principal.accountId);
+								//用户名称
+								localStorage.setItem('ms_username', data.data.principal.fullname);
+								//部门ID
+								localStorage.setItem('ms_userDepartId', data.data.principal.deptmentId);
+								//部门名称
+								localStorage.setItem('ms_userDepartName', data.data.principal.deptmentName);
+								//公司ID
+								localStorage.setItem('ms_companyId', data.data.principal.companyId);
+								//公司名称
+								localStorage.setItem('ms_companyName', data.data.principal.companyName);
+								//跳转门户
+								sessionStorage.setItem("oaMenu", true);
+								this.$router.push("/oaCompanyHome")
+							})
+							
 						})
 					} else {
 						this.$message.error("请输入用户名和密码!");

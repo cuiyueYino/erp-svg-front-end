@@ -7,15 +7,55 @@
                  <span class="tab-title-tips">Workflow</span>
                  <el-divider></el-divider>
                   <el-tabs v-model="activeName" @tab-click="handleClick">
-                        <el-tab-pane label="处理中心" name="1">
-                            <ul class="ul-left">
-                                <li>关于岗位调整公示</li>
+                        <el-tab-pane label="待办事项" name="1">
+                            <template v-for="item in getunhandledTaskList">
+                            <ul class="ul-left" @click="toLookItems(item)">
+                                <li>{{item.fsubject}}<span class="li-after" v-show="item.fisread=='0'"></span></li>
                             </ul>
-                            <ul class="ul-right">
-                                <li>2020-7-30</li>
+                            <ul class="ul-right" @click="toLookItems(item)">
+                                <li>{{item.freceiveTime}}</li>
                             </ul>
+                            </template>
                         </el-tab-pane>
-                        <el-tab-pane label="消息中心" name="2">
+                        <el-tab-pane label="关注事项" name="2">
+                            <template v-for="item in getAttentionTaskList">
+                                <ul class="ul-left" @click="toLookItems(item)">
+                                    <li>{{item.fsubject}}<span class="li-after" v-show="item.fisread=='0'"></span></li>
+                                </ul>
+                                <ul class="ul-right" @click="toLookItems(item)">
+                                    <li>{{item.freceiveTime}}</li>
+                                </ul>
+                            </template>
+                        </el-tab-pane>
+                        <el-tab-pane label="已办事项" name="3">
+                            <template v-for="item in getHunTableDataList">
+                                <ul class="ul-left" @click="toLookItems(item)">
+                                    <li>{{item.fsubject}}<span class="li-after" v-show="item.fisread=='0'"></span></li>
+                                </ul>
+                                <ul class="ul-right" @click="toLookItems(item)">
+                                    <li>{{item.freceiveTime}}</li>
+                                </ul>
+                            </template>
+                        </el-tab-pane>
+                        <el-tab-pane label="已发事项" name="4">
+                             <template v-for="item in getIssuedItemsList">
+                                <ul class="ul-left" @click="toLookItems(item)">
+                                    <li>{{item.fsubject}}<span class="li-after" v-show="item.fisread=='0'"></span></li>
+                                </ul>
+                                <ul class="ul-right" @click="toLookItems(item)">
+                                    <li>{{item.freceiveTime}}</li>
+                                </ul>
+                            </template>
+                        </el-tab-pane>
+                        <el-tab-pane label="回收站" name="5">
+                             <template v-for="item in getRecycleBinList">
+                                <ul class="ul-left" @click="toLookItems(item)">
+                                    <li>{{item.fsubject}}<span class="li-after" v-show="item.fisread=='0'"></span></li>
+                                </ul>
+                                <ul class="ul-right" @click="toLookItems(item)">
+                                    <li>{{item.freceiveTime}}</li>
+                                </ul>
+                            </template>
                         </el-tab-pane>
                     </el-tabs>
              </el-card>
@@ -23,16 +63,46 @@
                  <span class="tab-title">我的邮件</span>
                  <span class="tab-title-tips">Mail</span>
                  <el-divider></el-divider>
-                  <el-tabs v-model="activeName" @tab-click="handleClick">
-                        <el-tab-pane label="处理中心" name="1">
-                            <ul class="ul-left">
-                                <li>关于岗位调整公示</li>
-                            </ul>
-                            <ul class="ul-right">
-                                <li>2020-7-30</li>
-                            </ul>
+                  <el-tabs v-model="activeNameMail" @tab-click="handleClickMail">
+                        <el-tab-pane label="收件箱" name="1">
+                            <template v-for="item in getReceiveMailList">
+                                <ul class="ul-left" @click="toLookMail(item)">
+                                    <li>{{item.subject}}<span class="li-after" v-show="item.isRead== 0"></span></li>
+                                </ul>
+                                <ul class="ul-right" @click="toLookMail(item)">
+                                    <li>{{item.createTime}}</li>
+                                </ul>
+                            </template>
                         </el-tab-pane>
-                        <el-tab-pane label="消息中心" name="2">
+                        <el-tab-pane label="草稿箱" name="2">
+                             <template v-for="item in getDraftMailList">
+                                <ul class="ul-left" @click="toLookMail(item)">
+                                    <li>{{item.subject}}<span class="li-after" v-show="item.isRead== 0"></span></li>
+                                </ul>
+                                <ul class="ul-right" @click="toLookMail(item)">
+                                    <li>{{item.createTime}}</li>
+                                </ul>
+                            </template>
+                        </el-tab-pane>
+                        <el-tab-pane label="发件箱" name="3">
+                              <template v-for="item in getSendMailList">
+                                <ul class="ul-left" @click="toLookMail(item)">
+                                    <li>{{item.subject}}<span class="li-after" v-show="item.isRead== 0"></span></li>
+                                </ul>
+                                <ul class="ul-right" @click="toLookMail(item)">
+                                    <li>{{item.createTime}}</li>
+                                </ul>
+                            </template>
+                        </el-tab-pane>
+                        <el-tab-pane label="回收站" name="4">
+                             <template v-for="item in getRecycleMailList">
+                                <ul class="ul-left" @click="toLookMail(item)">
+                                    <li>{{item.subject}}<span class="li-after" v-show="item.isRead== 0"></span></li>
+                                </ul>
+                                <ul class="ul-right" @click="toLookMail(item)">
+                                    <li>{{item.createTime}}</li>
+                                </ul>
+                            </template>
                         </el-tab-pane>
                     </el-tabs>
              </el-card>
@@ -59,42 +129,264 @@
              </el-calendar>
         </el-card>
     </el-aside>
- </el-container>
+     <el-dialog
+        :title="detailMsg.fname"
+        :visible.sync="dialogVisible"
+        center
+        :close-on-click-modal="false">
+            <span v-html="detailMsg.content" ></span>
+            <span>1111111111111</span>
+            
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="closeDialog">关 闭</el-button>
+            </span>
+        </el-dialog>
+        <WAApage  :rowWAADataObj="rowWAADataObj" :rowWAAtype="rowWAAtype" :isOa="isOa" @changeShow="showORhideForWAA"/>
+    </el-container>
+ 
 </template>
 
 <script>
+import WAApage from '../process-set/warehousing-applicant-approval';
 export default {
     name:'oaPersonalHome',
     data() {
         return {
+            isOa:false,
+             rowWAADataObj:{},
+              rowWAAtype:false,
+            dialogVisible:false,
+             detailMsg:[],
             activeName: '1',
-            value: new Date()
+            activeNameMail:'1',
+            value: new Date(),
+            getReceiveMailList:[],
+            getRecycleMailList:[],
+            getDraftMailList:[],
+            getSendMailList:[],
+            getunhandledTaskList:[],
+            getAttentionTaskList:[],
+            getHunTableDataList:[],
+            getIssuedItemsList:[],
+            getRecycleBinList:[],
         };
     },
     components: {
+        WAApage
     },
     created(){
         this.$nextTick(()=>{
-
+            this.getReceiveMail()
+            this.getunhandledTask()
         })
     },
     computed:{
         
     },
     methods:{
-        handleClick(tab, event) {
-        console.log(tab, event);
-      },
-        //删除
-        deleteMsg(){
-            this.$api.processSet.deleteMsg().then(res=>{
-                    if(res.data.data.msg = "success"){
-                        this.$message.success('删除成功');
-                    }
-                }),error=>{
-                    console.log(error);
-                }
+        showORhideForWAA(data){
+            if(data == false){
+                this.rowWAAtype = false
+            }else{
+                this.rowWAAtype = true
+            }
         },
+        closeDialog(){
+            // this.detailMsg.isRead = 1
+            // this.childList.forEach((items,index)=>{
+            //     items.forEach((item,idx)=>{
+            //         if( item.foid == this.detailMsg.foid ){
+            //             this.$set(items,idx, this.detailMsg);
+            //             this.dialogVisible = false
+            //         }
+            //         })
+            // });
+        },
+        toLookItems(val){
+            let  finandata={}
+            let data={
+                oid:val.foid
+            }
+            this.$api.processSet.getunhandledTask(data).then(
+                res => {
+                    finandata.finanrowname="人员缺省查询方案";
+                    finandata.finanrowId="QS_0056";
+                    finandata.nametitle="入库申请申请人审批";
+                    this.rowWAADataObj=finandata;
+                    this.detailMsg = '流程中心';
+                    this.rowWAAtype=true;
+                    this.isOa = true;
+                }
+            )
+        },
+        toLookMail(val){
+            let data={
+                id:val.id
+            }
+            this.$api.insideMail.getMailById(data).then(
+                res => {
+                    this.detailMsg = res.data.data;
+                    this.dialogVisible = true
+                    console.log(this.detailMsg )
+                }
+            )
+        },
+        handleClick() {
+            switch (this.activeName) {
+                    case '1':
+                        this.getunhandledTask()
+                        break;
+                    case '2':
+                        this.getAttentionTask()
+                        break;
+                    case '3':
+                        this.getHunTableData()
+                        break;
+                    case '4':
+                        this.getIssuedItems()
+                        break;
+                    case '5':
+                        this.getRecycleBinItems()
+                        break;
+                
+                    default:
+                        break;
+            }
+      },
+      //待办事项
+      getunhandledTask(){
+          let data={
+                infosBeginNum: 1,
+                infosEndNum: 10,
+                userId:localStorage.getItem('ms_userId')
+          }
+           this.$api.processSet.getunhandledTask(data).then(res=>{
+               this.getunhandledTaskList = res.data.data.rows
+                console.log(this.getunhandledTaskList)
+           })
+      },
+       //关注事项
+      getAttentionTask(){
+          let data={
+                infosBeginNum: 1,
+                infosEndNum: 10,
+                userId: localStorage.getItem('ms_userId')
+          }
+           this.$api.processSet.attentionTask(data).then(res=>{
+                this.getAttentionTaskList = res.data.data.rows
+                console.log(this.getAttentionTaskList)
+           })
+      },
+       //已办事项
+      getHunTableData(){
+          let data={
+                infosBeginNum: 1,
+                infosEndNum: 10,
+                userId: localStorage.getItem('ms_userId')
+          }
+           this.$api.processSet.handledTask(data).then(res=>{
+                this.getHunTableDataList = res.data.data.rows
+                console.log(this.getHunTableDataList)
+           })
+      },
+       //已发事项
+      getIssuedItems(){
+          let data={
+                infosBeginNum: 1,
+                infosEndNum: 10,
+                userId: localStorage.getItem('ms_userId')
+          }
+           this.$api.processSet.sendedTask(data).then(res=>{
+               this.getIssuedItemsList = res.data.data.rows
+                console.log(this.getIssuedItemsList)
+           })
+      },
+       //回收站
+      getRecycleBinItems(){
+          let data={
+                infosBeginNum: 1,
+                infosEndNum: 10,
+                userId: localStorage.getItem('ms_userId')
+          }
+           this.$api.processSet.getRecycleBinList(data).then(res=>{
+               this.getRecycleBinList = res.data.data.rows
+                console.log(this.getRecycleBinList)
+           })
+      },
+
+      handleClickMail() {
+        switch (this.activeNameMail) {
+            case '1':
+                this.getReceiveMail()
+                break;
+            case '2':
+                this.getDraftMail()
+                break;
+            case '3':
+                this.getSendMail()
+                break;
+            case '4':
+                this.getRecycleMail()
+                break;
+        
+            default:
+                break;
+        }
+      },
+      /**
+     * 获取收件箱信息
+     */
+       getReceiveMail(){
+           let data ={
+            //    owner: localStorage.getItem('ms_userId'),
+                owner:"BFPID000000LSN000E",
+                page: 1,
+                size: 10
+           }
+        this.$api.insideMail.getReceiveMail(data).then(res=>{
+            this.getReceiveMailList = res.data.data.rows
+            console.log( this.getReceiveMailList)
+        })
+       },
+    //    草稿箱
+    getDraftMail(){
+        let data ={
+               //    owner: localStorage.getItem('ms_userId'),
+                owner:"BFPID000000LSN000E",
+                page: 1,
+                size: 10
+           }
+        this.$api.insideMail.getDraftMail(data).then(res=>{
+             this.getDraftMailList = res.data.data.rows
+            console.log( this.getDraftMailList)
+        })
+    },
+     //    发件箱
+    getSendMail(){
+        let data ={
+              //    owner: localStorage.getItem('ms_userId'),
+                owner:"BFPID000000LSN000E",
+                page: 1,
+                size: 10
+           }
+        this.$api.insideMail.getSendMail(data).then(res=>{
+            this.getSendMailList = res.data.data.rows
+            console.log( this.getSendMailList)
+        })
+    },
+     //    回收站
+    getRecycleMail(){
+        let data ={
+               //    owner: localStorage.getItem('ms_userId'),
+                owner:"BFPID000000LSN000E",
+                page: 1,
+                size: 10
+           }
+        this.$api.insideMail.getRecycleMail(data).then(res=>{
+            this.getRecycleMailList = res.data.data.rows
+            console.log( this.getRecycleMailList)
+        })
+    },
         
     },
 }
@@ -130,6 +422,7 @@ export default {
       .el-tab-pane{
         display: flex;
         justify-content: space-between;
+        flex-wrap: wrap;
       }
      /deep/ .el-tabs__nav-wrap::after{
           display: none !important;
@@ -137,14 +430,17 @@ export default {
        /deep/ .el-tabs__content{
               width: 96%;
       }
-      .ul-left{
-        //   float: left;
-      }
-       .ul-right{
-        //   float: right;
-      }
+    .ul-left {
+    width: 50%;
+  }
+  .ul-right {
+    width: 50%;
+    text-align: right;
+  }
       ul li{
           list-style: none;
+          cursor: pointer;
+    line-height: 34px;
       }
   }
   .tab-title{
@@ -227,4 +523,12 @@ export default {
         height: 34px;
         margin-top: 30px;
     }
+    .li-after{
+      display: inline-block;
+          margin: 0 0 4px 4px;
+        width: 6px;
+        height: 6px;
+        background-color: red;
+        border-radius: 4px;
+  }
 </style>
