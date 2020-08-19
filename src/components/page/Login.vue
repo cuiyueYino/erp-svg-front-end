@@ -1,5 +1,6 @@
 <template>
 	<div class="login-wrap">
+		<iframe src="http://localhost:6013/login" style="width:100%;height:764px;border:0px;padding:0px;display:none"  class="taskStructure"  ref="iframe"></iframe>
 		<div class="ms-login">
 			<div class="ms-title01"><img src="../../assets/img/logo-bg.png" height="45" width="360" /></div>
 			<div class="ms-content01">
@@ -24,10 +25,13 @@
 	</div>
 </template>
 
+
 <script>
 	export default {
 		data: function() {
-			return {
+			return {	
+				iframeWin:{},
+				eventObject:{},
 				param: {
 					grant_type: 'password',
 					username: '',
@@ -47,7 +51,18 @@
 				}
 			};
 		},
+		mounted () {
+    		this.iframeWin = this.$refs.iframe.contentWindow
+		},
 		methods: {
+			 handleMessage (event) {
+				const data = event.data
+				switch (data.cmd) {
+					case 'getHtmlData':
+					this.eventObject = event;
+					break;
+				}
+    		},
 			submitForm() {
 				//清空本地的缓存
 				localStorage.clear()
@@ -58,6 +73,7 @@
 						this.$api.common.login(this.param).then(val => {
 							//存入本地缓存,登陆后的每次接口调用都要带着token
 							localStorage.setItem('ms_tokenId', val.data.access_token);
+<<<<<<< HEAD
 							//根据token查询登陆人的信息并存入缓存
 							this.$api.common.getUserInfo().then(data => {
 								//用户ID
@@ -78,6 +94,21 @@
 							})
 							
 						})
+=======
+							//跳转门户
+							sessionStorage.setItem("oaMenu", true);
+							this.$router.push("/oaCompanyHome")
+						});
+						// 向html的login方法反动数据 	
+							this.iframeWin.postMessage({
+								cmd: 'sendLoginData',
+								params: {
+			                        'username':this.param.username,
+			                        'pass': this.param.password,
+			                    }
+							}, '*');
+						this.handleMessage(this.eventObject);
+>>>>>>> 8e63215f0bf61026b3a93940233aabfd6c0b2d6a
 					} else {
 						this.$message.error("请输入用户名和密码!");
 					}

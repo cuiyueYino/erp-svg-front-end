@@ -522,6 +522,9 @@ export default {
         },
         //左侧角色分页下一页
         onroleLCurrentChange(val){
+            this.ALLSelectFlage=false;
+            this.roleLselectedList=[];
+            this.RUserLselectData=[];
             let  fromdataU={};
             fromdataU.page=val;
             fromdataU.size=this.pageSize;
@@ -532,29 +535,32 @@ export default {
             }else if(this.formInline.regionleft=="company"){
                 fromdataU.company=this.formInline.searchValueleft;
             }
-            if(this.ALLSelectFlage==true){
-                let RoleRSelect=this.RoleselectData;
-                fromdataU.roleIds=RoleRSelect;
-            }
             this.searchRole(fromdataU);
+            let fromdata={};
+            fromdata.page=this.pageNum;
+            fromdata.size=this.pageSize;
+            this.getUserData(fromdata);
         },
         //左侧人员分页下一页
         onUserCurrentChange(val){
-            if(this.ALLSelectFlage===true){
-                this.UserSelectDataPage(val,this.pageSize,this.RUserLselectData);
-            }else{
-                let  fromdata={};
-                fromdata.page=val;
-                fromdata.size=this.pageSize;
-                if(this.formInline.regionleft=="name"){
-                    fromdata.fname=this.formInline.searchValueleft;
-                }else if(this.formInline.regionleft=="code"){
-                    fromdata.fcode=this.formInline.searchValueleft;
-                }else if(this.formInline.regionleft=="company"){
-                    fromdata.fcompanyoid=this.formInline.searchValueleft;
-                }
-                this.getUserData(fromdata);
+            this.UserselectedList=[];
+            this.RoleselectData=[];
+            this.ALLSelectFlage=false;
+            let  fromdata={};
+            fromdata.page=val;
+            fromdata.size=this.pageSize;
+            if(this.formInline.regionleft=="name"){
+                fromdata.fname=this.formInline.searchValueleft;
+            }else if(this.formInline.regionleft=="code"){
+                fromdata.fcode=this.formInline.searchValueleft;
+            }else if(this.formInline.regionleft=="company"){
+                fromdata.fcompanyoid=this.formInline.searchValueleft;
             }
+            this.getUserData(fromdata);
+            let  fromdataU={};
+            fromdataU.page=this.pageNum;
+            fromdataU.size=this.pageSize;
+            this.searchRole(fromdataU);
         },
         //右侧角色下一页
         onRoleCurrentChange(val){

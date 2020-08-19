@@ -252,6 +252,10 @@ export default {
                 "id": e.structureId,
             };  
             //参与者
+            this.data.permission=null;
+            this.data.mntNextJoin=null;
+            this.data.canSkip=null;
+            this.data.multMail=null;
              e.checkedCities.forEach(item => {
                   switch (item) {
                     case '由权限控制':
@@ -280,18 +284,18 @@ export default {
                 }
             }
             e2.forEach(item => {
-                     wfParticipatorObj = 
+                    wfParticipatorObj = 
                         {
                             "oid":item.oid?item.oid:'',
                             //6:表示 选择的是职务
                             "type": item.type,
                             //表达式的值 
-                             [item.typeName]:{
-                                "oid": item.fUseroid?item.fUseroid:item.oid,
+                            [item.typeName]:{
+                                "oid": item.fUseroid?item.fUseroid:'',
                                 "code":item.fUsercode,
                                 "name":item.fUsername
                             },
-                            "expression":item.fUserRemake
+                            "expression":item.typeName=="expression"?item.fUsername:item.fUserRemake
                         }
                 this.data.wfParticipator.participator.push(wfParticipatorObj)
             });
@@ -315,7 +319,7 @@ export default {
                                 "code":item.fUsercode,
                                 "name":item.fUsername
                             },
-                            "expression":item.fUserRemake
+                            "expression":item.typeName=="expression"?item.fUsername:item.fUserRemake
                         }
                 this.data.wfCopyTo.copyTo.push(copyToObj)
             });
@@ -407,6 +411,10 @@ export default {
                     break;
             }
              //参与者
+            this.data.permission=null;
+            this.data.mntNextJoin=null;
+            this.data.canSkip=null;
+            this.data.multMail=null;
               e.checkedCities.forEach(item => {
                   switch (item) {
                     case '由权限控制':
@@ -448,7 +456,7 @@ export default {
                                 "code":item.fUsercode,
                                 "name":item.fUsername
                             },
-                            "expression":item.fUserRemake
+                            "expression":item.typeName=="expression"?item.fUsername:item.fUserRemake
                         }
                 this.data.wfParticipator.participator.push(participatorObj)
             });
@@ -473,7 +481,7 @@ export default {
                                 "code":item.fUsercode,
                                 "name":item.fUsername
                             },
-                            "expression":item.fUserRemake
+                            "expression":item.typeName=="expression"?item.fUsername:item.fUserRemake
                         }
                 this.data.wfCopyTo.copyTo.push(copyToObj)
             });

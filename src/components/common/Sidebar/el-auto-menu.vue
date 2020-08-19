@@ -33,8 +33,11 @@
 		},
 		watch: {
 			$route(to, from) {
-				if(to.path == "/"){
+				if(to.path == "/") {
+					this.getCon()
 					window.location.reload()
+				} else if(to.path == "/oaCompanyHome") {
+					sessionStorage.setItem("oaMenu", true);
 					this.getCon()
 				}
 			}
