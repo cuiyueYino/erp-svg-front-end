@@ -16,7 +16,7 @@
                                 <el-button type="success" icon="el-icon-refresh" plain @click="createDepartment">部门</el-button>
                             </el-dropdown-item>
                             <el-dropdown-item>
-                                <el-button type="success" icon="el-icon-refresh" plain @click="createDuties">职务</el-button>
+                                <el-button type="success" icon="el-icon-refresh" plain @click="createDuties">职位</el-button>
                             </el-dropdown-item>
                         </el-dropdown-menu>
                     </el-dropdown>
