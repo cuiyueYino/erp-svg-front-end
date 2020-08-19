@@ -782,15 +782,16 @@ export default {
         clickNode (node) {
             // 点击节点 保存节点数据 获取节点类型
             this.selectedNode = node;
-             for(let k =0 ; k<this.dataObj.length; k++){
+            /*for(let k =0 ; k<this.dataObj.length; k++){
                 if(this.dataObj[k].data.displayName === node.data.displayName){
                     this.selectedNode.data = this.dataObj[k].data;
                     this.selectedNode.data.oid = this.dataObj[k].oid;
                     // console.log(this.selectedNode,this.dataObj[k])
                 }
-            }
+            }*/
             if(node.type == "Join"){
-                sessionStorage.setItem('allData',JSON.stringify(this.dataObj))
+                //sessionStorage.setItem('allData',JSON.stringify(this.dataObj))
+                sessionStorage.setItem('allData',JSON.stringify(this.workflowNodes))
             }
             this.nodeType = node.type;
             console.log(node,this.selectedNode)

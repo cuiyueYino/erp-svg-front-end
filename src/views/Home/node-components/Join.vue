@@ -25,7 +25,7 @@
                     <img class="icon-search"  @click="workSearch('源单据业务')" src="../../../assets/img/search.svg">
                 </el-form-item>
                 <el-form-item label="业务数据" :label-width="formLabelWidth" >
-                    <el-input v-model="formData.fmclassName" autocomplete="off"></el-input>
+                    <el-input v-model="formData.fmclassName" autocomplete="off" :disabled="true"></el-input>
                    
                 </el-form-item>
                 <!-- <el-form-item label="组织结构" :label-width="formLabelWidth" >
@@ -803,18 +803,22 @@ export default {
                 this.dialogVisible = false;
             });
         },
-        handleClick() {//console.log(this.formData.name)
-            if(this.activeName == '5'){//debugger
+        handleClick() {//
+            if(this.activeName == '5'){//
+                debugger
                 this.tableData2 =[]
                 let allData = JSON.parse( sessionStorage.getItem('allData') );
+                console.log(this.formData.name)
                 if(allData.length>0){
                     allData.forEach(item=>{
-                        if(item.type == 'Join'&& (item.data.displayName !== this.formData.name) ){
-                            this.tableData2.push({
-                                fname:item.data.displayName,
-                                ftype:item.data.name,
-                                wfProcessor: item.oid?item.oid:item.key
-                            })
+                        if(item.data){
+                            if(item.type == 'Join' && (item.data.displayName !== this.formData.name)){
+                                this.tableData2.push({
+                                    fname:item.data.displayName,
+                                    ftype:item.data.name,
+                                    wfProcessor: item.oid?item.oid:item.key
+                                })
+                            }
                             // item.wfViewOtherComments.wfViewOtherComment.forEach(vOcItime=>{
                             //     vOcItime.push({
                             //         fname:item.data.displayName,
