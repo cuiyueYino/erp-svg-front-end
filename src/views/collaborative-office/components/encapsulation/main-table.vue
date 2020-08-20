@@ -11,7 +11,7 @@
 					<el-col :span="10">
 						<el-form-item>
 							<el-button type="primary" @click="toSelect()">搜索</el-button>
-							<el-button type="primary" plain @click="$refs.formInline.resetFields();toSelect()">重置</el-button>
+							<el-button type="primary" plain @click="$refs.formInline.resetFields();showFig == 2 ? '' : clear();">重置</el-button>
 							<el-button v-if="showFig == 2" type="primary" plain @click="getAll()">全部</el-button>
 							<el-button v-if="showFig == 2" type="primary" plain @click="getConList()">已选中</el-button>
 						</el-form-item>
@@ -24,7 +24,7 @@
 					</el-col>
 				</el-row>
 			</el-form>
-			<vxe-table border ref="multipleTable" align="center" size="small" highlight-current-row @cell-click="clickRow" height="700" :data="tableData">
+			<vxe-table border ref="multipleTable" align="center" size="small" :highlight-current-row="showFig != 2" @cell-click="clickRow" height="700" :data="tableData">
 				<vxe-table-column v-if="showFig == 2" type="checkbox" width="60"></vxe-table-column>
 				<vxe-table-column field="code" title="主表模板编码"></vxe-table-column>
 				<vxe-table-column field="name" title="主表模板名称"></vxe-table-column>
@@ -84,7 +84,7 @@
 				})
 			},
 			roleAuthWorkItem() {
-				if(typeof(this.roleCon.id) == "undefined") {
+				if(typeof(this.roleCon.id) == "undefined" || this.roleCon.id == "") {
 					this.goOut("请选择数据")
 					return
 				}
@@ -144,7 +144,8 @@
 			},
 			clear() {
 				this.rowClick = {}
-				this.$emit("getCon", {}, "")
+				this.toSelect()
+				this.$emit("getCon", "", "")
 			}
 		}
 	}
