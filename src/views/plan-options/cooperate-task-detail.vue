@@ -154,6 +154,12 @@ export default {
     components: {
         DynamicTable,
     },
+    created() {
+        debugger;
+        console.log("页面初期化。。。。。。。。。");
+      // this.getPositionTypeTableData("");
+    getunhandledTaskFormDetail("");
+    },
     data(){
         return{
             focusLevelCheckList:[],
@@ -189,6 +195,19 @@ export default {
         }
     },
     methods: {
+        // 获取详情表单数据
+        getunhandledTaskFormDetail(params) {
+        debugger;
+        let data;
+        this.$api.jobUserManagement.getunhandledTaskFormDetail(data).then(
+            res => {
+            this.formdata = res.data.data.rows[0];
+            },
+            error => {
+            console.log(error);
+            }
+        );
+        },
     },
     watch:{
         rowCooTaskDetailtype(oldVal,newVal){
