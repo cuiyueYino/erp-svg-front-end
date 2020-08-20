@@ -1146,12 +1146,12 @@ export default {
                      data = {
                         fmclassName: this.formData.fmclassName,
                         fmclass:this.formData.fmclassOid,
-                        fcode: this.formData.formCode,
-                        fname: this.formData.formName,
+                        // fcode: this.formData.formCode?this.formData.formCode:'',
+                        // fname: this.formData.formName?this.formData.formName:'',
                         fmfunctiontypecon: this.formData.formCtionTypeCon,
                         page:this.pageNum,
                         size:this.pageSize
-                    };
+                    };console.log(data)
                     break;
                 case '':
                     data = {
