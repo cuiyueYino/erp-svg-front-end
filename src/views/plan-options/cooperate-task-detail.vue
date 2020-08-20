@@ -1,4 +1,5 @@
 <template>
+    
     <div v-if="ShowFinancVisible" class="itemDivStyle">
         <el-form
             :label-width="formLabelWidth"
