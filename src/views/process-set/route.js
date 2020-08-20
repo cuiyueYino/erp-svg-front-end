@@ -9,6 +9,7 @@ const recycleBin =()=> import('./recycle-bin')
 const structure = () => import('./task-structure.vue');
 const temporaryMission = () => import('./temporary-mission.vue');
 const postBid = () => import('./post-bid.vue'); 
+
 const PROJECT = [
     {
         path: 'workProcess',
