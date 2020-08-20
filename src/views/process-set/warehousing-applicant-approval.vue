@@ -23,184 +23,69 @@
               :span="12"
               :offset="12"
             >
-              <el-button
-                type="danger"
-                icon="el-icon-circle-plus-outline"
-                plain
-                @click="baseInputTable('加签')"
-              >加签</el-button>
-              <el-button
-                type="success"
-                icon="el-icon-share"
-                plain
-                @click="baseInputTable('转发')"
-              >转发</el-button>
-              <el-button
-                type="danger"
-                icon="el-icon-s-order"
-                plain
-                @click="baseInputTable('委托')"
-              >委托</el-button>
-              <el-button
-                type="danger"
-                icon="el-icon-view"
-                plain
-                @click="basefollow()"
-              >关注</el-button>
-              <el-button
-                type="success"
-                icon="el-icon-success"
-                plain
-                @click="effectOrDisableMsg"
-              >提交</el-button>
-            </el-col>
-          </el-row>
-          <el-row :gutter="24">
-            <ComAnnDetaiPage
-              :rowComPanDetaiDataObj="rowComPanDetaiDataObj"
-              :rowComPanDetaitype="rowComPanDetaitype"
-              @changeShow="showLookOrUpdate"
-            />
-            <TempTaskPage
-              :rowTEMTaskDataObj="rowTEMTaskDataObj"
-              :rowTEMTasktype="rowTEMTasktype"
-              @changeShow="showLookOrUpdate"
-            />
-            <EachPerEachJobDetailPage
-              :rowEACHPerEachJobDetDataObj="rowEACHPerEachJobDetDataObj"
-              :rowEACHPerEachJobDettype="rowEACHPerEachJobDettype"
-              @changeShow="showLookOrUpdate"
-            />
-            <EachPerEachTableReportPage
-              :rowEachPerEachTableReportDataObj="rowEachPerEachTableReportDataObj"
-              :rowEachPerEachTableReporttype="rowEachPerEachTableReporttype"
-              @changeShow="showLookOrUpdate"
-            />
-            <EachPerEachTableInvalidPage
-              :rowEachPerEachTableInvalidDataObj="rowEachPerEachTableInvalidDataObj"
-              :rowEachPerEachTableInvalidtype="rowEachPerEachTableInvalidtype"
-              @changeShow="showLookOrUpdate"
-            />
-            <EachPerEachTablePersonPage
-              :rowEachPerEachTablePersonDataObj="rowEachPerEachTablePersonDataObj"
-              :rowEachPerEachTablePersontype="rowEachPerEachTablePersontype"
-              @changeShow="showLookOrUpdate"
-            />
-            <EachPerEachTableDelayPage
-              :rowEachPerEachTableDelayDataObj="rowEachPerEachTableDelayDataObj"
-              :rowEachPerEachTableDelaytype="rowEachPerEachTableDelaytype"
-              @changeShow="showLookOrUpdate"
-            />
-            <EachPerEachTableAssPage
-              :rowEachPerEachTableAssDataObj="rowEachPerEachTableAssDataObj"
-              :rowEachPerEachTableAsstype="rowEachPerEachTableAsstype"
-              @changeShow="showLookOrUpdate"
-            />
-            <EachPerEachTableEntrustPage
-              :rowEachPerEachTableEntrustDataObj="rowEachPerEachTableEntrustDataObj"
-              :rowEachPerEachTableEntrusttype="rowEachPerEachTableEntrusttype"
-              @changeShow="showLookOrUpdate"
-            />
-            <EachPerEachTableDetailPage
-              :rowEachPerEachTableDetailDataObj="rowEachPerEachTableDetailDataObj"
-              :rowEachPerEachTableDetailtype="rowEachPerEachTableDetailtype"
-              @changeShow="showLookOrUpdate"
-            />
-            <DepartAnnPlanDetPage
-              :rowDepartAnnPlanDetDataObj="rowDepartAnnPlanDetDataObj"
-              :rowDepartAnnPlanDettype="rowDepartAnnPlanDettype"
-              @changeShow="showLookOrUpdate"
-            />
-            <DepartMonPlanDetPage
-              :rowDepartMonPlanDetDataObj="rowDepartMonPlanDetDataObj"
-              :rowDepartMonPlanDettype="rowDepartMonPlanDettype"
-              @changeShow="showLookOrUpdate"
-            />
-            <EmpApprTabDetailPage
-              :rowEmpApprTabDetailDataObj="rowEmpApprTabDetailDataObj"
-              :rowEmpApprTabDetailtype="rowEmpApprTabDetailtype"
-              @changeShow="showLookOrUpdate"
-            />
-            <EmpApprTabNumDetailPage
-              :rowEmpApprTabNumDetailDataObj="rowEmpApprTabNumDetailDataObj"
-              :rowEmpApprTabNumDetailtype="rowEmpApprTabNumDetailtype"
-              @changeShow="showLookOrUpdate"
-            />
-            <CooTaskDetailPage
-              :rowCooTaskDetailDataObj="rowCooTaskDetailDataObj"
-              :rowCooTaskDetailtype="rowCooTaskDetailtype"
-              @changeShow="showLookOrUpdate"
-            />
-            <EachPerEachTableAdjPage
-              :rowEachPerEachTableAdjDataObj="rowEachPerEachTableAdjDataObj"
-              :rowEachPerEachTableAdjtype="rowEachPerEachTableAdjtype"
-              @changeShow="showLookOrUpdate"
-            />
-          </el-row>
-          <el-row>
-            <el-col :span="22">
-              <processnodelist
-                :rowDataprocessObj="rowDataprocessObj"
-                @changeShow="showprocessData"
-              />
-            </el-col>
-          </el-row>
-          <el-tabs
-            v-model="atctiveName"
-            @tab-click="handleClick"
-          >
-            <el-tab-pane
-              label="审批意见"
-              name="first"
-            >
-              <el-row>
-                <el-col :span="12">
-                  <el-form-item
-                    label="决策类型"
-                    prop="code"
-                  >
-                    <el-radio
-                      v-model="formdata.radio"
-                      label="1"
-                    >同意</el-radio>
-                    <el-radio
-                      v-model="formdata.radio"
-                      label="2"
-                    >不同意</el-radio>
-                  </el-form-item>
-                </el-col>
-              </el-row>
-              <el-row>
-                <el-col :span="23">
-                  <el-form-item label="审批意见">
-                    <el-input
-                      type="textarea"
-                      v-model="formdata.remark"
-                      :rows="5"
-                    ></el-input>
-                  </el-form-item>
-                </el-col>
-              </el-row>
-            </el-tab-pane>
-            <el-tab-pane
-              label="附件"
-              name="second"
-            >
-              <creditEnclFilelist
-                :rowEFListDataObj="rowEFListDataObj"
-                :financingEFListtype="financingEFListtype"
-              />
-            </el-tab-pane>
-          </el-tabs>
-        </el-card>
-      </el-form>
-    </el-dialog>
-    <baseInfoDialog
-      :rowUTSDataObj="rowUTSDataObj"
-      :rowUTStype="rowUTStype"
-      @changeShow="closeBaseInfo"
-    />
-  </div>
+                <el-card>
+                    <el-row :gutter="24" v-show="!isOa">
+                        <el-col :span="12" :offset="12">
+                            <el-button type="danger" icon="el-icon-circle-plus-outline" plain @click="baseInputTable('加签')">加签</el-button>
+                            <el-button type="success" icon="el-icon-share" plain @click="baseInputTable('转发')">转发</el-button>
+                            <el-button type="danger" icon="el-icon-s-order" plain @click="baseInputTable('委托')">委托</el-button>
+                            <el-button type="danger" icon="el-icon-view" plain @click="basefollow()">关注</el-button>
+                            <el-button type="success" icon="el-icon-success" plain @click="effectOrDisableMsg">提交</el-button>
+                        </el-col>
+                    </el-row>
+                    <el-row :gutter="24">
+                        <ComAnnDetaiPage  :rowComPanDetaiDataObj="rowComPanDetaiDataObj" :rowComPanDetaitype="rowComPanDetaitype" @changeShow="showLookOrUpdate"/>
+                        <TempTaskPage  :rowTEMTaskDataObj="rowTEMTaskDataObj" :rowTEMTasktype="rowTEMTasktype" @changeShow="showLookOrUpdate"/>
+                        <EachPerEachJobDetailPage  :rowEACHPerEachJobDetDataObj="rowEACHPerEachJobDetDataObj" :rowEACHPerEachJobDettype="rowEACHPerEachJobDettype" @changeShow="showLookOrUpdate"/>
+                        <DepartYearEncPlanDetailPage  :rowDepartYearEncPlanDetailDataObj="rowDepartYearEncPlanDetailDataObj" :rowDepartYearEncPlanDetailtype="rowDepartYearEncPlanDetailtype" @changeShow="showLookOrUpdate"/>
+                        <EncBenefitsIndDetailPage  :rowEncBenefitsIndDetailDataObj="rowEncBenefitsIndDetailDataObj" :rowEncBenefitsIndDetailtype="rowEncBenefitsIndDetailtype" @changeShow="showLookOrUpdate"/>
+                        <EachPerEachTableReportPage  :rowEachPerEachTableReportDataObj="rowEachPerEachTableReportDataObj" :rowEachPerEachTableReporttype="rowEachPerEachTableReporttype" @changeShow="showLookOrUpdate"/>
+                        <EachPerEachTableInvalidPage  :rowEachPerEachTableInvalidDataObj="rowEachPerEachTableInvalidDataObj" :rowEachPerEachTableInvalidtype="rowEachPerEachTableInvalidtype" @changeShow="showLookOrUpdate"/>
+                        <EachPerEachTablePersonPage  :rowEachPerEachTablePersonDataObj="rowEachPerEachTablePersonDataObj" :rowEachPerEachTablePersontype="rowEachPerEachTablePersontype" @changeShow="showLookOrUpdate"/>
+                        <EachPerEachTableDelayPage  :rowEachPerEachTableDelayDataObj="rowEachPerEachTableDelayDataObj" :rowEachPerEachTableDelaytype="rowEachPerEachTableDelaytype" @changeShow="showLookOrUpdate"/>
+                        <EachPerEachTableAssPage  :rowEachPerEachTableAssDataObj="rowEachPerEachTableAssDataObj" :rowEachPerEachTableAsstype="rowEachPerEachTableAsstype" @changeShow="showLookOrUpdate"/>
+                        <EachPerEachTableEntrustPage  :rowEachPerEachTableEntrustDataObj="rowEachPerEachTableEntrustDataObj" :rowEachPerEachTableEntrusttype="rowEachPerEachTableEntrusttype" @changeShow="showLookOrUpdate"/>
+                        <EachPerEachTableDetailPage  :rowEachPerEachTableDetailDataObj="rowEachPerEachTableDetailDataObj" :rowEachPerEachTableDetailtype="rowEachPerEachTableDetailtype" @changeShow="showLookOrUpdate"/>
+                        <EachPerEachTableLowerPage  :rowEachPerEachTableLowerDataObj="rowEachPerEachTableLowerDataObj" :rowEachPerEachTableLowertype="rowEachPerEachTableLowertype" @changeShow="showLookOrUpdate"/>
+                        <DepartAnnPlanDetPage  :rowDepartAnnPlanDetDataObj="rowDepartAnnPlanDetDataObj" :rowDepartAnnPlanDettype="rowDepartAnnPlanDettype" @changeShow="showLookOrUpdate"/>
+                        <DepartMonPlanDetPage  :rowDepartMonPlanDetDataObj="rowDepartMonPlanDetDataObj" :rowDepartMonPlanDettype="rowDepartMonPlanDettype" @changeShow="showLookOrUpdate"/>
+                        <EmpApprTabDetailPage  :rowEmpApprTabDetailDataObj="rowEmpApprTabDetailDataObj" :rowEmpApprTabDetailtype="rowEmpApprTabDetailtype" @changeShow="showLookOrUpdate"/>
+                        <EmpApprTabNumDetailPage  :rowEmpApprTabNumDetailDataObj="rowEmpApprTabNumDetailDataObj" :rowEmpApprTabNumDetailtype="rowEmpApprTabNumDetailtype" @changeShow="showLookOrUpdate"/>
+                        <CooTaskDetailPage  :rowCooTaskDetailDataObj="rowCooTaskDetailDataObj" :rowCooTaskDetailtype="rowCooTaskDetailtype" @changeShow="showLookOrUpdate"/>
+                        <EachPerEachTableAdjPage  :rowEachPerEachTableAdjDataObj="rowEachPerEachTableAdjDataObj" :rowEachPerEachTableAdjtype="rowEachPerEachTableAdjtype" @changeShow="showLookOrUpdate"/>
+                    </el-row>  
+                    <el-row>
+                        <el-col :span="22">
+                            <processnodelist :rowDataprocessObj="rowDataprocessObj"  @changeShow="showprocessData"/> 
+                        </el-col>
+                    </el-row>
+                    <el-tabs v-model="atctiveName" @tab-click="handleClick">
+                        <el-tab-pane label="审批意见" name="first">
+                            <el-row >
+                                <el-col :span="12" >
+                                    <el-form-item label="决策类型" prop="code">
+                                        <el-radio v-model="formdata.radio" label="1">同意</el-radio>
+                                        <el-radio v-model="formdata.radio" label="2">不同意</el-radio>
+                                    </el-form-item>
+                                </el-col>
+                            </el-row>
+                            <el-row>
+                                <el-col :span="23">
+                                    <el-form-item label="审批意见">
+                                        <el-input type="textarea" v-model="formdata.remark" :rows="5"></el-input>
+                                    </el-form-item>
+                                </el-col>
+                            </el-row>
+                        </el-tab-pane>
+                        <el-tab-pane label="附件" name="second">
+                            <creditEnclFilelist :rowEFListDataObj="rowEFListDataObj" :financingEFListtype="financingEFListtype" />
+                        </el-tab-pane>
+                    </el-tabs>
+                </el-card>
+            </el-form>
+        </el-dialog>
+        <baseInfoDialog  :rowUTSDataObj="rowUTSDataObj" :rowUTStype="rowUTStype" @changeShow="closeBaseInfo"/>
+    </div>
 </template>
 
 <script>
@@ -227,11 +112,24 @@ import EmpApprTabNumDetailPage from "../plan-options/employees-appraisal-table-n
 import CooTaskDetailPage from "../plan-options/cooperate-task-detail.vue"; // 配合任务  A
 
 export default {
+<<<<<<< HEAD
   props: {
     rowWAADataObj: Object,
     rowWAAtype: {
       type: Boolean,
       default: false,
+=======
+    props: {
+        rowWAADataObj: Object,
+        rowWAAtype:{
+             type: Boolean,
+             default: false
+        },
+        isOa:{
+                type: Boolean,
+             default: false
+        }
+>>>>>>> d43089e27ff752b5dc65cb8209825a84e0622aeb
     },
   },
   name: "basetable",
@@ -353,6 +251,7 @@ export default {
     showprocessData(data) {
       console.log(data);
     },
+<<<<<<< HEAD
     //控制查看显示影藏
     showLookOrUpdate(data) {
       if (data === false) {
@@ -374,6 +273,26 @@ export default {
         } else {
           //附件列表
           this.financingEFListtype = true;
+=======
+    watch:{
+        rowWAAtype(oldVal,newVal){
+            this.ShowFinancVisible=this.rowWAAtype;
+            let formDataA ={};
+            if(!this.isOa){
+                this.title=this.rowWAADataObj.nametitle;
+                let finandata=this.rowWAADataObj.selectData;
+                formDataA.oid=finandata[0].foid;
+            }
+            this.$api.processSet.getunhandledTask(formDataA).then(response => {
+                let responsevalue = response;
+                if (responsevalue) {
+                    let returndata = responsevalue.data;
+                    this.DisplayOrHide("显示K")
+                } else {
+                    this.$message.success('数据库没有该条数据!');
+                }
+            });
+>>>>>>> d43089e27ff752b5dc65cb8209825a84e0622aeb
         }
       }
     },

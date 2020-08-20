@@ -13,7 +13,7 @@
             <el-tab-pane label="基本信息" name="1">
                 <!-- Condition -->
                 <el-form-item label="名称" :label-width="formLabelWidth" prop="name">
-                    <el-input ref="nameInput" v-model="formData.name" autocomplete="off"></el-input>
+                    <el-input ref="nameInput" v-model="formData.name" @input="change($event)" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="审核工作" :label-width="formLabelWidth" prop="work">
                     <el-input v-model="formData.work" autocomplete="off"></el-input>
@@ -25,7 +25,7 @@
                     <img class="icon-search"  @click="workSearch('源单据业务')" src="../../../assets/img/search.svg">
                 </el-form-item>
                 <el-form-item label="业务数据" :label-width="formLabelWidth" >
-                    <el-input v-model="formData.fmclassName" autocomplete="off"></el-input>
+                    <el-input v-model="formData.fmclassName" autocomplete="off" :disabled="true"></el-input>
                    
                 </el-form-item>
                 <!-- <el-form-item label="组织结构" :label-width="formLabelWidth" >
@@ -510,12 +510,18 @@ export default {
             handler (obj) {
                 if(obj.name === "Join"){
                     console.log( obj)
-                    if(!obj.oid){
+                    if(!obj.oid && (obj.isSaveFlag==undefined)){
+                        this.formData = {};
+                        this.editData= {};
+                        this.joinusertableData=[];
+                        this.tableData=[];
+                        this.decisionSelection=[];
                         this.checkedCities = ['由权限控制'];
                         this.formData.name = obj.displayName
                     }else{
                         this.checkedCities = [];
                         this.editData = obj;
+                        this.formData.oid = this.editData.oid;
                         this.formData.name = this.editData.displayName
                         this.formData.work = this.editData.mactivity.name
                         this.formData.workId = this.editData.mactivity.oid
@@ -544,7 +550,19 @@ export default {
                             default:
                             break;
                         }
-                        this.checkedCities.push(this.editData.permission=='1'?'由权限控制':this.editData.mntNextJoin=='1'?'手工指定下一节点参与者':this.editData.canSkip=='1'?'可略过':this.editData.multMail=='1'?'多封邮件':null)
+                        if(this.editData.permission=='1'){
+                            this.checkedCities.push('由权限控制');
+                        }
+                        if(this.editData.mntNextJoin=='1'){
+                            this.checkedCities.push('手工指定下一节点参与者');
+                        }
+                        if(this.editData.canSkip=='1'){
+                            this.checkedCities.push('可略过');
+                        }
+                        if(this.editData.multMail=='1'){
+                            this.checkedCities.push('多封邮件');
+                        }
+                        //this.checkedCities.push(this.editData.permission=='1'?'由权限控制':this.editData.mntNextJoin=='1'?'手工指定下一节点参与者':this.editData.canSkip=='1'?'可略过':this.editData.multMail=='1'?'多封邮件':null)
                         //    this.joinusertableData = this.editData.wfParticipator.participator
                         let joinusertable = [];
                         if( this.editData.wfParticipator.participator.length == 0){}else{
@@ -803,18 +821,20 @@ export default {
                 this.dialogVisible = false;
             });
         },
-        handleClick() {//console.log(this.formData.name)
-            if(this.activeName == '5'){//debugger
+        handleClick() {//
+            if(this.activeName == '5'){//
                 this.tableData2 =[]
                 let allData = JSON.parse( sessionStorage.getItem('allData') );
                 if(allData.length>0){
                     allData.forEach(item=>{
-                        if(item.type == 'Join'&& (item.data.displayName !== this.formData.name) ){
-                            this.tableData2.push({
-                                fname:item.data.displayName,
-                                ftype:item.data.name,
-                                wfProcessor: item.oid?item.oid:item.key
-                            })
+                        if(item.data){
+                            if(item.type == 'Join' && (item.data.displayName !== this.formData.name) && (item.data.displayName !== "审核活动")){
+                                this.tableData2.push({
+                                    fname:item.data.displayName,
+                                    ftype:item.data.name,
+                                    wfProcessor: item.oid?item.oid:item.key
+                                })
+                            }
                             // item.wfViewOtherComments.wfViewOtherComment.forEach(vOcItime=>{
                             //     vOcItime.push({
                             //         fname:item.data.displayName,
@@ -1053,27 +1073,27 @@ export default {
         },
          //多选
         onSelectionChange(val) { console.log(val)
-            this.multipleSelection = val;
-            switch (this.titleStr) {
-                case '源单据业务':
-                         this.formData.workDataCode = val[0].fcode?val[0].fcode:'';
-                         this.formData.workData = val[0].fname?val[0].fname:'';
-                         this.formData.workDataId = val[0].foid?val[0].foid:'';
-                    break;
-                case '审核工作':
-                         this.formData.work = val[0].fname?val[0].fname:'';
-                         this.formData.workId = val[0].foid?val[0].foid:'';
-                         this.formData.workCode = val[0].fcode?val[0].fcode:'';
-                         this.formData.fmclassName = val[0].fmclassName?val[0].fmclassName:'';
-                         this.formData.fmclassOid = val[0].fmclassOid?val[0].fmclassOid:'';
-                         this.formData.fmclassCode = val[0].fmclassCode?val[0].fmclassCode:'';
-                    break;
-            
-                default:
-                    break;
+            if(val.length>0){
+                this.multipleSelection = val;
+                switch (this.titleStr) {
+                    case '源单据业务':
+                            this.formData.workDataCode = val[0].fcode?val[0].fcode:'';
+                            this.formData.workData = val[0].fname?val[0].fname:'';
+                            this.formData.workDataId = val[0].foid?val[0].foid:'';
+                        break;
+                    case '审核工作':
+                            this.formData.work = val[0].fname?val[0].fname:'';
+                            this.formData.workId = val[0].foid?val[0].foid:'';
+                            this.formData.workCode = val[0].fcode?val[0].fcode:'';
+                            this.formData.fmclassName = val[0].fmclassName?val[0].fmclassName:'';
+                            this.formData.fmclassOid = val[0].fmclassOid?val[0].fmclassOid:'';
+                            this.formData.fmclassCode = val[0].fmclassCode?val[0].fmclassCode:'';
+                        break;
+                
+                    default:
+                        break;
+                }
             }
-           
-            
         },
           // 业务工作-获取表格数据-重置
         reWorkSearchTable(formName){
@@ -1140,12 +1160,12 @@ export default {
                      data = {
                         fmclassName: this.formData.fmclassName,
                         fmclass:this.formData.fmclassOid,
-                        fcode: this.formData.formCode,
-                        fname: this.formData.formName,
+                        // fcode: this.formData.formCode?this.formData.formCode:'',
+                        // fname: this.formData.formName?this.formData.formName:'',
                         fmfunctiontypecon: this.formData.formCtionTypeCon,
                         page:this.pageNum,
                         size:this.pageSize
-                    };
+                    };console.log(data)
                     break;
                 case '':
                     data = {
@@ -1177,7 +1197,9 @@ export default {
                 console.log(error)
             })
         },
-       
+        change(e){
+            this.$forceUpdate()
+        },
          //分页、下一页
         onCurrentChange(val){
              this.pageNum = val;

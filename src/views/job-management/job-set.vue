@@ -176,8 +176,8 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="职务类型：" :label-width="formLabelWidth" prop="fpositiontype">
-              <el-input :disabled="true" v-model="searchForm.fpositiontype" size="small" autocomplete="off"></el-input>
+            <el-form-item label="职务类型：" :label-width="formLabelWidth" prop="fpositioncategory">
+              <el-input :disabled="true" v-model="searchForm.fpositioncategory" size="small" autocomplete="off"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
@@ -227,7 +227,7 @@ export default {
       searchForm: {
         fname: "",
         fcode: "",
-        fpositiontype: "",
+        fpositioncategory: "",
         fpositionname: "",
         fremark: "",
         fcreator: localStorage.getItem('ms_userId'),
@@ -250,7 +250,7 @@ export default {
           title: "名称",
         },
         {
-          key: "fpositiontype",
+          key: "fpositioncategory",
           title: "职务类型",
         },
         {
@@ -368,7 +368,7 @@ export default {
         (res) => {
           if (this.isEdit) {
             this.searchForm = res.data.data.rows[0];
-            this.searchForm.fpositionname = this.searchForm.fpositiontype
+            this.searchForm.fpositionname = this.searchForm.fpositioncategory
           } else {
             this.tableData = res.data.data.rows;
             this.total = res.data.data.total;
@@ -408,7 +408,7 @@ export default {
       this.searchForm = {
         fname: "",
         fcode: "",
-        fpositiontype: "",
+        fpositioncategory: "",
         fpositionname: "",
         fremark: "",
         fcreator: localStorage.getItem('ms_userId'),
@@ -527,7 +527,7 @@ export default {
       if (data.SearchData) {
         let Sdata = data.SearchData;
         this.searchForm.fpositionname = Sdata[0].fname;
-        this.searchForm.fpositiontype = Sdata[0].foid;
+        this.searchForm.fpositioncategory = Sdata[0].foid;
       }
     },
   }

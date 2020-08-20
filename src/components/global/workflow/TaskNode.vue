@@ -188,7 +188,7 @@ export default {
         },
         // 监听task节点初始化数据变化
         initial: {
-            handler (obj) {
+            handler (obj) {console.log(obj)
                 this.$emit('dragmove', obj.x, obj.y);
             },
             deep: true,

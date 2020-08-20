@@ -20,8 +20,8 @@
             <el-input v-model="formData.work" autocomplete="off"></el-input>
             <img class="icon-search" @click="workSearch" src="../../../assets/img/search.svg" />
           </el-form-item>
-          <el-form-item label="业务数据" :label-width="formLabelWidth">
-            <el-input v-model="formData.workData" autocomplete="off"></el-input>
+          <el-form-item label="业务数据" :label-width="formLabelWidth" >
+            <el-input v-model="formData.workData" autocomplete="off" :disabled="true"></el-input>
           </el-form-item>
           <!-- <el-form-item label="组织结构" :label-width="formLabelWidth">
             <el-input v-model="formData.structure" autocomplete="off"></el-input>
@@ -296,10 +296,12 @@ export default {
         //  this.$refs['formData'].resetFields();
         console.log(obj)
           if(!obj.oid){
+             this.formData = {}
               this.formData.displayName = obj.displayName
           }else{
                 this.checkedCities = [];
                 this.editData = obj;
+                this.formData.oid = this.editData.oid;
                 this.formData.displayName = this.editData.displayName
                 this.formData.work = this.editData.mactivity.name
                 this.formData.workId = this.editData.mactivity.oid

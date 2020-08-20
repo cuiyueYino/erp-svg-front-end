@@ -19,8 +19,8 @@
                     <el-input v-model="formData.work" autocomplete="off"></el-input>
                     <img class="icon-search" @click="workSearch" src="../../../assets/img/search.svg">
                 </el-form-item>
-                <el-form-item label="业务数据" :label-width="formLabelWidth" prop="workData">
-                    <el-input v-model="formData.workData" autocomplete="off"></el-input>
+                <el-form-item label="业务数据" :label-width="formLabelWidth"   prop="workData">
+                    <el-input v-model="formData.workData" autocomplete="off" :disabled="true" ></el-input>
                 </el-form-item>
                 <!-- <el-form-item label="隐藏" :label-width="formLabelWidth" prop="work">
                     <el-checkbox v-model="formData.checked"></el-checkbox>
@@ -265,9 +265,11 @@ export default {
             handler (obj) {
                 if(obj.name === "Fork"){console.log( obj)
                     if(!obj.oid){
+                         this.formData = {}
                         this.formData.name = obj.displayName
                     }else{
                         this.editData = obj;
+                        this.formData.oid = this.editData.oid;
                         this.formData.name = this.editData.displayName
                         this.formData.work = this.editData.mactivity.name
                         this.formData.workId = this.editData.mactivity.oid
