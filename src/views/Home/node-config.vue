@@ -521,8 +521,7 @@ export default {
                     }
                 this.data.decisions.decision.push(decisionsObj)
             })
-
-         
+            this.data.isSaveFlag=true;
         },
         //自由活动
         saveForkData(e){
