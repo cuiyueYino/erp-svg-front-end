@@ -101,7 +101,7 @@ export default {
               }
              Promise.all(getItems).then(res=>{
                   this.childList = res
-             })
+             });console.log(this.childList)
             })     
           }
         })

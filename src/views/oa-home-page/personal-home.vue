@@ -1,6 +1,5 @@
 <template>
  <el-container>
-    <el-container>
         <el-main>
              <el-card class="box-card">
                  <span class="tab-title">流程中心</span>
@@ -8,81 +7,51 @@
                  <el-divider></el-divider>
                   <el-tabs v-model="activeName" @tab-click="handleClick">
                         <el-tab-pane label="待办事项" name="1">
-                            <template v-for="item in getunhandledTaskList" >
-                            <ul class="ul-lefta" @click="toLookItems(item)" :key="item.foid">
+                            <template v-for="item in getunhandledTaskList" class="li-box">
+                            <ul class="ul-left" @click="toLookItems(item)">
                                 <li>{{item.fsubject}}<span class="li-after" v-show="item.fisread=='0'"></span></li>
                             </ul>
-                            <ul class="ul-lefta" :key="item.foid">
-                                <li>{{item.fsrcCompany}}</li>
-                            </ul>
-                            <ul class="ul-lefta" :key="item.foid">
-                                <li>{{item.faddresser}}</li>
-                            </ul>
-                            <ul class="ul-lefta" @click="toLookItems(item)" :key="item.foid">
+                            <ul class="ul-right" @click="toLookItems(item)">
                                 <li>{{item.freceiveTime}}</li>
                             </ul>
                             </template>
                         </el-tab-pane>
                         <el-tab-pane label="关注事项" name="2">
-                            <template v-for="item in getAttentionTaskList">
-                                <ul class="ul-left" @click="toLookItems(item)" :key="item.foid">
+                            <template v-for="item in getAttentionTaskList" class="li-box">
+                                <ul class="ul-left" @click="toLookItems(item)">
                                     <li>{{item.fsubject}}<span class="li-after" v-show="item.fisread=='0'"></span></li>
                                 </ul>
-                                <ul class="ul-lefta" :key="item.foid">
-                                <li>{{item.fsrcCompany}}</li>
-                                </ul>
-                                <ul class="ul-lefta" :key="item.foid">
-                                    <li>{{item.faddresser}}</li>
-                                </ul>
-                                <ul class="ul-lefta" @click="toLookItems(item)" :key="item.foid">
+                                <ul class="ul-right" @click="toLookItems(item)">
                                     <li>{{item.freceiveTime}}</li>
                                 </ul>
                             </template>
                         </el-tab-pane>
                         <el-tab-pane label="已办事项" name="3">
-                            <template v-for="item in getHunTableDataList">
-                                <ul class="ul-lefta" @click="toLookItems(item)" :key="item.foid">
+                            <template v-for="item in getHunTableDataList" class="li-box">
+                                <ul class="ul-left" @click="toLookItems(item)">
                                     <li>{{item.fsubject}}<span class="li-after" v-show="item.fisread=='0'"></span></li>
                                 </ul>
-                                <ul class="ul-lefta" :key="item.foid">
-                                <li>{{item.fsrcCompany}}</li>
-                                </ul>
-                                <ul class="ul-lefta" :key="item.foid">
-                                    <li>{{item.faddresser}}</li>
-                                </ul>
-                                <ul class="ul-lefta" @click="toLookItems(item)" :key="item.foid">
+                                <ul class="ul-right" @click="toLookItems(item)">
                                     <li>{{item.freceiveTime}}</li>
                                 </ul>
                             </template>
                         </el-tab-pane>
                         <el-tab-pane label="已发事项" name="4">
-                             <template v-for="item in getIssuedItemsList">
-                                <ul class="ul-lefta" @click="toLookItems(item)" :key="item.foid">
+                             <template v-for="item in getIssuedItemsList" class="li-box">
+                                <ul class="ul-left" @click="toLookItems(item)">
                                     <li>{{item.fsubject}}<span class="li-after" v-show="item.fisread=='0'"></span></li>
                                 </ul>
-                                <ul class="ul-lefta" :key="item.foid">
-                                    <li>{{item.fsrcCompany}}</li>
-                                </ul>
-                                <ul class="ul-lefta" :key="item.foid">
-                                    <li>{{item.entityoName}}</li>
-                                </ul>
-                                <ul class="ul-lefta" @click="toLookItems(item)" :key="item.foid">
+                                <ul class="ul-right" @click="toLookItems(item)">
                                     <li>{{item.freceiveTime}}</li>
                                 </ul>
                             </template>
                         </el-tab-pane>
                         <el-tab-pane label="回收站" name="5">
-                             <template v-for="item in getRecycleBinList">
-                                <ul class="ul-lefta" @click="toLookItems(item)" :key="item.foid">
+                             <template v-for="item in getRecycleBinList" class="li-box">
+                                <ul class="ul-left" @click="toLookItems(item)">
                                     <li>{{item.fsubject}}<span class="li-after" v-show="item.fisread=='0'"></span></li>
                                 </ul>
-                                <ul class="ul-lefta" :key="item.foid">
-                                    <li>{{item.fsrcCompany}}</li>
-                                </ul>
-                                <ul class="ul-lefta" :key="item.foid">
-                                    <li>{{item.faddresser}}</li>
-                                </ul>
-                                <ul class="ul-lefta" @click="toLookItems(item)" :key="item.foid">
+                                <ul class="ul-right" @click="toLookItems(item)">
                                     <li>{{item.freceiveTime}}</li>
                                 </ul>
                             </template>
@@ -95,41 +64,41 @@
                  <el-divider></el-divider>
                   <el-tabs v-model="activeNameMail" @tab-click="handleClickMail">
                         <el-tab-pane label="收件箱" name="1">
-                            <template v-for="item in getReceiveMailList">
-                                <ul class="ul-left" @click="toLookMail(item)" :key="item.foid">
+                            <template v-for="item in getReceiveMailList" class="li-box">
+                                <ul class="ul-left" @click="toLookMail(item)">
                                     <li>{{item.subject}}<span class="li-after" v-show="item.isRead== 0"></span></li>
                                 </ul>
-                                <ul class="ul-right" @click="toLookMail(item)" :key="item.foid">
+                                <ul class="ul-right" @click="toLookMail(item)">
                                     <li>{{item.createTime}}</li>
                                 </ul>
                             </template>
                         </el-tab-pane>
                         <el-tab-pane label="草稿箱" name="2">
-                             <template v-for="item in getDraftMailList">
-                                <ul class="ul-left" @click="toLookMail(item)" :key="item.foid">
+                             <template v-for="item in getDraftMailList" class="li-box">
+                                <ul class="ul-left" @click="toLookMail(item)">
                                     <li>{{item.subject}}<span class="li-after" v-show="item.isRead== 0"></span></li>
                                 </ul>
-                                <ul class="ul-right" @click="toLookMail(item)" :key="item.foid">
+                                <ul class="ul-right" @click="toLookMail(item)">
                                     <li>{{item.createTime}}</li>
                                 </ul>
                             </template>
                         </el-tab-pane>
                         <el-tab-pane label="发件箱" name="3">
-                              <template v-for="item in getSendMailList">
-                                <ul class="ul-left" @click="toLookMail(item)" :key="item.foid">
+                              <template v-for="item in getSendMailList" class="li-box">
+                                <ul class="ul-left" @click="toLookMail(item)">
                                     <li>{{item.subject}}<span class="li-after" v-show="item.isRead== 0"></span></li>
                                 </ul>
-                                <ul class="ul-right" @click="toLookMail(item)" :key="item.foid">
+                                <ul class="ul-right" @click="toLookMail(item)">
                                     <li>{{item.createTime}}</li>
                                 </ul>
                             </template>
                         </el-tab-pane>
                         <el-tab-pane label="回收站" name="4">
-                             <template v-for="item in getRecycleMailList">
-                                <ul class="ul-left" @click="toLookMail(item)" :key="item.foid">
+                             <template v-for="item in getRecycleMailList" class="li-box">
+                                <ul class="ul-left" @click="toLookMail(item)">
                                     <li>{{item.subject}}<span class="li-after" v-show="item.isRead== 0"></span></li>
                                 </ul>
-                                <ul class="ul-right" @click="toLookMail(item)" :key="item.foid">
+                                <ul class="ul-right" @click="toLookMail(item)">
                                     <li>{{item.createTime}}</li>
                                 </ul>
                             </template>
@@ -137,16 +106,15 @@
                     </el-tabs>
              </el-card>
         </el-main>
-    </el-container>
     <el-aside width="30%">
-        <div class="img1">
-            <div>
+        <div class="img1 website"  @click="toWebsite">
+            <div  >
                 <img src="../../assets/img/oa2.png">
                 <img src="../../assets/img/oa5.png" class="img5">
             </div>
         </div>
-        <div class="img2">
-            <div>
+        <div class="img2 website" @click="toTel">
+            <div  >
                 <img src="../../assets/img/oa4.png">
                 <span>通讯录</span>
             </div>
@@ -237,9 +205,6 @@ export default {
             let data={
                 oid:val.foid
             }
-            //去未读红点
-            let localKey = localStorage.getItem('ms_userId') + "_" + val.foid;
-            localStorage.setItem(localKey, "1");
             this.$api.processSet.getunhandledTask(data).then(
                 res => {
                     finandata.finanrowname="人员缺省查询方案";
@@ -294,17 +259,8 @@ export default {
                 userId:localStorage.getItem('ms_userId')
           }
            this.$api.processSet.getunhandledTask(data).then(res=>{
-               
-                this.getunhandledTaskList = res.data.data.rows;
-                //去未读红点
-                this.getunhandledTaskList.forEach((item, index) => {
-                    let localKey = localStorage.getItem('ms_userId') + "_" + item.foid;
-                    item.fisread = "0";
-                    if (localStorage.getItem(localKey)){
-                        item.fisread = "1";
-                    }
-                });
-                console.log(this.getunhandledTaskList);
+               this.getunhandledTaskList = res.data.data.rows
+                console.log(this.getunhandledTaskList)
            })
       },
        //关注事项
@@ -315,16 +271,8 @@ export default {
                 userId: localStorage.getItem('ms_userId')
           }
            this.$api.processSet.attentionTask(data).then(res=>{
-                this.getAttentionTaskList = res.data.data.rows;
-                //去未读红点
-                this.getAttentionTaskList.forEach((item, index) => {
-                    let localKey = localStorage.getItem('ms_userId') + "_" + item.foid;
-                    item.fisread = "0";
-                    if (localStorage.getItem(localKey)){
-                        item.fisread = "1";
-                    }
-                });
-                console.log(this.getAttentionTaskList);
+                this.getAttentionTaskList = res.data.data.rows
+                console.log(this.getAttentionTaskList)
            })
       },
        //已办事项
@@ -335,16 +283,8 @@ export default {
                 userId: localStorage.getItem('ms_userId')
           }
            this.$api.processSet.handledTask(data).then(res=>{
-                this.getHunTableDataList = res.data.data.rows;
-                //去未读红点
-                this.getHunTableDataList.forEach((item, index) => {
-                    let localKey = localStorage.getItem('ms_userId') + "_" + item.foid;
-                    item.fisread = "0";
-                    if (localStorage.getItem(localKey)){
-                        item.fisread = "1";
-                    }
-                });
-                console.log(this.getHunTableDataList);
+                this.getHunTableDataList = res.data.data.rows
+                console.log(this.getHunTableDataList)
            })
       },
        //已发事项
@@ -355,16 +295,8 @@ export default {
                 userId: localStorage.getItem('ms_userId')
           }
            this.$api.processSet.sendedTask(data).then(res=>{
-               this.getIssuedItemsList = res.data.data.rows;
-               //去未读红点
-                this.getIssuedItemsList.forEach((item, index) => {
-                    let localKey = localStorage.getItem('ms_userId') + "_" + item.foid;
-                    item.fisread = "0";
-                    if (localStorage.getItem(localKey)){
-                        item.fisread = "1";
-                    }
-                });
-                console.log(this.getIssuedItemsList);
+               this.getIssuedItemsList = res.data.data.rows
+                console.log(this.getIssuedItemsList)
            })
       },
        //回收站
@@ -375,16 +307,8 @@ export default {
                 userId: localStorage.getItem('ms_userId')
           }
            this.$api.processSet.getRecycleBinList(data).then(res=>{
-               this.getRecycleBinList = res.data.data.rows;
-               //去未读红点
-                this.getRecycleBinList.forEach((item, index) => {
-                    let localKey = localStorage.getItem('ms_userId') + "_" + item.foid;
-                    item.fisread = "0";
-                    if (localStorage.getItem(localKey)){
-                        item.fisread = "1";
-                    }
-                });
-                console.log(this.getRecycleBinList);
+               this.getRecycleBinList = res.data.data.rows
+                console.log(this.getRecycleBinList)
            })
       },
 
@@ -418,8 +342,8 @@ export default {
                 size: 10
            }
         this.$api.insideMail.getReceiveMail(data).then(res=>{
-            this.getReceiveMailList = res.data.data.rows;
-            console.log( this.getReceiveMailList);
+            this.getReceiveMailList = res.data.data.rows
+            console.log( this.getReceiveMailList)
         })
        },
     //    草稿箱
@@ -461,7 +385,12 @@ export default {
             console.log( this.getRecycleMailList)
         })
     },
-        
+        toWebsite() {
+      window.open("http://www.fujiagroup.com/");
+    },
+    toTel() {
+      window.open("http://192.168.85.96:8092/file/txl.htm");
+    },
     },
 }
 </script>
@@ -485,6 +414,8 @@ export default {
     padding: 0;
     margin-right: 20px;
     width: 100%;
+    height: 100%;
+    overflow: unset !important;
   }
   .box-card{
       display: flex;
@@ -506,9 +437,6 @@ export default {
       }
     .ul-left {
     width: 50%;
-  }
-  .ul-lefta {
-    width: 25%;
   }
   .ul-right {
     width: 50%;
@@ -608,4 +536,13 @@ export default {
         background-color: red;
         border-radius: 4px;
   }
+  .website {
+  cursor: pointer;
+}
+.li-box {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
 </style>

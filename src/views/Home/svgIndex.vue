@@ -798,7 +798,7 @@ export default {
                 //sessionStorage.setItem('allData',JSON.stringify(this.workflowNodes))
             }
             this.nodeType = node.type;
-            console.log(node,this.selectedNode)
+            console.log(node,this.selectedNode,this.workflowNodes)
             // console.log(this.selectedNode,this.workflowNodes)
         },
         // 清空面板事件

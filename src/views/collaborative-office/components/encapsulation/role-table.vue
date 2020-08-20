@@ -24,8 +24,8 @@
 					</el-col>
 				</el-row>
 			</el-form>
-			<vxe-table border :loading="loading" ref="multipleTable" align="center" size="small" :highlight-current-row="showFig != 1" @cell-click="clickRow" height="700" :data="roleList">
-				<vxe-table-column v-if="showFig == 1" width="60">
+			<vxe-table border align="center" :loading="loading" ref="multipleTable"  size="small" :highlight-current-row="showFig != 1" @cell-click="clickRow" height="700" :data="roleList">
+				<vxe-table-column v-if="showFig == 1" width="50">
 					<template v-slot:header>
 						<vxe-checkbox v-model="checkCon" :indeterminate="getIndeterminate" @change="checkClickAll()"></vxe-checkbox>
 					</template>
@@ -61,6 +61,7 @@
 			}
 		},
 		computed: {
+			//全选 是否不确定状态
 			getIndeterminate: function() {
 				var con = this.roleList.filter(item => {
 					return item.exist == 1
@@ -82,13 +83,13 @@
 			this.getRoleList()
 		},
 		methods: {
+			//全选触发
 			checkClickAll(checked, $event) {
 				if(this.checkCon) {
 					this.roleList.forEach(item => {
 						item.exist = 1
 					})
 					if(this.conList.length != 0) {
-						console.log(1)
 						this.conList.forEach(item => {
 							item.exist = 1
 						})
@@ -104,6 +105,7 @@
 					}
 				}
 			},
+			//复选框值变化
 			checkClick(row) {
 				if(row.exist == 1) {
 					row.exist = 0
@@ -125,22 +127,27 @@
 					}
 				}
 			},
+			//复选框是否选中
 			checkValue(row) {
 				if(row.exist == 1) {
 					return true
 				}
 			},
+			//全部
 			getAll() {
 				this.roleList = JSON.parse(JSON.stringify(this.conList))
 			},
+			//已选中
 			getConList() {
 				this.roleList = this.roleList.filter(item => {
 					return item.exist == 1
 				})
 			},
+			//搜索
 			selectList() {
 				this.roleList = this.conList.filter(item => (~item.name.indexOf(this.formInline.name)));
 			},
+			//父组件调用,默认选中项
 			check() {
 				this.loading = true
 				var id = ""
@@ -155,6 +162,7 @@
 					this.conList = JSON.parse(JSON.stringify(this.roleList))
 				})
 			},
+			//确定
 			workItemAuthRole() {
 				if(typeof(this.roleCon.id) == "undefined" || this.roleCon.id == "") {
 					this.goOut("请选择数据")
@@ -175,9 +183,11 @@
 					}
 				})
 			},
+			//切换维度
 			switchChild() {
 				this.$parent.$parent.$parent.$parent.$parent.role()
 			},
+			//首屏加载
 			getRoleList() {
 				this.$api.collaborativeOffice.findRoleAuthByWorkItem(this.formInline).then(data => {
 					this.loading = false
@@ -196,6 +206,7 @@
 					})
 				}
 			},
+			//重置
 			clear() {
 				this.rowClick = {}
 				this.getRoleList()
