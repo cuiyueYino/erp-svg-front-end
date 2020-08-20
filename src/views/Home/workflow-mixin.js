@@ -439,6 +439,7 @@ export default {
         },
         // 配置节点 连接线 以及文件事件
         handleSaveEvent (obj) {
+            debugger
             if (this.saveFlag === 'workflow') {
                 // 工作流文件配置
                 // this.compileObjToXML(obj);

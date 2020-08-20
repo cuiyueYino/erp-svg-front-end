@@ -65,6 +65,18 @@
 				sessionStorage.setItem("oaMenu", false);
 				//根据token查询登陆人的信息并存入缓存
 				this.$api.common.getUserInfo().then(data => {
+					//用户ID
+					localStorage.setItem('ms_userId', data.data.principal.accountId);
+					//用户名称
+					localStorage.setItem('ms_username', data.data.principal.fullname);
+					//部门ID
+					localStorage.setItem('ms_userDepartId', data.data.principal.deptmentId);
+					//部门名称
+					localStorage.setItem('ms_userDepartName', data.data.principal.deptmentName);
+					//公司ID
+					localStorage.setItem('ms_companyId', data.data.principal.companyId);
+					//公司名称
+					localStorage.setItem('ms_companyName', data.data.principal.companyName);
 					//通过用户ID查询菜单
 					this.$api.common.findMenuByComputer({
 						userId: data.data.principal.accountId
@@ -73,7 +85,6 @@
 						sessionStorage.setItem("menuList", JSON.stringify(data2.data.data));
 						this.$router.push("/");
 					})
-					
 					//获取工作事项相关参数
 					this.getContext()
 					//获取员工树信息
@@ -98,10 +109,6 @@
 				//最上端公司选择
 				this.$api.collaborativeOffice.getCompanyData().then(data => {
 					localStorage.setItem('CompanyData', JSON.stringify(data.data.data.rows));
-				})
-				//全部枚举
-				this.$api.collaborativeOffice.findList({}).then(data => {
-					localStorage.setItem('selectList', JSON.stringify(data.data.data));
 				})
 				//全部服务
 				this.$api.collaborativeOffice.findTServiceByParams({}).then(data => {

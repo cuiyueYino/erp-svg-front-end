@@ -121,11 +121,11 @@ const collaborativeOffice = {
 	},
 	//工作事项上传
 	uploadFile(params) {        
-		return httpReqest.post('/api/interfaces/attachment/uploadFile', params);    
+		return  httpReqest.post('/api/interfaces/attachment/uploadFile', params);    
 	},
 	//查询附件
 	findlnfosList(params) {        
-		return httpReqest.post('/api/interfaces/attachment/findInfosList', params);    
+		return  httpReqest.post('/api/interfaces/attachment/findInfosList', params);    
 	},
 	//根据ID查询工作事项模版主表
 	getWorkItemTempModel(params) {
@@ -173,14 +173,7 @@ const collaborativeOffice = {
 	},
 	//通过模版查询权限
 	findRoleAuthByWorkItem(params) {
-		var valueS = '?';
-		for(var item in params) {
-			valueS += item + "=" + params[item] + "&";
-		}
-		if(valueS.slice(valueS.length - 1, valueS.length) === "&") {
-			valueS = valueS.slice(0, valueS.length - 1);
-		}
-		return httpReqest.get('/api/interfaces/workItemAuth/findRoleAuthByWorkItem' + valueS);
+		return httpReqest.post('/api/interfaces/workItemAuth/findRoleAuthByWorkItem', params);
 	},
 	//通过角色查询模版
 	findWorkItemByRoleId(params) {
@@ -206,14 +199,7 @@ const collaborativeOffice = {
 	},
 	//通过模板查询人员
 	findUserAuthByWorkItem(params) {
-		var valueS = '?';
-		for(var item in params) {
-			valueS += item + "=" + params[item] + "&";
-		}
-		if(valueS.slice(valueS.length - 1, valueS.length) === "&") {
-			valueS = valueS.slice(0, valueS.length - 1);
-		}
-		return httpReqest.get('/api/interfaces/workItemAuthUser/findUserAuthByWorkItem' + valueS);
+		return httpReqest.post('/api/interfaces/workItemAuthUser/findUserAuthByWorkItem', params);
 	},
 	//删除附件
 	deleteInfo(params) {

@@ -65,7 +65,7 @@ const errorHandle = (status, other) => {
 // 创建axios实例
 //var _axios = axios.create({ timeout: 1000 * 12, baseUrl: process.env.BASE_URL });
 var _axios = axios.create({
-	timeout: 1000 * 12
+	timeout: 1000 * 120
 });
 // 设置post请求头
 // _axios.defaults.headers.post['Authorization'] = "Basic YXBwLWFkbWluOmFwcC1hZG1pbi1zZWNyZXQ=",
