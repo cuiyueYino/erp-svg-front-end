@@ -8,51 +8,51 @@
                  <el-divider></el-divider>
                   <el-tabs v-model="activeName" @tab-click="handleClick">
                         <el-tab-pane label="待办事项" name="1">
-                            <template v-for="item in getunhandledTaskList">
-                            <ul class="ul-left" @click="toLookItems(item)">
+                            <template v-for="item in getunhandledTaskList" >
+                            <ul class="ul-left" @click="toLookItems(item)" :key="item.foid">
                                 <li>{{item.fsubject}}<span class="li-after" v-show="item.fisread=='0'"></span></li>
                             </ul>
-                            <ul class="ul-right" @click="toLookItems(item)">
+                            <ul class="ul-right" @click="toLookItems(item)" :key="item.foid">
                                 <li>{{item.freceiveTime}}</li>
                             </ul>
                             </template>
                         </el-tab-pane>
                         <el-tab-pane label="关注事项" name="2">
                             <template v-for="item in getAttentionTaskList">
-                                <ul class="ul-left" @click="toLookItems(item)">
+                                <ul class="ul-left" @click="toLookItems(item)" :key="item.foid">
                                     <li>{{item.fsubject}}<span class="li-after" v-show="item.fisread=='0'"></span></li>
                                 </ul>
-                                <ul class="ul-right" @click="toLookItems(item)">
+                                <ul class="ul-right" @click="toLookItems(item)" :key="item.foid">
                                     <li>{{item.freceiveTime}}</li>
                                 </ul>
                             </template>
                         </el-tab-pane>
                         <el-tab-pane label="已办事项" name="3">
                             <template v-for="item in getHunTableDataList">
-                                <ul class="ul-left" @click="toLookItems(item)">
+                                <ul class="ul-left" @click="toLookItems(item)" :key="item.foid">
                                     <li>{{item.fsubject}}<span class="li-after" v-show="item.fisread=='0'"></span></li>
                                 </ul>
-                                <ul class="ul-right" @click="toLookItems(item)">
+                                <ul class="ul-right" @click="toLookItems(item)" :key="item.foid">
                                     <li>{{item.freceiveTime}}</li>
                                 </ul>
                             </template>
                         </el-tab-pane>
                         <el-tab-pane label="已发事项" name="4">
                              <template v-for="item in getIssuedItemsList">
-                                <ul class="ul-left" @click="toLookItems(item)">
+                                <ul class="ul-left" @click="toLookItems(item)" :key="item.foid">
                                     <li>{{item.fsubject}}<span class="li-after" v-show="item.fisread=='0'"></span></li>
                                 </ul>
-                                <ul class="ul-right" @click="toLookItems(item)">
+                                <ul class="ul-right" @click="toLookItems(item)" :key="item.foid">
                                     <li>{{item.freceiveTime}}</li>
                                 </ul>
                             </template>
                         </el-tab-pane>
                         <el-tab-pane label="回收站" name="5">
                              <template v-for="item in getRecycleBinList">
-                                <ul class="ul-left" @click="toLookItems(item)">
+                                <ul class="ul-left" @click="toLookItems(item)" :key="item.foid">
                                     <li>{{item.fsubject}}<span class="li-after" v-show="item.fisread=='0'"></span></li>
                                 </ul>
-                                <ul class="ul-right" @click="toLookItems(item)">
+                                <ul class="ul-right" @click="toLookItems(item)" :key="item.foid">
                                     <li>{{item.freceiveTime}}</li>
                                 </ul>
                             </template>
@@ -66,40 +66,40 @@
                   <el-tabs v-model="activeNameMail" @tab-click="handleClickMail">
                         <el-tab-pane label="收件箱" name="1">
                             <template v-for="item in getReceiveMailList">
-                                <ul class="ul-left" @click="toLookMail(item)">
+                                <ul class="ul-left" @click="toLookMail(item)" :key="item.foid">
                                     <li>{{item.subject}}<span class="li-after" v-show="item.isRead== 0"></span></li>
                                 </ul>
-                                <ul class="ul-right" @click="toLookMail(item)">
+                                <ul class="ul-right" @click="toLookMail(item)" :key="item.foid">
                                     <li>{{item.createTime}}</li>
                                 </ul>
                             </template>
                         </el-tab-pane>
                         <el-tab-pane label="草稿箱" name="2">
                              <template v-for="item in getDraftMailList">
-                                <ul class="ul-left" @click="toLookMail(item)">
+                                <ul class="ul-left" @click="toLookMail(item)" :key="item.foid">
                                     <li>{{item.subject}}<span class="li-after" v-show="item.isRead== 0"></span></li>
                                 </ul>
-                                <ul class="ul-right" @click="toLookMail(item)">
+                                <ul class="ul-right" @click="toLookMail(item)" :key="item.foid">
                                     <li>{{item.createTime}}</li>
                                 </ul>
                             </template>
                         </el-tab-pane>
                         <el-tab-pane label="发件箱" name="3">
                               <template v-for="item in getSendMailList">
-                                <ul class="ul-left" @click="toLookMail(item)">
+                                <ul class="ul-left" @click="toLookMail(item)" :key="item.foid">
                                     <li>{{item.subject}}<span class="li-after" v-show="item.isRead== 0"></span></li>
                                 </ul>
-                                <ul class="ul-right" @click="toLookMail(item)">
+                                <ul class="ul-right" @click="toLookMail(item)" :key="item.foid">
                                     <li>{{item.createTime}}</li>
                                 </ul>
                             </template>
                         </el-tab-pane>
                         <el-tab-pane label="回收站" name="4">
                              <template v-for="item in getRecycleMailList">
-                                <ul class="ul-left" @click="toLookMail(item)">
+                                <ul class="ul-left" @click="toLookMail(item)" :key="item.foid">
                                     <li>{{item.subject}}<span class="li-after" v-show="item.isRead== 0"></span></li>
                                 </ul>
-                                <ul class="ul-right" @click="toLookMail(item)">
+                                <ul class="ul-right" @click="toLookMail(item)" :key="item.foid">
                                     <li>{{item.createTime}}</li>
                                 </ul>
                             </template>
@@ -207,6 +207,9 @@ export default {
             let data={
                 oid:val.foid
             }
+            //去未读红点
+            let localKey = localStorage.getItem('ms_userId') + "_" + val.foid;
+            localStorage.setItem(localKey, "1");
             this.$api.processSet.getunhandledTask(data).then(
                 res => {
                     finandata.finanrowname="人员缺省查询方案";
@@ -261,8 +264,17 @@ export default {
                 userId:localStorage.getItem('ms_userId')
           }
            this.$api.processSet.getunhandledTask(data).then(res=>{
-               this.getunhandledTaskList = res.data.data.rows
-                console.log(this.getunhandledTaskList)
+               
+                this.getunhandledTaskList = res.data.data.rows;
+                //去未读红点
+                this.getunhandledTaskList.forEach((item, index) => {
+                    let localKey = localStorage.getItem('ms_userId') + "_" + item.foid;
+                    item.fisread = "0";
+                    if (localStorage.getItem(localKey)){
+                        item.fisread = "1";
+                    }
+                });
+                console.log(this.getunhandledTaskList);
            })
       },
        //关注事项
@@ -273,8 +285,16 @@ export default {
                 userId: localStorage.getItem('ms_userId')
           }
            this.$api.processSet.attentionTask(data).then(res=>{
-                this.getAttentionTaskList = res.data.data.rows
-                console.log(this.getAttentionTaskList)
+                this.getAttentionTaskList = res.data.data.rows;
+                //去未读红点
+                this.getAttentionTaskList.forEach((item, index) => {
+                    let localKey = localStorage.getItem('ms_userId') + "_" + item.foid;
+                    item.fisread = "0";
+                    if (localStorage.getItem(localKey)){
+                        item.fisread = "1";
+                    }
+                });
+                console.log(this.getAttentionTaskList);
            })
       },
        //已办事项
@@ -285,8 +305,16 @@ export default {
                 userId: localStorage.getItem('ms_userId')
           }
            this.$api.processSet.handledTask(data).then(res=>{
-                this.getHunTableDataList = res.data.data.rows
-                console.log(this.getHunTableDataList)
+                this.getHunTableDataList = res.data.data.rows;
+                //去未读红点
+                this.getHunTableDataList.forEach((item, index) => {
+                    let localKey = localStorage.getItem('ms_userId') + "_" + item.foid;
+                    item.fisread = "0";
+                    if (localStorage.getItem(localKey)){
+                        item.fisread = "1";
+                    }
+                });
+                console.log(this.getHunTableDataList);
            })
       },
        //已发事项
@@ -297,8 +325,16 @@ export default {
                 userId: localStorage.getItem('ms_userId')
           }
            this.$api.processSet.sendedTask(data).then(res=>{
-               this.getIssuedItemsList = res.data.data.rows
-                console.log(this.getIssuedItemsList)
+               this.getIssuedItemsList = res.data.data.rows;
+               //去未读红点
+                this.getIssuedItemsList.forEach((item, index) => {
+                    let localKey = localStorage.getItem('ms_userId') + "_" + item.foid;
+                    item.fisread = "0";
+                    if (localStorage.getItem(localKey)){
+                        item.fisread = "1";
+                    }
+                });
+                console.log(this.getIssuedItemsList);
            })
       },
        //回收站
@@ -309,8 +345,16 @@ export default {
                 userId: localStorage.getItem('ms_userId')
           }
            this.$api.processSet.getRecycleBinList(data).then(res=>{
-               this.getRecycleBinList = res.data.data.rows
-                console.log(this.getRecycleBinList)
+               this.getRecycleBinList = res.data.data.rows;
+               //去未读红点
+                this.getRecycleBinList.forEach((item, index) => {
+                    let localKey = localStorage.getItem('ms_userId') + "_" + item.foid;
+                    item.fisread = "0";
+                    if (localStorage.getItem(localKey)){
+                        item.fisread = "1";
+                    }
+                });
+                console.log(this.getRecycleBinList);
            })
       },
 
@@ -344,8 +388,8 @@ export default {
                 size: 10
            }
         this.$api.insideMail.getReceiveMail(data).then(res=>{
-            this.getReceiveMailList = res.data.data.rows
-            console.log( this.getReceiveMailList)
+            this.getReceiveMailList = res.data.data.rows;
+            console.log( this.getReceiveMailList);
         })
        },
     //    草稿箱
