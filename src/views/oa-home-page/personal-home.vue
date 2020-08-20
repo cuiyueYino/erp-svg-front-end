@@ -9,10 +9,16 @@
                   <el-tabs v-model="activeName" @tab-click="handleClick">
                         <el-tab-pane label="待办事项" name="1">
                             <template v-for="item in getunhandledTaskList" >
-                            <ul class="ul-left" @click="toLookItems(item)" :key="item.foid">
+                            <ul class="ul-lefta" @click="toLookItems(item)" :key="item.foid">
                                 <li>{{item.fsubject}}<span class="li-after" v-show="item.fisread=='0'"></span></li>
                             </ul>
-                            <ul class="ul-right" @click="toLookItems(item)" :key="item.foid">
+                            <ul class="ul-lefta" :key="item.foid">
+                                <li>{{item.fsrcCompany}}</li>
+                            </ul>
+                            <ul class="ul-lefta" :key="item.foid">
+                                <li>{{item.faddresser}}</li>
+                            </ul>
+                            <ul class="ul-lefta" @click="toLookItems(item)" :key="item.foid">
                                 <li>{{item.freceiveTime}}</li>
                             </ul>
                             </template>
@@ -22,37 +28,61 @@
                                 <ul class="ul-left" @click="toLookItems(item)" :key="item.foid">
                                     <li>{{item.fsubject}}<span class="li-after" v-show="item.fisread=='0'"></span></li>
                                 </ul>
-                                <ul class="ul-right" @click="toLookItems(item)" :key="item.foid">
+                                <ul class="ul-lefta" :key="item.foid">
+                                <li>{{item.fsrcCompany}}</li>
+                                </ul>
+                                <ul class="ul-lefta" :key="item.foid">
+                                    <li>{{item.faddresser}}</li>
+                                </ul>
+                                <ul class="ul-lefta" @click="toLookItems(item)" :key="item.foid">
                                     <li>{{item.freceiveTime}}</li>
                                 </ul>
                             </template>
                         </el-tab-pane>
                         <el-tab-pane label="已办事项" name="3">
                             <template v-for="item in getHunTableDataList">
-                                <ul class="ul-left" @click="toLookItems(item)" :key="item.foid">
+                                <ul class="ul-lefta" @click="toLookItems(item)" :key="item.foid">
                                     <li>{{item.fsubject}}<span class="li-after" v-show="item.fisread=='0'"></span></li>
                                 </ul>
-                                <ul class="ul-right" @click="toLookItems(item)" :key="item.foid">
+                                <ul class="ul-lefta" :key="item.foid">
+                                <li>{{item.fsrcCompany}}</li>
+                                </ul>
+                                <ul class="ul-lefta" :key="item.foid">
+                                    <li>{{item.faddresser}}</li>
+                                </ul>
+                                <ul class="ul-lefta" @click="toLookItems(item)" :key="item.foid">
                                     <li>{{item.freceiveTime}}</li>
                                 </ul>
                             </template>
                         </el-tab-pane>
                         <el-tab-pane label="已发事项" name="4">
                              <template v-for="item in getIssuedItemsList">
-                                <ul class="ul-left" @click="toLookItems(item)" :key="item.foid">
+                                <ul class="ul-lefta" @click="toLookItems(item)" :key="item.foid">
                                     <li>{{item.fsubject}}<span class="li-after" v-show="item.fisread=='0'"></span></li>
                                 </ul>
-                                <ul class="ul-right" @click="toLookItems(item)" :key="item.foid">
+                                <ul class="ul-lefta" :key="item.foid">
+                                    <li>{{item.fsrcCompany}}</li>
+                                </ul>
+                                <ul class="ul-lefta" :key="item.foid">
+                                    <li>{{item.entityoName}}</li>
+                                </ul>
+                                <ul class="ul-lefta" @click="toLookItems(item)" :key="item.foid">
                                     <li>{{item.freceiveTime}}</li>
                                 </ul>
                             </template>
                         </el-tab-pane>
                         <el-tab-pane label="回收站" name="5">
                              <template v-for="item in getRecycleBinList">
-                                <ul class="ul-left" @click="toLookItems(item)" :key="item.foid">
+                                <ul class="ul-lefta" @click="toLookItems(item)" :key="item.foid">
                                     <li>{{item.fsubject}}<span class="li-after" v-show="item.fisread=='0'"></span></li>
                                 </ul>
-                                <ul class="ul-right" @click="toLookItems(item)" :key="item.foid">
+                                <ul class="ul-lefta" :key="item.foid">
+                                    <li>{{item.fsrcCompany}}</li>
+                                </ul>
+                                <ul class="ul-lefta" :key="item.foid">
+                                    <li>{{item.faddresser}}</li>
+                                </ul>
+                                <ul class="ul-lefta" @click="toLookItems(item)" :key="item.foid">
                                     <li>{{item.freceiveTime}}</li>
                                 </ul>
                             </template>
@@ -476,6 +506,9 @@ export default {
       }
     .ul-left {
     width: 50%;
+  }
+  .ul-lefta {
+    width: 25%;
   }
   .ul-right {
     width: 50%;
