@@ -12,10 +12,10 @@
             <el-tabs v-model="activeName" @tab-click="handleClick">
                 <el-tab-pane label="基本信息" name="1">
                     <el-form-item label="编码" :label-width="formLabelWidth" prop="code">
-                        <el-input ref="nameInput" v-model="formData.code" autocomplete="off" clearable></el-input>
+                        <el-input ref="nameInput" v-model="formData.code" @input="change($event)" autocomplete="off" clearable></el-input>
                     </el-form-item>
                     <el-form-item label="名称" :label-width="formLabelWidth" prop="name">
-                        <el-input ref="nameInput" v-model="formData.name" autocomplete="off" clearable></el-input>
+                        <el-input ref="nameInput" v-model="formData.name" @input="change($event)" autocomplete="off" clearable></el-input>
                     </el-form-item>
                     <!-- <el-form-item label="隐藏" :label-width="formLabelWidth">
                         <el-checkbox v-model="checked"></el-checkbox>
@@ -24,7 +24,7 @@
                         <el-checkbox v-model="join"></el-checkbox>
                     </el-form-item>
                     <el-form-item label="描述：" :label-width="formLabelWidth">
-                        <el-input maxlength="500" clearable  autosize show-word-limit type="textarea" v-model="formData.fremark"></el-input>
+                        <el-input maxlength="500" clearable  autosize show-word-limit @input="change($event)" type="textarea" v-model="formData.fremark"></el-input>
                     </el-form-item>
                 </el-tab-pane>
             </el-tabs>
@@ -180,13 +180,18 @@ export default {
             handler (obj) {
             if(obj.name === "Task"){
                 console.log(obj)
-                this.editData = obj;
-                this.formData.oid = this.editData.oid;
-                this.formData.code = this.editData.code
-                this.formData.name = this.editData.displayName
-                this.formData.fremark = this.editData.fremark
-                this.checked = this.editData.hidden==1?true:false
-                this.join = this.editData.join==1?true:false
+                if(!obj.oid && (obj.isSaveFlag==undefined)){
+                    this.formData = {}
+                    this.formData.name = obj.displayName
+                }else{
+                    this.editData = obj;
+                    this.formData.oid = this.editData.oid;
+                    this.formData.code = this.editData.code
+                    this.formData.name = this.editData.displayName
+                    this.formData.fremark = this.editData.fremark
+                    this.checked = this.editData.hidden==1?true:false
+                    this.join = this.editData.join==1?true:false
+                }
             }// console.log( this.formData)
             },
             deep: true,
@@ -291,7 +296,9 @@ export default {
                 console.log(error)
             })
         },
-       
+        change(e){
+            this.$forceUpdate()
+        },
          //分页、下一页
         onCurrentChange(val){
              this.pageNum = val;

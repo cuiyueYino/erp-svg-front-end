@@ -13,7 +13,7 @@
             <el-tab-pane label="基本信息" name="1">
                 <!-- Condition -->
                 <el-form-item label="名称" :label-width="formLabelWidth" prop="name">
-                    <el-input ref="nameInput" v-model="formData.name" autocomplete="off" clearable></el-input>
+                    <el-input ref="nameInput" v-model="formData.name" autocomplete="off" @input="change($event)" clearable></el-input>
                 </el-form-item>
                 <el-form-item label="业务工作" :label-width="formLabelWidth" prop="work">
                     <el-input v-model="formData.work" autocomplete="off"></el-input>
@@ -264,7 +264,7 @@ export default {
         data: {
             handler (obj) {
                 if(obj.name === "Fork"){console.log( obj)
-                    if(!obj.oid){
+                    if(!obj.oid && (obj.isSaveFlag==undefined)){
                          this.formData = {}
                         this.formData.name = obj.displayName
                     }else{
@@ -387,7 +387,9 @@ export default {
                 console.log(error)
             })
         },
-       
+        change(e){
+        this.$forceUpdate()
+        },
          //分页、下一页
         onCurrentChange(val){
              this.pageNum = val;

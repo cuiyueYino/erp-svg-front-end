@@ -357,6 +357,7 @@ export default {
                             from:{
                                 data:{
                                     name: this.dataObj.lines.line[i].from.type,
+                                    oid: this.dataObj.lines.line[i].from.key,
                                     displayName: this.dataObj.lines.line[i].from.name
                                 },
                                 options:this.dataObj.lines.line[i].from.options,
@@ -366,6 +367,7 @@ export default {
                             to:{
                                 data:{
                                     name: this.dataObj.lines.line[i].to.type,
+                                    oid: this.dataObj.lines.line[i].to.key,
                                     displayName: this.dataObj.lines.line[i].to.name,
                                 },
                                 options:this.dataObj.lines.line[i].to.options,
@@ -534,6 +536,7 @@ export default {
                                 join: this.dataObj.nodes.wfRouter[i].join,
                                 code: this.dataObj.nodes.wfRouter[i].code,
                                 name: 'Task',
+                                type: 'Task',
                                 oid:this.dataObj.nodes.wfRouter[i].oid,
                                 displayName: this.dataObj.nodes.wfRouter[i].name,
                             },
@@ -764,9 +767,9 @@ export default {
             }
         },
         // 点击线名字事件
-        selectedNodeClick(item){//debugger
+        selectedNodeClick(item){//
             let newData = []
-            for(let k =0 ; k<this.dataObj.length; k++){
+            /*for(let k =0 ; k<this.dataObj.length; k++){
                 newData  = this.dataObj[k].transition;//
                 if(newData){
                     for(let j =0 ; j<newData.length; j++){
@@ -776,26 +779,23 @@ export default {
                         }
                     }
                 }
-            }
+            }*/
             //console.log(this.lineData,item)
         },
         // 点击节点事件
         clickNode (node) {
             // 点击节点 保存节点数据 获取节点类型
             this.selectedNode = node;
-            for(let k =0 ; k<this.dataObj.length; k++){
+            /*for(let k =0 ; k<this.dataObj.length; k++){
                 if(this.dataObj[k].data.displayName === node.data.displayName){
                     this.selectedNode.data = this.dataObj[k].data;
                     this.selectedNode.data.oid = this.dataObj[k].oid;
                     // console.log(this.selectedNode,this.dataObj[k])
                 }
-            }
+            }*/
             if(node.type == "Join"){
-                if(this.dataObj.length == 0){
-                    this.dataObj=this.workflowNodes;
-                }
-                sessionStorage.setItem('allData',JSON.stringify(this.dataObj))
-                //sessionStorage.setItem('allData',JSON.stringify(this.workflowNodes))
+                //sessionStorage.setItem('allData',JSON.stringify(this.dataObj))
+                sessionStorage.setItem('allData',JSON.stringify(this.workflowNodes))
             }
             this.nodeType = node.type;
             console.log(node,this.selectedNode)

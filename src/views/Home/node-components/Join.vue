@@ -509,7 +509,7 @@ export default {
         data: {
             handler (obj) {
                 if(obj.name === "Join"){
-                    console.log( obj)
+                    console.log("审核活动数据",obj)
                     if(!obj.oid && (obj.isSaveFlag==undefined)){
                         this.formData = {};
                         this.editData= {};

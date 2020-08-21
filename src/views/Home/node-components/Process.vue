@@ -124,7 +124,7 @@ export default {
         data: {
             handler (obj) {
                 if(obj.type === "Subprocess" || obj.name === "Subprocess"){console.log(obj);//debugger
-                if(!obj.oid){
+                if(!obj.oid && (obj.isSaveFlag==undefined)){
                     this.formData = {}
                     this.formData.name = obj.displayName
                 }else{

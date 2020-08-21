@@ -323,7 +323,9 @@ export default {
                         }
                 this.data.wfCopyTo.copyTo.push(copyToObj)
             });
+            this.data.isSaveFlag=true;
             this.dialogVisible = false;
+            
         },
         //连接线保存
         saveLineData(e){
@@ -335,10 +337,13 @@ export default {
             this.data.oid = e.oid;
             this.data.otherwise =e.otherwise;
             this.data.expression =e.conditional;
+            this.data.lineexpression=e.conditional;
+            this.data.lineotherwise=e.otherwise;
             this.data.code =e.code;
             this.data.linefcode =e.code;
             this.data.displayName = e.name;
             this.data.fremark = e.fremark;
+            this.data.lineremark= e.fremark;
             switch (e.name ) {
                 case '同意':
                         this.data.decisionType = 1
@@ -539,6 +544,7 @@ export default {
             this.data.hidden = e.checked?1:0;
             this.data.fremark = e.fremark;
             this.data.displayName = e.name;
+            this.data.isSaveFlag=true;
         },
          //路由
         saveRouteData(e){console.log(e)
@@ -548,6 +554,7 @@ export default {
             this.data.fremark = e.fremark;
             this.data.displayName = e.name;
             this.data.code = e.code;
+            this.data.isSaveFlag=true;
         },
         //子流程
         saveProcessData(e){
@@ -561,6 +568,7 @@ export default {
             this.data.fremark = e.fremark;
             this.data.displayName = e.name;
             this.data.code = e.code;
+            this.data.isSaveFlag=true;
         },
     }
 };
