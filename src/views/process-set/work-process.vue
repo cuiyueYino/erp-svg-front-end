@@ -126,6 +126,14 @@ export default {
                 title: '子流程'
             },
             {
+                key: 'fgotoauditName',
+                title: '按退回节点重新提交'
+            },
+            {
+                key: 'fremark',
+                title: '描述'
+            },
+            {
                 key: 'fstatusName',
                 title: '状态'
             }

@@ -245,7 +245,7 @@ export default {
         rowTEMTasktype(oldVal){
             this.ShowFinancVisible=this.rowTEMTasktype;
             let temporartSelected = {};
-            temporartSelected.id = this.rowTEMTaskDataObj.foid;
+            temporartSelected.id = this.rowTEMTaskDataObj.fsrcoId;
             temporartSelected.userId = localStorage.getItem("ms_userId");
             this.getTemporaryMission(temporartSelected);
             },
