@@ -24,24 +24,24 @@
 					<el-row>
 						<el-col :span="6">
 							<el-form-item prop="code" label="主表编码">
-								<el-input style="width: 150%;" clearable  v-model="ruleForm.code" maxlength="50" placeholder="主表编码"></el-input>
+								<el-input style="width: 150%;" clearable v-model="ruleForm.code" maxlength="50" placeholder="主表编码"></el-input>
 							</el-form-item>
 						</el-col>
 						<el-col :span="6">
 							<el-form-item prop="name" label="主表名称">
-								<el-input style="width: 150%;" clearable  v-model="ruleForm.name" maxlength="50" placeholder="主表名称"></el-input>
+								<el-input style="width: 150%;" clearable v-model="ruleForm.name" maxlength="50" placeholder="主表名称"></el-input>
 							</el-form-item>
 						</el-col>
 						<el-col :span="6">
 							<el-form-item prop="workItemTypeName" label="主表分类">
 								<el-input style="width: 150%;" disabled placeholder="主表分类" v-model="ruleForm.workItemTypeName">
-									<el-button  @click="dialogVisible = true" slot="append" icon="el-icon-search"></el-button>
+									<el-button @click="dialogVisible = true" slot="append" icon="el-icon-search"></el-button>
 								</el-input>
 							</el-form-item>
 						</el-col>
 						<el-col :span="6">
 							<el-form-item label="描述">
-								<el-input clearable  style="width: 150%;" type="textarea" :rows="1" maxlength="1500" v-model="ruleForm.remark" placeholder="描述"></el-input>
+								<el-input clearable style="width: 150%;" type="textarea" :rows="1" maxlength="1500" v-model="ruleForm.remark" placeholder="描述"></el-input>
 							</el-form-item>
 						</el-col>
 					</el-row>
@@ -51,7 +51,7 @@
 				<el-row>
 					<el-col style="text-align: center;">工作事项模板主表行</el-col>
 				</el-row>
-				<el-form  style="margin-top: 10px;" :model="ruleForm" :rules="rulesTable" ref="ruleFormTable">
+				<el-form style="margin-top: 10px;" :model="ruleForm" :rules="rulesTable" ref="ruleFormTable">
 					<el-table size="small" height="600" :data="ruleForm.lines" border style="width: 100%">
 						<el-table-column prop="field" label="数据库字段名" align="center" width="120">
 							<template slot-scope="scope">
@@ -80,7 +80,7 @@
 						<el-table-column prop="lengthType" label="字段长度类型" align="center" width="180">
 							<template slot-scope="scope">
 								<el-form-item :prop="'lines[' + scope.$index + '].lengthType'" :rules="rulesTable.lengthType">
-									<el-select  style="width: 100%;" v-model="scope.row.lengthType" placeholder="字段长度类型">
+									<el-select style="width: 100%;" v-model="scope.row.lengthType" placeholder="字段长度类型">
 										<el-option v-for="item in lengthTypeList" :key="item.id" :label="item.name" :value="item.id"></el-option>
 									</el-select>
 								</el-form-item>
@@ -89,42 +89,42 @@
 						<el-table-column prop="show" label="是否显示" align="center">
 							<template slot-scope="scope">
 								<el-form-item>
-									<el-checkbox  v-model="scope.row.show"></el-checkbox>
+									<el-checkbox v-model="scope.row.show"></el-checkbox>
 								</el-form-item>
 							</template>
 						</el-table-column>
 						<el-table-column prop="orderNum" label="显示顺序" align="center">
 							<template slot-scope="scope">
 								<el-form-item :prop="'lines[' + scope.$index + '].orderNum'" :rules="rulesTable.orderNum">
-									<el-input  v-model="scope.row.orderNum" placeholder=""></el-input>
+									<el-input v-model="scope.row.orderNum" placeholder=""></el-input>
 								</el-form-item>
 							</template>
 						</el-table-column>
 						<el-table-column prop="showNum" label="显示行数" align="center">
 							<template slot-scope="scope">
 								<el-form-item :prop="'lines[' + scope.$index + '].showNum'" :rules="rulesTable.showNum">
-									<el-input  v-model="scope.row.showNum" placeholder=""></el-input>
+									<el-input v-model="scope.row.showNum" placeholder=""></el-input>
 								</el-form-item>
 							</template>
 						</el-table-column>
 						<el-table-column prop="required" label="是否必填" align="center">
 							<template slot-scope="scope">
 								<el-form-item>
-									<el-checkbox  v-model="scope.row.required"></el-checkbox>
+									<el-checkbox v-model="scope.row.required"></el-checkbox>
 								</el-form-item>
 							</template>
 						</el-table-column>
 						<el-table-column prop="choice" label="是否多选" align="center">
 							<template slot-scope="scope">
 								<el-form-item>
-									<el-checkbox  v-model="scope.row.choice"></el-checkbox>
+									<el-checkbox v-model="scope.row.choice"></el-checkbox>
 								</el-form-item>
 							</template>
 						</el-table-column>
 						<el-table-column prop="edit" label="是否可编辑" align="center">
 							<template slot-scope="scope">
 								<el-form-item>
-									<el-checkbox  v-model="scope.row.edit"></el-checkbox>
+									<el-checkbox v-model="scope.row.edit"></el-checkbox>
 								</el-form-item>
 							</template>
 						</el-table-column>
@@ -132,7 +132,7 @@
 							<template slot-scope="scope">
 								<el-form-item>
 									<el-input disabled v-model="scope.row.serviceCon">
-										<el-button  @click="findTServiceByParams(scope.row)" slot="append" icon="el-icon-search"></el-button>
+										<el-button @click="findTServiceByParams(scope.row)" slot="append" icon="el-icon-search"></el-button>
 									</el-input>
 								</el-form-item>
 							</template>
@@ -140,7 +140,7 @@
 						<el-table-column prop="parameter" label="参数" align="center" width="200">
 							<template slot-scope="scope">
 								<el-form-item>
-									<el-input  v-model="scope.row.parameter" placeholder="参数"></el-input>
+									<el-input v-model="scope.row.parameter" placeholder="参数"></el-input>
 								</el-form-item>
 							</template>
 						</el-table-column>
@@ -331,7 +331,7 @@
 				//全部公司
 				CompanyData: JSON.parse(localStorage.getItem('CompanyData')),
 				//全部枚举
-				selectList: JSON.parse(localStorage.getItem('selectList')),
+				selectList: "",
 				//全部工作事项
 				fieldBrowseList: JSON.parse(localStorage.getItem('fieldBrowseList')),
 				//公司部门职位的合集
@@ -349,6 +349,9 @@
 				if(item.name == "福佳集团") {
 					this.ruleForm.company = item.id
 				}
+			})
+			this.$api.collaborativeOffice.findList({}).then(data => {
+				this.selectList = data.data.data
 			})
 		},
 		methods: {
@@ -442,28 +445,28 @@
 							this.ruleForm.lines.forEach((item, index1) => {
 								item.parameterList = []
 								//时间控件计算差值
-									this.ruleForm.lines.forEach(itemChild => {
-										//通过‘-’符号确定需要计算的两边
-										if(item.serviceId == 5 && !this.noNull(itemChild.parameter) && itemChild.parameter.indexOf('-') != -1) {
-											//left right 分别是需要计算的两个值的字段名称
-											var index = itemChild.parameter.indexOf('-')
-											var left = itemChild.parameter.substring(0, index)
-											var right = itemChild.parameter.substring(index + 1)
-											//两个字段都要添加属性parameterList，里面存储需要计算的字段名和需要显示的字段名child
-											if(left == item.field || right == item.field) {
-												item.parameterList = {}
-												item.parameterList.left = left
-												item.parameterList.right = right
-												item.parameterList.child = itemChild.field
-											}
-										} else {
-											//发现被添加服务的字段后，绑定双方
-											if(itemChild.parameter == item.field) {
-												item.parameterList.push(itemChild.field)
-											}
+								this.ruleForm.lines.forEach(itemChild => {
+									//通过‘-’符号确定需要计算的两边
+									if(item.serviceId == 5 && !this.noNull(itemChild.parameter) && itemChild.parameter.indexOf('-') != -1) {
+										//left right 分别是需要计算的两个值的字段名称
+										var index = itemChild.parameter.indexOf('-')
+										var left = itemChild.parameter.substring(0, index)
+										var right = itemChild.parameter.substring(index + 1)
+										//两个字段都要添加属性parameterList，里面存储需要计算的字段名和需要显示的字段名child
+										if(left == item.field || right == item.field) {
+											item.parameterList = {}
+											item.parameterList.left = left
+											item.parameterList.right = right
+											item.parameterList.child = itemChild.field
 										}
+									} else {
+										//发现被添加服务的字段后，绑定双方
+										if(itemChild.parameter == item.field) {
+											item.parameterList.push(itemChild.field)
+										}
+									}
 
-									})
+								})
 								//行序按照填写排序
 								item.fieldTypeName = this.fieldTypeShow(item)
 								if(obj[item.showNum]) {

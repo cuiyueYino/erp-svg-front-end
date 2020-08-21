@@ -10,7 +10,7 @@
         >
             <el-row>
                 <el-col :span="6">
-                    <el-form-item label="公司：">
+                    <el-form-item label="公司1111111111：">
                         <el-select v-model="formdata.company" value-key="value" :disabled="true">
                             <el-option
                                 v-for="item in companyData"
@@ -225,13 +225,34 @@ export default {
             ],
         }
     },
-    methods: {
+    created() {
        
     },
+    methods: {
+    //获取临时任务派发详情·
+    getTemporaryMission(data) {
+        debugger;
+      this.$api.processSet.getTemporaryMissionDetail({
+        id: data.id,
+        userId:data.userId,
+      })
+      .then((response) => {
+        console.log(response);
+      });
+    },
+    },
     watch:{
-        rowTEMTasktype(oldVal,newVal){
+        rowTEMTasktype(oldVal){
             this.ShowFinancVisible=this.rowTEMTasktype;
-        }
+            let temporartSelected = {};
+            temporartSelected.id = this.rowTEMTaskDataObj.foid;
+            temporartSelected.userId = localStorage.getItem("ms_userId");
+            this.getTemporaryMission(temporartSelected);
+            },
+            // rowTEMTaskDataObj(value) {
+                
+            // }
+        
     }
 }
 </script>

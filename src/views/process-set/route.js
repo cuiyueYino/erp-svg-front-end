@@ -6,7 +6,10 @@ const concernsItemlist = () => import('./concerns-item-list.vue');
 const issuedItems =() => import('./issued-items')
 const workdoneItemList =() => import('./work-done-items');
 const recycleBin =()=> import('./recycle-bin')
-const outline2 = () => import('./task-structure.vue');
+const structure = () => import('./task-structure.vue');
+const temporaryMission = () => import('./temporary-mission.vue');
+const postBid = () => import('./post-bid.vue'); 
+
 const PROJECT = [
     {
         path: 'workProcess',
@@ -35,9 +38,25 @@ const PROJECT = [
     {
         path: 'taskStructure',
         name: 'taskStructure',
-        component: outline2,
+        component: structure,
         meta: {
             title: '任务结构编制'
+        }
+    },
+    {
+        path: 'temporaryMission',
+        name: 'temporaryMission',
+        component: temporaryMission,
+        meta: {
+            title: '临时任务派发'
+        }
+    },
+    {
+        path: 'postBid',
+        name: 'postBid',
+        component: postBid,
+        meta: {
+            title: '一岗一表'
         }
     },
     {

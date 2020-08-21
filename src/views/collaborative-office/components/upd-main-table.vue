@@ -335,7 +335,7 @@
 				//全部公司
 				CompanyData: JSON.parse(localStorage.getItem('CompanyData')),
 				//全部枚举
-				selectList: JSON.parse(localStorage.getItem('selectList')),
+				selectList: "",
 				//全部工作事项
 				fieldBrowseList: JSON.parse(localStorage.getItem('fieldBrowseList')),
 				//公司部门职位的合集
@@ -348,6 +348,9 @@
 				if(item.name == "福佳集团") {
 					this.ruleForm.company = item.id
 				}
+			})
+			this.$api.collaborativeOffice.findList({}).then(data => {
+				this.selectList = data.data.data
 			})
 			//全部服务
 			this.ruleForm.lines.forEach(item => {
@@ -365,10 +368,10 @@
 			})
 		},
 		methods: {
-			getTitle(){
-				if(this.showFigNum == 1){
+			getTitle() {
+				if(this.showFigNum == 1) {
 					return "工作事项模板主表-查看"
-				}else{
+				} else {
 					return "工作事项模板主表-修改"
 				}
 			},

@@ -3,6 +3,12 @@ import httpReqest from '../../utils/https';
 const v = base.dev;
 //const testV = base.test;
 const processSet = {
+    
+    // 新建工作业务组保存
+    addWorkGroup(params){
+        return httpReqest.post('/api/wfInterfaces/workFlow/saveWorkGroup', params);
+    },
+
     // 获取表格列表数据
     getTableData(params){
         return httpReqest.post('/api/wfInterfaces/workFlow/findWorkFlowProcessList', params);
@@ -64,6 +70,21 @@ const processSet = {
     //获取待办事项
     getunhandledTask(params){
         return httpReqest.post('/api/wfInterfaces/workFlow/unhandledTask', params);
+    },
+    // 获取待办事项的popForm表单数据
+    getTemporaryMissionDetail(params){
+        var valueS='?';
+        for(var item in params){
+            valueS+=item+"="+params[item]+"&";
+        }
+        if(valueS.slice(valueS.length-1,valueS.length) ==="&"){
+            valueS=valueS.slice(0,valueS.length-1);
+        }
+        return httpReqest.get('/api/scha/temporaryMission/getTemporaryMissionVO'+valueS);
+    },
+     //获取处理表单详情数据
+     getunhandledTaskFormDetail(params){
+        return httpReqest.post('/api/scha/workFlow/unhandledTaskFormDetail', params);
     },
     //部门的详细数据查询
     getdepaSearch(params){

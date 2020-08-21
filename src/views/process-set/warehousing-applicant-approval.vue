@@ -1,4 +1,5 @@
 <template>
+
     <div>
         <el-dialog :title="title" @close="handleClose" :visible.sync="ShowFinancVisible" :append-to-body="true" v-if="ShowFinancVisible" :close-on-click-modal="false" width="60%">
             <el-form
@@ -23,8 +24,6 @@
                         <ComAnnDetaiPage  :rowComPanDetaiDataObj="rowComPanDetaiDataObj" :rowComPanDetaitype="rowComPanDetaitype" @changeShow="showLookOrUpdate"/>
                         <TempTaskPage  :rowTEMTaskDataObj="rowTEMTaskDataObj" :rowTEMTasktype="rowTEMTasktype" @changeShow="showLookOrUpdate"/>
                         <EachPerEachJobDetailPage  :rowEACHPerEachJobDetDataObj="rowEACHPerEachJobDetDataObj" :rowEACHPerEachJobDettype="rowEACHPerEachJobDettype" @changeShow="showLookOrUpdate"/>
-                        <DepartYearEncPlanDetailPage  :rowDepartYearEncPlanDetailDataObj="rowDepartYearEncPlanDetailDataObj" :rowDepartYearEncPlanDetailtype="rowDepartYearEncPlanDetailtype" @changeShow="showLookOrUpdate"/>
-                        <EncBenefitsIndDetailPage  :rowEncBenefitsIndDetailDataObj="rowEncBenefitsIndDetailDataObj" :rowEncBenefitsIndDetailtype="rowEncBenefitsIndDetailtype" @changeShow="showLookOrUpdate"/>
                         <EachPerEachTableReportPage  :rowEachPerEachTableReportDataObj="rowEachPerEachTableReportDataObj" :rowEachPerEachTableReporttype="rowEachPerEachTableReporttype" @changeShow="showLookOrUpdate"/>
                         <EachPerEachTableInvalidPage  :rowEachPerEachTableInvalidDataObj="rowEachPerEachTableInvalidDataObj" :rowEachPerEachTableInvalidtype="rowEachPerEachTableInvalidtype" @changeShow="showLookOrUpdate"/>
                         <EachPerEachTablePersonPage  :rowEachPerEachTablePersonDataObj="rowEachPerEachTablePersonDataObj" :rowEachPerEachTablePersontype="rowEachPerEachTablePersontype" @changeShow="showLookOrUpdate"/>
@@ -32,7 +31,6 @@
                         <EachPerEachTableAssPage  :rowEachPerEachTableAssDataObj="rowEachPerEachTableAssDataObj" :rowEachPerEachTableAsstype="rowEachPerEachTableAsstype" @changeShow="showLookOrUpdate"/>
                         <EachPerEachTableEntrustPage  :rowEachPerEachTableEntrustDataObj="rowEachPerEachTableEntrustDataObj" :rowEachPerEachTableEntrusttype="rowEachPerEachTableEntrusttype" @changeShow="showLookOrUpdate"/>
                         <EachPerEachTableDetailPage  :rowEachPerEachTableDetailDataObj="rowEachPerEachTableDetailDataObj" :rowEachPerEachTableDetailtype="rowEachPerEachTableDetailtype" @changeShow="showLookOrUpdate"/>
-                        <EachPerEachTableLowerPage  :rowEachPerEachTableLowerDataObj="rowEachPerEachTableLowerDataObj" :rowEachPerEachTableLowertype="rowEachPerEachTableLowertype" @changeShow="showLookOrUpdate"/>
                         <DepartAnnPlanDetPage  :rowDepartAnnPlanDetDataObj="rowDepartAnnPlanDetDataObj" :rowDepartAnnPlanDettype="rowDepartAnnPlanDettype" @changeShow="showLookOrUpdate"/>
                         <DepartMonPlanDetPage  :rowDepartMonPlanDetDataObj="rowDepartMonPlanDetDataObj" :rowDepartMonPlanDettype="rowDepartMonPlanDettype" @changeShow="showLookOrUpdate"/>
                         <EmpApprTabDetailPage  :rowEmpApprTabDetailDataObj="rowEmpApprTabDetailDataObj" :rowEmpApprTabDetailtype="rowEmpApprTabDetailtype" @changeShow="showLookOrUpdate"/>
@@ -83,8 +81,6 @@ import TempTaskPage from '../plan-options/temporary-task.vue';//临时任务派�
 import creditEnclFilelist from '../comment/enclosure-file.vue';
 import baseInfoDialog from './user-tree-search.vue';//转发加签委托人员选择
 import EachPerEachJobDetailPage from '../plan-options/each-person-each-job-detail.vue';//一岗一表 F
-import DepartYearEncPlanDetailPage from '../plan-options/depart-year-enc-plan-detail.vue';//部门年度经济指标计划 Q
-import EncBenefitsIndDetailPage from '../plan-options/enc-benefits-indicators-detail.vue';//经济效益指标 R
 import EachPerEachTableDelayPage from '../plan-options/each-person-each-table-delay.vue';//一人一表任务表（延期）I
 import EachPerEachTableAssPage from '../plan-options/each-person-each-table-assessment.vue';//一人一表任务表（自评）H
 import EachPerEachTableAdjPage from '../plan-options/each-person-each-table-adjust.vue';//一人一表任务表（任务调整）K
@@ -93,7 +89,6 @@ import EachPerEachTableInvalidPage from '../plan-options/each-person-each-table-
 import EachPerEachTablePersonPage from '../plan-options/each-person-each-table-person.vue';//一人一表任务表（人员变更）L
 import EachPerEachTableEntrustPage from '../plan-options/each-person-each-table-entrust.vue';//一人一表任务表（任务委托）M
 import EachPerEachTableDetailPage from '../plan-options/each-person-each-table-detail.vue';//一人一表任务表（查看功能）O
-import EachPerEachTableLowerPage from '../plan-options/each-person-each-table-lower.vue';//一人一表任务表（下级任务功能）N
 import DepartAnnPlanDetPage from '../plan-options/department-annual-plan-detail.vue';//部门年度计划  B
 import DepartMonPlanDetPage from '../plan-options/department-month-plan-detail.vue';//部门月度计划  D
 import EmpApprTabDetailPage from '../plan-options/employees-appraisal-table-detail.vue';//员工考评表 P
@@ -103,6 +98,7 @@ import CooTaskDetailPage from '../plan-options/cooperate-task-detail.vue';// 配
 export default {
     props: {
         rowWAADataObj: Object,
+        functionType:String,
         rowWAAtype:{
              type: Boolean,
              default: false
@@ -121,8 +117,6 @@ export default {
         baseInfoDialog,
         TempTaskPage,
         EachPerEachJobDetailPage,
-        DepartYearEncPlanDetailPage,
-        EncBenefitsIndDetailPage,
         EachPerEachTableDelayPage,
         EachPerEachTableAssPage,
         EachPerEachTableAdjPage,
@@ -131,7 +125,6 @@ export default {
         EachPerEachTablePersonPage,
         EachPerEachTableEntrustPage,
         EachPerEachTableDetailPage,
-        EachPerEachTableLowerPage,
         DepartAnnPlanDetPage,
         DepartMonPlanDetPage,
         EmpApprTabDetailPage,
@@ -157,8 +150,6 @@ export default {
             financingEFListtype:false,
             rowTEMTasktype:false,
             rowEACHPerEachJobDettype:false,
-            rowDepartYearEncPlanDetailtype:false,
-            rowEncBenefitsIndDetailtype:false,
             rowEachPerEachTableDelaytype:false,
             rowEachPerEachTableAsstype:false,
             rowEachPerEachTableReporttype:false,
@@ -166,7 +157,6 @@ export default {
             rowEachPerEachTablePersontype:false,
             rowEachPerEachTableEntrusttype:false,
             rowEachPerEachTableDetailtype:false,
-            rowEachPerEachTableLowertype:false,
             rowDepartAnnPlanDettype:false,
             rowDepartMonPlanDettype:false,
             rowEmpApprTabDetailtype:false,
@@ -174,14 +164,12 @@ export default {
             rowCooTaskDetailtype:false,
             rowEachPerEachTableAdjtype:false,
             rowUTSDataObj:{},
-            rowDataprocessObj: {},
+            rowDataprocessObj: [],
             rowCOOTaskDataObj: {},
             rowComPanDetaiDataObj: {},
             rowEFListDataObj: {},
             rowTEMTaskDataObj: {},
             rowEACHPerEachJobDetDataObj: {},
-            rowDepartYearEncPlanDetailDataObj: {},
-            rowEncBenefitsIndDetailDataObj: {},
             rowEachPerEachTableDelayDataObj: {},
             rowEachPerEachTableReportDataObj: {},
             rowEachPerEachTableInvalidDataObj: {},
@@ -189,7 +177,6 @@ export default {
             rowEachPerEachTableAssDataObj: {},
             rowEachPerEachTableEntrustDataObj: {},
             rowEachPerEachTableDetailDataObj: {},
-            rowEachPerEachTableLowerDataObj: {},
             rowDepartAnnPlanDetDataObj:{},
             rowDepartMonPlanDetDataObj:{},
             rowEmpApprTabDetailDataObj:{},
@@ -203,6 +190,9 @@ export default {
             title:''
         };
     },
+    created() {
+
+    },
     methods: {
         //关闭当前dialog时给父组件传值
         handleClose(){
@@ -211,8 +201,6 @@ export default {
             this.financingEFListtype=false;
             this.rowTEMTasktype=false;
             this.rowEACHPerEachJobDettype=false;
-            this.rowDepartYearEncPlanDetailtype=false;
-            this.rowEncBenefitsIndDetailtype=false;
             this.rowEachPerEachTableDelaytype=false;
             this.rowEachPerEachTableAsstype=false;
             this.rowEachPerEachTableReporttype=false;
@@ -220,7 +208,6 @@ export default {
             this.rowEachPerEachTablePersontype=false;
             this.rowEachPerEachTableEntrusttype=false;
             this.rowEachPerEachTableDetailtype=false;
-            this.rowEachPerEachTableLowertype=false;
             this.rowDepartAnnPlanDettype=false;
             this.rowDepartMonPlanDettype=false;
             this.rowEmpApprTabDetailtype=false;
@@ -274,44 +261,40 @@ export default {
         },
         showprocessData(){},
         //判断
-        DisplayOrHide(data){
-            if(data === '显示A'){
+        DisplayOrHide(dataType,dataContent){
+            if(dataType === 'CoordinationTask'){
                 this.rowCooTaskDetailtype=true;
-            }else if(data === '显示B'){
+            }else if(dataType === 'DepartmentYearPlan'){
                 this.rowDepartAnnPlanDettype=true;
-            }else if(data === '显示C'){
+            }else if(dataType === 'CompanyYearPlanCollect'){
                 this.rowComPanDetaitype=true;
-            } else if(data === '显示D'){
+            } else if(dataType === 'DepartmentMonthPlan'){
                 this.rowDepartMonPlanDettype=true;
-            } else if(data === '显示E'){
+            } else if(dataType === 'TemporaryMission'){
                 this.rowTEMTasktype=true;
-            } else if(data === '显示F'){
+                this.rowTEMTaskDataObj = dataContent.selectData[0];
+                console.log(this.rowTEMTaskDataObj);
+            } else if(dataType === 'FormPost'){
                 this.rowEACHPerEachJobDettype=true;
-            } else if(data === '显示G'){
+            } else if(dataType === 'TaskReport'){
                 this.rowEachPerEachTableReporttype=true;
-            } else if(data === '显示H'){
+            } else if(dataType === 'TaskSelfEvaluateApplyzp'){
                 this.rowEachPerEachTableAsstype=true;
-            } else if(data === '显示I'){
+            } else if(dataType === 'TaskDelayApply'){
                 this.rowEachPerEachTableDelaytype=true;
-            } else if(data === '显示J'){
+            } else if(dataType === 'TaskCancelApply'){
                 this.rowEachPerEachTableInvalidtype=true;
-            } else if(data === '显示K'){
+            } else if(dataType === 'TaskAdjust'){
                 this.rowEachPerEachTableAdjtype=true;
-            } else if(data === '显示L'){
+            } else if(dataType === 'AssignerChange'){
                 this.rowEachPerEachTablePersontype=true;
-            } else if(data === '显示M'){
+            } else if(dataType === 'TaskEntrust'){
                 this.rowEachPerEachTableEntrusttype=true;
-            } else if(data === '显示N'){
-                this.rowEachPerEachTableLowertype=true;
-            } else if(data === '显示O'){
+            } else if(dataType === 'PersonalTableTask'){
                 this.rowEachPerEachTableDetailtype=true;
-            } else if(data === '显示P'){
+            } else if(dataType === 'StaffAppraisals'){
                 this.rowEmpApprTabDetailtype=true;
-            } else if(data === '显示Q'){
-                this.rowDepartYearEncPlanDetailtype=true;
-            } else if(data === '显示R'){
-                this.rowEncBenefitsIndDetailtype=true;
-            } else if(data === '显示S'){
+            } else if(dataType === 'StaffAppraisalsCollect'){
                 this.rowEmpApprTabNumDetailtype=true;
             }
         },
@@ -323,7 +306,7 @@ export default {
             finandata.finanrowId="QS_0056";
             finandata.nametitle="待办事项";
             finandata.SelectionData=this.rowWAADataObj.selectData;
-            finandata.FunctionType=data;
+            //finandata.FunctionType=data;
             this.rowUTSDataObj=finandata;
         },
         closeBaseInfo(data){
@@ -376,7 +359,7 @@ export default {
                 let responsevalue = response;
                 if (responsevalue) {
                     let returndata = responsevalue.data;
-                    this.DisplayOrHide("显示K")
+                    this.DisplayOrHide(this.functionType,this.rowWAADataObj);
                 } else {
                     this.$message.success('数据库没有该条数据!');
                 }
