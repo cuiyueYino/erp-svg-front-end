@@ -31,7 +31,6 @@
                         <EachPerEachTableAssPage  :rowEachPerEachTableAssDataObj="rowEachPerEachTableAssDataObj" :rowEachPerEachTableAsstype="rowEachPerEachTableAsstype" @changeShow="showLookOrUpdate"/>
                         <EachPerEachTableEntrustPage  :rowEachPerEachTableEntrustDataObj="rowEachPerEachTableEntrustDataObj" :rowEachPerEachTableEntrusttype="rowEachPerEachTableEntrusttype" @changeShow="showLookOrUpdate"/>
                         <EachPerEachTableDetailPage  :rowEachPerEachTableDetailDataObj="rowEachPerEachTableDetailDataObj" :rowEachPerEachTableDetailtype="rowEachPerEachTableDetailtype" @changeShow="showLookOrUpdate"/>
-                        <EachPerEachTableLowerPage  :rowEachPerEachTableLowerDataObj="rowEachPerEachTableLowerDataObj" :rowEachPerEachTableLowertype="rowEachPerEachTableLowertype" @changeShow="showLookOrUpdate"/>
                         <DepartAnnPlanDetPage  :rowDepartAnnPlanDetDataObj="rowDepartAnnPlanDetDataObj" :rowDepartAnnPlanDettype="rowDepartAnnPlanDettype" @changeShow="showLookOrUpdate"/>
                         <DepartMonPlanDetPage  :rowDepartMonPlanDetDataObj="rowDepartMonPlanDetDataObj" :rowDepartMonPlanDettype="rowDepartMonPlanDettype" @changeShow="showLookOrUpdate"/>
                         <EmpApprTabDetailPage  :rowEmpApprTabDetailDataObj="rowEmpApprTabDetailDataObj" :rowEmpApprTabDetailtype="rowEmpApprTabDetailtype" @changeShow="showLookOrUpdate"/>
@@ -90,7 +89,6 @@ import EachPerEachTableInvalidPage from '../plan-options/each-person-each-table-
 import EachPerEachTablePersonPage from '../plan-options/each-person-each-table-person.vue';//一人一表任务表（人员变更）L
 import EachPerEachTableEntrustPage from '../plan-options/each-person-each-table-entrust.vue';//一人一表任务表（任务委托）M
 import EachPerEachTableDetailPage from '../plan-options/each-person-each-table-detail.vue';//一人一表任务表（查看功能）O
-import EachPerEachTableLowerPage from '../plan-options/each-person-each-table-lower.vue';//一人一表任务表（下级任务功能）N
 import DepartAnnPlanDetPage from '../plan-options/department-annual-plan-detail.vue';//部门年度计划  B
 import DepartMonPlanDetPage from '../plan-options/department-month-plan-detail.vue';//部门月度计划  D
 import EmpApprTabDetailPage from '../plan-options/employees-appraisal-table-detail.vue';//员工考评表 P
@@ -100,6 +98,7 @@ import CooTaskDetailPage from '../plan-options/cooperate-task-detail.vue';// 配
 export default {
     props: {
         rowWAADataObj: Object,
+        functionType:String,
         rowWAAtype:{
              type: Boolean,
              default: false
@@ -126,7 +125,6 @@ export default {
         EachPerEachTablePersonPage,
         EachPerEachTableEntrustPage,
         EachPerEachTableDetailPage,
-        EachPerEachTableLowerPage,
         DepartAnnPlanDetPage,
         DepartMonPlanDetPage,
         EmpApprTabDetailPage,
@@ -159,7 +157,6 @@ export default {
             rowEachPerEachTablePersontype:false,
             rowEachPerEachTableEntrusttype:false,
             rowEachPerEachTableDetailtype:false,
-            rowEachPerEachTableLowertype:false,
             rowDepartAnnPlanDettype:false,
             rowDepartMonPlanDettype:false,
             rowEmpApprTabDetailtype:false,
@@ -167,7 +164,7 @@ export default {
             rowCooTaskDetailtype:false,
             rowEachPerEachTableAdjtype:false,
             rowUTSDataObj:{},
-            rowDataprocessObj: {},
+            rowDataprocessObj: [],
             rowCOOTaskDataObj: {},
             rowComPanDetaiDataObj: {},
             rowEFListDataObj: {},
@@ -180,7 +177,6 @@ export default {
             rowEachPerEachTableAssDataObj: {},
             rowEachPerEachTableEntrustDataObj: {},
             rowEachPerEachTableDetailDataObj: {},
-            rowEachPerEachTableLowerDataObj: {},
             rowDepartAnnPlanDetDataObj:{},
             rowDepartMonPlanDetDataObj:{},
             rowEmpApprTabDetailDataObj:{},
@@ -193,6 +189,9 @@ export default {
             prechecked:'',
             title:''
         };
+    },
+    created() {
+
     },
     methods: {
         //关闭当前dialog时给父组件传值
@@ -209,7 +208,6 @@ export default {
             this.rowEachPerEachTablePersontype=false;
             this.rowEachPerEachTableEntrusttype=false;
             this.rowEachPerEachTableDetailtype=false;
-            this.rowEachPerEachTableLowertype=false;
             this.rowDepartAnnPlanDettype=false;
             this.rowDepartMonPlanDettype=false;
             this.rowEmpApprTabDetailtype=false;
@@ -263,40 +261,40 @@ export default {
         },
         showprocessData(){},
         //判断
-        DisplayOrHide(data){
-            if(data === '显示A'){
+        DisplayOrHide(dataType,dataContent){
+            if(dataType === 'CoordinationTask'){
                 this.rowCooTaskDetailtype=true;
-            }else if(data === '显示B'){
+            }else if(dataType === 'DepartmentYearPlan'){
                 this.rowDepartAnnPlanDettype=true;
-            }else if(data === '显示C'){
+            }else if(dataType === 'CompanyYearPlanCollect'){
                 this.rowComPanDetaitype=true;
-            } else if(data === '显示D'){
+            } else if(dataType === 'DepartmentMonthPlan'){
                 this.rowDepartMonPlanDettype=true;
-            } else if(data === '显示E'){
+            } else if(dataType === 'TemporaryMission'){
                 this.rowTEMTasktype=true;
-            } else if(data === '显示F'){
+                this.rowTEMTaskDataObj = dataContent.selectData[0];
+                console.log(this.rowTEMTaskDataObj);
+            } else if(dataType === 'FormPost'){
                 this.rowEACHPerEachJobDettype=true;
-            } else if(data === '显示G'){
+            } else if(dataType === 'TaskReport'){
                 this.rowEachPerEachTableReporttype=true;
-            } else if(data === '显示H'){
+            } else if(dataType === 'TaskSelfEvaluateApplyzp'){
                 this.rowEachPerEachTableAsstype=true;
-            } else if(data === '显示I'){
+            } else if(dataType === 'TaskDelayApply'){
                 this.rowEachPerEachTableDelaytype=true;
-            } else if(data === '显示J'){
+            } else if(dataType === 'TaskCancelApply'){
                 this.rowEachPerEachTableInvalidtype=true;
-            } else if(data === '显示K'){
+            } else if(dataType === 'TaskAdjust'){
                 this.rowEachPerEachTableAdjtype=true;
-            } else if(data === '显示L'){
+            } else if(dataType === 'AssignerChange'){
                 this.rowEachPerEachTablePersontype=true;
-            } else if(data === '显示M'){
+            } else if(dataType === 'TaskEntrust'){
                 this.rowEachPerEachTableEntrusttype=true;
-            } else if(data === '显示N'){
-                this.rowEachPerEachTableLowertype=true;
-            } else if(data === '显示O'){
+            } else if(dataType === 'PersonalTableTask'){
                 this.rowEachPerEachTableDetailtype=true;
-            } else if(data === '显示P'){
+            } else if(dataType === 'StaffAppraisals'){
                 this.rowEmpApprTabDetailtype=true;
-            } else if(data === '显示S'){
+            } else if(dataType === 'StaffAppraisalsCollect'){
                 this.rowEmpApprTabNumDetailtype=true;
             }
         },
@@ -308,7 +306,7 @@ export default {
             finandata.finanrowId="QS_0056";
             finandata.nametitle="待办事项";
             finandata.SelectionData=this.rowWAADataObj.selectData;
-            finandata.FunctionType=data;
+            //finandata.FunctionType=data;
             this.rowUTSDataObj=finandata;
         },
         closeBaseInfo(data){
@@ -361,7 +359,7 @@ export default {
                 let responsevalue = response;
                 if (responsevalue) {
                     let returndata = responsevalue.data;
-                    this.DisplayOrHide("显示K")
+                    this.DisplayOrHide(this.functionType,this.rowWAADataObj);
                 } else {
                     this.$message.success('数据库没有该条数据!');
                 }

@@ -367,6 +367,7 @@
     <WAApage
       :rowWAADataObj="rowWAADataObj"
       :rowWAAtype="rowWAAtype"
+      :functionType="functionType"
       @changeShow="showORhideForWAA"
     />
     <baseInfoDialog
@@ -415,6 +416,7 @@ export default {
   inject: ["reload"],
   data() {
     return {
+      functionType:'',
       detail: false,
       dialogWFMVisible: false,
       rowPStype: false,
@@ -604,7 +606,8 @@ export default {
         finandata.finanrowId = "QS_0056";
         finandata.nametitle = "待办事项";
         finandata.SelectionData = this.multipleSelection;
-        finandata.FunctionType = data;
+        //finandata.FunctionType = data;
+        
         this.rowUTSDataObj = finandata;
       }
     },
@@ -665,7 +668,6 @@ export default {
     },
     //处理
     handle() {
-      // debugger;
       this.detail = true;
       if (this.multipleSelection.length > 1) {
         this.$message.error("只能选择一个");
@@ -673,6 +675,7 @@ export default {
         this.$message.error("请选择一项");
       } else {
         let selectData = this.multipleSelection;
+        this.functionType = this.multipleSelection[0].classId;
         let finandata = {};
         finandata.selectData = selectData;
         finandata.finanrowname = "人员缺省查询方案";

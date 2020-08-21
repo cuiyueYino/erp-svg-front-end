@@ -41,30 +41,39 @@
             ></dynamic-table>
         </el-card>
     <!-- 弹出框 -->
-        <el-dialog title="流程维护" :visible.sync="dialogFormVisible" :close-on-click-modal="false">
+        <el-dialog title="流程维护" :visible.sync="dialogFormVisible" :close-on-click-modal="false" center >
             <el-form :model="form" :rules="rules" ref="form">
-                <el-col :span="22">
-                <el-form-item label="编码：" :label-width="formLabelWidth" prop="fcode">
-                    <el-input v-model="form.fcode" autocomplete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="名称：" :label-width="formLabelWidth" prop="fname">
-                    <el-input v-model="form.fname" autocomplete="off"></el-input>
-                </el-form-item>
-                <!-- <el-form-item label="组织结构" :label-width="formLabelWidth" style="position:relative;">
-                    <el-input v-model="form.structure" autocomplete="off"></el-input>
-                    <img
-                    class="icon-search"
-                    src="../../assets/img/search.svg"
-                    @click="baseInputTable('用户','组织结构查询')"
-                    />
-                </el-form-item> -->
-                <el-form-item label="子流程：" :label-width="formLabelWidth"> 
-                    <el-checkbox v-model="checked"></el-checkbox>
-                </el-form-item>
-                <el-form-item label="描述：" :label-width="formLabelWidth"  prop="fremark">
-                    <el-input maxlength="500" show-word-limit autosize type="textarea" v-model="form.fremark"></el-input>
-                </el-form-item>
-                </el-col>
+                <el-row :gutter="24">
+                    <el-col :span="12">
+                        <el-form-item label="编码：" :label-width="formLabelWidth" prop="fcode">
+                            <el-input v-model="form.fcode" autocomplete="off" size="small"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                         <el-form-item label="名称：" :label-width="formLabelWidth" prop="fname">
+                            <el-input v-model="form.fname" autocomplete="off" size="small"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                         <el-form-item label="子流程：" :label-width="formLabelWidth"> 
+                            <el-checkbox v-model="checked"></el-checkbox>
+                        </el-form-item>
+                    </el-col>
+                    <!-- <el-form-item label="组织结构" :label-width="formLabelWidth" style="position:relative;">
+                        <el-input v-model="form.structure" autocomplete="off"></el-input>
+                        <img
+                        class="icon-search"
+                        src="../../assets/img/search.svg"
+                        @click="baseInputTable('用户','组织结构查询')"
+                        />
+                    </el-form-item> -->
+                    <el-col :span="22">
+                         <el-form-item label="描述：" :label-width="formLabelWidth"  prop="fremark">
+                            <el-input maxlength="500" show-word-limit autosize type="textarea" v-model="form.fremark"></el-input>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                
             </el-form>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="closeDialog('form')">取 消</el-button>
