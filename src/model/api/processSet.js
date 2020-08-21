@@ -72,7 +72,7 @@ const processSet = {
         return httpReqest.post('/api/wfInterfaces/workFlow/unhandledTask', params);
     },
     // 获取待办事项的popForm表单数据
-    getunhandledTaskForm(params){
+    getTemporaryMissionDetail(params){
         var valueS='?';
         for(var item in params){
             valueS+=item+"="+params[item]+"&";
@@ -80,7 +80,7 @@ const processSet = {
         if(valueS.slice(valueS.length-1,valueS.length) ==="&"){
             valueS=valueS.slice(0,valueS.length-1);
         }
-        return httpReqest.get('/api/scha/taskStructure/init'+valueS);
+        return httpReqest.get('/api/scha/temporaryMission/getTemporaryMissionVO'+valueS);
     },
      //获取处理表单详情数据
      getunhandledTaskFormDetail(params){

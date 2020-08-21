@@ -196,12 +196,12 @@ export default {
     };
   },
   created() {
-    this.$api.processSet.getunhandledTaskForm({
-        id: finandata[0].foid,
-      })
-      .then((response) => {
-        console.log(response);
-      });
+    // this.$api.processSet.getunhandledTaskForm({
+    //     id: finandata[0].foid,
+    //   })
+    //   .then((response) => {
+    //     console.log(response);
+    //   });
   },
   methods: {
     handleClick() {},
