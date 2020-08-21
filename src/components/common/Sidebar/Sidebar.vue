@@ -1,23 +1,26 @@
 <template>
     <div class="sidebar">
-        <ElAutoMenu :onRoutes="onRoutes" :collapse="collapse" />
+        <ElAutoMenu :navselected="navselected" :onRoutes="onRoutes" :collapse="collapse" />
     </div>
 </template>
 <script>
 import ElAutoMenu from './el-auto-menu';
 export default {
     inject: ['bus'],
-    data() {
-        return {
-            collapse: false
-        };
-    },
-    components: {
-        ElAutoMenu
-    },
-    computed: {
-        onRoutes() {
-            return this.$route.path.replace('/', '');
+data() {
+		return {
+			collapse: false
+		};
+	},
+	props: {
+		navselected: String
+	},
+	components: {
+		ElAutoMenu
+	},
+	computed: {
+		onRoutes() {
+			return this.$route.path.replace('/', '');
         }
     },
     created() {

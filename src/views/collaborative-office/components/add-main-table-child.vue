@@ -212,7 +212,7 @@
 			</el-dialog>
 		</div>
 		<div v-if="showFigForm">
-			<formAndTable dis="2" showAdd="1" :form-data="conData">
+			<formAndTable :files="files" dis="2" showAdd="1" :form-data="conData">
 				<el-row style="text-align: right;margin-bottom: 10px;">
 					<el-button icon="el-icon-arrow-left" size="mini" type="danger" plain @click="showFigForm = false">返回</el-button>
 				</el-row>
@@ -241,6 +241,7 @@
 		},
 		data() {
 			return {
+				files :[],
 				//子表类型
 				showType: false,
 				//子表类型

@@ -1,5 +1,5 @@
 <template>
-	<el-menu class="sidebar-el-menu" :collapse="collapse" background-color="#fff" text-color="#000" active-text-color="#2d72c9" unique-opened router>
+	<el-menu :default-active="nowUrl" :default-openeds="urlShow" class="sidebar-el-menu" :collapse="collapse" background-color="#fff" text-color="#000" active-text-color="#2d72c9" unique-opened router>
 		<el-auto-menu-item v-for="(menuItem,index) in innerData" :key="index" :menu-item-data="menuItem" :isOa="isOa"></el-auto-menu-item>
 	</el-menu>
 </template>
@@ -10,40 +10,32 @@
 		components: {
 			ElAutoMenuItem,
 		},
+		props: {
+			collapse: Boolean,
+			navselected: String
+		},
 		data() {
 			return {
-				innerData: [],
 				isOa: false,
+				innerData: [],
+				nowUrl: "",
+				urlShow: ['A_Menu']
 			};
 		},
 		created() {
-			this.getCon()
-		},
-		methods: {
-			getCon() {
-				this.$nextTick(() => {
-					if(sessionStorage.getItem("oaMenu") == "true") {
-						this.isOa = true
-						this.innerData = new ITEM().ITEMoa;
-					} else {
-						this.innerData = JSON.parse(sessionStorage.getItem("menuList"));
-					}
-				})
+			if(sessionStorage.getItem("oaMenu") == "true") {
+				this.isOa = true
+				this.innerData = new ITEM().ITEMoa;
+			} else {
+				this.innerData = JSON.parse(sessionStorage.getItem("menuList"));
 			}
 		},
 		watch: {
-			$route(to, from) {
-				if(to.path == "/") {
-					this.getCon()
-					window.location.reload()
-				} else if(to.path == "/oaCompanyHome") {
-					sessionStorage.setItem("oaMenu", true);
-					this.getCon()
-				}
+			navselected(newVal, oldVal) {
+				this.$nextTick(() => {
+					this.nowUrl = newVal
+				})
 			}
-		},
-		props: {
-			collapse: Boolean
 		}
-	};
+	}
 </script>

@@ -17,7 +17,7 @@
 					</el-select>
 				</el-col>
 			</el-row>
-			<formAndTable dis="1" showAdd="2" ref="child" :form-data="conData"></formAndTable>
+			<formAndTable :files="context.files" dis="1" showAdd="2" ref="child" :form-data="conData"></formAndTable>
 		</el-card>
 	</div>
 </template>
