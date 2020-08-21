@@ -215,7 +215,7 @@
               />
             </el-form-item>
             <el-form-item
-              label="组员11："
+              label="组员："
               :label-width="formLabelWidth"
               prop="staffRelUsers"
             >
