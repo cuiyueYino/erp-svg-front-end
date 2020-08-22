@@ -1,6 +1,6 @@
 <template>
 	<div class="login-wrap">
-		<iframe src="http://localhost:6013/login" style="width:100%;height:764px;border:0px;padding:0px;display:none" class="taskStructure" ref="iframe"></iframe>
+		<iframe src="http://192.168.85.96:8092/login" style="width:100%;height:764px;border:0px;padding:0px;display:none" class="taskStructure" ref="iframe"></iframe>
 		<div class="ms-login">
 			<div class="ms-title01"><img src="../../assets/img/logo-bg.png" height="45" width="360" /></div>
 			<div class="ms-content01">
@@ -55,6 +55,7 @@
 		},
 		methods: {
 			handleMessage(event) {
+				debugger;
 				const data = event.data
 				switch(data.cmd) {
 					case 'getHtmlData':
@@ -91,6 +92,7 @@
 							localStorage.setItem('ms_tokenId', val.data.access_token);
 							//跳转门户
 							sessionStorage.setItem("oaMenu", true);
+							debugger;
 							// 向html的login方法反动数据 	
 							this.iframeWin.postMessage({
 								cmd: 'sendLoginData',
@@ -99,7 +101,7 @@
 									'pass':  this.param.password
 								}
 							}, '*');
-							this.handleMessage(this.eventObject);
+							//this.handleMessage(this.eventObject);
 						})
 
 					} else {

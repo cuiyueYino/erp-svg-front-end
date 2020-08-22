@@ -245,7 +245,7 @@ export default {
        
     },
     methods: {
-    //获取临时任务派发详情·
+    //获取临时任务派发详情
     getTemporaryMission(data) {
       this.$api.processSet.getTemporaryMissionDetail({
         id: data.id,
@@ -260,8 +260,6 @@ export default {
               tableDataObj["optionValue"] = res.data.data.optionValue;
               tableDataObj["unit"] = res.data.data.unit;
               this.tableData.push(tableDataObj);
-              console.log(11111111111);
-              console.log(this.tableData);
               let taskStateParams = res.data.data.taskState;
               let taskTypeParams = res.data.data.taskType;
               let taskLeveParams = res.data.data.taskLevel;

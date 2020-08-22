@@ -71,7 +71,7 @@ const processSet = {
     getunhandledTask(params){
         return httpReqest.post('/api/wfInterfaces/workFlow/unhandledTask', params);
     },
-    // 获取待办事项的popForm表单数据
+    // 获取待办事项的popForm表单数据(临时任务派发)
     getTemporaryMissionDetail(params){
         var valueS='?';
         for(var item in params){
@@ -81,6 +81,17 @@ const processSet = {
             valueS=valueS.slice(0,valueS.length-1);
         }
         return httpReqest.get('/api/scha/temporaryMission/getTemporaryMissionVO'+valueS);
+    },
+    // 获取待办事项的popForm表单数据(公司年度计划汇总)
+    getAnnualPlanDetail(params){
+        var valueS='?';
+        for(var item in params){
+            valueS+=item+"="+params[item]+"&";
+        }
+        if(valueS.slice(valueS.length-1,valueS.length) ==="&"){
+            valueS=valueS.slice(0,valueS.length-1);
+        }
+        return httpReqest.get('/api/scha/yearPlanSummary/findInfoById'+valueS);
     },
      //获取处理表单详情数据
      getunhandledTaskFormDetail(params){
