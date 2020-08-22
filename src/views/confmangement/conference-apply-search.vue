@@ -127,6 +127,10 @@
                   default:
                     break;
                 }
+                // 不公开
+                if(tableData[i].fovert == 1){
+                  tableData[i].fphone = tableData[i].fphone.substring(0,3)+"********";
+                }
               }
               this.tableData = tableData;
             }

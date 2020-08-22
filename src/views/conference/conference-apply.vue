@@ -225,10 +225,15 @@
       },
       // 获取列表数据
       getTableData(params) {
+        let fcreator = localStorage.getItem('ms_userId');
+        if(fcreator === "admin" || fcreator === "admin01" || fcreator === "admin02"){
+          fcreator = null;
+        }
         let data = {
           [params]: this.form.selectVal,
           page: this.pageNum,
           size: this.pageSize,
+          fcreator: fcreator,
         };
         this.$api.confMangement.getApplyList(data).then(
           (res) => {

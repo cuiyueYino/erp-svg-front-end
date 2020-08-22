@@ -228,7 +228,7 @@ export default {
         if (this.type != "4") {
           this.$refs.tree.setCheckedNodes([data]);
           if (this.$refs.tree.getCheckedNodes(true).length > 1) {
-            this.goOut("清单选");
+            this.goOut("请单选");
           }
         }
       }
