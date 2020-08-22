@@ -17,7 +17,7 @@
                             <el-button type="success" icon="el-icon-share" plain @click="baseInputTable('转发')">转发</el-button>
                             <el-button type="danger" icon="el-icon-s-order" plain @click="baseInputTable('委托')">委托</el-button>
                             <el-button type="danger" icon="el-icon-view" plain @click="basefollow()">关注</el-button>
-                            <el-button type="success" icon="el-icon-success" plain @click="effectOrDisableMsg">提交</el-button>
+                            <el-button type="success" icon="el-icon-success" plain @click="effectOrDisableMsg">提交11111</el-button>
                         </el-col>
                     </el-row>
                     <el-row :gutter="24">
@@ -257,7 +257,33 @@ export default {
         },
         //提交按钮点击事件
         effectOrDisableMsg(){
-
+            let paramsData = {};
+            paramsData["currUserId"] = localStorage.getItem("ms_userId");
+            paramsData["mactivityOid"] = this.rowWAADataObj.selectData[0].factivity;
+            paramsData["processCode"] = "schedule";
+            paramsData["srcOid"] = this.rowWAADataObj.selectData[0].fsrcoId;
+            paramsData["subject"] = this.rowWAADataObj.selectData[0].fsubject;
+            let twfbizmailReqVoObj = {};
+            twfbizmailReqVoObj["foid"] = this.rowWAADataObj.selectData[0].foid;
+            paramsData["twfbizmailReqVo"] = twfbizmailReqVoObj;    
+            console.log(333333333333333333333);
+            
+            let twfauditObj = {};
+            twfauditObj["fresult"] = 1;
+            twfauditObj["fopinion"] = this.formdata.remark;
+            paramsData["twfaudit"] = twfauditObj;
+            console.log(JSON.stringify(paramsData));
+            this.$api.processSet.addWfsubmit(paramsData).then(res=>{
+                if( res.data.code == 0 ){
+                    this.$message.success('保存成功');
+                    //sessionStorage.setItem("eidtMsg",null);
+                }else{
+                    this.$message.error("保存失败,请填写完整信息");
+                }
+                
+            },error=>{
+                console.log(error)
+            });
         },
         showprocessData(){},
         //判断
@@ -344,7 +370,8 @@ export default {
             }
         },
     },
-    mounted() {
+    mounted() {  
+        
     },
     watch:{
         rowWAAtype(oldVal,newVal){
@@ -418,3 +445,4 @@ export default {
     padding: 10px 20px;
 }
 </style>
+// wfsubmit

@@ -106,6 +106,10 @@ const processSet = {
     setencyclic(params){
         return httpReqest.post('/api/wfInterfaces/workFlow/encyclic', params);
     },
+    //待办事项-提交
+    addWfsubmit(params){
+        return httpReqest.post('/api/wfInterfaces/workFlow/wfsubmit', params);
+    },
     //委托
     transmit(params){
         return httpReqest.post('/api/wfInterfaces/workFlow/transmit', params);
