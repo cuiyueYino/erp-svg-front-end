@@ -136,7 +136,7 @@
                     </el-tabs>
              </el-card>
         </el-main>
-    <el-aside width="30%">
+    <el-aside  width="530px">
         <div class="img1 website"  @click="toWebsite">
             <div  >
                 <img src="../../assets/img/oa2.png">
@@ -495,7 +495,7 @@ export default {
       margin-bottom: 20px;
       .el-divider--horizontal{
         margin:11px 0 0 0;
-        width: 63vw;
+        width: 55vw;
       }
       .el-tab-pane{
         display: flex;
@@ -537,7 +537,7 @@ export default {
     .img1{
       background-image: url("../../assets/img/oa1.png");
         max-width: 520px;
-        height: 270px;
+        height: 20vh;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -558,7 +558,7 @@ export default {
     .img2{
       background-image: url("../../assets/img/oa3.png");
         max-width: 520px;
-        height: 270px;
+        height: 20vh;
         margin: 15px 0;
         object-fit: cover;
         object-position: center top;
