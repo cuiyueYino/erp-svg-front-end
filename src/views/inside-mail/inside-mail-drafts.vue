@@ -138,8 +138,8 @@ export default {
         getDraftMail(){
             //表格查询基础参数
             let reqParam={
-                // owner: this.userId,
-                owner: 'BFPID000000LSN000E',
+                owner: this.userId,
+                // owner: 'BFPID000000LSN000E',
                 page: this.pageNum,
                 size: this.pageSize
             };
@@ -160,7 +160,7 @@ export default {
                                 this.tableData[i].isRead = "已读";
                                 break;
                                 default :
-                                break;              
+                                break;
                             }
                         }
                     };
@@ -230,7 +230,7 @@ export default {
                 };
                 }
             )
-               
+
         },
 
         /**
@@ -269,7 +269,7 @@ export default {
                 if(this.dataBack(res,"删除成功")){
                     // 刷新表格
                     this.getDraftMail();
-                };  
+                };
                 },
             );
         },

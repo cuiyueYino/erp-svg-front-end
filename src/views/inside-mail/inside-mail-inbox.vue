@@ -62,7 +62,7 @@
         v-loading="false"
         @current-change="onCurrentChange"
         @selection-change = "selection"
-        element-loading-text="加载中"      
+        element-loading-text="加载中"
         @Row-Click="clickRow">
       </dynamic-table>
 
@@ -76,7 +76,7 @@ export default {
   data() {
     return {
       name: "insideMailInbox",
-      
+
       userName: localStorage.getItem('ms_username'),
       userId: localStorage.getItem('ms_userId'),
       //搜索内容
@@ -141,8 +141,8 @@ export default {
     getReceiveMail(){
       //表格查询基础参数
       let reqParam={
-        // owner: this.userId,
-        owner: 'BFPID000000LSN000E',
+        owner: this.userId,
+        // owner: 'BFPID000000LSN000E',
         page: this.pageNum,
         size: this.pageSize
       };
@@ -163,7 +163,7 @@ export default {
                   this.tableData[i].isRead = "已读";
                   break;
                 default :
-                  break;              
+                  break;
               }
             }
             this.$api.insideMail.unReadCountById(reqParam).then(
@@ -174,7 +174,7 @@ export default {
           };
         }
       );
-      
+
     },
 
     /**
@@ -188,8 +188,8 @@ export default {
     /**
      * 未读邮件
      */
-    getUnRead(){   
-      //清空共享参数，拼装需要的参数  
+    getUnRead(){
+      //清空共享参数，拼装需要的参数
       this.emptyParam();
       this.params.isRead= 0;
       this.pageNum = 1;
@@ -231,10 +231,10 @@ export default {
      */
     selection(val) {
       this.multipleSelection = val;
-    },   
+    },
 
     /**
-     *  已读 
+     *  已读
      */
     setRead(){
       if(this.multipleSelection.length==0){
@@ -254,7 +254,7 @@ export default {
           if(this.dataBack(res,"修改成功")){
             // 刷新表格
             this.getReceiveMail();
-          };  
+          };
         },
       );
       console.log(reqParam);
@@ -262,12 +262,12 @@ export default {
 
     /**
      * 全部已读
-     */ 
+     */
     setReadAll(){
-      
+
       let reqParam={
-        // owner: this.userId,
-        owner: 'BFPID000000LSN000E'
+        owner: this.userId,
+        // owner: 'BFPID000000LSN000E'
       }
       //返回成功 刷新表格
       this.$api.insideMail.setReadAll(reqParam).then(
@@ -369,7 +369,7 @@ export default {
       }
       this.$parent.$parent.$parent.toDetail(this.multipleSelection[0].id,"inbox");
     },
-    
+
     /**
      * 删除
      */
@@ -391,7 +391,7 @@ export default {
           if(this.dataBack(res,"删除成功")){
             // 刷新表格
             this.getReceiveMail();
-          };  
+          };
         },
       );
     },
@@ -399,7 +399,7 @@ export default {
     /**
      * 清空共享参数列表
      */
-    emptyParam(){
+      emptyParam(){
       for(let key of Object.keys(this.params)){
          delete this.params[key];
       }
@@ -442,12 +442,12 @@ export default {
       }
     },
   },
-    
-      
+
+
 }
 </script>
 <style lang="scss" scoped>
-/deep/ .el-table__fixed-right::before {
-background-color: revert;
+/deep/ .el-table__fixed-right::before{
+background-color:revert;
 }
 </style>

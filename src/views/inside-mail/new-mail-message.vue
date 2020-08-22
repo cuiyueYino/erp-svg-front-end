@@ -7,8 +7,8 @@
                     <el-button type="success" icon="el-icon-coin" plain @click="saveCDD">暂存</el-button>
                 </el-col>
         </el-row>
-        <el-form 
-            :model="formData" 
+        <el-form
+            :model="formData"
             label-width="100px"
             class="dataForm"
             size="mini"
@@ -58,7 +58,7 @@
                             ></quill-editor>
                         </el-tab-pane>
                         <el-tab-pane label="附件" name="second">
-                            <enclosurefile :rowDataFileObj="rowDataFileObj"  @changeShow="showFileData"/> 
+                            <enclosurefile :rowDataFileObj="rowDataFileObj"  @changeShow="showFileData"/>
                         </el-tab-pane>
                     </el-tabs>
                 </el-col>
@@ -87,14 +87,14 @@
                 :destroy-on-close="true"
                 :data="treeData"
                 ref="tree"
-                
+
                 show-checkbox
                 node-key="foid"
                 :default-checked-keys="defautChecked"
                 :props="defaultProps">
                 </el-tree>
             </div>
-           
+
         </el-dialog>
 
 
@@ -192,24 +192,24 @@ export default {
         perData:{
             type: Object
         }
-    }, 
+    },
     methods:{
         //滑块切换
-        // handleClick(tab){
-        //     var tabsname =tab.paneName;
-        //     if(tabsname){
-        //         if(tabsname ==="first"){
-        //             //
-        //         }else if(tabsname ==="second"){
-        //             //
-        //             this.financingCVMListtype=true;
-        //         }else{
-        //             //附件列表
-        //             this.financingEFListtype=true;
-                    
-        //         }
-        //     }
-        // },
+        handleClick(tab){
+            var tabsname =tab.paneName;
+            if(tabsname){
+                if(tabsname ==="first"){
+                    //
+                }else if(tabsname ==="second"){
+                    //
+                    this.financingCVMListtype=true;
+                }else{
+                    //附件列表
+                    this.financingEFListtype=true;
+
+                }
+            }
+        },
         //附件
         showFileData(data){
             this.FiletableData=data;
@@ -223,10 +223,10 @@ export default {
                 id: this.formData.id,
                 subject:this.formData.subject,
                 content:this.content,
-                // sender: this.sender,
-                // senderName: this.senderName,
-                sender:'BFPID000000LSN000E',
-                senderName:'聂立虹',
+                sender: this.sender,
+                senderName: this.senderName,
+                // sender:'BFPID000000LSN000E',
+                // senderName:'聂立虹',
                 status:2,
                 addresseeList:this.formData.addresseeList,
                 duplicateList:this.formData.duplicateList
@@ -246,10 +246,10 @@ export default {
                 id: this.formData.id,
                 subject:this.formData.subject,
                 content:this.content,
-                // sender: this.sender,
-                // senderName: this.senderName,
-                sender:'BFPID000000LSN000E',
-                senderName:'聂立虹',
+                sender: this.sender,
+                senderName: this.senderName,
+                // sender:'BFPID000000LSN000E',
+                // senderName:'聂立虹',
                 status:1,
                 addresseeList:this.formData.addresseeList,
                 duplicateList:this.formData.duplicateList
@@ -331,7 +331,7 @@ export default {
         /**
          * 失去焦点事件
          */
-        onEditorBlur() {}, 
+        onEditorBlur() {},
         /**
          * 获得焦点事件
          */
@@ -397,7 +397,7 @@ export default {
 
             }else if(this.treeTpye=="duplicate"){
                 let staffList = this.$refs.tree.getCheckedNodes(true)
-               
+
                 let nameString= '';
                 let checkId=[];
                 for(let i=0;i<staffList.length;i++){

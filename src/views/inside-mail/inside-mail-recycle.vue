@@ -144,8 +144,8 @@ export default {
         getRecycleMail(){
             //表格查询基础参数
             let reqParam={
-                // owner: this.userId,
-                owner: 'BFPID000000LSN000E',
+                owner: this.userId,
+                // owner: 'BFPID000000LSN000E',
                 page: this.pageNum,
                 size: this.pageSize
             };
@@ -166,7 +166,7 @@ export default {
                                 this.tableData[i].isRead = "已读";
                                 break;
                                 default :
-                                break;              
+                                break;
                             };
                             switch(this.tableData[i].status){
                                 case 1:
@@ -179,10 +179,10 @@ export default {
                                 this.tableData[i].status = "收件箱";
                                 break;
                                 default :
-                                break;              
+                                break;
                             }
                         }
-                    };  
+                    };
                 }
             );
         },
@@ -246,7 +246,7 @@ export default {
                 if(this.dataBack(res,"还原成功")){
                     // 刷新表格
                     this.getRecycleMail();
-                };  
+                };
                 },
             );
         },
@@ -295,7 +295,7 @@ export default {
                 this.$message({
                     type: 'info',
                     message: '已取消删除'
-                });          
+                });
             });
         },
         clickRow(val) {
