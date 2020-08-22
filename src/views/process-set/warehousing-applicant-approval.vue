@@ -17,7 +17,7 @@
                             <el-button type="success" icon="el-icon-share" plain @click="baseInputTable('转发')">转发</el-button>
                             <el-button type="danger" icon="el-icon-s-order" plain @click="baseInputTable('委托')">委托</el-button>
                             <el-button type="danger" icon="el-icon-view" plain @click="basefollow()">关注</el-button>
-                            <el-button type="success" icon="el-icon-success" plain @click="effectOrDisableMsg">提交11111</el-button>
+                            <el-button type="success" icon="el-icon-success" plain @click="effectOrDisableMsg">提交</el-button>
                         </el-col>
                     </el-row>
                     <el-row :gutter="24">
