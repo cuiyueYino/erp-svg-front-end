@@ -59,6 +59,13 @@
 				this.bus.$emit('collapse', this.collapse);
 			}
 		},
+		created(){
+			if(this.$route.name == "oaCompanyHome" || this.$route.name == "oaPersonalHome"){
+				this.showFig = true
+			}else{
+				this.showFig = false
+			}
+		},
 		methods: {
 			toOa() {
 				sessionStorage.setItem("oaMenu", false);
@@ -133,6 +140,10 @@
 	};
 </script>
 <style scoped lang="scss">
+	.el-dropdown-menu__item--divided {
+		margin-top: 0px!important ;
+	}
+	
 	.header {
 		position: relative;
 		box-sizing: border-box;
