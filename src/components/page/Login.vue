@@ -17,7 +17,7 @@
 						</el-input>
 					</el-form-item>
 					<div class="login-btn">
-						<el-button type="primary" @click="submitForm()">登录</el-button>
+						<el-button type="primary" @click="submitForm()">登录</el-button>   
 					</div>
 				</el-form>
 			</div>
@@ -55,7 +55,6 @@
 		},
 		methods: {
 			handleMessage(event) {
-				debugger;
 				const data = event.data
 				switch(data.cmd) {
 					case 'getHtmlData':
@@ -65,13 +64,14 @@
 			},
 			submitForm() {
 				//清空本地的缓存
-				localStorage.removeItem('ms_tokenId');
+				localStorage.clear()
 				//校验用户名和密码
 				this.$refs.login.validate((valid) => {
 					if(valid) {
 						//获取token
 						this.$api.common.login(this.param).then(val => {
 							this.$api.common.getUserInfo().then(data => {
+								debugger;
 								//用户ID
 								localStorage.setItem('ms_userId', data.data.principal.accountId);
 								//用户名称
@@ -85,23 +85,25 @@
 								//公司名称
 								localStorage.setItem('ms_companyName', data.data.principal.companyName);
 								//获取工作事项相关参数
-								this.getContext()
+								this.getContext();
+								// 向html的login方法发送数据
+							this.iframeWin.postMessage({
+								cmd: 'sendLoginData',
+								params:  {                        
+									'username': localStorage.getItem("ms_username"),
+									'userId':  localStorage.getItem("ms_userId"),
+									'deptmentId':localStorage.getItem("ms_userDepartId"),
+									'companyId':localStorage.getItem("ms_companyId"),
+									'accessToken':localStorage.getItem("ms_tokenId")
+								}
+							}, '*');
+							// this.handleMessage(this.eventObject);
 								this.$router.push("/erp")
 							})
 							//存入本地缓存,登陆后的每次接口调用都要带着token
 							localStorage.setItem('ms_tokenId', val.data.access_token);
 							//跳转门户
 							sessionStorage.setItem("oaMenu", true);
-							debugger;
-							// 向html的login方法反动数据 	
-							this.iframeWin.postMessage({
-								cmd: 'sendLoginData',
-								params:  {                        
-									'username': this.param.username,
-									'pass':  this.param.password
-								}
-							}, '*');
-							//this.handleMessage(this.eventObject);
 						})
 
 					} else {
