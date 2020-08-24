@@ -65,7 +65,7 @@
 			},
 			submitForm() {
 				//清空本地的缓存
-				localStorage.clear()
+				localStorage.removeItem('ms_tokenId');
 				//校验用户名和密码
 				this.$refs.login.validate((valid) => {
 					if(valid) {

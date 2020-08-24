@@ -54,7 +54,10 @@ export const constantRouterMap = [{
 			{
 				path: 'index',
 				name: 'index',
-				component: index
+				component: index,
+				meta: {
+					title: '首页'
+				}
 			},
 			{
 				path: 'svgIndex',
