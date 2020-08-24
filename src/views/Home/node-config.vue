@@ -367,13 +367,20 @@ export default {
                 "name":e.baseInputServe,
                 "expression":e.baseTextarea
             }
+            this.data.isSaveFlag=true;
         },
          //审核活动保存
         saveJoinData(e,e1,e2,e3,e4,e5){
             console.log(e,e1,e2,e3,e4,e5);
-             if( e.displayName =='' || e.work =='' || e.checkedCities.length ==0  || e4.length==0 ){
+             if( e.name =='' || e.work =='' || e.checkedCities.length ==0  || e4.length==0 ){
                 this.$message.error("保存失败,请填写必填信息");
                 return;
+            }
+            if(e.wfAuditType=='并行会签' || e.wfAuditType=='串行会签'){
+                if(!e1 || e1.length < 2){
+                    this.$message.error("保存失败,并行会签和串行会签参与者必须多人!");
+                    return;
+                }
             }
             this.data.oid = e.oid;
             this.data.displayName = e.name;

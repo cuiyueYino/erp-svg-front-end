@@ -84,6 +84,7 @@ export default {
                         if (item.data.oid === node.to.data.oid) {
                             node.to = {
                                 ...item,
+                                key:item.oid,
                                 target: node.to.target,
                                 point: this.computedLinkPoint(item.options, node.to.target)
                             };

@@ -265,7 +265,7 @@ export default {
             handler (obj) {
                 if(obj.name === "Fork"){console.log( obj)
                     if(!obj.oid && (obj.isSaveFlag==undefined)){
-                         this.formData = {}
+                        this.formData = {}
                         this.formData.name = obj.displayName
                     }else{
                         this.editData = obj;
