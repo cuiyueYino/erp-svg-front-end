@@ -1,6 +1,6 @@
 <template>
 	<div class="login-wrap">
-		<iframe src="http://192.168.85.96:8092/login" style="width:100%;height:764px;border:0px;padding:0px;display:none" class="taskStructure" ref="iframe"></iframe>
+		<iframe src="http://192.168.85.96:6013/login" style="width:100%;height:764px;border:0px;padding:0px;display:none" class="taskStructure" ref="iframe"></iframe>
 		<div class="ms-login">
 			<div class="ms-title01"><img src="../../assets/img/logo-bg.png" height="45" width="360" /></div>
 			<div class="ms-content01">
@@ -64,14 +64,13 @@
 			},
 			submitForm() {
 				//清空本地的缓存
-				localStorage.removeItem('ms_tokenId');
+				localStorage.clear()
 				//校验用户名和密码
 				this.$refs.login.validate((valid) => {
 					if(valid) {
 						//获取token
 						this.$api.common.login(this.param).then(val => {
 							this.$api.common.getUserInfo().then(data => {
-								debugger;
 								//用户ID
 								localStorage.setItem('ms_userId', data.data.principal.accountId);
 								//用户名称
@@ -86,6 +85,7 @@
 								localStorage.setItem('ms_companyName', data.data.principal.companyName);
 								//获取工作事项相关参数
 								this.getContext();
+								debugger;
 								// 向html的login方法发送数据
 							this.iframeWin.postMessage({
 								cmd: 'sendLoginData',
