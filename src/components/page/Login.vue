@@ -85,7 +85,6 @@
 								localStorage.setItem('ms_companyName', data.data.principal.companyName);
 								//获取工作事项相关参数
 								this.getContext();
-								debugger;
 								// 向html的login方法发送数据
 							this.iframeWin.postMessage({
 								cmd: 'sendLoginData',

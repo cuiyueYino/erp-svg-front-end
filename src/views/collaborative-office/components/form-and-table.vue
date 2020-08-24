@@ -118,6 +118,9 @@
 			},
 			//文件下载
 			downFiles(file) {
+				if(typeof(file.id) == "undefined"){
+					return
+				}
 				this.popup('是否下载文件<' + file.name + '>?').then(res => {
 					axios.interceptors.request.use(
 						config => {

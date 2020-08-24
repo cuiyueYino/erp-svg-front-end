@@ -10,7 +10,7 @@
 <template>
 	<div>
 		<div v-if="showFig == 'organization' " class="treeDivClass">
-			<el-tree show-checkbox ref="treeDialogVisible" highlight-current :data="dataCon.context" :props="defaultProps" node-key="foid" accordion></el-tree>
+			<el-tree :default-checked-keys="dataCon.echo" :default-expanded-keys="dataCon.echo" show-checkbox ref="treeDialogVisible" highlight-current :data="dataCon.context" :props="defaultProps" node-key="foid" accordion></el-tree>
 		</div>
 		<div v-if="showFig == 'personnel'" style="margin-bottom: 40px;">
 			<el-form label-width="80px" :inline="true" ref="formInlineTName" :model="formInlineTName" class="demo-form-inline">
@@ -181,7 +181,6 @@
 						url = "positionmnt/findPositionList"
 						con = this.formInlineTNameJob
 						this.$api.collaborativeOffice.findConList(url, con).then(data => {
-							console.log(data)
 							this.dataCon.context = data.data.data.rows
 						})
 						break;
