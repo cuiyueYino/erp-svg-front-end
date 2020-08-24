@@ -302,6 +302,7 @@
       },
       // 新增
       add() {
+        this.foid = "";
         this.title = '新建会议申请';
         this.dialogVisible = true;
       },
@@ -402,6 +403,7 @@
       },
       // 关闭模态框
       closeApplyDialog(data) {
+        this.foid = "";
         this.dialogVisible = false;
         this.getTableData("");
       },

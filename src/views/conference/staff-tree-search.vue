@@ -56,62 +56,97 @@
 </template>
 
 <script>
-export default {
-  name: "staffTreeSearch",
-  components: {},
-  props: {
-    type: {
-      type: String,
-      default: "",
-    },
-    fcompanyid: {
-      type: String,
-      default: "_DefaultCompanyOId",
-    },
-    // 当前配置节点类型
-    title: {
-      type: String,
-      default: "",
-    },
-    // 配置对话框显示标识
-    visible: {
-      type: Boolean,
-      default: false,
-    },
-  },
-  data() {
-    return {
-      form: {
-        selectVal: "",
+  export default {
+    name: "staffTreeSearch",
+    components: {},
+    props: {
+      type: {
+        type: String,
+        default: "",
       },
-      // 关闭对话框配置
-      closeConfig: false,
-      // 对话框显示标识
-      dialogVisible: this.visible,
-      treeData: [],
-      fromData: {
-        id: this.fcompanyid
+      fcompanyid: {
+        type: String,
+        default: "_DefaultCompanyOId",
       },
-      strictly: false,
-      defaultProps: {
-        label: "fname",
-        children: "children",
+      // 当前配置节点类型
+      title: {
+        type: String,
+        default: "",
       },
-    };
-  },
-  computed: {},
-  watch: {
-    // 对话框显示 自动聚焦name输入框
-    visible(bool) {
-      this.dialogVisible = bool;
-      this.treeData = [];
-      if (this.title == "用户查询") {
-        this.strictly = false;
-        let staffTree = JSON.parse(localStorage.getItem('conf_staffTree'));
-        if(staffTree != null){
+      // 配置对话框显示标识
+      visible: {
+        type: Boolean,
+        default: false,
+      },
+    },
+    data() {
+      return {
+        form: {
+          selectVal: "",
+        },
+        // 关闭对话框配置
+        closeConfig: false,
+        // 对话框显示标识
+        dialogVisible: this.visible,
+        treeData: [],
+        fromData: {
+          id: this.fcompanyid
+        },
+        strictly: false,
+        defaultProps: {
+          label: "fname",
+          children: "children",
+        },
+      };
+    },
+    computed: {},
+    watch: {
+      // 对话框显示 自动聚焦name输入框
+      visible(bool) {
+        this.dialogVisible = bool;
+        this.treeData = [];
+        if (this.title == "用户查询") {
+          this.strictly = false;
+          let resDataArr = null;
+          let staffTree = JSON.parse(localStorage.getItem('conf_staffTree'));
+          if (staffTree == null) {
+            this.$api.confMangement.getStaffTreeList(this.fromData).then(
+              (res) => {
+                let resData = res.data.data;
+                staffTree = eval("(" + resData + ")");
+              },
+              (error) => {
+                console.log(error);
+              }
+            );
+          }
+          for (let i in staffTree) {
+            // 第一级
+            if (staffTree[i].foid != undefined) {
+              staffTree[i].disabled = true;
+            }
+            // 第二级
+            let company = staffTree[i].children;
+            for (let k in company) {
+              if (company[k].foid != undefined) {
+                company[k].disabled = true;
+              }
+              // 第三级
+              let dept = company[k].children;
+              for (let l in dept) {
+                if (dept[l].foid != undefined) {
+                  dept[l].disabled = true;
+                }
+              }
+            }
+          }
           this.treeData = staffTree;
-        }else{
-          this.$api.confMangement.getStaffTreeList(this.fromData).then(
+        } else if (this.title == "组织机构查询") {
+          this.strictly = true;
+          let fromData = {
+            queryType: "org"
+          };
+          this.$api.confMangement.getOrgunitTree(fromData).then(
             (res) => {
               let resData = res.data.data;
               let resDataArr = eval("(" + resData + ")");
@@ -122,150 +157,133 @@ export default {
             }
           );
         }
-      } else if (this.title == "组织机构查询") {
-        this.strictly = true;
-        let fromData = {
-          orgUnitId: this.fcompanyid,
-          queryType: "org"
-        };
-        this.$api.confMangement.getOrgunitTree(fromData).then(
-          (res) => {
-            let resData = res.data.data;
-            let resDataArr = eval("(" + resData + ")");
-            this.treeData = resDataArr;
-          },
-          (error) => {
-            console.log(error);
-          }
-        );
-      }
+      },
     },
-  },
-  methods: {
-    // 查询
-    searchKey() {
-      if (this.title == "用户查询") {
-        this.fromData.name = this.form.selectVal;
-        this.$api.confMangement.getStaffTreeList(this.fromData).then(
-          (res) => {
-            let resData = res.data.data;
-            let resDataArr = eval("(" + resData + ")");
-            this.treeData = resDataArr;
-          },
-          (error) => {
-            console.log(error);
-          }
-        );
-      } else if (this.title == "组织机构查询") {
-        let fromData = {
-          orgUnitId: this.fcompanyid,
-          queryType: "org"
-        };
-        this.$api.confMangement.getOrgunitTree(fromData).then(
-          (res) => {
-            let resData = res.data.data;
-            let resDataArr = eval("(" + resData + ")");
-            this.treeData = resDataArr;
-          },
-          (error) => {
-            console.log(error);
-          }
-        );
-      }
-    },
-    // 保存
-    saveConfig() {
-      let selectData = null;
-      if (this.title == "用户查询") {
-        selectData = this.$refs.tree.getCheckedNodes(true, true);
-      } else {
-        selectData = this.$refs.tree.getCheckedNodes();
-      }
-      console.log(selectData);
-      if (selectData.length > 0) {
-        if (selectData.length > 1 && this.type != "4") {
-          this.$message.error("只能选择一条数据!");
+    methods: {
+      // 查询
+      searchKey() {
+        if (this.title == "用户查询") {
+          this.fromData.name = this.form.selectVal;
+          this.$api.confMangement.getStaffTreeList(this.fromData).then(
+            (res) => {
+              let resData = res.data.data;
+              let resDataArr = eval("(" + resData + ")");
+              this.treeData = resDataArr;
+            },
+            (error) => {
+              console.log(error);
+            }
+          );
+        } else if (this.title == "组织机构查询") {
+          let fromData = {
+            orgUnitId: this.fcompanyid,
+            queryType: "org"
+          };
+          this.$api.confMangement.getOrgunitTree(fromData).then(
+            (res) => {
+              let resData = res.data.data;
+              let resDataArr = eval("(" + resData + ")");
+              this.treeData = resDataArr;
+            },
+            (error) => {
+              console.log(error);
+            }
+          );
+        }
+      },
+      // 保存
+      saveConfig() {
+        let selectData = null;
+        if (this.title == "用户查询") {
+          selectData = this.$refs.tree.getCheckedNodes(true, true);
         } else {
-          let dialogType = this.title;
-          let typeS = this.type;
-          if (this.title == "用户查询" && this.type != "4") {
-            // 获取员工信息
-            this.$api.confMangement
-              .getStaffInfoById(selectData[0].foid)
-              .then((res) => {
-                if (res.data.code == 0) {
-                  let serchData = {
-                    foid: res.data.data.toid,
-                    fname: res.data.data.tname,
-                    fdeptid: res.data.data.tdepartmentoid,
-                    fdeptname: res.data.data.tdepartmentname,
-                  };
-                  this.$emit("closeDialog", serchData, dialogType, typeS);
-                } else {
-                  this.$message.error(res.data.msg);
-                }
-              }),
-              (error) => {
-                console.log(error);
+          selectData = this.$refs.tree.getCheckedNodes();
+        }
+        console.log(selectData);
+        if (selectData.length > 0) {
+          if (selectData.length > 1 && this.type != "4") {
+            this.$message.error("只能选择一条数据!");
+          } else {
+            let dialogType = this.title;
+            let typeS = this.type;
+            if (this.title == "用户查询" && this.type != "4") {
+              // 获取员工信息
+              this.$api.confMangement
+                .getStaffInfoById(selectData[0].foid)
+                .then((res) => {
+                  if (res.data.code == 0) {
+                    let serchData = {
+                      foid: res.data.data.toid,
+                      fname: res.data.data.tname,
+                      fdeptid: res.data.data.tdepartmentoid,
+                      fdeptname: res.data.data.tdepartmentname,
+                    };
+                    this.$emit("closeDialog", serchData, dialogType, typeS);
+                  } else {
+                    this.$message.error(res.data.msg);
+                  }
+                }),
+                (error) => {
+                  console.log(error);
+                };
+            } else if (this.title == "用户查询" && this.type == "4") {
+              // 查询内部参与人员时不需要获取员工的部门信息,所以直接返回选中的值即可
+              this.$emit("closeDialog", selectData, dialogType, typeS);
+            } else if (this.title == "组织机构查询") {
+              let serchData = {
+                foid: selectData[0].foid,
+                fname: selectData[0].fname,
               };
-          } else if (this.title == "用户查询" && this.type == "4") {
-            // 查询内部参与人员时不需要获取员工的部门信息,所以直接返回选中的值即可
-            this.$emit("closeDialog", selectData, dialogType, typeS);
-          } else if (this.title == "组织机构查询") {
-            let serchData = {
-              foid: selectData[0].foid,
-              fname: selectData[0].fname,
-            };
-            this.$emit("closeDialog", serchData, dialogType, typeS);
+              this.$emit("closeDialog", serchData, dialogType, typeS);
+            }
+          }
+        } else {
+          this.$message.error("请选择一行数据!");
+        }
+      },
+      handleNodeClick(data, checked) {
+        if (checked) {
+          if (this.type != "4") {
+            this.$refs.tree.setCheckedNodes([data]);
+            if (this.$refs.tree.getCheckedNodes(true).length > 1) {
+              this.goOut("请单选");
+            }
           }
         }
-      } else {
-        this.$message.error("请选择一行数据!");
-      }
+      },
+      // 关闭模态框时子组件传值给父组件
+      closeDialog() {
+        let serchData = [];
+        let title = this.title;
+        let typeS = this.type;
+        this.$emit("closeDialog", serchData, title, typeS);
+      },
     },
-    handleNodeClick(data, checked) {
-      if (checked) {
-        if (this.type != "4") {
-          this.$refs.tree.setCheckedNodes([data]);
-          if (this.$refs.tree.getCheckedNodes(true).length > 1) {
-            this.goOut("请单选");
-          }
-        }
-      }
-    },
-    // 关闭模态框时子组件传值给父组件
-    closeDialog() {
-      let serchData = [];
-      let title = this.title;
-      let typeS = this.type;
-      this.$emit("closeDialog", serchData, title, typeS);
-    },
-  },
-};
+  };
 </script>
 <style lang="less" scoped>
-/deep/ .selectVal .el-input__inner {
-  width: 100%;
-}
+  /deep/ .selectVal .el-input__inner {
+    width: 100%;
+  }
 
-/deep/ .el-card__body {
-  padding: 6px !important;
-}
+  /deep/ .el-card__body {
+    padding: 6px !important;
+  }
 
-/deep/ .el-dialog {
-  width: 30% !important;
-}
+  /deep/ .el-dialog {
+    width: 30% !important;
+  }
 
-/deep/ .el-dialog__header {
-  padding: 15px 20px 0px !important;
-}
+  /deep/ .el-dialog__header {
+    padding: 15px 20px 0px !important;
+  }
 
-/deep/ .el-dialog__body {
-  padding: 12px 20px !important;
-}
+  /deep/ .el-dialog__body {
+    padding: 12px 20px !important;
+  }
 
-.box-card:first-child {
-  margin-bottom: 16px;
-  height: 53px;
-}
+  .box-card:first-child {
+    margin-bottom: 16px;
+    height: 53px;
+  }
 </style>

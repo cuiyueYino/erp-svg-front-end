@@ -230,7 +230,7 @@
 
       // 关闭模态框时子组件传值给父组件
       closeDialog() {
-        let serchData = [];
+        let serchData = null;
         this.$emit("closeDialog", serchData);
       },
     },
@@ -257,9 +257,9 @@
     padding: 12px 20px !important;
   }
 
-  /deep/ .el-table .cell{
+  /*/deep/ .el-table .cell{
     overflow: inherit !important;
-  }
+  }*/
 
   .box-card:first-child {
     margin-bottom: 16px;
