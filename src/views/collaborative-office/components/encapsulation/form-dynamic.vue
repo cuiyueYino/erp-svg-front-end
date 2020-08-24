@@ -615,10 +615,8 @@
 				}
 				var label = ""
 				var value = ""
-				console.log(dataBack)
 				dataBack.forEach((item, index) => {
 					if(index == dataBack.length - 1) {
-						console.log(1)
 						if(this.showCon == "personnel") {
 							label = label + item.tname
 							value = value + item.toid
