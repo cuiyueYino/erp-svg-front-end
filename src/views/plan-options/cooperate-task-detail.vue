@@ -156,8 +156,6 @@ export default {
         DynamicTable,
     },
     created() {
-        debugger;
-        console.log("页面初期化。。。。。。。。。");
       // this.getPositionTypeTableData("");
     getunhandledTaskFormDetail("");
     },
@@ -209,10 +207,118 @@ export default {
             }
         );
         },
+        getAnnualPlan(data) {
+      this.$api.processSet.getAnnualPlanDetail({
+        id: data.id,
+      })
+      .then((res) => {
+            if(res.data.code == 0){
+              this.formdata = res.data.data;
+              let tableDataObj = {};
+              tableDataObj["key1"] = '计划值';
+              tableDataObj["key2"] = 'Q 累计预计计划完成指标';
+              tableDataObj["optionValue"] = res.data.data.optionValue;
+              tableDataObj["unit"] = res.data.data.unit;
+              this.tableData.push(tableDataObj);
+              let taskStateParams = res.data.data.taskState;
+              let taskTypeParams = res.data.data.taskType;
+              let taskLeveParams = res.data.data.taskLevel;
+            switch(taskStateParams) {
+                case "1": 
+                    this.formdata.taskState = '可执行';
+                    break;
+                case "2":
+                    this.formdata.taskState = '已完成';
+                    break;
+                case "3":
+                    this.formdata.taskState = '未完成';
+                    break;
+                case "4":
+                    this.formdata.taskState = '延期';
+                    break;
+                case '5':
+                    this.formdata.taskState ='作废';
+                    break;
+                case '0':
+                    this.formdata.taskState ='未发生';
+                    break;
+                case '10':
+                    this.formdata.taskState ='已报待批';
+                    break;
+                default:
+                    break; 
+            }
+            // debugger;
+            console.log(taskTypeParams);
+            switch(taskTypeParams) {
+                case 1: 
+                    this.formdata.taskType = '主任务';
+                    break;
+                case 2:
+                    this.formdata.taskType = '临时任务';
+                    break;
+                case 3:
+                    this.formdata.taskType = '配合任务';
+                    break;
+                default:
+                    break; 
+            }
+            switch(taskLeveParams) {
+                case 1: 
+                    this.formdata.taskLevel = '一';
+                    break;
+                case 2:
+                    this.formdata.taskLevel = '二';
+                    break;
+                case 3:
+                    this.formdata.taskLevel = '三';
+                    break;
+                case 4:
+                    this.formdata.taskLevel = '四';
+                    break;
+                case 5:
+                    this.formdata.taskLevel ='五';
+                    break;
+                case 6:
+                    this.formdata.taskLevel ='六';
+                    break;
+                case 7:
+                    this.formdata.taskLevel ='七';
+                    break;
+                case 8:
+                    this.formdata.taskLevel ='八';
+                    break;
+                case 9:
+                    this.formdata.taskLevel ='九';
+                    break;
+                case 10:
+                    this.formdata.taskLevel ='十';
+                    break;
+                default:
+                    break; 
+            }
+            if(res.data.data.groupPoint) {
+                this.focusLevelCheckList.push('集团重点');
+            } else if(res.data.data.companyPoint) {
+                this.focusLevelCheckList.push('公司重点');
+            }  else if(res.data.data.departmentPoint) {
+                 this.focusLevelCheckList.push('部门重点')
+            } else {
+                this.focusLevelCheckList.push('');
+            }
+            }
+        }),error => {
+          console.log(error);
+        }
+    },
     },
     watch:{
         rowCooTaskDetailtype(oldVal,newVal){
             this.ShowFinancVisible=this.rowCooTaskDetailtype;
+            // this.ShowFinancVisible=this.rowTEMTasktype; 
+            let cooTaskDetailDataSelected = {};
+            cooTaskDetailDataSelected.id = this.rowCooTaskDetailDataObj.fsrcoId;
+            this.getAnnualPlan(cooTaskDetailDataSelected);
         }
     }
 }

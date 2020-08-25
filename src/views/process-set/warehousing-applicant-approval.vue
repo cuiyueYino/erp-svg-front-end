@@ -292,14 +292,16 @@ export default {
                 this.rowCooTaskDetailtype=true;
             }else if(dataType === 'DepartmentYearPlan'){
                 this.rowDepartAnnPlanDettype=true;
-            }else if(dataType === 'CompanyYearPlanCollect'){
+                this.rowDepartAnnPlanDetDataObj = dataContent.selectData[0];
+            }else if(dataType === 'CompanyYearPlanCollect'){   
                 this.rowComPanDetaitype=true;
+                this.rowComPanDetaiDataObj = dataContent.selectData[0];
             } else if(dataType === 'DepartmentMonthPlan'){
                 this.rowDepartMonPlanDettype=true;
+                this.rowDepartMonPlanDetDataObj = dataContent.selectData[0];
             } else if(dataType === 'TemporaryMission'){
                 this.rowTEMTasktype=true;
                 this.rowTEMTaskDataObj = dataContent.selectData[0];
-                console.log(this.rowTEMTaskDataObj);
             } else if(dataType === 'FormPost'){
                 this.rowEACHPerEachJobDettype=true;
             } else if(dataType === 'TaskReport'){

@@ -8,6 +8,14 @@ const workdoneItemList =() => import('./work-done-items');
 const recycleBin =()=> import('./recycle-bin')
 const structure = () => import('./task-structure.vue');
 const temporaryMission = () => import('./temporary-mission.vue');
+const coordinationTask = () => import('./coordination-task.vue');
+const annualPlan = () => import('./annual-plan.vue');
+const companyAnnual = () => import('./company-annual.vue');
+const monthlyPlan = () => import('./monthly-plan.vue');
+const personalTableTask = () => import('./personal-table-task.vue');
+const summaryEmployeeEvaluation = () => import('./summary-employee-evaluation.vue');
+const employeeAppraisal = () => import('./employee-appraisal.vue');
+
 const postBid = () => import('./post-bid.vue'); 
 
 const PROJECT = [
@@ -19,7 +27,7 @@ const PROJECT = [
             title: '工作流程维护'
         }
     },
-    {
+    { 
         path: 'workflowMonitoring',
         name: 'workflowMonitoring',
         component: workflowMonitorn,
@@ -52,11 +60,67 @@ const PROJECT = [
         }
     },
     {
+        path: 'coordinationTask',
+        name: 'coordinationTask',
+        component: coordinationTask,
+        meta: {
+            title: '配合任务'
+        }
+    },
+    {
+        path: 'annualPlan',
+        name: 'annualPlan',
+        component: annualPlan,
+        meta: {
+            title: '部门年度计划'
+        }
+    },
+    {
+        path: 'companyAnnual',
+        name: 'companyAnnual',
+        component: companyAnnual,
+        meta: {
+            title: '公司年度计划汇总'
+        }
+    },
+    {
+        path: 'monthlyPlan',
+        name: 'monthlyPlan',
+        component: monthlyPlan,
+        meta: {
+            title: '部门月度计划'
+        }
+    },
+    {
         path: 'postBid',
         name: 'postBid',
         component: postBid,
         meta: {
             title: '一岗一表'
+        }
+    },
+    {
+        path: 'personalTableTask',
+        name: 'personalTableTask',
+        component: personalTableTask,
+        meta: {
+            title: '一人一表任务表'
+        }
+    },
+    {
+        path: 'summaryEmployeeEvaluation',
+        name: 'summaryEmployeeEvaluation',
+        component: summaryEmployeeEvaluation,
+        meta: {
+            title: '员工考评表汇总'
+        }
+    },
+    {
+        path: 'employeeAppraisal',
+        name: 'employeeAppraisal',
+        component: employeeAppraisal,
+        meta: {
+            title: '员工考评表'
         }
     },
     {

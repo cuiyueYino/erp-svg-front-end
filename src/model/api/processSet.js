@@ -93,6 +93,21 @@ const processSet = {
         }
         return httpReqest.get('/api/scha/yearPlanSummary/findInfoById'+valueS);
     },
+    //获取待办事项的popForm表单数据(部门月度计划)
+    getMonthlyPlanDetail(params){
+        var valueS='?';
+        for(var item in params){
+            valueS+=item+"="+params[item]+"&";
+        }
+        if(valueS.slice(valueS.length-1,valueS.length) ==="&"){
+            valueS=valueS.slice(0,valueS.length-1);
+        }
+        return httpReqest.get('/api/scha/departmentMonthPlan/showDeptMonthPlanDetail'+valueS);
+    },
+    // 获取待办事项的popForm表单数据(部门年度计划)
+    getDepYearPlanDetail(params){
+        return httpReqest.post('/api/scha/departmentYearPlan/findInfoById', params);
+    },
      //获取处理表单详情数据
      getunhandledTaskFormDetail(params){
         return httpReqest.post('/api/scha/workFlow/unhandledTaskFormDetail', params);

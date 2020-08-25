@@ -10,7 +10,7 @@
         >
             <el-row>
                 <el-col :span="6">
-                    <el-form-item label="公司：">
+                    <el-form-item label="公司8：">
                         <el-select v-model="formdata.company" value-key="value" :disabled="true">
                             <el-option  
                                 v-for="item in companyData"
@@ -145,7 +145,7 @@ import proData from '../../components/common/proData/proData';
 import DynamicTable from '../../components/common/dytable/dytable.vue';
 export default {
     props: {
-        rowEACHPerEachJobDataObj: Object,
+        rowDepartMonPlanDetDataObj: Object,
         rowDepartMonPlanDettype:Boolean,
     },
     components: {
@@ -270,11 +270,48 @@ export default {
         }
     },
     methods: {
-        handleClick() {}
+        handleClick() {},
+        //部门月度计划
+        getmonthlyPlan(data) {
+        debugger;
+        this.$api.processSet.getMonthlyPlanDetail({
+        id: data.id,
+        }) 
+        .then((res) => {
+                if(res.data.code == 0){
+                this.formdata = res.data.data;
+                // let tableDataObj = {};
+                // tableDataObj["key1"] = '计划值';
+                // tableDataObj["key2"] = 'Q 累计预计计划完成指标';
+                // tableDataObj["optionValue"] = res.data.data.optionValue;
+                // tableDataObj["unit"] = res.data.data.unit;
+                // this.tableData.push(tableDataObj);
+                let taskTypeParams = res.data.data.taskType;
+                let taskLeveParams = res.data.data.taskLevel;
+                if(res.data.data.groupPoint) {
+                    this.focusLevelCheckList.push('集团重点');
+                } else if(res.data.data.companyPoint) {
+                    this.focusLevelCheckList.push('公司重点');
+                }  else if(res.data.data.departmentPoint) {
+                    this.focusLevelCheckList.push('部门重点')
+                } else {
+                    this.focusLevelCheckList.push('');
+                }
+
+                }
+            }),error => {
+            console.log(error);
+            }
+        },
     },
     watch:{
         rowDepartMonPlanDettype(oldVal,newVal){
+            debugger;
+            // voucherId、menuCode
             this.ShowFinancVisible=this.rowDepartMonPlanDettype;
+            let EACHPerEachJobDataSelected = {};
+            EACHPerEachJobDataSelected.id = this.rowDepartMonPlanDetDataObj.fsrcoId;
+            this.getmonthlyPlan(EACHPerEachJobDataSelected);
         }
     }
 }
