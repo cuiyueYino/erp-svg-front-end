@@ -332,7 +332,9 @@ export default {
                 // { "code": this.multipleSelection[0].fcode},
                 //    this.multipleSelection[0].fname,
                 // this.multipleSelection[0].foid,
-            this.$api.svg.getSvgSingleData(this.multipleSelection[0].foid).then(res=>{
+            sessionStorage.setItem("eidtMsgSelectID",this.multipleSelection[0].foid);
+            this.$router.push({name:"svgIndex"})
+            /*this.$api.svg.getSvgSingleData(this.multipleSelection[0].foid).then(res=>{
                 if(res.data.data.msg = "success"){
                     sessionStorage.setItem("eidtMsgcode",  res.data.data.code);
                     sessionStorage.setItem("eidtMsgfname",   res.data.data.name);
@@ -344,7 +346,7 @@ export default {
                 }
             }),error=>{
                 console.log(error);
-            }
+            }*/
         },
     },
 }

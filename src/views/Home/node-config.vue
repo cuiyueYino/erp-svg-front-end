@@ -537,6 +537,10 @@ export default {
         },
         //自由活动
         saveForkData(e){
+            if( e.name =='' || e.work ==''){
+                this.$message.error("保存失败,请填写必填信息");
+                return;
+            }
             this.data.oid = e.oid;
               this.data.mactivity = {
                 "code": e.workCode,
@@ -555,6 +559,10 @@ export default {
         },
          //路由
         saveRouteData(e){console.log(e)
+            if( e.name =='' || e.code ==''){
+                this.$message.error("保存失败,请填写必填信息");
+                return;
+            }
             this.data.oid = e.oid;
             this.data.hidden = e.checked?1:0;
             this.data.join = e.join?1:0;

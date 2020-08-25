@@ -10,7 +10,7 @@
         >
             <el-row>
                 <el-col :span="6">
-                    <el-form-item label="公司8：">
+                    <el-form-item label="公司：">
                         <el-select v-model="formdata.company" value-key="value" :disabled="true">
                             <el-option  
                                 v-for="item in companyData"
@@ -25,17 +25,17 @@
             <el-row>
                 <el-col :span="6">
                     <el-form-item label="月计划编号：">
-                        <el-input v-model="formdata.yuejihuabianhao" :disabled="true"></el-input>
+                        <el-input v-model="formdata.planIdParam" :disabled="true"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="6" :offset="2">
                     <el-form-item label="版本：">
-                        <el-input v-model="formdata.banben" :disabled="true"></el-input>
+                        <el-input v-model="formdata.editId" :disabled="true"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="6" :offset="2">
-                    <el-form-item label="年度：">
-                        <el-select v-model="formdata.years" value-key="value" :disabled="true">
+                    <el-form-item label="年度：" prop="year">
+                        <el-select v-model="formdata.year" value-key="value" :disabled="true">
                             <el-option  
                                 v-for="item in yearsData"
                                 :key="item.value"
@@ -48,7 +48,7 @@
             </el-row>
             <el-row>
                 <el-col :span="6">
-                    <el-form-item label="月度：">
+                    <el-form-item label="月度：" prop="month">
                         <el-select v-model="formdata.month" value-key="value" :disabled="true">
                             <el-option  
                                 v-for="item in monthData"
@@ -61,7 +61,7 @@
                 </el-col>
                 <el-col :span="5" :offset="2">
                     <el-form-item label="计划部门：">
-                        <el-input v-model="formdata.jihuabumen" :disabled="true"></el-input>
+                        <el-input v-model="formdata.planDepName" :disabled="true"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="1">
@@ -71,7 +71,7 @@
                     <el-form-item label="编制日期：" :label-width="formLabelWidth">
                         <el-date-picker
                             clearable
-                            v-model="formdata.fenddate"
+                            v-model="formdata.editDate"
                             format="yyyy-MM-dd HH:mm"
                             value-format="yyyy-MM-dd HH:mm"
                             type="datetime"
@@ -93,7 +93,7 @@
                     <el-form-item label="经办日期：" :label-width="formLabelWidth">
                         <el-date-picker
                             clearable
-                            v-model="formdata.fenddate"
+                            v-model="formdata.handleDate"
                             format="yyyy-MM-dd HH:mm"
                             value-format="yyyy-MM-dd HH:mm"
                             type="datetime"
@@ -156,10 +156,22 @@ export default {
             formLabelWidth: "120px",
             ShowFinancVisible:false,
             labelPosition: 'left',
-            formdata:{},
-            companyData:new proData().company,
-            yearsData:new proData().years,
-            monthData:new proData().month,
+            formdata:{
+                company:'',
+                planIdParam:'',
+                editId:'',
+                year:'',
+                month:'',
+                planDepName:'',
+                editDate:'',
+                gestorName:'',
+                handleDate:'',
+            },
+            companyData:[],
+            yearsData:[],
+            monthData:[
+                1,2,3,4,5,6,7,8,9,10,11,12
+            ],
             atctiveName:'first',
             pageNum: 1,
             pageSize: 10,
@@ -286,17 +298,17 @@ export default {
                 // tableDataObj["optionValue"] = res.data.data.optionValue;
                 // tableDataObj["unit"] = res.data.data.unit;
                 // this.tableData.push(tableDataObj);
-                let taskTypeParams = res.data.data.taskType;
-                let taskLeveParams = res.data.data.taskLevel;
-                if(res.data.data.groupPoint) {
-                    this.focusLevelCheckList.push('集团重点');
-                } else if(res.data.data.companyPoint) {
-                    this.focusLevelCheckList.push('公司重点');
-                }  else if(res.data.data.departmentPoint) {
-                    this.focusLevelCheckList.push('部门重点')
-                } else {
-                    this.focusLevelCheckList.push('');
-                }
+                // let taskTypeParams = res.data.data.taskType;
+                // let taskLeveParams = res.data.data.taskLevel;
+                // if(res.data.data.groupPoint) {
+                //     this.focusLevelCheckList.push('集团重点');
+                // } else if(res.data.data.companyPoint) {
+                //     this.focusLevelCheckList.push('公司重点');
+                // }  else if(res.data.data.departmentPoint) {
+                //     this.focusLevelCheckList.push('部门重点')
+                // } else {
+                //     this.focusLevelCheckList.push('');
+                // }
 
                 }
             }),error => {
