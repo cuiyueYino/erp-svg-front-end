@@ -14,18 +14,14 @@
     >
       <el-row>
         <el-col :span="6">
-          <el-form-item label="公司：">
-            <el-select
-              v-model="formdata.company"
-              value-key="value"
-              :disabled="true"
-            >
-              <el-option
-                v-for="item in companyData"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              ></el-option>
+          <el-form-item label="公司：" prop="company">
+           <el-select v-model="formdata.company" value-key="value" :disabled="true">
+                <el-option
+                    v-for="item in companyData"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                ></el-option>
             </el-select>
           </el-form-item>
         </el-col>
