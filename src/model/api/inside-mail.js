@@ -1,4 +1,5 @@
 import httpReqest from '../../utils/https';
+import httpUpload from "../../views/document-management/base/httpUpload";
 
 const insideMail = {
 
@@ -64,8 +65,35 @@ const insideMail = {
     // 转发（邮件体拼接）
     relay(params) {
         return httpReqest.post('/api/interfaces/insideMail/relay', params);
-    }
-   
+    },
+
+    //---------------------------------附件-begin-----------------------------------------------------------
+    //单文件上传
+    uploadFile(params){
+      return httpUpload.post('/api/interfaces/attachment/uploadFile',params);
+    },
+    //批量上传文件
+    uploadFileBatch(params){
+      return httpUpload.post('/api/interfaces/attachment/uploadFileBatch',params);
+    },
+    //查询所有附件信息
+    findInfosList(params){
+      return httpReqest.post('/api/interfaces/attachment/findInfosList',params);
+    },
+    //批量删除文件
+    deleteInfoByIds(params){
+      return httpReqest.get('/api/interfaces/attachment/deleteInfoByIds?ids='+ params);
+    },
+    //文件下载
+    downloadFile(params){
+      return httpReqest.post('/api/interfaces/attachment/downloadFile?attachmentId='+ params);
+    },
+    //文件下载
+    getHtmlPreviewAttachmentById(params){
+      return httpReqest.get('/api/interfaces/attachment/getHtmlPreviewAttachmentById?id='+ params);
+    },
+    //---------------------------------附件-end-----------------------------------------------------------
+
 };
 
 export default insideMail;
