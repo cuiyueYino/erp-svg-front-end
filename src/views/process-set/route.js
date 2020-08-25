@@ -40,6 +40,7 @@ const optionApplication = () => import('./option-application.vue');
 const economicIndicators = () => import('./economic-indicators.vue');
 const rewardsApply = () => import('./rewards-apply.vue');
 const optionRecord = () => import('./option-record.vue');
+const recordOfLossesIncurred = () => import('./recordOf-lossesIncurred.vue');
 
 const PROJECT = [
     {
@@ -99,7 +100,7 @@ const PROJECT = [
         }
     },
     {
-        path: 'companyAnnual',
+        path: 'plan/companyAnnual',
         name: 'companyAnnual',
         component: companyAnnual,
         meta: {
@@ -378,6 +379,15 @@ const PROJECT = [
             title: '期权记录'
         }
     },
+    {
+        path: 'plan/recordOfLossesIncurred',
+        name: 'recordOfLossesIncurred',
+        component: recordOfLossesIncurred,
+        meta: {
+            title: '挂账情况记录表'
+        }
+    },
+    
     
 ];
 export default PROJECT;
