@@ -656,7 +656,7 @@
           fexternal: 0,
           fcompanyid: "_DefaultCompanyOId",
           fcompanyname: "福佳集团",
-          fcreator: localStorage.getItem('ms_userId'),
+          fcreator: localStorage.getItem('conf_ms_userId'),
         },
         isDate: false,
         isNormal: true,
