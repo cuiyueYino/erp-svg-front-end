@@ -516,6 +516,7 @@
 					this.$api.collaborativeOffice.getWorkItemTypeModel({
 						id: this.$refs.child.rowClick.id
 					}).then(data => {
+						this.ruleForm.tableName = data.data.data.tableName
 						data.data.data.lines.forEach(item => {
 							//为每一条数据定义好字段
 							var con = JSON.parse(JSON.stringify(this.rowConNew))
