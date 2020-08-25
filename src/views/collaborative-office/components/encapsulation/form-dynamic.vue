@@ -718,6 +718,7 @@
 						this.showCon = "organization"
 						this.titleShow = "公司"
 						this.$set(this.dataCon, "context", row.browseBoxList)
+						//数据回显(保证选中后再次打开数据依旧被选中)下面两条一样
 						typeof(this.ruleForm[row.field]) != "undefined" ? this.$set(this.dataCon,"echo",this.ruleForm[row.field].split(',')) : this.$set(this.dataCon,"echo",[])
 						break;
 					case "2":

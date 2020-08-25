@@ -267,6 +267,7 @@ export default {
                     if(!obj.oid && (obj.isSaveFlag==undefined)){
                         this.formData = {}
                         this.formData.name = obj.displayName
+                        this.formData.work ="";
                     }else{
                         this.editData = obj;
                         this.formData.oid = this.editData.oid;

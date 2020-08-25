@@ -1,7 +1,7 @@
 <template>
     <div >
-        <el-form 
-            :model="formData" 
+        <el-form
+            :model="formData"
             label-width="100px"
             class="dataForm"
             size="mini"
@@ -56,7 +56,7 @@
                             ></quill-editor>
                         </el-tab-pane>
                         <el-tab-pane label="附件" name="enclosure">
-                            <enclosurefile :rowDataFileObj="rowDataFileObj"  @changeShow="showFileData"/> 
+                            <enclosurefile :enclosureConfig="enclosureConfig"/>
                         </el-tab-pane>
                     </el-tabs>
                 </el-col>
@@ -64,15 +64,15 @@
             <br/>
             <el-row>
                 <el-col :span="14">
-                    <el-button type="primary" @click="$parent.$parent.goBack();" icon="" size="mini">返回</el-button>
+                    <el-button type="primary" @click="$parent.$parent.goBack()" icon="" size="mini">返回</el-button>
                 </el-col>
             </el-row>
         </el-form>
-        
+
     </div>
 </template>
 <script>
-import enclosurefile from '../comment/enclosure-file.vue';
+import enclosurefile from './enclosure-file.vue';
 import { quillEditor } from 'vue-quill-editor'; //调用编辑器
 import 'quill/dist/quill.snow.css';
 import * as Quill from 'quill';
@@ -81,7 +81,7 @@ export default {
         enclosurefile,
         quillEditor
     },
-    name: "insideMailDetail", 
+    name: "insideMailDetail",
     data(){
         return{
             //文本编辑器
@@ -97,20 +97,23 @@ export default {
                 senderName:"",
                 duplicateName: "",
                 addresseeName: "",
-                addresseeList: {
-                    oid: "",
-                    name:""
-                },
-                duplicateList: {
-                    oid: "",
-                    name:""
-                },
+                addresseeList: {},
+                duplicateList: {},
                 sendTime:"",
             },
             formDisabled: true,
             labelPosition: 'left',
             atctiveName:'first',
-            rowDataFileObj:{},
+
+            // 附件
+            // 附件
+            enclosureConfig:{
+                voucherId: '',
+                isShowButton: false,
+                menuCode: 'insideMail',
+                isDownload:true,
+                isSearch:false,
+            },
         }
     },
     props: {
@@ -119,10 +122,9 @@ export default {
         }
     },
     created(){
-        
+
         this.atctiveName = "article",
         this.getDetail();
-        console.log("进入信息详情");
     },
     methods: {
         /**
@@ -130,7 +132,6 @@ export default {
          */
         getDetail(){
             if(this.id!=null&&this.id!=''){
-                console.log(this.id);
                 let reqParam = {
                     id: this.id
                 }
@@ -145,6 +146,8 @@ export default {
                         this.formData.duplicateList = data.duplicateList;
                         this.formData.sendTime = data.sendTime;
                         this.content = data.content;
+                        this.enclosureConfig.voucherId = data.mailCode;
+                        this.showFileData(data.mailCode);
                     };
                 })
             }
@@ -155,7 +158,6 @@ export default {
         },
         //附件
         showFileData(data){
-            this.FiletableData=data;
         },
         onEditorBlur() {}, // 失去焦点事件
         onEditorFocus(event) {
@@ -166,7 +168,7 @@ export default {
             }
         }, // 获得焦点事件
         onEditorChange() {}, // 内容改变事件
-    } 
+    }
 }
 </script>
 <style scoped>

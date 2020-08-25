@@ -78,7 +78,7 @@ export default {
       name: "insideMailInbox",
 
       userName: localStorage.getItem('ms_username'),
-      userId: localStorage.getItem('ms_userId'),
+      userId: localStorage.getItem('ms_staffId'),
       //搜索内容
       form: {
         select: [],
@@ -132,7 +132,6 @@ export default {
     this.$nextTick(() => {
       this.getReceiveMail();
     });
-    console.log("进入收件箱");
   },
   methods: {
     /**

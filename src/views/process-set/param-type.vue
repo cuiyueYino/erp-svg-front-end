@@ -1,7 +1,7 @@
 <template>
     
     <div class="most-warapper">     
-       <iframe src="http://192.168.85.96:6013/plan/companyAnnual" style="width:100%;height:764px;border:0px;padding:0px;"  class="companyAnnual"></iframe>
+       <iframe src="http://192.168.85.96:6013/paramType" style="width:100%;height:764px;border:0px;padding:0px;"  class="paramType"></iframe>
     </div>
 </template>
 
@@ -24,14 +24,14 @@ export default {
     .sidebar {
         z-index:999;
     }
-    .companyAnnual {
+    .paramType {
         z-index: 0;
         position: absolute;
     }
     .tags {
         z-index:999;
     }
-    .companyAnnual .page-heading  {
+    .paramType .page-heading  {
         padding-top:0px !important;
     }
 </style>

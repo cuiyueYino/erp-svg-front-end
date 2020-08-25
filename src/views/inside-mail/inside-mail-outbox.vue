@@ -76,7 +76,7 @@ export default {
             total: 0,
 
             userName: localStorage.getItem('ms_username'),
-            userId: localStorage.getItem('ms_userId'),
+            userId: localStorage.getItem('ms_staffId'),
             form: {
                 select: [],
                 selectVal: "",
@@ -122,7 +122,6 @@ export default {
         this.$nextTick(() => {
             this.getSendMail();
         });
-        console.log("进入发件箱")
     },
     methods: {
 

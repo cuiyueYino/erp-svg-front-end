@@ -10,9 +10,9 @@
         >
             <el-row>
                 <el-col :span="6">
-                    <el-form-item label="公司1212：">
+                    <el-form-item label="公司：">
                         <el-select v-model="formdata.company" value-key="value" :disabled="true">
-                            <el-option  
+                            <el-option
                                 v-for="item in companyData"
                                 :key="item.value"
                                 :label="item.label"
@@ -25,17 +25,17 @@
             <el-row>
                 <el-col :span="6">
                     <el-form-item label="单据号：">
-                        <el-input v-model="formdata.danjuhao" :disabled="true"></el-input>
+                        <el-input v-model="formdata.voucherId" :disabled="true"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="6" :offset="2">
                     <el-form-item label="版本：">
-                        <el-input v-model="formdata.banben" :disabled="true"></el-input>
+                        <el-input v-model="formdata.editId" :disabled="true"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="6" :offset="2">
                     <el-form-item label="年份：">
-                        <el-select v-model="formdata.years" value-key="value" :disabled="true">
+                        <el-select v-model="formdata.year" value-key="value" :disabled="true">
                             <el-option  
                                 v-for="item in yearsData"
                                 :key="item.value"
@@ -49,17 +49,17 @@
             <el-row>
                 <el-col :span="5">
                     <el-form-item label="计划部门：">
-                        <el-input v-model="formdata.jihuabumen" :disabled="true"></el-input>
+                        <el-input v-model="formdata.planDepName" :disabled="true"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="1">
                     <el-button type="primary" size="mini" icon="el-icon-search" :disabled="true"></el-button>
                 </el-col>
                 <el-col :span="6" :offset="2">
-                <el-form-item label="编制日期：" :label-width="formLabelWidth" prop="fenddate">
+                <el-form-item label="编制日期：" :label-width="formLabelWidth" prop="editDate">
                     <el-date-picker
                         clearable
-                        v-model="formdata.fenddate"
+                        v-model="formdata.editDate"
                         format="yyyy-MM-dd HH:mm"
                         value-format="yyyy-MM-dd HH:mm"
                         type="datetime"
@@ -72,14 +72,14 @@
                 </el-col>
                 <el-col :span="6" :offset="2">
                     <el-form-item label="经办人：">
-                        <el-input v-model="formdata.versionnum" :disabled="true"></el-input>
+                        <el-input v-model="formdata.gestor" :disabled="true"></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>
             <el-row>
                  <el-col :span="22">
                     <el-form-item label="备注：">
-                        <el-input v-model="formdata.text1" :disabled="true"></el-input>
+                        <el-input v-model="formdata.remark" :disabled="true"></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>
@@ -134,9 +134,18 @@ export default {
             ShowFinancVisible:false,
             disabled:false,
             labelPosition: 'left',
-            formdata:{},
-            companyData:new proData().company,
-            yearsData:new proData().years,
+            formdata:{
+                company:'',
+                voucherId:'',
+                editId:'',
+                year:'',
+                planDepName:'',
+                editDate:'',
+                gestor:'',
+                remark:'',
+            },
+            companyData:[],
+            yearsData:[],
             atctiveName:'first',
             pageNum: 1,
             pageSize: 10,
