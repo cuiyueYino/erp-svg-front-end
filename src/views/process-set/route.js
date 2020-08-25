@@ -28,7 +28,7 @@ const indexClassification = () => import('./index-classification.vue');
 const emphasisLevel = () => import('./emphasis-level.vue'); 
 const rewardPunishmentType = () => import('./reward-punishment-type.vue'); 
 const taskUpdateApply = () => import('./task-update-apply.vue'); 
-const taskEvaluateCheck = () => import('./task-evaluate-check.vue'); 
+const taskEvaluate = () => import('./task-evaluate.vue'); 
 const personalTableResult = () => import('./personal-table-result.vue'); 
 const changeResponsible = () => import('./change-responsible.vue');
 const taskForceChangeRequest = () => import('./task-force-changeRequest.vue');
@@ -289,9 +289,9 @@ const PROJECT = [
         }
     },
     {
-        path: 'taskEvaluateCheck',
-        name: 'taskEvaluateCheck',
-        component: taskEvaluateCheck,
+        path: 'taskEvaluate',
+        name: 'taskEvaluate',
+        component: taskEvaluate,
         meta: {
             title: '任务自评流程查看'
         }
