@@ -40,7 +40,7 @@
             ref="tree"
             node-key="foid"
             :props="defaultProps"
-            :check-strictly="strictly"
+            :check-strictly="checkStrictly"
             show-checkbox
             check-on-click-node
             @check-change="handleNodeClick"
@@ -60,10 +60,12 @@
     name: "staffTreeSearch",
     components: {},
     props: {
+      // 当前配置查询类型
       type: {
         type: String,
         default: "",
       },
+      // 公司id
       fcompanyid: {
         type: String,
         default: "_DefaultCompanyOId",
@@ -81,6 +83,7 @@
     },
     data() {
       return {
+        // 表单属性
         form: {
           selectVal: "",
         },
@@ -88,15 +91,20 @@
         closeConfig: false,
         // 对话框显示标识
         dialogVisible: this.visible,
+        // 树形展示数据
         treeData: [],
-        fromData: {
-          id: this.fcompanyid
-        },
-        strictly: false,
+        // 树形结构属性
         defaultProps: {
           label: "fname",
           children: "children",
         },
+        // 查询参数
+        fromData: {
+          id: this.fcompanyid
+        },
+        // 搜索框及确定按钮显示标识
+        strictly: false,
+        checkStrictly: false,
       };
     },
     computed: {},
@@ -106,6 +114,7 @@
         this.dialogVisible = bool;
         this.treeData = [];
         if (this.title == "用户查询") {
+          this.form.selectVal = "";
           this.strictly = false;
           let resDataArr = null;
           let staffTree = JSON.parse(localStorage.getItem('conf_staffTree'));
@@ -120,27 +129,8 @@
               }
             );
           }
-          for (let i in staffTree) {
-            // 第一级
-            if (staffTree[i].foid != undefined) {
-              staffTree[i].disabled = true;
-            }
-            // 第二级
-            let company = staffTree[i].children;
-            for (let k in company) {
-              if (company[k].foid != undefined) {
-                company[k].disabled = true;
-              }
-              // 第三级
-              let dept = company[k].children;
-              for (let l in dept) {
-                if (dept[l].foid != undefined) {
-                  dept[l].disabled = true;
-                }
-              }
-            }
-          }
-          this.treeData = staffTree;
+          // 员工树数据处理
+          this.operateUserTree(staffTree);
         } else if (this.title == "组织机构查询") {
           this.strictly = true;
           let fromData = {
@@ -163,12 +153,15 @@
       // 查询
       searchKey() {
         if (this.title == "用户查询") {
+          let staffTree = null;
+          this.checkStrictly = true;
           this.fromData.name = this.form.selectVal;
           this.$api.confMangement.getStaffTreeList(this.fromData).then(
             (res) => {
               let resData = res.data.data;
-              let resDataArr = eval("(" + resData + ")");
-              this.treeData = resDataArr;
+              staffTree = eval("(" + resData + ")");
+              // 员工树数据处理
+              this.operateUserTree(staffTree);
             },
             (error) => {
               console.log(error);
@@ -190,6 +183,31 @@
             }
           );
         }
+      },
+      // 用户查询时，公司部门层级不可点击
+      operateUserTree(staffTree) {
+        this.treeData = [];
+        for (let i in staffTree) {
+          // 第一级
+          if (staffTree[i].fstruid != undefined) {
+            staffTree[i].disabled = true;
+          }
+          // 第二级
+          let company = staffTree[i].children;
+          for (let k in company) {
+            if (company[k].fstruid != undefined) {
+              company[k].disabled = true;
+            }
+            // 第三级
+            let dept = company[k].children;
+            for (let l in dept) {
+              if (dept[l].fstruid != undefined) {
+                dept[l].disabled = true;
+              }
+            }
+          }
+        }
+        this.treeData = staffTree;
       },
       // 保存
       saveConfig() {
@@ -242,11 +260,12 @@
         }
       },
       handleNodeClick(data, checked) {
+        console.log(data)
         if (checked) {
           if (this.type != "4") {
             this.$refs.tree.setCheckedNodes([data]);
             if (this.$refs.tree.getCheckedNodes(true).length > 1) {
-              this.goOut("请单选");
+              this.goOut("请选择一条数据");
             }
           }
         }
