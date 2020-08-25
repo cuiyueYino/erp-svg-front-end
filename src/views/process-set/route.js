@@ -41,6 +41,11 @@ const economicIndicators = () => import('./economic-indicators.vue');
 const rewardsApply = () => import('./rewards-apply.vue');
 const optionRecord = () => import('./option-record.vue');
 const recordOfLossesIncurred = () => import('./recordOf-lossesIncurred.vue');
+const taskGeneralTable = () => import('./taskGeneral-table.vue');
+const quantificationOfPlannedTasks = () => import('./quantification-ofPlannedTasks.vue');
+const taskStatus = () => import('./task-status.vue');
+const taskExtensionApproval = () => import('./task-extensionApproval.vue');
+const temporaryTaskEstablishment = () => import('./temporary-taskEstablishment.vue');
 
 const PROJECT = [
     {
@@ -385,6 +390,46 @@ const PROJECT = [
         component: recordOfLossesIncurred,
         meta: {
             title: '挂账情况记录表'
+        }
+    },
+    {
+        path: 'taskGeneralTable',
+        name: 'taskGeneralTable',
+        component: taskGeneralTable,
+        meta: {
+            title: '任务情况通用表'
+        }
+    },
+    {
+        path: 'plan/quantificationOfPlannedTasks',
+        name: 'quantificationOfPlannedTasks',
+        component: quantificationOfPlannedTasks,
+        meta: {
+            title: '计划任务量化统计表'
+        }
+    },
+    {
+        path: 'plan/taskStatus',
+        name: 'taskStatus',
+        component: taskStatus,
+        meta: {
+            title: '计划情况表'
+        }
+    },
+    {
+        path: 'plan/taskExtensionApproval',
+        name: 'taskExtensionApproval',
+        component: taskExtensionApproval,
+        meta: {
+            title: '任务延期审批'
+        }
+    },
+    {
+        path: 'plan/temporaryTaskEstablishment',
+        name: 'temporaryTaskEstablishment',
+        component: temporaryTaskEstablishment,
+        meta: {
+            title: '临时任务编制情况表'
         }
     },
     
