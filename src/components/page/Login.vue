@@ -71,8 +71,11 @@
 						//获取token
 						this.$api.common.login(this.param).then(val => {
 							this.$api.common.getUserInfo().then(data => {
-								//用户ID
+								console.log(data)
+								//账户ID
 								localStorage.setItem('ms_userId', data.data.principal.accountId);
+								//人员ID
+								localStorage.setItem('ms_staffId', data.data.principal.staffId);
 								//用户名称
 								localStorage.setItem('ms_username', data.data.principal.fullname);
 								//部门ID
