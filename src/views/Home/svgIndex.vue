@@ -313,6 +313,7 @@ export default {
                 sessionStorage.setItem("eidtMsgfname",   res.data.data.name);
                 sessionStorage.setItem("eidtMsgfoid",   res.data.data.oid);
                 sessionStorage.setItem("eidtMsg",   JSON.stringify(res.data.data));
+                let Fstatus = res.data.data.status;
                 this.dataObj = res.data.data;
                 switch (this.dataObj.subProcess) {
                     case '0':
@@ -326,8 +327,13 @@ export default {
                         break;
                 }
                 if(this.dataObj.lines.line.length >0){
-                    this.isEditF = true;
-                    this.isNewF = false;
+                    if(Fstatus == 3 || Fstatus=='3'){
+                        this.isEditF = false;
+                        this.isNewF = false;
+                    }else{
+                        this.isEditF = true;
+                        this.isNewF = false;
+                    }
                     let newObj=[];
                     let newFork=[];
                     let newTask=[];
@@ -707,8 +713,15 @@ export default {
                     }
                     this.compileXMLToObj(this.dataObj);
                 }else{
-                    this.isEditF = false;
-                    this.isNewF = true;
+                    if(Fstatus == 3 || Fstatus=='3'){
+                        this.isEditF = false;
+                        this.isNewF = false;
+                    }else{
+                        this.isEditF = true;
+                        this.isNewF = false;
+                    }
+                    //this.isEditF = false;
+                    //this.isNewF = true;
                     this.workflowNodes = [
                         ...TerminalNode()
                     ];
