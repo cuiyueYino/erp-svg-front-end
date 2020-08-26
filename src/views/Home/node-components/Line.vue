@@ -433,7 +433,8 @@ export default {
                 page:this.pageNum,
                 size:this.pageSize
             };
-            this.$api.processSet.workSearchData(data).then(res=>{
+            //this.$api.processSet.workSearchData(data).then(res=>{
+            this.$api.processSet.getWfBusinessService(data).then(res=>{
                 this.tableLoading = false;
                 this.gridData = res.data.data.rows
                 this.total = res.data.data.total
