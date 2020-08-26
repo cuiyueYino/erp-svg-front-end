@@ -2,7 +2,7 @@
 	<div>
 		<el-row>
 			<el-col style="text-align: right;">
-				<el-dropdown trigger="click" @command="showForm = true;showSave = true">
+				<el-dropdown trigger="click" @command="showForm = true;showSave = true;disabledUpd = false">
 					<el-button :disabled="showFigButton" type="success" plain><i class="el-icon-plus"></i>新建</el-button>
 					<el-dropdown-menu slot="dropdown">
 						<el-dropdown-item :disabled="showFig">类别</el-dropdown-item>
@@ -22,7 +22,7 @@
 				<el-card>
 					<el-form v-if="showForm" size="mini" label-width="80px" :rules="rules" ref="ruleForm" :model="ruleForm" class="demo-form-inline">
 						<el-form-item prop="code" label="编码">
-							<el-input clearable v-model="ruleForm.code" maxlength="50" placeholder="编码"></el-input>
+							<el-input clearable :disabled="disabledUpd" v-model="ruleForm.code" maxlength="50" placeholder="编码"></el-input>
 						</el-form-item>
 						<el-form-item prop="name" label="名称">
 							<el-input clearable v-model="ruleForm.name" maxlength="50" placeholder="名称"></el-input>
@@ -40,6 +40,8 @@
 	export default {
 		data() {
 			return {
+				//修改-编码
+				disabledUpd: false,
 				//修改
 				showFigUpd: false,
 				//表单
@@ -93,14 +95,7 @@
 			},
 			handleNodeClick(data) {
 				this.rowClick = data
-				this.showForm = false
-				this.ruleForm = {
-					code: "",
-					name: "",
-					id: "",
-					pid: "",
-					resList: []
-				}
+				this.clear()
 				if(data.name == "枚举类别") {
 					this.showFigUpd = true
 					this.showFig = false
@@ -115,6 +110,16 @@
 					}
 				}
 			},
+			clear() {
+				this.showForm = false
+				this.ruleForm = {
+					code: "",
+					name: "",
+					id: "",
+					pid: "",
+					resList: []
+				}
+			},
 			toUpd() {
 				if(this.noObject(this.rowClick)) {
 					this.goOut("请选择")
@@ -122,29 +127,40 @@
 					this.showForm = true;
 					this.ruleForm = this.rowClick;
 					this.showSave = false
+					this.disabledUpd = true
 				}
 			},
 			toSave() {
-				if(this.showSave) {
-					if(this.rowClick.type == 1) {
-						this.ruleForm.type = 2
-						this.ruleForm.pid = this.rowClick.id
-					} else {
-						this.ruleForm.type = 1
+				this.$refs.ruleForm.validate((valid) => {
+					if(valid) {
+						if(this.showSave) {
+							if(this.rowClick.type == 1) {
+								this.ruleForm.type = 2
+								this.ruleForm.pid = this.rowClick.id
+							} else {
+								this.ruleForm.type = 1
 
+							}
+							this.$api.collaborativeOffice.add(this.ruleForm).then(data => {
+								if(this.dataBack(data, "新增成功")) {
+									this.getContext()
+									this.clear()
+								}
+							})
+						} else {
+							this.$api.collaborativeOffice.modify(this.ruleForm).then(data => {
+								if(this.dataBack(data, "修改成功")) {
+									this.getContext()
+									this.clear()
+								}
+							})
+						}
+					} else {
+						this.goOut("请填写完整内容")
+						return false;
 					}
-					this.$api.collaborativeOffice.add(this.ruleForm).then(data => {
-						if(this.dataBack(data, "新增成功")) {
-							this.getContext()
-						}
-					})
-				} else {
-					this.$api.collaborativeOffice.modify(this.ruleForm).then(data => {
-						if(this.dataBack(data, "修改成功")) {
-							this.getContext()
-						}
-					})
-				}
+				});
+
 			}
 		}
 	}

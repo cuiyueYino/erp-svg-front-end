@@ -323,7 +323,9 @@ export default {
                         }
                 this.data.wfCopyTo.copyTo.push(copyToObj)
             });
+            this.data.isSaveFlag=true;
             this.dialogVisible = false;
+            
         },
         //连接线保存
         saveLineData(e){
@@ -335,10 +337,13 @@ export default {
             this.data.oid = e.oid;
             this.data.otherwise =e.otherwise;
             this.data.expression =e.conditional;
+            this.data.lineexpression=e.conditional;
+            this.data.lineotherwise=e.otherwise;
             this.data.code =e.code;
             this.data.linefcode =e.code;
             this.data.displayName = e.name;
             this.data.fremark = e.fremark;
+            this.data.lineremark= e.fremark;
             switch (e.name ) {
                 case '同意':
                         this.data.decisionType = 1
@@ -362,13 +367,20 @@ export default {
                 "name":e.baseInputServe,
                 "expression":e.baseTextarea
             }
+            this.data.isSaveFlag=true;
         },
          //审核活动保存
         saveJoinData(e,e1,e2,e3,e4,e5){
             console.log(e,e1,e2,e3,e4,e5);
-             if( e.displayName =='' || e.work =='' || e.checkedCities.length ==0  || e4.length==0 ){
+             if( e.name =='' || e.work =='' || e.checkedCities.length ==0  || e4.length==0 ){
                 this.$message.error("保存失败,请填写必填信息");
                 return;
+            }
+            if(e.wfAuditType=='并行会签' || e.wfAuditType=='串行会签'){
+                if(!e1 || e1.length < 2){
+                    this.$message.error("保存失败,并行会签和串行会签参与者必须多人!");
+                    return;
+                }
             }
             this.data.oid = e.oid;
             this.data.displayName = e.name;
@@ -521,11 +533,14 @@ export default {
                     }
                 this.data.decisions.decision.push(decisionsObj)
             })
-
-         
+            this.data.isSaveFlag=true;
         },
         //自由活动
         saveForkData(e){
+            if( e.name =='' || e.work ==''){
+                this.$message.error("保存失败,请填写必填信息");
+                return;
+            }
             this.data.oid = e.oid;
               this.data.mactivity = {
                 "code": e.workCode,
@@ -540,15 +555,21 @@ export default {
             this.data.hidden = e.checked?1:0;
             this.data.fremark = e.fremark;
             this.data.displayName = e.name;
+            this.data.isSaveFlag=true;
         },
          //路由
         saveRouteData(e){console.log(e)
+            if( e.name =='' || e.code ==''){
+                this.$message.error("保存失败,请填写必填信息");
+                return;
+            }
             this.data.oid = e.oid;
             this.data.hidden = e.checked?1:0;
             this.data.join = e.join?1:0;
             this.data.fremark = e.fremark;
             this.data.displayName = e.name;
             this.data.code = e.code;
+            this.data.isSaveFlag=true;
         },
         //子流程
         saveProcessData(e){
@@ -562,6 +583,7 @@ export default {
             this.data.fremark = e.fremark;
             this.data.displayName = e.name;
             this.data.code = e.code;
+            this.data.isSaveFlag=true;
         },
     }
 };

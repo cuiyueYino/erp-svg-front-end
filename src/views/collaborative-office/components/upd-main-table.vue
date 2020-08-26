@@ -182,7 +182,7 @@
 			</el-dialog>
 		</div>
 		<div v-if="showFigForm">
-			<formAndTable dis="2" showAdd="2" :form-data="conData">
+			<formAndTable :files="files" dis="2" showAdd="2" :form-data="conData">
 				<el-row style="text-align: right;margin-bottom: 10px;">
 					<el-button icon="el-icon-arrow-left" size="mini" type="danger" plain @click="showFigForm = false">返回</el-button>
 				</el-row>
@@ -205,6 +205,7 @@
 		},
 		data() {
 			return {
+				files :[],
 				//字段长度类型
 				lengthTypeList: [{
 					id: "1",
@@ -335,7 +336,7 @@
 				//全部公司
 				CompanyData: JSON.parse(localStorage.getItem('CompanyData')),
 				//全部枚举
-				selectList: JSON.parse(localStorage.getItem('selectList')),
+				selectList: "",
 				//全部工作事项
 				fieldBrowseList: JSON.parse(localStorage.getItem('fieldBrowseList')),
 				//公司部门职位的合集
@@ -348,6 +349,9 @@
 				if(item.name == "福佳集团") {
 					this.ruleForm.company = item.id
 				}
+			})
+			this.$api.collaborativeOffice.findList({}).then(data => {
+				this.selectList = data.data.data
 			})
 			//全部服务
 			this.ruleForm.lines.forEach(item => {
@@ -365,10 +369,10 @@
 			})
 		},
 		methods: {
-			getTitle(){
-				if(this.showFigNum == 1){
+			getTitle() {
+				if(this.showFigNum == 1) {
 					return "工作事项模板主表-查看"
-				}else{
+				} else {
 					return "工作事项模板主表-修改"
 				}
 			},

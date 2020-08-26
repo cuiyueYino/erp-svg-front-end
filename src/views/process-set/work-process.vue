@@ -21,8 +21,8 @@
                      <el-button type="success" plain @click="add">新增</el-button>
                      <el-button type="danger" plain @click="deleteMsg">删除</el-button>
                      <el-button type="warning" plain @click="toEdit">编辑</el-button>
-                     <el-button type="success" plain @click="effectOrDisableMsg">生效</el-button>
-                     <el-button type="danger" plain @click="effectOrDisableMsg">禁用</el-button>
+                     <el-button type="success" plain @click="effectOrDisableMsg('生效')">生效</el-button>
+                     <el-button type="danger" plain @click="effectOrDisableMsg('禁用')">禁用</el-button>
                  </el-col>
             </el-row>
         </el-card>
@@ -41,30 +41,39 @@
             ></dynamic-table>
         </el-card>
     <!-- 弹出框 -->
-        <el-dialog title="流程维护" :visible.sync="dialogFormVisible" :close-on-click-modal="false">
+        <el-dialog title="流程维护" :visible.sync="dialogFormVisible" :close-on-click-modal="false" center >
             <el-form :model="form" :rules="rules" ref="form">
-                <el-col :span="22">
-                <el-form-item label="编码：" :label-width="formLabelWidth" prop="fcode">
-                    <el-input v-model="form.fcode" autocomplete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="名称：" :label-width="formLabelWidth" prop="fname">
-                    <el-input v-model="form.fname" autocomplete="off"></el-input>
-                </el-form-item>
-                <!-- <el-form-item label="组织结构" :label-width="formLabelWidth" style="position:relative;">
-                    <el-input v-model="form.structure" autocomplete="off"></el-input>
-                    <img
-                    class="icon-search"
-                    src="../../assets/img/search.svg"
-                    @click="baseInputTable('用户','组织结构查询')"
-                    />
-                </el-form-item> -->
-                <el-form-item label="子流程：" :label-width="formLabelWidth"> 
-                    <el-checkbox v-model="checked"></el-checkbox>
-                </el-form-item>
-                <el-form-item label="描述：" :label-width="formLabelWidth"  prop="fremark">
-                    <el-input maxlength="500" show-word-limit autosize type="textarea" v-model="form.fremark"></el-input>
-                </el-form-item>
-                </el-col>
+                <el-row :gutter="24">
+                    <el-col :span="12">
+                        <el-form-item label="编码：" :label-width="formLabelWidth" prop="fcode">
+                            <el-input v-model="form.fcode" autocomplete="off" size="small"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                         <el-form-item label="名称：" :label-width="formLabelWidth" prop="fname">
+                            <el-input v-model="form.fname" autocomplete="off" size="small"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                         <el-form-item label="子流程：" :label-width="formLabelWidth"> 
+                            <el-checkbox v-model="checked"></el-checkbox>
+                        </el-form-item>
+                    </el-col>
+                    <!-- <el-form-item label="组织结构" :label-width="formLabelWidth" style="position:relative;">
+                        <el-input v-model="form.structure" autocomplete="off"></el-input>
+                        <img
+                        class="icon-search"
+                        src="../../assets/img/search.svg"
+                        @click="baseInputTable('用户','组织结构查询')"
+                        />
+                    </el-form-item> -->
+                    <el-col :span="22">
+                         <el-form-item label="描述：" :label-width="formLabelWidth"  prop="fremark">
+                            <el-input maxlength="500" show-word-limit autosize type="textarea" v-model="form.fremark"></el-input>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                
             </el-form>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="closeDialog('form')">取 消</el-button>
@@ -115,6 +124,14 @@ export default {
             {
                 key: 'fsubprocessName',
                 title: '子流程'
+            },
+            {
+                key: 'fgotoauditName',
+                title: '按退回节点重新提交'
+            },
+            {
+                key: 'fremark',
+                title: '描述'
             },
             {
                 key: 'fstatusName',
@@ -247,7 +264,6 @@ export default {
         
         //删除
         deleteMsg(){
-            debugger;
             if(this.multipleSelection.length > 1){
                  this.$message.error('只能选择一个删除');
                  return;
@@ -268,7 +284,7 @@ export default {
                 }
         },
          //生效/禁用
-        effectOrDisableMsg(){
+        effectOrDisableMsg(stat){
             let status = this.multipleSelection[0];
             if(this.multipleSelection.length > 1){
                  this.$message.error('只能选择一个操作');
@@ -277,6 +293,10 @@ export default {
                 this.$message.error('请选择一项操作');
                  return;
             };
+            if(stat==status.fstatusName){
+                this.$message.error('选中项已经'+stat+'!');
+                return;
+            }
             switch (status.fstatusName) {
                 case '生效':
                     status.fstatus = 8
@@ -315,7 +335,9 @@ export default {
                 // { "code": this.multipleSelection[0].fcode},
                 //    this.multipleSelection[0].fname,
                 // this.multipleSelection[0].foid,
-            this.$api.svg.getSvgSingleData(this.multipleSelection[0].foid).then(res=>{
+            sessionStorage.setItem("eidtMsgSelectID",this.multipleSelection[0].foid);
+            this.$router.push({name:"svgIndex"})
+            /*this.$api.svg.getSvgSingleData(this.multipleSelection[0].foid).then(res=>{
                 if(res.data.data.msg = "success"){
                     sessionStorage.setItem("eidtMsgcode",  res.data.data.code);
                     sessionStorage.setItem("eidtMsgfname",   res.data.data.name);
@@ -327,7 +349,7 @@ export default {
                 }
             }),error=>{
                 console.log(error);
-            }
+            }*/
         },
     },
 }

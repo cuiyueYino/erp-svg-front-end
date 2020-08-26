@@ -217,7 +217,7 @@
 			</el-dialog>
 		</div>
 		<div v-if="showFigForm">
-			<formAndTable dis="2" showAdd="2" :form-data="conData">
+			<formAndTable :files="files" dis="2" showAdd="2" :form-data="conData">
 				<el-row style="text-align: right;margin-bottom: 10px;">
 					<el-button icon="el-icon-arrow-left" size="mini" type="danger" plain @click="showFigForm = false">返回</el-button>
 				</el-row>
@@ -244,6 +244,7 @@
 		},
 		data() {
 			return {
+				files :[],
 				//子表类型
 				showType: false,
 				//子表类型
@@ -408,7 +409,7 @@
 				//全部公司
 				CompanyData: JSON.parse(localStorage.getItem('CompanyData')),
 				//全部枚举
-				selectList: JSON.parse(localStorage.getItem('selectList')),
+				selectList: "",
 				//全部工作事项
 				fieldBrowseList: JSON.parse(localStorage.getItem('fieldBrowseList')),
 				//公司部门职位的合集
@@ -421,6 +422,9 @@
 				if(item.name == "福佳集团") {
 					this.ruleForm.company = item.id
 				}
+			})
+			this.$api.collaborativeOffice.findList({}).then(data => {
+				this.selectList = data.data.data
 			})
 			//全部服务
 			this.getDialogVisible(false)
@@ -440,10 +444,10 @@
 			this.getType(this.ruleForm.type)
 		},
 		methods: {
-			getTitle(){
-				if(this.showFigNum == 1){
+			getTitle() {
+				if(this.showFigNum == 1) {
 					return "工作事项模板子表-查看"
-				}else{
+				} else {
 					return "工作事项模板子表-修改"
 				}
 			},
@@ -604,30 +608,30 @@
 							})
 						}
 					})
-						item.parameterList = []
-						//时间控件计算差值
-						rowConList.forEach(itemChild => {
-							//通过‘-’符号确定需要计算的两边
-							if(item.serviceId == 5 && !this.noNull(itemChild.parameter) && itemChild.parameter.indexOf('-') != -1) {
-								//left right 分别是需要计算的两个值的字段名称
-								var index = itemChild.parameter.indexOf('-')
-								var left = itemChild.parameter.substring(0, index)
-								var right = itemChild.parameter.substring(index + 1)
-								//两个字段都要添加属性parameterList，里面存储需要计算的字段名和需要显示的字段名child
-								if(left == item.field || right == item.field) {
-									item.parameterList = {}
-									item.parameterList.left = left
-									item.parameterList.right = right
-									item.parameterList.child = itemChild.field
-								}
-							} else {
-								//发现被添加服务的字段后，绑定双方
-								if(itemChild.parameter == item.field) {
-									item.parameterList.push(itemChild.field)
-								}
+					item.parameterList = []
+					//时间控件计算差值
+					rowConList.forEach(itemChild => {
+						//通过‘-’符号确定需要计算的两边
+						if(item.serviceId == 5 && !this.noNull(itemChild.parameter) && itemChild.parameter.indexOf('-') != -1) {
+							//left right 分别是需要计算的两个值的字段名称
+							var index = itemChild.parameter.indexOf('-')
+							var left = itemChild.parameter.substring(0, index)
+							var right = itemChild.parameter.substring(index + 1)
+							//两个字段都要添加属性parameterList，里面存储需要计算的字段名和需要显示的字段名child
+							if(left == item.field || right == item.field) {
+								item.parameterList = {}
+								item.parameterList.left = left
+								item.parameterList.right = right
+								item.parameterList.child = itemChild.field
 							}
+						} else {
+							//发现被添加服务的字段后，绑定双方
+							if(itemChild.parameter == item.field) {
+								item.parameterList.push(itemChild.field)
+							}
+						}
 
-						})
+					})
 					//行序按照填写排序
 					item.fieldTypeName = this.fieldTypeShow2(item)
 					if(obj[item.showNum]) {
@@ -752,30 +756,30 @@
 							let obj = {};
 							//循环判断是否有添加服务的字段名
 							this.ruleForm.lines.forEach((item, index1) => {
-									item.parameterList = []
-									//时间控件计算差值
-									this.ruleForm.lines.forEach(itemChild => {
-										//通过‘-’符号确定需要计算的两边
-										if(item.serviceId == 5 && !this.noNull(itemChild.parameter) && itemChild.parameter.indexOf('-') != -1) {
-											//left right 分别是需要计算的两个值的字段名称
-											var index = itemChild.parameter.indexOf('-')
-											var left = itemChild.parameter.substring(0, index)
-											var right = itemChild.parameter.substring(index + 1)
-											//两个字段都要添加属性parameterList，里面存储需要计算的字段名和需要显示的字段名child
-											if(left == item.field || right == item.field) {
-												item.parameterList = {}
-												item.parameterList.left = left
-												item.parameterList.right = right
-												item.parameterList.child = itemChild.field
-											}
-										} else {
-											//发现被添加服务的字段后，绑定双方
-											if(itemChild.parameter == item.field) {
-												item.parameterList.push(itemChild.field)
-											}
+								item.parameterList = []
+								//时间控件计算差值
+								this.ruleForm.lines.forEach(itemChild => {
+									//通过‘-’符号确定需要计算的两边
+									if(item.serviceId == 5 && !this.noNull(itemChild.parameter) && itemChild.parameter.indexOf('-') != -1) {
+										//left right 分别是需要计算的两个值的字段名称
+										var index = itemChild.parameter.indexOf('-')
+										var left = itemChild.parameter.substring(0, index)
+										var right = itemChild.parameter.substring(index + 1)
+										//两个字段都要添加属性parameterList，里面存储需要计算的字段名和需要显示的字段名child
+										if(left == item.field || right == item.field) {
+											item.parameterList = {}
+											item.parameterList.left = left
+											item.parameterList.right = right
+											item.parameterList.child = itemChild.field
 										}
+									} else {
+										//发现被添加服务的字段后，绑定双方
+										if(itemChild.parameter == item.field) {
+											item.parameterList.push(itemChild.field)
+										}
+									}
 
-									})
+								})
 								//行序按照填写排序
 								item.fieldTypeName = this.fieldTypeShow(item)
 								if(obj[item.showNum]) {

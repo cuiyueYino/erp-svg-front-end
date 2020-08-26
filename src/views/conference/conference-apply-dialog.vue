@@ -12,7 +12,7 @@
       @close="closeDialog"
       style="z-index:2007"
     >
-      <el-form :model="searchForm" :rules="rules" ref="searchForm" style="margin-right: 60px;">
+      <el-form :model="searchForm" :rules="rules" ref="searchForm" style="margin: 0px 20px;">
         <el-row :gutter="24">
           <el-col :span="11">
             <el-form-item
@@ -46,7 +46,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="11">
-            <el-form-item label="召集人：" :label-width="formLabelWidth" prop="fconvener">
+            <el-form-item label="召集人：" :label-width="formLabelWidth" prop="fconvenername">
               <el-input
                 v-model="searchForm.fconvenername"
                 :disabled="true"
@@ -65,7 +65,7 @@
             ></el-button>
           </el-col>
           <el-col :span="11">
-            <el-form-item label="召集人部门：" :label-width="formLabelWidth" prop="fconvenerdept">
+            <el-form-item label="召集人部门：" :label-width="formLabelWidth">
               <el-input
                 class="unfocus"
                 v-model="searchForm.fconvenerdeptname"
@@ -76,7 +76,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="11">
-            <el-form-item label="联系人：" :label-width="formLabelWidth" prop="fcontact">
+            <el-form-item label="联系人：" :label-width="formLabelWidth" prop="fcontactname">
               <el-input
                 v-model="searchForm.fcontactname"
                 :disabled="true"
@@ -95,7 +95,7 @@
             ></el-button>
           </el-col>
           <el-col :span="11">
-            <el-form-item label="联系人部门：" :label-width="formLabelWidth" prop="fconvenerdept">
+            <el-form-item label="联系人部门：" :label-width="formLabelWidth">
               <el-input
                 class="unfocus"
                 v-model="searchForm.fcontactdeptname"
@@ -106,12 +106,12 @@
             </el-form-item>
           </el-col>
           <el-col :span="11">
-            <el-form-item label="联系方式：" :label-width="formLabelWidth" prop="fphone">
+            <el-form-item label="联系方式：" :label-width="formLabelWidth">
               <el-input v-model="searchForm.fphone" size="small" autocomplete="off"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="11" style="margin-left: 32px;">
-            <el-form-item label="参会人数(人)：" :label-width="formLabelWidth" prop="fcpmcount">
+            <el-form-item label="参会人数：" :label-width="formLabelWidth" prop="fcpmcount">
               <el-input v-model="searchForm.fcpmcount" size="small" autocomplete="off"></el-input>
             </el-form-item>
           </el-col>
@@ -197,7 +197,7 @@
         </el-row>
         <el-row :gutter="24">
           <el-col :span="23">
-            <el-form-item label="内部参与人：" :label-width="formLabelWidth" prop="internalmans">
+            <el-form-item label="内部参与人：" :label-width="formLabelWidth">
               <el-input
                 maxlength="3000"
                 size="small"
@@ -222,7 +222,7 @@
         </el-row>
         <el-row :gutter="24">
           <el-col :span="23">
-            <el-form-item label="外部参与人：" :label-width="formLabelWidth" prop="fexternalman">
+            <el-form-item label="外部参与人：" :label-width="formLabelWidth">
               <el-input
                 maxlength="3000"
                 size="small"
@@ -236,7 +236,7 @@
         </el-row>
         <el-row :gutter="24">
           <el-col :span="23">
-            <el-form-item label="会议内容：" :label-width="formLabelWidth" prop="fmeetcontent">
+            <el-form-item label="会议内容：" :label-width="formLabelWidth">
               <el-input
                 maxlength="3000"
                 size="small"
@@ -266,7 +266,7 @@
       @close="closeDialog"
       style="z-index:2007"
     >
-      <el-form :model="searchForm" ref="searchForm" style="margin-right: 60px;">
+      <el-form :model="searchForm" ref="searchForm" style="margin: 0px 20px;">
         <el-row :gutter="24">
           <el-col :span="11">
             <el-form-item
@@ -296,7 +296,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="11">
-            <el-form-item label="召集人：" :label-width="formLabelWidth" prop="fconvener">
+            <el-form-item label="召集人：" :label-width="formLabelWidth" prop="fconvenername">
               <el-input
                 v-model="searchForm.fconvenername"
                 :disabled="true"
@@ -315,7 +315,7 @@
             ></el-button>
           </el-col>
           <el-col :span="11">
-            <el-form-item label="召集人部门：" :label-width="formLabelWidth" prop="fconvenerdept">
+            <el-form-item label="召集人部门：" :label-width="formLabelWidth" prop="fconvenerdeptname">
               <el-input
                 class="unfocus"
                 v-model="searchForm.fconvenerdeptname"
@@ -326,7 +326,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="11">
-            <el-form-item label="联系人：" :label-width="formLabelWidth" prop="fcontact">
+            <el-form-item label="联系人：" :label-width="formLabelWidth" prop="fcontactname">
               <el-input
                 v-model="searchForm.fcontactname"
                 :disabled="true"
@@ -366,7 +366,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="11" style="margin-left: 32px;">
-            <el-form-item label="参会人数(人)：" :label-width="formLabelWidth" prop="fcpmcount">
+            <el-form-item label="参会人数：" :label-width="formLabelWidth" prop="fcpmcount">
               <el-input
                 v-model="searchForm.fcpmcount"
                 :disabled="true"
@@ -466,7 +466,7 @@
         </el-row>
         <el-row :gutter="24">
           <el-col :span="23">
-            <el-form-item label="内部参与人：" :label-width="formLabelWidth" prop="internalmans">
+            <el-form-item label="内部参与人：" :label-width="formLabelWidth" prop="internalMansName">
               <el-input
                 maxlength="3000"
                 size="small"
@@ -685,41 +685,43 @@
               trigger: "blur",
             },
           ],
-          fcpmcount: [{validator: checkInt, trigger: "blur"}],
-          fconvener: [
-            {required: true, message: "请输入召集人", trigger: "blur"},
+          fcpmcount: [
+            {required: true, message: "请输入参会人数（人）", trigger: "blur"},
+            {validator: checkInt, trigger: "blur"}],
+          fconvenername: [
+            {required: true, message: "请输入召集人", trigger: "change"},
             {
               min: 1,
               max: 3000,
               message: "长度在 1 到 3000 个字符",
-              trigger: "blur",
+              trigger: "change",
             },
           ],
-          fcontact: [
-            {required: true, message: "请输入联系人", trigger: "blur"},
+          fcontactname: [
+            {required: true, message: "请输入联系人", trigger: "change"},
             {
               min: 1,
               max: 3000,
               message: "长度在 1 到 3000 个字符",
-              trigger: "blur",
+              trigger: "change",
             },
           ],
           fconfname: [
-            {required: true, message: "请输入会议室", trigger: "blur"},
+            {required: true, message: "请输入会议室", trigger: "change"},
             {
               min: 1,
               max: 3000,
               message: "长度在 1 到 3000 个字符",
-              trigger: "blur",
+              trigger: "change",
             },
           ],
           fimportanceValue: [
-            {required: true, message: "请输入重要程度", trigger: "blur"},
+            {required: true, message: "请输入重要程度", trigger: "change"},
             {
               min: 1,
               max: 3000,
               message: "长度在 1 到 3000 个字符",
-              trigger: "blur",
+              trigger: "change",
             },
           ],
           fstartdate: [
@@ -750,7 +752,9 @@
             this.$api.confMangement
               .submitConfApply(this.searchForm)
               .then((res) => {
-                if (res.data.code == 0) {
+                if (res.data.code != 0 && res.data.msg == null) {
+                  this.$message.error("进入流程失败");
+                } else if (res.data.code == 0) {
                   this.dialogVisible = false;
                   this.closeDialog();
                   this.pageNum = 1;
@@ -797,10 +801,6 @@
       },
       // 暂存或提交form表单校验
       check() {
-        if (this.searchForm.internalmans.length <= 0) {
-          this.$message.error("内部参与人员不可为空");
-          return;
-        }
         switch (this.searchForm.fimportanceValue) {
           case "0":
             this.searchForm.fimportance = 0;
@@ -829,13 +829,15 @@
             this.fcompanyid = data.foid;
           } else if (type === "2") {
             // 召集人
-            this.searchForm.fconvenername = data.fname;
+            // this.searchForm.fconvenername = data.fname;
+            this.$set(this.searchForm,"fconvenername",data.fname)
             this.searchForm.fconvener = data.foid;
             this.searchForm.fconvenerdeptname = data.fdeptname;
             this.searchForm.fconvenerdept = data.fdeptid;
           } else if (type === "3") {
             // 联系人
-            this.searchForm.fcontactname = data.fname;
+            // this.searchForm.fcontactname = data.fname;
+            this.$set(this.searchForm,"fcontactname",data.fname)
             this.searchForm.fcontact = data.foid;
             this.searchForm.fcontactdeptname = data.fdeptname;
             this.searchForm.fcontactdept = data.fdeptid;
@@ -857,6 +859,7 @@
             this.searchForm.internalmans = internalmans;
             this.searchForm.internalMansName = internalMansName;
           }
+          this.staffTableVisible = false;
         }
         this.staffTableVisible = false;
       },
@@ -883,12 +886,21 @@
       },
       // 关闭会议室弹窗
       closeConfOffice(data) {
-        this.searchForm.fconfname = data.fname;
-        this.searchForm.fconfid = data.foid;
+        if (data != null) {
+          this.searchForm.fconfname = data.fname;
+          this.searchForm.fconfid = data.foid;
+        }
         this.officeTableVisible = false;
       },
       // 关闭模态框时子组件传值给父组件
       closeDialog() {
+        this.searchForm = {
+          fovert: 0,
+          fexternal: 0,
+          fcompanyid: "_DefaultCompanyOId",
+          fcompanyname: "福佳集团",
+          fcreator: localStorage.getItem('ms_userId'),
+        };
         let serchData = [];
         this.$emit("closeDialog", serchData);
       },
@@ -900,6 +912,10 @@
   /deep/ .el-positionType {
     padding-left: 0px !important;
     padding-top: 6px;
+  }
+
+  /deep/ .el-dialog {
+    margin-top: 5vh !important;
   }
 
   .el-internalMansName_ {

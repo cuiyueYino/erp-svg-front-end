@@ -14,14 +14,14 @@
         <el-tab-pane label="基本信息" name="1">
           <!-- Condition -->
           <el-form-item label="名称" :label-width="formLabelWidth" prop="displayName">
-            <el-input ref="nameInput" v-model="formData.displayName" autocomplete="off"></el-input>
+            <el-input ref="nameInput" v-model="formData.displayName" @input="change($event)" autocomplete="off"></el-input>
           </el-form-item>
           <el-form-item label="业务工作" :label-width="formLabelWidth" prop="work">
             <el-input v-model="formData.work" autocomplete="off"></el-input>
             <img class="icon-search" @click="workSearch" src="../../../assets/img/search.svg" />
           </el-form-item>
-          <el-form-item label="业务数据" :label-width="formLabelWidth">
-            <el-input v-model="formData.workData" autocomplete="off"></el-input>
+          <el-form-item label="业务数据" :label-width="formLabelWidth" >
+            <el-input v-model="formData.workData" autocomplete="off" :disabled="true"></el-input>
           </el-form-item>
           <!-- <el-form-item label="组织结构" :label-width="formLabelWidth">
             <el-input v-model="formData.structure" autocomplete="off"></el-input>
@@ -295,11 +295,15 @@ export default {
       if(obj.name === "Condition"){
         //  this.$refs['formData'].resetFields();
         console.log(obj)
-          if(!obj.oid){
+          if(!obj.oid && (obj.isSaveFlag==undefined)){
+             this.formData = {}
+             this.joinusertableData=[];
+             this.CCtableData=[];
               this.formData.displayName = obj.displayName
           }else{
                 this.checkedCities = [];
                 this.editData = obj;
+                this.formData.oid = this.editData.oid;
                 this.formData.displayName = this.editData.displayName
                 this.formData.work = this.editData.mactivity.name
                 this.formData.workId = this.editData.mactivity.oid
@@ -1078,6 +1082,9 @@ export default {
         }
       }
       this.baseInputTableF = false;
+    },
+    change(e){
+      this.$forceUpdate()
     },
     //分页、下一页
     onCurrentChange(val) {

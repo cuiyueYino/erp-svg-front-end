@@ -7,8 +7,8 @@
                     <el-button type="success" icon="el-icon-coin" plain @click="saveCDD">暂存</el-button>
                 </el-col>
         </el-row>
-        <el-form 
-            :model="formData" 
+        <el-form
+            :model="formData"
             label-width="100px"
             class="dataForm"
             size="mini"
@@ -58,7 +58,7 @@
                             ></quill-editor>
                         </el-tab-pane>
                         <el-tab-pane label="附件" name="second">
-                            <enclosurefile :rowDataFileObj="rowDataFileObj"  @changeShow="showFileData"/> 
+                            <enclosureFile ref="child" :enclosureConfig="enclosureConfig"/>
                         </el-tab-pane>
                     </el-tabs>
                 </el-col>
@@ -87,14 +87,14 @@
                 :destroy-on-close="true"
                 :data="treeData"
                 ref="tree"
-                
+
                 show-checkbox
                 node-key="foid"
                 :default-checked-keys="defautChecked"
                 :props="defaultProps">
                 </el-tree>
             </div>
-           
+
         </el-dialog>
 
 
@@ -102,13 +102,12 @@
     </div>
 </template>
 <script>
-import enclosurefile from '../comment/enclosure-file.vue';
+import enclosureFile from './enclosure-file.vue';
 import { quillEditor } from 'vue-quill-editor'; //调用编辑器
 import 'quill/dist/quill.snow.css';
-import * as Quill from 'quill';
 export default {
     components: {
-        enclosurefile,
+        enclosureFile,
         quillEditor
     },
     data(){
@@ -146,7 +145,7 @@ export default {
             },
             defautltAddressee: [],
             defautltDuplicate: [],
-            sender: localStorage.getItem('ms_userId'),
+            sender: localStorage.getItem('ms_staffId'),
             senderName: localStorage.getItem('ms_username'),
             treeTpye : '',
 
@@ -154,7 +153,6 @@ export default {
             dialogTree: false,
             labelPosition: 'left',
             atctiveName:'first',
-            rowDataFileObj:{},
 
             dialogName: '',
             treeData: [],
@@ -165,13 +163,22 @@ export default {
             },
             defautChecked:[],
 
+            // 附件
+            enclosureConfig:{
+                voucherId: '',
+                isShowButton: true,
+                menuCode: 'insideMail',
+                isDownload:false,
+                isSearch:true,
+            },
+
             rules: {
-               /*  subject: [
+               subject: [
                     { required: true, message: "请输入主题", trigger: "blur" }
                 ],
                 addresseeName: [
                     { required: true, message: "请选择主送人", trigger: "blur" }
-                ] */
+                ]
             }
         }
     },
@@ -179,7 +186,6 @@ export default {
         this.$nextTick(() => {
             this.persetParam();
         });
-        console.log("进入写信");
     },
     mounted() {
     },
@@ -192,27 +198,18 @@ export default {
         perData:{
             type: Object
         }
-    }, 
+    },
     methods:{
         //滑块切换
-        // handleClick(tab){
-        //     var tabsname =tab.paneName;
-        //     if(tabsname){
-        //         if(tabsname ==="first"){
-        //             //
-        //         }else if(tabsname ==="second"){
-        //             //
-        //             this.financingCVMListtype=true;
-        //         }else{
-        //             //附件列表
-        //             this.financingEFListtype=true;
-                    
-        //         }
-        //     }
-        // },
-        //附件
-        showFileData(data){
-            this.FiletableData=data;
+        handleClick(tab){
+            var tabsname =tab.paneName;
+            if(tabsname){
+                if(tabsname ==="first"){
+                    //内容
+                }else if(tabsname ==="second"){
+                }else{
+                }
+            }
         },
 
         /**
@@ -223,16 +220,18 @@ export default {
                 id: this.formData.id,
                 subject:this.formData.subject,
                 content:this.content,
-                // sender: this.sender,
-                // senderName: this.senderName,
-                sender:'BFPID000000LSN000E',
-                senderName:'聂立虹',
+                sender: this.sender,
+                senderName: this.senderName,
+                // sender:'BFPID000000LSN000E',
+                // senderName:'聂立虹',
                 status:2,
                 addresseeList:this.formData.addresseeList,
                 duplicateList:this.formData.duplicateList
             }
             this.$api.insideMail.sendInsideMail(reqParam).then(res=>{
                 if(this.dataBack(res,"发送成功")){
+                    this.enclosureConfig.voucherId = res.data.data;
+                    this.$refs.child.upload();
                     this.$parent.$parent.$parent.toPage(null,"outbox");
                 };
             })
@@ -246,16 +245,18 @@ export default {
                 id: this.formData.id,
                 subject:this.formData.subject,
                 content:this.content,
-                // sender: this.sender,
-                // senderName: this.senderName,
-                sender:'BFPID000000LSN000E',
-                senderName:'聂立虹',
+                sender: this.sender,
+                senderName: this.senderName,
+                // sender:'BFPID000000LSN000E',
+                // senderName:'聂立虹',
                 status:1,
                 addresseeList:this.formData.addresseeList,
                 duplicateList:this.formData.duplicateList
             }
             this.$api.insideMail.sendInsideMail(reqParam).then(res=>{
                 if(this.dataBack(res,"成功存储")){
+                    this.enclosureConfig.voucherId = res.data.data;
+                    enclosureFile.methods.upload();
                     this.$parent.$parent.$parent.toPage(null,"drafts");
                 };
             })
@@ -331,7 +332,7 @@ export default {
         /**
          * 失去焦点事件
          */
-        onEditorBlur() {}, 
+        onEditorBlur() {},
         /**
          * 获得焦点事件
          */
@@ -359,6 +360,7 @@ export default {
                 this.formData.subject= resData.subject
                 this.formData.addresseeList = this.perData.addresseeList
                 this.formData.duplicateList = this.perData.duplicateList
+                this.enclosureConfig.voucherId = this.perData.mailCode;
                  // 主送人自动勾选数据,名字回显
                 let addresseeName= '';
                 let defautltAddressee=[];
@@ -397,7 +399,7 @@ export default {
 
             }else if(this.treeTpye=="duplicate"){
                 let staffList = this.$refs.tree.getCheckedNodes(true)
-               
+
                 let nameString= '';
                 let checkId=[];
                 for(let i=0;i<staffList.length;i++){

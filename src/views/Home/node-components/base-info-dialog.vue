@@ -56,7 +56,7 @@
              </el-row>
              <el-row :gutter="24" >
                 <el-col :span="type=='角色'?12:8" v-show="type !=='服务'  && type !=='审核' && type !=='职务'">
-                    <el-form-item :label="'角色类别'" :label-width="'70px'"  prop="formCtionRole">
+                    <el-form-item :label="'角色类型'" :label-width="'70px'"  prop="formCtionRole">
                          <el-select v-model="formData.formCtionRole" clearable placeholder="请选择">
                             <el-option
                             v-for="item in roleoptions"
@@ -254,7 +254,7 @@ export default {
                     },
                     {
                         key: 'roleTypeName',
-                        title: '角色类别'
+                        title: '角色类型'
                     },
                     {
                         key: 'remark',

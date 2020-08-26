@@ -1,17 +1,16 @@
 <template>
 	<div v-if="!isOa">
-		<el-submenu v-if="menuItemData.subs" :index="typeof(menuItemData.url) == 'undefined' ? Math.random().toString() : menuItemData.url">
+		<el-submenu v-if="menuItemData.subs" :index="showUrl()">
 			<template slot="title">
 				<i :class="menuItemData.pictureUrl"></i>
 				<span>{{ menuItemData.name }}</span>
 			</template>
 			<el-auto-menu-item v-for="(menuChildrenItem,index) in menuItemData.subs" :key="index" :menuItemData="menuChildrenItem"></el-auto-menu-item>
 		</el-submenu>
-		<el-menu-item v-else :index="typeof(menuItemData.url) == 'undefined' ? Math.random().toString() : menuItemData.url">
+		<el-menu-item v-else :index="showUrl()">
 			<i :class="menuItemData.pictureUrl"></i>
 			<span slot="title">{{ menuItemData.name }}</span>
 		</el-menu-item>
-		
 	</div>
 	<div v-else>
 		 <el-menu-item  :index="menuItemData.index">
@@ -34,6 +33,15 @@
 		props: {
 			menuItemData: Object,
 			isOa:Boolean
+		},
+		methods:{
+			showUrl(){
+				if(typeof(this.menuItemData.url) == 'undefined' || this.menuItemData.url == ''){
+					return 'none' + Math.random().toString()
+				}else{
+					return this.menuItemData.url
+				}
+			}
 		}
 	};
 </script>

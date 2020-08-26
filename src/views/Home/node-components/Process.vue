@@ -123,11 +123,13 @@ export default {
         // 监听配置数据源
         data: {
             handler (obj) {
-                if(obj.type === "Subprocess" || obj.name === "Subprocess"){console.log(obj)
-                if(!obj.oid){
+                if(obj.type === "Subprocess" || obj.name === "Subprocess"){console.log(obj);//debugger
+                if(!obj.oid && (obj.isSaveFlag==undefined)){
+                    this.formData = {}
                     this.formData.name = obj.displayName
                 }else{
                     this.editData = obj;
+                    this.formData.oid = this.editData.oid;
                     this.formData.fremark = this.editData.fremark;
                     this.formData.name = this.editData.displayName;
                     this.formData.code = this.editData.code;

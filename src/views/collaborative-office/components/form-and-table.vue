@@ -65,6 +65,7 @@
 			};
 		},
 		computed: {
+			//区分组件
 			activeName: {
 				get() {
 					this.count++
@@ -82,6 +83,7 @@
 			}
 		},
 		created() {
+			//获取上传数据,显示出来
 			if(this.files.length != 0) {
 				this.files.forEach(item => {
 					var a = {
@@ -93,6 +95,7 @@
 			}
 		},
 		methods: {
+			//上传数据改变时
 			getFile(file, fileList) {
 				const isLt2M = file.size / 1024 / 1024 < 20;
 				if(isLt2M) {
@@ -106,13 +109,18 @@
 					}
 				}
 			},
+			//移除上传数据
 			delFile(file, fileList) {
 				if(typeof(file.id) != "undefined") {
 					this.delFiles.push(file.id)
 				}
 				this.fileList = fileList
 			},
+			//文件下载
 			downFiles(file) {
+				if(typeof(file.id) == "undefined"){
+					return
+				}
 				this.popup('是否下载文件<' + file.name + '>?').then(res => {
 					axios.interceptors.request.use(
 						config => {
@@ -151,6 +159,7 @@
 				document.body.appendChild(link)
 				link.click()
 			},
+			//上传
 			toUpload(id) {   
 				this.fileList.forEach(item => {
 					if(typeof(item.id) == "undefined") {
@@ -162,13 +171,16 @@
 						this.$api.collaborativeOffice.uploadFile(formData).then(data => {})
 					}
 				})
+				//删除之前上传过,现在被删除的文件
 				this.delFiles.forEach(item => {
 					this.$api.collaborativeOffice.deleteInfo({
 						id: item
 					}).then(data => {})
 				})
 			},
+			//提交
 			onSubmit() {
+				//form 和 table 校验
 				var state = true
 				if(!this.$refs.mainTableChild.onSubmit()) {
 					state = false
@@ -181,12 +193,17 @@
 					})
 				}
 				if(state) {
+					//整理主表返回数据
 					this.conData = this.$refs.mainTableChild.ruleForm
+					//整理子表返回数据
 					if(typeof(this.$refs.refCon) != "undefined") {
 						this.$refs.refCon.forEach(item => {
+							//form表单样式的子表
 							if(item.formData.type == 1) {
+								//格式统一,用子表ID做为数组的名称,表单样式数组只有一条数据
 								this.$set(this.conData, item.formData.id, [])
 								this.conData[item.formData.id].push(item.ruleForm)
+								//table样式的子表
 							} else {
 								this.$set(this.conData, item.formData.id, item.ruleForm.lines)
 							}

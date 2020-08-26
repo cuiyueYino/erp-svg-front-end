@@ -73,23 +73,26 @@ export default {
             // const dataStr = await this.compileObjToXMLLoading(dataObj);
             //let yData;
             let responData = await this.compileObjToXMLLoading(dataObj);
-            this.compileNodes(responData).then(res=>{ //console.log(res);
+            this.compileNodes(responData).then(res=>{ //
                 //遍历节点的返回值
                 this.workflowNodes.map(item => {
                     //线置空，然后重新赋值
                     item.transition=[];
                     //遍历线的返回值
-                    res.map(node => {//debugger
-                        if (item.data.displayName === node.to.data.displayName) {
+                    res.map(node => {//
+                        //if (item.data.displayName === node.to.data.displayName) {
+                        if (item.data.oid === node.to.data.oid) {
                             node.to = {
                                 ...item,
+                                key:item.oid,
                                 target: node.to.target,
                                 point: this.computedLinkPoint(item.options, node.to.target)
                             };
                             this.$set(this.linkData, this.linkData.length, node);
                         }
-                        if (item.data.displayName === node.from.data.displayName) {
-                            item.transition.push(node);//;console.log( item )
+                        //if (item.data.displayName === node.from.data.displayName) {
+                        if (item.data.oid === node.from.data.oid) {
+                            item.transition.push(node);//;console.log("ITEM",item)
                         }
                     });
                 });
@@ -113,7 +116,7 @@ export default {
                     if (item.type !== 'End') {
                         item.transition.map(link => {
                             compileXML += `
-                                <transition offset="${link.from.target},${link.to.target}" to="${link.to.data.displayName}" oid="${link.data.oid}" name="${link.data.name}" displayName="${link.data.displayName}" ></transition>`;
+                                <transition offset="${link.from.target},${link.to.target}" to="${link.to.data.displayName}" toid="${link.to.data.oid}" oid="${link.data.oid}" name="${link.data.name}" displayName="${link.data.displayName}" ></transition>`;
                         });
                     }
                     compileXML += `</${tagName}>`;
@@ -265,6 +268,7 @@ export default {
                     const target = attributes.offset.nodeValue.split(',')[0];
                     const toTarget = attributes.offset.nodeValue.split(',')[1];
                     const toDisplayName = attributes.to.nodeValue;
+                    const toid=attributes.toid.nodeValue;
                     allNodes.forEach(item=>{
                         if( item.attributes.displayName.nodeValue === attributes.to.nodeValue ){
                             toName = item.attributes.name.nodeValue;
@@ -276,7 +280,8 @@ export default {
                     if(LDataL && LDataL.length >0){
                         for(let j=0;j<LDataL.length;j++){
                             let LData=LDataL[j];
-                            if(LData.data.displayName == attributes.displayName.nodeValue){
+                            //if(LData.data.displayName == attributes.displayName.nodeValue){
+                            if(LData.data.oid == attributes.oid.nodeValue){
                                 lineList.push({
                                     from: {
                                         ...obj,
@@ -286,6 +291,7 @@ export default {
                                     to: {
                                         data: {
                                             name: toName,
+                                            oid: toid,
                                             displayName: toDisplayName,
                                         },
                                         target: toTarget
@@ -309,6 +315,7 @@ export default {
                             to: {
                                 data: {
                                     name: toName,
+                                    oid: toid,
                                     displayName: toDisplayName,
                                 },
                                 target: toTarget

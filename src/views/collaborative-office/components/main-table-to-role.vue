@@ -37,7 +37,6 @@
 			},
 			getCon(id){
 				this.roleCon.id = id
-//				this.roleCon.list = list
 				this.$refs.roleTable.check()
 			}
 		}

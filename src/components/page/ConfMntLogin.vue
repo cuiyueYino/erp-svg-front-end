@@ -59,8 +59,12 @@
     },
     methods: {
       submitForm() {
-        localStorage.removeItem('ms_tokenId');
         //校验用户名和密码
+        if(this.param.username !== "admin" && this.param.username !== "admin01" && this.param.username !== "admin02"){
+          this.$message.error("用户名或密码错误");
+          return;
+        }
+        localStorage.removeItem('ms_tokenId');
         this.$refs.conf_login.validate((valid) => {
           if (valid) {
             //获取token

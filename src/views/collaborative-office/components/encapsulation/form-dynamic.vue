@@ -263,7 +263,6 @@
 						this.formData.rowList.forEach(item => {
 							item.colList.forEach(val => {
 								if(val.field == row.field) {
-									console.log(1)
 									if(val.fieldType == 4) {
 										this.ruleForm[row.field] = result.con.toFixed(0)
 									} else if(val.fieldType == 5) {
@@ -615,10 +614,8 @@
 				}
 				var label = ""
 				var value = ""
-				console.log(dataBack)
 				dataBack.forEach((item, index) => {
 					if(index == dataBack.length - 1) {
-						console.log(1)
 						if(this.showCon == "personnel") {
 							label = label + item.tname
 							value = value + item.toid
@@ -721,16 +718,20 @@
 						this.showCon = "organization"
 						this.titleShow = "公司"
 						this.$set(this.dataCon, "context", row.browseBoxList)
+						//数据回显(保证选中后再次打开数据依旧被选中)下面两条一样
+						typeof(this.ruleForm[row.field]) != "undefined" ? this.$set(this.dataCon,"echo",this.ruleForm[row.field].split(',')) : this.$set(this.dataCon,"echo",[])
 						break;
 					case "2":
 						this.showCon = "organization"
 						this.titleShow = "部门"
 						this.$set(this.dataCon, "context", row.browseBoxList)
+						typeof(this.ruleForm[row.field]) != "undefined" ? this.$set(this.dataCon,"echo",this.ruleForm[row.field].split(',')) : this.$set(this.dataCon,"echo",[])
 						break;
 					case "3":
 						this.showCon = "organization"
 						this.titleShow = "职位"
 						this.$set(this.dataCon, "context", row.browseBoxList)
+						typeof(this.ruleForm[row.field]) != "undefined" ? this.$set(this.dataCon,"echo",this.ruleForm[row.field].split(',')) : this.$set(this.dataCon,"echo",[])
 						break;
 					case "4":
 						this.showCon = "personnel"

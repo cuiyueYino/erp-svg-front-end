@@ -3,6 +3,12 @@ import httpReqest from '../../utils/https';
 const v = base.dev;
 //const testV = base.test;
 const processSet = {
+    
+    // 新建工作业务组保存
+    addWorkGroup(params){
+        return httpReqest.post('/api/wfInterfaces/workFlow/saveWorkGroup', params);
+    },
+
     // 获取表格列表数据
     getTableData(params){
         return httpReqest.post('/api/wfInterfaces/workFlow/findWorkFlowProcessList', params);
@@ -65,6 +71,73 @@ const processSet = {
     getunhandledTask(params){
         return httpReqest.post('/api/wfInterfaces/workFlow/unhandledTask', params);
     },
+    // 获取待办事项的popForm表单数据(临时任务派发)
+    getTemporaryMissionDetail(params){
+        var valueS='?';
+        for(var item in params){
+            valueS+=item+"="+params[item]+"&";
+        }
+        if(valueS.slice(valueS.length-1,valueS.length) ==="&"){
+            valueS=valueS.slice(0,valueS.length-1);
+        }
+        return httpReqest.get('/api/scha/temporaryMission/getTemporaryMissionVO'+valueS);
+    },
+    // 获取待办事项的popForm表单数据(一岗一表)
+    getPostBidDetail(params){
+        var valueS='?';
+        for(var item in params){
+            valueS+=item+"="+params[item]+"&";
+        }
+        if(valueS.slice(valueS.length-1,valueS.length) ==="&"){
+            valueS=valueS.slice(0,valueS.length-1);
+        }
+        return httpReqest.get('/api/scha/formPost/getFormPostVO'+valueS);
+    },
+    // 获取待办事项的popForm表单数据(配合任务)
+    getCoordinationTaskDetail(params){
+        var valueS='?';
+        for(var item in params){
+            valueS+=item+"="+params[item]+"&";
+        }
+        if(valueS.slice(valueS.length-1,valueS.length) ==="&"){
+            valueS=valueS.slice(0,valueS.length-1);
+        }
+        return httpReqest.get('/api/scha/coordinationTask/getCoordinationTaskVO'+valueS);
+    },
+    // 获取待办事项的popForm表单数据(公司年度计划汇总)
+    getAnnualPlanDetail(params){
+        var valueS='?';
+        for(var item in params){
+            valueS+=item+"="+params[item]+"&";
+        }
+        if(valueS.slice(valueS.length-1,valueS.length) ==="&"){
+            valueS=valueS.slice(0,valueS.length-1);
+        }
+        return httpReqest.get('/api/scha/yearPlanSummary/findInfoById'+valueS);
+    },
+    //获取待办事项的popForm表单数据(部门月度计划)
+    getMonthlyPlanDetail(params){
+        var valueS='?';
+        for(var item in params){
+            valueS+=item+"="+params[item]+"&";
+        }
+        if(valueS.slice(valueS.length-1,valueS.length) ==="&"){
+            valueS=valueS.slice(0,valueS.length-1);
+        }
+        return httpReqest.get('/api/scha/departmentMonthPlan/showDeptMonthPlanDetail'+valueS);
+    },
+    // 获取待办事项的popForm表单数据(部门年度计划)
+    getDepYearPlanDetail(params){
+        return httpReqest.post('/api/scha/departmentYearPlan/findInfoById', params);
+    },
+    // 获取待办事项的popForm表单数据(一人一表任务表)
+    getPersonalTableTaskDetail(params){
+        return httpReqest.post('/api/scha/personalTableTask/findPersonalTableTaskById', params);
+    },
+     //获取处理表单详情数据
+     getunhandledTaskFormDetail(params){
+        return httpReqest.post('/api/scha/workFlow/unhandledTaskFormDetail', params);
+    },
     //部门的详细数据查询
     getdepaSearch(params){
         return httpReqest.post('/api/wfInterfaces/workFlow/departmentSearch', params);
@@ -84,6 +157,10 @@ const processSet = {
     //待办事项-转发
     setencyclic(params){
         return httpReqest.post('/api/wfInterfaces/workFlow/encyclic', params);
+    },
+    //待办事项-提交
+    addWfsubmit(params){
+        return httpReqest.post('/api/wfInterfaces/workFlow/wfsubmit', params);
     },
     //委托
     transmit(params){

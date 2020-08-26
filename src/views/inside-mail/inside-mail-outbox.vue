@@ -76,7 +76,7 @@ export default {
             total: 0,
 
             userName: localStorage.getItem('ms_username'),
-            userId: localStorage.getItem('ms_userId'),
+            userId: localStorage.getItem('ms_staffId'),
             form: {
                 select: [],
                 selectVal: "",
@@ -122,7 +122,6 @@ export default {
         this.$nextTick(() => {
             this.getSendMail();
         });
-        console.log("进入发件箱")
     },
     methods: {
 
@@ -142,8 +141,8 @@ export default {
         getSendMail(){
             //表格查询基础参数
             let reqParam={
-                // owner: this.userId,
-                owner: 'BFPID000000LSN000E',
+                owner: this.userId,
+                // owner: 'BFPID000000LSN000E',
                 page: this.pageNum,
                 size: this.pageSize
             };
@@ -164,14 +163,14 @@ export default {
                                 this.tableData[i].isRead = "已读";
                                 break;
                                 default :
-                                break;              
+                                break;
                             }
                         }
                     };
                 }
             );
         },
-        
+
         /**
         * 搜索
          */
@@ -209,7 +208,7 @@ export default {
             for(let key of Object.keys(this.params)){
                 delete this.params[key];
             }
-        },        
+        },
 
         /**
          * 回复
@@ -323,7 +322,7 @@ export default {
                     this.$message.success("删除成功")
                     // 刷新表格
                     this.getSendMail();
-                };  
+                };
                 },
             );
         },

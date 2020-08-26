@@ -12,7 +12,7 @@
         <el-tabs v-model="activeName" >
             <el-tab-pane label="基本信息" name="1">
                  <el-form-item label="编码" :label-width="formLabelWidth" prop="code">
-                    <el-input v-model="formData.code" @input="change($event)" autocomplete="off" clearable></el-input>
+                    <el-input v-model="formData.code" @input="change($event)"  autocomplete="off" clearable></el-input>
                 </el-form-item>
                 <el-form-item label="名称" :label-width="formLabelWidth" prop="name">
                     <el-input  v-model="formData.name" autocomplete="off" @input="change($event)" clearable></el-input>
@@ -42,12 +42,12 @@
                     </el-tab-pane>
                     <el-tab-pane label="有条件" name="2">
                         <el-form-item label="条件表达式" :label-width="formLabelWidth" prop="conditional">
-                            <el-input type="textarea"  v-model="formData.conditional"></el-input>
+                            <el-input type="textarea" @input="change($event)" v-model="formData.conditional"></el-input>
                         </el-form-item>
                     </el-tab-pane>
                     <el-tab-pane label="[否则]条件" name="3">
                         <el-form-item label="条件表达式" :label-width="formLabelWidth" prop="otherwise">
-                            <el-input type="textarea" disabled v-model="formData.otherwise"></el-input>
+                            <el-input type="textarea" disabled v-model="formData.otherwiseText"></el-input>
                         </el-form-item>
                     </el-tab-pane>
                     <el-tab-pane label="调用服务" name="4">
@@ -56,7 +56,7 @@
                             <img class="icon-search" src="../../../assets/img/search.svg"  @click="baseInputTable('服务','服务查询')">
                         </el-form-item>
                         <el-form-item label="条件表达式" :label-width="formLabelWidth" prop="baseTextarea"> 
-                            <el-input type="textarea" v-model="formData.baseTextarea"></el-input>
+                            <el-input type="textarea" @input="change($event)" v-model="formData.baseTextarea"></el-input>
                         </el-form-item>
                     </el-tab-pane>
                    
@@ -177,12 +177,16 @@ export default {
             dialogVisible: this.visible,
             // 配置表单数据
             formData: {
+                unconditional:'',
+                conditional:'',
                 name:'',
                 code:'',
                 fremark:'',
                 formCode:'',
                 formName:'',
                 baseTextarea:'',
+                otherwise:'0',
+                otherwiseText:"",
                 baseInputServe:''
             },
             dialogData: {},
@@ -227,35 +231,55 @@ export default {
         data: {
             handler (obj) {
              if(obj.name === "Line"){
-                console.log(obj)
-                this.editData = obj;
-                this.formData.code = this.editData.linefcode
-                this.formData.oid = this.editData.oid
-                this.formData.fremark = this.editData.lineremark
-                this.formData.baseTextarea = this.editData.lineexpression
-                this.formData.name = this.editData.displayName
-                this.formData.conditional = this.editData.lineexpression?this.editData.lineexpression:''
-                this.formData.otherwise = this.editData.lineotherwise?this.editData.lineotherwise:''
-                this.formData.baseInputServe = this.editData.service?this.editData.service.name:''
-                this.formData.baseTextarea = this.editData.service?this.editData.service.expression:''
-                this.formData.serviceOid = this.editData.service?this.editData.service.oid:''
-                this.formData.serviceCode = this.editData.service?this.editData.service.code:''
-                switch (this.editData.decisionType ) {
-                    case 1:
-                            this.formData.decisionType = '同意'
-                        break;
-                    case 2:
-                            this.formData.decisionType = '不同意'
-                        break;
-                    case 3:
-                            this.formData.decisionType = '待处理'
-                        break;
-                    case 4:
-                            this.formData.decisionType = '其他'
-                        break;
-                
-                    default:
-                        break;
+                console.log(obj,"Line")
+                if(!obj.oid && (obj.isSaveFlag==undefined)){
+                    this.formData={};
+                    this.formData.otherwise ="0";
+                    this.formData.conditional="";
+                    this.formData.serviceOid="";
+                    this.formData.serviceCode="";
+                    this.formData.baseInputServe="";
+                    this.formData.baseTextarea="";
+                    this.formData.name = obj.displayName
+                }else{
+                    this.editData = obj;
+                    this.formData.code = this.editData.linefcode
+                    this.formData.oid = this.editData.oid
+                    this.formData.fremark = this.editData.lineremark
+                    this.formData.name = this.editData.displayName
+                    //条件判断
+                    if(this.editData.lineexpression){
+                        this.baseActiveName ='2';
+                    }else if(this.editData.lineotherwise =="1"){
+                        this.baseActiveName ='3';
+                    }else if(this.editData.service && this.editData.service.name){
+                        this.baseActiveName ='4';
+                    }else{
+                        this.baseActiveName ='1';
+                    }
+                    this.formData.conditional = this.editData.lineexpression?this.editData.lineexpression:''
+                    this.formData.otherwise = this.editData.lineotherwise?this.editData.lineotherwise:''
+                    this.formData.baseInputServe = this.editData.service?this.editData.service.name:''
+                    this.formData.baseTextarea = this.editData.service?this.editData.service.expression:''
+                    this.formData.serviceOid = this.editData.service?this.editData.service.oid:''
+                    this.formData.serviceCode = this.editData.service?this.editData.service.code:''
+                    switch (this.editData.decisionType ) {
+                        case 1:
+                                this.formData.decisionType = '同意'
+                            break;
+                        case 2:
+                                this.formData.decisionType = '不同意'
+                            break;
+                        case 3:
+                                this.formData.decisionType = '待处理'
+                            break;
+                        case 4:
+                                this.formData.decisionType = '其他'
+                            break;
+                    
+                        default:
+                            break;
+                    }
                 }
              }
             },
@@ -268,7 +292,7 @@ export default {
         },
         dialogTableVisible(val){
             if(!val){
-                this.$refs['formData'].resetFields();
+                //this.$refs['formData'].resetFields();
             }
         },
         // 对话框显示 自动聚焦name输入框
@@ -324,6 +348,9 @@ export default {
             switch (this.baseActiveName) {
                 case '1':
                         this.formData.conditional =''
+                        this.formData.serviceOid=''
+                        this.formData.serviceCode=''
+                        this.formData.baseInputServe=''
                         this.formData.otherwise ='0'
                         this.formData.baseTextarea = ''
                     break;
@@ -331,12 +358,18 @@ export default {
                         this.formData.unconditional =''
                         this.formData.otherwise ='0'
                         this.formData.baseTextarea = ''
+                        this.formData.serviceOid=''
+                        this.formData.serviceCode=''
+                        this.formData.baseInputServe=''
                     break;
                 case '3':
                         this.formData.otherwise = '1'
                         this.formData.unconditional =''
                         this.formData.conditional =''
                         this.formData.baseTextarea = ''
+                        this.formData.serviceOid=''
+                        this.formData.serviceCode=''
+                        this.formData.baseInputServe=''
                     break;
                 case '4':
                         this.formData.unconditional =''
@@ -400,7 +433,8 @@ export default {
                 page:this.pageNum,
                 size:this.pageSize
             };
-            this.$api.processSet.workSearchData(data).then(res=>{
+            //this.$api.processSet.workSearchData(data).then(res=>{
+            this.$api.processSet.getWfBusinessService(data).then(res=>{
                 this.tableLoading = false;
                 this.gridData = res.data.data.rows
                 this.total = res.data.data.total

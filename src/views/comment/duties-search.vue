@@ -105,7 +105,7 @@
                     <el-col :span="6" class="elColCenter">职务类型</el-col>
                     <el-col :span="6" class="elColCenter">等于</el-col>
                     <el-col :span="6">
-                        <el-select v-model="dialog.fpositiontype">
+                        <el-select v-model="dialog.fpositioncategory">
                             <el-option
                                 v-for="item in jobtypeoptions"
                                 :key="item.code"
@@ -271,9 +271,9 @@ export default {
             if(fstatusS && fstatusS!=''){
                 fromdata.fstatus=this.dialog.fstatus;
             }
-            let fpostype=this.dialog.fpositiontype;
+            let fpostype=this.dialog.fpositioncategory;
             if(fpostype && fpostype!=''){
-                fromdata.fpositiontype=this.dialog.fpositiontype;
+                fromdata.fpositioncategory=this.dialog.fpositioncategory;
             }
             this.$api.jobUserManagement.getTableData(fromdata).then(response => {
                 let responsevalue = response;
@@ -320,9 +320,9 @@ export default {
             if(fstatusS && fstatusS!=''){
                 fromdata.fstatus=this.dialog.fstatus;
             }
-            let fpostype=this.dialog.fpositiontype;
+            let fpostype=this.dialog.fpositioncategory;
             if(fpostype && fpostype!=''){
-                fromdata.fpositiontype=this.dialog.fpositiontype;
+                fromdata.fpositioncategory=this.dialog.fpositioncategory;
             }
             this.$api.jobUserManagement.getTableData(fromdata).then(response => {
                 let responsevalue = response;

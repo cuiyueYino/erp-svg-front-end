@@ -13,7 +13,7 @@
             <el-tab-pane label="基本信息" name="1">
                 <!-- Condition -->
                 <el-form-item label="名称" :label-width="formLabelWidth" prop="name">
-                    <el-input ref="nameInput" v-model="formData.name" autocomplete="off"></el-input>
+                    <el-input ref="nameInput" v-model="formData.name" @input="change($event)" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="审核工作" :label-width="formLabelWidth" prop="work">
                     <el-input v-model="formData.work" autocomplete="off"></el-input>
@@ -25,7 +25,7 @@
                     <img class="icon-search"  @click="workSearch('源单据业务')" src="../../../assets/img/search.svg">
                 </el-form-item>
                 <el-form-item label="业务数据" :label-width="formLabelWidth" >
-                    <el-input v-model="formData.fmclassName" autocomplete="off"></el-input>
+                    <el-input v-model="formData.fmclassName" autocomplete="off" :disabled="true"></el-input>
                    
                 </el-form-item>
                 <!-- <el-form-item label="组织结构" :label-width="formLabelWidth" >
@@ -53,9 +53,10 @@
                     <el-input v-model="formData.maxWorkTime" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="时间单位" :label-width="formLabelWidth" prop="timeUnit">
-                     <el-radio-group v-model="formData.timeUnit">
+                    <!-- <el-radio-group v-model="formData.timeUnit">
                         <el-radio label="1">小时</el-radio>
-                    </el-radio-group>
+                    </el-radio-group>-->
+                    <el-checkbox v-model="formData.timeUnit">小时</el-checkbox>
                 </el-form-item>
                  <el-form-item  :label-width="formLabelWidth" prop="autoSubmit">
                     <el-checkbox v-model="formData.autoSubmit" @change="changeAutoSubmit">超过最大时间系统自动提交审批</el-checkbox>
@@ -139,7 +140,8 @@
                     <el-col :span="24">
                         <dynamic-table
                             :columns="columns4"
-                            ref="decisionTable"
+                            ref="decisionTableReF"
+                            tooltip-effect="dark"
                             :isShowPager="false"
                             :table-data="tableData3"
                             @selection-change="onSelectionDecision"
@@ -381,7 +383,7 @@ export default {
                 maxWorkTime:'',
                 autoSubmit:'',
                 autoHurry:'',
-                timeUnit:'1'
+                timeUnit:''
             },
             columns: [
             {
@@ -450,19 +452,19 @@ export default {
         baseActiveNameStr: "角色",
         tableData3:[
             {
-                "decisionType":1,
+                "decisionType":"1",
 				"decisionText":"同意"
             },
             {
-                "decisionType":2,
+                "decisionType":"2",
 				"decisionText":"不同意"
             },
             {
-                "decisionType":3,
-				"decisionText":" 待处理"
+                "decisionType":"3",
+				"decisionText":"待处理"
             },
             {
-                "decisionType":4,
+                "decisionType":"4",
 				"decisionText":"其他"
             },
         ],
@@ -470,6 +472,7 @@ export default {
         editData:{},  
         multipleSelection: [],
         decisionSelection:[],
+        decisionSelData:[],
         joinSelection:[],
         copyToSelection:[],
         joinUserSelection:[],
@@ -509,13 +512,21 @@ export default {
         data: {
             handler (obj) {
                 if(obj.name === "Join"){
-                    console.log( obj)
-                    if(!obj.oid){
+                    console.log("审核活动数据",obj)
+                    if(!obj.oid && (obj.isSaveFlag==undefined)){
+                        this.formData = {};
+                        this.editData= {};
+                        this.joinusertableData=[];
+                        this.tableData=[];
+                        this.decisionSelection=[];
+                        this.decisionSelData=[];
                         this.checkedCities = ['由权限控制'];
                         this.formData.name = obj.displayName
                     }else{
+                        this.activeName='1';
                         this.checkedCities = [];
                         this.editData = obj;
+                        this.formData.oid = this.editData.oid;
                         this.formData.name = this.editData.displayName
                         this.formData.work = this.editData.mactivity.name
                         this.formData.workId = this.editData.mactivity.oid
@@ -528,7 +539,8 @@ export default {
                         this.formData.fmclassName = this.editData.dataType.name
                         this.formData.fremark = this.editData.fremark    
                         this.formData.maxWorkTime = this.editData.maxWorkTime
-                        this.formData.timeUnit = this.editData.timeUnit       
+                        //this.formData.timeUnit = this.editData.timeUnit
+                        this.formData.timeUnit = this.editData.timeUnit==1?true:false       
                         this.formData.autoSubmit = this.editData.autoSubmit==1?true:false 
                         this.formData.autoHurry = this.editData.autoHurry==1?true:false
                         switch (this.editData.wfAuditType) {
@@ -544,9 +556,22 @@ export default {
                             default:
                             break;
                         }
-                        this.checkedCities.push(this.editData.permission=='1'?'由权限控制':this.editData.mntNextJoin=='1'?'手工指定下一节点参与者':this.editData.canSkip=='1'?'可略过':this.editData.multMail=='1'?'多封邮件':null)
+                        if(this.editData.permission=='1' || this.editData.permission==1){
+                            this.checkedCities.push('由权限控制');
+                        }
+                        if(this.editData.mntNextJoin=='1' || this.editData.mntNextJoin==1){
+                            this.checkedCities.push('手工指定下一节点参与者');
+                        }
+                        if(this.editData.canSkip=='1' || this.editData.canSkip==1){
+                            this.checkedCities.push('可略过');
+                        }
+                        if(this.editData.multMail=='1' || this.editData.multMail==1){
+                            this.checkedCities.push('多封邮件');
+                        }
+                        //this.checkedCities.push(this.editData.permission=='1'?'由权限控制':this.editData.mntNextJoin=='1'?'手工指定下一节点参与者':this.editData.canSkip=='1'?'可略过':this.editData.multMail=='1'?'多封邮件':null)
                         //    this.joinusertableData = this.editData.wfParticipator.participator
                         let joinusertable = [];
+                        this.joinusertableData=[];
                         if( this.editData.wfParticipator.participator.length == 0){}else{
                             this.editData.wfParticipator.participator.forEach(item=>{
                                 switch (item.type) {
@@ -618,6 +643,7 @@ export default {
                         }
                         console.log(this.joinusertableData,joinusertable);
                         let tableDataNewSet = []
+                        this.tableData=[];
                         if( this.editData.wfCopyTo.copyTo.length == 0){}else{
                             this.editData.wfCopyTo.copyTo.forEach(item=>{
                                 switch (item.type) {
@@ -681,22 +707,16 @@ export default {
                                 }
                             });
                         }
-                        
                         if( this.tableData.length === 0 && tableDataNewSet.length !== 0){
                             tableDataNewSet.forEach(item=>{
                                 this.tableData.push(item)
                             })
                         }
+                        this.decisionSelData=this.editData.decisions.decision;
                         this.$nextTick(()=>{
                             //设置审核活动决策类型选中
-                            this.tableData3.forEach(row => {
-                                this.editData.decisions.decision.forEach(row1 => {
-                                    if (row1.decisionText === row.decisionText) {
-                                        this.$refs.decisionTable.toggleRowSelection(row,true);
-                                    }
-                                });
-                            })
-                            //设置审核活动选中
+                            this.tableRowSelect();
+                            /*//设置审核活动选中
                             this.tableData2.forEach((item)=>{
                                 this.editData.wfViewOtherComments.wfViewOtherComment.forEach(row2 => {
                                     if (row2.fname === item.fname) {
@@ -704,18 +724,8 @@ export default {
                                     }
                                 });
                             })
-                            /*this.editData.decisions.decision.forEach((item)=>{
-                                if(this.tableData3.indexOf(item) >=0){
-                                    debugger
-                                    this.$refs.decisionTable.toggleRowSelection(item,true);//选中所在行
-                                }
-                            })*/
+                            */
                         })
-                        /*this.tableData2 = this.editData.wfViewOtherComments.wfViewOtherComment;
-                        this.tableData3 = this.editData.decisions.decision;
-                        this.tableData3.forEach(row => {
-                            this.$refs.decisionTable.toggleRowSelection(row);
-                        });*/
                     }
                 }  
             },
@@ -803,18 +813,31 @@ export default {
                 this.dialogVisible = false;
             });
         },
-        handleClick() {//console.log(this.formData.name)
-            if(this.activeName == '5'){//debugger
+        tableRowSelect(){
+            //this.$refs.decisionTableReF.clearSelection();
+            this.$refs.decisionTableReF.$refs.refTable.clearSelection()
+            this.tableData3.forEach(row => {
+                this.decisionSelData.forEach(row1 => {
+                    if (row1.decisionText === row.decisionText) {
+                        this.$refs.decisionTableReF.toggleRowSelection(row,true);
+                    }
+                })    
+            })
+        },
+        handleClick() {//
+            if(this.activeName == '5'){//
                 this.tableData2 =[]
                 let allData = JSON.parse( sessionStorage.getItem('allData') );
                 if(allData.length>0){
                     allData.forEach(item=>{
-                        if(item.type == 'Join'&& (item.data.displayName !== this.formData.name) ){
-                            this.tableData2.push({
-                                fname:item.data.displayName,
-                                ftype:item.data.name,
-                                wfProcessor: item.oid?item.oid:item.key
-                            })
+                        if(item.data){
+                            if(item.type == 'Join' && (item.data.displayName !== this.formData.name) && (item.data.displayName !== "审核活动")){
+                                this.tableData2.push({
+                                    fname:item.data.displayName,
+                                    ftype:item.data.name,
+                                    wfProcessor: item.oid?item.oid:item.key
+                                })
+                            }
                             // item.wfViewOtherComments.wfViewOtherComment.forEach(vOcItime=>{
                             //     vOcItime.push({
                             //         fname:item.data.displayName,
@@ -824,9 +847,21 @@ export default {
                             // })
                         }
                     })
+                    /*this.$nextTick(()=>{
+                        this.tableData2.forEach((item)=>{
+                            this.editData.wfViewOtherComments.wfViewOtherComment.forEach(row2 => {
+                                if (row2.fname === item.fname) {
+                                    this.$refs.joinTable.toggleRowSelection(item,true);
+                                }
+                            });
+                        })
+                    })*/
                 }
-            }   
-            
+            }else if(this.activeName == '6'){
+                this.$nextTick(()=>{
+                    this.tableRowSelect();
+                });
+            }
         },
          // 参与人弹窗
         joinSearch(Str){
@@ -1012,25 +1047,27 @@ export default {
         //删除
         deleteMsg(Str){
             if (Str == "新增参与者") {
-                let selectData = this.multipleSelection;
+                //let selectData = this.multipleSelection;
+                let selectData = this.joinUserSelection;
                 let updateDate = this.joinusertableData;
                 for (var i = 0; i < selectData.length; i++) {
-                for (var j = 0; j < updateDate.length; j++) {
-                    if (selectData[i].fUsername === updateDate[j].fUsername) {
-                        updateDate.splice(j, 1);
+                    for (var j = 0; j < updateDate.length; j++) {
+                        if (selectData[i].fUsername === updateDate[j].fUsername) {
+                            updateDate.splice(j, 1);
                         }
                     }
                 }
                 this.joinusertableData = updateDate;
             } else if (Str == "新增抄送") {
-                let selectCCData = this.multipleSelection;
+                //let selectCCData = this.multipleSelection;
+                let selectCCData = this.copyToSelection;
                 let updateCCDate = this.tableData;
                 for (var i = 0; i < selectCCData.length; i++) {
-                for (var j = 0; j < updateCCDate.length; j++) {
-                    if (selectCCData[i].fUsername === updateCCDate[j].fUsername) {
-                    updateCCDate.splice(j, 1);
+                    for (var j = 0; j < updateCCDate.length; j++) {
+                        if (selectCCData[i].fUsername === updateCCDate[j].fUsername) {
+                            updateCCDate.splice(j, 1);
+                        }
                     }
-                }
                 }
                 this.tableData = updateCCDate;
             }
@@ -1053,27 +1090,27 @@ export default {
         },
          //多选
         onSelectionChange(val) { console.log(val)
-            this.multipleSelection = val;
-            switch (this.titleStr) {
-                case '源单据业务':
-                         this.formData.workDataCode = val[0].fcode?val[0].fcode:'';
-                         this.formData.workData = val[0].fname?val[0].fname:'';
-                         this.formData.workDataId = val[0].foid?val[0].foid:'';
-                    break;
-                case '审核工作':
-                         this.formData.work = val[0].fname?val[0].fname:'';
-                         this.formData.workId = val[0].foid?val[0].foid:'';
-                         this.formData.workCode = val[0].fcode?val[0].fcode:'';
-                         this.formData.fmclassName = val[0].fmclassName?val[0].fmclassName:'';
-                         this.formData.fmclassOid = val[0].fmclassOid?val[0].fmclassOid:'';
-                         this.formData.fmclassCode = val[0].fmclassCode?val[0].fmclassCode:'';
-                    break;
-            
-                default:
-                    break;
+            if(val.length>0){
+                this.multipleSelection = val;
+                switch (this.titleStr) {
+                    case '源单据业务':
+                            this.formData.workDataCode = val[0].fcode?val[0].fcode:'';
+                            this.formData.workData = val[0].fname?val[0].fname:'';
+                            this.formData.workDataId = val[0].foid?val[0].foid:'';
+                        break;
+                    case '审核工作':
+                            this.formData.work = val[0].fname?val[0].fname:'';
+                            this.formData.workId = val[0].foid?val[0].foid:'';
+                            this.formData.workCode = val[0].fcode?val[0].fcode:'';
+                            this.formData.fmclassName = val[0].fmclassName?val[0].fmclassName:'';
+                            this.formData.fmclassOid = val[0].fmclassOid?val[0].fmclassOid:'';
+                            this.formData.fmclassCode = val[0].fmclassCode?val[0].fmclassCode:'';
+                        break;
+                
+                    default:
+                        break;
+                }
             }
-           
-            
         },
           // 业务工作-获取表格数据-重置
         reWorkSearchTable(formName){
@@ -1140,12 +1177,12 @@ export default {
                      data = {
                         fmclassName: this.formData.fmclassName,
                         fmclass:this.formData.fmclassOid,
-                        fcode: this.formData.formCode,
-                        fname: this.formData.formName,
+                        // fcode: this.formData.formCode?this.formData.formCode:'',
+                        // fname: this.formData.formName?this.formData.formName:'',
                         fmfunctiontypecon: this.formData.formCtionTypeCon,
                         page:this.pageNum,
                         size:this.pageSize
-                    };
+                    };console.log(data)
                     break;
                 case '':
                     data = {
@@ -1177,7 +1214,9 @@ export default {
                 console.log(error)
             })
         },
-       
+        change(e){
+            this.$forceUpdate()
+        },
          //分页、下一页
         onCurrentChange(val){
              this.pageNum = val;
