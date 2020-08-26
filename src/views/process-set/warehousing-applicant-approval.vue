@@ -37,6 +37,8 @@
                         <EmpApprTabNumDetailPage  :rowEmpApprTabNumDetailDataObj="rowEmpApprTabNumDetailDataObj" :rowEmpApprTabNumDetailtype="rowEmpApprTabNumDetailtype" @changeShow="showLookOrUpdate"/>
                         <CooTaskDetailPage  :rowCooTaskDetailDataObj="rowCooTaskDetailDataObj" :rowCooTaskDetailtype="rowCooTaskDetailtype" @changeShow="showLookOrUpdate"/>
                         <EachPerEachTableAdjPage  :rowEachPerEachTableAdjDataObj="rowEachPerEachTableAdjDataObj" :rowEachPerEachTableAdjtype="rowEachPerEachTableAdjtype" @changeShow="showLookOrUpdate"/>
+                        <ConferenceApplyPage  :rowConferenceApplyDataObj="rowConferenceApplyDataObj" :rowConferenceApplytype="rowConferenceApplytype" @changeShow="showLookOrUpdate"/>
+                    
                     </el-row>  
                     <el-row>
                         <el-col :span="22">
@@ -94,6 +96,7 @@ import DepartMonPlanDetPage from '../plan-options/department-month-plan-detail.v
 import EmpApprTabDetailPage from '../plan-options/employees-appraisal-table-detail.vue';//员工考评表 P
 import EmpApprTabNumDetailPage from '../plan-options/employees-appraisal-table-num-detail.vue';//员工考评表汇总 S
 import CooTaskDetailPage from '../plan-options/cooperate-task-detail.vue';// 配合任务  A
+import ConferenceApplyPage from '../plan-options/conference-apply-detail.vue';// 会议申请
 
 export default {
     props: {
@@ -129,7 +132,8 @@ export default {
         DepartMonPlanDetPage,
         EmpApprTabDetailPage,
         EmpApprTabNumDetailPage,
-        CooTaskDetailPage    
+        CooTaskDetailPage,
+        ConferenceApplyPage    
     },
     inject: ['reload'],
     data: function() {   
@@ -163,6 +167,7 @@ export default {
             rowEmpApprTabNumDetailtype:false,
             rowCooTaskDetailtype:false,
             rowEachPerEachTableAdjtype:false,
+            rowConferenceApplytype:false,
             rowUTSDataObj:{},
             rowDataprocessObj: [],
             rowCOOTaskDataObj: {},
@@ -183,6 +188,7 @@ export default {
             rowEmpApprTabNumDetailDataObj:{},
             rowCooTaskDetailDataObj:{},
             rowEachPerEachTableAdjDataObj:{},
+            rowConferenceApplyDataObj:{},
             pageNum: 1,
             pageSize: 10,
             total: 20,
@@ -214,6 +220,7 @@ export default {
             this.rowEmpApprTabNumDetailtype=false;
             this.rowCooTaskDetailtype=false;
             this.rowEachPerEachTableAdjtype=false;
+            this.rowConferenceApplytype=false;
             this.reload();
             this.$emit('changeShow',false);
         },
@@ -290,6 +297,7 @@ export default {
         DisplayOrHide(dataType,dataContent){
             if(dataType === 'CoordinationTask'){
                 this.rowCooTaskDetailtype=true;
+                this.rowCooTaskDetailDataObj = dataContent.selectData[0];
             }else if(dataType === 'DepartmentYearPlan'){
                 this.rowDepartAnnPlanDettype=true;
                 this.rowDepartAnnPlanDetDataObj = dataContent.selectData[0];
@@ -304,6 +312,7 @@ export default {
                 this.rowTEMTaskDataObj = dataContent.selectData[0];
             } else if(dataType === 'FormPost'){
                 this.rowEACHPerEachJobDettype=true;
+                this.rowEACHPerEachJobDetDataObj = dataContent.selectData[0];
             } else if(dataType === 'TaskReport'){
                 this.rowEachPerEachTableReporttype=true;
             } else if(dataType === 'TaskSelfEvaluateApplyzp'){
@@ -320,11 +329,14 @@ export default {
                 this.rowEachPerEachTableEntrusttype=true;
             } else if(dataType === 'PersonalTableTask'){
                 this.rowEachPerEachTableDetailtype=true;
+                this.rowEachPerEachTableDetailDataObj = dataContent.selectData[0];
             } else if(dataType === 'StaffAppraisals'){
                 this.rowEmpApprTabDetailtype=true;
             } else if(dataType === 'StaffAppraisalsCollect'){
                 this.rowEmpApprTabNumDetailtype=true;
-            }
+            } else if(dataType === 'Meetingapplication'){
+                this.rowConferenceApplytype=true;
+            } 
         },
         //转发按钮点击事件
         baseInputTable(data){

@@ -10,7 +10,7 @@
         >
             <el-row>
                 <el-col :span="6">
-                    <el-form-item label="公司：">
+                    <el-form-item label="公司：" prop="company">
                         <el-select v-model="formdata.company" value-key="value" :disabled="true">
                             <el-option  
                                 v-for="item in companyData"
@@ -25,34 +25,34 @@
             <el-row>
                 <el-col :span="6">
                     <el-form-item label="部门：">
-                        <el-input v-model="formdata.bumen" :disabled="true"></el-input>
+                        <el-input v-model="formdata.department" :disabled="true"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="6" :offset="2">
                     <el-form-item label="岗位：">
-                        <el-input v-model="formdata.gangwei"  :disabled="true"></el-input>
+                        <el-input v-model="formdata.positionName"  :disabled="true"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="6" :offset="2">
                     <el-form-item label="版本：">
-                        <el-input v-model="formdata.gangwei"  :disabled="true"></el-input>
+                        <el-input v-model="formdata.versionName"  :disabled="true"></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>
             <el-row>
                 <el-col :span="6">
                     <el-form-item label="经办人：">
-                        <el-input v-model="formdata.jingbanren" :disabled="true"></el-input>
+                        <el-input v-model="formdata.gestorName" :disabled="true"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="6" :offset="2">
                     <el-form-item label="经办时间：">
-                        <el-input v-model="formdata.jinagbanshijian"  :disabled="true"></el-input>
+                        <el-input v-model="formdata.voucherDate"  :disabled="true"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="6" :offset="2">
                     <el-form-item label="版本号：">
-                        <el-input v-model="formdata.gangwei"  :disabled="true"></el-input>
+                        <el-input v-model="formdata.versionNumber"  :disabled="true"></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>
@@ -123,7 +123,7 @@ import proData from '../../components/common/proData/proData';
 import DynamicTable from '../../components/common/dytable/dytable.vue';
 export default {
     props: {
-        rowEACHPerEachJobDataObj: Object,
+        rowEACHPerEachJobDetDataObj: Object,
         rowEACHPerEachJobDettype:Boolean,
     },
     components: {
@@ -137,10 +137,18 @@ export default {
             peopleJobgsTableVisible: false,
             disabled:false,
             labelPosition: 'left',
-            formdata:{},
-            companyData:new proData().company,
-            yearsData:new proData().years,
-            monthData:new proData().month,
+            formdata:{
+                company:'',
+                // department,
+                // positionName,
+                // versionName,
+                // gestorName,
+                // voucherDate,
+                // versionNumber,
+            },
+            companyData:[],
+            yearsData:[],
+            monthData:[],
             atctiveName:'first',
             pageNum: 1,
             pageSize: 10,
@@ -290,11 +298,125 @@ export default {
     methods: {
         handleClick() {
             
-        }
+        },
+        //获取一岗一表详情
+        getPostBidMission(data) {
+            debugger;
+        this.$api.processSet.getPostBidDetail({
+            id: data.id,
+            userId:data.userId,
+            xiuding:data.xiuding,
+        })
+        .then((res) => {
+                if(res.data.code == 0){
+                this.formdata = res.data.data;
+                let tableDataObj = {};
+                // tableDataObj["key1"] = '计划值';
+                // tableDataObj["key2"] = 'Q 累计预计计划完成指标';
+                // tableDataObj["optionValue"] = res.data.data.optionValue;
+                // tableDataObj["unit"] = res.data.data.unit;
+                // this.tableData.push(tableDataObj);
+                // let taskStateParams = res.data.data.taskState;
+                // let taskTypeParams = res.data.data.taskType;
+                // let taskLeveParams = res.data.data.taskLevel;
+                // switch(taskStateParams) {
+                //     case "1": 
+                //         this.formdata.taskState = '可执行';
+                //         break;
+                //     case "2":
+                //         this.formdata.taskState = '已完成';
+                //         break;
+                //     case "3":
+                //         this.formdata.taskState = '未完成';
+                //         break;
+                //     case "4":
+                //         this.formdata.taskState = '延期';
+                //         break;
+                //     case '5':
+                //         this.formdata.taskState ='作废';
+                //         break;
+                //     case '0':
+                //         this.formdata.taskState ='未发生';
+                //         break;
+                //     case '10':
+                //         this.formdata.taskState ='已报待批';
+                //         break;
+                //     default:
+                //         break; 
+                // }
+                // debugger;
+                // console.log(taskTypeParams);
+                // switch(taskTypeParams) {
+                //     case 1: 
+                //         this.formdata.taskType = '主任务';
+                //         break;
+                //     case 2:
+                //         this.formdata.taskType = '临时任务';
+                //         break;
+                //     case 3:
+                //         this.formdata.taskType = '配合任务';
+                //         break;
+                //     default:
+                //         break; 
+                // }
+                // switch(taskLeveParams) {
+                //     case 1: 
+                //         this.formdata.taskLevel = '一';
+                //         break;
+                //     case 2:
+                //         this.formdata.taskLevel = '二';
+                //         break;
+                //     case 3:
+                //         this.formdata.taskLevel = '三';
+                //         break;
+                //     case 4:
+                //         this.formdata.taskLevel = '四';
+                //         break;
+                //     case 5:
+                //         this.formdata.taskLevel ='五';
+                //         break;
+                //     case 6:
+                //         this.formdata.taskLevel ='六';
+                //         break;
+                //     case 7:
+                //         this.formdata.taskLevel ='七';
+                //         break;
+                //     case 8:
+                //         this.formdata.taskLevel ='八';
+                //         break;
+                //     case 9:
+                //         this.formdata.taskLevel ='九';
+                //         break;
+                //     case 10:
+                //         this.formdata.taskLevel ='十';
+                //         break;
+                //     default:
+                //         break; 
+                // }
+                // if(res.data.data.groupPoint) {
+                //     this.focusLevelCheckList.push('集团重点');
+                // } else if(res.data.data.companyPoint) {
+                //     this.focusLevelCheckList.push('公司重点');
+                // }  else if(res.data.data.departmentPoint) {
+                //     this.focusLevelCheckList.push('部门重点')
+                // } else {
+                //     this.focusLevelCheckList.push('');
+                // }
+
+                }
+            }),error => {
+            console.log(error);
+            }
+        },
     },
     watch:{
         rowEACHPerEachJobDettype(oldVal,newVal){
             this.ShowFinancVisible=this.rowEACHPerEachJobDettype;
+            let postBidSelected = {};
+            postBidSelected.id = this.rowEACHPerEachJobDetDataObj.fsrcoId;
+            postBidSelected.userId = localStorage.getItem("ms_userId");
+            postBidSelected.xiuding = false;
+            this.getPostBidMission(postBidSelected);
         }
     }
 }
