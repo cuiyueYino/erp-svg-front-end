@@ -40,7 +40,7 @@
 						<el-col :span="6">
 							<el-form-item prop="workItemTypeSubName" label="子表分类">
 								<el-input style="width: 110%;" disabled placeholder="子表分类" v-model="ruleForm.workItemTypeSubName">
-									<el-button @click="dialogVisibleChild = true" slot="append" icon="el-icon-search"></el-button>
+									<el-button disabled @click="dialogVisibleChild = true" slot="append" icon="el-icon-search"></el-button>
 								</el-input>
 							</el-form-item>
 						</el-col>
@@ -244,7 +244,7 @@
 		},
 		data() {
 			return {
-				files :[],
+				files: [],
 				//子表类型
 				showType: false,
 				//子表类型
@@ -502,6 +502,10 @@
 			//选择主表模板-确认
 			getDialogVisible(show) {
 				if(show) {
+					if(this.$refs.childMain.rowClick.status != 3) {
+						this.goOut("只能选择状态为 '有效' 的主表模板")
+						return
+					}
 					//主表模板名称
 					this.ruleForm.workItemTempName = this.$refs.childMain.rowClick.name
 					//主表模板名称ID

@@ -115,10 +115,14 @@
 		methods: {
 			//双击选中
 			rowDblClick(row) {
-				if(typeof(this.parent.getSelectMainTableClassification) == "function") {
-					this.parent.getSelectMainTableClassification()
-				} else if(typeof(this.$parent.$parent.getSelectMainTableClassification) == "function") {
-					this.$parent.$parent.getSelectMainTableClassification()
+				if(row.status == 3) {
+					if(typeof(this.parent.getSelectMainTableClassification) == "function") {
+						this.parent.getSelectMainTableClassification()
+					} else if(typeof(this.$parent.$parent.getSelectMainTableClassification) == "function") {
+						this.$parent.$parent.getSelectMainTableClassification()
+					}
+				} else {
+					this.goOut("只能选择状态为 '有效' 的主表模板分类")
 				}
 			},
 			//查看

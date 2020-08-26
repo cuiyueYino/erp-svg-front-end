@@ -61,7 +61,7 @@
 			return {
 				value: "",
 				selectData: "",
-				formInlineList: [ {
+				formInlineList: [{
 					id: "code",
 					name: "主表编码"
 				}, {
@@ -94,11 +94,15 @@
 		},
 		methods: {
 			rowDblClick(row) {
-				if(typeof(this.$parent.$parent.getDialogVisible) == "function") {
-					this.$parent.$parent.getDialogVisible(true)
-				}
-				if(typeof(this.$parent.$parent.$parent.getDialogVisible) == "function") {
-					this.$parent.$parent.$parent.getDialogVisible(true)
+				if(row.status == 3) {
+					if(typeof(this.$parent.$parent.getDialogVisible) == "function") {
+						this.$parent.$parent.getDialogVisible(true)
+					}
+					if(typeof(this.$parent.$parent.$parent.getDialogVisible) == "function") {
+						this.$parent.$parent.$parent.getDialogVisible(true)
+					}
+				} else {
+					this.goOut("只能选择状态为 '有效' 的主表模板")
 				}
 			},
 			selectChange(data) {
@@ -112,7 +116,7 @@
 					this.$api.collaborativeOffice.getWorkItemTempModel({
 						id: this.rowClickId
 					}).then(data => {
-						this.$parent.toUpd(data.data.data,'1')
+						this.$parent.toUpd(data.data.data, '1')
 					})
 				}
 			},
@@ -157,7 +161,7 @@
 					this.$api.collaborativeOffice.getWorkItemTempModel({
 						id: this.rowClickId
 					}).then(data => {
-						this.$parent.toUpd(data.data.data,"2")
+						this.$parent.toUpd(data.data.data, "2")
 					})
 				}
 			},
@@ -189,7 +193,7 @@
 				this.rowClickId = row.id
 				this.rowClick = row
 			},
-			toClear(){
+			toClear() {
 				this.selectData = ""
 				this.value = ""
 				this.toSelect()

@@ -241,7 +241,7 @@
 		},
 		data() {
 			return {
-				files :[],
+				files: [],
 				//子表类型
 				showType: false,
 				//子表类型
@@ -490,6 +490,10 @@
 			},
 			//选择主表模板-确认
 			getDialogVisible() {
+				if(this.$refs.childMain.rowClick.status != 3) {
+					this.goOut("只能选择状态为 '有效' 的主表模板")
+					return
+				}
 				//主表模板名称
 				this.ruleForm.workItemTempName = this.$refs.childMain.rowClick.name
 				//主表模板名称ID
@@ -806,6 +810,10 @@
 			},
 			//选择子表分类
 			getSelectMainTableClassification() {
+				if(this.$refs.child.rowClick.status != 3) {
+					this.goOut("只能选择状态为 '有效' 的子表模板分类")
+					return
+				}
 				this.ruleForm.lines = []
 				//判断是否选中
 				if(this.$refs.child.rowClick.id) {
