@@ -231,6 +231,7 @@
                 type="datetime"
                 size="mini"
                 default-time="12:00:00"
+                value-format="yyyy-MM-dd HH:mm:ss"
                 placeholder="选择日期"
               >
               </el-date-picker>
@@ -251,6 +252,7 @@
                 type="datetime"
                 size="mini"
                 default-time="12:00:00"
+                value-format="yyyy-MM-dd HH:mm:ss"
                 placeholder="选择日期"
               >
               </el-date-picker>
@@ -298,6 +300,7 @@
                 type="datetime"
                 size="mini"
                 default-time="12:00:00"
+                value-format="yyyy-MM-dd HH:mm:ss"
                 placeholder="选择日期"
               >
               </el-date-picker>
@@ -318,6 +321,7 @@
                 type="datetime"
                 size="mini"
                 default-time="12:00:00"
+                value-format="yyyy-MM-dd HH:mm:ss"
                 placeholder="选择日期"
               >
               </el-date-picker>
@@ -718,8 +722,8 @@ export default {
     //查询搜索
     onHandleMoreSearch() {
       let fromdata = {};
-      fromdata.page = this.pageNum;
-      fromdata.size = this.pageSize;
+      fromdata.infosBeginNum = this.pageNum;
+      fromdata.infosEndNum = this.pageSize;
       let CompanyS = this.DataForm.srcCompany;
       if (CompanyS && CompanyS != "") {
         fromdata.srcCompany = this.DataForm.srcCompany;
@@ -764,6 +768,7 @@ export default {
       if (overTimeS && overTimeS != "") {
         fromdata.overTime = this.DataForm.overTime;
       }
+      fromdata.userId = localStorage.getItem("ms_userId");
       this.getHunTableData(fromdata);
     },
     //查询发起人员

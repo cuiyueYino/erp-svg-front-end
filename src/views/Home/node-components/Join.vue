@@ -53,9 +53,10 @@
                     <el-input v-model="formData.maxWorkTime" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="时间单位" :label-width="formLabelWidth" prop="timeUnit">
-                     <el-radio-group v-model="formData.timeUnit">
+                    <!-- <el-radio-group v-model="formData.timeUnit">
                         <el-radio label="1">小时</el-radio>
-                    </el-radio-group>
+                    </el-radio-group>-->
+                    <el-checkbox v-model="formData.timeUnit">小时</el-checkbox>
                 </el-form-item>
                  <el-form-item  :label-width="formLabelWidth" prop="autoSubmit">
                     <el-checkbox v-model="formData.autoSubmit" @change="changeAutoSubmit">超过最大时间系统自动提交审批</el-checkbox>
@@ -139,7 +140,8 @@
                     <el-col :span="24">
                         <dynamic-table
                             :columns="columns4"
-                            ref="decisionTable"
+                            ref="decisionTableReF"
+                            tooltip-effect="dark"
                             :isShowPager="false"
                             :table-data="tableData3"
                             @selection-change="onSelectionDecision"
@@ -381,7 +383,7 @@ export default {
                 maxWorkTime:'',
                 autoSubmit:'',
                 autoHurry:'',
-                timeUnit:'1'
+                timeUnit:''
             },
             columns: [
             {
@@ -450,19 +452,19 @@ export default {
         baseActiveNameStr: "角色",
         tableData3:[
             {
-                "decisionType":1,
+                "decisionType":"1",
 				"decisionText":"同意"
             },
             {
-                "decisionType":2,
+                "decisionType":"2",
 				"decisionText":"不同意"
             },
             {
-                "decisionType":3,
-				"decisionText":" 待处理"
+                "decisionType":"3",
+				"decisionText":"待处理"
             },
             {
-                "decisionType":4,
+                "decisionType":"4",
 				"decisionText":"其他"
             },
         ],
@@ -470,6 +472,7 @@ export default {
         editData:{},  
         multipleSelection: [],
         decisionSelection:[],
+        decisionSelData:[],
         joinSelection:[],
         copyToSelection:[],
         joinUserSelection:[],
@@ -516,9 +519,11 @@ export default {
                         this.joinusertableData=[];
                         this.tableData=[];
                         this.decisionSelection=[];
+                        this.decisionSelData=[];
                         this.checkedCities = ['由权限控制'];
                         this.formData.name = obj.displayName
                     }else{
+                        this.activeName='1';
                         this.checkedCities = [];
                         this.editData = obj;
                         this.formData.oid = this.editData.oid;
@@ -534,7 +539,8 @@ export default {
                         this.formData.fmclassName = this.editData.dataType.name
                         this.formData.fremark = this.editData.fremark    
                         this.formData.maxWorkTime = this.editData.maxWorkTime
-                        this.formData.timeUnit = this.editData.timeUnit       
+                        //this.formData.timeUnit = this.editData.timeUnit
+                        this.formData.timeUnit = this.editData.timeUnit==1?true:false       
                         this.formData.autoSubmit = this.editData.autoSubmit==1?true:false 
                         this.formData.autoHurry = this.editData.autoHurry==1?true:false
                         switch (this.editData.wfAuditType) {
@@ -550,21 +556,22 @@ export default {
                             default:
                             break;
                         }
-                        if(this.editData.permission=='1'){
+                        if(this.editData.permission=='1' || this.editData.permission==1){
                             this.checkedCities.push('由权限控制');
                         }
-                        if(this.editData.mntNextJoin=='1'){
+                        if(this.editData.mntNextJoin=='1' || this.editData.mntNextJoin==1){
                             this.checkedCities.push('手工指定下一节点参与者');
                         }
-                        if(this.editData.canSkip=='1'){
+                        if(this.editData.canSkip=='1' || this.editData.canSkip==1){
                             this.checkedCities.push('可略过');
                         }
-                        if(this.editData.multMail=='1'){
+                        if(this.editData.multMail=='1' || this.editData.multMail==1){
                             this.checkedCities.push('多封邮件');
                         }
                         //this.checkedCities.push(this.editData.permission=='1'?'由权限控制':this.editData.mntNextJoin=='1'?'手工指定下一节点参与者':this.editData.canSkip=='1'?'可略过':this.editData.multMail=='1'?'多封邮件':null)
                         //    this.joinusertableData = this.editData.wfParticipator.participator
                         let joinusertable = [];
+                        this.joinusertableData=[];
                         if( this.editData.wfParticipator.participator.length == 0){}else{
                             this.editData.wfParticipator.participator.forEach(item=>{
                                 switch (item.type) {
@@ -636,6 +643,7 @@ export default {
                         }
                         console.log(this.joinusertableData,joinusertable);
                         let tableDataNewSet = []
+                        this.tableData=[];
                         if( this.editData.wfCopyTo.copyTo.length == 0){}else{
                             this.editData.wfCopyTo.copyTo.forEach(item=>{
                                 switch (item.type) {
@@ -699,22 +707,16 @@ export default {
                                 }
                             });
                         }
-                        
                         if( this.tableData.length === 0 && tableDataNewSet.length !== 0){
                             tableDataNewSet.forEach(item=>{
                                 this.tableData.push(item)
                             })
                         }
+                        this.decisionSelData=this.editData.decisions.decision;
                         this.$nextTick(()=>{
                             //设置审核活动决策类型选中
-                            this.tableData3.forEach(row => {
-                                this.editData.decisions.decision.forEach(row1 => {
-                                    if (row1.decisionText === row.decisionText) {
-                                        this.$refs.decisionTable.toggleRowSelection(row,true);
-                                    }
-                                });
-                            })
-                            //设置审核活动选中
+                            this.tableRowSelect();
+                            /*//设置审核活动选中
                             this.tableData2.forEach((item)=>{
                                 this.editData.wfViewOtherComments.wfViewOtherComment.forEach(row2 => {
                                     if (row2.fname === item.fname) {
@@ -722,18 +724,8 @@ export default {
                                     }
                                 });
                             })
-                            /*this.editData.decisions.decision.forEach((item)=>{
-                                if(this.tableData3.indexOf(item) >=0){
-                                    debugger
-                                    this.$refs.decisionTable.toggleRowSelection(item,true);//选中所在行
-                                }
-                            })*/
+                            */
                         })
-                        /*this.tableData2 = this.editData.wfViewOtherComments.wfViewOtherComment;
-                        this.tableData3 = this.editData.decisions.decision;
-                        this.tableData3.forEach(row => {
-                            this.$refs.decisionTable.toggleRowSelection(row);
-                        });*/
                     }
                 }  
             },
@@ -821,6 +813,17 @@ export default {
                 this.dialogVisible = false;
             });
         },
+        tableRowSelect(){
+            //this.$refs.decisionTableReF.clearSelection();
+            this.$refs.decisionTableReF.$refs.refTable.clearSelection()
+            this.tableData3.forEach(row => {
+                this.decisionSelData.forEach(row1 => {
+                    if (row1.decisionText === row.decisionText) {
+                        this.$refs.decisionTableReF.toggleRowSelection(row,true);
+                    }
+                })    
+            })
+        },
         handleClick() {//
             if(this.activeName == '5'){//
                 this.tableData2 =[]
@@ -844,9 +847,21 @@ export default {
                             // })
                         }
                     })
+                    /*this.$nextTick(()=>{
+                        this.tableData2.forEach((item)=>{
+                            this.editData.wfViewOtherComments.wfViewOtherComment.forEach(row2 => {
+                                if (row2.fname === item.fname) {
+                                    this.$refs.joinTable.toggleRowSelection(item,true);
+                                }
+                            });
+                        })
+                    })*/
                 }
-            }   
-            
+            }else if(this.activeName == '6'){
+                this.$nextTick(()=>{
+                    this.tableRowSelect();
+                });
+            }
         },
          // 参与人弹窗
         joinSearch(Str){
@@ -1032,25 +1047,27 @@ export default {
         //删除
         deleteMsg(Str){
             if (Str == "新增参与者") {
-                let selectData = this.multipleSelection;
+                //let selectData = this.multipleSelection;
+                let selectData = this.joinUserSelection;
                 let updateDate = this.joinusertableData;
                 for (var i = 0; i < selectData.length; i++) {
-                for (var j = 0; j < updateDate.length; j++) {
-                    if (selectData[i].fUsername === updateDate[j].fUsername) {
-                        updateDate.splice(j, 1);
+                    for (var j = 0; j < updateDate.length; j++) {
+                        if (selectData[i].fUsername === updateDate[j].fUsername) {
+                            updateDate.splice(j, 1);
                         }
                     }
                 }
                 this.joinusertableData = updateDate;
             } else if (Str == "新增抄送") {
-                let selectCCData = this.multipleSelection;
+                //let selectCCData = this.multipleSelection;
+                let selectCCData = this.copyToSelection;
                 let updateCCDate = this.tableData;
                 for (var i = 0; i < selectCCData.length; i++) {
-                for (var j = 0; j < updateCCDate.length; j++) {
-                    if (selectCCData[i].fUsername === updateCCDate[j].fUsername) {
-                    updateCCDate.splice(j, 1);
+                    for (var j = 0; j < updateCCDate.length; j++) {
+                        if (selectCCData[i].fUsername === updateCCDate[j].fUsername) {
+                            updateCCDate.splice(j, 1);
+                        }
                     }
-                }
                 }
                 this.tableData = updateCCDate;
             }
