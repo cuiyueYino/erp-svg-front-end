@@ -41,7 +41,7 @@
 		data() {
 			return {
 				//修改-编码
-				disabledUpd:false,
+				disabledUpd: false,
 				//修改
 				showFigUpd: false,
 				//表单
@@ -131,28 +131,36 @@
 				}
 			},
 			toSave() {
-				if(this.showSave) {
-					if(this.rowClick.type == 1) {
-						this.ruleForm.type = 2
-						this.ruleForm.pid = this.rowClick.id
-					} else {
-						this.ruleForm.type = 1
+				this.$refs.ruleForm.validate((valid) => {
+					if(valid) {
+						if(this.showSave) {
+							if(this.rowClick.type == 1) {
+								this.ruleForm.type = 2
+								this.ruleForm.pid = this.rowClick.id
+							} else {
+								this.ruleForm.type = 1
 
+							}
+							this.$api.collaborativeOffice.add(this.ruleForm).then(data => {
+								if(this.dataBack(data, "新增成功")) {
+									this.getContext()
+									this.clear()
+								}
+							})
+						} else {
+							this.$api.collaborativeOffice.modify(this.ruleForm).then(data => {
+								if(this.dataBack(data, "修改成功")) {
+									this.getContext()
+									this.clear()
+								}
+							})
+						}
+					} else {
+						this.goOut("请填写完整内容")
+						return false;
 					}
-					this.$api.collaborativeOffice.add(this.ruleForm).then(data => {
-						if(this.dataBack(data, "新增成功")) {
-							this.getContext()
-							this.clear()
-						}
-					})
-				} else {
-					this.$api.collaborativeOffice.modify(this.ruleForm).then(data => {
-						if(this.dataBack(data, "修改成功")) {
-							this.getContext()
-							this.clear()
-						}
-					})
-				}
+				});
+
 			}
 		}
 	}
