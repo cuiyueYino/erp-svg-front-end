@@ -21,8 +21,8 @@
                      <el-button type="success" plain @click="add">新增</el-button>
                      <el-button type="danger" plain @click="deleteMsg">删除</el-button>
                      <el-button type="warning" plain @click="toEdit">编辑</el-button>
-                     <el-button type="success" plain @click="effectOrDisableMsg">生效</el-button>
-                     <el-button type="danger" plain @click="effectOrDisableMsg">禁用</el-button>
+                     <el-button type="success" plain @click="effectOrDisableMsg('生效')">生效</el-button>
+                     <el-button type="danger" plain @click="effectOrDisableMsg('禁用')">禁用</el-button>
                  </el-col>
             </el-row>
         </el-card>
@@ -264,7 +264,6 @@ export default {
         
         //删除
         deleteMsg(){
-            debugger;
             if(this.multipleSelection.length > 1){
                  this.$message.error('只能选择一个删除');
                  return;
@@ -285,7 +284,7 @@ export default {
                 }
         },
          //生效/禁用
-        effectOrDisableMsg(){
+        effectOrDisableMsg(stat){
             let status = this.multipleSelection[0];
             if(this.multipleSelection.length > 1){
                  this.$message.error('只能选择一个操作');
@@ -294,6 +293,10 @@ export default {
                 this.$message.error('请选择一项操作');
                  return;
             };
+            if(stat==status.fstatusName){
+                this.$message.error('选中项已经'+stat+'!');
+                return;
+            }
             switch (status.fstatusName) {
                 case '生效':
                     status.fstatus = 8

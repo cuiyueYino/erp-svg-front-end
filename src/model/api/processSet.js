@@ -82,6 +82,28 @@ const processSet = {
         }
         return httpReqest.get('/api/scha/temporaryMission/getTemporaryMissionVO'+valueS);
     },
+    // 获取待办事项的popForm表单数据(一岗一表)
+    getPostBidDetail(params){
+        var valueS='?';
+        for(var item in params){
+            valueS+=item+"="+params[item]+"&";
+        }
+        if(valueS.slice(valueS.length-1,valueS.length) ==="&"){
+            valueS=valueS.slice(0,valueS.length-1);
+        }
+        return httpReqest.get('/api/scha/formPost/getFormPostVO'+valueS);
+    },
+    // 获取待办事项的popForm表单数据(配合任务)
+    getCoordinationTaskDetail(params){
+        var valueS='?';
+        for(var item in params){
+            valueS+=item+"="+params[item]+"&";
+        }
+        if(valueS.slice(valueS.length-1,valueS.length) ==="&"){
+            valueS=valueS.slice(0,valueS.length-1);
+        }
+        return httpReqest.get('/api/scha/coordinationTask/getCoordinationTaskVO'+valueS);
+    },
     // 获取待办事项的popForm表单数据(公司年度计划汇总)
     getAnnualPlanDetail(params){
         var valueS='?';
@@ -107,6 +129,10 @@ const processSet = {
     // 获取待办事项的popForm表单数据(部门年度计划)
     getDepYearPlanDetail(params){
         return httpReqest.post('/api/scha/departmentYearPlan/findInfoById', params);
+    },
+    // 获取待办事项的popForm表单数据(一人一表任务表)
+    getPersonalTableTaskDetail(params){
+        return httpReqest.post('/api/scha/personalTableTask/findPersonalTableTaskById', params);
     },
      //获取处理表单详情数据
      getunhandledTaskFormDetail(params){
