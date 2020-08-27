@@ -761,6 +761,11 @@ export default {
                       this.form = res.data.data;
                       this.form.fpasswordSure = this.form.fpassword
                       this.tableData2 = res.data.data.tuseroperationrecordList;//console.log(this.tableData2)
+                      if(res.data.data.fforbid == 1) {
+                        this.checked = true;
+                      } else {
+                        this.checked = false;
+                      }
                           this.tableData2.forEach((item,index) => {
                             switch (item.foperationcause) {
                               case 2:
