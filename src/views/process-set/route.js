@@ -15,7 +15,7 @@ const monthlyPlan = () => import('./monthly-plan.vue');
 const personalTableTask = () => import('./personal-table-task.vue');
 const summaryEmployeeEvaluation = () => import('./summary-employee-evaluation.vue');
 const employeeAppraisal = () => import('./employee-appraisal.vue');
-const indexDatabaseEntry = () => import('./index-database-entry.vue');
+const indexLibrary = () => import('./index-library.vue');
 const postBid = () => import('./post-bid.vue'); 
 const setEndDate = () => import('./set-endDate.vue'); 
 const billType = () => import('./bill-type.vue'); 
@@ -193,9 +193,9 @@ const PROJECT = [
         }
     },
     {
-        path: 'plan/indexDatabaseEntry',
-        name: 'indexDatabaseEntry',
-        component: indexDatabaseEntry,
+        path: 'indexLibrary',
+        name: 'indexLibrary', 
+        component: indexLibrary,
         meta: {
             title: '指标库'
         }

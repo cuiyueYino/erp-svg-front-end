@@ -115,8 +115,12 @@
 		methods: {
 			//双击选中
 			rowDblClick(row) {
-				if(typeof(this.parent.getSelectMainTableClassification) == "function") {
-					this.parent.getSelectMainTableClassification()
+				if(row.status == 3) {
+					if(typeof(this.parent.getSelectMainTableClassification) == "function") {
+						this.parent.getSelectMainTableClassification()
+					}
+				} else {
+					this.goOut("只能选择状态为 '有效' 的子表模板分类")
 				}
 			},
 			//查看

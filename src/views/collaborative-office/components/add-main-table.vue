@@ -170,7 +170,7 @@
 			</el-dialog>
 		</div>
 		<div v-if="showFigForm">
-			<formAndTable  :files="files" dis="2" showAdd="1" :form-data="conData">
+			<formAndTable :files="files" dis="2" showAdd="1" :form-data="conData">
 				<el-row style="text-align: right;margin-bottom: 10px;">
 					<el-button icon="el-icon-arrow-left" size="mini" type="danger" plain @click="showFigForm = false">返回</el-button>
 				</el-row>
@@ -195,7 +195,7 @@
 		},
 		data() {
 			return {
-				files:[],
+				files: [],
 				//字段长度类型
 				lengthTypeList: [{
 					id: "1",
@@ -509,6 +509,10 @@
 			},
 			//选择主表分类
 			getSelectMainTableClassification() {
+				if(this.$refs.child.rowClick.status != 3) {
+					this.goOut("只能选择状态为 '有效' 的主表模板")
+					return
+				}
 				this.ruleForm.lines = []
 				//判断是否选中
 				if(this.$refs.child.rowClick.id) {

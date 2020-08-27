@@ -173,6 +173,10 @@
 				 * 获取模板详细数据
 				 */
 				//主表ID
+				if(this.$refs.childMain.rowClick.status != 3){
+					this.goOut("只能选择状态为 '有效' 的主表模板")
+					return
+				}
 				this.tempId = this.$refs.childMain.rowClick.id
 				//根据主表ID查询详细信息
 				this.$api.collaborativeOffice.findById({
