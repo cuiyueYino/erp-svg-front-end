@@ -78,6 +78,8 @@
 								localStorage.setItem('ms_staffId', data.data.principal.staffId);
 								//用户名称
 								localStorage.setItem('ms_username', data.data.principal.fullname);
+								//用户code
+								localStorage.setItem('ms_accountNo', data.data.principal.accountNo);
 								//部门ID
 								localStorage.setItem('ms_userDepartId', data.data.principal.deptmentId);
 								//部门名称
@@ -92,7 +94,7 @@
 							this.iframeWin.postMessage({
 								cmd: 'sendLoginData',
 								params:  {                        
-									'username': localStorage.getItem("ms_username"),
+									'accountNo': localStorage.getItem("ms_accountNo"),
 									'userId':  localStorage.getItem("ms_userId"),
 									'deptmentId':localStorage.getItem("ms_userDepartId"),
 									'companyId':localStorage.getItem("ms_companyId"),
