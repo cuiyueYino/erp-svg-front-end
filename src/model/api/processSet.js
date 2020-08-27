@@ -82,6 +82,17 @@ const processSet = {
         }
         return httpReqest.get('/api/scha/temporaryMission/getTemporaryMissionVO'+valueS);
     },
+    // 获取待办事项的popForm表单数据(经济指标)
+    getEconomicIndicatorsDetail(params){
+        var valueS='?';
+        for(var item in params){
+            valueS+=item+"="+params[item]+"&";
+        }
+        if(valueS.slice(valueS.length-1,valueS.length) ==="&"){
+            valueS=valueS.slice(0,valueS.length-1);
+        }
+        return httpReqest.post('/api/scha/optionIndex/findById'+valueS);
+    },
     // 获取待办事项的popForm表单数据(一岗一表)
     getPostBidDetail(params){
         var valueS='?';

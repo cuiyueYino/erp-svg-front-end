@@ -38,7 +38,7 @@
                         <CooTaskDetailPage  :rowCooTaskDetailDataObj="rowCooTaskDetailDataObj" :rowCooTaskDetailtype="rowCooTaskDetailtype" @changeShow="showLookOrUpdate"/>
                         <EachPerEachTableAdjPage  :rowEachPerEachTableAdjDataObj="rowEachPerEachTableAdjDataObj" :rowEachPerEachTableAdjtype="rowEachPerEachTableAdjtype" @changeShow="showLookOrUpdate"/>
                         <ConferenceApplyPage  :rowConferenceApplyDataObj="rowConferenceApplyDataObj" :rowConferenceApplytype="rowConferenceApplytype" @changeShow="showLookOrUpdate"/>
-                    
+                        <EconomicIndicatorsPage  :rowEconomicIndicatorsDataObj="rowEconomicIndicatorsDataObj" :rowEconomicIndicatorstype="rowEconomicIndicatorstype" @changeShow="showLookOrUpdate"/>
                     </el-row>  
                     <el-row>
                         <el-col :span="22">
@@ -97,6 +97,7 @@ import EmpApprTabDetailPage from '../plan-options/employees-appraisal-table-deta
 import EmpApprTabNumDetailPage from '../plan-options/employees-appraisal-table-num-detail.vue';//员工考评表汇总 S
 import CooTaskDetailPage from '../plan-options/cooperate-task-detail.vue';// 配合任务  A
 import ConferenceApplyPage from '../plan-options/conference-apply-detail.vue';// 会议申请
+import EconomicIndicatorsPage from '../plan-options/economic-Indicators-detail.vue';// 经济指标
 
 export default {
     props: {
@@ -133,7 +134,8 @@ export default {
         EmpApprTabDetailPage,
         EmpApprTabNumDetailPage,
         CooTaskDetailPage,
-        ConferenceApplyPage    
+        ConferenceApplyPage,
+        EconomicIndicatorsPage    
     },
     inject: ['reload'],
     data: function() {   
@@ -168,6 +170,7 @@ export default {
             rowCooTaskDetailtype:false,
             rowEachPerEachTableAdjtype:false,
             rowConferenceApplytype:false,
+            rowEconomicIndicatorstype:false,
             rowUTSDataObj:{},
             rowDataprocessObj: [],
             rowCOOTaskDataObj: {},
@@ -189,6 +192,7 @@ export default {
             rowCooTaskDetailDataObj:{},
             rowEachPerEachTableAdjDataObj:{},
             rowConferenceApplyDataObj:{},
+            rowEconomicIndicatorsDataObj:{},
             pageNum: 1,
             pageSize: 10,
             total: 20,
@@ -221,6 +225,7 @@ export default {
             this.rowCooTaskDetailtype=false;
             this.rowEachPerEachTableAdjtype=false;
             this.rowConferenceApplytype=false;
+            this.rowEconomicIndicatorstype=false;
             this.reload();
             this.$emit('changeShow',false);
         },
@@ -336,6 +341,9 @@ export default {
                 this.rowEmpApprTabNumDetailtype=true;
             } else if(dataType === 'Meetingapplication'){
                 this.rowConferenceApplytype=true;
+            } else if(dataType === 'OptionIndex'){
+                this.rowEconomicIndicatorstype=true;
+                this.rowEconomicIndicatorsDataObj = dataContent.selectData[0];
             } 
         },
         //转发按钮点击事件
