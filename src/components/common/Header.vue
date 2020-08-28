@@ -99,7 +99,9 @@
 					localStorage.removeItem('ms_username');
 					localStorage.removeItem('ms_name');
 					localStorage.removeItem('ms_userId');
-					this.$router.push('/');
+					this.$router.push({
+						name :"/login"
+					});
 					location.reload();
 				} else if(command == 'change') {
 					this.dialogVisible = true;

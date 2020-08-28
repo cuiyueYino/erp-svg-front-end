@@ -94,7 +94,7 @@
 						</template>
 						<template slot-scope="scope">
 							<el-form-item v-if="!scope.row.showFig">
-								<el-button @click="toDelTable(scope.$index)" type="error">删除</el-button>
+								<el-button @click="toDelTable(scope.$index)" type="danger">删除</el-button>
 							</el-form-item>
 						</template>
 					</el-table-column>

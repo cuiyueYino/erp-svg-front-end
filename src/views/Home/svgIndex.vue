@@ -314,6 +314,7 @@ export default {
                 sessionStorage.setItem("eidtMsgfoid",   res.data.data.oid);
                 sessionStorage.setItem("eidtMsg",   JSON.stringify(res.data.data));
                 let Fstatus = res.data.data.status;
+                //console.log("dedesssss",JSON.stringify(res.data.data))
                 this.dataObj = res.data.data;
                 switch (this.dataObj.subProcess) {
                     case '0':
@@ -1224,12 +1225,22 @@ export default {
                     // console.log(this.selectedNode,this.dataObj[k])
                 }
             }*/
+            this.nodeType = node.type;
             if(node.type == "Join"){
                 //sessionStorage.setItem('allData',JSON.stringify(this.dataObj))
-                sessionStorage.setItem('allData',JSON.stringify(this.workflowNodes))
+                //sessionStorage.setItem('allData',JSON.stringify(this.workflowNodes))
+                let Sdata=this.workflowNodes;
+                let AllData=[];
+                for(let i=0;i<Sdata.length;i++){
+                    let Obj={};
+                    Obj.data=Sdata[i].data;
+                    Obj.key=Sdata[i].key;
+                    Obj.oid=Sdata[i].oid;
+                    Obj.type=Sdata[i].type;
+                    AllData.push(Obj)
+                }
+                sessionStorage.setItem('allData',JSON.stringify(AllData))
             }
-            this.nodeType = node.type;
-            console.log(node,this.selectedNode,this.workflowNodes)
             // console.log(this.selectedNode,this.workflowNodes)
         },
         // 清空面板事件

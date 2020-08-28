@@ -195,8 +195,12 @@ export default {
         },
         //分页、下一页
         onCurrentChange(val){
-             this.pageNum = val;
-            this.getTableData('')
+            this.pageNum = val;
+            if(this.formCode){
+                this.getTableData(this.formCode);
+            }else{
+                this.getTableData('')
+            }
         },
         // 搜索
         onSubmit(){
