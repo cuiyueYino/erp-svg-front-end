@@ -491,10 +491,12 @@ export default {
                     let userName='';
                     let userID='';
                     for(let i=0;i<UserData.length;i++){
-                        if(UserData[i]){
-                            userName+=UserData[i].fname+',';
-                            userID+=UserData[i].foid+',';
-                        }
+                        if(!UserData[i].hasOwnProperty("children")) {
+                            if(UserData[i]){
+                                userName+=UserData[i].fname+',';
+                                userID+=UserData[i].foid+',';
+                            }
+                        } 
                     }
                     userName=userName.slice(0,userName.length -1);
                     userID=userID.slice(0,userID.length -1);
