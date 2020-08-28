@@ -64,7 +64,7 @@
                     </el-form-item>
                 </el-col>
                 <el-col :span="6" v-if="type === '用户'">
-                    <el-button type="primary" size="small" plain @click="reWorkSearchTable">重置</el-button>
+                    <el-button type="primary" size="small" plain @click="reWorkSearchTable()">重置</el-button>
                     <el-button type="primary" size="small" plain @click="workSearchTable">搜索</el-button>
                 </el-col>
                 <!--<el-col :span="8" v-show="type !== '用户'">
@@ -122,8 +122,8 @@
                     </el-form-item>
                 </el-col>-->
                  <el-col :span="8">
-                    <el-form-item label="公司" v-show="type !== '用户'" label-width="70px">
-                         <el-select v-model="formData.formCompany" clearable placeholder="请选择">
+                    <el-form-item label="公司" v-show="type !== '用户'" label-width="70px" prop="fcompanyoid">
+                         <el-select v-model="formData.fcompanyoid" clearable placeholder="请选择">
                             <el-option
                             v-for="item in Companyoptions"
                             :key="item.id"
@@ -134,7 +134,7 @@
                     </el-form-item>
                 </el-col>
                 <el-col :span="6" v-show="type !== '用户'">
-                    <el-button type="primary" size="small" plain @click="reWorkSearchTable">重置</el-button>
+                    <el-button type="primary" size="small" plain @click="reWorkSearchTable()">重置</el-button>
                     <el-button type="primary" size="small" plain @click="workSearchTable">搜索</el-button>
                 </el-col>
              </el-row>
@@ -270,14 +270,6 @@ export default {
                 {
                     key: 'name',
                     title: '名称'
-                },
-                {
-                    key: 'remark',
-                    title: '描述'
-                },
-                {
-                    key: 'virtual',
-                    title: '虚拟组织'
                 },
             ],
             treeData:[],
@@ -430,6 +422,7 @@ export default {
         },
         //重置role table
         reWorkSearchTable(){
+            this.formData = {};
             if(this.type =='用户'){
                 let Roledata={};
                 Roledata.queryType='';
