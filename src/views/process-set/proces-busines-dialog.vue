@@ -251,7 +251,7 @@ export default {
                 },
                 {
                     key: 'role_expression',
-                    title: '角色类别'
+                    title: '角色类型'
                 },
                 {
                     key: 'sortOrder',
