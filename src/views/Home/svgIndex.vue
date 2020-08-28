@@ -657,7 +657,7 @@ export default {
                                 oid:this.dataObj.nodes.wfStarter[0].oid,
                                 displayName: this.dataObj.nodes.wfStarter[0].name,
                             },
-                            key: 'Start'
+                            key: this.dataObj.nodes.wfStarter[0].oid,
                         }
                     );
                     newEnd.push(
@@ -680,7 +680,7 @@ export default {
                                 displayName: this.dataObj.nodes.wfEnder[0].name,
                                 
                             },
-                            key: 'End'
+                            key: this.dataObj.nodes.wfEnder[0].oid,
                         }
                     )
                 

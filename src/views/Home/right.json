@@ -1,0 +1,259 @@
+{
+    "code": "1993",
+    "name": "崔玥test",
+    "oid": "02bf8278ec204d9dbc8f4e04d2049431",
+    "nodes": [
+        {
+            "type": "Start",
+            "options": {
+                "width": 55,
+                "height": 55,
+                "color": "#67C23A",
+                "allowIn": true,
+                "allowOut": true,
+                "x": 121,
+                "y": 447,
+                "draggable": true
+            },
+            "data": {
+                "name": "Start",
+                "displayName": "开始",
+                "oid": "b621ed8265d04134b193c715452f79fd"
+            },
+            "transition": [
+                {
+                    "from": {
+                        "type": "Start",
+                        "options": {
+                            "width": 55,
+                            "height": 55,
+                            "color": "#67C23A",
+                            "allowIn": true,
+                            "allowOut": true,
+                            "x": 121,
+                            "y": 447,
+                            "draggable": true
+                        },
+                        "data": {
+                            "name": "Start",
+                            "displayName": "开始"
+                        },
+                        "key": "b621ed8265d04134b193c715452f79fd",
+                        "target": "R",
+                        "point": [
+                            55,
+                            27.5
+                        ]
+                    },
+                    "to": {
+                        "type": "Condition",
+                        "options": {
+                            "width": 120,
+                            "height": 76,
+                            "visible": false,
+                            "color": "#f39c43",
+                            "x": 400,
+                            "y": 432,
+                            "draggable": true
+                        },
+                        "data": {
+                            "name": "Condition",
+                            "displayName": "手工活动2222"
+                        },
+                        "key": "4d480cf9bc6c4f9c93a95b191e89c942",
+                        "target": "L",
+                        "point": [
+                            0,
+                            38
+                        ]
+                    },
+                    "data": {
+                        "linefcode": "Line",
+                        "decisionType": "1",
+                        "lineremark": "1",
+                        "lineexpression": null,
+                        "lineotherwise": null,
+                        "name": "Line",
+                        "displayName": "1",
+                        "oid": "15b5a3ce6cff49198ca7dce8eba778b1"
+                    },
+                    "key": "15b5a3ce6cff49198ca7dce8eba778b1",
+                    "lineEdit": true,
+                    "visible": false,
+                    "type": "Line",
+                    "coordinate": "176,474.5 288,474.5 288,470 384,470",
+                    "left": 248,
+                    "top": 456.25
+                }
+            ],
+            "key": "b621ed8265d04134b193c715452f79fd"
+        },
+        {
+            "type": "Condition",
+            "options": {
+                "width": 120,
+                "height": 76,
+                "visible": false,
+                "color": "#f39c43",
+                "x": 400,
+                "y": 432,
+                "draggable": true
+            },
+            "data": {
+                "mactivity": {
+                    "code": "liulankuang",
+                    "oid": "23ce91305e9543e9baeec310c63b26c1",
+                    "name": "浏览狂1"
+                },
+                "dataType": {
+                    "code": "liulankuang",
+                    "oid": "5448b1408fab44b2889a04d9233f737f",
+                    "name": "浏览狂1"
+                },
+                "decisions": {
+                    "decision": []
+                },
+                "srcActivity": {},
+                "wfCopyTo": {
+                    "copyTo": []
+                },
+                "wfParticipator": {
+                    "participator": [
+                        {
+                            "oid": "9eed1b6310a245e5af6f73cde07a3f00",
+                            "type": 2,
+                            "expression": "2",
+                            "macro": null,
+                            "role": {
+                                "oid": "6ab1d28c25eb4e1ab4e28c7e6102b892",
+                                "code": "FJ-CSJS002",
+                                "name": "测试角色002",
+                                "role_expression": null,
+                                "admin": false,
+                                "portalRole": false
+                            },
+                            "user": null,
+                            "service": null,
+                            "position": null,
+                            "roleId": null,
+                            "macroId": null,
+                            "fmuserId": null,
+                            "serviceId": null,
+                            "positionId": null
+                        }
+                    ]
+                },
+                "wfViewOtherComments": {
+                    "wfViewOtherComment": []
+                },
+                "autoHurry": null,
+                "autoSubmit": null,
+                "permission": "1",
+                "canSkip": "0",
+                "code": "manpower",
+                "creator": null,
+                "fremark": null,
+                "hidden": null,
+                "maxWorkTime": null,
+                "mntNextJoin": "0",
+                "multMail": "0",
+                "nodetype": 2,
+                "orgUnit": null,
+                "rollbackService": null,
+                "timeUnit": null,
+                "wfAuditType": null,
+                "name": "Condition",
+                "displayName": "手工活动2222",
+                "oid": "4d480cf9bc6c4f9c93a95b191e89c942"
+            },
+            "transition": [
+                {
+                    "from": {
+                        "type": "Condition",
+                        "options": {
+                            "width": 120,
+                            "height": 76,
+                            "visible": false,
+                            "color": "#f39c43",
+                            "x": 400,
+                            "y": 432,
+                            "draggable": true
+                        },
+                        "data": {
+                            "name": "Condition",
+                            "displayName": "手工活动2222"
+                        },
+                        "key": "4d480cf9bc6c4f9c93a95b191e89c942",
+                        "target": "R",
+                        "point": [
+                            120,
+                            38
+                        ]
+                    },
+                    "to": {
+                        "type": "End",
+                        "options": {
+                            "width": 55,
+                            "height": 55,
+                            "color": "#F56C6C",
+                            "allowIn": true,
+                            "allowOut": false,
+                            "x": 862,
+                            "y": 445,
+                            "draggable": true
+                        },
+                        "data": {
+                            "name": "End",
+                            "displayName": "结束"
+                        },
+                        "key": "3de9df85fe5a4b84811c4dc6801f7949",
+                        "target": "L",
+                        "point": [
+                            0,
+                            27.5
+                        ]
+                    },
+                    "data": {
+                        "linefcode": "Line",
+                        "decisionType": "1",
+                        "lineremark": "3",
+                        "lineexpression": null,
+                        "lineotherwise": null,
+                        "name": "Line",
+                        "displayName": "3",
+                        "oid": "e20f35ea46db441c8ccb3babaa0ed753"
+                    },
+                    "key": "e20f35ea46db441c8ccb3babaa0ed753",
+                    "lineEdit": true,
+                    "visible": false,
+                    "type": "Line",
+                    "coordinate": "520,470 691,470 691,472.5 846,472.5",
+                    "left": 651,
+                    "top": 455.25
+                }
+            ],
+            "key": "4d480cf9bc6c4f9c93a95b191e89c942",
+            "visible": false
+        },
+        {
+            "type": "End",
+            "options": {
+                "width": 55,
+                "height": 55,
+                "color": "#F56C6C",
+                "allowIn": true,
+                "allowOut": false,
+                "x": 862,
+                "y": 445,
+                "draggable": true
+            },
+            "data": {
+                "name": "End",
+                "displayName": "结束",
+                "oid": "3de9df85fe5a4b84811c4dc6801f7949"
+            },
+            "transition": [],
+            "key": "3de9df85fe5a4b84811c4dc6801f7949"
+        }
+    ]
+}
