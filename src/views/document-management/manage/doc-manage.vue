@@ -7,11 +7,15 @@
                         :data="treeData"
                         :props="defaultProps"
                         node-key="foid"
-                        :render-content="renderContent"
                         accordion
                         @node-click="handleNodeClick">
+                        <div slot-scope="{node,data}" class="customize-tree-p">
+                          <el-tooltip class="item" effect="dark" :content="data.fname" placement="top-start">
+                            <span>{{data.fname|labelShow}}</span>
+                          </el-tooltip>
+                        </div>
                     </el-tree>
-                </el-col>   
+                </el-col>
                 <el-col :span="18" :offset="1">
                     <el-card class="box-card">
                         <el-row :gutter="24">
@@ -36,7 +40,7 @@
                                 </el-form>
                             </el-col>
                             <el-col :span="16">
-                                <el-button type="success" icon="el-icon-plus" plain @click="createDocumentCategory">新建</el-button> 
+                                <el-button type="success" icon="el-icon-plus" plain @click="createDocumentCategory">新建</el-button>
                                 <el-button type="success" icon="el-icon-edit" plain @click="editDocumentCategory()" >修改</el-button>
                                 <el-button type="primary" icon="el-icon-top" plain @click="operateDocumentCategory(1)">置顶</el-button>
                                 <el-button type="primary" icon="el-icon-bottom" plain @click="operateDocumentCategory(2)">取消置顶</el-button>
@@ -73,6 +77,16 @@ import NewDocument from './new-document.vue';
 import documentData from'../base/documentData';
 
 export default {
+    //树结构 label 过长，替换显示成"..."结构
+    filters: {
+      labelShow(value) {
+        if(!value) return ''
+        if(value.length > 10) {
+          return value.slice(0, 10) + '...'
+        }
+        return value
+      }
+    },
     name:'workProcess',
     components: {
       DynamicTable,
@@ -128,7 +142,7 @@ export default {
                     key: 'fdocstatus',
                     title: '状态'
                 },
-                
+
             ],
             tableData:[],
             treeData:[],
@@ -375,7 +389,7 @@ export default {
                         </span>
                     );
                 }
-            }  
+            }
         },
         //树结构点击事件
         handleNodeClick(data) {
@@ -448,7 +462,7 @@ export default {
                 } else {
                     this.$message.success('数据库没有该条数据!');
                 }
-            }); 
+            });
         },
         //格式化日期
         formateDate(date){
@@ -463,7 +477,7 @@ export default {
                     .toISOString()
                     .slice(0, 19).replace('T',' ');
         },
-        
+
     }
 };
 </script>
