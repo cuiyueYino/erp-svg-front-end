@@ -41,18 +41,47 @@
     <!-- 弹出框 -->
         <el-dialog :title="homeTitle" :visible.sync="dialogFormVisible" :close-on-click-modal="false">
             <el-form :model="form" :rules="rules" ref="form">
-                <el-form-item label="部门" :label-width="formLabelWidth" prop="departMentName">
-                    <el-input 
-                    v-model="form.departMentName"
-                    class="Carfiles"
-                     :disabled="homeTitle == '查看业务'?true:false" 
-                     autocomplete="off"
-                     ></el-input>
-                    <img class="icon-search"  
-                    v-show="homeTitle !== '查看业务'"
-                     @click="workSearch"
-                      src="../../assets/img/search.svg">
-                </el-form-item>
+                 <el-row>
+                    <el-col :span="22">
+                        <el-form-item
+                        label="公司："
+                        :label-width="formLabelWidth"
+                        class="pop-select"
+                        prop="fcompanyoid"
+                        >
+                        <el-select
+                            v-model="form.fcompanyoid"
+                            size="small"
+                            clearable
+                            placeholder="请选择"
+                        >
+                            <el-option
+                            v-for="item in options"
+                            :key="item.id"
+                            :label="item.name"
+                            :value="item.id"
+                            ></el-option>
+                        </el-select>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <el-col :span="22">
+                        <el-form-item label="部门" :label-width="formLabelWidth" prop="departMentName">
+                            <el-input 
+                            v-model="form.departMentName"
+                            class="Carfiles"
+                            :disabled="homeTitle == '查看业务'?true:false" 
+                            autocomplete="off"
+                            ></el-input>
+                            <img class="icon-search"  
+                            v-show="homeTitle !== '查看业务'"
+                            @click="workSearch"
+                            src="../../assets/img/search.svg">
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                
             </el-form>
              <el-row :gutter="24" class="joinTableBox">
                     <el-col :span="20">
@@ -97,6 +126,7 @@ export default {
     inject: ['reload'],
     data() {
         return {
+            options: [],
             homeTitle:'',
             userType:'',
             proBusDialogF:false,
@@ -144,7 +174,10 @@ export default {
             multipleSelection: [],
             UBmultipleSelection: [],
             checked:false,
-            form: {},
+            form: {
+                departMentName:'',
+                fcompanyoid:''
+            },
             formLabelWidth: '120px',
             rules: {
                 departMentName:[{ required: true, message: '请输入部门', trigger: 'blur' }],
@@ -158,6 +191,15 @@ export default {
         fromdata.size=this.pageSize;
         fromdata.fcreator=localStorage.getItem("ms_userId")
         this.getPBListData(fromdata);
+        // 获取公司方法
+        this.$api.jobUserManagement.getCompanyData().then((res) => {
+            if (res.status == "200") {
+            this.options = res.data.data.rows;
+            }
+        }),
+        (error) => {
+          console.log(error);
+        };
     },
     computed:{
         
@@ -301,9 +343,10 @@ export default {
                    this.$message.error('请添加角色和用户!');
                    SaveFlag=false;
                 }
-                formData.fcompanyid=localStorage.getItem('ms_companyId');
+                formData.fcompanyid= this.form.fcompanyoid;
                 formData.fhandler=localStorage.getItem('ms_userId');
                 formData.fcreator=localStorage.getItem('ms_userId');
+              
                 if(SaveFlag){
                     this.saveLCData(formData);
                 }
@@ -321,6 +364,7 @@ export default {
                     let roleList=[];
                     let userList=[];
                     for(let i=0;i<this.tableUBData.length;i++){
+                        //错误
                         roleList.push(this.tableUBData[i].froleId);
                         userList.push(this.tableUBData[i].fuserId);
                     }
@@ -347,14 +391,19 @@ export default {
             let fromdata=params;
             this.$api.processSet.saveProBusData(fromdata).then(response => {
                 let responsevalue = response;
-                if(responsevalue){
+                if(response.data.code == 0){
                     this.$message.success('新建成功!');
                     this.dialogFormVisible=false;
-                    this.reload();
+                    //刷新表格
+                     this.reload();
                 }else{
-                    this.$message.error('新建失败!');    
+                    this.$message.error(res.data.msg);   
                 }
-            });
+            },
+            (error) => {
+                console.log(error);
+            }
+            );
         },
         //更新流程业务
         updateLCData(params){
@@ -437,7 +486,7 @@ export default {
                     let RowObj={};
                     if(RoleData[0]){
                         RowObj.froleName=RoleData[0].name;
-                        RowObj.froleId=RoleData[0].foid;
+                        RowObj.froleId=RoleData[0].oid;
                     }
                     let userName='';
                     let userID='';
