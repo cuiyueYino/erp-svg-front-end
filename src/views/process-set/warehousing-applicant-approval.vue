@@ -278,7 +278,6 @@ export default {
             let twfbizmailReqVoObj = {};
             twfbizmailReqVoObj["foid"] = this.rowWAADataObj.selectData[0].foid;
             paramsData["twfbizmailReqVo"] = twfbizmailReqVoObj;    
-            console.log(333333333333333333333);
             
             let twfauditObj = {};
             twfauditObj["fresult"] = 1;
