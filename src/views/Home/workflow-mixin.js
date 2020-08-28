@@ -553,6 +553,26 @@ export default {
                     break;
                 }
             }
+            //删除节点 transition 中的线数据
+            let lineDataA=this.linkData[index];
+            this.workflowNodes.forEach((item,index)=>{
+                if(item == null){
+                    this.workflowNodes.splice(index,1)
+                }
+                if(item.transition){
+                    if(item.transition.length>0){
+                        let newTransiton = item.transition;
+                        let itemT=[];
+                        newTransiton.forEach(items => {
+                            if(items.key == lineDataA.key){
+                            }else{
+                                itemT.push(items)
+                            }
+                        });
+                        item.transition=itemT;
+                    }
+                }
+            })
             // 根据索引删除目标连接数据
             this.linkData.splice(index, 1);
         },
