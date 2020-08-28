@@ -398,7 +398,6 @@
 			},
 			baseInputData2(Str, row) {
 				this.rowNow = row
-				console.log(row)
 				this.userVisible = true;
 				this.choseDepart = Str;
 				this.show = true
@@ -472,6 +471,8 @@
 						case '选择部门':
 							this.rowNow.fdepartmentname = data.label
 							this.rowNow.fdepartmentoid = data.foid
+							this.rowNow.ffirmpositionoid = ""
+							this.rowNow.ffirmpositionname = ""
 							break;
 						case '选择职位':
 							this.rowNow.ffirmpositionname = data.label
@@ -496,7 +497,6 @@
 							break;
 					}
 				}
-				console.log(this.peopleForm)
 			},
 			//多选
 			onSelectionChange(val) {
