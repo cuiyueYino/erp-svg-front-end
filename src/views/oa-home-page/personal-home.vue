@@ -163,11 +163,6 @@
         center
         :close-on-click-modal="false">
             <span v-html="detailMsg.content" ></span>
-            <span>1111111111111</span>
-            
-            <span slot="footer" class="dialog-footer">
-                <el-button @click="closeDialog">关 闭</el-button>
-            </span>
         </el-dialog>
         <WAApage  :rowWAADataObj="rowWAADataObj" :rowWAAtype="rowWAAtype" :isOa="isOa" @changeShow="showORhideForWAA"/>
     </el-container>

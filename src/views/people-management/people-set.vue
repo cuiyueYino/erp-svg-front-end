@@ -19,20 +19,20 @@
 								</el-select>
 							</el-form-item>
 						</el-col>
-						<el-form-item prop="selectVal">
+						<el-form-item prop="selectFormVal">
 							<el-input clearable v-model="form.selectFormVal" placeholder="请输入任意查询内容"></el-input>
 						</el-form-item>
 
 						<el-form-item>
-							<el-button type="primary" plain @click="onSubmit">搜索</el-button>
+							<el-button type="primary" plain @click="showFig = false;onSubmit()">搜索</el-button>
 						</el-form-item>
 						<el-form-item>
-							<el-button type="primary" plain @click="resetForm('form')" class="search-all">显示全部信息</el-button>
+							<el-button type="primary" plain @click="showFig = false;resetForm('form')" class="search-all">显示全部信息</el-button>
 						</el-form-item>
 					</el-form>
 				</el-col>
 				<el-col :span="6" style="text-align: right;">
-					<el-button type="success" plain class="el-icon-plus" @click="add">新增</el-button>
+					<el-button type="success" plain class="el-icon-plus" @click="add();tableData3 = []">新增</el-button>
 					<el-button type="danger" plain class="el-icon-delete" @click="deleteMsg">删除</el-button>
 					<el-button type="warning" plain class="el-icon-edit" @click="toEdit('编辑')">编辑</el-button>
 				</el-col>
@@ -48,7 +48,7 @@
 				<el-row :gutter="22">
 					<el-col :span="11">
 						<el-form-item label="公司：" :label-width="formLabelWidth" class="pop-select" prop="tcompanyoid">
-							<el-select v-model="peopleForm.tcompanyoid" size="small" :disabled="isEdit" clearable placeholder="请选择">
+							<el-select v-model="peopleForm.tcompanyoid" @change="getTcompanyo" size="small" :disabled="isEdit" clearable placeholder="请选择">
 								<el-option v-for="item in options" :key="item.id" :label="item.name" :value="item.id"></el-option>
 							</el-select>
 						</el-form-item>
@@ -100,7 +100,7 @@
 					<dynamic-table :columns="columns3" :table-data="tableData3" :total="total" :isShowPager="false" :height="200" :page-num="pageNum" :page-size="pageSize" @current-change="onCurrentChange" @selection-change="onChange" v-loading="false" element-loading-text="加载中"></dynamic-table>
 				</el-col>
 				<el-col :span="5">
-					<el-button size="small" :disabled="isLook" v-show="!isEdit" type="success" plain @click="baseInputTable('新增兼职')">新增</el-button>
+					<el-button size="small" :disabled="isLook" type="success" plain @click="baseInputTable('新增兼职')">新增</el-button>
 					<el-button size="small" :disabled="isLook" type="danger" plain @click="deleteRow()">删除</el-button>
 				</el-col>
 			</el-row>
@@ -123,16 +123,32 @@
 		<el-dialog :title="choseDepart" top="20px" :visible.sync="peopleTableVisible" :close-on-click-modal="false">
 			<el-form :model="peopleTableForm" :rules="peopleTableRules" ref="peopleTableForm">
 				<el-col :span="11">
-					<el-form-item label="公司：" :label-width="formLabelWidth" prop="tcompanyoid">
-						<el-input v-model="peopleTableForm.tcompanyoid" size="small" autocomplete="off"></el-input>
+					<el-form-item label="公司：" :label-width="formLabelWidth" prop="fcompanyoid">
+						<el-select v-model="peopleTableForm.fcompanyoid" @change="getTcompanyo2" size="small" clearable placeholder="请选择">
+							<el-option v-for="item in options" :key="item.id" :label="item.name" :value="item.id"></el-option>
+						</el-select>
 					</el-form-item>
-					<el-form-item label="部门：" :label-width="formLabelWidth" prop="tdepartmentoid">
-						<el-input v-model="peopleTableForm.tdepartmentoid" size="small" autocomplete="off"></el-input>
+					<el-form-item label="部门：" :label-width="formLabelWidth" prop="fdepartmentname">
+						<el-row>
+							<el-col :span="21">
+								<el-input v-model="peopleTableForm.fdepartmentname" size="small" autocomplete="off"></el-input>
+							</el-col>
+							<el-col :span="3">
+								<el-button type="primary" size="mini" icon="el-icon-search" @click="baseInputData2('选择部门')"></el-button>
+							</el-col>
+						</el-row>
 					</el-form-item>
 				</el-col>
 				<el-col :span="11">
-					<el-form-item label="职位：" :label-width="formLabelWidth" prop="ffirmposition">
-						<el-input v-model="peopleTableForm.ffirmposition" size="small" autocomplete="off"></el-input>
+					<el-form-item label="职位：" :label-width="formLabelWidth" prop="ffirmpositionname">
+						<el-row>
+							<el-col :span="21">
+								<el-input v-model="peopleTableForm.ffirmpositionname" size="small" autocomplete="off"></el-input>
+							</el-col>
+							<el-col :span="3">
+								<el-button type="primary" size="mini" icon="el-icon-search" @click="baseInputData2('选择职位')"></el-button>
+							</el-col>
+						</el-row>
 					</el-form-item>
 					<el-form-item label="生效：" :label-width="formLabelWidth">
 						<el-checkbox v-model="checked" size="small"></el-checkbox>
@@ -153,6 +169,8 @@
 		name: "peopleSet",
 		data() {
 			return {
+				show : false,
+				showFig: true,
 				dialogFormVisible: false,
 				userVisible: false,
 				peopleTableVisible: false,
@@ -205,28 +223,31 @@
 						type: "selection"
 					},
 					{
-						key: "tcompanyoid",
+						key: "fcompanyname",
 						title: "公司"
 					},
 					{
-						key: "tdepartmentoid",
+						key: "fdepartmentname",
 						title: "部门"
 					},
 					{
-						key: "ffirmposition",
+						key: "ffirmpositionname",
 						title: "职位"
 					},
 					{
-						key: "tstatus",
+						key: "fiseffectiveShow",
 						title: "生效"
 					},
 				],
 				editFormData: [],
 				peopleTableForm: {
-					tdepartmentoid: "",
-					tcompanyoid: "",
-					tstatus: '',
-					ffirmposition: '',
+					fdepartmentoid: "",
+					fcompanyoid: "",
+					ffirmposition: "",
+					fiseffective: '',
+					fcompanyname: '',
+					fdepartmentname: '',
+					ffirmpositionname: '',
 				},
 				tableData: [],
 				tableData2: [],
@@ -242,6 +263,7 @@
 					selectFormVal: '',
 				},
 				peopleForm: {
+					ffirmpositionname:'',
 					tcompanyoid: "",
 					fpositionstate: "",
 					tdepartmentname: "",
@@ -264,20 +286,20 @@
 				choseDepart: "",
 				formLabelWidth: "120px",
 				peopleTableRules: {
-					tcompanyoid: [{
+					fcompanyoid: [{
 						required: true,
 						message: "请输入公司",
-						trigger: "blur"
+						trigger: "change"
 					}],
-					tdepartmentoid: [{
+					fdepartmentname: [{
 						required: true,
 						message: "请输入部门",
-						trigger: "blur"
+						trigger: "change"
 					}],
-					ffirmposition: [{
+					ffirmpositionname: [{
 						required: true,
 						message: "请输入职位",
-						trigger: "blur"
+						trigger: "change"
 					}],
 				},
 				rules: {
@@ -315,11 +337,16 @@
 							trigger: "blur"
 						}
 					],
-					ffirmposition: [{
+					tdepartmentname: [{
+						required: true,
+						message: "请选择部门",
+						trigger: "change"
+					}],
+					ffirmpositionname: [{
 						required: true,
 						message: "请选择职位",
-						trigger: "blur"
-					}, ]
+						trigger: "change"
+					}]
 				}
 			};
 		},
@@ -329,6 +356,7 @@
 		created() {
 			this.$nextTick(() => {
 				this.getTableData("页面初期化");
+				this.getCompany()
 			});
 		},
 		computed: {},
@@ -361,6 +389,20 @@
 		},
 
 		methods: {
+			getTcompanyo() {
+				this.peopleForm.ffirmpositionname = ""
+				this.peopleForm.tdepartmentname = ""
+			},
+			getTcompanyo2() {
+				this.peopleTableForm.fdepartmentname = ""
+				this.peopleTableForm.ffirmpositionname = ""
+				this.options.forEach(item =>{
+					if(item.id == this.peopleTableForm.fcompanyoid){
+						this.peopleTableForm.fcompanyname = item.name
+					}
+				})
+				
+			},
 			filterNode(value, data) {
 				if(!value) return true;
 				return data.label.indexOf(value) !== -1;
@@ -368,6 +410,7 @@
 			baseInputData(Str) {
 				this.userVisible = true;
 				this.choseDepart = Str;
+				this.show = false
 				switch(Str) {
 					case '选择部门':
 						this.searchDepart()
@@ -380,15 +423,39 @@
 						break;
 				}
 			},
+			baseInputData2(Str) {
+				this.userVisible = true;
+				this.choseDepart = Str;
+				this.show = true
+				switch(Str) {
+					case '选择部门':
+						this.searchDepart(1)
+						break;
+					case '选择职位':
+						this.searchPosition(1)
+						break;
+
+					default:
+						break;
+				}
+			},
 			baseInputTable(Str) {
 				this.peopleTableVisible = true;
 				this.choseDepart = Str;
+				this.peopleTableForm.ffirmpositionname = ""
+				this.peopleTableForm.fdepartmentname = ""
 			},
 			//部门
-			searchDepart() {
-				console.log(this.peopleForm)
-				this.$api.jobUserManagement.getDepartData(this.peopleForm.tcompanyoid).then(res => {
+			searchDepart(a) {
+				var data
+				if(a) {
+					data = this.peopleTableForm.fcompanyoid
+				} else {
+					data = this.peopleForm.tcompanyoid
+				}
+				this.$api.jobUserManagement.getDepartData(data).then(res => {
 					if(res.status == '200') {
+						this.treeData = []
 						this.getTreeData = res.data.data.rows; //console.log( this.getTreeData)
 						this.getTreeData.forEach((item, index) => {
 							this.treeData.push({
@@ -396,15 +463,18 @@
 								foid: item.foid,
 							})
 						})
-						console.log(this.treeData)
 					}
-				}), error => {
-					console.log(error);
-				}
+				}), error => {}
 			},
 			//职位
-			searchPosition() {
-				this.$api.jobUserManagement.getPositonData(this.peopleForm.tdepartmentoid).then(res => {
+			searchPosition(a) {
+				var data
+				if(a) {
+					data = this.peopleTableForm.fdepartmentoid
+				} else {
+					data = this.peopleForm.tdepartmentoid
+				}
+				this.$api.jobUserManagement.getPositonData(data).then(res => {
 					if(res.status == '200') {
 						this.treeData = [];
 						this.getTreeData = res.data.data.rows; //console.log( this.getTreeData)
@@ -428,20 +498,37 @@
 				this.getTableData("");
 			},
 			handleNodeClick(data) {
-				switch(this.choseDepart) {
-					case '选择部门':
-						this.peopleForm.tdepartmentname = data.label
-						this.peopleForm.tdepartmentoid = data.foid
-						break;
-					case '选择职位':
-						this.peopleForm.ffirmpositionname = data.label
-						this.peopleForm.ffirmposition = data.foid
-						break;
+				if(this.show) {
+					console.log(this.choseDepart)
+					switch(this.choseDepart) {
+						case '选择部门':
+							this.peopleTableForm.fdepartmentname = data.label
+							this.peopleTableForm.fdepartmentoid = data.foid
+							break;
+						case '选择职位':
+							this.peopleTableForm.ffirmpositionname = data.label
+							this.peopleTableForm.ffirmposition = data.foid
+							break;
 
-					default:
-						break;
+						default:
+							break;
+					}
+				} else {
+					switch(this.choseDepart) {
+						case '选择部门':
+							this.peopleForm.tdepartmentname = data.label
+							this.peopleForm.tdepartmentoid = data.foid
+							break;
+						case '选择职位':
+							this.peopleForm.ffirmpositionname = data.label
+							this.peopleForm.ffirmposition = data.foid
+							break;
+
+						default:
+							break;
+					}
 				}
-
+				console.log(this.peopleForm)
 			},
 			//多选兼职table
 			onChange(val) {
@@ -492,7 +579,7 @@
 				switch(this.isEdit) {
 					case true:
 						data = {
-							[params]: this.multipleSelection[0].foid,
+							[params]: this.form.selectFormVal,
 							page: this.pageNum,
 							size: this.pageSize
 						};
@@ -527,7 +614,6 @@
 							page: this.pageNum,
 							size: this.pageSize
 						};
-						data[params]
 						if(params == '页面初期化') {
 							data['fpositionstate'] = 1;
 						}
@@ -535,6 +621,9 @@
 
 					default:
 						break;
+				}
+				if(this.showFig) {
+					data['fpositionstate'] = 1;
 				}
 				this.$api.jobUserManagement.getPeopleTableData(data).then(
 					res => {
@@ -579,17 +668,18 @@
 					if(valid) {
 						if(formName == 'peopleTableForm') {
 							this.tableData3.push({
-								tcompanyoid: this.peopleTableForm.tcompanyoid,
-								tdepartmentoid: this.peopleTableForm.tdepartmentoid,
+								fcompanyoid: this.peopleTableForm.fcompanyoid,
+								fdepartmentoid: this.peopleTableForm.fdepartmentoid,
 								ffirmposition: this.peopleTableForm.ffirmposition,
-								tstatus: this.checked ? '是' : '否',
+								fcompanyname: this.peopleTableForm.fcompanyname,
+								fdepartmentname: this.peopleTableForm.fdepartmentname,
+								ffirmpositionname: this.peopleTableForm.ffirmpositionname,
+								fiseffective: this.checked ? '1' : '0',
+								fiseffectiveShow: this.checked ? '是' : '否',
 							});
 							this.peopleTableVisible = false;
 							return
 						}
-						this.tableData3.forEach(item => {
-							item.tstatus = item.tstatus == '是' ? '1' : '0'
-						})
 						this.peopleForm.pluralismModels = this.tableData3
 						if(this.isEdit) { // console.log( this.editFormData)
 							this.peopleForm.ffirmposition = this.editFormData.ffirmposition
@@ -656,21 +746,28 @@
 						this.dialogFormVisible = true;
 						this.isEdit = true;
 						this.$api.jobUserManagement.addPeopleData(this.multipleSelection[0].toid).then(res => {
+								console.log(res)
 								if(res.status == '200') {
 									let newData;
 									newData = JSON.parse(JSON.stringify(res.data.data));
 									this.editFormData = res.data.data;
 									this.peopleForm = newData;
 									this.peopleForm.ffirmposition = res.data.data.ffirmpositionname;
-									this.peopleForm.tcompanyoid = res.data.data.tcompanyname;
+									this.peopleForm.tcompanyoid = res.data.data.tcompanyoid;
 									this.tableData3 = res.data.data.pluralismModels == null ? [] : res.data.data.pluralismModels;
+									this.tableData3.forEach(item =>{
+										if(item.fiseffective == 1){
+											item.fiseffectiveShow = "是"
+										}else{
+											item.fiseffectiveShow = "否"
+										}
+									})
 									// console.log(this.editFormData,res.data.data,newData )
 								}
 							}),
 							error => {
 								console.log(error);
 							};
-						this.isEdit = false;
 					}
 				} else {
 					this.$message.error('请选择一项');
