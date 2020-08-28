@@ -11,9 +11,13 @@ const processSet = {
 
     // 获取表格列表数据
     getTableData(params){
-        return httpReqest.post('/api/wfInterfaces/workFlow/getWorkGroupList', params);
+        return httpReqest.post('/api/wfInterfaces/workFlow/findWorkFlowProcessList', params);
     },
 
+     // 获取表格列表数据(工作业务组 )
+     getTableDataGroup(params){
+        return httpReqest.post('/api/wfInterfaces/workFlow/getWorkGroupList', params);
+    },
     // 新增
     addSubmit(params){
         return httpReqest.post('/api/wfInterfaces/workFlow/addWfprocess', params);

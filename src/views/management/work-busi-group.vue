@@ -426,14 +426,11 @@ export default {
     staffTreeSearch
   },
   created() {
-    // this.$nextTick(() => {
-    //   this.getTableData("");
-    // });
     let fromdata={};
     fromdata.page=this.pageNum;
     fromdata.size=this.pageSize;
     fromdata.fcreator=localStorage.getItem("ms_userId")
-    this.getTableData(fromdata);
+    this.getTableDataGroup(fromdata);
   },
   computed: {},
   watch: {
@@ -609,19 +606,19 @@ export default {
     //分页、下一页
     onCurrentChange(val) {
       this.pageNum = val;
-      this.getTableData("");
+      this.getTableDataGroup("");
     },
     // 搜索
     onSubmit() {
-      this.getTableData(this.formCode);
+      this.getTableDataGroup(this.formCode);
     },
     getAll() {
-      this.getTableData("");
+      this.getTableDataGroup("");
     },
     // 获取表格数据
-    getTableData(params) {
+    getTableDataGroup(params) {
       let data=params;
-      this.$api.processSet.getTableData(data).then(
+      this.$api.processSet.getTableDataGroup(data).then(
         (res) => {
           this.tableData = res.data.data.rows;
           for (let i in this.tableData) {
