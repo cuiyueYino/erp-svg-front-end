@@ -262,6 +262,12 @@ export default {
                     let returndata = responsevalue.data;
                     let tableArr=returndata.data.rows;
                     this.formdata1=tableArr;
+                    for (let i = 0; i < tableArr.length; i++) {
+                      //时间格式化
+                      if(tableArr[i].foperatetime){
+                        tableArr[i].foperatetime = this.formateDate(tableArr[i].foperatetime);
+                      }
+                    }
                     this.total=returndata.data.total;
                 } else {
                     this.$message.success('数据库没有该条数据!');
@@ -273,6 +279,7 @@ export default {
             let formDataA ={};
             formDataA.page=val;
             formDataA.size=this.pageSize;
+            formDataA.foid = this.formdata.foid;
             this.searchMenutable(formDataA);
         },
         //附件
@@ -335,7 +342,7 @@ export default {
                     this.$message.success('查询失败!');
                 }
             });
-
+            //查询操作记录
             formDataA.page=this.pageNum;
             formDataA.size=this.pageSize;
             this.$api.documentManagement.getDocumentRecordByMasterid(formDataA).then(response => {
@@ -344,6 +351,12 @@ export default {
                     let returndata = responsevalue.data;
                     let tableDataArr=returndata.data;
                     this.formdata1 = tableDataArr.rows;
+                    for (let i = 0; i < tableDataArr.rows.length; i++) {
+                      //时间格式化
+                      if(tableDataArr.rows[i].foperatetime){
+                        tableDataArr.rows[i].foperatetime = this.formateDate(tableDataArr.rows[i].foperatetime);
+                      }
+                    }
                     this.total=tableDataArr.total;
                 } else {
                     this.$message.success('查询操作纪录失败!');
@@ -407,6 +420,8 @@ export default {
             let foid = this.formdata.foid;
             let attachment ={};
             let formDataA =data;
+            let creator = localStorage.getItem('ms_userId');
+            formDataA.fcreator = creator;
             this.$api.documentManagement.updateDocumentManage(formDataA).then(response => {
                 let responsevalue = response;
                 if (responsevalue.data.data) {
@@ -495,6 +510,19 @@ export default {
                     this.$message.error(responsevalue.data.msg);
                 }
             });
+        },
+        //格式化日期
+        formateDate(date){
+          let datetime= new Date(date);
+          return new Date(Date.UTC(
+            datetime.getFullYear(),
+            datetime.getMonth(),
+            datetime.getDate(),
+            datetime.getHours(),
+            datetime.getMinutes(),
+            datetime.getSeconds()))
+            .toISOString()
+            .slice(0, 19).replace('T',' ');
         },
 
     },

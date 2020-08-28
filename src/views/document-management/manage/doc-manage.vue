@@ -272,6 +272,8 @@ export default {
                         finandata.fdocstatus="2";
                     }
                     finandata.foid=SelectData[0].foid;
+                    let creator = localStorage.getItem('ms_userId');
+                    finandata.fcreator = creator;
                     this.$api.documentManagement.updateDocumentManage(finandata).then(response => {
                         let responsevalue = response;
                         if (responsevalue.data.data) {
