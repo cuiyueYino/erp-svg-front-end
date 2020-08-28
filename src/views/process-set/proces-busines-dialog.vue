@@ -250,11 +250,11 @@ export default {
                     title: '名称'
                 },
                 {
-                    key: 'role_expression',
+                    key: 'roleTypeName',
                     title: '角色类型'
                 },
                 {
-                    key: 'sortOrder',
+                    key: 'remark',
                     title: '描述'
                 },
                 
@@ -337,7 +337,7 @@ export default {
                 let returndata = resData.data;
                 let tableDataArr=returndata.data.rows;
                 this.gridData=tableDataArr;
-                this.total=returndata.total;
+                this.total=returndata.data.total;
             },error=>{
                 console.log(error)
             })
