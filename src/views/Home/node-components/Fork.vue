@@ -357,7 +357,7 @@ export default {
             this.workSearchTable()
         },
         workSearchTableBtn(){
-            this.pageNum = 1
+            this.pageNum = 1;
             this.workSearchTable();
         },
          workSearch(){
@@ -365,6 +365,7 @@ export default {
             this.formData.formCode='';
             this.formData.formName='';
             this.formData.formCtionTypeCon='';
+            this.pageNum = 1;
             this.workSearchOption();
             this.workSearchTable();
             this.dialogTableVisible = true;
@@ -389,6 +390,7 @@ export default {
         },
         // 业务工作-搜索枚举项
         workSearchOption(){
+            this.options=[];
             this.$api.processSet.getWorkSearch().then(res=>{
                 for( let i in res.data.data ){
                     this.options.push({value: i,label: res.data.data[i]})

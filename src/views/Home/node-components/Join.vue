@@ -1221,6 +1221,8 @@ export default {
         workSearch(str){
             this.titleStr = str;
             this.pageNum=1;
+            this.formData.formCode='';
+            this.formData.formName='';
             // 业务工作-搜索枚举项
             // this.workSearchOption()
             this.showInfoCheck = true;

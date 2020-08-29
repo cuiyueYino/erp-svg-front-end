@@ -75,12 +75,12 @@
              <el-row :gutter="24">
                   <el-col :span="8">
                     <el-form-item label="编码" label-width="43px" prop="formCode">
-                        <el-input clearable size="small" v-model="formData.formCode" placeholder="请输入"></el-input>
+                        <el-input clearable size="small" v-model="formData.formCode" @input="change($event)" placeholder="请输入"></el-input>
                     </el-form-item>
                   </el-col> 
                   <el-col :span="8">
                     <el-form-item label="名称" label-width="43px"  prop="formName">
-                        <el-input clearable size="small" v-model="formData.formName" placeholder="请输入"></el-input>
+                        <el-input clearable size="small" v-model="formData.formName" @input="change($event)" placeholder="请输入"></el-input>
                     </el-form-item>
                   </el-col> 
                   <el-col :span="8" >
@@ -386,6 +386,9 @@ export default {
             this.dialogTableVisible = true;
             this.baseInputTitle = title;
             this.baseInputType = str;
+            this.formData.formCode='';
+            this.formData.formName='';
+            this.pageNum = 1;
             this.workSearchTable('')
         },
          //业务工作-新增
@@ -414,8 +417,8 @@ export default {
           // 业务工作-获取表格数据-重置
         reWorkSearchTable(formName){
             this.$refs[formName].resetFields();
-            this.pageNum = 1
-            this.workSearchTable()
+            this.pageNum = 1;
+            this.workSearchTable();
         },
          workSearch(){
              // 业务工作-搜索枚举项
@@ -429,7 +432,6 @@ export default {
              let data = {
                 fcode: this.formData.formCode,
                 fname: this.formData.formName,
-                fmfunctiontypecon: this.formData.formCtionTypeCon,
                 page:this.pageNum,
                 size:this.pageSize
             };
@@ -445,6 +447,7 @@ export default {
         },
         // 业务工作-搜索枚举项
         workSearchOption(){
+            this.options=[];
             this.$api.processSet.getWorkSearch().then(res=>{
                 for( let i in res.data.data ){
                     this.options.push({value: i,label: res.data.data[i]})
@@ -456,7 +459,7 @@ export default {
        
          //分页、下一页
         onCurrentChange(val){
-             this.pageNum = val;
+            this.pageNum = val;
             this.workSearchTable('')
         },
     }

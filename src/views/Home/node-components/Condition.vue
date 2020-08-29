@@ -1031,6 +1031,10 @@ export default {
       this.titleStr = "业务工作";
       this.showInfoCheck = true;
       this.showBaseInfo = false;
+      this.pageNum = 1;
+      this.formData.formCode="";
+      this.formData.formName="";
+      this.formData.formCtionTypeCon="";
       // 业务工作-搜索枚举项
       this.workSearchOption();
       this.workSearchTable();
