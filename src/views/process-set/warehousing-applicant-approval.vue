@@ -11,7 +11,7 @@
                 :label-position="labelPosition"
             >
                 <el-card>
-                    <el-row :gutter="24" v-show="!isOa">
+                    <el-row :gutter="24">
                         <el-col :span="12" :offset="12">
                             <el-button type="danger" icon="el-icon-circle-plus-outline" plain @click="baseInputTable('加签')">加签</el-button>
                             <el-button type="success" icon="el-icon-share" plain @click="baseInputTable('转发')">转发</el-button>
@@ -103,6 +103,8 @@ export default {
     props: {
         rowWAADataObj: Object,
         functionType:String,
+        factivity:String,
+        fsubject:String,
         rowWAAtype:{
              type: Boolean,
              default: false
@@ -270,20 +272,27 @@ export default {
         //提交按钮点击事件
         effectOrDisableMsg(){
             let paramsData = {};
-            paramsData["currUserId"] = localStorage.getItem("ms_userId");
-            paramsData["mactivityOid"] = this.rowWAADataObj.selectData[0].factivity;
-            paramsData["processCode"] = "schedule";
-            paramsData["srcOid"] = this.rowWAADataObj.selectData[0].fsrcoId;
-            paramsData["subject"] = this.rowWAADataObj.selectData[0].fsubject;
             let twfbizmailReqVoObj = {};
-            twfbizmailReqVoObj["foid"] = this.rowWAADataObj.selectData[0].foid;
+            if(this.isOa) {
+                paramsData["mactivityOid"] = this.rowWAADataObj.factivity;
+                paramsData["srcOid"] = this.rowWAADataObj.fsrcoId;
+                paramsData["subject"] = this.rowWAADataObj.fsubject;
+                twfbizmailReqVoObj["foid"] = this.rowWAADataObj.foid;
+            } else {
+                paramsData["mactivityOid"] = this.rowWAADataObj.selectData[0].factivity;
+                paramsData["srcOid"] = this.rowWAADataObj.selectData[0].fsrcoId;
+                paramsData["subject"] = this.rowWAADataObj.selectData[0].fsubject;
+                twfbizmailReqVoObj["foid"] = this.rowWAADataObj.selectData[0].foid;
+            }
+            paramsData["currUserId"] = localStorage.getItem("ms_userId");
+            paramsData["processCode"] = "schedule";
             paramsData["twfbizmailReqVo"] = twfbizmailReqVoObj;    
-            
             let twfauditObj = {};
             twfauditObj["fresult"] = 1;
             twfauditObj["fopinion"] = this.formdata.remark;
             paramsData["twfaudit"] = twfauditObj;
-            console.log(JSON.stringify(paramsData));
+            console.log("提交。。。。。。。。。。。。。。。。");
+            console.log(paramsData);
             this.$api.processSet.addWfsubmit(paramsData).then(res=>{
                 if( res.data.code == 0 ){
                     this.$message.success('保存成功');
@@ -299,24 +308,30 @@ export default {
         showprocessData(){},
         //判断
         DisplayOrHide(dataType,dataContent){
+            var currentDatd = "";
+            if(this.isOa) {
+                currentDatd = dataContent.fsrcoId;
+            } else {
+                currentDatd = dataContent.selectData[0].fsrcoId;
+            }
             if(dataType === 'CoordinationTask'){
                 this.rowCooTaskDetailtype=true;
-                this.rowCooTaskDetailDataObj = dataContent.selectData[0];
+                this.rowCooTaskDetailDataObj = currentDatd;
             }else if(dataType === 'DepartmentYearPlan'){
                 this.rowDepartAnnPlanDettype=true;
-                this.rowDepartAnnPlanDetDataObj = dataContent.selectData[0];
+                this.rowDepartAnnPlanDetDataObj = currentDatd;
             }else if(dataType === 'CompanyYearPlanCollect'){   
                 this.rowComPanDetaitype=true;
-                this.rowComPanDetaiDataObj = dataContent.selectData[0];
+                this.rowComPanDetaiDataObj = currentDatd;
             } else if(dataType === 'DepartmentMonthPlan'){
                 this.rowDepartMonPlanDettype=true;
-                this.rowDepartMonPlanDetDataObj = dataContent.selectData[0];
+                this.rowDepartMonPlanDetDataObj = currentDatd;
             } else if(dataType === 'TemporaryMission'){
                 this.rowTEMTasktype=true;
-                this.rowTEMTaskDataObj = dataContent.selectData[0];
+                this.rowTEMTaskDataObj = currentDatd;
             } else if(dataType === 'FormPost'){
                 this.rowEACHPerEachJobDettype=true;
-                this.rowEACHPerEachJobDetDataObj = dataContent.selectData[0];
+                this.rowEACHPerEachJobDetDataObj = currentDatd;
             } else if(dataType === 'TaskReport'){
                 this.rowEachPerEachTableReporttype=true;
             } else if(dataType === 'TaskSelfEvaluateApplyzp'){
@@ -333,7 +348,7 @@ export default {
                 this.rowEachPerEachTableEntrusttype=true;
             } else if(dataType === 'PersonalTableTask'){
                 this.rowEachPerEachTableDetailtype=true;
-                this.rowEachPerEachTableDetailDataObj = dataContent.selectData[0];
+                this.rowEachPerEachTableDetailDataObj = currentDatd;
             } else if(dataType === 'StaffAppraisals'){
                 this.rowEmpApprTabDetailtype=true;
             } else if(dataType === 'StaffAppraisalsCollect'){
@@ -342,7 +357,7 @@ export default {
                 this.rowConferenceApplytype=true;
             } else if(dataType === 'OptionIndex'){
                 this.rowEconomicIndicatorstype=true;
-                this.rowEconomicIndicatorsDataObj = dataContent.selectData[0];
+                this.rowEconomicIndicatorsDataObj = currentDatd;
             } 
         },
         //转发按钮点击事件
@@ -402,6 +417,9 @@ export default {
                 this.title=this.rowWAADataObj.nametitle;
                 let finandata=this.rowWAADataObj.selectData;
                 formDataA.oid=finandata[0].foid;
+            } else {
+                formDataA.oid= this.rowWAADataObj.fsrcoId;
+                this.title = "入库申请申请人审批";
             }
             this.$api.processSet.getunhandledTask(formDataA).then(response => {
                 let responsevalue = response;

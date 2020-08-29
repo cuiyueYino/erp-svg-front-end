@@ -11,7 +11,7 @@
             <el-row>
                 <el-col :span="6">
                     <el-form-item label="公司：" prop="company">
-                        <el-select v-model="formdata.company" value-key="value" :disabled="true">
+                        <el-select v-model="formdata.companyName" value-key="value" :disabled="true">
                             <el-option
                                 v-for="item in companyData"
                                 :key="item.value"
@@ -365,8 +365,8 @@ export default {
     watch:{
         rowTEMTasktype(oldVal){
             this.ShowFinancVisible=this.rowTEMTasktype;
-            let temporartSelected = {};
-            temporartSelected.id = this.rowTEMTaskDataObj.fsrcoId;
+            let temporartSelected = {};     
+            temporartSelected.id = this.rowTEMTaskDataObj;
             temporartSelected.userId = localStorage.getItem("ms_userId");
             this.getTemporaryMission(temporartSelected);
             },
