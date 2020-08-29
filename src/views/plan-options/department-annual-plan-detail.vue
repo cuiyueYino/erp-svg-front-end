@@ -327,7 +327,7 @@ export default {
         rowDepartAnnPlanDettype(oldVal,newVal){
             this.ShowFinancVisible=this.rowDepartAnnPlanDettype;
             let EACHPerEachJobDataSelected = {};
-            EACHPerEachJobDataSelected.id = this.rowDepartAnnPlanDetDataObj.fsrcoId;
+            EACHPerEachJobDataSelected.id = this.rowDepartAnnPlanDetDataObj;
             this.getDepYearPlanDetail(EACHPerEachJobDataSelected);
         }
     }
