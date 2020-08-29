@@ -224,12 +224,12 @@
                     <el-row :gutter="24">
                         <el-col :span="10">
                             <el-form-item label="编码" label-width="60px">
-                                <el-input clearable size="small" v-model="formData.formCode" placeholder="请输入"></el-input>
+                                <el-input clearable size="small" v-model="formData.formCode" @input="change($event)" placeholder="请输入"></el-input>
                             </el-form-item>
                         </el-col> 
                         <el-col :span="10">
                             <el-form-item label="名称" label-width="60px">
-                                <el-input clearable size="small" v-model="formData.formName" placeholder="请输入"></el-input>
+                                <el-input clearable size="small" v-model="formData.formName" @input="change($event)" placeholder="请输入"></el-input>
                             </el-form-item>
                         </el-col> 
                         <!-- <el-col :span="8">
@@ -249,7 +249,7 @@
                     <el-row :gutter="24">
                         <el-col :span="6" :offset="18">
                             <el-button type="primary" size="small" plain @click="reWorkSearchTable('formData')">重置</el-button>
-                            <el-button type="primary" size="small" plain @click="workSearchTable('')">搜索</el-button>
+                            <el-button type="primary" size="small" plain @click="SearchWorkSearchTable('')">搜索</el-button>
                         </el-col>
                     </el-row>
                     <!-- 表格 -->
@@ -946,6 +946,7 @@ export default {
                             ProleObj.type = 6;
                             ProleObj.typeName = "position";
                             ProleObj.fUsername = ProleObj.fname;
+                            ProleObj.fUseroid = ProleObj.foid;
                             ProleObj.fUsercode = this.baseActiveNameStr;
                             ProleObj.fUserRemake = ProleObj.fenglishname;
                             this.joinusertableData.push(ProleObj);
@@ -1154,9 +1155,39 @@ export default {
         },
         // 业务工作-获取表格数据-重置
         reWorkSearchTable(formName){
-            this.$refs[formName].resetFields();
+            //this.$refs[formName].resetFields();
+            this.pageNum = 1;
+            this.formData.formCode="";
+            this.formData.formName="";
+            let StrS=this.titleStr;
+            switch (StrS) {
+                case '审核工作':
+                this.workSearchTable('')
+                break;
+                case '源单据业务':
+                this.workSearchTable('源单据业务')
+                break;
+                default:
+                break;
+            }
+            //this.workSearchTable(StrS)
+        },
+        // 业务工作-获取表格数据-搜索
+        SearchWorkSearchTable(){
+            //this.$refs[formName].resetFields();
             this.pageNum = 1
-            this.workSearchTable('')
+            let StrS=this.titleStr;
+            switch (StrS) {
+                case '审核工作':
+                this.workSearchTable('')
+                break;
+                case '源单据业务':
+                this.workSearchTable('源单据业务')
+                break;
+                default:
+                break;
+            }
+            //this.workSearchTable(StrS)
         },
         baseInputTable(str,title){ 
             this.baseInputTableF = true;
@@ -1189,19 +1220,17 @@ export default {
         },
         workSearch(str){
             this.titleStr = str;
+            this.pageNum=1;
             // 业务工作-搜索枚举项
             // this.workSearchOption()
-
             this.showInfoCheck = true;
             this.showBaseInfo = false;
             this.dialogTableVisible = true;
             switch (str) {
                 case '审核工作':
-                this.formData.formCtionTypeCon = 3;
                 this.workSearchTable('')
                 break;
                 case '源单据业务':
-                this.formData.formCtionTypeCon = 1;
                 this.workSearchTable('源单据业务')
                 break;
                 default:
@@ -1214,17 +1243,19 @@ export default {
             let data;
             switch (str) {
                 case '源单据业务':
+                this.formData.formCtionTypeCon = 1;
                 data = {
                     fmclassName: this.formData.fmclassName,
                     fmclass:this.formData.fmclassOid,
-                    // fcode: this.formData.formCode?this.formData.formCode:'',
-                    // fname: this.formData.formName?this.formData.formName:'',
+                    fcode: this.formData.formCode?this.formData.formCode:'',
+                    fname: this.formData.formName?this.formData.formName:'',
                     fmfunctiontypecon: this.formData.formCtionTypeCon,
                     page:this.pageNum,
                     size:this.pageSize
                 };console.log(data)
                 break;
                 case '':
+                this.formData.formCtionTypeCon = 3;
                 data = {
                     fcode: this.formData.formCode,
                     fname: this.formData.formName,
@@ -1260,7 +1291,16 @@ export default {
         //分页、下一页
         onCurrentChange(val){
             this.pageNum = val;
-            this.workSearch('审核工作')
+            switch (this.titleStr) {
+                case '审核工作':
+                this.workSearchTable('')
+                break;
+                case '源单据业务':
+                this.workSearchTable('源单据业务')
+                break;
+                default:
+                break;
+            }
         },
     }
 };

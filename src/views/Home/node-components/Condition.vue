@@ -190,17 +190,17 @@
           <el-row :gutter="24">
             <el-col :span="8">
               <el-form-item label="编码 " label-width="43px">
-                <el-input clearable size="small" v-model="formData.formCode" placeholder="请输入"></el-input>
+                <el-input clearable size="small" v-model="formData.formCode" @input="change($event)" placeholder="请输入"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="8">
               <el-form-item label="名称 " label-width="43px">
-                <el-input clearable size="small" v-model="formData.formName" placeholder="请输入"></el-input>
+                <el-input clearable size="small" v-model="formData.formName" @input="change($event)" placeholder="请输入"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="8">
               <el-form-item label="工作类型 " label-width="70px">
-                <el-select v-model="formData.formCtionTypeCon" clearable placeholder="请选择">
+                <el-select v-model="formData.formCtionTypeCon" @input="change($event)" clearable placeholder="请选择">
                   <el-option
                     v-for="item in options"
                     :key="item.value"
@@ -213,7 +213,7 @@
           </el-row>
           <el-row :gutter="24">
             <el-col :span="6" :offset="18">
-              <el-button type="primary" size="small" plain @click="(reWorkSearchTable('formData'))">重置</el-button>
+              <el-button type="primary" size="small" plain @click="reWorkSearchTable('formData')">重置</el-button>
               <el-button type="primary" size="small" plain @click="workSearchTableBtn">搜索</el-button>
             </el-col>
           </el-row>
@@ -1019,9 +1019,11 @@ export default {
     },
     // 业务工作-获取表格数据-重置
     reWorkSearchTable(formName) {
-       this.$refs[formName].resetFields();
-       this.pageNum = 1
-      
+      //this.$refs[formName].resetFields();
+      this.pageNum = 1
+      this.formData.formCode="";
+      this.formData.formName="";
+      this.formData.formCtionTypeCon="";
       this.workSearchTable();
     },
     //业务工作弹窗
@@ -1035,7 +1037,6 @@ export default {
     },
     // 业务工作-获取表格数据
     workSearchTable() {
-     
       this.dialogTableVisible = true;
       this.tableLoading = true;
       let fromdata = {};
