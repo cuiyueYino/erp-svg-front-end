@@ -142,7 +142,7 @@ export default {
         rowEconomicIndicatorstype(oldVal){
             this.ShowFinancVisible=this.rowEconomicIndicatorstype;
             let economicIndicatorsSelected = {};
-            economicIndicatorsSelected.id = this.rowEconomicIndicatorsDataObj.fsrcoId;
+            economicIndicatorsSelected.id = this.rowEconomicIndicatorsDataObj;
             this.getEconomicIndicatorsDetail(economicIndicatorsSelected);
             },
     }
