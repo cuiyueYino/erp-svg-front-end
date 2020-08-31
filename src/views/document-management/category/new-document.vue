@@ -9,6 +9,7 @@
                 :model="formdata"
                 size="mini"
                 :label-position="labelPosition"
+                ref="formdata"
             >
                 <el-card>
                     <el-row>
@@ -31,7 +32,7 @@
                         </el-col>
                         <el-col :span="10" :offset="2">
                             <el-form-item label="显示顺序" prop="forder">
-                                <el-input v-model="formdata.forder" @keyup.native="changeForder":disabled="isEdit" ></el-input>
+                                <el-input v-model="formdata.forder" @keyup.native="changeForder" :disabled="isEdit" ></el-input>
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -53,7 +54,7 @@
             </el-form>
             <span slot="footer" class="dialog-footer">
                 <el-button v-if="isShow" @click="handleClose">取 消</el-button>
-                <el-button v-if="isShow" @click="onHandleSave">保 存</el-button>
+                <el-button v-if="isShow" @click="submitForm('formdata')">保 存</el-button>
             </span>
         </el-dialog>
     </div>
@@ -123,6 +124,18 @@ export default {
             this.ShowFinancVisible=false;
             this.$emit('changeShow',false,1);
         },
+        //submit 校验
+        submitForm(formName) {
+          this.$refs[formName].validate((valid) => {
+            if (valid) {
+              this.onHandleSave();
+            } else {
+              // console.log('error submit!!');
+              return false;
+            }
+          });
+        },
+        //提交
         onHandleSave(){
             let fromDataS={};
             fromDataS=this.formdata;
@@ -209,6 +222,12 @@ export default {
                 let responsevalue = response;
                 if(responsevalue.data.code != 0){
                     this.$message.success(responsevalue.data.msg);
+                    debugger;
+                    if( 1 == data.flevel){
+                      data.flevel = '一级';
+                    } else if(2 == data.flevel) {
+                      data.flevel = '二级';
+                    }
                 } else {
                     if (responsevalue.data.data.msg=="success") {
                         this.$message.success('新建成功!');
