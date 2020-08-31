@@ -190,17 +190,17 @@
           <el-row :gutter="24">
             <el-col :span="8">
               <el-form-item label="编码 " label-width="43px">
-                <el-input clearable size="small" v-model="formData.formCode" placeholder="请输入"></el-input>
+                <el-input clearable size="small" v-model="formData.formCode" @input="change($event)" placeholder="请输入"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="8">
               <el-form-item label="名称 " label-width="43px">
-                <el-input clearable size="small" v-model="formData.formName" placeholder="请输入"></el-input>
+                <el-input clearable size="small" v-model="formData.formName" @input="change($event)" placeholder="请输入"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="8">
               <el-form-item label="工作类型 " label-width="70px">
-                <el-select v-model="formData.formCtionTypeCon" clearable placeholder="请选择">
+                <el-select v-model="formData.formCtionTypeCon" @input="change($event)" clearable placeholder="请选择">
                   <el-option
                     v-for="item in options"
                     :key="item.value"
@@ -213,7 +213,7 @@
           </el-row>
           <el-row :gutter="24">
             <el-col :span="6" :offset="18">
-              <el-button type="primary" size="small" plain @click="(reWorkSearchTable('formData'))">重置</el-button>
+              <el-button type="primary" size="small" plain @click="reWorkSearchTable('formData')">重置</el-button>
               <el-button type="primary" size="small" plain @click="workSearchTableBtn">搜索</el-button>
             </el-col>
           </el-row>
@@ -293,8 +293,8 @@ export default {
     data: {
       handler(obj) {
       if(obj.name === "Condition"){
-        //  this.$refs['formData'].resetFields();
-        console.log(obj)
+          //  this.$refs['formData'].resetFields();
+          console.log("Condition",obj)
           if(!obj.oid && (obj.isSaveFlag==undefined)){
              this.formData = {}
              this.joinusertableData=[];
@@ -758,131 +758,196 @@ export default {
           break;
       }
     },
+    //参与者，抄送查重
+    DuplicateCheck(tdata,name){
+      let TdataA=tdata;
+      let Reflag=true;
+      let nameS=name;
+      if(TdataA.length>0){
+          for(let i=0;i<TdataA.length;i++){
+              if(TdataA[i].fUsername===nameS){
+                  Reflag=false;
+                  break;
+              }
+          }
+      }
+      return Reflag+"";
+    },
     //业务工作-新增
     gridDataAdd() {
       if (this.titleStr === "定义关系") {
       } else if (this.titleStr === "新增参与者") {
         if (this.baseActiveNameStr == "角色") {
           if (this.roleReq.name) {
-            let roleObj = {};
-            roleObj = this.roleReq;
-            roleObj.type = 2;
-            roleObj.typeName = "role";
-            roleObj.fUseroid = roleObj.foid;
-            roleObj.fUsername = roleObj.name;
-            roleObj.fUsercode = this.baseActiveNameStr;
-            roleObj.fUserRemake = roleObj.role_expression;
-            this.joinusertableData.push(roleObj);
+            let FlagStr=this.DuplicateCheck(this.joinusertableData,this.roleReq.name);
+            if(FlagStr === "true"){
+              let roleObj = {};
+              roleObj = this.roleReq;
+              roleObj.type = 2;
+              roleObj.typeName = "role";
+              roleObj.fUseroid = roleObj.foid;
+              roleObj.fUsername = roleObj.name;
+              roleObj.fUsercode = this.baseActiveNameStr;
+              roleObj.fUserRemake = roleObj.role_expression;
+              this.joinusertableData.push(roleObj);
+            }else{
+              this.$message.error("不能添加重复角色!");
+            }
           }
         } else if (this.baseActiveNameStr == "用户") {
           if (this.UserListReq.fname) {
-            let UroleObj = {};
-            UroleObj = this.UserListReq;
-            UroleObj.type = 3;
-            UroleObj.typeName = "user";
-            //UroleObj.fUseroid = UroleObj.foid;
-            UroleObj.fUseroid = this.UserListReq.userid;
-            UroleObj.fUsername = UroleObj.fname;
-            UroleObj.fUsercode = this.baseActiveNameStr;
-            UroleObj.fUserRemake = UroleObj.fenglishname;
-            this.joinusertableData.push(UroleObj);
+            let FlagStr=this.DuplicateCheck(this.joinusertableData,this.UserListReq.fname);
+            if(FlagStr === "true"){
+              let UroleObj = {};
+              UroleObj = this.UserListReq;
+              UroleObj.type = 3;
+              UroleObj.typeName = "user";
+              //UroleObj.fUseroid = UroleObj.foid;
+              UroleObj.fUseroid = this.UserListReq.userid;
+              UroleObj.fUsername = UroleObj.fname;
+              UroleObj.fUsercode = this.baseActiveNameStr;
+              UroleObj.fUserRemake = UroleObj.fenglishname;
+              this.joinusertableData.push(UroleObj);
+            }else{
+              this.$message.error("不能添加重复用户!");
+            }
           }
         } else if (this.baseActiveNameStr == "服务") {
           if (this.serveReq.fname) {
-            let SroleObj = {};
-            SroleObj = this.serveReq;
-            SroleObj.type = 4;
-            SroleObj.typeName = "service";
-            SroleObj.fUsername = SroleObj.fname;
-            SroleObj.fUseroid = SroleObj.foid;
-            SroleObj.fUsercode = this.baseActiveNameStr;
-            SroleObj.fUserRemake = SroleObj.fenglishname;
-            this.joinusertableData.push(SroleObj);
+            let FlagStr=this.DuplicateCheck(this.joinusertableData,this.serveReq.fname);
+            if(FlagStr === "true"){
+              let SroleObj = {};
+              SroleObj = this.serveReq;
+              SroleObj.type = 4;
+              SroleObj.typeName = "service";
+              SroleObj.fUsername = SroleObj.fname;
+              SroleObj.fUseroid = SroleObj.foid;
+              SroleObj.fUsercode = this.baseActiveNameStr;
+              SroleObj.fUserRemake = SroleObj.fenglishname;
+              this.joinusertableData.push(SroleObj);
+            }else{
+              this.$message.error("不能添加重复服务!");
+            }
           }
         } else if (this.baseActiveNameStr == "职务") {
           if (this.posLReq.fname) {
-            let ProleObj = {};
-            ProleObj = this.posLReq;
-            ProleObj.type = 6;
-            ProleObj.typeName = "position";
-            ProleObj.fUsername = ProleObj.fname;
-            ProleObj.fUseroid = ProleObj.foid;
-            ProleObj.fUsercode = this.baseActiveNameStr;
-            ProleObj.fUserRemake = ProleObj.fenglishname;
-            this.joinusertableData.push(ProleObj);
+            let FlagStr=this.DuplicateCheck(this.joinusertableData,this.posLReq.fname);
+            if(FlagStr === "true"){
+              let ProleObj = {};
+              ProleObj = this.posLReq;
+              ProleObj.type = 6;
+              ProleObj.typeName = "position";
+              ProleObj.fUsername = ProleObj.fname;
+              ProleObj.fUseroid = ProleObj.foid;
+              ProleObj.fUsercode = this.baseActiveNameStr;
+              ProleObj.fUserRemake = ProleObj.fenglishname;
+              this.joinusertableData.push(ProleObj);
+            }else{
+              this.$message.error("不能添加重复职务!");
+            }
           }
         } else if (this.baseActiveNameStr == "表达式") {
           if (this.baseTextarea) {
-            let BroleObj = {};
-            BroleObj.type = 5;
-            BroleObj.typeName = "expression";
-            BroleObj.fUsername = this.baseTextarea;
-            BroleObj.fUseroid = BroleObj.foid;
-            BroleObj.fUsercode = this.baseActiveNameStr;
-            BroleObj.fUserRemake = "";
-            this.joinusertableData.push(BroleObj);
+            let FlagStr=this.DuplicateCheck(this.joinusertableData,this.baseTextarea);
+            if(FlagStr === "true"){
+              let BroleObj = {};
+              BroleObj.type = 5;
+              BroleObj.typeName = "expression";
+              BroleObj.fUsername = this.baseTextarea;
+              BroleObj.fUseroid = BroleObj.foid;
+              BroleObj.fUsercode = this.baseActiveNameStr;
+              BroleObj.fUserRemake = "";
+              this.joinusertableData.push(BroleObj);
+            }else{
+              this.$message.error("不能添加重复表达式!");
+            }
           }
         }
       } else if (this.titleStr === "新增抄送") {
         if (this.baseActiveNameStr == "角色") {
           if (this.roleReq.name) {
-            let roleObj = {};
-            roleObj = this.roleReq; //console.log(roleObj)
-            roleObj.type = 2;
-            roleObj.typeName = "role";
-            roleObj.fUseroid = roleObj.foid;
-            roleObj.fUsername = roleObj.name;
-            roleObj.fUsercode = this.baseActiveNameStr;
-            roleObj.fUserRemake = roleObj.role_expression;
-            this.CCtableData.push(roleObj);
+            let FlagStr=this.DuplicateCheck(this.CCtableData,this.roleReq.name);
+            if(FlagStr === "true"){
+              let roleObj = {};
+              roleObj = this.roleReq; //console.log(roleObj)
+              roleObj.type = 2;
+              roleObj.typeName = "role";
+              roleObj.fUseroid = roleObj.foid;
+              roleObj.fUsername = roleObj.name;
+              roleObj.fUsercode = this.baseActiveNameStr;
+              roleObj.fUserRemake = roleObj.role_expression;
+              this.CCtableData.push(roleObj);
+            }else{
+              this.$message.error("不能添加重复角色!");
+            }
           }
         } else if (this.baseActiveNameStr == "用户") {
           if (this.UserListReq.fname) {
-            let UroleObj = {};
-            UroleObj = this.UserListReq;
-            UroleObj.type = 3;
-            UroleObj.typeName = "user";
-            //UroleObj.fUseroid = UroleObj.foid;
-            UroleObj.fUseroid = UroleObj.userid;
-            UroleObj.fUsername = UroleObj.fname;
-            UroleObj.fUsercode = this.baseActiveNameStr;
-            UroleObj.fUserRemake = UroleObj.fenglishname;
-            this.CCtableData.push(UroleObj);
+            let FlagStr=this.DuplicateCheck(this.CCtableData,this.UserListReq.fname);
+            if(FlagStr === "true"){
+              let UroleObj = {};
+              UroleObj = this.UserListReq;
+              UroleObj.type = 3;
+              UroleObj.typeName = "user";
+              //UroleObj.fUseroid = UroleObj.foid;
+              UroleObj.fUseroid = UroleObj.userid;
+              UroleObj.fUsername = UroleObj.fname;
+              UroleObj.fUsercode = this.baseActiveNameStr;
+              UroleObj.fUserRemake = UroleObj.fenglishname;
+              this.CCtableData.push(UroleObj);
+            }else{
+              this.$message.error("不能添加重复用户!");
+            }
           }
         } else if (this.baseActiveNameStr == "服务") {
           if (this.serveReq.fname) {
-            let SroleObj = {};
-            SroleObj = this.serveReq;
-            SroleObj.type = 4;
-            SroleObj.typeName = "service";
-            SroleObj.fUsername = SroleObj.fname;
-            SroleObj.fUseroid = SroleObj.foid;
-            SroleObj.fUsercode = this.baseActiveNameStr;
-            SroleObj.fUserRemake = SroleObj.fenglishname;
-            this.CCtableData.push(SroleObj);
+            let FlagStr=this.DuplicateCheck(this.CCtableData,this.serveReq.fname);
+            if(FlagStr === "true"){
+              let SroleObj = {};
+              SroleObj = this.serveReq;
+              SroleObj.type = 4;
+              SroleObj.typeName = "service";
+              SroleObj.fUsername = SroleObj.fname;
+              SroleObj.fUseroid = SroleObj.foid;
+              SroleObj.fUsercode = this.baseActiveNameStr;
+              SroleObj.fUserRemake = SroleObj.fenglishname;
+              this.CCtableData.push(SroleObj);
+            }else{
+              this.$message.error("不能添加重复服务!");
+            }
           }
         } else if (this.baseActiveNameStr == "职务") {
           if (this.posLReq.fname) {
-            let ProleObj = {};
-            ProleObj = this.posLReq;
-            ProleObj.type = 6;
-            ProleObj.typeName = "position";
-            ProleObj.fUsername = ProleObj.fname;
-            ProleObj.fUseroid = ProleObj.foid;
-            ProleObj.fUsercode = this.baseActiveNameStr;
-            ProleObj.fUserRemake = ProleObj.fenglishname;
-            this.CCtableData.push(ProleObj);
+            let FlagStr=this.DuplicateCheck(this.CCtableData,this.posLReq.fname);
+            if(FlagStr === "true"){
+              let ProleObj = {};
+              ProleObj = this.posLReq;
+              ProleObj.type = 6;
+              ProleObj.typeName = "position";
+              ProleObj.fUsername = ProleObj.fname;
+              ProleObj.fUseroid = ProleObj.foid;
+              ProleObj.fUsercode = this.baseActiveNameStr;
+              ProleObj.fUserRemake = ProleObj.fenglishname;
+              this.CCtableData.push(ProleObj);
+            }else{
+              this.$message.error("不能添加重复职务!");
+            }
           }
         } else if (this.baseActiveNameStr == "表达式") {
           if (this.baseTextarea) {
-            let BroleObj = {};
-            BroleObj.type = 5;
-            BroleObj.typeName = "expression";
-            BroleObj.fUseroid = BroleObj.foid;
-            BroleObj.fUsername = this.baseTextarea;
-            BroleObj.fUsercode = this.baseActiveNameStr;
-            BroleObj.fUserRemake = "";
-            this.CCtableData.push(BroleObj);
+            let FlagStr=this.DuplicateCheck(this.CCtableData,this.baseTextarea);
+            if(FlagStr === "true"){
+              let BroleObj = {};
+              BroleObj.type = 5;
+              BroleObj.typeName = "expression";
+              BroleObj.fUseroid = BroleObj.foid;
+              BroleObj.fUsername = this.baseTextarea;
+              BroleObj.fUsercode = this.baseActiveNameStr;
+              BroleObj.fUserRemake = "";
+              this.CCtableData.push(BroleObj);
+            }else{
+              this.$message.error("不能添加重复表达式!");
+            }
           }
         }
       } else if (this.titleStr === "业务工作") {
@@ -954,9 +1019,11 @@ export default {
     },
     // 业务工作-获取表格数据-重置
     reWorkSearchTable(formName) {
-       this.$refs[formName].resetFields();
-       this.pageNum = 1
-      
+      //this.$refs[formName].resetFields();
+      this.pageNum = 1
+      this.formData.formCode="";
+      this.formData.formName="";
+      this.formData.formCtionTypeCon="";
       this.workSearchTable();
     },
     //业务工作弹窗
@@ -964,13 +1031,16 @@ export default {
       this.titleStr = "业务工作";
       this.showInfoCheck = true;
       this.showBaseInfo = false;
+      this.pageNum = 1;
+      this.formData.formCode="";
+      this.formData.formName="";
+      this.formData.formCtionTypeCon="";
       // 业务工作-搜索枚举项
       this.workSearchOption();
       this.workSearchTable();
     },
     // 业务工作-获取表格数据
     workSearchTable() {
-     
       this.dialogTableVisible = true;
       this.tableLoading = true;
       let fromdata = {};

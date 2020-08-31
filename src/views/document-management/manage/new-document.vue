@@ -44,7 +44,7 @@
                     <el-row>
                         <el-col :span="22">
                             <el-form-item label="描述">
-                                <el-input type="textarea" v-model="formdata.fdescription" :rows="3" :disabled="isEdit"></el-input>
+                                <el-input type="textarea" v-model="formdata.fdescription" :rows="10" :disabled="isEdit"></el-input>
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -172,7 +172,7 @@ export default {
                     key: 'foperatetime',
                     title: '操作时间'
                 }
-                
+
             ],
             formdata1:[],
             isShow:true,
@@ -191,8 +191,15 @@ export default {
             // 改变table行样式
             tableRowClassName(){},
             rules: {
-                fcode:[{ required: true, message: '请输入编码', trigger: 'blur' }],
-                fname:[{ required: true, message: '请输入名称', trigger: 'blur' }],
+                fcode:[
+                    { required: true, message: '请输入编码', trigger: 'blur' },
+                    { max: 50, message: "编码最大长度 50 字节", trigger: "blur"}
+                    ],
+                fname:[
+                    { required: true, message: '请输入名称', trigger: 'blur' },
+                    { max: 100, message: "名称最大长度 100 字节", trigger: "blur"}
+                    ],
+                fdescription:[{ max: 3000, message: "描述最大长度 3000 字节", trigger: "blur" }],
             },
             NewOrEditFlag:'',
             FiletableData: [],
@@ -233,7 +240,7 @@ export default {
             }
         },
         // 失去焦点事件
-        onEditorBlur() {}, 
+        onEditorBlur() {},
         // 获得焦点事件
         onEditorFocus(event) {
             if (this.formDisabled == true) {
@@ -241,9 +248,9 @@ export default {
             } else {
                 event.enable(true);
             }
-        }, 
+        },
         // 内容改变事件
-        onEditorChange() {}, 
+        onEditorChange() {},
         //分页查询菜单
         searchMenutable(data){
             debugger
@@ -255,17 +262,24 @@ export default {
                     let returndata = responsevalue.data;
                     let tableArr=returndata.data.rows;
                     this.formdata1=tableArr;
+                    for (let i = 0; i < tableArr.length; i++) {
+                      //时间格式化
+                      if(tableArr[i].foperatetime){
+                        tableArr[i].foperatetime = this.formateDate(tableArr[i].foperatetime);
+                      }
+                    }
                     this.total=returndata.data.total;
                 } else {
                     this.$message.success('数据库没有该条数据!');
                 }
-            }); 
+            });
         },
         //分页，下一页
         onCurrentChange(val){
             let formDataA ={};
             formDataA.page=val;
             formDataA.size=this.pageSize;
+            formDataA.foid = this.formdata.foid;
             this.searchMenutable(formDataA);
         },
         //附件
@@ -328,7 +342,7 @@ export default {
                     this.$message.success('查询失败!');
                 }
             });
-
+            //查询操作记录
             formDataA.page=this.pageNum;
             formDataA.size=this.pageSize;
             this.$api.documentManagement.getDocumentRecordByMasterid(formDataA).then(response => {
@@ -337,6 +351,12 @@ export default {
                     let returndata = responsevalue.data;
                     let tableDataArr=returndata.data;
                     this.formdata1 = tableDataArr.rows;
+                    for (let i = 0; i < tableDataArr.rows.length; i++) {
+                      //时间格式化
+                      if(tableDataArr.rows[i].foperatetime){
+                        tableDataArr.rows[i].foperatetime = this.formateDate(tableDataArr.rows[i].foperatetime);
+                      }
+                    }
                     this.total=tableDataArr.total;
                 } else {
                     this.$message.success('查询操作纪录失败!');
@@ -348,7 +368,7 @@ export default {
             let foid ='';
             data.fpid = this.rowNMMDataObj.fpid;
             let formDataA =data;
-            let creator = localStorage.getItem('ms_userId'); 
+            let creator = localStorage.getItem('ms_userId');
             formDataA.fcreator = creator;
             formDataA.fistop = '2';
             formDataA.fdocstatus = '2';
@@ -373,7 +393,7 @@ export default {
         tempSaveNewMenu(data){
             data.fpid = this.rowNMMDataObj.fpid;
             let formDataA =data;
-            let creator = localStorage.getItem('ms_userId'); 
+            let creator = localStorage.getItem('ms_userId');
             formDataA.fcreator = creator;
             formDataA.fistop = '2';
             formDataA.fdocstatus = '1';
@@ -400,6 +420,8 @@ export default {
             let foid = this.formdata.foid;
             let attachment ={};
             let formDataA =data;
+            let creator = localStorage.getItem('ms_userId');
+            formDataA.fcreator = creator;
             this.$api.documentManagement.updateDocumentManage(formDataA).then(response => {
                 let responsevalue = response;
                 if (responsevalue.data.data) {
@@ -489,6 +511,19 @@ export default {
                 }
             });
         },
+        //格式化日期
+        formateDate(date){
+          let datetime= new Date(date);
+          return new Date(Date.UTC(
+            datetime.getFullYear(),
+            datetime.getMonth(),
+            datetime.getDate(),
+            datetime.getHours(),
+            datetime.getMinutes(),
+            datetime.getSeconds()))
+            .toISOString()
+            .slice(0, 19).replace('T',' ');
+        },
 
     },
     watch:{
@@ -502,7 +537,7 @@ export default {
             if(this.rowNMMDataObj.NewOrEditFlag==="NEW"){
                 this.isShowOperateRecord = false;
                 this.formdata={};
-                this.formdata.flevel=this.rowNMMDataObj.flevel; 
+                this.formdata.flevel=this.rowNMMDataObj.flevel;
                 this.formdata.fcreator = localStorage.getItem('ms_username');
                 this.formdata.fcreatetime =new Date() ;
             } else if (this.rowNMMDataObj.NewOrEditFlag==="EDIT"){

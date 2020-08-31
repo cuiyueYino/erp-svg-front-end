@@ -1,7 +1,7 @@
 <template>
     
     <div class="most-warapper">     
-       <iframe src="http://192.168.85.96:6013/summaryEmployeeEvaluation" style="width:100%;height:764px;border:0px;padding:0px;"  class="summaryEmployeeEvaluation"></iframe>
+       <iframe :src="$GLOBAL.htmlUrl + 'summaryEmployeeEvaluation' " style="width:100%;height:764px;border:0px;padding:0px;"  class="summaryEmployeeEvaluation"></iframe>
     </div>
 </template>
 

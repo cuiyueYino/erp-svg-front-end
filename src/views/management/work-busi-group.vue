@@ -175,8 +175,8 @@
                 type="textarea"
                 autosize
                 size="small"
-                placeholder="请选择组员"
-                v-model="form.transStaffRelUserNames"
+                placeholder=""
+                :value="getTransStaffRelUser()"
               >
               </el-input>
             </el-form-item>
@@ -288,6 +288,7 @@ import staffTreeSearch from "../conference/staff-tree-search";
 
 export default {
   name: "workBusiGroup",
+  inject: ['reload'],
   data() {
     return {
       fcompanyid: "",
@@ -361,31 +362,31 @@ export default {
           type: "selection",
         },
         {
-          key: "fname",
+          key: "fcompanyName",
           title: "公司名称",
         },
         {
-          key: "fcode",
+          key: "fteamid",
           title: "编码",
         },
         {
-          key: "fname",
+          key: "fteamname",
           title: "组名",
         },
         {
-          key: "fname",
+          key: "fteamleaderName",
           title: "组长名称",
         },
         {
-          key: "fname",
+          key: "staffRelUserNameList",
           title: "组员",
         },
         {
-          key: "fstatus",
+          key: "transStaffRelUserNameList",
           title: "离职、调转人员",
         },
         {
-          key: "fstatus",
+          key: "fremark",
           title: "备注",
         },
       ],
@@ -400,9 +401,9 @@ export default {
         fteamname: "",
         fteamid: "",
         fremark: "",
-        transStaffRelUserNames:'',
+        // transStaffRelUser:'',
         // staffRelUsers: {},
-        // transStaffRelUser: {},
+        transStaffRelUser: {}
       },
       searchForm: {},
       userForm: {},
@@ -414,9 +415,9 @@ export default {
         fteamleader: [
           { required: true, message: "请选择组长名称", trigger: "blur" },
         ],
-        staffRelUsersNames: [
-          { required: true, message: "请选择组员名称", trigger: "blur" },
-        ],
+        // staffRelUsersNames: [
+        //   { required: true, message: "请选择组员名称", trigger: "blur" },
+        // ],
       },
     };
   },
@@ -425,9 +426,11 @@ export default {
     staffTreeSearch
   },
   created() {
-    this.$nextTick(() => {
-      this.getTableData("");
-    });
+    let fromdata={};
+    fromdata.page=this.pageNum;
+    fromdata.size=this.pageSize;
+    fromdata.fcreator=localStorage.getItem("ms_userId")
+    this.getTableDataGroup(fromdata);
   },
   computed: {},
   watch: {
@@ -447,6 +450,11 @@ export default {
     });
   },
   methods: {
+    //获取离职、调转人员信息
+    getTransStaffRelUser() {
+      return(String(Object.values(this.form.transStaffRelUser)));
+    },
+
     // 打开组织架构弹窗
       addFteamleader(type,title) {
         this.staffTableVisible = true;
@@ -598,23 +606,19 @@ export default {
     //分页、下一页
     onCurrentChange(val) {
       this.pageNum = val;
-      this.getTableData("");
+      this.getTableDataGroup("");
     },
     // 搜索
     onSubmit() {
-      this.getTableData(this.formCode);
+      this.getTableDataGroup(this.formCode);
     },
     getAll() {
-      this.getTableData("");
+      this.getTableDataGroup("");
     },
     // 获取表格数据
-    getTableData(params) {
-      let data = {
-        fcode: params,
-        page: this.pageNum,
-        size: this.pageSize,
-      };
-      this.$api.processSet.getTableData(data).then(
+    getTableDataGroup(params) {
+      let data=params;
+      this.$api.processSet.getTableDataGroup(data).then(
         (res) => {
           this.tableData = res.data.data.rows;
           for (let i in this.tableData) {
@@ -659,7 +663,7 @@ export default {
               this.dialogFormVisible = false;
               this.$message.success("新增成功");
               //刷新表格
-              this.getTableData("");
+              this.reload();
             } else {
               this.$message.error(res.data.msg);
             }
@@ -683,7 +687,7 @@ export default {
           if ((res.data.data.msg = "success")) {
             this.$message.success("删除成功");
             //刷新表格
-            this.getTableData("");
+            this.reload();
           }
         }),
         (error) => {
@@ -719,7 +723,7 @@ export default {
         if ((res.data.data.msg = "success")) {
           this.$message.success("操作成功");
           //刷新表格
-          this.getTableData("");
+          this.reload();
         }
       }),
         (error) => {

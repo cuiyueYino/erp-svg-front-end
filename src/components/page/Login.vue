@@ -1,6 +1,6 @@
-<template>
-	<div class="login-wrap">
-		<iframe src="http://192.168.85.96:6013/login" style="width:100%;height:764px;border:0px;padding:0px;display:none" class="taskStructure" ref="iframe"></iframe>
+<template> 
+	<div class="login-wrap"> 
+		<iframe :src="$GLOBAL.htmlUrl + 'login' " style="width:100%;height:764px;border:0px;padding:0px;display:none" class="taskStructure" ref="iframe"></iframe>
 		<div class="ms-login">
 			<div class="ms-title01"><img src="../../assets/img/logo-bg.png" height="45" width="360" /></div>
 			<div class="ms-content01">
@@ -78,6 +78,8 @@
 								localStorage.setItem('ms_staffId', data.data.principal.staffId);
 								//用户名称
 								localStorage.setItem('ms_username', data.data.principal.fullname);
+								//用户code
+								localStorage.setItem('ms_accountNo', data.data.principal.accountNo);
 								//部门ID
 								localStorage.setItem('ms_userDepartId', data.data.principal.deptmentId);
 								//部门名称
@@ -92,7 +94,7 @@
 							this.iframeWin.postMessage({
 								cmd: 'sendLoginData',
 								params:  {                        
-									'username': localStorage.getItem("ms_username"),
+									'accountNo': localStorage.getItem("ms_accountNo"),
 									'userId':  localStorage.getItem("ms_userId"),
 									'deptmentId':localStorage.getItem("ms_userDepartId"),
 									'companyId':localStorage.getItem("ms_companyId"),

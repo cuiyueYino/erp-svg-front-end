@@ -574,7 +574,7 @@ export default {
         //子流程
         saveProcessData(e){
             console.log(e)
-             if( e.name =='' || !e.refWfProcess || e.code ==''  ){
+            if( e.name =='' || !e.refWfProcess || e.code ==''  ){
                 this.$message.error("保存失败,请填写必填信息");
                 return;
             }

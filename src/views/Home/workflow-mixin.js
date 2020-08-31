@@ -206,11 +206,12 @@ export default {
                             draggable: true
                         };
                         nodeObj.transition=[];
-                        nodeObj.key=`${Date.parse(new Date())}_${Math.ceil(Math.random() * 99999)}`;
+                        //nodeObj.key=`${Date.parse(new Date())}_${Math.ceil(Math.random() * 99999)}`;
+                        nodeObj.key=MMWFNodes[j].oid;
                         if (localName === 'start') {
-                            nodeObj.key = 'Start';
+                            //nodeObj.key = 'Start';
                         } else if (localName === 'end') {
-                            nodeObj.key = 'End';
+                            //nodeObj.key = 'End';
                         } else if (localName === 'task') {
                             nodeObj.data.performType = attributes.performType.nodeValue;
                         }
@@ -552,6 +553,26 @@ export default {
                     break;
                 }
             }
+            //删除节点 transition 中的线数据
+            let lineDataA=this.linkData[index];
+            this.workflowNodes.forEach((item,index)=>{
+                if(item == null){
+                    this.workflowNodes.splice(index,1)
+                }
+                if(item.transition){
+                    if(item.transition.length>0){
+                        let newTransiton = item.transition;
+                        let itemT=[];
+                        newTransiton.forEach(items => {
+                            if(items.key == lineDataA.key){
+                            }else{
+                                itemT.push(items)
+                            }
+                        });
+                        item.transition=itemT;
+                    }
+                }
+            })
             // 根据索引删除目标连接数据
             this.linkData.splice(index, 1);
         },
@@ -611,17 +632,17 @@ export default {
                             if(items.oid){
                                 items.key = items.oid 
                             }
-                            if(items.from.data.displayName == item.data.displayName){
-                                items.from.key = item.key
-                            }
-                            if(items.to.data.displayName == item.data.displayName){
-                                items.to.key = item.key
-                            }
+                            //if(items.from.data.displayName == item.data.displayName){
+                                //items.from.key = item.key
+                            //}
+                            //if(items.to.data.displayName == item.data.displayName){
+                                //items.to.key = item.key
+                            //}
                             delete items.from.transition;
                             delete items.to.transition;
                             
                         });
-                        newTransiton.forEach(items => {//debugger
+                        /*newTransiton.forEach(items => {//debugger
                             for(let i =1; i<workflowNodes.length; i++){
                                 if(workflowNodes[i].oid){
                                     if(items.to.data.displayName == workflowNodes[i].data.displayName){
@@ -632,7 +653,7 @@ export default {
                                 //         items.to.key = workflowNodes[i].data.name
                                 // }
                             }
-                        });
+                        });*/
                     }
                 } 
             });

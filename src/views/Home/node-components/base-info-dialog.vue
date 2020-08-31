@@ -27,18 +27,18 @@
              <el-row :gutter="24">
                   <el-col :span="type=='角色'?12:8" v-show=" type !=='审核'">
                     <el-form-item label="编码" label-width="43px" prop="formCode">
-                        <el-input clearable size="small" v-model="formData.formCode" placeholder="请输入"></el-input>
+                        <el-input clearable size="small" v-model="formData.formCode" @input="change($event)" placeholder="请输入"></el-input>
                     </el-form-item>
                   </el-col> 
                   <el-col :span="type=='角色'?12:8"  v-show=" type !=='审核'">
                     <el-form-item label="名称" label-width="43px"  prop="formName">
-                        <el-input clearable size="small" v-model="formData.formName" placeholder="请输入"></el-input>
+                        <el-input clearable size="small" v-model="formData.formName" @input="change($event)" placeholder="请输入"></el-input>
                     </el-form-item>
                   </el-col> 
                  
                   <el-col :span="8" v-show="type !=='服务' && type !=='审核'  && type !=='角色' && type !=='职务' ">
                     <el-form-item label="状态" label-width="43px" prop="formCtionTypeCon">
-                         <el-select v-model="formData.formCtionTypeCon" clearable placeholder="请选择">
+                         <el-select v-model="formData.formCtionTypeCon" @input="change($event)" clearable placeholder="请选择">
                             <el-option
                             v-for="item in options"
                             :key="item.value"
@@ -57,7 +57,7 @@
              <el-row :gutter="24" >
                 <el-col :span="type=='角色'?12:8" v-show="type !=='服务'  && type !=='审核' && type !=='职务'">
                     <el-form-item :label="'角色类型'" :label-width="'70px'"  prop="formCtionRole">
-                         <el-select v-model="formData.formCtionRole" clearable placeholder="请选择">
+                         <el-select v-model="formData.formCtionRole" @input="change($event)" clearable placeholder="请选择">
                             <el-option
                             v-for="item in roleoptions"
                             :key="item.value"
@@ -86,12 +86,12 @@
                   <span v-show="type ==='审核'">
                     <el-col :span="12">
                     <el-form-item label="编码" label-width="56px"  prop="formCode">
-                        <el-input clearable size="small" v-model="formData.formCode" placeholder="请输入"></el-input>
+                        <el-input clearable size="small" v-model="formData.formCode" @input="change($event)" placeholder="请输入"></el-input>
                     </el-form-item>
                   </el-col> 
                   <el-col :span="12">
                     <el-form-item label="名称" label-width="56px"  prop="formName">
-                        <el-input clearable size="small" v-model="formData.formName" placeholder="请输入"></el-input>
+                        <el-input clearable size="small" v-model="formData.formName" @input="change($event)" placeholder="请输入"></el-input>
                     </el-form-item>
                   </el-col> 
                   <!-- <el-col :span="12">
@@ -238,6 +238,7 @@ export default {
          // 对话框显示 自动聚焦name输入框
         visible (bool) {//console.log(bool)
             this.dialogVisible = bool;
+            this.pageNum = 1;
             //角色查询
             if(this.type ==="角色"){
                 this.columns3=[
@@ -466,7 +467,6 @@ export default {
                 if(this.$refs['workflowConfigForm']){
                     this.$refs['workflowConfigForm'].resetFields();
                 }
-                
             }
             
         }
@@ -586,7 +586,20 @@ export default {
                 },error=>{
                     console.log(error)
                 })
-            } 
+            }
+            if(this.type ==="审核"){
+                let fromdata={};
+                fromdata.page=this.pageNum;
+                fromdata.size=this.pageSize;
+                this.$api.svg.getProcessData(fromdata).then(res=>{
+                    let resData=res.data.data.rows;
+                    this.gridData = resData;
+                    this.pageNum = res.data.data.page;
+                    this.total = res.data.data.total;
+                },error=>{
+                    console.log(error)
+                })
+            }
         },
         workSearchTable(){
             if(this.type ==="服务"){
@@ -690,7 +703,7 @@ export default {
                     console.log(error)
                 })
             }
-             if(this.type ==="审核"){
+            if(this.type ==="审核"){
                 let fromdata={};
                 fromdata.page=this.pageNum;
                 fromdata.size=this.pageSize;
@@ -735,6 +748,26 @@ export default {
                 let fromdata={};
                 fromdata.page=val;
                 fromdata.size=this.pageSize;
+                let formCode=this.formData.formCode;
+                if(formCode){
+                    fromdata.code=formCode;
+                }
+                let formName=this.formData.formName;
+                if(formName){
+                    fromdata.name=formName;
+                }
+                let formCtionTypeCon=this.formData.formCtionTypeCon;
+                if(formCtionTypeCon){
+                    fromdata.role_expression=formCtionTypeCon;
+                }
+                let formCtionRole=this.formData.formCtionRole;
+                if(formCtionRole){
+                    fromdata.roleTypeId=formCtionRole;
+                }
+                let formradio=this.radio;
+                if(formradio){
+                    fromdata.admin=formradio;
+                }
                 this.$api.processSet.getRolesData(fromdata).then(res=>{
                     let resData=res.data.data.rows;
                     for(var i=0;i< resData.length;i++){
@@ -756,7 +789,15 @@ export default {
             if(this.type ==="服务"){
                 let fromdata={};
                 fromdata.page=val;
-                fromdata.size=this.pageSize
+                fromdata.size=this.pageSize;
+                let formCode=this.formData.formCode;
+                if(formCode){
+                    fromdata.fcode=formCode;
+                }
+                let formName=this.formData.formName;
+                if(formName){
+                    fromdata.fname=formName;
+                }
                 this.$api.processSet.getWfBusinessService(fromdata).then(res=>{
                     let resData=res.data.data.rows;
                     this.gridData = resData;
@@ -769,7 +810,27 @@ export default {
             if(this.type ==="职务"){
                 let fromdata={};
                 fromdata.page=val;
-                fromdata.size=this.pageSize
+                fromdata.size=this.pageSize;
+                let formCode=this.formData.formCode;
+                if(formCode){
+                    fromdata.fcode=formCode;
+                }
+                let formName=this.formData.formName;
+                if(formName){
+                    fromdata.fname=formName;
+                }
+                let formCtionTypeCon=this.formData.formCtionTypeCon;
+                if(formCtionTypeCon){
+                    fromdata.fstatus=formCtionTypeCon;
+                }
+                let formCtionRole=this.formData.formCtionRole;
+                if(formCtionRole){
+                    fromdata.fcompanyoid=formCtionRole;
+                }
+                let formRole=this.formData.formRoleName;
+                if(formRole){
+                    fromdata.positionType=formRole;
+                }
                 this.$api.processSet.positionList(fromdata).then(res=>{
                     let resData=res.data.data.rows;
                     if(resData && resData.length>0){
@@ -791,7 +852,15 @@ export default {
              if(this.type ==="审核"){
                 let fromdata={};
                 fromdata.page=val;
-                fromdata.size=this.pageSize
+                fromdata.size=this.pageSize;
+                let formCode=this.formData.formCode;
+                if(formCode){
+                    fromdata.fcode=formCode;
+                }
+                let formName=this.formData.formName;
+                if(formName){
+                    fromdata.fname=formName;
+                }
                 this.$api.svg.getProcessData(fromdata).then(res=>{
                     let resData=res.data.data.rows;
                     this.gridData = resData;
@@ -803,7 +872,9 @@ export default {
             }
         
         },
-        
+        change(e){
+            this.$forceUpdate()
+        },
         onSelectionChange(val){
             this.multipleSelection = val;
         },

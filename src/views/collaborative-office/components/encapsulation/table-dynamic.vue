@@ -34,7 +34,7 @@
 						<el-button size="mini" @click="addRow()">新建</el-button>
 					</template>
 					<template slot-scope="scope">
-						<el-button size="mini" @click="delRow(scope.$index,scope.row)">删除</el-button>
+						<el-button size="mini" type="danger" @click="delRow(scope.$index,scope.row)">删除</el-button>
 					</template>
 				</el-table-column>
 			</el-table>

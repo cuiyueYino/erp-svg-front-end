@@ -1,10 +1,10 @@
 <template>
     
     <div class="most-warapper">     
-       <iframe src="http://192.168.85.96:6013/indexLibrary" style="width:100%;height:764px;border:0px;padding:0px;"  class="indexLibrary"></iframe>
+       <iframe :src="$GLOBAL.htmlUrl + 'indexLibrary' " style="width:100%;height:764px;border:0px;padding:0px;"  class="indexLibrary"></iframe>
     </div>
 </template>
-
+indexLibrary
 7 <script>
 export default {
      data () {

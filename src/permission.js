@@ -8,8 +8,8 @@ router.beforeEach((to, from, next) => {
 	const token = localStorage.getItem('ms_tokenId');
 	if(token) {
 		//跳转页面的url是否存在
-		if(to.path == "/login") {
-			next('/')
+		if(to.name == "/login") {
+			next()
 		} else {
 			if(to.path.indexOf("none") == "-1") {
 				next()

@@ -1,7 +1,7 @@
 <template>
     
     <div class="most-warapper">     
-       <iframe src="http://192.168.85.96:6013/personalTableTask" style="width:100%;height:764px;border:0px;padding:0px;"  class="personalTableTask"></iframe>
+       <iframe :src="$GLOBAL.htmlUrl + 'personalTableTask' " style="width:100%;height:764px;border:0px;padding:0px;"  class="personalTableTask"></iframe>
     </div>
 </template>
 

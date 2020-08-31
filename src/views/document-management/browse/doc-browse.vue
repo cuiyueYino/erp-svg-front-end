@@ -7,11 +7,15 @@
                         :data="treeData"
                         :props="defaultProps"
                         node-key="foid"
-                        :render-content="renderContent"
                         accordion
                         @node-click="handleNodeClick">
+                        <div slot-scope="{node,data}" class="customize-tree-p">
+                          <el-tooltip class="item" effect="dark" :content="data.fname" placement="top-start">
+                            <span>{{data.fname|labelShow}}</span>
+                          </el-tooltip>
+                        </div>
                     </el-tree>
-                </el-col>   
+                </el-col>
                 <el-col :span="18" :offset="1">
                     <el-card class="box-card">
                         <el-row :gutter="24">
@@ -67,6 +71,16 @@ import NewDocument from './new-document.vue';
 import documentData from'../base/documentData';
 
 export default {
+    //树结构 label 过长，替换显示成"..."结构
+    filters: {
+      labelShow(value) {
+        if(!value) return ''
+        if(value.length > 10) {
+          return value.slice(0, 10) + '...'
+        }
+        return value
+      }
+    },
     name:'workProcess',
     components: {
       DynamicTable,
@@ -122,7 +136,7 @@ export default {
                     key: 'fdocstatus',
                     title: '状态'
                 },
-                
+
             ],
             tableData:[],
             treeData:[],
@@ -191,8 +205,8 @@ export default {
                         } else {
                             this.$message.error("无该文档查看权限!");
                         }
-                    }); 
-                    
+                    });
+
                 }else{
                     this.$message.error("请选择一行数据!");
                 }
@@ -223,7 +237,7 @@ export default {
                         </span>
                     );
                 }
-            }  
+            }
         },
         //树结构点击事件
         handleNodeClick(data) {
@@ -297,7 +311,7 @@ export default {
                 } else {
                     this.$message.success('数据库没有该条数据!');
                 }
-            }); 
+            });
         },
         //格式化日期
         formateDate(date){
@@ -330,16 +344,16 @@ export default {
                         } else {
                             this.isShowButton = false;
                         }
-                    }); 
+                    });
                 }else{
                     this.$message.error("请选择一行数据!");
                 }
             }
 
 
-            
+
         },
-        
+
     }
 };
 </script>
