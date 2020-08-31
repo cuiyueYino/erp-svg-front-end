@@ -144,7 +144,7 @@ export default {
                 },
                 {
                     key: 'fuserName',
-                    title: '用户名称'
+                    title: '人员名称'
                 },
                 {
                     key: 'froleName',
@@ -469,7 +469,7 @@ export default {
         },
         //新建用户角色
         joinSearch(Str){
-            this.titleStr = '新建用户&角色'
+            this.titleStr = '新增人员&角色'
             this.proBusDialogF = true;
             this.userType = Str;
         },

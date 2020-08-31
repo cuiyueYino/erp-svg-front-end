@@ -189,9 +189,9 @@ export default {
                     //验证是否有权限
                     let finandata={};
                     finandata.fdocmanageoid = SelectData[0].foid;
-                    // finandata.froleid = localStorage.removeItem('ms_roleId');
+                    finandata.froleid = localStorage.removeItem('ms_roleId');
                     //测试暂用假数据
-                    finandata.froleid = '7f6496f161c14e2e83a7a5f8aa3b2ece';
+                    // finandata.froleid = '7f6496f161c14e2e83a7a5f8aa3b2ece';
                     finandata.fauth = '1';
                     this.$api.documentManagement.isHaveDocAuthority(finandata).then(response => {
                         let responsevalue = response;
@@ -254,6 +254,7 @@ export default {
             let formDataA ={};
             formDataA.page=val;
             formDataA.size=this.pageSize;
+            formDataA.fpid=this.documentFpid
             this.searchMenutable(formDataA);
         },
         //table选中事件
@@ -294,11 +295,6 @@ export default {
                     let tableArr=returndata.data.rows;
                     this.tableData=tableArr;
                     for (let i = 0; i < tableArr.length; i++) {
-                        if(1 == tableArr[i].flevel){
-                            tableArr[i].flevel = '一级';
-                        } else if(2 == tableArr[i].flevel){
-                            tableArr[i].flevel = '二级';
-                        }
                         //时间格式化
                         if(tableArr[i].fcreatetime){
                             tableArr[i].fcreatetime = this.formateDate(tableArr[i].fcreatetime);

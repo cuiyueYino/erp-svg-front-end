@@ -9,6 +9,7 @@
                 :model="formdata"
                 size="mini"
                 :label-position="labelPosition"
+              ref="formdata"
             >
                 <el-card>
                     <el-row>
@@ -102,8 +103,8 @@
             </el-form>
             <span slot="footer" class="dialog-footer">
                 <el-button v-if="isShow" @click="handleClose">取 消</el-button>
-                <el-button v-if="isShow" @click="tempSaveNewMenu">暂 存</el-button>
-                <el-button v-if="isShow" @click="onHandleSave">提 交</el-button>
+                <el-button v-if="isShow" @click="tempSubmitForm('formdata')">暂 存</el-button>
+                <el-button v-if="isShow" @click="submitForm('formdata')">提 交</el-button>
             </span>
         </el-dialog>
     </div>
@@ -291,6 +292,18 @@ export default {
             this.ShowFinancVisible=false;
             this.$emit('changeShow',false);
         },
+        //submit 校验
+        submitForm(formName) {
+          this.$refs[formName].validate((valid) => {
+            if (valid) {
+              this.onHandleSave();
+            } else {
+              // console.log('error submit!!');
+              return false;
+            }
+          });
+        },
+        //提交
         onHandleSave(){
             let fromDataS={};
             fromDataS=this.formdata;
@@ -389,19 +402,32 @@ export default {
                 }
             });
         },
+        //暂存submit 校验
+        tempSubmitForm(formName) {
+          this.$refs[formName].validate((valid) => {
+            if (valid) {
+              this.tempSaveNewMenu();
+            } else {
+              // console.log('error submit!!');
+              return false;
+            }
+          });
+        },
         //暂存：新建
-        tempSaveNewMenu(data){
-            data.fpid = this.rowNMMDataObj.fpid;
-            let formDataA =data;
+        tempSaveNewMenu(){
+            debugger;
+            let formDataA ={};
             let creator = localStorage.getItem('ms_userId');
             formDataA.fcreator = creator;
             formDataA.fistop = '2';
             formDataA.fdocstatus = '1';
             formDataA.fstatus = 1;
+            formDataA.fpid = this.rowNMMDataObj.fpid;
             this.$api.documentManagement.insertDocumentManage(formDataA).then(response => {
                 let responsevalue = response;
                 if (responsevalue.data.data) {
-                    foid = responsevalue.data.data;
+                  debugger;
+                    let foid = responsevalue.data.data;
                     //上传附件
                     if(this.uploadFiles != null){
                         this.uploadFile("document",foid);
