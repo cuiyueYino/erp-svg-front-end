@@ -699,13 +699,27 @@ export default {
     },
     //流程图查看
     flowChart() {
-      let selectData = this.multipleSelection;
-      let finandata = {};
+      if (this.multipleSelection.length > 1) {
+        this.$message.error("只能选择一个");
+      } else if (this.multipleSelection.length == 0) {
+        this.$message.error("请选择一项");
+      } else {
+        let selectData = this.multipleSelection;
+        let finandata = {};
+        finandata.finanrowname = selectData[0].fsrcCompany+"/"+selectData[0].factivityName;
+        finandata.finanrowId = selectData[0].foid;
+        finandata.nametitle = selectData[0].fsubject;
+        this.rowFCDDataObj = finandata;
+        this.rowFCDtype = true;
+        console.log(selectData)
+      }
+      
+      /*let finandata = {};
       finandata.finanrowname = "人员缺省查询方案";
       finandata.finanrowId = "QS_0056";
       finandata.nametitle = "入库申请申请人审批";
       this.rowFCDDataObj = finandata;
-      this.rowFCDtype = true;
+      this.rowFCDtype = true;*/
     },
     //流程图关闭
     closeflowchart(data) {
