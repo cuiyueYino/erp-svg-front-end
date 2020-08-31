@@ -43,7 +43,7 @@
 			<dynamic-table :columns="columns" :table-data="tableData" :total="total" :page-num="pageNum" :page-size="pageSize" @current-change="onCurrentChange" @selection-change="onSelectionChange" v-loading="false" element-loading-text="加载中"></dynamic-table>
 		</el-card>
 		<!-- 弹出框 -->
-		<el-dialog :title="isEdit?'编辑人员':'新建人员'" class="add-user" center top="20px" :visible.sync="dialogFormVisible" width="70%" >
+		<erpDialog erpDialogwidth="true" :title="isEdit?'编辑人员':'新建人员'" :dialogShow="dialogFormVisible">
 			<el-form :model="peopleForm" :rules="rules" ref="peopleForm">
 				<el-row :gutter="22">
 					<el-col :span="11">
@@ -96,7 +96,7 @@
 			<h4>兼职记录</h4>
 			<el-divider></el-divider>
 			<el-form style="margin-top: 10px;" :model="peopleForm" :rules="rulesTable" ref="peopleFormOther">
-				<el-table size="small" height="350" :data="peopleForm.tableData3" border style="width: 100%">
+				<el-table size="small" height="300" :data="peopleForm.tableData3" border style="width: 100%">
 					<el-table-column prop="fcompanyoid" label="公司" align="center">
 						<template slot-scope="scope">
 							<el-form-item :prop="'tableData3[' + scope.$index + '].fcompanyoid'" :rules="rulesTable.fcompanyoid">
@@ -141,23 +141,20 @@
 					</el-table-column>
 				</el-table>
 			</el-form>
-			<div slot="footer" class="dialog-footer">
+			<div slot="footer">
 				<el-button @click="dialogFormVisible = false">取 消</el-button>
 				<el-button type="primary" @click="addSubmit('peopleForm')">保 存</el-button>
 			</div>
-		</el-dialog>
+		</erpDialog>
 		<!-- 部门/职位弹窗 -->
-		<el-dialog :title="choseDepart" top="20px" :visible.sync="userVisible" >
-			<el-input placeholder="输入关键字进行过滤" v-model="filterText">></el-input>
+		<erpDialog erpDialogwidth="true" :title="choseDepart" :dialogShow="userVisible">
 			<!-- 树状图 -->
-			<div class="aaasss">
-				<el-tree class="filter-tree" :data="treeData" :props="defaultProps" default-expand-all :filter-node-method="filterNode" ref="tree" @node-click="handleNodeClick"></el-tree>
-			</div>
-			<div slot="footer" class="dialog-footer">
+			<el-tree class="filter-tree" :data="treeData" :props="defaultProps" default-expand-all :filter-node-method="filterNode" ref="tree" @node-click="handleNodeClick"></el-tree>
+			<div slot="footer">
 				<el-button @click="userVisible = false">取 消</el-button>
 				<el-button type="primary" @click="addDepart()">确 定</el-button>
 			</div>
-		</el-dialog>
+		</erpDialog>
 	</div>
 </template>
 
@@ -190,7 +187,6 @@
 				dialogFormVisible: false,
 				userVisible: false,
 				isEdit: false,
-				filterText: "",
 				treeData: [],
 				defaultProps: {
 					children: "children",
@@ -322,9 +318,6 @@
 			});
 		},
 		watch: {
-			filterText(val) {
-				this.$refs.tree.filter(val);
-			},
 			dialogFormVisible(val) {
 				switch(val) {
 					case false:
