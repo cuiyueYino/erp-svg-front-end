@@ -433,7 +433,7 @@
           fcompanyname: "福佳集团",
           fcreator: localStorage.getItem('ms_userId'),
         };
-        //等弹窗里的form表单的dom渲染完在执行this.$refs.staffForm.resetFields()，去除验证
+        //等弹窗里的form表单的dom渲染完在执行this.$refs.searchForm.resetFields()，去除验证
         this.$nextTick(()=>{
           this.$refs.searchForm.resetFields();
         });
