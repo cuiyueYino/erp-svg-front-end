@@ -103,8 +103,8 @@
             </el-form>
             <span slot="footer" class="dialog-footer">
                 <el-button v-if="isShow" @click="handleClose">取 消</el-button>
-                <el-button v-if="isShow" @click="tempSubmitForm('formdata')">暂 存</el-button>
-                <el-button v-if="isShow" @click="submitForm('formdata')">提 交</el-button>
+                <el-button v-if="isShow" @click="submitForm('formdata',0)">暂 存</el-button>
+                <el-button v-if="isShow" @click="submitForm('formdata',1)">提 交</el-button>
             </span>
         </el-dialog>
     </div>
@@ -293,10 +293,11 @@ export default {
             this.$emit('changeShow',false);
         },
         //submit 校验
-        submitForm(formName) {
+        submitForm(formName,type) {
+          debugger;
           this.$refs[formName].validate((valid) => {
             if (valid) {
-              this.onHandleSave();
+              this.onHandleSave(type);
             } else {
               // console.log('error submit!!');
               return false;
@@ -304,7 +305,7 @@ export default {
           });
         },
         //提交
-        onHandleSave(){
+        onHandleSave(type){
             let fromDataS={};
             fromDataS=this.formdata;
             let SaveFlag=false;
@@ -331,9 +332,9 @@ export default {
             }
             if(SaveFlag){
                 if(this.NewOrEditFlag==="NEW"){
-                    this.saveNewMenu(fromDataS);
+                    this.saveNewMenu(fromDataS,type);
                 }else{
-                    this.saveEditmenu(fromDataS);
+                    this.saveEditmenu(fromDataS,type);
                 }
             }
         },
@@ -342,7 +343,6 @@ export default {
             let formDataA =data;
             this.$api.documentManagement.findDocumentManageById(formDataA).then(response => {
                 let responsevalue = response;
-                debugger;
                 if (responsevalue.data.data) {
                     let returndata = responsevalue.data;
                     let tableDataArr=returndata.data;
@@ -376,16 +376,21 @@ export default {
                 }
             });
         },
-        //提交：新建
-        saveNewMenu(data){
+        //提交暂存：新建 ：修改
+        saveNewMenu(data,type){
             let foid ='';
             data.fpid = this.rowNMMDataObj.fpid;
             let formDataA =data;
             let creator = localStorage.getItem('ms_userId');
             formDataA.fcreator = creator;
             formDataA.fistop = '2';
-            formDataA.fdocstatus = '2';
-            formDataA.fstatus = 2;
+            if(type == 1){//提交
+              formDataA.fdocstatus = '2';
+              formDataA.fstatus = 2;
+            } else {//暂存
+              formDataA.fdocstatus = '1';
+              formDataA.fstatus = 1;
+            }
             this.$api.documentManagement.insertDocumentManage(formDataA).then(response => {
                 let responsevalue = response;
                 if (responsevalue.data.data) {
@@ -394,45 +399,7 @@ export default {
                     if(this.uploadFiles != null){
                         this.uploadFile("document",foid);
                     }
-                    this.$message.success('新建成功!');
-                    this.ShowFinancVisible=false;
-                    this.$emit('changeShow',false);
-                } else {
-                    this.$message.error(responsevalue.data.msg);
-                }
-            });
-        },
-        //暂存submit 校验
-        tempSubmitForm(formName) {
-          this.$refs[formName].validate((valid) => {
-            if (valid) {
-              this.tempSaveNewMenu();
-            } else {
-              // console.log('error submit!!');
-              return false;
-            }
-          });
-        },
-        //暂存：新建
-        tempSaveNewMenu(){
-            debugger;
-            let formDataA ={};
-            let creator = localStorage.getItem('ms_userId');
-            formDataA.fcreator = creator;
-            formDataA.fistop = '2';
-            formDataA.fdocstatus = '1';
-            formDataA.fstatus = 1;
-            formDataA.fpid = this.rowNMMDataObj.fpid;
-            this.$api.documentManagement.insertDocumentManage(formDataA).then(response => {
-                let responsevalue = response;
-                if (responsevalue.data.data) {
-                  debugger;
-                    let foid = responsevalue.data.data;
-                    //上传附件
-                    if(this.uploadFiles != null){
-                        this.uploadFile("document",foid);
-                    }
-                    this.$message.success('暂存成功!');
+                    this.$message.success(type == 1? '新建成功!': '暂存成功!');
                     this.ShowFinancVisible=false;
                     this.$emit('changeShow',false);
                 } else {
@@ -441,10 +408,22 @@ export default {
             });
         },
         //修改文档管理提交
-        saveEditmenu(data){
+        saveEditmenu(data,type){
+            if(type == 0 && data.fdocstatus != "暂存") { //暂存
+              this.$message.error("非暂存态不可以暂存!");
+              return;
+            }
             let files = this.rowDataFileObj;
             let foid = this.formdata.foid;
             let attachment ={};
+            if(data.fdocstatus == "暂存"){
+              data.fdocstatus = 1;
+            } else if(data.fdocstatus == "待发布"){
+              data.fdocstatus = 2;
+            } else if(data.fdocstatus == "已发布"){
+              this.$message.error("文档已发布不可以修改!");
+              return;
+            }
             let formDataA =data;
             let creator = localStorage.getItem('ms_userId');
             formDataA.fcreator = creator;
