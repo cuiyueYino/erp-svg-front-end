@@ -178,7 +178,7 @@ export default {
             rowComPanDetaiDataObj: {},
             rowEFListDataObj: {},
             rowTEMTaskDataObj: "",
-            rowEACHPerEachJobDetDataObj: {},
+            rowEACHPerEachJobDetDataObj: "",
             rowEachPerEachTableDelayDataObj: {},
             rowEachPerEachTableReportDataObj: {},
             rowEachPerEachTableInvalidDataObj: {},
