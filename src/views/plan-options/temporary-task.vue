@@ -306,34 +306,34 @@ export default {
             }
             switch(taskLeveParams) {
                 case 1: 
-                    this.formdata.taskLevel = '一';
+                    this.formdata.taskLevel = '一级';
                     break;
                 case 2:
-                    this.formdata.taskLevel = '二';
+                    this.formdata.taskLevel = '二级';
                     break;
                 case 3:
-                    this.formdata.taskLevel = '三';
+                    this.formdata.taskLevel = '三级';
                     break;
                 case 4:
-                    this.formdata.taskLevel = '四';
+                    this.formdata.taskLevel = '四级';
                     break;
                 case 5:
-                    this.formdata.taskLevel ='五';
+                    this.formdata.taskLevel ='五级';
                     break;
                 case 6:
-                    this.formdata.taskLevel ='六';
+                    this.formdata.taskLevel ='六级';
                     break;
                 case 7:
-                    this.formdata.taskLevel ='七';
+                    this.formdata.taskLevel ='七级';
                     break;
                 case 8:
-                    this.formdata.taskLevel ='八';
+                    this.formdata.taskLevel ='八级';
                     break;
                 case 9:
-                    this.formdata.taskLevel ='九';
+                    this.formdata.taskLevel ='九级';
                     break;
                 case 10:
-                    this.formdata.taskLevel ='十';
+                    this.formdata.taskLevel ='十级';
                     break;
                 default:
                     break; 

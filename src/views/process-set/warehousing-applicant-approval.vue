@@ -190,7 +190,7 @@ export default {
             rowDepartMonPlanDetDataObj:"",
             rowEmpApprTabDetailDataObj:{},
             rowEmpApprTabNumDetailDataObj:{},
-            rowCooTaskDetailDataObj:{},
+            rowCooTaskDetailDataObj:"",
             rowEachPerEachTableAdjDataObj:{},
             rowConferenceApplyDataObj:{},
             rowEconomicIndicatorsDataObj:"",
