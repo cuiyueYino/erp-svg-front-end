@@ -358,7 +358,7 @@ export default {
             trigger: "blur",
           },
         ],
-        fvolume: [{ validator: checkInt, trigger: "blur" }],
+        fvolume: [{ required: true,validator: checkInt, trigger: "blur" }],
         fsite: [
           { required: false, message: "请输入地点", trigger: "blur" },
           {
