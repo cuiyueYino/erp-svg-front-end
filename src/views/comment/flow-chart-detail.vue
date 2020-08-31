@@ -58,43 +58,60 @@ export default {
         }
     },
     watch:{
-        rowFCDtype(oldVal,newVal){  
-            let finandata=this.rowFCDDataObj.finanrowId;
-            let formDataA ={};
-            formDataA.bizMailId=finandata;
-            formDataA.currUserId=localStorage.getItem("ms_userId");
-            this.title=this.rowFCDDataObj.nametitle;
-            this.titleName=this.rowFCDDataObj.finanrowname;
-            //fstatus 1-外处理 2当前节点 3 已处理 -2 结束 
-            this.$api.processSet.viewProcess(formDataA).then(response=>{
-                let responsevalue = response;
-                if (responsevalue) {
-                    let returndata = responsevalue.data;
-                    let tableDataArr=returndata.data;
-                    for(let i=0;i<tableDataArr.length;i++){
-                        if(tableDataArr[i].fstatus){
-                            if(tableDataArr[i].fstatus ==='1'){
-                                tableDataArr[i].type="after";
-                            }else if(tableDataArr[i].fstatus ==='2'){
-                                tableDataArr[i].type="current";
-                            }else if(tableDataArr[i].fstatus ==='3'){
-                                tableDataArr[i].type="closed";
+        rowFCDtype(oldVal,newVal){
+            if(this.rowFCDtype){
+                let finandata=this.rowFCDDataObj.finanrowId;
+                let formDataA ={};
+                formDataA.bizMailId=finandata;
+                formDataA.currUserId=localStorage.getItem("ms_userId");
+                this.title=this.rowFCDDataObj.nametitle;
+                this.titleName=this.rowFCDDataObj.finanrowname;
+                //fstatus 1-外处理 2当前节点 3 已处理 -2 结束
+                this.$api.processSet.viewProcess(formDataA).then(response=>{
+                    let responsevalue = response;
+                    if (responsevalue) {
+                        let returndata = responsevalue.data;
+                        let tableDataArr=returndata.data;
+                        for(let i=0;i<tableDataArr.length;i++){
+                            if(tableDataArr[i].fstatus){
+                                if(tableDataArr[i].fstatus ==='1'){
+                                    tableDataArr[i].type="after";
+                                }else if(tableDataArr[i].fstatus ==='2'){
+                                    tableDataArr[i].type="current";
+                                }else if(tableDataArr[i].fstatus ==='3'){
+                                    tableDataArr[i].type="closed";
+                                }else{
+                                    tableDataArr[i].type="after";
+                                }   
                             }else{
                                 tableDataArr[i].type="after";
-                            }   
-                        }else{
-                            tableDataArr[i].type="after";
+                            }
+                            tableDataArr[i].remak=tableDataArr[i].fstatusDesc;
+                            if(tableDataArr[i].participators){
+                                let tatileS = tableDataArr[i].participators;
+                                let tatileArr=tatileS.split(',');
+                                if(tatileArr.length > 5){
+                                    let tatileStr='';
+                                    for(let j=0;j<5;j++){
+                                        tatileStr+=tatileArr[j]+',';
+                                    }   
+                                    tableDataArr[i].tatile=tatileStr+"...";
+                                }else{
+                                    tableDataArr[i].tatile=tableDataArr[i].participators;
+                                }
+                            }else{
+                                tableDataArr[i].tatile=tableDataArr[i].participators;
+                            }
+                            //tableDataArr[i].tatile=tableDataArr[i].participators;
+                            tableDataArr[i].name=tableDataArr[i].name?tableDataArr[i].name:tableDataArr[i].activityName;
                         }
-                        tableDataArr[i].remak=tableDataArr[i].fstatusDesc;
-                        tableDataArr[i].tatile=tableDataArr[i].participators;
-                        tableDataArr[i].name=tableDataArr[i].name?tableDataArr[i].name:tableDataArr[i].activityName;
+                        this.treeData=tableDataArr;
+                        this.ShowFinancVisible=this.rowFCDtype;
+                    } else {
+                        this.$message.success('数据库没有该条数据!');
                     }
-                    this.treeData=tableDataArr;
-                    this.ShowFinancVisible=this.rowFCDtype;
-                } else {
-                    this.$message.success('数据库没有该条数据!');
-                }
-            });
+                });
+            }
         }
     }
 }
