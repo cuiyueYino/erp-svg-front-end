@@ -104,32 +104,116 @@
             </el-row>
             <el-tabs v-model="atctiveName" @tab-click="handleClick">
                 <el-tab-pane label="月计划编制" name="first">
-                    <dynamic-table
-                        :columns="columns"
-                        :table-data="tableData"
-                        :total="total"
-                        size="mini"
-                        :isShowPager="false"    
-                        ref="multipleTable"
-                        :page-num="pageNum"
-                        :page-size="pageSize"
-                        v-loading="false"
-                        element-loading-text="加载中"
-                    ></dynamic-table>
+                    <el-table :data="tableData" border>
+                        <el-table-column
+                            prop="index"
+                            label="序号"
+                            >
+                        </el-table-column>
+                        <el-table-column
+                            prop="companyName"
+                            label="公司"
+                            >
+                        </el-table-column>
+                        <el-table-column
+                            prop="departmentName"
+                            label="部门">
+                        </el-table-column>
+                        <el-table-column
+                            prop="taskType"
+                            label="任务类型">
+                        </el-table-column>
+                        <el-table-column
+                            prop="taskLevel"
+                            label="任务级别">
+                        </el-table-column>
+                        <el-table-column
+                            prop="periodicityTask"
+                            label="周期性任务">
+                            <template slot-scope="scope">
+                                <el-checkbox v-model="scope.row.periodicityTask" disabled></el-checkbox>
+                            </template>
+                        </el-table-column>
+                        <el-table-column
+                            prop="workName"
+                            label="工作名称">
+                        </el-table-column>
+                        <el-table-column
+                            prop="workStandard"
+                            label="工作标准">
+                        </el-table-column>
+                        <el-table-column
+                            prop="planFinish"
+                            label="Q累计预计计划完成指标">
+                        </el-table-column>
+                        <el-table-column
+                            prop="unit"
+                            label="计量单位">
+                        </el-table-column>
+                        <el-table-column
+                            prop="emphasisLevel"
+                            label="重点级别">
+                        </el-table-column>
+                        <el-table-column
+                            prop="beginDate"
+                            label="开始时间">
+                        </el-table-column>
+                        <el-table-column
+                            prop="endDate"
+                            label="结束时间">
+                        </el-table-column>
+                        <el-table-column
+                            prop="responsibleName"
+                            label="责任人">
+                        </el-table-column>
+                        <el-table-column
+                            prop="glResponsibleName"
+                            label="协办人">
+                        </el-table-column>
+                        <el-table-column
+                            prop="secretaryName"
+                            label="秘书">
+                        </el-table-column>
+                        <el-table-column
+                            prop="examinerName"
+                            label="检查人">
+                        </el-table-column>
+                        <el-table-column
+                            prop="assignerName"
+                            label="交办人">
+                        </el-table-column>
+                        <el-table-column
+                            prop="completion"
+                            label="完成情况">
+                        </el-table-column>
+                        <el-table-column
+                            prop="noFinishReason"
+                            label="情况说明">
+                        </el-table-column>
+                        <el-table-column
+                            prop="remark"
+                            label="备注">
+                        </el-table-column>
+                    </el-table>
                 </el-tab-pane>
-                <el-tab-pane label="附件" name="fourth">
-                    <dynamic-table
-                        :columns="attachColumns"
-                        :table-data="tableAttachData"
-                        :total="total"
-                        size="mini"
-                        :isShowPager="false"
-                        ref="multipleTable"
-                        :page-num="pageNum"
-                        :page-size="pageSize"
-                        v-loading="false"
-                        element-loading-text="加载中"
-                    ></dynamic-table>
+                <el-tab-pane label="附件" name="second">
+                    <el-table :data="tableAttachData" border>
+                        <el-table-column
+                            prop="num"
+                            label="序号"
+                            >
+                        </el-table-column>
+                        <el-table-column
+                            prop="name"
+                            label="名称"
+                            >
+                        </el-table-column>
+                        <el-table-column
+                            prop="option"
+                            label="操作"
+                            >
+                        </el-table-column>
+                    </el-table>
                 </el-tab-pane>
             </el-tabs> 
         </el-form>
@@ -153,6 +237,7 @@ export default {
             formLabelWidth: "120px",
             ShowFinancVisible:false,
             labelPosition: 'left',
+            checked:false,
             formdata:{
                 companyName:'',
                 planId:'',
@@ -175,106 +260,6 @@ export default {
             total: 20,
             isEdit: false,
             isLook:false,
-            columns:[
-                {
-                    key: 'index',
-                    title: '序号'
-                },
-                {
-                    key: 'companyName',
-                    title: '公司'
-                },
-                {
-                    key: 'departmentName',
-                    title: '部门'
-                },
-                {
-                    key: 'taskType',
-                    title: '任务类型'
-                },
-                {
-                    key: 'taskLevel',
-                    title: '任务级别'
-                },
-                {
-                    key: 'periodicityTask',
-                    title: '周期性任务'
-                },
-                {
-                    key: 'workName',
-                    title: '工作名称'
-                },
-                {
-                    key: 'workStandard',
-                    title: '工作标准'
-                },
-                {
-                    key: 'planFinish',
-                    title: 'Q累计预计计划完成指标'
-                },
-                {
-                    key: 'unit',
-                    title: '计量单位'
-                },
-                {
-                    key: 'emphasisLevel',
-                    title: '重点级别'
-                },
-                {
-                    key: 'beginDate',
-                    title: '开始时间'
-                },
-                {
-                    key: 'endDate',
-                    title: '结束时间'
-                },
-                {
-                    key: 'responsibleName',
-                    title: '责任人'
-                },
-                {
-                    key: 'glResponsibleName',
-                    title: '协办人'
-                },
-                {
-                    key: 'secretaryName',
-                    title: '秘书'
-                },
-                {
-                    key: 'examinerName',
-                    title: '检查人'
-                },
-                {
-                    key: 'assignerName',
-                    title: '交办人'
-                },
-                {
-                    key: 'completion',
-                    title: '完成情况'
-                },
-                {
-                    key: 'noFinishReason',
-                    title: '情况说明'
-                },
-                {
-                    key: 'remark',
-                    title: '备注'
-                },
-            ],
-            attachColumns:[
-                {
-                    key: 'num',
-                    title: '序号'
-                },
-                {
-                    key: 'name',
-                    title: '名称'
-                },
-                {
-                    key: 'option',
-                    title: '操作'
-                },
-            ],
             tableData:[],
             tableAttachData:[],
         }
@@ -287,38 +272,30 @@ export default {
         id: data.id,
         }) 
         .then((res) => {
-            // debugger;
                 if(res.data.code == 0){
                 this.formdata = res.data.data;
                 this.formdata.companyName = res.data.data.departmentMonthPlanLine[0].companyName;
                 
                 var tableObj = res.data.data.departmentMonthPlanLine;
-                this.tableAttachData.push(tableObj);
+                // this.tableAttachData.push(tableObj);
+                let taskTypeParams = "";
                 for(var i=0;i<tableObj.length;i++){
+                    taskTypeParams = tableObj[i].taskType;
                     tableObj[i]['index'] = i + 1;
+                    // tableObj[i]['num'] = i + 1;
+                    switch(taskTypeParams) {
+                        case 1: 
+                            tableObj[i].taskType = '主任务';
+                            break;
+                        case 2:
+                            tableObj[i].taskType = '临时任务';
+                            break;
+                        default:
+                            break; 
                 }
-                this.tableData.push(tableObj);
-                console.log(this.tableData);
-
-
-                // let tableDataObj = {};
-                // tableDataObj["key1"] = '计划值';
-                // tableDataObj["key2"] = 'Q 累计预计计划完成指标';
-                // tableDataObj["optionValue"] = res.data.data.optionValue;
-                // tableDataObj["unit"] = res.data.data.unit;
-                // this.tableData.push(tableDataObj);
-                // let taskTypeParams = res.data.data.taskType;
-                // let taskLeveParams = res.data.data.taskLevel;
-                // if(res.data.data.groupPoint) {
-                //     this.focusLevelCheckList.push('集团重点');
-                // } else if(res.data.data.companyPoint) {
-                //     this.focusLevelCheckList.push('公司重点');
-                // }  else if(res.data.data.departmentPoint) {
-                //     this.focusLevelCheckList.push('部门重点')
-                // } else {
-                //     this.focusLevelCheckList.push('');
-                // }
-
+                }
+                this.tableData = tableObj;
+                // this.tableAttachData = tableObj;
                 }
             }),error => {
             console.log(error);
