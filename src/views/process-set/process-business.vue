@@ -181,7 +181,9 @@ export default {
             formLabelWidth: '120px',
             rules: {
                 departMentName:[{ required: true, message: '请输入部门', trigger: 'blur' }],
+                company:[{ required: true, message: '请选择公司', trigger: 'blur' }],
             }
+            
         };
     },
     

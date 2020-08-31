@@ -11,7 +11,7 @@
             <el-row>
                 <el-col :span="6">
                     <el-form-item label="公司：">
-                        <el-select v-model="formdata.company" value-key="value" :disabled="true">
+                        <el-select v-model="formdata.companyName" value-key="value" :disabled="true">
                             <el-option  
                                 v-for="item in companyData"
                                 :key="item.value"
@@ -25,7 +25,7 @@
             <el-row>
                 <el-col :span="6">
                     <el-form-item label="月计划编号：">
-                        <el-input v-model="formdata.planIdParam" :disabled="true"></el-input>
+                        <el-input v-model="formdata.planId" :disabled="true"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="6" :offset="2">
@@ -59,14 +59,11 @@
                         </el-select>
                     </el-form-item>
                 </el-col>
-                <el-col :span="5" :offset="2">
+                <el-col :span="6" :offset="2">
                     <el-form-item label="计划部门：">
                         <el-input v-model="formdata.planDepName" :disabled="true"></el-input>
                     </el-form-item>
                 </el-col>
-                <el-col :span="1">
-                    <el-button type="primary" size="mini" icon="el-icon-search" :disabled="true"></el-button>
-                </el-col>
                 <el-col :span="6" :offset="2">
                     <el-form-item label="编制日期：" :label-width="formLabelWidth">
                         <el-date-picker
@@ -86,7 +83,7 @@
             <el-row>
                 <el-col :span="6">
                     <el-form-item label="经办人：">
-                        <el-input v-model="formdata.jingbanren" :disabled="true"></el-input>
+                        <el-input v-model="formdata.gestorName" :disabled="true"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="6" :offset="2">
@@ -123,7 +120,7 @@
                 <el-tab-pane label="附件" name="fourth">
                     <dynamic-table
                         :columns="attachColumns"
-                        :table-data="tableData"
+                        :table-data="tableAttachData"
                         :total="total"
                         size="mini"
                         :isShowPager="false"
@@ -145,7 +142,7 @@ import proData from '../../components/common/proData/proData';
 import DynamicTable from '../../components/common/dytable/dytable.vue';
 export default {
     props: {
-        rowDepartMonPlanDetDataObj: Object,
+        rowDepartMonPlanDetDataObj: String,
         rowDepartMonPlanDettype:Boolean,
     },
     components: {
@@ -157,8 +154,8 @@ export default {
             ShowFinancVisible:false,
             labelPosition: 'left',
             formdata:{
-                company:'',
-                planIdParam:'',
+                companyName:'',
+                planId:'',
                 editId:'',
                 year:'',
                 month:'',
@@ -180,118 +177,130 @@ export default {
             isLook:false,
             columns:[
                 {
-                    key: 'key1',
+                    key: 'index',
                     title: '序号'
                 },
                 {
-                    key: 'key2',
+                    key: 'companyName',
                     title: '公司'
                 },
                 {
-                    key: 'key3',
+                    key: 'departmentName',
                     title: '部门'
                 },
                 {
-                    key: 'key4',
+                    key: 'taskType',
                     title: '任务类型'
                 },
                 {
-                    key: 'key5',
+                    key: 'taskLevel',
                     title: '任务级别'
                 },
                 {
-                    key: 'key6',
+                    key: 'periodicityTask',
                     title: '周期性任务'
                 },
                 {
-                    key: 'key7',
+                    key: 'workName',
                     title: '工作名称'
                 },
                 {
-                    key: 'key8',
+                    key: 'workStandard',
                     title: '工作标准'
                 },
                 {
-                    key: 'key9',
+                    key: 'planFinish',
                     title: 'Q累计预计计划完成指标'
                 },
                 {
-                    key: 'key10',
+                    key: 'unit',
                     title: '计量单位'
                 },
                 {
-                    key: 'key11',
+                    key: 'emphasisLevel',
                     title: '重点级别'
                 },
                 {
-                    key: 'key12',
+                    key: 'beginDate',
                     title: '开始时间'
                 },
                 {
-                    key: 'key13',
+                    key: 'endDate',
                     title: '结束时间'
                 },
                 {
-                    key: 'key14',
+                    key: 'responsibleName',
                     title: '责任人'
                 },
                 {
-                    key: 'key15',
+                    key: 'glResponsibleName',
                     title: '协办人'
                 },
                 {
-                    key: 'key16',
+                    key: 'secretaryName',
                     title: '秘书'
                 },
                 {
-                    key: 'key17',
+                    key: 'examinerName',
                     title: '检查人'
                 },
                 {
-                    key: 'key18',
+                    key: 'assignerName',
                     title: '交办人'
                 },
                 {
-                    key: 'key19',
+                    key: 'completion',
                     title: '完成情况'
                 },
                 {
-                    key: 'key20',
+                    key: 'noFinishReason',
                     title: '情况说明'
                 },
                 {
-                    key: 'key21',
+                    key: 'remark',
                     title: '备注'
                 },
             ],
             attachColumns:[
                 {
-                    key: 'key1',
+                    key: 'num',
                     title: '序号'
                 },
                 {
-                    key: 'key2',
+                    key: 'name',
                     title: '名称'
                 },
                 {
-                    key: 'key3',
+                    key: 'option',
                     title: '操作'
                 },
             ],
             tableData:[],
+            tableAttachData:[],
         }
     },
     methods: {
         handleClick() {},
         //部门月度计划
         getmonthlyPlan(data) {
-        debugger;
         this.$api.processSet.getMonthlyPlanDetail({
         id: data.id,
         }) 
         .then((res) => {
+            // debugger;
                 if(res.data.code == 0){
                 this.formdata = res.data.data;
+                this.formdata.companyName = res.data.data.departmentMonthPlanLine[0].companyName;
+                
+                var tableObj = res.data.data.departmentMonthPlanLine;
+                this.tableAttachData.push(tableObj);
+                for(var i=0;i<tableObj.length;i++){
+                    tableObj[i]['index'] = i + 1;
+                }
+                this.tableData.push(tableObj);
+                console.log(this.tableData);
+
+
                 // let tableDataObj = {};
                 // tableDataObj["key1"] = '计划值';
                 // tableDataObj["key2"] = 'Q 累计预计计划完成指标';
@@ -318,11 +327,10 @@ export default {
     },
     watch:{
         rowDepartMonPlanDettype(oldVal,newVal){
-            debugger;
             // voucherId、menuCode
             this.ShowFinancVisible=this.rowDepartMonPlanDettype;
             let EACHPerEachJobDataSelected = {};
-            EACHPerEachJobDataSelected.id = this.rowDepartMonPlanDetDataObj.fsrcoId;
+            EACHPerEachJobDataSelected.id = this.rowDepartMonPlanDetDataObj;
             this.getmonthlyPlan(EACHPerEachJobDataSelected);
         }
     }
