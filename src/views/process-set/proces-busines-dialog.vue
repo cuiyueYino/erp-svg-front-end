@@ -23,7 +23,7 @@
      <!-- 新建用户&角色 -->
      <el-row :gutter="20">
         <el-col  v-show="type === '用户'" :span="8" class="tree-class">
-            <h3>用户</h3>
+            <h3>角色</h3>
                     <el-col :span="16">
                         <el-form-item label="搜索"  label-width="60px">
                             <el-input v-model="searchKeyW" clearable></el-input>
