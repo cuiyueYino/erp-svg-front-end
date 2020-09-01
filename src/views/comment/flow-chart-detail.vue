@@ -69,8 +69,8 @@ export default {
                 //fstatus 1-外处理 2当前节点 3 已处理 -2 结束
                 this.$api.processSet.viewProcess(formDataA).then(response=>{
                     let responsevalue = response;
-                    if (responsevalue) {
-                        let returndata = responsevalue.data;
+                    let returndata = responsevalue.data;
+                    if (returndata.code =='0' || returndata.code ==0) {
                         let tableDataArr=returndata.data;
                         for(let i=0;i<tableDataArr.length;i++){
                             if(tableDataArr[i].fstatus){
@@ -108,7 +108,7 @@ export default {
                         this.treeData=tableDataArr;
                         this.ShowFinancVisible=this.rowFCDtype;
                     } else {
-                        this.$message.success('数据库没有该条数据!');
+                        this.$message.error(returndata.msg);
                     }
                 });
             }
