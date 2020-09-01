@@ -66,9 +66,9 @@
                         <el-select v-model="dialog.company" size="mini">
                             <el-option
                                 v-for="item in companyoptions"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value"
+                                :key="item.id"
+                                :label="item.name"
+                                :value="item.id"
                             ></el-option>
                         </el-select>
                     </el-col>
@@ -148,7 +148,7 @@ export default {
             pageNum: 1,
             pageSize: 10,
             total: 20,
-            companyoptions: new proData().company,
+            companyoptions:[],
             usertypeoptions:[
                 {
                     label:'--',
@@ -319,6 +319,16 @@ export default {
                 }
             });
         },
+        selectCom(){
+            this.$api.jobUserManagement.getCompanyData().then((res) => {
+                if (res.status == "200") {
+                    this.companyoptions= res.data.data.rows;
+                }
+            }),
+            (error) => {
+                console.log(error);
+            };
+        },
         //提交
         savefinanceValue(){
             let selectOption= this.multipleSelection;
@@ -351,6 +361,7 @@ export default {
             fromdata.page=this.pageNum;
             fromdata.size=this.pageSize;
             this.GetUSerData(fromdata);
+            this.selectCom();
         }
     }
 }

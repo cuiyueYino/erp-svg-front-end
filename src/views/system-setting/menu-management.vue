@@ -8,9 +8,9 @@
                             <el-select v-model="formInline.company" @change="Comchange" placeholder="公司" clearable>
                                 <el-option
                                     v-for="item in companyData"
-                                    :key="item.value"
-                                    :label="item.label"
-                                    :value="item.value"
+                                    :key="item.id"
+                                    :label="item.name"
+                                    :value="item.id"
                                 ></el-option>
                             </el-select>
                        </el-col>
@@ -69,7 +69,7 @@ export default {
     inject: ['reload'],
     data(){
         return{
-            companyData:new proData().company,
+            companyData:[],
             formInline: {
                 company:'_DefaultCompanyOId'
             },
@@ -129,6 +129,7 @@ export default {
         fromdata.size=this.pageSize;
         fromdata.company=this.formInline.company;
         this.searchMenutable(fromdata);
+        this.selectCom();
     },
     methods:{
         //公司改变
@@ -338,6 +339,16 @@ export default {
                     this.$message.success('数据库没有该条数据!');
                 }
             });
+        },
+        selectCom(){
+            this.$api.jobUserManagement.getCompanyData().then((res) => {
+                if (res.status == "200") {
+                    this.companyData= res.data.data.rows;
+                }
+            }),
+            (error) => {
+                console.log(error);
+            };
         },
         //分页查询菜单
         searchMenutable(data){

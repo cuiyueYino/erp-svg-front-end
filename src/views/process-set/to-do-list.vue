@@ -125,9 +125,9 @@
               >
                 <el-option
                   v-for="item in companyoptions"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value"
+                  :key="item.id"
+                  :label="item.name"
+                  :value="item.id"
                 ></el-option>
               </el-select>
             </el-col>
@@ -505,7 +505,7 @@ export default {
       checked: false,
       DataForm: {},
       WFMtypeoptions: [],
-      companyoptions: new proData().company,
+      companyoptions:[],
       commonMeta: new proData().commonMetaClass,
       formLabelWidth: "120px",
     };
@@ -521,9 +521,20 @@ export default {
     //fromdata1.infosBeginNum=0;
     //fromdata1.infosEndNum=2000;
     this.getmetaClass(fromdata1);
+    this.selectCom();
   },
   computed: {},
   methods: {
+    selectCom(){
+      this.$api.jobUserManagement.getCompanyData().then((res) => {
+        if (res.status == "200") {
+          this.companyoptions= res.data.data.rows;
+        }
+      }),
+      (error) => {
+        console.log(error);
+      };
+    },
     //获取待办事项
     getHunTableData(data) {
       let fromdata = data;

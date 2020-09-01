@@ -145,7 +145,6 @@ export default {
             ShowFinancVisible:false,
             labelPosition: 'left',
             disabled:false,
-            companyData:new proData().company,
             objectoptions:new proData().project,
             formdata: {
                 radio:1,

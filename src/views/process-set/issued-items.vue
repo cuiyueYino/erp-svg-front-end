@@ -47,9 +47,9 @@
                                 <el-select v-model="DataForm.srcCompany" clearable placeholder="请选择">
                                     <el-option
                                     v-for="item in companyoptions"
-                                    :key="item.value"
-                                    :label="item.label"
-                                    :value="item.value">
+                                    :key="item.id"
+                                    :label="item.name"
+                                    :value="item.id">
                                     </el-option>
                                 </el-select>
                             </el-form-item>
@@ -222,7 +222,7 @@ export default {
         ],
         tableData:[],
         options:[],
-        companyoptions: new proData().company,
+        companyoptions:[],
         WFMtypeoptions:[],
         multipleSelection: [],
         checked:false,
@@ -259,11 +259,22 @@ export default {
         //查找业务数据
         let fromdata1={};
         this.getmetaClass(fromdata1);
+        this.selectCom();
     },
     computed:{
         
     },
     methods:{
+        selectCom(){
+            this.$api.jobUserManagement.getCompanyData().then((res) => {
+                if (res.status == "200") {
+                    this.companyoptions= res.data.data.rows;
+                }
+            }),
+            (error) => {
+                console.log(error);
+            };
+        },
         //根据状态改背景色
         tableRowClassName({ row }) {
             if (row.fstatus === '暂停') {

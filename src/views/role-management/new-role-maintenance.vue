@@ -48,9 +48,9 @@
                                         <el-select v-model="company" @change="CompanyChange" value-key="value" >
                                             <el-option
                                                 v-for="item in companyoptions"
-                                                :key="item.value"
-                                                :label="item.label"
-                                                :value="item.value"
+                                                :key="item.id"
+                                                :label="item.name"
+                                                :value="item.id"
                                             ></el-option>
                                         </el-select>
                                     </el-form-item>
@@ -110,7 +110,7 @@ export default {
             labelPosition: 'left',
             atctiveName:'first',
             company:'_DefaultCompanyOId',
-            companyoptions:new proData().company,
+            companyoptions:[],
             treeData:[],
             terrAllMenuData:[],
             defaultProps: {
@@ -403,6 +403,16 @@ export default {
             }
             return CheckData;
         },
+        selectCom(){
+            this.$api.jobUserManagement.getCompanyData().then((res) => {
+                if (res.status == "200") {
+                    this.companyoptions= res.data.data.rows;
+                }
+            }),
+            (error) => {
+                console.log(error);
+            };
+        },
         //异步变同步
         async asyncCall(company,roleid) {
             await this.maketree(company);
@@ -417,8 +427,10 @@ export default {
             if(this.rowNRMDataObj.createtype =="NEW"){
                 this.maketree(this.company);
                 this.formdata={};
+                this.selectCom();
             }else{
                 let selectdata=this.rowNRMDataObj.SelectData;
+                this.selectCom();
                 let fromdata={};
                 fromdata.id=selectdata[0].id;
                 this.$api.RoleManagement.getRoleModel(fromdata).then(response => {
