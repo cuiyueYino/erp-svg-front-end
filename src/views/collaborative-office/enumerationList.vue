@@ -15,7 +15,13 @@
 		<el-row :gutter="10">
 			<el-col :span="6">
 				<el-card>
-					<el-tree highlight-current :data="dataList" :props="defaultProps" @node-click="handleNodeClick"></el-tree>
+					<el-tree highlight-current :data="dataList" :props="defaultProps" @node-click="handleNodeClick">
+            <div slot-scope="{node,data}" class="customize-tree-p">
+              <el-tooltip class="item" effect="dark" :content="data.name" placement="top-start">
+                <span>{{data.name|labelShow}}</span>
+              </el-tooltip>
+            </div>
+          </el-tree>
 				</el-card>
 			</el-col>
 			<el-col :span="18">
@@ -38,6 +44,16 @@
 </template>
 <script>
 	export default {
+    //树结构 label 过长，替换显示成"..."结构
+    filters: {
+      labelShow(value) {
+        if(!value) return ''
+        if(value.length > 18) {
+          return value.slice(0, 18) + '...'
+        }
+        return value
+      }
+    },
 		data() {
 			return {
 				//修改-编码
@@ -169,7 +185,7 @@
 	.el-card {
 		height: 80vh;
 	}
-	
+
 	.custom-tree-node {
 		flex: 1;
 		display: flex;
