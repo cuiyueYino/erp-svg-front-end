@@ -53,8 +53,8 @@
 	};
 </script>
 
-<style>
-	.el-dialog {
+<style scoped="scoped">
+	>>>.el-dialog {
 		position: relative;
 		margin: 0 auto 0px;
 		background: #FFFFFF;
@@ -67,7 +67,7 @@
 		height: 70%;
 	}
 	
-	.el-dialog__body {
+	>>>.el-dialog__body {
 		border-top: 1px solid #dcdfe6;
 		border-bottom: 1px solid #dcdfe6;
 		max-height: 70% !important;
@@ -76,7 +76,7 @@
 		padding: 10px 20px!important;
 	}
 	
-	.el-dialog__footer {
+	>>>.el-dialog__footer {
 		padding: 20px!important
 	}
 </style>
