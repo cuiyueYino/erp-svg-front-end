@@ -183,8 +183,8 @@ export default {
             rowEachPerEachTableInvalidDataObj: {},
             rowEachPerEachTablePersonDataObj: {},
             rowEachPerEachTableAssDataObj: {},
-            rowEachPerEachTableEntrustDataObj: {},
-            rowEachPerEachTableDetailDataObj: {},
+            rowEachPerEachTableEntrustDataObj: "",
+            rowEachPerEachTableDetailDataObj: "",
             rowDepartAnnPlanDetDataObj:{},
             rowDepartMonPlanDetDataObj:"",
             rowEmpApprTabDetailDataObj:{},
@@ -336,6 +336,7 @@ export default {
                 this.rowEachPerEachTableAsstype=true;
             } else if(dataType === 'TaskDelayApply'){
                 this.rowEachPerEachTableDelaytype=true;
+                 this.rowEachPerEachTableDelayDataObj = currentDatd;
             } else if(dataType === 'TaskCancelApply'){
                 this.rowEachPerEachTableInvalidtype=true;
             } else if(dataType === 'TaskAdjust'){
