@@ -4,7 +4,7 @@
         <el-card class="box-card">
            <el-row :gutter="24">
                <el-col :span="14">
-                    <el-form :inline="true"  class="demo-form-inline">
+                    <el-form @submit.native.prevent :inline="true"  class="demo-form-inline">
                     <el-form-item >
                         <el-input clearable v-model="formCode" placeholder="请输入任意查询内容"></el-input>
                     </el-form-item>
@@ -167,7 +167,7 @@ export default {
         };
     },
     components: {
-      DynamicTable,
+        DynamicTable,
        baseInfoDialog
     },
     created(){
@@ -179,6 +179,7 @@ export default {
     },
     watch:{
         dialogFormVisible(val){
+            debugger
             if(!val){
                 this.$refs['form'].resetFields();
             }
@@ -364,6 +365,9 @@ export default {
  /deep/ .el-textarea .el-input__count{
      background: #fff0;
  }
+/deep/ .el-dropdown-menu__item{
+    padding: 0;
+}
 /deep/ .el-select{
     width: 100%;
 }

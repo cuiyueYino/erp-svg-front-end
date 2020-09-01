@@ -4,7 +4,7 @@
         <el-card class="box-card">
            <el-row :gutter="24">
                <el-col :span="14">
-                    <el-form :inline="true"  class="demo-form-inline">
+                    <el-form :inline="true" @submit.native.prevent  class="demo-form-inline">
                     <el-form-item >
                         <el-input clearable v-model="formCode" placeholder="请输入任意查询内容"></el-input>
                     </el-form-item>
