@@ -204,10 +204,12 @@ export default {
         },
         // 搜索
         onSubmit(){
+            this.pageNum=1;
             this.getTableData(this.formCode);
         },
         getAll(){
             // 清空搜索框数据
+            this.pageNum=1;
             this.formCode = '';
             this.getTableData('')
         },
