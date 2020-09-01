@@ -44,19 +44,26 @@
         <el-dialog title="流程维护" :visible.sync="dialogFormVisible" :close-on-click-modal="false" center >
             <el-form :model="form" :rules="rules" ref="form">
                 <el-row :gutter="24">
-                    <el-col :span="12">
+                    <el-col :span="10">
                         <el-form-item label="编码：" :label-width="formLabelWidth" prop="fcode">
                             <el-input v-model="form.fcode" autocomplete="off" size="small"></el-input>
                         </el-form-item>
                     </el-col>
-                    <el-col :span="12">
+                    <el-col :span="10" :offset="2">
                          <el-form-item label="名称：" :label-width="formLabelWidth" prop="fname">
                             <el-input v-model="form.fname" autocomplete="off" size="small"></el-input>
                         </el-form-item>
                     </el-col>
-                    <el-col :span="12">
-                         <el-form-item label="子流程：" :label-width="formLabelWidth"> 
+                </el-row>
+                <el-row :gutter="24">
+                    <el-col :span="10">
+                        <el-form-item label="子流程：" :label-width="formLabelWidth"> 
                             <el-checkbox v-model="checked"></el-checkbox>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="10" :offset="2">
+                        <el-form-item label="按退回节点重新提交："> 
+                            <el-checkbox v-model="backchecked"></el-checkbox>
                         </el-form-item>
                     </el-col>
                     <!-- <el-form-item label="组织结构" :label-width="formLabelWidth" style="position:relative;">
@@ -67,6 +74,8 @@
                         @click="baseInputTable('用户','组织结构查询')"
                         />
                     </el-form-item> -->
+                </el-row>
+                <el-row :gutter="24">
                     <el-col :span="22">
                          <el-form-item label="描述：" :label-width="formLabelWidth"  prop="fremark">
                             <el-input maxlength="500" show-word-limit autosize type="textarea" v-model="form.fremark"></el-input>
@@ -141,6 +150,7 @@ export default {
         tableData:[],
         multipleSelection: [],
         checked:false,
+        backchecked:false,
          form: {
           name: '',
           region: '',
@@ -179,7 +189,6 @@ export default {
     },
     watch:{
         dialogFormVisible(val){
-            debugger
             if(!val){
                 this.$refs['form'].resetFields();
             }
@@ -249,6 +258,7 @@ export default {
              this.$refs[formName].validate((valid) => {
                 if (valid) {
                     this.form.fsubprocess = this.checked?1:0;
+                    this.form.fgotoaudit = this.backchecked?1:0;
                     this.$api.processSet.addSubmit(this.form).then(res=>{
                         if(res.data.data.msg == "success"){
                             this.dialogFormVisible = false
