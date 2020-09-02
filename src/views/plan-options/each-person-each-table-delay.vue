@@ -393,6 +393,18 @@ export default {
                 }
             }
         },
+         //获取一人一表任务表详情
+        getPersonalTableDelayDetail(data) {
+        this.$api.processSet.getPersonalTableTaskDetail(data)
+        .then((res) => {
+                if(res.data.code == 0){
+                this.formdata = res.data.data;
+                let tableDataObj = {};
+                }
+            }),error => {
+            console.log(error);
+            }
+        },
         //pop框里面的新增表格行
         baseInputTable(Str) {
             alert("新增111111111");
@@ -417,6 +429,9 @@ export default {
             },
         rowEachPerEachTableDelaytype(oldVal,newVal){
             this.ShowFinancVisible=this.rowEachPerEachTableDelaytype;
+            let PersonalTableDelaySelected = {};
+            PersonalTableDelaySelected.id = this.rowEachPerEachTableDelaytype;
+            this.getPersonalTableDelayDetail(PersonalTableDelaySelected);
         }
     }
 }
