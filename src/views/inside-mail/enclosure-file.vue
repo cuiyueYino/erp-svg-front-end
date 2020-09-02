@@ -77,7 +77,7 @@ export default {
          * @param row
          */
         getHtmlPreviewAttachment(row){
-            this.$api.insideMail.getHtmlPreviewAttachmentById(row.fileFoid).then(response => {
+            this.$api.insideMail.getHtmlPreviewAttachmentById(row.id).then(response => {
                 debugger;
                 let value =response.data.data;
                 if (value) {
@@ -124,7 +124,7 @@ export default {
                     method: 'post',
                     url: '/api/interfaces/attachment/downloadFile',
                     params: {
-                        attachmentId: row.fileFoid
+                        attachmentId: row.id
                     },
                     responseType: 'blob'
                 }).then(response => {
@@ -162,11 +162,10 @@ export default {
 
             let tableLen = this.enclosureTableData.length;
             let localFile = event.raw; //选中的File对象
-           /* let tval =  this.enclosureTableData[tableLen - 1];
-            tval.fileName = event.name;*/
             this.enclosureTableData.splice(tableLen - 1, 1);
             this.enclosureTableData.push(localFile);
             console.log(this.enclosureTableData)
+            console.log(localFile)
 
             //选中的文件传给父组件
 
@@ -185,23 +184,24 @@ export default {
             var formData = new FormData();
             // formData.append('files', this.uploadFiles);
 
-            let count = 0;
             for(var i=0; i < length; i++ ){
-                formData.append('file', this.enclosureTableData[0]);
-                formData.append('menuCode',this.enclosureConfig.menuCode);
-                if(creator){
-                    formData.append('userCode',creator);
-                } else {
-                    formData.append('userCode','test');
-                }
-                formData.append('voucherId',this.enclosureConfig.voucherId);
-                console.log(formData);
-                // this.$api.insideMail.uploadFileBatch(formData).then((response) => {
-                this.$api.insideMail.uploadFile(formData).then((response) => {
-                    if(response.data.code == 0 && response.data.data){
-                        count++;
+                if(this.enclosureTableData[0].id==null&&this.enclosureTableData[0].id==''){
+                    formData.append('file', this.enclosureTableData[0]);
+                    formData.append('menuCode',this.enclosureConfig.menuCode);
+                    if(creator){
+                        formData.append('userCode',creator);
+                    } else {
+                        formData.append('userCode','test');
                     }
-                });
+                    formData.append('voucherId',this.enclosureConfig.voucherId);
+                    console.log(formData);
+                    // this.$api.insideMail.uploadFileBatch(formData).then((response) => {
+                    this.$api.insideMail.uploadFile(formData).then((response) => {
+                        if(response.data.code == 0 && response.data.data){
+                        }
+                    });
+                }
+
             }
         },
 
@@ -242,13 +242,8 @@ export default {
                             // i 为选中的索引
                             this.enclosureTableData.splice(i, 1);
                             let ids = '';
-                            /*let list = this.delFileFoids.forEach(element => {
-                                ids = ids + '\'' + element +'\','
-                            });
-                            ids = ids.substring(0,ids.length-1)*/
-                            ids = ids + '\'' + v.fileFoid +'\','
+                            ids = ids + '\'' + v.id +'\','
                             console.log(ids+"+++"+i);
-                            return;
                             this.$api.insideMail.deleteInfoByIds(ids).then((response) => {
                             });
                         }
@@ -279,22 +274,14 @@ export default {
                     let flag = true;
                     for(var i= 0;i<values.length;i++){
                         let attachment = values[i];
-                       /* console.log(attachment)
-                        for(var j= 0;j<this.enclosureTableData.length;j++){
-                            if(attachment.fileName == this.enclosureTableData[j].fileName){
-                                flag = false;
-                            }
-                        }*/
-                        // if(flag){
                             let file = {
                                 rowNum: this.rowNum,
                                 name: attachment.fileName,
-                                fileFoid: attachment.id
+                                id: attachment.id
                             };
+                            console.log(attachment)
                             this.enclosureTableData.unshift(file);
                             this.rowNum += 1;
-                        /*}
-                        flag = true;*/
                     }
                 } else {
                     this.$message.error(response.data.msg);
