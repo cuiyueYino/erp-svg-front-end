@@ -17,7 +17,7 @@
                     </el-form>
                 </el-col>
                  <el-col :span="6" :offset="6">
-                    <el-button type="success" icon="el-icon-refresh" plain @click="createMainte">新建</el-button> 
+                    <el-button type="success" icon="el-icon-refresh" plain @click="createMainte">新建</el-button>
                     <el-button type="success" icon="el-icon-refresh" plain @click="editMainte">修改</el-button>
                     <el-button type="danger" icon="el-icon-notebook-2" plain @click="removeMainte">删除</el-button>
                  </el-col>
@@ -27,6 +27,7 @@
             <el-row>
                 <el-col :span="6" class="treeStyle">
                     <el-tree
+                      highlight-current
                         :data="treeData"
                         :props="defaultProps"
                         node-key="id"
@@ -181,7 +182,7 @@ export default {
                 this.rowNMMDataObj=finandata;
             }else{
                 this.$message.error("请选择父菜单!");
-            } 
+            }
         },
         //修改菜单详情
         editMainte(){
@@ -234,7 +235,7 @@ export default {
                         </span>
                     )
                 }
-            }  
+            }
         },
         //树结构点击事件
         handleNodeClick(data) {
@@ -370,7 +371,7 @@ export default {
                 } else {
                     this.$message.success('数据库没有该条数据!');
                 }
-            }); 
+            });
         },
     }
 }
