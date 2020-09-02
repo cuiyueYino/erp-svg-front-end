@@ -75,19 +75,24 @@
       <el-form :model="searchForm" :rules="rules" ref="searchForm" style="margin-right: 60px;">
         <el-row :gutter="24">
           <el-col :span="12">
-            <el-form-item
-              label="公司："
-              :label-width="formLabelWidth"
-              style="position:relative;"
-              prop="fcompany"
-            >
-              <el-input
-                v-model="searchForm.fcompanyname"
-                autocomplete="off"
-                size="small"
-                @focus="baseInputTable('用户','组织结构查询')"
-              ></el-input>
+            <el-form-item label="公司：" :label-width="formLabelWidth" class="pop-select" prop="fcompany">
+              <el-select v-model="searchForm.fcompanyname" size="small" clearable placeholder="请选择">
+                <el-option v-for="item in options" :key="item.id" :label="item.name" :value="item.id"></el-option>
+              </el-select>
             </el-form-item>
+<!--            <el-form-item-->
+<!--              label="公司："-->
+<!--              :label-width="formLabelWidth"-->
+<!--              style="position:relative;"-->
+<!--              prop="fcompany"-->
+<!--            >-->
+<!--              <el-input-->
+<!--                v-model="searchForm.fcompanyname"-->
+<!--                autocomplete="off"-->
+<!--                size="small"-->
+<!--                @focus="baseInputTable('用户','组织结构查询')"-->
+<!--              ></el-input>-->
+<!--            </el-form-item>-->
           </el-col>
           <el-col :span="12">
             <el-form-item label="编码：" :label-width="formLabelWidth" prop="fcode">
@@ -269,6 +274,7 @@
         }
       };
       return {
+        options: [],
         isEdit: false,
         addFormVisible: false,
         queryFormVisible: false,
@@ -439,6 +445,7 @@
         });
         this.addFormVisible = true;
         this.isEdit = false;
+        this.getCompany();
       },
       // 修改
       toEdit(params) {
@@ -662,6 +669,16 @@
           this.searchForm.fcompanyname = data[0].fname;
         }
         this.baseInputTableF = false;
+      },
+      //公司
+      getCompany() {
+        this.$api.jobUserManagement.getCompanyData().then(res => {
+          if(res.status == '200') {
+            this.options = res.data.data.rows
+          }
+        }), error => {
+          console.log(error);
+        }
       },
     },
   };

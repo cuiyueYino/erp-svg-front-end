@@ -279,6 +279,7 @@ export default {
                     // this.treeData = this.makeTree(reqData);
                     console.log(reqData)
                     this.treeData = reqData;
+                    this.operateUserTree(this.treeData);
                 }
             })
             if(data=="addressee"){
@@ -294,6 +295,31 @@ export default {
         },
         treeSearch(){
             this.AddToUser(this.treeTpye,true)
+        },
+        // 选择人员树时，公司部门层级不可点击
+        operateUserTree(staffTree) {
+          this.treeData = [];
+          for (let i in staffTree) {
+            // 第一级
+            if (staffTree[i].fstruid != undefined) {
+              staffTree[i].disabled = true;
+            }
+            // 第二级
+            let company = staffTree[i].children;
+            for (let k in company) {
+              if (company[k].fstruid != undefined) {
+                company[k].disabled = true;
+              }
+              // 第三级
+              let dept = company[k].children;
+              for (let l in dept) {
+                if (dept[l].fstruid != undefined) {
+                  dept[l].disabled = true;
+                }
+              }
+            }
+          }
+          this.treeData = staffTree;
         },
          /**
          * 清空 主送/抄送用户点击事件
