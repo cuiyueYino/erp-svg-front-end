@@ -80,7 +80,6 @@ function calcExpression(expression, form) {
 		expression = expression.replace(rep, form[rep2])
 	}
 	var errorCon = expression
-	console.log(expression)
 	expression = expression.replace(/\s/g, '').replace(/÷/g, '/').replace(/x/g, '*').replace(/×/g, '*').replace(/X/g, '*');
 	if(getCharCountInString(expression, '(') != getCharCountInString(expression, ')'))
 		return NaN;

@@ -7,11 +7,16 @@
                         :data="treeData"
                         :props="defaultProps"
                         node-key="foid"
-                        :render-content="renderContent"
                         accordion
-                        @node-click="handleNodeClick">
+                        @node-click="handleNodeClick"
+                        >
+                        <div slot-scope="{node,data}" class="customize-tree-p">
+                            <el-tooltip class="item" effect="dark" :content="data.fname" placement="top-start">
+                             <span>{{data.fname|labelShow}}</span>
+                            </el-tooltip>
+                        </div>
                     </el-tree>
-                </el-col>   
+                </el-col>
                 <el-col :span="18" :offset="1">
                     <el-card class="box-card">
                         <el-row :gutter="24">
@@ -36,7 +41,7 @@
                                 </el-form>
                             </el-col>
                             <el-col :span="9" :offset="3">
-                                <el-button type="success" icon="el-icon-plus" plain @click="createDocumentCategory">新建</el-button> 
+                                <el-button type="success" icon="el-icon-plus" plain @click="createDocumentCategory">新建</el-button>
                                 <el-button type="success" icon="el-icon-edit" plain @click="editDocumentCategory">修改</el-button>
                                 <el-button type="danger" icon="el-icon-delete" plain @click="removeDocumentCategory">删除</el-button>
                                 <el-button type="primary" icon="el-icon-notebook-2" plain @click="showDocumentCategory">查看</el-button>
@@ -70,6 +75,16 @@ import NewDocument from './new-document.vue';
 import documentData from'../base/documentData';
 
 export default {
+    //树结构 label 过长，替换显示成"..."结构
+    filters: {
+        labelShow(value) {
+            if(!value) return ''
+            if(value.length > 10) {
+                return value.slice(0, 10) + '...'
+            }
+            return value
+        }
+    },
     name:'workProcess',
     components: {
       DynamicTable,
@@ -106,7 +121,7 @@ export default {
                 },
                 {
                     key: 'flevel',
-                    title: '文档类别等级'
+                    title: '文档类别级别'
                 },
                 {
                     key: 'forder',
@@ -139,6 +154,7 @@ export default {
         this.maketree();
     },
     methods:{
+
         //查询按钮
         findData(){
             let field = this.formInline.document;
@@ -165,17 +181,43 @@ export default {
                 this.$message.error("只能选择一个!");
             }else{
                 if(SelectData[0]){
-                    let fromdata={};
-                    fromdata.id=SelectData[0].foid;
-                    this.$api.documentManagement.deleteDocumentCategory(fromdata).then(response => {
-                        let responsevalue = response;
-                        if (responsevalue.data.data.msg=="success") {
-                            this.$message.success('删除成功!');
-                            this.reload();
-                        } else {
-                            this.$message.error(responsevalue.data.msg);
-                        }
-                    });
+                    //根节点
+                    if(SelectData[0].fcode == '000'){
+                        this.$message.error("根节点不可以删除!");
+                    } else {
+                        //文档类别是否被引用
+                        let fromdata={};
+                        fromdata.page=1;
+                        fromdata.size=10;
+                        fromdata.fpid=SelectData[0].foid;
+                        this.$api.documentManagement.findDocumentCategoryByPage(fromdata).then(response => {
+                            let responsevalue = response;
+                            if (responsevalue) {
+                                let returndata = responsevalue.data;
+                                let tableArr=returndata.data.rows;
+                                this.tableData=tableArr;
+                                if(tableArr.length > 1){
+                                    this.$message.error("该文档类别已被引用，不可以删除!");
+                                } else {
+                                    //删除操作
+                                    let fromdata={};
+                                    fromdata.id=SelectData[0].foid;
+                                    this.$api.documentManagement.deleteDocumentCategory(fromdata).then(response => {
+                                        let responsevalue = response;
+                                        if (responsevalue.data.data.msg=="success") {
+                                            this.$message.success('删除成功!');
+                                            this.reload();
+                                        } else {
+                                            this.$message.error(responsevalue.data.msg);
+                                        }
+                                    });
+                                }
+                            } else {
+                                this.$message.success('数据库没有该条数据!');
+                            }
+                        });
+                    }
+
                 }else{
                     this.$message.error("请选择一行数据!");
                 }
@@ -202,13 +244,22 @@ export default {
         },
         //新增文档类别维护
         createDocumentCategory(){
-            this.rowNMMtype = true;
-            let finandata={};
-            finandata.fpid=this.documentFpid;
-            finandata.nametitle="文档类别维护新增";
-            finandata.NewOrEditFlag="NEW";
-            finandata.flevel= ( this.documentLevel == null || this.documentLevel == '' )? '一级': '二级';
-            this.rowNMMDataObj=finandata;
+            //校验当前是否为2级菜单
+            if(this.documentLevel == 2){
+                this.$message.error("不可增加三级菜单!");
+            } else {
+                if(this.documentFpid){
+                    this.rowNMMtype = true;
+                    let finandata={};
+                    finandata.fpid=this.documentFpid;
+                    finandata.nametitle="文档类别维护新增";
+                    finandata.NewOrEditFlag="NEW";
+                    finandata.flevel= ( this.documentLevel == null || this.documentLevel == '' )? '一级': '二级';
+                    this.rowNMMDataObj=finandata;
+                } else {
+                    this.$message.error("请选择一个文档类别!");
+                }
+            }
         },
         //修改文档类别维护
         editDocumentCategory(){
@@ -253,15 +304,15 @@ export default {
                         </span>
                     );
                 }
-            }  
+            }
         },
         //树结构点击事件
         handleNodeClick(data) {
             this.documentLevel = data.flevel;
             this.documentFpid = data.foid;
             let fromdata={};
-            fromdata.page=this.pageNum;
-            fromdata.size=this.pageSize;
+            fromdata.page=1;
+            fromdata.size=10;
             fromdata.fpid=data.foid;
             this.searchMenutable(fromdata);
         },
@@ -270,6 +321,7 @@ export default {
             let formDataA ={};
             formDataA.page=val;
             formDataA.size=this.pageSize;
+            formDataA.fpid=this.documentFpid;
             this.searchMenutable(formDataA);
         },
         //table选中事件
@@ -278,14 +330,17 @@ export default {
         },
         // 改变table行样式
         tableRowClassName(){},
-        //是否展示dialog弹窗
-        showAddMenu(type){
+        //是否展示dialog弹窗 :
+        showAddMenu(type,operate){
             if(type === false){
                 this.rowNMMtype = false;
             }else{
                 this.rowNMMtype = true;
             }
-            this.reload();
+            //弹窗取消或×掉 时不刷新树结构
+            if(operate == 0){
+                this.reload();
+            }
         },
         //生成树
         maketree(){
@@ -319,9 +374,9 @@ export default {
                 } else {
                     this.$message.success('数据库没有该条数据!');
                 }
-            }); 
+            });
         },
-        
+
     }
 };
 </script>
@@ -331,4 +386,11 @@ export default {
        height: 400px;
        overflow-y:auto;
    }
+   .show-ellipsis {
+        display: block;
+        width: 100%;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
 </style>

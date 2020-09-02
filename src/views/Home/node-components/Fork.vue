@@ -62,17 +62,17 @@
              <el-row :gutter="24">
                   <el-col :span="8">
                     <el-form-item label="编码 " label-width="43px">
-                        <el-input clearable size="small" v-model="formData.formCode" placeholder="请输入"></el-input>
+                        <el-input clearable size="small" v-model="formData.formCode" @input="change($event)" placeholder="请输入"></el-input>
                     </el-form-item>
                   </el-col> 
                   <el-col :span="8">
                     <el-form-item label="名称 " label-width="43px">
-                        <el-input clearable size="small" v-model="formData.formName" placeholder="请输入"></el-input>
+                        <el-input clearable size="small" v-model="formData.formName" @input="change($event)" placeholder="请输入"></el-input>
                     </el-form-item>
                   </el-col> 
                   <el-col :span="8">
                     <el-form-item label="工作类型 " label-width="70px">
-                         <el-select v-model="formData.formCtionTypeCon" clearable placeholder="请选择">
+                         <el-select v-model="formData.formCtionTypeCon" @input="change($event)" clearable placeholder="请选择">
                             <el-option
                             v-for="item in options"
                             :key="item.value"
@@ -87,7 +87,7 @@
              <el-row :gutter="24">
                 <el-col :span="6" :offset="18">
                     <el-button type="primary" size="small" plain @click="reWorkSearchTable('formData')">重置</el-button>
-                    <el-button type="primary" size="small" plain @click="workSearchTable">搜索</el-button>
+                    <el-button type="primary" size="small" plain @click="workSearchTableBtn">搜索</el-button>
                 </el-col>
              </el-row>
             <!-- 表格 -->
@@ -349,12 +349,23 @@ export default {
         },
           // 业务工作-获取表格数据-重置
         reWorkSearchTable(formName){
-            this.$refs[formName].resetFields();
-            this.pageNum = 1
+            //this.$refs[formName].resetFields();
+            this.formData.formCode='';
+            this.formData.formName='';
+            this.formData.formCtionTypeCon='';
+            this.pageNum = 1;
             this.workSearchTable()
+        },
+        workSearchTableBtn(){
+            this.pageNum = 1;
+            this.workSearchTable();
         },
          workSearch(){
             // 业务工作-搜索枚举项
+            this.formData.formCode='';
+            this.formData.formName='';
+            this.formData.formCtionTypeCon='';
+            this.pageNum = 1;
             this.workSearchOption();
             this.workSearchTable();
             this.dialogTableVisible = true;
@@ -372,7 +383,6 @@ export default {
             this.$api.processSet.workSearchData(data).then(res=>{
                 this.tableLoading = false;
                 this.gridData = res.data.data.rows
-                this.pageNum = res.data.data.page;
                 this.total = res.data.data.total;
             },error=>{
                 console.log(error)
@@ -380,6 +390,7 @@ export default {
         },
         // 业务工作-搜索枚举项
         workSearchOption(){
+            this.options=[];
             this.$api.processSet.getWorkSearch().then(res=>{
                 for( let i in res.data.data ){
                     this.options.push({value: i,label: res.data.data[i]})
@@ -393,8 +404,8 @@ export default {
         },
          //分页、下一页
         onCurrentChange(val){
-             this.pageNum = val;
-            this.workSearch('')
+            this.pageNum = val;
+            this.workSearchTable('')
         },
     }
 };

@@ -9,6 +9,7 @@
                 :model="formdata"
                 size="mini"
                 :label-position="labelPosition"
+              ref="formdata"
             >
                 <el-card>
                     <el-row>
@@ -44,7 +45,7 @@
                     <el-row>
                         <el-col :span="22">
                             <el-form-item label="描述">
-                                <el-input type="textarea" v-model="formdata.fdescription" :rows="3" :disabled="isEdit"></el-input>
+                                <el-input type="textarea" v-model="formdata.fdescription" :rows="10" :disabled="isEdit"></el-input>
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -102,8 +103,8 @@
             </el-form>
             <span slot="footer" class="dialog-footer">
                 <el-button v-if="isShow" @click="handleClose">取 消</el-button>
-                <el-button v-if="isShow" @click="tempSaveNewMenu">暂 存</el-button>
-                <el-button v-if="isShow" @click="onHandleSave">提 交</el-button>
+                <el-button v-if="isShow" @click="submitForm('formdata',0)">暂 存</el-button>
+                <el-button v-if="isShow" @click="submitForm('formdata',1)">提 交</el-button>
             </span>
         </el-dialog>
     </div>
@@ -172,7 +173,7 @@ export default {
                     key: 'foperatetime',
                     title: '操作时间'
                 }
-                
+
             ],
             formdata1:[],
             isShow:true,
@@ -191,8 +192,15 @@ export default {
             // 改变table行样式
             tableRowClassName(){},
             rules: {
-                fcode:[{ required: true, message: '请输入编码', trigger: 'blur' }],
-                fname:[{ required: true, message: '请输入名称', trigger: 'blur' }],
+                fcode:[
+                    { required: true, message: '请输入编码', trigger: 'blur' },
+                    { max: 50, message: "编码最大长度 50 字节", trigger: "blur"}
+                    ],
+                fname:[
+                    { required: true, message: '请输入名称', trigger: 'blur' },
+                    { max: 100, message: "名称最大长度 100 字节", trigger: "blur"}
+                    ],
+                fdescription:[{ max: 3000, message: "描述最大长度 3000 字节", trigger: "blur" }],
             },
             NewOrEditFlag:'',
             FiletableData: [],
@@ -233,7 +241,7 @@ export default {
             }
         },
         // 失去焦点事件
-        onEditorBlur() {}, 
+        onEditorBlur() {},
         // 获得焦点事件
         onEditorFocus(event) {
             if (this.formDisabled == true) {
@@ -241,9 +249,9 @@ export default {
             } else {
                 event.enable(true);
             }
-        }, 
+        },
         // 内容改变事件
-        onEditorChange() {}, 
+        onEditorChange() {},
         //分页查询菜单
         searchMenutable(data){
             debugger
@@ -255,17 +263,24 @@ export default {
                     let returndata = responsevalue.data;
                     let tableArr=returndata.data.rows;
                     this.formdata1=tableArr;
+                    for (let i = 0; i < tableArr.length; i++) {
+                      //时间格式化
+                      if(tableArr[i].foperatetime){
+                        tableArr[i].foperatetime = this.formateDate(tableArr[i].foperatetime);
+                      }
+                    }
                     this.total=returndata.data.total;
                 } else {
                     this.$message.success('数据库没有该条数据!');
                 }
-            }); 
+            });
         },
         //分页，下一页
         onCurrentChange(val){
             let formDataA ={};
             formDataA.page=val;
             formDataA.size=this.pageSize;
+            formDataA.foid = this.formdata.foid;
             this.searchMenutable(formDataA);
         },
         //附件
@@ -277,7 +292,20 @@ export default {
             this.ShowFinancVisible=false;
             this.$emit('changeShow',false);
         },
-        onHandleSave(){
+        //submit 校验
+        submitForm(formName,type) {
+          debugger;
+          this.$refs[formName].validate((valid) => {
+            if (valid) {
+              this.onHandleSave(type);
+            } else {
+              // console.log('error submit!!');
+              return false;
+            }
+          });
+        },
+        //提交
+        onHandleSave(type){
             let fromDataS={};
             fromDataS=this.formdata;
             let SaveFlag=false;
@@ -304,9 +332,9 @@ export default {
             }
             if(SaveFlag){
                 if(this.NewOrEditFlag==="NEW"){
-                    this.saveNewMenu(fromDataS);
+                    this.saveNewMenu(fromDataS,type);
                 }else{
-                    this.saveEditmenu(fromDataS);
+                    this.saveEditmenu(fromDataS,type);
                 }
             }
         },
@@ -315,7 +343,6 @@ export default {
             let formDataA =data;
             this.$api.documentManagement.findDocumentManageById(formDataA).then(response => {
                 let responsevalue = response;
-                debugger;
                 if (responsevalue.data.data) {
                     let returndata = responsevalue.data;
                     let tableDataArr=returndata.data;
@@ -328,7 +355,7 @@ export default {
                     this.$message.success('查询失败!');
                 }
             });
-
+            //查询操作记录
             formDataA.page=this.pageNum;
             formDataA.size=this.pageSize;
             this.$api.documentManagement.getDocumentRecordByMasterid(formDataA).then(response => {
@@ -337,22 +364,33 @@ export default {
                     let returndata = responsevalue.data;
                     let tableDataArr=returndata.data;
                     this.formdata1 = tableDataArr.rows;
+                    for (let i = 0; i < tableDataArr.rows.length; i++) {
+                      //时间格式化
+                      if(tableDataArr.rows[i].foperatetime){
+                        tableDataArr.rows[i].foperatetime = this.formateDate(tableDataArr.rows[i].foperatetime);
+                      }
+                    }
                     this.total=tableDataArr.total;
                 } else {
                     this.$message.success('查询操作纪录失败!');
                 }
             });
         },
-        //提交：新建
-        saveNewMenu(data){
+        //提交暂存：新建 ：修改
+        saveNewMenu(data,type){
             let foid ='';
             data.fpid = this.rowNMMDataObj.fpid;
             let formDataA =data;
-            let creator = localStorage.getItem('ms_userId'); 
+            let creator = localStorage.getItem('ms_userId');
             formDataA.fcreator = creator;
             formDataA.fistop = '2';
-            formDataA.fdocstatus = '2';
-            formDataA.fstatus = 2;
+            if(type == 1){//提交
+              formDataA.fdocstatus = '2';
+              formDataA.fstatus = 2;
+            } else {//暂存
+              formDataA.fdocstatus = '1';
+              formDataA.fstatus = 1;
+            }
             this.$api.documentManagement.insertDocumentManage(formDataA).then(response => {
                 let responsevalue = response;
                 if (responsevalue.data.data) {
@@ -361,32 +399,7 @@ export default {
                     if(this.uploadFiles != null){
                         this.uploadFile("document",foid);
                     }
-                    this.$message.success('新建成功!');
-                    this.ShowFinancVisible=false;
-                    this.$emit('changeShow',false);
-                } else {
-                    this.$message.error(responsevalue.data.msg);
-                }
-            });
-        },
-        //暂存：新建
-        tempSaveNewMenu(data){
-            data.fpid = this.rowNMMDataObj.fpid;
-            let formDataA =data;
-            let creator = localStorage.getItem('ms_userId'); 
-            formDataA.fcreator = creator;
-            formDataA.fistop = '2';
-            formDataA.fdocstatus = '1';
-            formDataA.fstatus = 1;
-            this.$api.documentManagement.insertDocumentManage(formDataA).then(response => {
-                let responsevalue = response;
-                if (responsevalue.data.data) {
-                    foid = responsevalue.data.data;
-                    //上传附件
-                    if(this.uploadFiles != null){
-                        this.uploadFile("document",foid);
-                    }
-                    this.$message.success('暂存成功!');
+                    this.$message.success(type == 1? '新建成功!': '暂存成功!');
                     this.ShowFinancVisible=false;
                     this.$emit('changeShow',false);
                 } else {
@@ -395,11 +408,25 @@ export default {
             });
         },
         //修改文档管理提交
-        saveEditmenu(data){
+        saveEditmenu(data,type){
+            if(type == 0 && data.fdocstatus != "暂存") { //暂存
+              this.$message.error("非暂存态不可以暂存!");
+              return;
+            }
             let files = this.rowDataFileObj;
             let foid = this.formdata.foid;
             let attachment ={};
+            if(data.fdocstatus == "暂存"){
+              data.fdocstatus = 1;
+            } else if(data.fdocstatus == "待发布"){
+              data.fdocstatus = 2;
+            } else if(data.fdocstatus == "已发布"){
+              this.$message.error("文档已发布不可以修改!");
+              return;
+            }
             let formDataA =data;
+            let creator = localStorage.getItem('ms_userId');
+            formDataA.fcreator = creator;
             this.$api.documentManagement.updateDocumentManage(formDataA).then(response => {
                 let responsevalue = response;
                 if (responsevalue.data.data) {
@@ -489,6 +516,19 @@ export default {
                 }
             });
         },
+        //格式化日期
+        formateDate(date){
+          let datetime= new Date(date);
+          return new Date(Date.UTC(
+            datetime.getFullYear(),
+            datetime.getMonth(),
+            datetime.getDate(),
+            datetime.getHours(),
+            datetime.getMinutes(),
+            datetime.getSeconds()))
+            .toISOString()
+            .slice(0, 19).replace('T',' ');
+        },
 
     },
     watch:{
@@ -502,7 +542,7 @@ export default {
             if(this.rowNMMDataObj.NewOrEditFlag==="NEW"){
                 this.isShowOperateRecord = false;
                 this.formdata={};
-                this.formdata.flevel=this.rowNMMDataObj.flevel; 
+                this.formdata.flevel=this.rowNMMDataObj.flevel;
                 this.formdata.fcreator = localStorage.getItem('ms_username');
                 this.formdata.fcreatetime =new Date() ;
             } else if (this.rowNMMDataObj.NewOrEditFlag==="EDIT"){

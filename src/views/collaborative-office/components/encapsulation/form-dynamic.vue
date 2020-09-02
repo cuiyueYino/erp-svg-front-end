@@ -67,13 +67,13 @@
 		</el-form>
 		<!--弹出框-->
 		<div v-if="dialogVisible">
-			<el-dialog :title="titleShow" top="1vh" destroy-on-close center :visible.sync="dialogVisible" width="80%">
+			<erpDialog :title="titleShow" erpDialogwidth="false" :dialogShow="dialogVisible">
 				<formIconComponents ref="child" :showFig="showCon" :dataCon="dataCon"></formIconComponents>
-				<div slot="footer" class="dialog-footer">
+				<div slot="footer">
 					<el-button @click="dialogVisible = false">取 消</el-button>
 					<el-button type="primary" @click="getDialogVisible">确 定</el-button>
 				</div>
-			</el-dialog>
+			</erpDialog>
 		</div>
 		<!--弹出框-工作流-->
 		<workflowDialog ref="childWork"></workflowDialog>
@@ -660,6 +660,7 @@
 								listChild.colList[i2].serviceNow.fid = id
 								//循环查询
 								var conNow = await this.$api.collaborativeOffice.findTServiceItemByParams(listChild.colList[i2].serviceNow).then(data => {
+									console.log(data)
 									return new Promise(resolve => {
 										//把根据‘不同的服务’获取到的返回值从新赋值，都是id和name的形式，方便调用
 										switch(listChild.colList[i2].serviceNow.fcode) {
@@ -719,19 +720,19 @@
 						this.titleShow = "公司"
 						this.$set(this.dataCon, "context", row.browseBoxList)
 						//数据回显(保证选中后再次打开数据依旧被选中)下面两条一样
-						typeof(this.ruleForm[row.field]) != "undefined" ? this.$set(this.dataCon,"echo",this.ruleForm[row.field].split(',')) : this.$set(this.dataCon,"echo",[])
+						typeof(this.ruleForm[row.field]) != "undefined" ? this.$set(this.dataCon, "echo", this.ruleForm[row.field].split(',')): this.$set(this.dataCon, "echo", [])
 						break;
 					case "2":
 						this.showCon = "organization"
 						this.titleShow = "部门"
 						this.$set(this.dataCon, "context", row.browseBoxList)
-						typeof(this.ruleForm[row.field]) != "undefined" ? this.$set(this.dataCon,"echo",this.ruleForm[row.field].split(',')) : this.$set(this.dataCon,"echo",[])
+						typeof(this.ruleForm[row.field]) != "undefined" ? this.$set(this.dataCon, "echo", this.ruleForm[row.field].split(',')): this.$set(this.dataCon, "echo", [])
 						break;
 					case "3":
 						this.showCon = "organization"
 						this.titleShow = "职位"
 						this.$set(this.dataCon, "context", row.browseBoxList)
-						typeof(this.ruleForm[row.field]) != "undefined" ? this.$set(this.dataCon,"echo",this.ruleForm[row.field].split(',')) : this.$set(this.dataCon,"echo",[])
+						typeof(this.ruleForm[row.field]) != "undefined" ? this.$set(this.dataCon, "echo", this.ruleForm[row.field].split(',')): this.$set(this.dataCon, "echo", [])
 						break;
 					case "4":
 						this.showCon = "personnel"

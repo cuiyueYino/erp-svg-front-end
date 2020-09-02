@@ -11,7 +11,7 @@
             <el-row>
                 <el-col :span="6">
                     <el-form-item label="公司：">
-                        <el-select v-model="formdata.company" value-key="value" :disabled="true">
+                        <el-select v-model="formdata.companyName" value-key="value" :disabled="true">
                             <el-option
                                 v-for="item in companyData"
                                 :key="item.value"
@@ -47,14 +47,11 @@
                 </el-col>
             </el-row>
             <el-row>
-                <el-col :span="5">
+                <el-col :span="6">
                     <el-form-item label="计划部门：">
                         <el-input v-model="formdata.planDepName" :disabled="true"></el-input>
                     </el-form-item>
                 </el-col>
-                <el-col :span="1">
-                    <el-button type="primary" size="mini" icon="el-icon-search" :disabled="true"></el-button>
-                </el-col>
                 <el-col :span="6" :offset="2">
                 <el-form-item label="编制日期：" :label-width="formLabelWidth" prop="editDate">
                     <el-date-picker
@@ -72,7 +69,7 @@
                 </el-col>
                 <el-col :span="6" :offset="2">
                     <el-form-item label="经办人：">
-                        <el-input v-model="formdata.gestor" :disabled="true"></el-input>
+                        <el-input v-model="formdata.gestorName" :disabled="true"></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>
@@ -85,32 +82,132 @@
             </el-row>
             <el-tabs v-model="atctiveName" @tab-click="handleClick">
                 <el-tab-pane label="年计划编制" name="first">
-                    <dynamic-table
-                        :columns="columns"
-                        :table-data="tableData"
-                        :total="total"
-                        size="mini"
-                        :isShowPager="false"    
-                        ref="multipleTable"
-                        :page-num="pageNum"
-                        :page-size="pageSize"
-                        v-loading="false"
-                        element-loading-text="加载中"
-                    ></dynamic-table>
+                    <el-table :data="tableData" border>
+                        <el-table-column
+                            prop="index"
+                            label="序号"
+                            >
+                        </el-table-column>
+                        <el-table-column
+                            prop="companyName"
+                            label="公司"
+                            >
+                        </el-table-column>
+                        <el-table-column
+                            prop="departmentName"
+                            label="部门"
+                            >
+                        </el-table-column>
+                        <el-table-column
+                            prop="taskLevel"
+                            label="任务级别"
+                            >
+                        </el-table-column>
+                        <el-table-column
+                            prop="periodicityTask"
+                            label="周期性任务"
+                            >
+                        </el-table-column>
+                        <el-table-column
+                            prop="periodicityMonth"
+                            label="跨月任务"
+                            >
+                        </el-table-column>
+                        <el-table-column
+                            prop="workName"
+                            label="工作名称"
+                            >
+                        </el-table-column>
+                        <el-table-column
+                            prop="workStandard"
+                            label="工作标准"
+                            >
+                        </el-table-column>
+                        <el-table-column
+                            prop="planFinish"
+                            label="Q累计预计计划完成指标"
+                            >
+                        </el-table-column>
+                        <el-table-column
+                            prop="unit"
+                            label="计量单位"
+                            >
+                        </el-table-column>
+                        <el-table-column
+                            prop="emphasisLevel"
+                            label="重点级别"
+                            >
+                        </el-table-column>
+                        <el-table-column
+                            prop="beginDate"
+                            label="开始时间"
+                            >
+                        </el-table-column>
+                        <el-table-column
+                            prop="endDate"
+                            label="结束时间"
+                            >
+                        </el-table-column>
+                        <el-table-column
+                            prop="glResponsibleName"
+                            label="责任人"
+                            >
+                        </el-table-column>
+                        <el-table-column
+                            prop="responsibleName"
+                            label="协办人"
+                            >
+                        </el-table-column>
+                        <el-table-column
+                            prop="secretaryName"
+                            label="秘书"
+                            >
+                        </el-table-column>
+                        <el-table-column
+                            prop="examinerName"
+                            label="检查人"
+                            >
+                        </el-table-column>
+                        <el-table-column
+                            prop="assignerName"
+                            label="交办人"
+                            >
+                        </el-table-column>
+                        <el-table-column
+                            prop="completion"
+                            label="完成情况"
+                            >
+                        </el-table-column>
+                        <el-table-column
+                            prop="noFinishReason"
+                            label="情况说明"
+                            >
+                        </el-table-column>
+                        <el-table-column
+                            prop="remark"
+                            label="备注"
+                            >
+                        </el-table-column>
+                    </el-table>
                 </el-tab-pane>
                 <el-tab-pane label="附件" name="fourth">
-                    <dynamic-table
-                        :columns="attachColumns"
-                        :table-data="tableData"
-                        :total="total"
-                        size="mini"
-                        :isShowPager="false"
-                        ref="multipleTable"
-                        :page-num="pageNum"
-                        :page-size="pageSize"
-                        v-loading="false"
-                        element-loading-text="加载中"
-                    ></dynamic-table>
+                     <el-table :data="attachData" border>
+                        <el-table-column
+                            prop="index"
+                            label="序号"
+                            >
+                        </el-table-column>
+                        <el-table-column
+                            prop="name"
+                            label="名称"
+                            >
+                        </el-table-column>
+                        <el-table-column
+                            prop="caozuo"
+                            label="操作"
+                            >
+                        </el-table-column>
+                    </el-table>
                 </el-tab-pane>
             </el-tabs> 
         </el-form>
@@ -122,7 +219,7 @@ import proData from '../../components/common/proData/proData';
 import DynamicTable from '../../components/common/dytable/dytable.vue';
 export default {
     props: {
-        rowDepartAnnPlanDetDataObj: Object,
+        rowDepartAnnPlanDetDataObj: "",
         rowDepartAnnPlanDettype:Boolean,
     },
     components: {
@@ -135,13 +232,13 @@ export default {
             disabled:false,
             labelPosition: 'left',
             formdata:{
-                company:'',
+                companyName:'',
                 voucherId:'',
                 editId:'',
                 year:'',
                 planDepName:'',
                 editDate:'',
-                gestor:'',
+                gestorName:'',
                 remark:'',
             },
             companyData:[],
@@ -150,57 +247,7 @@ export default {
             pageNum: 1,
             pageSize: 10,
             total: 20,
-            columns:[
-                {
-                    type: "selection"
-                },
-                {
-                    key: 'key1',
-                    title: '序号'
-                },
-                {
-                    key: 'key2',
-                    title: '公司'
-                },
-                {
-                    key: 'key3',
-                    title: '部门'
-                },
-                {
-                    key: 'key4',
-                    title: '任务级别'
-                },
-                {
-                    key: 'key5',
-                    title: '周期性任务'
-                },
-                {
-                    key: 'key6',
-                    title: '跨月任务'
-                },
-                {
-                    key: 'key7',
-                    title: '工作名称'
-                },
-                {
-                    key: 'key8',
-                    title: '工作标准'
-                },
-            ],
-            attachColumns:[
-                {
-                    key: 'key1',
-                    title: '序号'
-                },
-                {
-                    key: 'key2',
-                    title: '名称'
-                },
-                {
-                    key: 'key3',
-                    title: '操作'
-                },
-            ],
+            attachData:[],
             tableData:[],
         }
     },
@@ -208,127 +255,55 @@ export default {
         handleClick() {
             
         },
-    //获取临时任务派发详情
-    getDepYearPlanDetail(data) {
-        debugger;
-      this.$api.processSet.getDepYearPlanDetail(data)
-      .then((res) => {
-            if(res.data.code == 0){
-              this.formdata = res.data.data;
-              let tableDataObj = {};
-              tableDataObj["key1"] = '计划值';
-              tableDataObj["key2"] = 'Q 累计预计计划完成指标';
-              tableDataObj["optionValue"] = res.data.data.optionValue;
-              tableDataObj["unit"] = res.data.data.unit;
-              this.tableData.push(tableDataObj);
-              let taskStateParams = res.data.data.taskState;
-              let taskTypeParams = res.data.data.taskType;
-              let taskLeveParams = res.data.data.taskLevel;
-            switch(taskStateParams) {
-                case "1": 
-                    this.formdata.taskState = '可执行';
-                    break;
-                case "2":
-                    this.formdata.taskState = '已完成';
-                    break;
-                case "3":
-                    this.formdata.taskState = '未完成';
-                    break;
-                case "4":
-                    this.formdata.taskState = '延期';
-                    break;
-                case '5':
-                    this.formdata.taskState ='作废';
-                    break;
-                case '0':
-                    this.formdata.taskState ='未发生';
-                    break;
-                case '10':
-                    this.formdata.taskState ='已报待批';
-                    break;
-                default:
-                    break; 
+        getDepYearPlanDetail(data) {
+        this.$api.processSet.getDepYearPlanDetail(data)
+        .then((res) => {
+            console.log(res);
+                if(res.data != ""){
+                this.formdata = res.data;
+                var tableObj = res.data.line;
+                for(var i=0;i<tableObj.length;i++){
+                   var periodicityTaskData = tableObj[i].periodicityTask;
+                   var periodicityMonthData = tableObj[i].periodicityMonth;
+                    tableObj[i]['index'] = i + 1;
+                    if(periodicityTaskData) {
+                        tableObj[i].periodicityTask = "是"
+                    } else {
+                        tableObj[i].periodicityTask = "否"
+                    }
+                    if(periodicityMonthData) {
+                        tableObj[i].periodicityMonth = "是"
+                    } else {
+                        tableObj[i].periodicityMonth = "否"
+                    }
+                    // tableObj[i]['num'] = i + 1;
+                //     switch(taskTypeParams) {
+                //         case 1: 
+                //             tableObj[i].taskType = '主任务';
+                //             break;
+                //         case 2:
+                //             tableObj[i].taskType = '临时任务';
+                //             break;
+                //         default:
+                //             break; 
+                // }
+                }
+                this.tableData = tableObj;
+                } else {
+                    this.$message.error("服务器异常!");
+                }
+            }),error => {
+            console.log(error);
             }
-            // debugger;
-            console.log(taskTypeParams);
-            switch(taskTypeParams) {
-                case 1: 
-                    this.formdata.taskType = '主任务';
-                    break;
-                case 2:
-                    this.formdata.taskType = '临时任务';
-                    break;
-                case 3:
-                    this.formdata.taskType = '配合任务';
-                    break;
-                default:
-                    break; 
-            }
-            switch(taskLeveParams) {
-                case 1: 
-                    this.formdata.taskLevel = '一';
-                    break;
-                case 2:
-                    this.formdata.taskLevel = '二';
-                    break;
-                case 3:
-                    this.formdata.taskLevel = '三';
-                    break;
-                case 4:
-                    this.formdata.taskLevel = '四';
-                    break;
-                case 5:
-                    this.formdata.taskLevel ='五';
-                    break;
-                case 6:
-                    this.formdata.taskLevel ='六';
-                    break;
-                case 7:
-                    this.formdata.taskLevel ='七';
-                    break;
-                case 8:
-                    this.formdata.taskLevel ='八';
-                    break;
-                case 9:
-                    this.formdata.taskLevel ='九';
-                    break;
-                case 10:
-                    this.formdata.taskLevel ='十';
-                    break;
-                default:
-                    break; 
-            }
-            if(res.data.data.groupPoint) {
-                this.focusLevelCheckList.push('集团重点');
-            } else if(res.data.data.companyPoint) {
-                this.focusLevelCheckList.push('公司重点');
-            }  else if(res.data.data.departmentPoint) {
-                 this.focusLevelCheckList.push('部门重点')
-            } else {
-                this.focusLevelCheckList.push('');
-            }
-
-
-                // this.getTreeData.forEach((item,index) => {
-                //    this.treeData.push(
-                //       {
-                //         label:item.fname,
-                //         foid:item.foid,
-                //       }
-                //    )
-                // })
-            }
-        }),error => {
-          console.log(error);
-        }
-    },
+        },
+        
     },
     watch:{
         rowDepartAnnPlanDettype(oldVal,newVal){
             this.ShowFinancVisible=this.rowDepartAnnPlanDettype;
             let EACHPerEachJobDataSelected = {};
-            EACHPerEachJobDataSelected.id = this.rowDepartAnnPlanDetDataObj.fsrcoId;
-            this.getDepYearPlanDetail(EACHPerEachJobDataSelected);
+            EACHPerEachJobDataSelected.id = this.rowDepartAnnPlanDetDataObj;
+            this.getDepYearPlanDetail(JSON.stringify(EACHPerEachJobDataSelected));
         }
     }
 }

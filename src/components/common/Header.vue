@@ -59,10 +59,10 @@
 				this.bus.$emit('collapse', this.collapse);
 			}
 		},
-		created(){
-			if(this.$route.name == "oaCompanyHome" || this.$route.name == "oaPersonalHome"){
+		created() {
+			if(this.$route.name == "oaCompanyHome" || this.$route.name == "oaPersonalHome") {
 				this.showFig = true
-			}else{
+			} else {
 				this.showFig = false
 			}
 		},
@@ -99,7 +99,10 @@
 					localStorage.removeItem('ms_username');
 					localStorage.removeItem('ms_name');
 					localStorage.removeItem('ms_userId');
-					this.$router.push('/');
+					this.$router.push({
+						name :"/login"
+					});
+					location.reload();
 				} else if(command == 'change') {
 					this.dialogVisible = true;
 				}
@@ -141,7 +144,7 @@
 </script>
 <style scoped lang="scss">
 	.el-dropdown-menu__item--divided {
-		margin-top: 0px!important ;
+		margin-top: 0px!important;
 	}
 	
 	.header {

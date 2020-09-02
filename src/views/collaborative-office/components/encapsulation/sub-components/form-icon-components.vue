@@ -22,7 +22,7 @@
 					<el-button type="primary" plain @click="resetForm('formInlineTName')" class="search-all">重置</el-button>
 				</el-form-item>
 			</el-form>
-			<vxe-table border :loading="loading" ref="multipleTable" align="center" size="small" highlight-current-row height="650" :data="dataCon.context">
+			<vxe-table border :loading="loading" ref="multipleTable" align="center" size="small" highlight-current-row  height="380" :data="dataCon.context">
 				<vxe-table-column type="checkbox" width="60"></vxe-table-column>
 				<vxe-table-column field="tcode" title="人员编码"></vxe-table-column>
 				<vxe-table-column field="tname" title="人员名称"></vxe-table-column>
@@ -209,7 +209,6 @@
 <style scoped>
 	
 	.treeDivClass {
-		height: 600px;
 		overflow: auto;
 	}
 	

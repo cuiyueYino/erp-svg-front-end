@@ -1,10 +1,10 @@
 <template>
     
     <div class="most-warapper">     
-       <iframe src="http://192.168.85.96:6013/indexDatabaseEntry" style="width:100%;height:764px;border:0px;padding:0px;"  class="indexDatabaseEntry"></iframe>
+       <iframe :src="$GLOBAL.htmlUrl + 'indexLibrary' " style="width:100%;height:764px;border:0px;padding:0px;"  class="indexLibrary"></iframe>
     </div>
 </template>
-
+indexLibrary
 7 <script>
 export default {
      data () {
@@ -24,14 +24,14 @@ export default {
     .sidebar {
         z-index:999;
     }
-    .indexDatabaseEntry {
+    .indexLibrary {
         z-index: 0;
         position: absolute;
     }
     .tags {
         z-index:999;
     }
-    .indexDatabaseEntry .page-heading  {
+    .indexLibrary .page-heading  {
         padding-top:0px !important;
     }
 </style>

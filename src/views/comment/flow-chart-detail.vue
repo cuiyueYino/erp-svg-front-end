@@ -36,97 +36,7 @@ export default {
             total: 20,
             titleName:'',
             labelPosition: 'left',
-            treeData:[
-                {
-                    name:'节点1',
-                    tatile:'wqwq',
-                    type:'closed'
-                },
-                {
-                    name:'节点A1',
-                    tatile:'wqwq',
-                    type:'current'
-                },
-                {
-                    name:'节点B11111',
-                    tatile:'wqwq',
-                    type:'after'
-                },
-                {
-                    name:'节点C1',
-                    tatile:'wqwq',
-                    type:'after'
-                },
-                {
-                    name:'节点C12',
-                    tatile:'wqwq',
-                    type:'after'
-                },
-                {
-                    name:'节点C13',
-                    tatile:'wqwq',
-                    type:'after'
-                },
-                {
-                    name:'节点C14',
-                    tatile:'wqwq',
-                    type:'after'
-                },
-                {
-                    name:'节点C15',
-                    tatile:'wqwq',
-                    remak:'error end',
-                    type:'after'
-                },
-                {
-                    name:'节点C122',
-                    tatile:'wq22wq',
-                    remak:'error end',
-                    type:'after'
-                },
-                {
-                    name:'节点C322',
-                    tatile:'wq22wq',
-                    remak:'error end',
-                    type:'after'
-                },
-                {
-                    name:'节点C34',
-                    tatile:'wq22wq',
-                    remak:'error end',
-                    type:'after'
-                },
-                {
-                    name:'节点C344',
-                    tatile:'wq22wq',
-                    remak:'error end',
-                    type:'after'
-                },
-                {
-                    name:'节点C344',
-                    tatile:'wq22wq',
-                    remak:'error end',
-                    type:'after'
-                },
-                {
-                    name:'节点C344',
-                    tatile:'wq22wq',
-                    remak:'error end',
-                    type:'after'
-                },
-                {
-                    name:'节点C344',
-                    tatile:'wq22wq',
-                    remak:'error end',
-                    type:'after'
-                },
-                {
-                    name:'节点C344',
-                    tatile:'wq22wq',
-                    remak:'error end',
-                    type:'after'
-                }
-            ]
+            treeData:[]
         };
     },
     components: {
@@ -149,39 +59,59 @@ export default {
     },
     watch:{
         rowFCDtype(oldVal,newVal){
-            this.ShowFinancVisible=this.rowFCDtype;
-            let finandata=this.rowFCDDataObj.finanrowId;
-            let formDataA ={};
-            formDataA.id=finandata;
-            this.title=this.rowFCDDataObj.nametitle;
-            this.titleName='工程付款流程';
-            /*this.$api.task.getUserCreditContractRegisterVO(formDataA).then(response => {
-                let responsevalue = response;
-                if (responsevalue) {
+            if(this.rowFCDtype){
+                let finandata=this.rowFCDDataObj.finanrowId;
+                let formDataA ={};
+                formDataA.bizMailId=finandata;
+                formDataA.currUserId=localStorage.getItem("ms_userId");
+                this.title=this.rowFCDDataObj.nametitle;
+                this.titleName=this.rowFCDDataObj.finanrowname;
+                //fstatus 1-外处理 2当前节点 3 已处理 -2 结束
+                this.$api.processSet.viewProcess(formDataA).then(response=>{
+                    let responsevalue = response;
                     let returndata = responsevalue.data;
-                    let tableDataArr=returndata.data;
-                    this.disabled = true;
-                    this.editabled=false;
-                    tableDataArr.loandateStr=this.$Uformat.formatDateTYMD(tableDataArr.loandate);
-                    tableDataArr.duedateStr=this.$Uformat.formatDateTYMD(tableDataArr.duedate);
-                    tableDataArr.depositstartdateStr=this.$Uformat.formatDateTYMD(tableDataArr.depositstartdate);
-                    tableDataArr.depositenddateStr=this.$Uformat.formatDateTYMD(tableDataArr.depositenddate);
-                    tableDataArr.voucherdateStr=this.$Uformat.formatDateTYMD(tableDataArr.voucherdate);
-                    if(tableDataArr.pre == true){
-                        this.prechecked='是';
-                    }else if(tableDataArr.pre == false){
-                        this.prechecked='否';
+                    if (returndata.code =='0' || returndata.code ==0) {
+                        let tableDataArr=returndata.data;
+                        for(let i=0;i<tableDataArr.length;i++){
+                            if(tableDataArr[i].fstatus){
+                                if(tableDataArr[i].fstatus ==='1'){
+                                    tableDataArr[i].type="after";
+                                }else if(tableDataArr[i].fstatus ==='2'){
+                                    tableDataArr[i].type="current";
+                                }else if(tableDataArr[i].fstatus ==='3'){
+                                    tableDataArr[i].type="closed";
+                                }else{
+                                    tableDataArr[i].type="after";
+                                }   
+                            }else{
+                                tableDataArr[i].type="after";
+                            }
+                            tableDataArr[i].remak=tableDataArr[i].fstatusDesc;
+                            if(tableDataArr[i].participators){
+                                let tatileS = tableDataArr[i].participators;
+                                let tatileArr=tatileS.split(',');
+                                if(tatileArr.length > 5){
+                                    let tatileStr='';
+                                    for(let j=0;j<5;j++){
+                                        tatileStr+=tatileArr[j]+',';
+                                    }   
+                                    tableDataArr[i].tatile=tatileStr+"...";
+                                }else{
+                                    tableDataArr[i].tatile=tableDataArr[i].participators;
+                                }
+                            }else{
+                                tableDataArr[i].tatile=tableDataArr[i].participators;
+                            }
+                            //tableDataArr[i].tatile=tableDataArr[i].participators;
+                            tableDataArr[i].name=tableDataArr[i].name?tableDataArr[i].name:tableDataArr[i].activityName;
+                        }
+                        this.treeData=tableDataArr;
+                        this.ShowFinancVisible=this.rowFCDtype;
+                    } else {
+                        this.$message.error(returndata.msg);
                     }
-                    this.formdata=tableDataArr;
-                    this.rowPDLDataObj=[];
-                    this.rowCDLDataObj=[];
-                    this.NewEditVisible= true;
-                    this.showCheckBox= false;
-                    this.checked=false;
-                } else {
-                    this.$message.success('数据库没有该条数据!');
-                }
-            });*/
+                });
+            }
         }
     }
 }

@@ -125,9 +125,9 @@
               >
                 <el-option
                   v-for="item in companyoptions"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value"
+                  :key="item.id"
+                  :label="item.name"
+                  :value="item.id"
                 ></el-option>
               </el-select>
             </el-col>
@@ -231,6 +231,7 @@
                 type="datetime"
                 size="mini"
                 default-time="12:00:00"
+                value-format="yyyy-MM-dd HH:mm:ss"
                 placeholder="选择日期"
               >
               </el-date-picker>
@@ -251,6 +252,7 @@
                 type="datetime"
                 size="mini"
                 default-time="12:00:00"
+                value-format="yyyy-MM-dd HH:mm:ss"
                 placeholder="选择日期"
               >
               </el-date-picker>
@@ -298,6 +300,7 @@
                 type="datetime"
                 size="mini"
                 default-time="12:00:00"
+                value-format="yyyy-MM-dd HH:mm:ss"
                 placeholder="选择日期"
               >
               </el-date-picker>
@@ -318,6 +321,7 @@
                 type="datetime"
                 size="mini"
                 default-time="12:00:00"
+                value-format="yyyy-MM-dd HH:mm:ss"
                 placeholder="选择日期"
               >
               </el-date-picker>
@@ -501,7 +505,7 @@ export default {
       checked: false,
       DataForm: {},
       WFMtypeoptions: [],
-      companyoptions: new proData().company,
+      companyoptions:[],
       commonMeta: new proData().commonMetaClass,
       formLabelWidth: "120px",
     };
@@ -517,9 +521,20 @@ export default {
     //fromdata1.infosBeginNum=0;
     //fromdata1.infosEndNum=2000;
     this.getmetaClass(fromdata1);
+    this.selectCom();
   },
   computed: {},
   methods: {
+    selectCom(){
+      this.$api.jobUserManagement.getCompanyData().then((res) => {
+        if (res.status == "200") {
+          this.companyoptions= res.data.data.rows;
+        }
+      }),
+      (error) => {
+        console.log(error);
+      };
+    },
     //获取待办事项
     getHunTableData(data) {
       let fromdata = data;
@@ -695,13 +710,27 @@ export default {
     },
     //流程图查看
     flowChart() {
-      let selectData = this.multipleSelection;
-      let finandata = {};
+      if (this.multipleSelection.length > 1) {
+        this.$message.error("只能选择一个");
+      } else if (this.multipleSelection.length == 0) {
+        this.$message.error("请选择一项");
+      } else {
+        let selectData = this.multipleSelection;
+        let finandata = {};
+        finandata.finanrowname = selectData[0].fsrcCompany+"/"+selectData[0].factivityName;
+        finandata.finanrowId = selectData[0].foid;
+        finandata.nametitle = selectData[0].fsubject;
+        this.rowFCDDataObj = finandata;
+        this.rowFCDtype = true;
+        console.log(selectData)
+      }
+      
+      /*let finandata = {};
       finandata.finanrowname = "人员缺省查询方案";
       finandata.finanrowId = "QS_0056";
       finandata.nametitle = "入库申请申请人审批";
       this.rowFCDDataObj = finandata;
-      this.rowFCDtype = true;
+      this.rowFCDtype = true;*/
     },
     //流程图关闭
     closeflowchart(data) {
@@ -718,8 +747,8 @@ export default {
     //查询搜索
     onHandleMoreSearch() {
       let fromdata = {};
-      fromdata.page = this.pageNum;
-      fromdata.size = this.pageSize;
+      fromdata.infosBeginNum = this.pageNum;
+      fromdata.infosEndNum = this.pageSize;
       let CompanyS = this.DataForm.srcCompany;
       if (CompanyS && CompanyS != "") {
         fromdata.srcCompany = this.DataForm.srcCompany;
@@ -764,6 +793,7 @@ export default {
       if (overTimeS && overTimeS != "") {
         fromdata.overTime = this.DataForm.overTime;
       }
+      fromdata.userId = localStorage.getItem("ms_userId");
       this.getHunTableData(fromdata);
     },
     //查询发起人员

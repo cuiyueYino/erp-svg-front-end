@@ -23,9 +23,9 @@
                 </el-col>
                 <el-col :span="6" :offset="2">
                     <el-form-item label="项目：">
-                        <el-select v-model="formdata.project" value-key="value" :disabled="true">
+                        <el-select v-model="formdata.projectId" value-key="value" :disabled="true">
                             <el-option
-                                v-for="item in companyData"
+                                v-for="item in projectIdData"
                                 :key="item.value"
                                 :label="item.label"
                                 :value="item.value"
@@ -37,38 +37,36 @@
             <el-row>
                 <el-col :span="6">
                     <el-form-item label="部门：">
-                        <el-input v-model="formdata.bumen" :disabled="true"></el-input>
+                        <el-input v-model="formdata.departmentName" :disabled="true"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="6" :offset="2">
                     <el-form-item label="任务状态：">
-                        <el-input v-model="formdata.renwuzhaungtai" :disabled="true"></el-input>
+                        <el-input v-model="formdata.taskStatusName" :disabled="true"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="6" :offset="2">
                     <el-form-item label="任务类型：">
-                        <el-input v-model="formdata.renwuleixing" :disabled="true"></el-input>
+                        <el-input v-model="formdata.taskType" :disabled="true"></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>
             <el-row>
                 <el-col :span="6">
                     <el-form-item label="任务级别：">
-                        <el-input v-model="formdata.renwujibie" :disabled="true"></el-input>
+                        <el-input v-model="formdata.taskLevel" :disabled="true"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="3" :offset="1">
-                    <el-form-item label="周期性任务：" ><el-checkbox v-model="formdata.checked" :disabled="true"></el-checkbox></el-form-item>
+                    <el-form-item label="周期性任务：" ><el-checkbox v-model="formdata.periodicityTask" :disabled="true"></el-checkbox></el-form-item>
                 </el-col>
                 <el-col :span="2">
-                    <el-form-item label="年计划调整：" ><el-checkbox v-model="formdata.checked" :disabled="true"></el-checkbox></el-form-item>
+                    <el-form-item label="年计划调整：" ><el-checkbox v-model="formdata.yearPlan" :disabled="true"></el-checkbox></el-form-item>
                 </el-col>
                 <el-col :span="9" :offset="2">
                     <el-form-item label="重点级别：">
-                        <el-checkbox-group v-model="focusLevelCheckList" :disabled="true">
-                            <el-checkbox label="集团重点"></el-checkbox>
-                            <el-checkbox label="公司重点"></el-checkbox>
-                            <el-checkbox label="部门重点"></el-checkbox>
+                        <el-checkbox-group v-model="focusLevelCheckList">
+                            <el-checkbox v-for="item in itemOptions"  :label="item" :key="item" disabled>{{item}}</el-checkbox>
                         </el-checkbox-group>
                     </el-form-item>
                 </el-col>  
@@ -76,63 +74,63 @@
             <el-row>
                 <el-col :span="6">
                     <el-form-item label="工作名称：">
-                        <el-input v-model="formdata.gongzuomingcheng" :disabled="true"></el-input>
+                        <el-input v-model="formdata.workName" :disabled="true"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="14" :offset="2">
                     <el-form-item label="工作标准：">
-                        <el-input v-model="formdata.gongzuobiaozhun" :disabled="true"></el-input>
+                        <el-input v-model="formdata.workStandard" :disabled="true"></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>  
             <el-row>
                 <el-col :span="6">
                     <el-form-item label="责任人：">
-                        <el-input v-model="formdata.bumen" :disabled="true"></el-input>
+                        <el-input v-model="formdata.responsibleName" :disabled="true"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="6" :offset="2">
                     <el-form-item label="检查人：">
-                        <el-input v-model="formdata.renwuzhaungtai" :disabled="true"></el-input>
+                        <el-input v-model="formdata.examinerName" :disabled="true"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="6" :offset="2">
                     <el-form-item label="交办人：">
-                        <el-input v-model="formdata.renwuleixing" :disabled="true"></el-input>
+                        <el-input v-model="formdata.assignerName" :disabled="true"></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>
             <el-row>
                 <el-col :span="6">
                     <el-form-item label="开始时间：">
-                        <el-input v-model="formdata.starttime" :disabled="true"></el-input>
+                        <el-input v-model="formdata.beginDate" :disabled="true"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="6" :offset="2">
                     <el-form-item label="完成时间：">
-                        <el-input v-model="formdata.endtime" :disabled="true"></el-input>
+                        <el-input v-model="formdata.endDate" :disabled="true"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="6" :offset="2">
                     <el-form-item label="秘书：">
-                        <el-input v-model="formdata.mishu" :disabled="true"></el-input>
+                        <el-input v-model="formdata.secretaryName" :disabled="true"></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>
             <el-row>
                 <el-col :span="6">
                      <el-form-item label="完成情况(%)：">
-                        <el-input v-model="formdata.text1" :disabled="true"></el-input>
+                        <el-input v-model="formdata.completion" :disabled="true"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="6" :offset="2">
                     <el-form-item label="经办人：">
-                        <el-input v-model="formdata.text1" :disabled="true"></el-input>
+                        <el-input v-model="formdata.gestorName" :disabled="true"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="6" :offset="2">
                     <el-form-item label="经办时间：">
-                        <el-input v-model="formdata.text1" :disabled="true"></el-input>
+                        <el-input v-model="formdata.voucherDate" :disabled="true"></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>
@@ -186,7 +184,7 @@ import proData from '../../components/common/proData/proData';
 import DynamicTable from '../../components/common/dytable/dytable.vue';
 export default {
     props: {
-        rowEachPerEachTableDetailDataObj: Object,
+        rowEachPerEachTableDetailDataObj: "",
         rowEachPerEachTableDetailtype:Boolean,
     },
     components: {
@@ -194,6 +192,8 @@ export default {
     },
     data(){
         return{
+            itemOptions:['集团重点','公司重点','部门重点'],
+            focusLevelCheckList:[],
             formLabelWidth: '120px',
             tableFirstData:[
                 {
@@ -254,8 +254,29 @@ export default {
             ShowFinancVisible:false,
             peopleJobgsTableVisible: false,
             labelPosition: 'left',
-            formdata:{},
-            companyData:new proData().company,
+            formdata:{
+                company:'',
+                projectId:'',
+                // departmentName,
+                // taskStatusName,
+                // taskType,
+                // taskLevel,
+                // periodicityTask,
+                // yearPlan,
+                // workName,
+                // workStandard,
+                // responsibleName,
+                // examinerName,
+                // assignerName,
+                // beginDate,
+                // endDate,
+                // secretaryName,
+                // completion,
+                // gestorName,
+                // voucherDate,
+            },
+            companyData:[],
+            projectIdData:[],
             pageNum: 1,
             pageSize: 10,
             total: 20,
@@ -300,6 +321,19 @@ export default {
         MoreSearchPS(){
 
         },
+        //获取一人一表任务表详情
+        getPersonalTableTaskDetail(data) {
+        this.$api.processSet.getPersonalTableTaskDetail(data)
+        .then((res) => {
+                if(res.data.code == 0){
+                this.formdata = res.data.data;
+                let tableDataObj = {};
+                // debugger;
+                }
+            }),error => {
+            console.log(error);
+            }
+        },
     },
     watch:{
         //新建一岗一表行数据清空
@@ -316,7 +350,11 @@ export default {
             },
         rowEachPerEachTableDetailtype(oldVal,newVal){
             this.ShowFinancVisible=this.rowEachPerEachTableDetailtype;
+            let PersonalTableTaskSelected = {};
+            PersonalTableTaskSelected.id = this.rowEachPerEachTableDetailDataObj;
+            this.getPersonalTableTaskDetail(PersonalTableTaskSelected);
         }
+        
     }
 }
 </script>

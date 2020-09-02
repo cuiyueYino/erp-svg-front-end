@@ -24,13 +24,17 @@
                             node-key="foid"
                             ref="tree"
                             show-checkbox
-                            :render-content="renderContent"
                             accordion
                             @node-click="handleNodeClick">
+                              <div slot-scope="{node,data}" class="customize-tree-p">
+                                <el-tooltip class="item" effect="dark" :content="data.fname" placement="top-start">
+                                  <span>{{data.fname|labelShow}}</span>
+                                </el-tooltip>
+                              </div>
                         </el-tree>
                         </el-col>
                     </el-row>
-                </el-col>   
+                </el-col>
                 <el-col :span="18" :offset="1">
                     <el-card class="box-card">
                         <el-row :gutter="24">
@@ -94,6 +98,16 @@ import NewDocument from './new-document.vue';
 import documentData from'../base/documentData';
 
 export default {
+    //树结构 label 过长，替换显示成"..."结构
+    filters: {
+      labelShow(value) {
+        if(!value) return ''
+        if(value.length > 10) {
+          return value.slice(0, 10) + '...'
+        }
+        return value
+      }
+    },
     name:'workProcess',
     components: {
       NewDocument
@@ -198,7 +212,7 @@ export default {
             this.formInSelect.select=data;
             this.findData(1);
         },
-        
+
         //查看文档授权
         submitAuth(){
             let nodes = this.$refs.tree.getCheckedNodes();
@@ -239,10 +253,10 @@ export default {
                     } else {
                         this.$message.success('数据库没有该条数据!');
                     }
-                }); 
+                });
             }
         },
-        
+
         //树结构节点样式设置
         renderContent(h, { node, data, store }) {
             if(data){
@@ -268,7 +282,7 @@ export default {
                         </span>
                     );
                 }
-            }  
+            }
         },
         //树结构点击事件
         handleNodeClick(data) {
@@ -284,7 +298,7 @@ export default {
                 fromdata.companyName=this.input;
             }
             fromdata.fauthtype = this.formInSelect.select; //权限类型
-            
+
             this.searchMenutable(fromdata);
         },
         //table选中事件
@@ -338,9 +352,9 @@ export default {
                 } else {
                     this.$message.success('数据库没有该条数据!');
                 }
-            }); 
+            });
         },
-        
+
     }
 };
 </script>

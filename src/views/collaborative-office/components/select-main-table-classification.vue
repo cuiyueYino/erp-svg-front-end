@@ -59,7 +59,7 @@
 				<el-table-column prop="tableName" label="数据库表名" width="180" align="center"></el-table-column>
 				<el-table-column prop="remark" label="描述" align="center"></el-table-column>
 			</el-table>
-			<pageNation :total="currentTotal" ref="pageNation" @pageChange="pageChange"></pageNation>
+			<pageNation :total="currentTotal" v-if="currentTotal != 0" ref="pageNation" @pageChange="pageChange"></pageNation>
 		</el-card>
 	</div>
 </template>
@@ -115,10 +115,14 @@
 		methods: {
 			//双击选中
 			rowDblClick(row) {
-				if(typeof(this.parent.getSelectMainTableClassification) == "function") {
-					this.parent.getSelectMainTableClassification()
-				} else if(typeof(this.$parent.$parent.getSelectMainTableClassification) == "function") {
-					this.$parent.$parent.getSelectMainTableClassification()
+				if(row.status == 3) {
+					if(typeof(this.parent.getSelectMainTableClassification) == "function") {
+						this.parent.getSelectMainTableClassification()
+					} else if(typeof(this.$parent.$parent.getSelectMainTableClassification) == "function") {
+						this.$parent.$parent.getSelectMainTableClassification()
+					}
+				} else {
+					this.goOut("只能选择状态为 '有效' 的主表模板分类")
 				}
 			},
 			//查看

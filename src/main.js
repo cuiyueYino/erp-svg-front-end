@@ -37,6 +37,9 @@ import permission from './permission.js'
 //打印
 import Print from 'vue-print-nb'
 
+import erpDialog from './components/page/erpDialog.vue'
+Vue.component('erpDialog', erpDialog)
+
 Vue.prototype.$GLOBAL = globalVariable;
 
 Vue.config.productionTip = false;

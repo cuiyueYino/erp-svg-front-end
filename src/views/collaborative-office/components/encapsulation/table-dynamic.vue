@@ -34,7 +34,7 @@
 						<el-button size="mini" @click="addRow()">新建</el-button>
 					</template>
 					<template slot-scope="scope">
-						<el-button size="mini" @click="delRow(scope.$index,scope.row)">删除</el-button>
+						<el-button size="mini" type="danger" @click="delRow(scope.$index,scope.row)">删除</el-button>
 					</template>
 				</el-table-column>
 			</el-table>
@@ -538,19 +538,19 @@
 						this.showCon = "organization"
 						this.titleShow = "公司"
 						this.$set(this.dataCon, "context", row.browseBoxList)
-						typeof(this.ruleForm[row.field]) != "undefined" ? this.$set(this.dataCon,"echo",this.ruleForm[row.field].split(',')) : this.$set(this.dataCon,"echo",[])
+						typeof(this.tableRowCon[row.field]) != "undefined" ? this.$set(this.dataCon,"echo",this.tableRowCon[row.field].split(',')) : this.$set(this.dataCon,"echo",[])
 						break;
 					case "2":
 						this.showCon = "organization"
 						this.titleShow = "部门"
 						this.$set(this.dataCon, "context", row.browseBoxList)
-						typeof(this.ruleForm[row.field]) != "undefined" ? this.$set(this.dataCon,"echo",this.ruleForm[row.field].split(',')) : this.$set(this.dataCon,"echo",[])
+						typeof(this.tableRowCon[row.field]) != "undefined" ? this.$set(this.dataCon,"echo",this.tableRowCon[row.field].split(',')) : this.$set(this.dataCon,"echo",[])
 						break;
 					case "3":
 						this.showCon = "organization"
 						this.titleShow = "职位"
 						this.$set(this.dataCon, "context", row.browseBoxList)
-						typeof(this.ruleForm[row.field]) != "undefined" ? this.$set(this.dataCon,"echo",this.ruleForm[row.field].split(',')) : this.$set(this.dataCon,"echo",[])
+						typeof(this.tableRowCon[row.field]) != "undefined" ? this.$set(this.dataCon,"echo",this.tableRowCon[row.field].split(',')) : this.$set(this.dataCon,"echo",[])
 						break;
 					case "4":
 						this.showCon = "personnel"

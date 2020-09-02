@@ -23,7 +23,7 @@
      <!-- 新建用户&角色 -->
      <el-row :gutter="20">
         <el-col  v-show="type === '用户'" :span="8" class="tree-class">
-            <h3>用户</h3>
+            <h3>角色</h3>
                     <el-col :span="16">
                         <el-form-item label="搜索"  label-width="60px">
                             <el-input v-model="searchKeyW" clearable></el-input>
@@ -64,7 +64,7 @@
                     </el-form-item>
                 </el-col>
                 <el-col :span="6" v-if="type === '用户'">
-                    <el-button type="primary" size="small" plain @click="reWorkSearchTable">重置</el-button>
+                    <el-button type="primary" size="small" plain @click="reWorkSearchTable()">重置</el-button>
                     <el-button type="primary" size="small" plain @click="workSearchTable">搜索</el-button>
                 </el-col>
                 <!--<el-col :span="8" v-show="type !== '用户'">
@@ -122,8 +122,8 @@
                     </el-form-item>
                 </el-col>-->
                  <el-col :span="8">
-                    <el-form-item label="公司" v-show="type !== '用户'" label-width="70px">
-                         <el-select v-model="formData.formCompany" clearable placeholder="请选择">
+                    <el-form-item label="公司" v-show="type !== '用户'" label-width="70px" prop="fcompanyoid">
+                         <el-select v-model="formData.fcompanyoid" clearable placeholder="请选择">
                             <el-option
                             v-for="item in Companyoptions"
                             :key="item.id"
@@ -134,7 +134,7 @@
                     </el-form-item>
                 </el-col>
                 <el-col :span="6" v-show="type !== '用户'">
-                    <el-button type="primary" size="small" plain @click="reWorkSearchTable">重置</el-button>
+                    <el-button type="primary" size="small" plain @click="reWorkSearchTable()">重置</el-button>
                     <el-button type="primary" size="small" plain @click="workSearchTable">搜索</el-button>
                 </el-col>
              </el-row>
@@ -250,11 +250,11 @@ export default {
                     title: '名称'
                 },
                 {
-                    key: 'role_expression',
-                    title: '角色类别'
+                    key: 'roleTypeName',
+                    title: '角色类型'
                 },
                 {
-                    key: 'sortOrder',
+                    key: 'remark',
                     title: '描述'
                 },
                 
@@ -270,14 +270,6 @@ export default {
                 {
                     key: 'name',
                     title: '名称'
-                },
-                {
-                    key: 'remark',
-                    title: '描述'
-                },
-                {
-                    key: 'virtual',
-                    title: '虚拟组织'
                 },
             ],
             treeData:[],
@@ -345,7 +337,7 @@ export default {
                 let returndata = resData.data;
                 let tableDataArr=returndata.data.rows;
                 this.gridData=tableDataArr;
-                this.total=returndata.total;
+                this.total=returndata.data.total;
             },error=>{
                 console.log(error)
             })
@@ -430,6 +422,7 @@ export default {
         },
         //重置role table
         reWorkSearchTable(){
+            this.formData = {};
             if(this.type =='用户'){
                 let Roledata={};
                 Roledata.queryType='';

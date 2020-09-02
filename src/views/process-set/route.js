@@ -15,7 +15,7 @@ const monthlyPlan = () => import('./monthly-plan.vue');
 const personalTableTask = () => import('./personal-table-task.vue');
 const summaryEmployeeEvaluation = () => import('./summary-employee-evaluation.vue');
 const employeeAppraisal = () => import('./employee-appraisal.vue');
-const indexDatabaseEntry = () => import('./index-database-entry.vue');
+const indexLibrary = () => import('./index-library.vue');
 const postBid = () => import('./post-bid.vue'); 
 const setEndDate = () => import('./set-endDate.vue'); 
 const billType = () => import('./bill-type.vue'); 
@@ -28,7 +28,7 @@ const indexClassification = () => import('./index-classification.vue');
 const emphasisLevel = () => import('./emphasis-level.vue'); 
 const rewardPunishmentType = () => import('./reward-punishment-type.vue'); 
 const taskUpdateApply = () => import('./task-update-apply.vue'); 
-const taskEvaluateCheck = () => import('./task-evaluate-check.vue'); 
+const taskEvaluate = () => import('./task-evaluate.vue'); 
 const personalTableResult = () => import('./personal-table-result.vue'); 
 const changeResponsible = () => import('./change-responsible.vue');
 const taskForceChangeRequest = () => import('./task-force-changeRequest.vue');
@@ -40,6 +40,12 @@ const optionApplication = () => import('./option-application.vue');
 const economicIndicators = () => import('./economic-indicators.vue');
 const rewardsApply = () => import('./rewards-apply.vue');
 const optionRecord = () => import('./option-record.vue');
+const recordOfLossesIncurred = () => import('./recordOf-lossesIncurred.vue');
+const taskGeneralTable = () => import('./taskGeneral-table.vue');
+const quantificationOfPlannedTasks = () => import('./quantification-ofPlannedTasks.vue');
+const taskStatus = () => import('./task-status.vue');
+const taskExtensionApproval = () => import('./task-extensionApproval.vue');
+const temporaryTaskEstablishment = () => import('./temporary-taskEstablishment.vue');
 
 const PROJECT = [
     {
@@ -99,7 +105,7 @@ const PROJECT = [
         }
     },
     {
-        path: 'companyAnnual',
+        path: 'plan/companyAnnual',
         name: 'companyAnnual',
         component: companyAnnual,
         meta: {
@@ -187,9 +193,9 @@ const PROJECT = [
         }
     },
     {
-        path: 'plan/indexDatabaseEntry',
-        name: 'indexDatabaseEntry',
-        component: indexDatabaseEntry,
+        path: 'indexLibrary',
+        name: 'indexLibrary', 
+        component: indexLibrary,
         meta: {
             title: '指标库'
         }
@@ -283,9 +289,9 @@ const PROJECT = [
         }
     },
     {
-        path: 'taskEvaluateCheck',
-        name: 'taskEvaluateCheck',
-        component: taskEvaluateCheck,
+        path: 'taskEvaluate',
+        name: 'taskEvaluate',
+        component: taskEvaluate,
         meta: {
             title: '任务自评流程查看'
         }
@@ -378,6 +384,55 @@ const PROJECT = [
             title: '期权记录'
         }
     },
+    {
+        path: 'plan/recordOfLossesIncurred',
+        name: 'recordOfLossesIncurred',
+        component: recordOfLossesIncurred,
+        meta: {
+            title: '挂账情况记录表'
+        }
+    },
+    {
+        path: 'taskGeneralTable',
+        name: 'taskGeneralTable',
+        component: taskGeneralTable,
+        meta: {
+            title: '任务情况通用表'
+        }
+    },
+    {
+        path: 'plan/quantificationOfPlannedTasks',
+        name: 'quantificationOfPlannedTasks',
+        component: quantificationOfPlannedTasks,
+        meta: {
+            title: '计划任务量化统计表'
+        }
+    },
+    {
+        path: 'plan/taskStatus',
+        name: 'taskStatus',
+        component: taskStatus,
+        meta: {
+            title: '计划情况表'
+        }
+    },
+    {
+        path: 'plan/taskExtensionApproval',
+        name: 'taskExtensionApproval',
+        component: taskExtensionApproval,
+        meta: {
+            title: '任务延期审批'
+        }
+    },
+    {
+        path: 'plan/temporaryTaskEstablishment',
+        name: 'temporaryTaskEstablishment',
+        component: temporaryTaskEstablishment,
+        meta: {
+            title: '临时任务编制情况表'
+        }
+    },
+    
     
 ];
 export default PROJECT;

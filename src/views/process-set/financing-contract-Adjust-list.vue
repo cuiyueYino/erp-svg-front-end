@@ -16,9 +16,9 @@
                             <el-select v-model="formdata.company" value-key="value" v-bind:disabled="disabled">
                                 <el-option
                                     v-for="item in companyData"
-                                    :key="item.value"
-                                    :label="item.label"
-                                    :value="item.value"
+                                    :key="item.id"
+                                    :label="item.name"
+                                    :value="item.id"
                                 ></el-option>
                             </el-select>
                         </el-form-item>
@@ -133,7 +133,7 @@ export default {
             ShowFinancVisible:false,
             labelPosition: 'left',
             disabled:false,
-            companyData:new proData().company,
+            companyData:[],
             objectoptions:new proData().project,
             formdata: {},
             rowCCRecordDataObj: {},
@@ -154,6 +154,16 @@ export default {
         };
     },
     methods: {
+        selectCom(){
+            this.$api.jobUserManagement.getCompanyData().then((res) => {
+                if (res.status == "200") {
+                    this.companyData= res.data.data.rows;
+                }
+            }),
+            (error) => {
+                console.log(error);
+            };
+        },
         //关闭当前dialog时给父组件传值
         handleClose(){
             this.$emit('changeShow',false);
@@ -192,6 +202,7 @@ export default {
     watch:{
         financingLFCAtype(oldVal,newVal){
             this.ShowFinancVisible=this.financingLFCAtype;
+            this.selectCom();
             let finandata=this.rowLFCADataObj.finanrowId;
             let formDataA ={};
             formDataA.id=finandata;

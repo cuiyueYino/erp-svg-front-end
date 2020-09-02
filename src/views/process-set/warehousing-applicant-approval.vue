@@ -1,5 +1,4 @@
 <template>
-
     <div>
         <el-dialog :title="title" @close="handleClose" :visible.sync="ShowFinancVisible" :append-to-body="true" v-if="ShowFinancVisible" :close-on-click-modal="false" width="60%">
             <el-form
@@ -11,7 +10,7 @@
                 :label-position="labelPosition"
             >
                 <el-card>
-                    <el-row :gutter="24" v-show="!isOa">
+                    <el-row :gutter="24">
                         <el-col :span="12" :offset="12">
                             <el-button type="danger" icon="el-icon-circle-plus-outline" plain @click="baseInputTable('加签')">加签</el-button>
                             <el-button type="success" icon="el-icon-share" plain @click="baseInputTable('转发')">转发</el-button>
@@ -37,6 +36,8 @@
                         <EmpApprTabNumDetailPage  :rowEmpApprTabNumDetailDataObj="rowEmpApprTabNumDetailDataObj" :rowEmpApprTabNumDetailtype="rowEmpApprTabNumDetailtype" @changeShow="showLookOrUpdate"/>
                         <CooTaskDetailPage  :rowCooTaskDetailDataObj="rowCooTaskDetailDataObj" :rowCooTaskDetailtype="rowCooTaskDetailtype" @changeShow="showLookOrUpdate"/>
                         <EachPerEachTableAdjPage  :rowEachPerEachTableAdjDataObj="rowEachPerEachTableAdjDataObj" :rowEachPerEachTableAdjtype="rowEachPerEachTableAdjtype" @changeShow="showLookOrUpdate"/>
+                        <ConferenceApplyPage  :rowConferenceApplyDataObj="rowConferenceApplyDataObj" :rowConferenceApplytype="rowConferenceApplytype" @changeShow="showLookOrUpdate"/>
+                        <EconomicIndicatorsPage  :rowEconomicIndicatorsDataObj="rowEconomicIndicatorsDataObj" :rowEconomicIndicatorstype="rowEconomicIndicatorstype" @changeShow="showLookOrUpdate"/>
                     </el-row>  
                     <el-row>
                         <el-col :span="22">
@@ -94,11 +95,15 @@ import DepartMonPlanDetPage from '../plan-options/department-month-plan-detail.v
 import EmpApprTabDetailPage from '../plan-options/employees-appraisal-table-detail.vue';//员工考评表 P
 import EmpApprTabNumDetailPage from '../plan-options/employees-appraisal-table-num-detail.vue';//员工考评表汇总 S
 import CooTaskDetailPage from '../plan-options/cooperate-task-detail.vue';// 配合任务  A
+import ConferenceApplyPage from '../plan-options/conference-apply-detail.vue';// 会议申请
+import EconomicIndicatorsPage from '../plan-options/economic-Indicators-detail.vue';// 经济指标
 
 export default {
     props: {
         rowWAADataObj: Object,
         functionType:String,
+        factivity:String,
+        fsubject:String,
         rowWAAtype:{
              type: Boolean,
              default: false
@@ -129,7 +134,9 @@ export default {
         DepartMonPlanDetPage,
         EmpApprTabDetailPage,
         EmpApprTabNumDetailPage,
-        CooTaskDetailPage    
+        CooTaskDetailPage,
+        ConferenceApplyPage,
+        EconomicIndicatorsPage    
     },
     inject: ['reload'],
     data: function() {   
@@ -138,7 +145,6 @@ export default {
             ShowFinancVisible:false,
             labelPosition: 'left',
             disabled:false,
-            companyData:new proData().company,
             objectoptions:new proData().project,
             formdata: {
                 radio:1,
@@ -163,26 +169,30 @@ export default {
             rowEmpApprTabNumDetailtype:false,
             rowCooTaskDetailtype:false,
             rowEachPerEachTableAdjtype:false,
+            rowConferenceApplytype:false,
+            rowEconomicIndicatorstype:false,
             rowUTSDataObj:{},
             rowDataprocessObj: [],
             rowCOOTaskDataObj: {},
             rowComPanDetaiDataObj: {},
             rowEFListDataObj: {},
-            rowTEMTaskDataObj: {},
-            rowEACHPerEachJobDetDataObj: {},
+            rowTEMTaskDataObj: "",
+            rowEACHPerEachJobDetDataObj: "",
             rowEachPerEachTableDelayDataObj: {},
             rowEachPerEachTableReportDataObj: {},
             rowEachPerEachTableInvalidDataObj: {},
             rowEachPerEachTablePersonDataObj: {},
             rowEachPerEachTableAssDataObj: {},
-            rowEachPerEachTableEntrustDataObj: {},
-            rowEachPerEachTableDetailDataObj: {},
+            rowEachPerEachTableEntrustDataObj: "",
+            rowEachPerEachTableDetailDataObj: "",
             rowDepartAnnPlanDetDataObj:{},
-            rowDepartMonPlanDetDataObj:{},
+            rowDepartMonPlanDetDataObj:"",
             rowEmpApprTabDetailDataObj:{},
             rowEmpApprTabNumDetailDataObj:{},
-            rowCooTaskDetailDataObj:{},
+            rowCooTaskDetailDataObj:"",
             rowEachPerEachTableAdjDataObj:{},
+            rowConferenceApplyDataObj:{},
+            rowEconomicIndicatorsDataObj:"",
             pageNum: 1,
             pageSize: 10,
             total: 20,
@@ -214,6 +224,8 @@ export default {
             this.rowEmpApprTabNumDetailtype=false;
             this.rowCooTaskDetailtype=false;
             this.rowEachPerEachTableAdjtype=false;
+            this.rowConferenceApplytype=false;
+            this.rowEconomicIndicatorstype=false;
             this.reload();
             this.$emit('changeShow',false);
         },
@@ -258,21 +270,27 @@ export default {
         //提交按钮点击事件
         effectOrDisableMsg(){
             let paramsData = {};
-            paramsData["currUserId"] = localStorage.getItem("ms_userId");
-            paramsData["mactivityOid"] = this.rowWAADataObj.selectData[0].factivity;
-            paramsData["processCode"] = "schedule";
-            paramsData["srcOid"] = this.rowWAADataObj.selectData[0].fsrcoId;
-            paramsData["subject"] = this.rowWAADataObj.selectData[0].fsubject;
             let twfbizmailReqVoObj = {};
-            twfbizmailReqVoObj["foid"] = this.rowWAADataObj.selectData[0].foid;
+            if(this.isOa) {
+                paramsData["mactivityOid"] = this.rowWAADataObj.factivity;
+                paramsData["srcOid"] = this.rowWAADataObj.fsrcoId;
+                paramsData["subject"] = this.rowWAADataObj.fsubject;
+                twfbizmailReqVoObj["foid"] = this.rowWAADataObj.foid;
+            } else {
+                paramsData["mactivityOid"] = this.rowWAADataObj.selectData[0].factivity;
+                paramsData["srcOid"] = this.rowWAADataObj.selectData[0].fsrcoId;
+                paramsData["subject"] = this.rowWAADataObj.selectData[0].fsubject;
+                twfbizmailReqVoObj["foid"] = this.rowWAADataObj.selectData[0].foid;
+            }
+            paramsData["currUserId"] = localStorage.getItem("ms_userId");
+            paramsData["processCode"] = "schedule";
             paramsData["twfbizmailReqVo"] = twfbizmailReqVoObj;    
-            console.log(333333333333333333333);
-            
             let twfauditObj = {};
             twfauditObj["fresult"] = 1;
             twfauditObj["fopinion"] = this.formdata.remark;
             paramsData["twfaudit"] = twfauditObj;
-            console.log(JSON.stringify(paramsData));
+            console.log("提交。。。。。。。。。。。。。。。。");
+            console.log(paramsData);
             this.$api.processSet.addWfsubmit(paramsData).then(res=>{
                 if( res.data.code == 0 ){
                     this.$message.success('保存成功');
@@ -288,28 +306,37 @@ export default {
         showprocessData(){},
         //判断
         DisplayOrHide(dataType,dataContent){
+            var currentDatd = "";
+            if(this.isOa) {
+                currentDatd = dataContent.fsrcoId;
+            } else {
+                currentDatd = dataContent.selectData[0].fsrcoId;
+            }
             if(dataType === 'CoordinationTask'){
                 this.rowCooTaskDetailtype=true;
+                this.rowCooTaskDetailDataObj = currentDatd;
             }else if(dataType === 'DepartmentYearPlan'){
                 this.rowDepartAnnPlanDettype=true;
-                this.rowDepartAnnPlanDetDataObj = dataContent.selectData[0];
+                this.rowDepartAnnPlanDetDataObj = currentDatd;
             }else if(dataType === 'CompanyYearPlanCollect'){   
                 this.rowComPanDetaitype=true;
-                this.rowComPanDetaiDataObj = dataContent.selectData[0];
+                this.rowComPanDetaiDataObj = currentDatd;
             } else if(dataType === 'DepartmentMonthPlan'){
                 this.rowDepartMonPlanDettype=true;
-                this.rowDepartMonPlanDetDataObj = dataContent.selectData[0];
+                this.rowDepartMonPlanDetDataObj = currentDatd;
             } else if(dataType === 'TemporaryMission'){
                 this.rowTEMTasktype=true;
-                this.rowTEMTaskDataObj = dataContent.selectData[0];
+                this.rowTEMTaskDataObj = currentDatd;
             } else if(dataType === 'FormPost'){
                 this.rowEACHPerEachJobDettype=true;
+                this.rowEACHPerEachJobDetDataObj = currentDatd;
             } else if(dataType === 'TaskReport'){
                 this.rowEachPerEachTableReporttype=true;
             } else if(dataType === 'TaskSelfEvaluateApplyzp'){
                 this.rowEachPerEachTableAsstype=true;
             } else if(dataType === 'TaskDelayApply'){
                 this.rowEachPerEachTableDelaytype=true;
+                 this.rowEachPerEachTableDelayDataObj = currentDatd;
             } else if(dataType === 'TaskCancelApply'){
                 this.rowEachPerEachTableInvalidtype=true;
             } else if(dataType === 'TaskAdjust'){
@@ -320,11 +347,17 @@ export default {
                 this.rowEachPerEachTableEntrusttype=true;
             } else if(dataType === 'PersonalTableTask'){
                 this.rowEachPerEachTableDetailtype=true;
+                this.rowEachPerEachTableDetailDataObj = currentDatd;
             } else if(dataType === 'StaffAppraisals'){
                 this.rowEmpApprTabDetailtype=true;
             } else if(dataType === 'StaffAppraisalsCollect'){
                 this.rowEmpApprTabNumDetailtype=true;
-            }
+            } else if(dataType === 'Meetingapplication'){
+                this.rowConferenceApplytype=true;
+            } else if(dataType === 'OptionIndex'){
+                this.rowEconomicIndicatorstype=true;
+                this.rowEconomicIndicatorsDataObj = currentDatd;
+            } 
         },
         //转发按钮点击事件
         baseInputTable(data){
@@ -383,6 +416,9 @@ export default {
                 this.title=this.rowWAADataObj.nametitle;
                 let finandata=this.rowWAADataObj.selectData;
                 formDataA.oid=finandata[0].foid;
+            } else {
+                formDataA.oid= this.rowWAADataObj.fsrcoId;
+                this.title = "入库申请申请人审批";
             }
             this.$api.processSet.getunhandledTask(formDataA).then(response => {
                 let responsevalue = response;

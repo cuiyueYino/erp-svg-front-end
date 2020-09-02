@@ -1,4 +1,5 @@
 <template>
+
  <el-container>
         <el-main>
              <el-card class="box-card">
@@ -12,7 +13,7 @@
                                 <li>{{item.fsubject}}<span class="li-after" v-show="item.fisread=='0'"></span></li>
                             </ul>
                             <ul class="ul-middle" :key="item.foid">
-                                <li>{{item.fsrcCompany}}</li>
+                                <li @click="taskDetail(item.fsrcoId,item.classId,item.factivity,item.fsubject,item.foid,)">{{item.fsrcCompany}}</li>
                             </ul>
                             <ul class="ul-middle" :key="item.foid">
                                 <li>{{item.faddresser}}</li>
@@ -163,13 +164,8 @@
         center
         :close-on-click-modal="false">
             <span v-html="detailMsg.content" ></span>
-            <span>1111111111111</span>
-            
-            <span slot="footer" class="dialog-footer">
-                <el-button @click="closeDialog">关 闭</el-button>
-            </span>
         </el-dialog>
-        <WAApage  :rowWAADataObj="rowWAADataObj" :rowWAAtype="rowWAAtype" :isOa="isOa" @changeShow="showORhideForWAA"/>
+        <WAApage  :rowWAADataObj="rowWAADataObj" :rowWAAtype="rowWAAtype" :isOa="isOa" @changeShow="showORhideForWAA" :functionType="functionType" />
     </el-container>
  
 </template>
@@ -180,6 +176,9 @@ export default {
     name:'oaPersonalHome',
     data() {
         return {
+            functionType:'',
+            factivity:'',
+            fsubject:'',
             isOa:false,
              rowWAADataObj:{},
               rowWAAtype:false,
@@ -212,6 +211,15 @@ export default {
         
     },
     methods:{
+        taskDetail(fsrcoId,type,factivity,fsubject,foid) {
+                this.rowWAAtype = true;
+                this.isOa = true;
+                this.functionType = type;
+                this.rowWAADataObj.fsrcoId = fsrcoId;
+                this.rowWAADataObj.factivity = factivity;
+                this.rowWAADataObj.fsubject = fsubject;
+                this.rowWAADataObj.foid = foid;
+        },
         showORhideForWAA(data){
             if(data == false){
                 this.rowWAAtype = false
@@ -292,10 +300,16 @@ export default {
                 userId:localStorage.getItem('ms_userId')
           }
            this.$api.processSet.getunhandledTask(data).then(res=>{
-                this.getunhandledTaskList = res.data.data.rows;
+                this.getunhandledTaskList = res.data.data.rows; 
                 console.log(this.getunhandledTaskList);
                 //去未读红点
                 this.getunhandledTaskList.forEach((item, index) => {
+                    let finandata = {};
+                    finandata.selectData = item;
+                    finandata.nametitle = "入库申请申请人审批";
+                    finandata.foid = item.foid;
+                    this.rowWAADataObj = finandata;
+                    this.functionType = item.classId;
                     let localKey = localStorage.getItem('ms_userId') + "_" + item.foid;
                     item.fisread = "0";
                     if (localStorage.getItem(localKey)){

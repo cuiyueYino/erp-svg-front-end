@@ -9,6 +9,7 @@
                 :model="formdata"
                 size="mini"
                 :label-position="labelPosition"
+                ref="formdata"
             >
                 <el-card>
                     <el-row>
@@ -25,13 +26,13 @@
                     </el-row>
                     <el-row>
                         <el-col :span="10">
-                            <el-form-item label="文档类别等级">
+                            <el-form-item label="文档类别级别">
                                 <el-input v-model="formdata.flevel"  :disabled="true" ></el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="10" :offset="2">
                             <el-form-item label="显示顺序" prop="forder">
-                                <el-input v-model="formdata.forder" :disabled="isEdit" ></el-input>
+                                <el-input v-model="formdata.forder" @keyup.native="changeForder" :disabled="isEdit" ></el-input>
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -44,8 +45,8 @@
                     </el-row>
                     <el-row>
                         <el-col :span="22">
-                            <el-form-item label="描述">
-                                <el-input type="textarea" v-model="formdata.fdescription" :rows="3" :disabled="isEdit"></el-input>
+                            <el-form-item label="描述" prop="fdescription">
+                                <el-input type="textarea" v-model="formdata.fdescription" :rows="10" :disabled="isEdit"></el-input>
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -53,7 +54,7 @@
             </el-form>
             <span slot="footer" class="dialog-footer">
                 <el-button v-if="isShow" @click="handleClose">取 消</el-button>
-                <el-button v-if="isShow" @click="onHandleSave">保 存</el-button>
+                <el-button v-if="isShow" @click="submitForm('formdata')">保 存</el-button>
             </span>
         </el-dialog>
     </div>
@@ -80,19 +81,61 @@ export default {
             title:'',
             labelPosition: 'left',
             rules: {
-                fcode:[{ required: true, message: '请输入编码', trigger: 'blur' }],
-                fname:[{ required: true, message: '请输入名称', trigger: 'blur' }],
-                forder:[{ required: true, message: '请输入显示顺序', trigger: 'blur' }],
+                fcode:[
+                        { required: true, message: '请输入编码', trigger: 'blur' },
+                        { max: 50, message: "编码最大长度 50 字节", trigger: "blur"},
+                        {
+                            validator: function(rule, value, callback) {
+                            //  校验字母、数字和英文符号的正则
+                            if (/^[a-z_A-Z0-9-\.!@#\$%\\\^&\*\)\(\+=\{\}\[\]\/",'<>~\·`\?:;|]+$/.test(value) == false) {
+                                callback(new Error("仅支持字母、数字和英文符号"));
+                            } else {
+                                //校验通过
+                                callback();
+                            }
+                            },
+                            trigger: "blur"
+                        }
+                    ],
+                fname:[
+                        { required: true, message: '请输入名称', trigger: 'blur' },
+                        { max: 100, message: "名称最大长度 100 字节", trigger: "blur"}
+                    ],
+                forder:[{ required: true, message: '请输入显示顺序', trigger: 'blur' },],
+                fdescription:[{ max: 3000, message: "描述最大长度 3000 字节", trigger: "blur" }],
             },
             NewOrEditFlag:'',
         }
     },
     methods: {
+        //只允许1.录入数字 2.允许输入两位小数
+        changeForder () {
+            debugger;
+            this.formdata.forder = this.formdata.forder.replace(/[^\d.]/g, '');
+            if(this.formdata.forder.indexOf(".") != -1){
+                let s = this.formdata.forder.substring('.');
+                if(s.length > 2){
+                    this.formdata.forder = this.formdata.forder.substring(0,this.formdata.forder.indexOf(".") + 3);
+                }
+            }
+        },
         //关闭当前dialog时给父组件传值
         handleClose(){
             this.ShowFinancVisible=false;
-            this.$emit('changeShow',false);
+            this.$emit('changeShow',false,1);
         },
+        //submit 校验
+        submitForm(formName) {
+          this.$refs[formName].validate((valid) => {
+            if (valid) {
+              this.onHandleSave();
+            } else {
+              // console.log('error submit!!');
+              return false;
+            }
+          });
+        },
+        //提交
         onHandleSave(){
             let fromDataS={};
             fromDataS=this.formdata;
@@ -101,7 +144,7 @@ export default {
                 fromDataS.fcode=this.formdata.fcode;
                 SaveFlag=true;
             }else{
-                this.$message.error('请输入编号!');
+                this.$message.error('请输入编码!');
                 SaveFlag=false
             }
             if(SaveFlag){
@@ -134,7 +177,7 @@ export default {
                     this.saveEditmenu(fromDataS);
                 }
             }
-            
+
         },
         //根据ID查询文档类别
         findDocCategoryById(data){
@@ -177,26 +220,45 @@ export default {
             let formDataA =data;
             this.$api.documentManagement.insertDocumentCategory(formDataA).then(response => {
                 let responsevalue = response;
-                if (responsevalue.data.data.msg=="success") {
-                    this.$message.success('新建成功!');
-                    this.ShowFinancVisible=false;
-                    this.$emit('changeShow',false);
-                    this.reload();
+                if(responsevalue.data.code != 0){
+                    this.$message.success(responsevalue.data.msg);
+                    debugger;
+                    if( 1 == data.flevel){
+                      data.flevel = '一级';
+                    } else if(2 == data.flevel) {
+                      data.flevel = '二级';
+                    }
                 } else {
-                    this.$message.error(responsevalue.data.msg);
+                    if (responsevalue.data.data.msg=="success") {
+                        this.$message.success('新建成功!');
+                        this.ShowFinancVisible=false;
+                        this.$emit('changeShow',false,0);
+                    } else {
+                        this.$message.error(responsevalue.data.msg);
+                    }
                 }
+
             });
         },
         //修改文档类别提交
         saveEditmenu(data){
             let formDataA =data;
+            if(true == data.fisportalshow){
+                data.fisportalshow = '1';
+            } else {
+                data.fisportalshow = '0';
+            }
+            if('一级' == data.flevel){
+                data.flevel = 1;
+            } else if('二级' == data.flevel) {
+                data.flevel = 2;
+            }
             this.$api.documentManagement.updateDocumentCategory(formDataA).then(response => {
                 let responsevalue = response;
                 if (responsevalue.data.data.msg=="success") {
                     this.$message.success('修改成功!');
                     this.ShowFinancVisible=false;
-                    this.$emit('changeShow',false);
-                    this.reload();
+                    this.$emit('changeShow',false,0);
                 } else {
                     this.$message.error(responsevalue.data.msg);
                 }
@@ -212,7 +274,7 @@ export default {
             if(this.rowNMMDataObj.NewOrEditFlag==="NEW"){
                 this.isEdit = false;
                 this.formdata={};
-                this.formdata.flevel=this.rowNMMDataObj.flevel;   
+                this.formdata.flevel=this.rowNMMDataObj.flevel;
             } else if (this.rowNMMDataObj.NewOrEditFlag==="EDIT"){
                 this.isEdit = false;
                 let fromdataA={};

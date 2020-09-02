@@ -136,8 +136,13 @@ export default {
         },
         closeBaseInfo(tableData){
             this.baseInputTableF = false;
-            this.formData.prosessData = tableData[0].fname;
-            this.formData.fmclass = tableData[0].foid;
+            if(tableData.length > 0){
+                this.formData.prosessData = tableData[0].fname;
+                this.formData.fmclass = tableData[0].foid;
+            }else{
+                this.formData.prosessData = '';
+                this.formData.fmclass = '';
+            }
             console.log(this.formData)
         },
         searchKey(){

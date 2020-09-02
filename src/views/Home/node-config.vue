@@ -33,7 +33,7 @@
                 <el-button  size="small" @click="saveConfig">保存</el-button>
             </el-col>
             <el-col :span="12">
-                <el-button size="small" @click="saveConfig">取消</el-button>
+                <el-button size="small" @click="cancelConfig">取消</el-button>
             </el-col>
         </el-row>
     </el-dialog>
@@ -101,6 +101,7 @@ export default {
             closeConfig: false,
             // 对话框显示标识
             dialogVisible: false,
+            cancelORSave:'',
             // 配置表单数据
             formData: {},
              // 配置表单校验规则
@@ -132,9 +133,13 @@ export default {
     },
     watch: {
         // 监听配置数据源
-        data: {
-            handler (obj) {
-                this.formData = JSON.parse(JSON.stringify(obj));console.log(this.formData,obj)
+        // 因为配置取消功能，注释掉关于data的监听
+        // 监听对话框显示标识
+        dialogVisible (bool) {
+            this.$emit('update:visible', bool);
+            if(bool){
+                //监听配置数据源
+                this.formData = JSON.parse(JSON.stringify(this.data));
                 switch (this.formData.name) {
                     case "Task":
                         this.TaskF = true
@@ -180,7 +185,6 @@ export default {
                         this.ConditionF =false
                         this.ProcessF =false
                         this.editLineData = this.formData
-                        
                         break;
                     case "Subprocess":
                         this.ProcessF =true;
@@ -190,45 +194,40 @@ export default {
                         this.ConditionF =false
                         this.LineF =false
                         this.sditProcessData = this.formData
-                        
                         break;
-                
                     default:
                         break;
                 }
-                // console.log( this.formData.name)
-            },
-            deep: true,
-            immediate: true
-        },
-        // 监听对话框显示标识
-        dialogVisible (bool) {
-            this.$emit('update:visible', bool);
-            if(bool){
-                 this.visibleF = true;
+                this.visibleF = true;
             }
         },
         // 对话框显示 自动聚焦name输入框
         visible (bool) {
             this.dialogVisible = bool;
-           
         }
     },
     methods: {
         // 取消配置操作
         cancelConfig () {
-            this.dialogVisible = false;
+            //this.dialogVisible = false;
             // this.$refs.workflowConfigForm.resetFields();
-            this.$emit('cancel');
+            //this.$emit('cancel');
+            this.visibleF = false;
+            this.dialogVisible = false;
+            this.cancelORSave="CANCEL";
         },
         // 执行保存配置操作
         saveConfig () {
             this.visibleF = false;
             this.dialogVisible = false;
+            this.cancelORSave="SAVE";
         },
         //手工活动保存
         saveConFormData(e,e2,e3){ 
             console.log(e,e2,e3)
+            if(this.cancelORSave ==='CANCEL'){
+                return;
+            }
             if( e.displayName =='' || e.work =='' || e.checkedCities.length ==0 || e2.length==0 ){
                 this.$message.error("保存失败,请填写必填信息");
                 return;
@@ -330,6 +329,9 @@ export default {
         //连接线保存
         saveLineData(e){
             console.log(e);
+            if(this.cancelORSave ==='CANCEL'){
+                return;
+            }
              if( e.displayName =='' || e.code ==''){
                 this.$message.error("保存失败,请填写必填信息");
                 return;
@@ -372,6 +374,9 @@ export default {
          //审核活动保存
         saveJoinData(e,e1,e2,e3,e4,e5){
             console.log(e,e1,e2,e3,e4,e5);
+            if(this.cancelORSave ==='CANCEL'){
+                return;
+            }
              if( e.name =='' || e.work =='' || e.checkedCities.length ==0  || e4.length==0 ){
                 this.$message.error("保存失败,请填写必填信息");
                 return;
@@ -537,6 +542,9 @@ export default {
         },
         //自由活动
         saveForkData(e){
+            if(this.cancelORSave ==='CANCEL'){
+                return;
+            }
             if( e.name =='' || e.work ==''){
                 this.$message.error("保存失败,请填写必填信息");
                 return;
@@ -559,6 +567,9 @@ export default {
         },
          //路由
         saveRouteData(e){console.log(e)
+            if(this.cancelORSave ==='CANCEL'){
+                return;
+            }
             if( e.name =='' || e.code ==''){
                 this.$message.error("保存失败,请填写必填信息");
                 return;
@@ -573,8 +584,11 @@ export default {
         },
         //子流程
         saveProcessData(e){
+            if(this.cancelORSave ==='CANCEL'){
+                return;
+            }
             console.log(e)
-             if( e.name =='' || !e.refWfProcess || e.code ==''  ){
+            if( e.name =='' || !e.refWfProcess || e.code ==''  ){
                 this.$message.error("保存失败,请填写必填信息");
                 return;
             }
