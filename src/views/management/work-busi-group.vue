@@ -219,7 +219,7 @@
             <el-form-item
               label="组员："
               :label-width="formLabelWidth"
-              prop="staffRelUsers" 
+              prop="staffRelUsersNames" 
             >
               <el-input
                 type="textarea"
@@ -416,12 +416,12 @@ export default {
       formLabelWidth: "120px",
       rules: {
         fteamid: [{ required: true, message: "请输入编码", trigger: "blur" }],
-        fteamleader: [
+        fteamleaderName: [
           { required: true, message: "请选择组长名称", trigger: "blur" },
         ],
-        // staffRelUsersNames: [
-        //   { required: true, message: "请选择组员名称", trigger: "blur" },
-        // ],
+        staffRelUsersNames: [
+          { required: true, message: "请选择组员名称", trigger: "blur" },
+        ],
       },
     };
   },
