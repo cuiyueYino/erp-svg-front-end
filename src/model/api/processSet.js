@@ -13,7 +13,7 @@ const processSet = {
         if(valueS.slice(valueS.length-1,valueS.length) ==="&"){
             valueS=valueS.slice(0,valueS.length-1);
         }
-        return httpReqest.get('/api/scha/workFlow/getWorkGroup'+valueS);
+        return httpReqest.get('/api/wfInterfaces/workFlow/getWorkGroup'+valueS);
     },
     // 新建工作业务组保存
     addWorkGroup(params){
@@ -37,6 +37,10 @@ const processSet = {
     // 删除
     deleteMsg(params){
         return httpReqest.get('/api/wfInterfaces/workFlow/deleteProcess?foid='+params);
+    },
+    // 删除（工作业务组）
+    delWorkGroupList(params){
+        return httpReqest.get('/api/wfInterfaces/workFlow/delWorkGroupList?foids='+params);
     },
 
      // 生效/禁用

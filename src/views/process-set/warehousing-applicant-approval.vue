@@ -483,4 +483,3 @@ export default {
     padding: 10px 20px;
 }
 </style>
-// wfsubmit
