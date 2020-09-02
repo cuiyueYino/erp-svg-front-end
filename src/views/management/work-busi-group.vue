@@ -91,7 +91,7 @@
             plain
             class="el-icon-edit"
             @click="toEdit('编辑')"
-          > 编辑11</el-button>
+          > 编辑</el-button>
           <el-button
             type="primary"
             plain
@@ -139,11 +139,13 @@
               prop="fcompanyoid"
             >
               <el-select
-                v-model="id"
                 size="small"
                 :disabled="isLook"
                 clearable
                 placeholder="请选择"
+                value-key="id"
+                v-model="form.fcompanyName"
+                @change="selectCompanyChanged"
               >
                 <el-option
                   v-for="item in options"
@@ -275,9 +277,9 @@
         :visible="staffTableVisible"
         :type="baseInputType"
         :title="baseInputTitle"
-        :fcompanyid="fcompanyid"
         @closeDialog="closeBaseInfo"
       ></staff-tree-search>
+      <!-- :fcompanyid="fcompanyid" -->
     </el-form>
   </div>
 </template>
@@ -452,15 +454,32 @@ export default {
     });
   },
   methods: {
-    // 工作业务组（查看）
+    //公司切换选择方法
+    selectCompanyChanged(value){
+      this.form.fcompanyoid = value;
+    },
+    // 工作业务组（查看、编辑）
     getWorkGroupDetail(data) {  
       this.$api.processSet.getWorkGroupDetail({
           foid: data,
       }).then((res) => {
         if (res.data.code == 0) {
-            this.form = res.data.data;
+            this.form.fcompanyName = res.data.data.fcompanyName;
+            this.form.fcompanyoid = res.data.data.fcompanyoid;
+            this.form.fteamleaderName = res.data.data.fteamleaderName;
+            this.form.fteamleader = res.data.data.fteamleader;
+            this.form.fteamname = res.data.data.fteamname;
+            this.form.fteamid = res.data.data.fteamid;
+            this.form.fremark = res.data.data.fremark;
+            this.form.transStaffRelUser = res.data.data.transStaffRelUser;
+            this.form.staffRelUsers = res.data.data.staffRelUsers;
+            // this.form.staffRelUsersNames = res.data.data.staffRelUsersNames;
+            // res.data.data;
+            console.log("8888888888");
+            console.log(res.data.data);
             this.form.staffRelUsersNames = Object.values(res.data.data.staffRelUsers);
-            this.form.transStaffRelUser = Object.values(res.data.data.transStaffRelUser);
+            // this.form.transStaffRelUser = Object.values(res.data.data.transStaffRelUser);
+            // this.form.fcompanyName = this.form.fcompanyName
             console.log(res.data.data);
           // this.options = res.data.data.rows;
         }
@@ -679,10 +698,10 @@ export default {
     },
 
     addSubmit(formName) {
-      debugger;
-      console.log(this.form);
       this.$refs[formName].validate((valid) => {
         if (valid) {
+          console.log("11111111111111");
+          console.log(this.form);
           this.$api.processSet.addWorkGroup(this.form).then((res) => {
             if (res.data.code == 0) {
               this.dialogFormVisible = false;
