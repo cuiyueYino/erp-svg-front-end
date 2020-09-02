@@ -106,7 +106,7 @@ export default {
             total: 20,
             labelPosition: 'left',
             rowFincename:'',
-            companyoptions: new proData().company,
+            companyoptions:[],
             formdata:{
                 searchName:'',
                 company:'',
@@ -212,7 +212,17 @@ export default {
                     this.$message.success('查询失败!');
                 }
             })
-        }
+        },
+        selectCom(){
+            this.$api.jobUserManagement.getCompanyData().then((res) => {
+                if (res.status == "200") {
+                    this.companyoptions= res.data.data.rows;
+                }
+            }),
+            (error) => {
+                console.log(error);
+            };
+        },
     },
     watch:{
         rowBAtype(oldVal,newVal){
@@ -226,6 +236,7 @@ export default {
             formData.page=this.pageNum;
             formData.size=this.pageSize;
             this.getActivity(formData);
+            this.selectCom();
         }
     }
 }

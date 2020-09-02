@@ -125,9 +125,9 @@
               >
                 <el-option
                   v-for="item in companyoptions"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value"
+                  :key="item.id"
+                  :label="item.name"
+                  :value="item.id"
                 ></el-option>
               </el-select>
             </el-col>
@@ -505,7 +505,7 @@ export default {
       checked: false,
       DataForm: {},
       WFMtypeoptions: [],
-      companyoptions: new proData().company,
+      companyoptions:[],
       commonMeta: new proData().commonMetaClass,
       formLabelWidth: "120px",
     };
@@ -521,9 +521,20 @@ export default {
     //fromdata1.infosBeginNum=0;
     //fromdata1.infosEndNum=2000;
     this.getmetaClass(fromdata1);
+    this.selectCom();
   },
   computed: {},
   methods: {
+    selectCom(){
+      this.$api.jobUserManagement.getCompanyData().then((res) => {
+        if (res.status == "200") {
+          this.companyoptions= res.data.data.rows;
+        }
+      }),
+      (error) => {
+        console.log(error);
+      };
+    },
     //获取待办事项
     getHunTableData(data) {
       let fromdata = data;
@@ -684,7 +695,7 @@ export default {
         finandata.selectData = selectData;
         finandata.finanrowname = "人员缺省查询方案";
         finandata.finanrowId = "QS_0056";
-        finandata.nametitle = "入库申请申请人审批";
+        finandata.nametitle = this.multipleSelection[0].fsrcCompany;
         this.rowWAADataObj = finandata;
         this.rowWAAtype = true;
         this.financingLFCAtype = true;

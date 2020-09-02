@@ -145,7 +145,6 @@ export default {
             ShowFinancVisible:false,
             labelPosition: 'left',
             disabled:false,
-            companyData:new proData().company,
             objectoptions:new proData().project,
             formdata: {
                 radio:1,
@@ -184,8 +183,8 @@ export default {
             rowEachPerEachTableInvalidDataObj: {},
             rowEachPerEachTablePersonDataObj: {},
             rowEachPerEachTableAssDataObj: {},
-            rowEachPerEachTableEntrustDataObj: {},
-            rowEachPerEachTableDetailDataObj: {},
+            rowEachPerEachTableEntrustDataObj: "",
+            rowEachPerEachTableDetailDataObj: "",
             rowDepartAnnPlanDetDataObj:{},
             rowDepartMonPlanDetDataObj:"",
             rowEmpApprTabDetailDataObj:{},
@@ -337,6 +336,7 @@ export default {
                 this.rowEachPerEachTableAsstype=true;
             } else if(dataType === 'TaskDelayApply'){
                 this.rowEachPerEachTableDelaytype=true;
+                 this.rowEachPerEachTableDelayDataObj = currentDatd;
             } else if(dataType === 'TaskCancelApply'){
                 this.rowEachPerEachTableInvalidtype=true;
             } else if(dataType === 'TaskAdjust'){
@@ -483,4 +483,3 @@ export default {
     padding: 10px 20px;
 }
 </style>
-// wfsubmit

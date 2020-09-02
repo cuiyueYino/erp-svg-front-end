@@ -172,28 +172,22 @@
 }
 
 .second-li {
-    /*width: 130px;
-    margin: 110px;
-    position: absolute;
-    text-align: center;*/
-
-    width: 20.5%;
-    /* margin: 110px; */
-    position: absolute;
+    width: 100%;
+    margin-top: 110px;
+    position: initial;
     text-align: center;
     height: 10%;
-    top: 44%;
 }
 
 .third-li {
     width: 190px;
-    margin: 150px 90px;
+    margin: 20px 90px;
     position: absolute;
 }
 
 .four-li {
     width: 90px;
-    margin: 180px 135px;
+    margin: 50px 135px;
     position: absolute;
 }
 

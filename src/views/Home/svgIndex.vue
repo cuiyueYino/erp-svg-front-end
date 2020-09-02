@@ -1186,6 +1186,7 @@ export default {
             sessionStorage.setItem("eidtMsg",null);
             sessionStorage.setItem("eidtMsgSelectID",null);
             this.dialogTableVisible = false;
+            this.$router.push({name:"workProcess"})//bug BUG #346
         },
         // 点击背景面板执行事件
         backgroundClick (event) {//console.log(event)

@@ -9,9 +9,9 @@
                                 <el-select v-model="formInline.company" @change="Comchange" placeholder="公司" clearable>
                                     <el-option
                                         v-for="item in companyData"
-                                        :key="item.value"
-                                        :label="item.label"
-                                        :value="item.value"
+                                        :key="item.id"
+                                        :label="item.name"
+                                        :value="item.id"
                                     ></el-option>
                                 </el-select>
                             </el-form-item>
@@ -80,9 +80,9 @@
                                 <el-select v-model="company" placeholder="公司" disabled clearable>
                                     <el-option
                                         v-for="item in companyData"
-                                        :key="item.value"
-                                        :label="item.label"
-                                        :value="item.value"
+                                        :key="item.id"
+                                        :label="item.name"
+                                        :value="item.id"
                                     ></el-option>
                                 </el-select>
                             </el-form-item>
@@ -165,7 +165,7 @@ export default {
             ],
             tableData:[],
             multipleSelection: [],
-            companyData:new proData().company,
+            companyData:[],
             ShowFinancVisible:false,
             forDisabled:false,
             company:'_DefaultCompanyOId',
@@ -186,11 +186,22 @@ export default {
     created() {
         this.maketree(this.company);
         this.searchRoleType(1,10);
+        this.selectCom();
     },
     mounted() {
         //获取查询全部角色类别
     },
     methods:{
+        selectCom(){
+            this.$api.jobUserManagement.getCompanyData().then((res) => {
+                if (res.status == "200") {
+                    this.companyData= res.data.data.rows;
+                }
+            }),
+            (error) => {
+                console.log(error);
+            };
+        },
         //公司改变
         Comchange(data){
             this.company=data;

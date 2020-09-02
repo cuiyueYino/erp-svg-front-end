@@ -15,9 +15,9 @@
                         <el-select v-model="formdata.companyName" value-key="value" :disabled="true">
                             <el-option
                                 v-for="item in companyData"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value"
+                                :key="item.id"
+                                :label="item.name"
+                                :value="item.id"
                             ></el-option>
                         </el-select>
                     </el-form-item>
@@ -246,6 +246,16 @@ export default {
        
     },
     methods: {
+        selectCom(){
+            this.$api.jobUserManagement.getCompanyData().then((res) => {
+                if (res.status == "200") {
+                    this.companyData= res.data.data.rows;
+                }
+            }),
+            (error) => {
+                console.log(error);
+            };
+        },
     //获取临时任务派发详情
     getTemporaryMission(data) {
       this.$api.processSet.getTemporaryMissionDetail({
@@ -370,6 +380,7 @@ export default {
             temporartSelected.id = this.rowTEMTaskDataObj;
             temporartSelected.userId = localStorage.getItem("ms_userId");
             this.getTemporaryMission(temporartSelected);
+            this.selectCom();
             },
     }
 }

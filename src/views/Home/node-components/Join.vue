@@ -281,6 +281,14 @@
             <!-- 表单弹窗 -->
             <join-dialog :visible="baseFormF" @closeDialog="closeForm" :title="baseFormTitle"></join-dialog>
         </el-form>
+        <el-row :gutter="20">
+            <el-col :span="12" style="text-align: right;">
+                <el-button size="small" @click="saveConfig">保存</el-button>
+            </el-col>
+            <el-col :span="12">
+                <el-button size="small" @click="cancelConfig">取消</el-button>
+            </el-col>
+        </el-row>
     </div>
     <!-- </el-dialog> -->
 </template>
@@ -486,7 +494,6 @@ export default {
         data: {
             handler (obj) {
                 if(obj.name === "Join"){
-                    console.log("审核活动数据",obj)
                     if(!obj.oid && (obj.isSaveFlag==undefined)){
                         this.formData = {};
                         this.editData= {};
@@ -617,7 +624,6 @@ export default {
                                 this.joinusertableData.push(item)
                             })
                         }
-                        console.log(this.joinusertableData,joinusertable);
                         let tableDataNewSet = []
                         this.tableData=[];
                         if( this.editData.wfCopyTo.copyTo.length == 0){}else{
@@ -718,18 +724,7 @@ export default {
             if (bool) {
                 // this.$refs['formData'].resetFields();
             }else{
-                console.log(this.decisionSelection)
-                this.formData.checkedCities = this.checkedCities;
-                let tableData3Chose = this.decisionSelection
-                this.$emit(
-                "saveFormData",
-                this.formData,
-                this.joinusertableData,
-                this.tableData,
-                this.tableData2,
-                tableData3Chose,
-                this.gridData,
-                ); 
+                
             }
         },
     },
@@ -766,7 +761,6 @@ export default {
                 break;
             }
             this.checkedCities = e;
-            console.log(this.checkedCities)
         },
         basehandleClick(tab, event) {
             this.baseActiveNameStr = tab.label;
@@ -778,17 +772,55 @@ export default {
         },
         // 取消配置操作
         cancelConfig () {
-            this.dialogVisible = false;
-            this.$refs.workflowConfigForm.resetFields();
-            this.$emit('cancel');
+            this.formData.checkedCities = this.checkedCities;
+            let tableData3Chose = this.decisionSelection
+            this.$emit(
+            "saveFormData",
+            this.formData,
+            this.joinusertableData,
+            this.tableData,
+            this.tableData2,
+            tableData3Chose,
+            this.gridData,
+            "CANCEL"
+            );
         },
         // 执行保存配置操作
         saveConfig () {
-            this.$refs.workflowConfigForm.validate(valid => {
-                if (!valid) return;
-                this.$emit('save', this.formData);
-                this.dialogVisible = false;
-            });
+            if(this.formData.name == ''){
+                this.$message.error("保存失败,请填写名称!");
+                return;
+            }
+            if(this.formData.work == ''){
+                this.$message.error("保存失败,请选择审核工作!");
+                return;
+            }
+            if(this.checkedCities.length ==0){
+                this.$message.error("保存失败,请选择参与者-控制权限!");
+                return;
+            }
+            if(this.decisionSelection.length ==0){
+                this.$message.error("保存失败,请选择决策类型!");
+                return;
+            }
+            if(this.formData.wfAuditType=='并行会签' || this.formData.wfAuditType=='串行会签'){
+                if(!this.joinusertableData || this.joinusertableData.length < 2){
+                    this.$message.error("保存失败!选中并行会签或串行会,签参与者必须多人!");
+                    return;
+                }
+            }
+            this.formData.checkedCities = this.checkedCities;
+            let tableData3Chose = this.decisionSelection
+            this.$emit(
+            "saveFormData",
+            this.formData,
+            this.joinusertableData,
+            this.tableData,
+            this.tableData2,
+            tableData3Chose,
+            this.gridData,
+            "SAVE"
+            ); 
         },
         tableRowSelect(){
             //this.$refs.decisionTableReF.clearSelection();
@@ -1115,7 +1147,7 @@ export default {
         },
         //决策类型-多选
         onSelectionDecision(val){
-            this.decisionSelection = val;console.log(this.decisionSelection)
+            this.decisionSelection = val;
         },
         //审核单范围-多选
         onJoinSelectionChange(val){
@@ -1131,7 +1163,6 @@ export default {
         },
         //多选
         onSelectionChange(val) { 
-            console.log(val)
             if(val.length>0){
                 this.multipleSelection = val;
                 switch (this.titleStr) {
@@ -1195,7 +1226,6 @@ export default {
             this.baseInputType = str;
         },
         closeBaseInfo(data, dialogtitle, type){
-            console.log(data)
             if (data.length > 0) {
                 if (type === "用户") {
                     if (dialogtitle === "组织结构查询") {
@@ -1254,7 +1284,7 @@ export default {
                     fmfunctiontypecon: this.formData.formCtionTypeCon,
                     page:this.pageNum,
                     size:this.pageSize
-                };console.log(data)
+                };
                 break;
                 case '':
                 this.formData.formCtionTypeCon = 3;

@@ -1,6 +1,5 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import Finance from '../views/finance/route';
 import Process from '../views/process-set/route';
 import Users from '../views/user-management/route';
 import Jobs from '../views/job-management/route';
@@ -38,7 +37,6 @@ export const constantRouterMap = [{
 			import('../components/common/Home.vue'),
 		redirect: '/erp/oaCompanyHome',
 		children: [
-			...Finance,
 			...Process,
 			...Users,
 			...Jobs,
