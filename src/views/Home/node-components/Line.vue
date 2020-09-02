@@ -1,120 +1,127 @@
 <template>
 <!-- 弹出框内容 -->
-        <div v-show="visible">
-            <el-form
-                label-width="110px"
-                :rules="configRules"
-                ref="formData"
-                class="dataForm"
-                :model="formData"
-                >
-        <!-- TAB页 -->
-        <el-tabs v-model="activeName" >
-            <el-tab-pane label="基本信息" name="1">
-                 <el-form-item label="编码" :label-width="formLabelWidth" prop="code">
-                    <el-input v-model="formData.code" @input="change($event)"  autocomplete="off" clearable></el-input>
-                </el-form-item>
-                <el-form-item label="名称" :label-width="formLabelWidth" prop="name">
-                    <el-input  v-model="formData.name" autocomplete="off" @input="change($event)" clearable></el-input>
-                </el-form-item>
-                 <!-- <el-form-item label="起点" :label-width="formLabelWidth" >
-                    <el-input v-model="formData.workData" autocomplete="off"></el-input>
-                </el-form-item>
-                 <el-form-item label="终点" :label-width="formLabelWidth" >
-                    <el-input v-model="formData.workData" autocomplete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="业务数据" :label-width="formLabelWidth" >
-                    <el-input v-model="formData.workData" autocomplete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="隐藏" :label-width="formLabelWidth">
-                    <el-checkbox v-model="checked"></el-checkbox>
-                </el-form-item> -->
-                <el-form-item label="描述：" :label-width="formLabelWidth" prop="fremark">
-                    <el-input maxlength="1000" clearable @input="change($event)"  autosize show-word-limit type="textarea" v-model="formData.fremark"></el-input>
-                </el-form-item>
-            </el-tab-pane>
-           <el-tab-pane label="流转条件" name="2">
-                <el-tabs v-model="baseActiveName" type="card" @tab-click="handleClick">
-                    <el-tab-pane label="无条件" name="1">
-                        <el-form-item label="条件表达式" :label-width="formLabelWidth" prop="unconditional">
-                            <el-input type="textarea" disabled v-model="formData.unconditional"></el-input>
-                        </el-form-item>
-                    </el-tab-pane>
-                    <el-tab-pane label="有条件" name="2">
-                        <el-form-item label="条件表达式" :label-width="formLabelWidth" prop="conditional">
-                            <el-input type="textarea" @input="change($event)" v-model="formData.conditional"></el-input>
-                        </el-form-item>
-                    </el-tab-pane>
-                    <el-tab-pane label="[否则]条件" name="3">
-                        <el-form-item label="条件表达式" :label-width="formLabelWidth" prop="otherwise">
-                            <el-input type="textarea" disabled v-model="formData.otherwiseText"></el-input>
-                        </el-form-item>
-                    </el-tab-pane>
-                    <el-tab-pane label="调用服务" name="4">
-                         <el-form-item label="条件" :label-width="formLabelWidth"  >
-                            <el-input placeholder="请选择" v-model="formData.baseInputServe" :disabled="true"> </el-input>
-                            <img class="icon-search" src="../../../assets/img/search.svg"  @click="baseInputTable('服务','服务查询')">
-                        </el-form-item>
-                        <el-form-item label="条件表达式" :label-width="formLabelWidth" prop="baseTextarea"> 
-                            <el-input type="textarea" @input="change($event)" v-model="formData.baseTextarea"></el-input>
-                        </el-form-item>
-                    </el-tab-pane>
-                   
-                </el-tabs>
-            </el-tab-pane>
-           
-        </el-tabs>
+    <div v-show="visible">
+        <el-form
+            label-width="110px"
+            :rules="configRules"
+            ref="formData"
+            class="dataForm"
+            :model="formData"
+            >
+            <!-- TAB页 -->
+            <el-tabs v-model="activeName" >
+                <el-tab-pane label="基本信息" name="1">
+                    <el-form-item label="编码" :label-width="formLabelWidth" prop="code">
+                        <el-input v-model="formData.code" @input="change($event)"  autocomplete="off" clearable></el-input>
+                    </el-form-item>
+                    <el-form-item label="名称" :label-width="formLabelWidth" prop="name">
+                        <el-input  v-model="formData.name" autocomplete="off" @input="change($event)" clearable></el-input>
+                    </el-form-item>
+                    <!-- <el-form-item label="起点" :label-width="formLabelWidth" >
+                        <el-input v-model="formData.workData" autocomplete="off"></el-input>
+                    </el-form-item>
+                    <el-form-item label="终点" :label-width="formLabelWidth" >
+                        <el-input v-model="formData.workData" autocomplete="off"></el-input>
+                    </el-form-item>
+                    <el-form-item label="业务数据" :label-width="formLabelWidth" >
+                        <el-input v-model="formData.workData" autocomplete="off"></el-input>
+                    </el-form-item>
+                    <el-form-item label="隐藏" :label-width="formLabelWidth">
+                        <el-checkbox v-model="checked"></el-checkbox>
+                    </el-form-item> -->
+                    <el-form-item label="描述：" :label-width="formLabelWidth" prop="fremark">
+                        <el-input maxlength="1000" clearable @input="change($event)"  autosize show-word-limit type="textarea" v-model="formData.fremark"></el-input>
+                    </el-form-item>
+                </el-tab-pane>
+                <el-tab-pane label="流转条件" name="2">
+                        <el-tabs v-model="baseActiveName" type="card" @tab-click="handleClick">
+                            <el-tab-pane label="无条件" name="1">
+                                <el-form-item label="条件表达式" :label-width="formLabelWidth" prop="unconditional">
+                                    <el-input type="textarea" disabled v-model="formData.unconditional"></el-input>
+                                </el-form-item>
+                            </el-tab-pane>
+                            <el-tab-pane label="有条件" name="2">
+                                <el-form-item label="条件表达式" :label-width="formLabelWidth" prop="conditional">
+                                    <el-input type="textarea" @input="change($event)" v-model="formData.conditional"></el-input>
+                                </el-form-item>
+                            </el-tab-pane>
+                            <el-tab-pane label="[否则]条件" name="3">
+                                <el-form-item label="条件表达式" :label-width="formLabelWidth" prop="otherwise">
+                                    <el-input type="textarea" disabled v-model="formData.otherwiseText"></el-input>
+                                </el-form-item>
+                            </el-tab-pane>
+                            <el-tab-pane label="调用服务" name="4">
+                                <el-form-item label="条件" :label-width="formLabelWidth"  >
+                                    <el-input placeholder="请选择" v-model="formData.baseInputServe" :disabled="true"> </el-input>
+                                    <img class="icon-search" src="../../../assets/img/search.svg"  @click="baseInputTable('服务','服务查询')">
+                                </el-form-item>
+                                <el-form-item label="条件表达式" :label-width="formLabelWidth" prop="baseTextarea"> 
+                                    <el-input type="textarea" @input="change($event)" v-model="formData.baseTextarea"></el-input>
+                                </el-form-item>
+                            </el-tab-pane>
+                        
+                        </el-tabs>
+                </el-tab-pane>
+            </el-tabs>
 
-        <!-- 搜索框 -->
-         <el-dialog 
-        :title="'调用服务查询'"
-        class="workDialog"
-         :modal="false"
-          :close-on-click-modal="closeConfig"
-          :visible.sync="dialogTableVisible">
-             <el-row :gutter="24">
-                  <el-col :span="8">
-                    <el-form-item label="编码" label-width="43px" prop="formCode">
-                        <el-input clearable size="small" v-model="formData.formCode" @input="change($event)" placeholder="请输入"></el-input>
-                    </el-form-item>
-                  </el-col> 
-                  <el-col :span="8">
-                    <el-form-item label="名称" label-width="43px"  prop="formName">
-                        <el-input clearable size="small" v-model="formData.formName" @input="change($event)" placeholder="请输入"></el-input>
-                    </el-form-item>
-                  </el-col> 
-                  <el-col :span="8" >
-                    <el-button type="primary" size="small" plain @click="reWorkSearchTable('formData')">重置</el-button>
-                    <el-button type="primary" size="small" plain @click="workSearchTable">搜索</el-button>
-                </el-col>
-             </el-row>
+            <!-- 搜索框 -->
+            <el-dialog 
+            :title="'调用服务查询'"
+            class="workDialog"
+            :modal="false"
+            :close-on-click-modal="closeConfig"
+            :visible.sync="dialogTableVisible">
+                <el-row :gutter="24">
+                    <el-col :span="8">
+                        <el-form-item label="编码" label-width="43px" prop="formCode">
+                            <el-input clearable size="small" v-model="formData.formCode" @input="change($event)" placeholder="请输入"></el-input>
+                        </el-form-item>
+                    </el-col> 
+                    <el-col :span="8">
+                        <el-form-item label="名称" label-width="43px"  prop="formName">
+                            <el-input clearable size="small" v-model="formData.formName" @input="change($event)" placeholder="请输入"></el-input>
+                        </el-form-item>
+                    </el-col> 
+                    <el-col :span="8" >
+                        <el-button type="primary" size="small" plain @click="reWorkSearchTable('formData')">重置</el-button>
+                        <el-button type="primary" size="small" plain @click="workSearchTable">搜索</el-button>
+                    </el-col>
+                </el-row>
+                
+                <!-- 表格 -->
+                <dynamic-table
+                    class="workTable"
+                    :height="310"
+                    :columns="columns"
+                    :table-data="gridData"
+                    :total="total"
+                    :page-num="pageNum"
+                    :page-size="pageSize"
+                    @current-change="onCurrentChange"
+                    @selection-change="onSelectionChange"
+                    v-loading="tableLoading"
+                    element-loading-text="加载中"
+                ></dynamic-table>
             
-            <!-- 表格 -->
-            <dynamic-table
-                class="workTable"
-                :height="310"
-                :columns="columns"
-                :table-data="gridData"
-                :total="total"
-                :page-num="pageNum"
-                :page-size="pageSize"
-                @current-change="onCurrentChange"
-                @selection-change="onSelectionChange"
-                v-loading="tableLoading"
-                element-loading-text="加载中"
-            ></dynamic-table>
-          
-            <!-- 角色选择 END-->
-            
-            <!-- footer -->
-            <footer>
-                <el-button   size="small"   @click="gridDataAdd">确定</el-button>
-                <!-- <el-button  type="primary" size="small" plain @click="dialogTableVisible = false">关闭</el-button> -->
-            </footer>
-            <!-- footer END-->
-           </el-dialog>
-            </el-form>
-        </div>
+                <!-- 角色选择 END-->
+                
+                <!-- footer -->
+                <footer>
+                    <el-button   size="small"   @click="gridDataAdd">确定</el-button>
+                    <!-- <el-button  type="primary" size="small" plain @click="dialogTableVisible = false">关闭</el-button> -->
+                </footer>
+                <!-- footer END-->
+            </el-dialog>
+        </el-form>
+        <el-row :gutter="20">
+            <el-col :span="12" style="text-align: right;">
+                <el-button size="small" @click="saveConfig">保存</el-button>
+            </el-col>
+            <el-col :span="12">
+                <el-button size="small" @click="cancelConfig">取消</el-button>
+            </el-col>
+        </el-row>
+    </div>
 </template>
 
 <script>
@@ -231,7 +238,6 @@ export default {
         data: {
             handler (obj) {
              if(obj.name === "Line"){
-                console.log(obj,"Line")
                 if(!obj.oid && (obj.isSaveFlag==undefined)){
                     this.formData={};
                     this.formData.otherwise ="0";
@@ -303,17 +309,7 @@ export default {
                 // setTimeout(() => {
                 //     this.$refs.nameInput.focus();
                 // }, 100);
-            }else{
-                
-                let codeData = this.formData.code
-                this.formData.code = codeData
-                this.formData.linefcode = codeData
-                console.log(this.formData)
-                this.$emit(
-                    "saveLineData",
-                    this.formData,
-                    this.gridDatax
-                ); 
+            }else{ 
             }
         },
         baseActiveName(val){
@@ -332,17 +328,35 @@ export default {
         },
         // 取消配置操作
         cancelConfig () {
-            this.dialogVisible = false;
-            this.$refs.workflowConfigForm.resetFields();
-            this.$emit('cancel');
+            let codeData = this.formData.code;
+            this.formData.code = codeData;
+            this.formData.linefcode = codeData;
+            this.$emit(
+                "saveLineData",
+                this.formData,
+                this.gridDatax,
+                'CANCEL'
+            );
         },
         // 执行保存配置操作
         saveConfig () {
-            this.$refs.workflowConfigForm.validate(valid => {
-                if (!valid) return;
-                this.$emit('save', this.formData);
-                this.dialogVisible = false;
-            });
+            if(this.formData.name ==''){
+                this.$message.error("保存失败,请填写名称!");
+                return;
+            }
+            if(this.formData.code ==''){
+                this.$message.error("保存失败,请填写编码!");
+                return;
+            }
+            let codeData = this.formData.code;
+            this.formData.code = codeData;
+            this.formData.linefcode = codeData;
+            this.$emit(
+                "saveLineData",
+                this.formData,
+                this.gridDatax,
+                'SAVE'
+            );
         },
         handleClick(tab, event) {
             switch (this.baseActiveName) {

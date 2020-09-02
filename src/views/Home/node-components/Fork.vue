@@ -1,118 +1,126 @@
 <template>
 <!-- 弹出框内容 -->
         <div v-show="visible">
-               <el-form
-                label-width="110px"
-                :rules="configRules"
-                ref="formData"
-                class="dataForm"
-                :model="formData"
-                >
-        <!-- TAB页 -->
-        <el-tabs v-model="activeName" @tab-click="handleClick">
-            <el-tab-pane label="基本信息" name="1">
-                <!-- Condition -->
-                <el-form-item label="名称" :label-width="formLabelWidth" prop="name">
-                    <el-input ref="nameInput" v-model="formData.name" autocomplete="off" @input="change($event)" clearable></el-input>
-                </el-form-item>
-                <el-form-item label="业务工作" :label-width="formLabelWidth" prop="work">
-                    <el-input v-model="formData.work" autocomplete="off"></el-input>
-                    <img class="icon-search" @click="workSearch" src="../../../assets/img/search.svg">
-                </el-form-item>
-                <el-form-item label="业务数据" :label-width="formLabelWidth"   prop="workData">
-                    <el-input v-model="formData.workData" autocomplete="off" :disabled="true" ></el-input>
-                </el-form-item>
-                <!-- <el-form-item label="隐藏" :label-width="formLabelWidth" prop="work">
-                    <el-checkbox v-model="formData.checked"></el-checkbox>
-                </el-form-item> -->
-                <el-form-item label="描述：" :label-width="formLabelWidth" prop="fremark">
-                    <el-input maxlength="500" clearable  autosize show-word-limit type="textarea" v-model="formData.fremark"></el-input>
-                </el-form-item>
-                <!-- Condition END-->
-            </el-tab-pane>
-            <!-- <el-tab-pane label="业务服务参数列表" name="2">
-                <el-form-item label="业务服务" label-width="84px" prop="maxTime">
-                    <el-input v-model="formData.maxTime" disabled autocomplete="off"></el-input>
-                </el-form-item>
-                <dynamic-table
-                    class="workTable"
-                    :height="310"
-                    :columns="columns3"
-                    :table-data="tableData"
-                    :total="total"
-                    :page-num="pageNum"
-                    :page-size="pageSize"
-                    @current-change="onCurrentChange"
-                    @selection-change="onSelectionChange"
-                    v-loading="tableLoading"
-                    element-loading-text="加载中"
-                ></dynamic-table>
-            </el-tab-pane> -->
-           
-        </el-tabs>
-        <!-- 弹出框 -->
-        <el-dialog 
-        title="业务工作"
-        class="workDialog"
-         :modal="false"
-          :close-on-click-modal="closeConfig"
-          :visible.sync="dialogTableVisible">
-            <!-- Condition -->
-            <!-- 搜索框 -->
-             <el-row :gutter="24">
-                  <el-col :span="8">
-                    <el-form-item label="编码 " label-width="43px">
-                        <el-input clearable size="small" v-model="formData.formCode" @input="change($event)" placeholder="请输入"></el-input>
-                    </el-form-item>
-                  </el-col> 
-                  <el-col :span="8">
-                    <el-form-item label="名称 " label-width="43px">
-                        <el-input clearable size="small" v-model="formData.formName" @input="change($event)" placeholder="请输入"></el-input>
-                    </el-form-item>
-                  </el-col> 
-                  <el-col :span="8">
-                    <el-form-item label="工作类型 " label-width="70px">
-                         <el-select v-model="formData.formCtionTypeCon" @input="change($event)" clearable placeholder="请选择">
-                            <el-option
-                            v-for="item in options"
-                            :key="item.value"
-                            :label="item.label"
-                            :value="item.value">
-                            </el-option>
-                        </el-select>
-                        
-                    </el-form-item>
-                  </el-col> 
-             </el-row>
-             <el-row :gutter="24">
-                <el-col :span="6" :offset="18">
-                    <el-button type="primary" size="small" plain @click="reWorkSearchTable('formData')">重置</el-button>
-                    <el-button type="primary" size="small" plain @click="workSearchTableBtn">搜索</el-button>
-                </el-col>
-             </el-row>
-            <!-- 表格 -->
-            <dynamic-table
-                class="workTable"
-                :height="310"
-                :columns="columns3"
-                :table-data="gridData"
-                :total="total"
-                :page-num="pageNum"
-                :page-size="pageSize"
-                @current-change="onCurrentChange"
-                @selection-change="onSelectionChange"
-                v-loading="tableLoading"
-                element-loading-text="加载中"
-            ></dynamic-table>
-            <!-- Condition END-->
-            <!-- footer -->
-            <footer>
-                <el-button   size="small" plain @click="gridDataAdd">确定</el-button>
-                <!-- <el-button  type="primary" size="small" plain @click="dialogTableVisible = false">关闭</el-button> -->
-            </footer>
-            <!-- footer END-->
-        </el-dialog>
+            <el-form
+            label-width="110px"
+            :rules="configRules"
+            ref="formData"
+            class="dataForm"
+            :model="formData"
+            >
+                <!-- TAB页 -->
+                <el-tabs v-model="activeName" @tab-click="handleClick">
+                    <el-tab-pane label="基本信息" name="1">
+                        <!-- Condition -->
+                        <el-form-item label="名称" :label-width="formLabelWidth" prop="name">
+                            <el-input ref="nameInput" v-model="formData.name" autocomplete="off" @input="change($event)" clearable></el-input>
+                        </el-form-item>
+                        <el-form-item label="业务工作" :label-width="formLabelWidth" prop="work">
+                            <el-input v-model="formData.work" autocomplete="off"></el-input>
+                            <img class="icon-search" @click="workSearch" src="../../../assets/img/search.svg">
+                        </el-form-item>
+                        <el-form-item label="业务数据" :label-width="formLabelWidth"   prop="workData">
+                            <el-input v-model="formData.workData" autocomplete="off" :disabled="true" ></el-input>
+                        </el-form-item>
+                        <!-- <el-form-item label="隐藏" :label-width="formLabelWidth" prop="work">
+                            <el-checkbox v-model="formData.checked"></el-checkbox>
+                        </el-form-item> -->
+                        <el-form-item label="描述：" :label-width="formLabelWidth" prop="fremark">
+                            <el-input maxlength="500" clearable  autosize show-word-limit type="textarea" v-model="formData.fremark"></el-input>
+                        </el-form-item>
+                        <!-- Condition END-->
+                    </el-tab-pane>
+                    <!-- <el-tab-pane label="业务服务参数列表" name="2">
+                        <el-form-item label="业务服务" label-width="84px" prop="maxTime">
+                            <el-input v-model="formData.maxTime" disabled autocomplete="off"></el-input>
+                        </el-form-item>
+                        <dynamic-table
+                            class="workTable"
+                            :height="310"
+                            :columns="columns3"
+                            :table-data="tableData"
+                            :total="total"
+                            :page-num="pageNum"
+                            :page-size="pageSize"
+                            @current-change="onCurrentChange"
+                            @selection-change="onSelectionChange"
+                            v-loading="tableLoading"
+                            element-loading-text="加载中"
+                        ></dynamic-table>
+                    </el-tab-pane> -->
+                
+                </el-tabs>
+                <!-- 弹出框 -->
+                <el-dialog 
+                title="业务工作"
+                class="workDialog"
+                :modal="false"
+                :close-on-click-modal="closeConfig"
+                :visible.sync="dialogTableVisible">
+                    <!-- Condition -->
+                    <!-- 搜索框 -->
+                    <el-row :gutter="24">
+                        <el-col :span="8">
+                            <el-form-item label="编码 " label-width="43px">
+                                <el-input clearable size="small" v-model="formData.formCode" @input="change($event)" placeholder="请输入"></el-input>
+                            </el-form-item>
+                        </el-col> 
+                        <el-col :span="8">
+                            <el-form-item label="名称 " label-width="43px">
+                                <el-input clearable size="small" v-model="formData.formName" @input="change($event)" placeholder="请输入"></el-input>
+                            </el-form-item>
+                        </el-col> 
+                        <el-col :span="8">
+                            <el-form-item label="工作类型 " label-width="70px">
+                                <el-select v-model="formData.formCtionTypeCon" @input="change($event)" clearable placeholder="请选择">
+                                    <el-option
+                                    v-for="item in options"
+                                    :key="item.value"
+                                    :label="item.label"
+                                    :value="item.value">
+                                    </el-option>
+                                </el-select>
+                                
+                            </el-form-item>
+                        </el-col> 
+                    </el-row>
+                    <el-row :gutter="24">
+                        <el-col :span="6" :offset="18">
+                            <el-button type="primary" size="small" plain @click="reWorkSearchTable('formData')">重置</el-button>
+                            <el-button type="primary" size="small" plain @click="workSearchTableBtn">搜索</el-button>
+                        </el-col>
+                    </el-row>
+                    <!-- 表格 -->
+                    <dynamic-table
+                        class="workTable"
+                        :height="310"
+                        :columns="columns3"
+                        :table-data="gridData"
+                        :total="total"
+                        :page-num="pageNum"
+                        :page-size="pageSize"
+                        @current-change="onCurrentChange"
+                        @selection-change="onSelectionChange"
+                        v-loading="tableLoading"
+                        element-loading-text="加载中"
+                    ></dynamic-table>
+                    <!-- Condition END-->
+                    <!-- footer -->
+                    <footer>
+                        <el-button   size="small" plain @click="gridDataAdd">确定</el-button>
+                        <!-- <el-button  type="primary" size="small" plain @click="dialogTableVisible = false">关闭</el-button> -->
+                    </footer>
+                    <!-- footer END-->
+                </el-dialog>
              </el-form>
+             <el-row :gutter="20">
+                <el-col :span="12" style="text-align: right;">
+                    <el-button size="small" @click="saveConfig">保存</el-button>
+                </el-col>
+                <el-col :span="12">
+                    <el-button size="small" @click="cancelConfig">取消</el-button>
+                </el-col>
+            </el-row>
         </div>
         
     <!-- </el-dialog> -->
@@ -263,7 +271,7 @@ export default {
         // 监听配置数据源
         data: {
             handler (obj) {
-                if(obj.name === "Fork"){console.log( obj)
+                if(obj.name === "Fork"){
                     if(!obj.oid && (obj.isSaveFlag==undefined)){
                         this.formData = {}
                         this.formData.name = obj.displayName
@@ -296,27 +304,26 @@ export default {
             if (bool) {
                 // this.$refs['formData'].resetFields();
             }else {
-                this.$emit(
-                "saveFormData",
-                this.formData
-                ); //console.log( this.formData)
+                 //console.log( this.formData)
             }
         }
     },
     methods: {
         // 取消配置操作
         cancelConfig () {
-            this.dialogVisible = false;
-            this.$refs.workflowConfigForm.resetFields();
-            this.$emit('cancel');
+            this.$emit("saveFormData",this.formData,'CANCEL');
         },
         // 执行保存配置操作
         saveConfig () {
-            this.$refs.workflowConfigForm.validate(valid => {
-                if (!valid) return;
-                this.$emit('save', this.formData);
-                this.dialogVisible = false;
-            });
+            if(this.formData.name == ''){
+                this.$message.error("保存失败,请填写名称!");
+                return;
+            }
+            if(this.formData.work == ''){
+                this.$message.error("保存失败,请选择业务工作!");
+                return;
+            }
+            this.$emit("saveFormData",this.formData,'SAVE');
         },
         handleClick(tab, event) {
             // console.log(tab, event);

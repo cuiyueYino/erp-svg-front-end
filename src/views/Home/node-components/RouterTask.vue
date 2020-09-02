@@ -1,13 +1,13 @@
 <template>
 <!-- 弹出框内容 -->
-        <div v-show="visible">
-              <el-form
-                label-width="110px"
-                :rules="configRules"
-                ref="formData"
-                class="dataForm"
-                :model="formData"
-                >
+    <div v-show="visible">
+        <el-form
+        label-width="110px"
+        :rules="configRules"
+        ref="formData"
+        class="dataForm"
+        :model="formData"
+        >
             <!-- TAB页 -->
             <el-tabs v-model="activeName" @tab-click="handleClick">
                 <el-tab-pane label="基本信息" name="1">
@@ -28,8 +28,16 @@
                     </el-form-item>
                 </el-tab-pane>
             </el-tabs>
-              </el-form>
-        </div>
+        </el-form>
+        <el-row :gutter="20">
+            <el-col :span="12" style="text-align: right;">
+                <el-button size="small" @click="saveConfig">保存</el-button>
+            </el-col>
+            <el-col :span="12">
+                <el-button size="small" @click="cancelConfig">取消</el-button>
+            </el-col>
+        </el-row>
+    </div>
 </template>
 
 <script>
@@ -179,7 +187,6 @@ export default {
         data: {
             handler (obj) {
             if(obj.name === "Task"){
-                console.log(obj)
                 if(!obj.oid && (obj.isSaveFlag==undefined)){
                     this.formData = {}
                     this.formData.name = obj.displayName
@@ -208,29 +215,38 @@ export default {
             if (bool) {
                 //this.$refs['formData'].resetFields();
             }else {
-                this.formData.checked = this.checked;
-                this.formData.join = this.join;
-                this.$emit(
-                "saveFormData",
-                this.formData
-                ); //console.log( this.formData)
+                 //console.log( this.formData)
             }
         }
     },
     methods: {
         // 取消配置操作
         cancelConfig () {
-            this.dialogVisible = false;
-            this.$refs.workflowConfigForm.resetFields();
-            this.$emit('cancel');
+            this.formData.checked = this.checked;
+            this.formData.join = this.join;
+            this.$emit(
+            "saveFormData",
+            this.formData,
+            'CANCEL'
+            );
         },
         // 执行保存配置操作
         saveConfig () {
-            this.$refs.workflowConfigForm.validate(valid => {
-                if (!valid) return;
-                this.$emit('save', this.formData);
-                this.dialogVisible = false;
-            });
+            if(this.formData.name ==''){
+                this.$message.error("保存失败,请填写名称!");
+                return;
+            }
+            if(this.formData.code ==''){
+                this.$message.error("保存失败,请填写编码!");
+                return;
+            }
+            this.formData.checked = this.checked;
+            this.formData.join = this.join;
+            this.$emit(
+            "saveFormData",
+            this.formData,
+            'SAVE'
+            );
         },
         handleClick(tab, event) {
             // console.log(tab, event);
