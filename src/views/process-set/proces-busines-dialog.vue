@@ -52,21 +52,22 @@
         <el-col  :span="type == '用户'?15:24" class="tree-class">
             <h3  v-show="type == '用户'">角色</h3>
             <!-- 搜索框 -->
-             <el-row :gutter="12">
-                <el-col :span="8" >
-                    <el-form-item label="编码" label-width="70px">
-                        <el-input clearable size="small" v-model="formData.formCode" placeholder="请输入"></el-input>
-                    </el-form-item>
-                </el-col> 
-                <el-col :span="8"  >
-                    <el-form-item label="名称" label-width="70px">
-                        <el-input clearable size="small" v-model="formData.formName" placeholder="请输入"></el-input>
-                    </el-form-item>
-                </el-col>
-                <el-col :span="6" v-if="type === '用户'">
-                    <el-button type="primary" size="small" plain @click="reWorkSearchTable()">重置</el-button>
-                    <el-button type="primary" size="small" plain @click="workSearchTable">搜索</el-button>
-                </el-col>
+             <el-row :gutter="12" v-if="type === '用户'" >
+                    <el-col :span="8">
+                        <el-form-item label="编码" label-width="70px">
+                            <el-input clearable size="small" v-model="formData.formCode" placeholder="请输入"></el-input>
+                        </el-form-item>
+                    </el-col> 
+                    <el-col :span="8">
+                        <el-form-item label="名称" label-width="70px">
+                            <el-input clearable size="small" v-model="formData.formName" placeholder="请输入"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="6">
+                        <el-button type="primary" size="small" plain @click="reWorkSearchTable()">重置</el-button>
+                        <el-button type="primary" size="small" plain @click="workSearchTable">搜索</el-button>
+                    </el-col>
+                 </el-row>
                 <!--<el-col :span="8" v-show="type !== '用户'">
                     <el-form-item label="虚拟组织" label-width="84px">
                         <el-radio-group v-model="radio">
@@ -83,8 +84,8 @@
                         </el-radio-group>
                     </el-form-item>
                 </el-col>-->
-             </el-row>
-            <el-row :gutter="24" >
+             <!-- </el-row>
+            <el-row :gutter="24" > -->
                 <!--<el-col :span="8">
                     <el-form-item label="组织类型" v-show="type !== '用户'" label-width="84px">
                          <el-select v-model="formData.formCtionTypeCon" clearable placeholder="请选择">
@@ -133,11 +134,23 @@
                         </el-select>
                     </el-form-item>
                 </el-col> -->
-                <el-col :span="6" v-show="type !== '用户'">
-                    <el-button type="primary" size="small" plain @click="reWorkSearchTable()">重置</el-button>
-                    <el-button type="primary" size="small" plain @click="workSearchTable">搜索</el-button>
-                </el-col>
-             </el-row>
+                <el-row v-show="type !== '用户'">
+                    <el-col :span="8">
+                        <el-form-item label="编码" label-width="70px">
+                            <el-input clearable size="small" v-model="formData.formCodeDep" placeholder="请输入"></el-input>
+                        </el-form-item>
+                    </el-col> 
+                    <el-col :span="8">
+                        <el-form-item label="名称" label-width="70px">
+                            <el-input clearable size="small" v-model="formData.formNameDep" placeholder="请输入"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="6">
+                        <el-button type="primary" size="small" plain @click="reWorkSearchTable()">重置</el-button>
+                        <el-button type="primary" size="small" plain @click="workSearchTable">搜索</el-button>
+                    </el-col>
+                </el-row>
+            
               <!-- 表格-->
                 <dynamic-table
                  v-show=" type !== '用户'"
@@ -443,6 +456,7 @@ export default {
         },
         //条件查询 role table
         workSearchTable(){
+            debugger;
             if(this.type =='用户'){
                 let Roledata={};
                 Roledata.queryType='';
@@ -455,8 +469,8 @@ export default {
                 let Roledata={};
                 Roledata.page=this.pageNum;
                 Roledata.size=this.pageSize;
-                Roledata.code=this.formData.formCode;
-                Roledata.name=this.formData.formName;
+                Roledata.code=this.formData.formCodeDep;
+                Roledata.name=this.formData.formNameDep;
                 Roledata.company=this.companyId;
                 this.getDepartment(Roledata);
             }
