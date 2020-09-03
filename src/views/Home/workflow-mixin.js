@@ -604,12 +604,25 @@ export default {
             // 打开配置对话框   
             this.dialogSaveVisible = true;
             this.$api.svg.addSvg(data).then(res=>{
+                console.log(res)
+                if(res.data.code === 999){
+                    this.$message.error(res.data.msg);
+                }else{
+                    if( res.data.data.msg == 'success' ){
+                        this.$message.success('保存成功');
+                        //sessionStorage.setItem("eidtMsg",null);
+                    }else{
+                        this.$message.error("保存失败,请填写完整信息");
+                    }   
+                }
+                /*console.log(res)
+                debugger
                 if( res.data.data.msg == 'success' ){
                     this.$message.success('保存成功');
                     //sessionStorage.setItem("eidtMsg",null);
                 }else{
                     this.$message.error("保存失败,请填写完整信息");
-                }
+                }*/
              
             },error=>{
                 console.log(error)
@@ -676,12 +689,25 @@ export default {
             // 打开配置对话框   
             this.dialogSaveVisible = true;
             this.$api.svg.addSvg(data).then(res=>{
+                console.log(res)
+                if(res.data.code===999){
+                    this.$message.error(res.data.msg);
+                }else{
+                    if( res.data.data.msg == 'success' ){
+                        this.$message.success('保存成功');
+                        //sessionStorage.setItem("eidtMsg",null);
+                    }else{
+                        this.$message.error("保存失败,请填写完整信息");
+                    }
+                }
+                /*console.log(res)
+                debugger
                 if( res.data.data.msg == 'success' ){
                     this.$message.success('保存成功');
                     //sessionStorage.setItem("eidtMsg",null);
                 }else{
                     this.$message.error("保存失败,请填写完整信息");
-                }
+                }*/
             },error=>{
                 console.log(error)
             })

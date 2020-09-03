@@ -486,7 +486,7 @@
 				}
 				this.searchRole(fromdataU);
 				let fromdata = {};
-				fromdata.page = this.pageNum;
+				fromdata.page = 1;
 				fromdata.size = this.pageSize;
 				this.getUserData(fromdata);
 			},
@@ -507,7 +507,7 @@
 				}
 				this.getUserData(fromdata);
 				let fromdataU = {};
-				fromdataU.page = this.pageNum;
+				fromdataU.page = 1;
 				fromdataU.size = this.pageSize;
 				this.searchRole(fromdataU);
 			},
