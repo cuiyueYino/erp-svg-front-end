@@ -252,6 +252,8 @@ export default {
         },
         //新增
         add(){
+            this.checked=false;
+            this.backchecked=false;
             this.dialogFormVisible = true
         },
         addSubmit(formName){

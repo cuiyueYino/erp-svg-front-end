@@ -31,8 +31,8 @@
                         :table-data="tableData"
                         :total="total"
                         ref="multipleTable"
-                        :page-num="pageNum"
-                        :page-size="pageSize"
+                        :pageNum="pageNum"
+                        :pageSize="pageSize"
                         @current-change="onCurrentChange"
                         @selection-change="onSelectionChange"
                         v-loading="false"
@@ -163,6 +163,12 @@ export default {
             let formDataA ={};
             formDataA.page=val;
             formDataA.size=this.pageSize;
+            if(this.dialog.code){
+                formDataA.fcode=this.dialog.code;
+            }
+            if(this.dialog.name){
+                formDataA.fname=this.dialog.name;
+            }
             this.getActivity(formDataA);
         },
         //提交
@@ -182,7 +188,8 @@ export default {
         //高级查询
         onHandleMoreSearch(){
             let formDataA ={};
-            formDataA.page=this.pageNum;
+            this.pageNum=1;
+            formDataA.page=1;
             formDataA.size=this.pageSize;
             if(this.dialog.code){
                 formDataA.fcode=this.dialog.code;
@@ -203,6 +210,7 @@ export default {
                         let tableDataArr=returndata.data.rows;
                         this.tableData = tableDataArr;
                         this.total=returndata.data.total;
+                        this.pageNum=returndata.data.page;
                     }else{
                         this.tableData =[];
                         this.total=0;
@@ -233,7 +241,7 @@ export default {
             this.rowFincename=rowDataObj.finanrowname;
             this.dialog={};
             let formData ={};
-            formData.page=this.pageNum;
+            formData.page=1;
             formData.size=this.pageSize;
             this.getActivity(formData);
             this.selectCom();

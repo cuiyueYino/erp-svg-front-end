@@ -41,7 +41,7 @@
                     </el-row>  
                     <el-row>
                         <el-col :span="22">
-                            <processnodelist :rowDataprocessObj="rowDataprocessObj"  @changeShow="showprocessData"/> 
+                            <processnodelist :rowDataprocessObj="rowDataprocessObj" :rowDataprocessOid="rowDataprocessOid"  @changeShow="showprocessData"/> 
                         </el-col>
                     </el-row>
                     <el-tabs v-model="atctiveName" @tab-click="handleClick">
@@ -173,6 +173,7 @@ export default {
             rowEconomicIndicatorstype:false,
             rowUTSDataObj:{},
             rowDataprocessObj: [],
+            rowDataprocessOid:{},
             rowCOOTaskDataObj: {},
             rowComPanDetaiDataObj: {},
             rowEFListDataObj: {},
@@ -415,9 +416,21 @@ export default {
             if(!this.isOa){
                 this.title=this.rowWAADataObj.nametitle;
                 let finandata=this.rowWAADataObj.selectData;
+                let rowData= {};
+                rowData.finanrowname = finandata[0].fsrcCompany+"/"+finandata[0].factivityName;
+                rowData.finanrowId = finandata[0].foid;
+                rowData.nametitle = finandata[0].fsubject;
+                this.rowDataprocessOid=rowData;
                 formDataA.oid=finandata[0].foid;
+                formDataA.userId=localStorage.getItem("ms_userId");
             } else {
+                let rowData= {};
+                rowData.finanrowname = this.rowWAADataObj.fsrcCompany+"/"+this.rowWAADataObj.factivityName;
+                rowData.finanrowId = this.rowWAADataObj.foid;
+                rowData.nametitle = this.rowWAADataObj.fsubject;
+                this.rowDataprocessOid=rowData;
                 formDataA.oid= this.rowWAADataObj.fsrcoId;
+                formDataA.userId=localStorage.getItem("ms_userId");
                 this.title = "入库申请申请人审批";
             }
             this.$api.processSet.getunhandledTask(formDataA).then(response => {

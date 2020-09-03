@@ -25,12 +25,12 @@
                     </el-row>
                     <el-row>
                         <el-col :span="10">
-                            <el-form-item label="显示顺序">
+                            <el-form-item label="显示顺序" prop="orderNum">
                                 <el-input v-model="formdata.orderNum" ></el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="10" :offset="2">
-                            <el-form-item label="菜单类型">
+                            <el-form-item label="菜单类型" prop="menuType">
                                 <el-select v-model="formdata.menuType" value-key="value" clearable>
                                     <el-option
                                         v-for="item in menuData"
@@ -67,7 +67,7 @@
                     <el-row>
                         <el-col :span="22">
                             <el-form-item label="描述">
-                                <el-input type="textarea" v-model="formdata.remark" :rows="3" ></el-input>
+                                <el-input type="textarea" v-model="formdata.remark" maxlength="250" :rows="3" ></el-input>
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -120,6 +120,8 @@ export default {
             rules: {
                 code:[{ required: true, message: '请输入编码', trigger: 'blur' }],
                 name:[{ required: true, message: '请输入名称', trigger: 'blur' }],
+                orderNum:[{ required: true, message: '请输入显示顺序', trigger: 'blur' }],
+                menuType:[{ required: true, message: '请输入菜单类型', trigger: 'change' }],
             },
             NewOrEditFlag:'',
         }
@@ -154,6 +156,18 @@ export default {
                 SaveFlag=true;
             }else{
                 this.$message.error('请输入名称!');
+                SaveFlag=false
+            }
+            if(this.formdata.orderNum){
+                SaveFlag=true;
+            }else{
+                this.$message.error('请输入显示顺序!');
+                SaveFlag=false
+            }
+            if(this.formdata.menuType){
+                SaveFlag=true;
+            }else{
+                this.$message.error('请选择菜单类型!');
                 SaveFlag=false
             }
             if(this.NewOrEditFlag==="NEW"){

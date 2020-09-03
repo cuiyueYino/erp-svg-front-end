@@ -314,7 +314,7 @@ export default {
                     },
                     {
                         key: 'positionName',
-                        title: '职务'
+                        title: '职位'
                     },
                 ];
                 if(this.title =='用户查询'){

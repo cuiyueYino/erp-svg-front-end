@@ -52,8 +52,8 @@
                         <el-select
                             v-model="form.fcompanyoid"
                             size="small"
+                            :disabled="homeTitle == '查看业务'?true:false" 
                             clearable
-                            placeholder="请选择"
                         >
                             <el-option
                             v-for="item in options"
@@ -73,6 +73,7 @@
                             class="Carfiles"
                             :disabled="homeTitle == '查看业务'?true:false" 
                             autocomplete="off"
+                            placeholder="请选择部门"
                             ></el-input>
                             <img class="icon-search"  
                             v-show="homeTitle !== '查看业务'"
@@ -102,7 +103,7 @@
                 </el-row>
             <el-row :gutter="20">
             <el-col :span="12" style="text-align: right;">
-                <el-button  size="small" v-show="homeTitle !== '查看业务'" @click="saveConfig">保存</el-button>
+                <el-button  size="small" v-show="homeTitle !== '查看业务'" @click="saveConfig('form')">保存</el-button>
             </el-col>
             <el-col :span="12"  :offset="homeTitle == '查看业务'?11:0">
                 <el-button size="small" @click="cancelConfig">{{homeTitle == '查看业务'?'关闭':'取消'}}</el-button>
@@ -110,7 +111,7 @@
         </el-row>
         </el-dialog>
         <!-- 部门弹出框 -->
-        <pro-bus-dialog :visible="proBusDialogF" :title="titleStr" :type="userType"  @closeDialog="closeBaseInfo"></pro-bus-dialog>
+        <pro-bus-dialog :visible="proBusDialogF" :title="titleStr" :type="userType" :companyId="curCompanyId"  @closeDialog="closeBaseInfo"></pro-bus-dialog>
     </div>
 </template>
 
@@ -129,6 +130,7 @@ export default {
             options: [],
             homeTitle:'',
             userType:'',
+            curCompanyId:'',
             proBusDialogF:false,
             proApartDialogF:false,
             dialogFormVisible:false,
@@ -180,8 +182,7 @@ export default {
             },
             formLabelWidth: '120px',
             rules: {
-                departMentName:[{ required: true, message: '请输入部门', trigger: 'blur' }],
-                company:[{ required: true, message: '请选择公司', trigger: 'blur' }],
+                fcompanyoid:[{ required: true, message: '请选择公司', trigger: 'blur' }],
             }
             
         };
@@ -194,9 +195,9 @@ export default {
         fromdata.fcreator=localStorage.getItem("ms_userId")
         this.getPBListData(fromdata);
         // 获取公司方法
-        this.$api.jobUserManagement.getCompanyData().then((res) => {
+        this.$api.processSet.getUserCompany(localStorage.getItem("ms_userId")).then((res) => {
             if (res.status == "200") {
-            this.options = res.data.data.rows;
+                this.options = res.data.data;
             }
         }),
         (error) => {
@@ -259,6 +260,7 @@ export default {
         //新建、编辑、查看
         add(data){
             if(data=='新增业务'){
+                // this.$refs['form'].resetFields();
                 this.dialogFormVisible=true;
                 this.homeTitle=data;
                 this.form={};
@@ -320,73 +322,81 @@ export default {
             this.dialogFormVisible=false;
         },
         //保存
-        saveConfig(){
-            if(this.homeTitle=='新增业务'){
-                let SaveFlag=true;
-                let formData ={};
-                if(this.form.departMentName){
-                    formData.fdepartmentid=this.form.fdepartmentid;
-                    SaveFlag=true;
-                }else{
-                   this.$message.error('请选择部门!');
-                   SaveFlag=false;
-                }
-                if(this.tableUBData.length >0){
-                    let roleList=[];
-                    let userList=[];
-                    for(let i=0;i<this.tableUBData.length;i++){
-                        roleList.push(this.tableUBData[i].froleId);
-                        userList.push(this.tableUBData[i].fuserId);
+        saveConfig(formName){
+            this.$refs[formName].validate((valid) => {
+                if(valid){
+                    if(this.homeTitle=='新增业务'){
+                        let SaveFlag=true;
+                        let formData ={};
+                        if(this.form.departMentName){
+                            formData.fdepartmentid=this.form.fdepartmentid;
+                            SaveFlag=true;
+                        }else{
+                        this.$message.error('请选择部门!');
+                        SaveFlag=false;
+                        }
+                        if(this.tableUBData.length >0){
+                            let roleList=[];
+                            let userList=[];
+                            for(let i=0;i<this.tableUBData.length;i++){
+                                roleList.push(this.tableUBData[i].froleId);
+                                userList.push(this.tableUBData[i].fuserId);
+                            }
+                            formData.roleList=roleList;
+                            formData.userList=userList;
+                            SaveFlag=true;
+                        }else{
+                        this.$message.error('请添加角色和用户!');
+                        SaveFlag=false;
+                        }
+                        formData.fcompanyid= this.form.fcompanyoid;
+                        formData.fhandler=localStorage.getItem('ms_userId');
+                        formData.fcreator=localStorage.getItem('ms_userId');
+                    
+                        if(SaveFlag){
+                            this.saveLCData(formData);
+                        }
+                    }else if(this.homeTitle=='编辑业务'){
+                        let SaveFlag=true;
+                        let formData ={};
+                        if(this.form.departMentName){
+                            formData.fdepartmentid=this.form.fdepartmentid;
+                            SaveFlag=true;
+                        }else{
+                        this.$message.error('请选择部门!');
+                        SaveFlag=false;
+                        }
+                        if(this.tableUBData.length >0){
+                            let roleList=[];
+                            let userList=[];
+                            for(let i=0;i<this.tableUBData.length;i++){
+                                //错误
+                                roleList.push(this.tableUBData[i].froleId);
+                                userList.push(this.tableUBData[i].fuserId);
+                            }
+                            formData.roleList=roleList;
+                            formData.userList=userList;
+                            SaveFlag=true;
+                        }else{
+                        this.$message.error('请添加角色和用户!');
+                        SaveFlag=false;
+                        }
+                        formData.fcompanyid=this.form.fcompanyid;
+                        formData.fhandler=localStorage.getItem('ms_userId');
+                        formData.fcreator=localStorage.getItem('ms_userId');
+                        formData.foid=this.form.foid;
+                        if(SaveFlag){
+                            this.updateLCData(formData);
+                        }
+                    }else{
+                        this.dialogFormVisible=false;
                     }
-                    formData.roleList=roleList;
-                    formData.userList=userList;
-                    SaveFlag=true;
                 }else{
-                   this.$message.error('请添加角色和用户!');
-                   SaveFlag=false;
+                    this.$message.error('请选择公司和部门!');
+                    return false;
                 }
-                formData.fcompanyid= this.form.fcompanyoid;
-                formData.fhandler=localStorage.getItem('ms_userId');
-                formData.fcreator=localStorage.getItem('ms_userId');
-              
-                if(SaveFlag){
-                    this.saveLCData(formData);
-                }
-            }else if(this.homeTitle=='编辑业务'){
-                let SaveFlag=true;
-                let formData ={};
-                if(this.form.departMentName){
-                    formData.fdepartmentid=this.form.fdepartmentid;
-                    SaveFlag=true;
-                }else{
-                   this.$message.error('请选择部门!');
-                   SaveFlag=false;
-                }
-                if(this.tableUBData.length >0){
-                    let roleList=[];
-                    let userList=[];
-                    for(let i=0;i<this.tableUBData.length;i++){
-                        //错误
-                        roleList.push(this.tableUBData[i].froleId);
-                        userList.push(this.tableUBData[i].fuserId);
-                    }
-                    formData.roleList=roleList;
-                    formData.userList=userList;
-                    SaveFlag=true;
-                }else{
-                   this.$message.error('请添加角色和用户!');
-                   SaveFlag=false;
-                }
-                formData.fcompanyid=this.form.fcompanyid;
-                formData.fhandler=localStorage.getItem('ms_userId');
-                formData.fcreator=localStorage.getItem('ms_userId');
-                formData.foid=this.form.foid;
-                if(SaveFlag){
-                    this.updateLCData(formData);
-                }
-            }else{
-                this.dialogFormVisible=false;
-            }
+                
+            });
         },
         //新建流程业务
         saveLCData(params){
@@ -425,6 +435,7 @@ export default {
         getLCData(params,data){
             let fromdata=params;
             this.$api.processSet.getProBusData(fromdata).then(response => {
+                console.log(response)
                 let responsevalue = response;
                 if(responsevalue){
                     this.form=responsevalue.data.data;
@@ -433,27 +444,31 @@ export default {
                     let UBData=[];
                     let roleList=responsevalue.data.data.roleVoList;
                     let userList=responsevalue.data.data.userVoList;
-                    if(roleList && userList){
-                        for(let i=0;i<roleList.length;i++){ 
-                            let DataObj={};
-                            DataObj.froleId=roleList[i][0].oid;
-                            DataObj.froleName=roleList[i][0].name;
-                            let userId='';
-                            let userName='';
-                            let usetL=userList[i];
-                            for(let j=0;j<usetL.length;j++){
-                                let LSTObj=usetL[j];
-                                userId+=LSTObj.oid+",";
-                                userName+=LSTObj.name+",";
+                    if(roleList != undefined && userList != undefined){
+                        if(roleList && userList){
+                            for(let i=0;i<roleList.length;i++){ 
+                                let DataObj={};
+                                DataObj.froleId=roleList[i][0].oid;
+                                DataObj.froleName=roleList[i][0].name;
+                                let userId='';
+                                let userName='';
+                                let usetL=userList[i];
+                                for(let j=0;j<usetL.length;j++){
+                                    let LSTObj=usetL[j];
+                                    userId+=LSTObj.oid+",";
+                                    userName+=LSTObj.name+",";
+                                }
+                                userId=userId.slice(0,userId.length -1);
+                                userName=userName.slice(0,userName.length -1);
+                                DataObj.fuserId=userId;
+                                DataObj.fuserName=userName;
+                                UBData.push(DataObj);
                             }
-                            userId=userId.slice(0,userId.length -1);
-                            userName=userName.slice(0,userName.length -1);
-                            DataObj.fuserId=userId;
-                            DataObj.fuserName=userName;
-                            UBData.push(DataObj);
+                            this.tableUBData=UBData;
+                        }else{
+                            this.tableUBData=[];
                         }
-                        this.tableUBData=UBData;
-                    }else{
+                    } else{
                         this.tableUBData=[];
                     }
                 }else{
@@ -463,15 +478,21 @@ export default {
         },
         //查询部门按钮点击事件
         workSearch(){
-            this.titleStr = '部门查询'
-            this.proBusDialogF = true;
-            this.userType = '部门'
+            if(this.form.fcompanyoid){
+                this.titleStr = '部门查询'
+                this.proBusDialogF = true;
+                this.userType = '部门'
+                this.curCompanyId = this.form.fcompanyoid;
+            } else {
+                this.$message.error('请选择公司!');  
+            }
         },
         //新建用户角色
         joinSearch(Str){
             this.titleStr = '新增人员&角色'
             this.proBusDialogF = true;
             this.userType = Str;
+            this.curCompanyId = this.form.fcompanyoid;
         },
         closeBaseInfo(data,type){
             this.proBusDialogF = false;

@@ -577,7 +577,7 @@ export default {
             this.linkData.splice(index, 1);
         },
         // 新增-点击保存工作流按钮执行事件
-        saveNewWorkflow (workflowNodes) {console.log(workflowNodes) 
+        saveNewWorkflow (workflowNodes) {
             workflowNodes.forEach((item,index)=>{
                 if(item == null){
                     workflowNodes.splice(index,1)
@@ -590,8 +590,6 @@ export default {
                     "oid":  editMsg.oid,
                     "nodes": workflowNodes
                 };
-            
-            console.log(data)
             console.log(JSON.stringify(data))
             //
             this.selectedNode = {};
@@ -599,17 +597,28 @@ export default {
             this.saveFlag = 'workflow';
             // 清空配置类型
             this.nodeType = '';
-            //
             this.$set(this.selectedNode, 'data', this.workflowData);
             // 打开配置对话框   
             this.dialogSaveVisible = true;
             this.$api.svg.addSvg(data).then(res=>{
+                if(res.data.code === 999){
+                    this.$message.error(res.data.msg);
+                }else{
+                    if( res.data.data.msg == 'success' ){
+                        this.$message.success('保存成功');
+                        //sessionStorage.setItem("eidtMsg",null);
+                    }else{
+                        this.$message.error("保存失败,请填写完整信息");
+                    }   
+                }
+                /*console.log(res)
+                debugger
                 if( res.data.data.msg == 'success' ){
                     this.$message.success('保存成功');
                     //sessionStorage.setItem("eidtMsg",null);
                 }else{
                     this.$message.error("保存失败,请填写完整信息");
-                }
+                }*/
              
             },error=>{
                 console.log(error)
@@ -663,7 +672,6 @@ export default {
                     "oid":  editMsg.oid,
                     "nodes": workflowNodes
                 };
-            console.log("wwww")
             console.log(JSON.stringify(data))
             //
             this.selectedNode = {};
@@ -676,16 +684,27 @@ export default {
             // 打开配置对话框   
             this.dialogSaveVisible = true;
             this.$api.svg.addSvg(data).then(res=>{
+                if(res.data.code===999){
+                    this.$message.error(res.data.msg);
+                }else{
+                    if( res.data.data.msg == 'success' ){
+                        this.$message.success('保存成功');
+                        //sessionStorage.setItem("eidtMsg",null);
+                    }else{
+                        this.$message.error("保存失败,请填写完整信息");
+                    }
+                }
+                /*console.log(res)
+                debugger
                 if( res.data.data.msg == 'success' ){
                     this.$message.success('保存成功');
                     //sessionStorage.setItem("eidtMsg",null);
                 }else{
                     this.$message.error("保存失败,请填写完整信息");
-                }
+                }*/
             },error=>{
                 console.log(error)
             })
-            console.log(workflowNodes)
         }
     }
 }

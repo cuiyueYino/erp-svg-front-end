@@ -202,6 +202,7 @@ export default {
                     let tableDataArr=returndata.data.rows;
                     this.tableData = tableDataArr;
                     this.total = returndata.data.total;
+                    this.pageNum=returndata.data.page;
                     this.MoreSearchVisible=false;
                 } else {
                     this.$message.success('没有查到数据!');
@@ -234,7 +235,8 @@ export default {
         //获得查询结果
         onHandleMoreSearch() {
             let fromdata={};
-            fromdata.page=this.pageNum;
+            this.pageNum=1;
+            fromdata.page=1;
             fromdata.size=this.pageSize;
             let namevalueS=this.dialog.name;
             if(namevalueS && namevalueS!=''){
@@ -292,7 +294,7 @@ export default {
             this.rowFincename=rowDataObj.finanrowname;
             this.dialog={};
             let fromdata={};
-            fromdata.page=this.pageNum;
+            fromdata.page=1;
             fromdata.size=this.pageSize;
             this.getdepaData(fromdata);
             this.selectCom();
