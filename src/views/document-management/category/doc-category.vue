@@ -16,7 +16,7 @@
                             </el-tooltip>
                         </div>
                     </el-tree>
-                </el-col>   
+                </el-col>
                 <el-col :span="18" :offset="1">
                     <el-card class="box-card">
                         <el-row :gutter="24">
@@ -41,7 +41,7 @@
                                 </el-form>
                             </el-col>
                             <el-col :span="9" :offset="3">
-                                <el-button type="success" icon="el-icon-plus" plain @click="createDocumentCategory">新建</el-button> 
+                                <el-button type="success" icon="el-icon-plus" plain @click="createDocumentCategory">新建</el-button>
                                 <el-button type="success" icon="el-icon-edit" plain @click="editDocumentCategory">修改</el-button>
                                 <el-button type="danger" icon="el-icon-delete" plain @click="removeDocumentCategory">删除</el-button>
                                 <el-button type="primary" icon="el-icon-notebook-2" plain @click="showDocumentCategory">查看</el-button>
@@ -154,7 +154,7 @@ export default {
         this.maketree();
     },
     methods:{
-        
+
         //查询按钮
         findData(){
             let field = this.formInline.document;
@@ -217,7 +217,7 @@ export default {
                             }
                         });
                     }
-                    
+
                 }else{
                     this.$message.error("请选择一行数据!");
                 }
@@ -255,7 +255,7 @@ export default {
                     finandata.nametitle="文档类别维护新增";
                     finandata.NewOrEditFlag="NEW";
                     finandata.flevel= ( this.documentLevel == null || this.documentLevel == '' )? '一级': '二级';
-                    this.rowNMMDataObj=finandata; 
+                    this.rowNMMDataObj=finandata;
                 } else {
                     this.$message.error("请选择一个文档类别!");
                 }
@@ -304,7 +304,7 @@ export default {
                         </span>
                     );
                 }
-            }  
+            }
         },
         //树结构点击事件
         handleNodeClick(data) {
@@ -321,6 +321,7 @@ export default {
             let formDataA ={};
             formDataA.page=val;
             formDataA.size=this.pageSize;
+            formDataA.fpid=this.documentFpid;
             this.searchMenutable(formDataA);
         },
         //table选中事件
@@ -329,7 +330,7 @@ export default {
         },
         // 改变table行样式
         tableRowClassName(){},
-        //是否展示dialog弹窗 : 
+        //是否展示dialog弹窗 :
         showAddMenu(type,operate){
             if(type === false){
                 this.rowNMMtype = false;
@@ -373,9 +374,9 @@ export default {
                 } else {
                     this.$message.success('数据库没有该条数据!');
                 }
-            }); 
+            });
         },
-        
+
     }
 };
 </script>

@@ -1,13 +1,13 @@
 <template>
 <!-- 弹出框内容 -->
-        <div v-show="visible">
-            <el-form
-                label-width="110px"
-                :rules="configRules"
-                ref="formData"
-                class="dataForm"
-                :model="formData"
-                >
+    <div v-show="visible">
+        <el-form
+            label-width="110px"
+            :rules="configRules"
+            ref="formData"
+            class="dataForm"
+            :model="formData"
+        >
             <!-- TAB页 -->
             <el-tabs v-model="activeName" @tab-click="handleClick">
                 <el-tab-pane label="基本信息" name="1">
@@ -35,8 +35,16 @@
                     </el-form-item>
                 </el-tab-pane>
             </el-tabs>
-            </el-form>
-        </div>
+        </el-form>
+        <el-row :gutter="20">
+            <el-col :span="12" style="text-align: right;">
+                <el-button size="small" @click="saveConfig">保存</el-button>
+            </el-col>
+            <el-col :span="12">
+                <el-button size="small" @click="cancelConfig">取消</el-button>
+            </el-col>
+        </el-row>
+    </div>
 </template>
 
 <script>
@@ -87,7 +95,7 @@ export default {
                 name: { required: true, message: '请输入名称', trigger: 'blur' },
                 code: { required: true, message: '请输入编码', trigger: 'blur' },
                 company: [
-                    { required: true, message: '请选择子流程', trigger: 'change' }
+                    { required: true, message: '请选择子流程', trigger: 'blur' }
                 ],
             },
             // 对话框显示标识
@@ -123,7 +131,7 @@ export default {
         // 监听配置数据源
         data: {
             handler (obj) {
-                if(obj.type === "Subprocess" || obj.name === "Subprocess"){console.log(obj);//debugger
+                if(obj.type === "Subprocess" || obj.name === "Subprocess"){
                 if(!obj.oid && (obj.isSaveFlag==undefined)){
                     this.formData = {}
                     this.formData.name = obj.displayName
@@ -151,25 +159,12 @@ export default {
             this.$emit('update:visible', bool);
         },
         // 对话框显示 自动聚焦name输入框
-        visible (bool) {console.log(bool)
+        visible (bool) {
             this.dialogVisible = bool;
             if (bool) {
                 // this.$refs['formData'].resetFields();
             }else {
-                this.newData.forEach(item => {
-                    if(item.foid == this.formData.company){
-                        this.formData.refWfProcess = {
-                            "oid": item.foid,
-                            "code":item.fcode,
-                            "name":  item.fname
-                     }
-                    }
-                });
-               
-                this.$emit(
-                "saveFormData",
-                this.formData
-                ); //console.log( this.formData)
+                 //console.log( this.formData)
             }
         }
     },
@@ -198,17 +193,33 @@ export default {
         },
         // 取消配置操作
         cancelConfig () {
-            this.dialogVisible = false;
-            this.$refs.workflowConfigForm.resetFields();
-            this.$emit('cancel');
+            this.newData.forEach(item => {
+                if(item.foid == this.formData.company){
+                    this.formData.refWfProcess = {"oid": item.foid,"code":item.fcode,"name":  item.fname}
+                }
+            });
+            this.$emit("saveFormData",this.formData,'CANCEL');
         },
         // 执行保存配置操作
         saveConfig () {
-            this.$refs.workflowConfigForm.validate(valid => {
-                if (!valid) return;
-                this.$emit('save', this.formData);
-                this.dialogVisible = false;
+            if(this.formData.name ==''){
+                this.$message.error("保存失败,请填写名称!");
+                return;
+            }
+            if(this.formData.code ==''){
+                this.$message.error("保存失败,请填写编码!");
+                return;
+            }
+            this.newData.forEach(item => {
+                if(item.foid == this.formData.company){
+                    this.formData.refWfProcess = {"oid": item.foid,"code":item.fcode,"name":  item.fname}
+                }
             });
+            if(!this.formData.refWfProcess){
+                this.$message.error("保存失败,请选择子流程!");
+                return;
+            }
+            this.$emit("saveFormData",this.formData,'SAVE');
         },
         handleClick(tab, event) {
             // console.log(tab, event);

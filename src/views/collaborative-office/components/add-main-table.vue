@@ -148,26 +148,26 @@
 				</el-form>
 			</el-card>
 			<!--弹出框-->
-			<el-dialog title="工作事项模板主表分类" top="1vh" :destroy-on-close="true" center :visible.sync="dialogVisible" width="80%">
+			<erpDialog title="工作事项模板主表分类" erpDialogwidth="true" :dialogShow="dialogVisible">
 				<selectMainTableClassification show="1" ref="child"></selectMainTableClassification>
-				<div slot="footer" class="dialog-footer">
+				<div slot="footer">
 					<el-button @click="dialogVisible = false">取 消</el-button>
 					<el-button type="primary" @click="getSelectMainTableClassification">确 定</el-button>
 				</div>
-			</el-dialog>
+			</erpDialog>
 			<!--弹出框-->
-			<el-dialog title="服务" top="1vh" :destroy-on-close="true" center :visible.sync="dialogVisible_TServiceByParams" width="60%">
+			<erpDialog title="服务" erpDialogwidth="false" :dialogShow="dialogVisible_TServiceByParams">
 				<el-table size="small" @row-dblclick="getTServiceByParams" highlight-current-row @row-click="clickRow" :data="tServiceByParams" border>
 					<el-table-column prop="fcode" label="服务编码"></el-table-column>
 					<el-table-column :formatter="ftypeShow" prop="ftype" label="服务类型"></el-table-column>
 					<el-table-column prop="fname" label="服务名称"></el-table-column>
 					<el-table-column prop="fdescription" label="描述"></el-table-column>
 				</el-table>
-				<div slot="footer" class="dialog-footer">
+				<div slot="footer">
 					<el-button @click="dialogVisible_TServiceByParams = false">取 消</el-button>
 					<el-button type="primary" @click="getTServiceByParams">确 定</el-button>
 				</div>
-			</el-dialog>
+			</erpDialog>
 		</div>
 		<div v-if="showFigForm">
 			<formAndTable :files="files" dis="2" showAdd="1" :form-data="conData">

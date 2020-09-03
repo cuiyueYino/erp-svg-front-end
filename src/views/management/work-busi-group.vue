@@ -125,7 +125,7 @@
       :visible.sync="dialogFormVisible"
       :close-on-click-modal="false"
     >
-      <el-form
+      <el-form 
         :model="form"
         :rules="rules"
         ref="form"
@@ -133,17 +133,19 @@
         <el-row :gutter="22">
           <el-col :span="11">
             <el-form-item
-              label="公司："
+              label="公司11："
               :label-width="formLabelWidth"
               class="pop-select"
               prop="fcompanyoid"
             >
               <el-select
-                v-model="form.fcompanyoid"
                 size="small"
                 :disabled="isLook"
                 clearable
                 placeholder="请选择"
+                value-key="id"
+                v-model="form.fcompanyName"
+                @change="selectCompanyChanged"
               >
                 <el-option
                   v-for="item in options"
@@ -217,7 +219,7 @@
             <el-form-item
               label="组员："
               :label-width="formLabelWidth"
-              prop="staffRelUsers"
+              prop="staffRelUsersNames" 
             >
               <el-input
                 type="textarea"
@@ -225,7 +227,7 @@
                 :disabled="isLook"
                 size="small"
                 placeholder="请选择组员"
-                v-model="form.staffRelUsersNames"
+                v-model="form.staffRelUsersNames" 
               ></el-input>
               <img
                 class="icon-search"
@@ -261,7 +263,7 @@
         class="dialog-footer"
       >
         <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button
+        <el-button :disabled="saveBtnFlag"
           type="primary"
           @click="addSubmit('form')"
         >保 存</el-button>
@@ -275,9 +277,9 @@
         :visible="staffTableVisible"
         :type="baseInputType"
         :title="baseInputTitle"
-        :fcompanyid="fcompanyid"
         @closeDialog="closeBaseInfo"
       ></staff-tree-search>
+      <!-- :fcompanyid="fcompanyid" -->
     </el-form>
   </div>
 </template>
@@ -291,7 +293,7 @@ export default {
   inject: ['reload'],
   data() {
     return {
-      fcompanyid: "",
+      saveBtnFlag:false,
       baseInputType: "",
       formProcess: {},
       baseInputTitle: "",
@@ -396,14 +398,16 @@ export default {
       multipleSelection: [],
       checked: false,
       form: {
+        fcompanyName:'',
         fcompanyoid:'',
+        fteamleaderName:'',
         fteamleader: "",
         fteamname: "",
         fteamid: "",
         fremark: "",
-        // transStaffRelUser:'',
-        // staffRelUsers: {},
-        transStaffRelUser: {}
+        transStaffRelUser: {},
+        staffRelUsers:{},
+        staffRelUsersNames:[],
       },
       searchForm: {},
       userForm: {},
@@ -412,12 +416,12 @@ export default {
       formLabelWidth: "120px",
       rules: {
         fteamid: [{ required: true, message: "请输入编码", trigger: "blur" }],
-        fteamleader: [
+        fteamleaderName: [
           { required: true, message: "请选择组长名称", trigger: "blur" },
         ],
-        // staffRelUsersNames: [
-        //   { required: true, message: "请选择组员名称", trigger: "blur" },
-        // ],
+        staffRelUsersNames: [
+          { required: true, message: "请选择组员名称", trigger: "blur" },
+        ],
       },
     };
   },
@@ -450,11 +454,48 @@ export default {
     });
   },
   methods: {
+    //公司切换选择方法
+    selectCompanyChanged(value){
+      this.form.fcompanyoid = value;
+    },
+    // 工作业务组（查看、编辑）
+    getWorkGroupDetail(data) {  
+      this.$api.processSet.getWorkGroupDetail({
+          foid: data,
+      }).then((res) => {
+        if (res.data.code == 0) {
+            this.form.fcompanyName = res.data.data.fcompanyName;
+            this.form.fcompanyoid = res.data.data.fcompanyoid;
+            this.form.fteamleaderName = res.data.data.fteamleaderName;
+            this.form.fteamleader = res.data.data.fteamleader;
+            this.form.fteamname = res.data.data.fteamname;
+            this.form.fteamid = res.data.data.fteamid;
+            this.form.fremark = res.data.data.fremark;
+            this.form.transStaffRelUser = res.data.data.transStaffRelUser;
+            this.form.staffRelUsers = res.data.data.staffRelUsers;
+            // this.form.staffRelUsersNames = res.data.data.staffRelUsersNames;
+            // res.data.data;
+            console.log("8888888888");
+            console.log(res.data.data);
+            this.form.staffRelUsersNames = Object.values(res.data.data.staffRelUsers);
+            // this.form.transStaffRelUser = Object.values(res.data.data.transStaffRelUser);
+            // this.form.fcompanyName = this.form.fcompanyName
+            console.log(res.data.data);
+          // this.options = res.data.data.rows;
+        }
+      }),
+        (error) => {
+          console.log(error);
+        };
+    },
     //获取离职、调转人员信息
     getTransStaffRelUser() {
       return(String(Object.values(this.form.transStaffRelUser)));
     },
-
+    //组员信息
+    // getStaffRelUsers() {
+    //   return(String(Object.values(this.transStaffRelUser)));
+    // },
     // 打开组织架构弹窗
       addFteamleader(type,title) {
         this.staffTableVisible = true;
@@ -493,9 +534,12 @@ export default {
               // };
               // internalmans.push(staff);
             }
+
             this.form.staffRelUsers = internalmans;
+            console.log("2222222222");
+            console.log(internalmans);
             this.form.staffRelUsersNames = internalMansName;
-            this.form.transStaffRelUser = {};
+            this.transStaffRelUser = {};
             // this.searchForm.internalmans = internalmans;
             // this.searchForm.internalMansName = internalMansName;
           }
@@ -654,10 +698,10 @@ export default {
     },
 
     addSubmit(formName) {
-      // debugger;
-      console.log(this.form);
       this.$refs[formName].validate((valid) => {
         if (valid) {
+          console.log("11111111111111");
+          console.log(this.form);
           this.$api.processSet.addWorkGroup(this.form).then((res) => {
             if (res.data.code == 0) {
               this.dialogFormVisible = false;
@@ -677,12 +721,13 @@ export default {
     },
     //删除
     deleteMsg() {
+      // debugger;
       if (this.multipleSelection.length > 1) {
         this.$message.error("只能选择一个删除");
         return;
       }
       this.$api.processSet
-        .deleteMsg(this.multipleSelection[0].foid)
+        .delWorkGroupList(this.multipleSelection[0].foid)
         .then((res) => {
           if ((res.data.data.msg = "success")) {
             this.$message.success("删除成功");
@@ -731,25 +776,46 @@ export default {
         };
     },
     toEdit(Str) {
-      this.dialogFormVisible = true;
       switch (Str) {
         case "新增":
+          // this.form = {};
+          // this.transStaffRelUser = Object.values({});
+          // this.staffRelUsers =Object.values({});
+          this.saveBtnFlag = false;
           this.isAdd = true;
           this.isEdit = false;
           this.isLook = false;
           this.getCompany();
+          this.dialogFormVisible = true;
           break;
         case "查看":
+          if (this.multipleSelection.length != 1) {
+          this.$message.error("请选择一条数据查看详情");
+          return;
+        } else {
+          this.saveBtnFlag = true;
+          this.dialogFormVisible = true;
           this.isLook = true;
           this.isEdit = false;
           this.isAdd = false;
+          let foid = this.multipleSelection[0].foid;
+          this.getWorkGroupDetail(foid);
+        }
           break;
         case "编辑":
+          if (this.multipleSelection.length != 1) {
+          this.$message.error("请选择一条数据查看详情");
+          return;
+        } else {
+          this.saveBtnFlag = false;
           this.isEdit = true;
           this.isLook = false;
           this.isAdd = false;
+          this.dialogFormVisible = true;
+          let foid = this.multipleSelection[0].foid;
+          this.getWorkGroupDetail(foid);
+        }
           break;
-
         default:
           break;
       }

@@ -4,7 +4,7 @@
         <el-card class="box-card">
            <el-row :gutter="24">
                <el-col :span="14">
-                    <el-form :inline="true"  class="demo-form-inline">
+                    <el-form :inline="true" @submit.native.prevent  class="demo-form-inline">
                     <el-form-item >
                         <el-input clearable v-model="formCode" placeholder="请输入任意查询内容"></el-input>
                     </el-form-item>
@@ -146,7 +146,7 @@ export default {
                 },
                 {
                     key: 'fuserName',
-                    title: '用户名称'
+                    title: '人员名称'
                 },
                 {
                     key: 'froleName',
@@ -182,9 +182,15 @@ export default {
             },
             formLabelWidth: '120px',
             rules: {
+<<<<<<< HEAD
                 fcompanyoid:[{ required: true, message: '请选择公司', trigger: 'blur' }],
                 departMentName:[{ required: true, message: '请选择部门', trigger: 'blur' }],
+=======
+                departMentName:[{ required: true, message: '请输入部门', trigger: 'blur' }],
+                company:[{ required: true, message: '请选择公司', trigger: 'blur' }],
+>>>>>>> cf9ed7435901ef533ac16da3cd5ac4567ccf7ebd
             }
+            
         };
     },
     
@@ -489,7 +495,7 @@ export default {
         },
         //新建用户角色
         joinSearch(Str){
-            this.titleStr = '新建用户&角色'
+            this.titleStr = '新增人员&角色'
             this.proBusDialogF = true;
             this.userType = Str;
             this.curCompanyId = this.form.fcompanyoid;

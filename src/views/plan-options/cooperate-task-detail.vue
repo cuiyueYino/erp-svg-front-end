@@ -12,8 +12,8 @@
             <el-row>
                 <el-col :span="6">
                     <el-form-item label="公司：" prop="company">
-                        <el-select v-model="formdata.company" value-key="value" :disabled="true">
-                            <el-option  
+                        <el-select v-model="formdata.companyName" value-key="value" :disabled="true">
+                            <el-option
                                 v-for="item in companyData"
                                 :key="item.value"
                                 :label="item.label"
@@ -147,7 +147,7 @@ import proData from '../../components/common/proData/proData';
 import DynamicTable from '../../components/common/dytable/dytable.vue';
 export default {
     props: {
-        rowCooTaskDetailDataObj: Object,
+        rowCooTaskDetailDataObj: "",
         rowCooTaskDetailtype:Boolean,
     },
     components: {
@@ -159,29 +159,30 @@ export default {
     },
     data(){
         return{
+            ShowFinancVisible:false,
+            formdata:{
+                companyName:'',
+                departmentNam:'',
+                cooperateTaskDepartmentName:'',
+                examinerName:'',
+                taskType:'',
+                taskLevel:'',
+                taskState:'',
+                assignedPersonName:'',
+                startTime:'',
+                fanishTime:'',
+                workeName:'',
+                gestorName:'',
+                voucherDate:'',
+                secretary:'',
+                personResponsibleTaskName:'',
+                workStandard:'',
+                remark:'',
+            },
             itemOptions:['集团重点','公司重点','部门重点'],
             focusLevelCheckList:[],
             formLabelWidth: "120px",
-            ShowFinancVisible:false,
             labelPosition: 'left',
-            formdata:{
-                company:'',
-                // departmentName,
-                // examinerName,
-                // taskType,
-                // taskLevel,
-                // taskState,
-                // assignedPersonName,
-                // startTime,
-                // fanishTime,
-                // workeName,
-                // gestorName,
-                // voucherDate,
-                // secretary,
-                // personResponsibleTaskName,
-                // workStandard,
-                // remark
-            },
             companyData:[],
             yearsData:[],
             atctiveName:'first',
@@ -198,11 +199,11 @@ export default {
                     title: '参数名称'
                 },
                 {
-                    key: 'key3',
+                    key: 'optionValue',
                     title: '期权数值'
                 },
                 {
-                    key: 'key4',
+                    key: 'unit',
                     title: '计量单位'
                 },
             ],
@@ -212,14 +213,102 @@ export default {
     methods: {
         //获取配合任务详情
         getCoordinationTaskDetail(data) {
-            debugger;
         this.$api.processSet.getCoordinationTaskDetail({
             id: data.id,
         })
         .then((res) => {
                 if(res.data.code == 0){
                 this.formdata = res.data.data;
-
+                let taskTypeParams = res.data.data.taskType;
+                let taskLeveParams = res.data.data.taskLevel;
+                let taskStateParams = res.data.data.taskState;
+                switch(taskStateParams) {
+                case "1": 
+                    this.formdata.taskState = '可执行';
+                    break;
+                case "2":
+                    this.formdata.taskState = '已完成';
+                    break;
+                case "3":
+                    this.formdata.taskState = '未完成';
+                    break;
+                case "4":
+                    this.formdata.taskState = '延期';
+                    break;
+                case '5':
+                    this.formdata.taskState ='作废';
+                    break;
+                case '0':
+                    this.formdata.taskState ='未发生';
+                    break;
+                case '10':
+                    this.formdata.taskState ='已报待批';
+                    break;
+                default:
+                    break; 
+            }
+                switch(taskTypeParams) {
+                    case 1: 
+                        this.formdata.taskType = '主任务';
+                        break;
+                    case 2:
+                        this.formdata.taskType = '临时任务';
+                        break;
+                    case 3:
+                        this.formdata.taskType = '配合任务';
+                        break;
+                    default:
+                        break; 
+                }
+                switch(taskLeveParams) {
+                case 1: 
+                    this.formdata.taskLevel = '一级';
+                    break;
+                case 2:
+                    this.formdata.taskLevel = '二级';
+                    break;
+                case 3:
+                    this.formdata.taskLevel = '三级';
+                    break;
+                case 4:
+                    this.formdata.taskLevel = '四级';
+                    break;
+                case 5:
+                    this.formdata.taskLevel ='五级';
+                    break;
+                case 6:
+                    this.formdata.taskLevel ='六级';
+                    break;
+                case 7:
+                    this.formdata.taskLevel ='七级';
+                    break;
+                case 8:
+                    this.formdata.taskLevel ='八级';
+                    break;
+                case 9:
+                    this.formdata.taskLevel ='九级';
+                    break;
+                case 10:
+                    this.formdata.taskLevel ='十级';
+                    break;
+                default:
+                    break; 
+            }
+            if(res.data.data.groupPoint) {
+                this.focusLevelCheckList.push('集团重点');
+            } else if(res.data.data.companyPoint) {
+                this.focusLevelCheckList.push('公司重点');
+            }  else if(res.data.data.departmentPoint) {
+                 this.focusLevelCheckList.push('部门重点')
+            } else {
+                this.focusLevelCheckList.push('');
+            }
+                let tableDataObj = {};
+                tableDataObj["key1"] = '计划值';
+                tableDataObj["key2"] = 'Q 累计预计计划完成指标';
+                tableDataObj["optionValue"] = res.data.data.optionValue;
+                tableDataObj["unit"] = res.data.data.unit;
+                this.tableData.push(tableDataObj);
                 }
             }),error => {
             console.log(error);
@@ -231,7 +320,7 @@ export default {
         rowCooTaskDetailtype(oldVal,newVal){
             this.ShowFinancVisible=this.rowCooTaskDetailtype;
              let coordinationSelected = {};
-            coordinationSelected.id = this.rowCooTaskDetailDataObj.fsrcoId;
+            coordinationSelected.id = this.rowCooTaskDetailDataObj;
             this.getCoordinationTaskDetail(coordinationSelected);
         }
     }

@@ -6,7 +6,7 @@
 					<el-form :inline="true" class="demo-form-inline">
 						<el-col :span="5">
 							<el-select v-model="formInline.company" placeholder="公司" clearable>
-								<el-option v-for="item in companyData" :key="item.value" :label="item.label" :value="item.value"></el-option>
+								<el-option v-for="item in companyData" :key="item.id" :label="item.name" :value="item.id"></el-option>
 							</el-select>
 						</el-col>
 					</el-form>
@@ -127,7 +127,7 @@
 				ALLSelectFlage: false,
 				dimension: false,
 				disShowPager: true,
-				companyData: new proData().company,
+				companyData:[],
 				formInline: {
 					searchValueleft: "",
 					searchValueright: "",
@@ -201,8 +201,19 @@
 			fromdataU.page = this.pageNum;
 			fromdataU.size = this.pageSize;
 			this.getUserData(fromdataU);
+			this.selectCom();
 		},
 		methods: {
+			selectCom(){
+				this.$api.jobUserManagement.getCompanyData().then((res) => {
+					if (res.status == "200") {
+						this.companyData= res.data.data.rows;
+					}
+				}),
+				(error) => {
+					console.log(error);
+				};
+			},
 			//获取人员
 			getUserData(data) {
 				let fromdata = data;

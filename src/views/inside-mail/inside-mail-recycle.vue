@@ -103,11 +103,6 @@ export default {
                 },
                 {
                 width: 80,
-                key: "isRead",
-                title: "是否已读"
-                },
-                {
-                width: 80,
                 key: "status",
                 title: "来源"
                 }

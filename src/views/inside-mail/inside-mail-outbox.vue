@@ -102,11 +102,6 @@ export default {
                 width: 300,
                 key: "sendTime",
                 title: "发送时间"
-                },
-                {
-                width: 80,
-                key: "isRead",
-                title: "是否已读"
                 }
             ],
             tableData: [],

@@ -14,13 +14,18 @@
         <el-tab-pane label="基本信息" name="1">
           <!-- Condition -->
           <el-form-item label="名称" :label-width="formLabelWidth" prop="displayName">
-            <el-input ref="nameInput" v-model="formData.displayName" @input="change($event)" autocomplete="off"></el-input>
+            <el-input
+              ref="nameInput"
+              v-model="formData.displayName"
+              @input="change($event)"
+              autocomplete="off"
+            ></el-input>
           </el-form-item>
           <el-form-item label="业务工作" :label-width="formLabelWidth" prop="work">
             <el-input v-model="formData.work" autocomplete="off"></el-input>
             <img class="icon-search" @click="workSearch" src="../../../assets/img/search.svg" />
           </el-form-item>
-          <el-form-item label="业务数据" :label-width="formLabelWidth" >
+          <el-form-item label="业务数据" :label-width="formLabelWidth">
             <el-input v-model="formData.workData" autocomplete="off" :disabled="true"></el-input>
           </el-form-item>
           <!-- <el-form-item label="组织结构" :label-width="formLabelWidth">
@@ -33,7 +38,7 @@
           </el-form-item>
           <el-form-item label="隐藏" :label-width="formLabelWidth">
             <el-checkbox v-model="formData.checked"></el-checkbox>
-          </el-form-item> -->
+          </el-form-item>-->
           <el-form-item label="描述：" :label-width="formLabelWidth">
             <el-input
               maxlength="500"
@@ -47,15 +52,15 @@
         </el-tab-pane>
         <el-tab-pane label="参与者" name="3">
           <!-- Condition -->
-          <el-checkbox-group v-model="checkedCities" label @change="checkboxChange" >
-            <el-checkbox v-for="item in itemOptions"  :label="item" :key="item">{{item}}</el-checkbox>
+          <el-checkbox-group v-model="checkedCities" label @change="checkboxChange">
+            <el-checkbox v-for="item in itemOptions" :label="item" :key="item">{{item}}</el-checkbox>
           </el-checkbox-group>
           <!-- <el-radio-group v-model="joinCheckBox" class="joinCheckBox">
             <el-radio :label="1">由权限控制</el-radio>
             <el-radio :label="2">手工指定下一节点参与者</el-radio>
             <el-radio :label="3">可略过</el-radio>
             <el-radio :label="4">多封邮件</el-radio>
-          </el-radio-group> -->
+          </el-radio-group>-->
           <el-row :gutter="24" class="joinTableBox">
             <el-col :span="20">
               <dynamic-table
@@ -190,17 +195,34 @@
           <el-row :gutter="24">
             <el-col :span="8">
               <el-form-item label="编码 " label-width="43px">
-                <el-input clearable size="small" v-model="formData.formCode" @input="change($event)" placeholder="请输入"></el-input>
+                <el-input
+                  clearable
+                  size="small"
+                  v-model="formData.formCode"
+                  @input="change($event)"
+                  placeholder="请输入"
+                ></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="8">
               <el-form-item label="名称 " label-width="43px">
-                <el-input clearable size="small" v-model="formData.formName" @input="change($event)" placeholder="请输入"></el-input>
+                <el-input
+                  clearable
+                  size="small"
+                  v-model="formData.formName"
+                  @input="change($event)"
+                  placeholder="请输入"
+                ></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="8">
               <el-form-item label="工作类型 " label-width="70px">
-                <el-select v-model="formData.formCtionTypeCon" @input="change($event)" clearable placeholder="请选择">
+                <el-select
+                  v-model="formData.formCtionTypeCon"
+                  @input="change($event)"
+                  clearable
+                  placeholder="请选择"
+                >
                   <el-option
                     v-for="item in options"
                     :key="item.value"
@@ -250,8 +272,15 @@
         @closeDialog="closeBaseInfo"
       ></base-info-dialog>
     </el-form>
+    <el-row :gutter="20">
+      <el-col :span="12" style="text-align: right;">
+        <el-button size="small" @click="saveConfig">保存</el-button>
+      </el-col>
+      <el-col :span="12">
+        <el-button size="small" @click="cancelConfig">取消</el-button>
+      </el-col>
+    </el-row>
   </div>
-
   <!-- </el-dialog> -->
 </template>
 
@@ -267,7 +296,7 @@ export default {
   name: "NodeCondition",
   components: {
     DynamicTable,
-    baseInfoDialog
+    baseInfoDialog,
   },
   props: {
     // 配置数据源
@@ -275,200 +304,200 @@ export default {
       type: Object,
       default: () => {
         return {};
-      }
+      },
     },
     // 当前配置节点类型
     type: {
       type: String,
-      default: ""
+      default: "",
     },
     // 配置对话框显示标识
     visible: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   watch: {
     // 监听配置数据源
     data: {
       handler(obj) {
-      if(obj.name === "Condition"){
+        if (obj.name === "Condition") {
           //  this.$refs['formData'].resetFields();
-          console.log("Condition",obj)
-          if(!obj.oid && (obj.isSaveFlag==undefined)){
-             this.formData = {}
-             this.joinusertableData=[];
-             this.CCtableData=[];
-              this.formData.displayName = obj.displayName
-          }else{
-                this.checkedCities = [];
-                this.editData = obj;
-                this.formData.oid = this.editData.oid;
-                this.formData.displayName = this.editData.displayName
-                this.formData.work = this.editData.mactivity.name
-                this.formData.workId = this.editData.mactivity.oid
-                this.formData.workCode = this.editData.mactivity.code
-                this.formData.workData = this.editData.dataType.name
-                this.formData.workDataId = this.editData.dataType.oid
-                this.formData.workDataCode = this.editData.dataType.code
-                // this.formData.structure = this.editData.orgUnit?this.editData.orgUnit.id:''
-                // this.formData.checked = this.editData.hidden==1?true:false
-                this.formData.fremark = this.editData.fremark
-                if(this.editData.permission=='1'){
-                  this.checkedCities.push('由权限控制');
-                }
-                if(this.editData.mntNextJoin=='1'){
-                  this.checkedCities.push('手工指定下一节点参与者');
-                }
-                if(this.editData.canSkip=='1'){
-                  this.checkedCities.push('可略过');
-                }
-                if(this.editData.multMail=='1'){
-                  this.checkedCities.push('多封邮件');
-                }
-                //this.checkedCities.push(this.editData.permission=='1'?'由权限控制':this.editData.mntNextJoin=='1'?'手工指定下一节点参与者':this.editData.canSkip=='1'?'可略过':this.editData.multMail=='1'?'多封邮件':null)
-                let tableDataNewSet = []
-                this.editData.wfCopyTo.copyTo.forEach(item=>{
-                    switch (item.type) {
-                        case 3://用户
-                            tableDataNewSet.push({
-                                fUsercode: "用户",
-                                fUsername: item.user.name,
-                                fUserRemake: item.expression,
-                                fUseroid:item.user.oid,
-                                oid:item.oid,
-                                type:item.type,
-                                typeName:'user',
-                            })
-                            break;
-                        case 2://角色
-                            tableDataNewSet.push({
-                                fUsercode: "角色",
-                                fUsername: item.role.name,
-                                fUserRemake: item.expression,
-                                fUseroid:item.role.oid,
-                                oid:item.oid,
-                                type:item.type,
-                                typeName:'role',
-                            })
-                            break;
-                          case 4://服务
-                            tableDataNewSet.push({
-                                fUsercode:  "服务",
-                                fUsername: item.service.name,
-                                fUserRemake: item.expression,
-                                fUseroid:item.service.oid,
-                                oid:item.oid,
-                                type:item.type,
-                                typeName:'service',
-                            })
-                            break;
-                        case 6://职务
-                            tableDataNewSet.push({
-                                fUsercode: "职务",
-                                fUsername: item.position.name,
-                                fUserRemake: item.expression,
-                                fUseroid:item.position.oid,
-                                oid:item.oid,
-                                type:item.type,
-                                typeName:'position',
-                            })
-                            break;
-                        case 5://表达式
-                            tableDataNewSet.push({
-                                fUsercode: "表达式",
-                                fUsername: item.expression|| '',
-                                fUserRemake:'',
-                                fUseroid:item.expression.oid|| '',
-                                oid:item.oid,
-                                type:item.type,
-                                typeName:'expression',
-                            })
-                            break;
-                    
-                        default:
-                            break;
-                    }
-                });
-                  if( this.CCtableData.length === 0 && tableDataNewSet.length !== 0){
-                       tableDataNewSet.forEach(item=>{
-                          this.CCtableData.push(item)
-                       })
-                    }
-                    console.log(this.CCtableData,'@@@@@@@@',tableDataNewSet)
-                let joinusertable = [];
-                this.editData.wfParticipator.participator.forEach(item=>{
-                    switch (item.type) {
-                        case 3://用户
-                            joinusertable.push({
-                                fUsercode: "用户",
-                                fUsername: item.user.name,
-                                fUserRemake: item.expression,
-                                fUseroid:item.user.oid,
-                                oid:item.oid,
-                                type:item.type,
-                                typeName:'user',
-                            })
-                            break;
-                        case 2://角色
-                            joinusertable.push({
-                                fUsercode:  "角色",
-                                fUsername: item.role.name,
-                                fUserRemake: item.expression,
-                                fUseroid:item.role.oid,
-                                oid:item.oid,
-                                type:item.type,
-                                typeName:'role',
-                            })
-                            break;
-                        case 4://服务
-                            joinusertable.push({
-                                fUsercode: "服务",
-                                fUsername: item.service.name,
-                                fUserRemake: item.expression,
-                                fUseroid:item.service.oid,
-                                oid:item.oid,
-                                type:item.type,
-                                typeName:'service',
-                            })
-                            break;
-                        case 6://职务
-                            joinusertable.push({
-                                fUsercode: "职务",
-                                fUsername: item.position.name,
-                                fUserRemake: item.expression,
-                                fUseroid:item.position.oid,
-                                oid:item.oid,
-                                type:item.type,
-                                typeName:'position',
-                            })
-                            break;
-                        case 5://表达式
-                                joinusertable.push({
-                                fUsercode: "表达式",
-                                fUsername: item.expression|| '',
-                                fUserRemake:'',
-                                fUseroid:item.oid|| '',
-                                oid:item.oid,
-                                type:item.type,
-                                typeName:'expression',
-                            })
-                            break;
-                        default:
-                            break;
-                    }
-                });
-                if( this.joinusertableData.length === 0 && joinusertable.length !== 0){
-                  joinusertable.forEach(item=>{
-                          this.joinusertableData.push(item)
-                       })
-                }
+          if (!obj.oid && obj.isSaveFlag == undefined) {
+            this.formData = {};
+            this.joinusertableData = [];
+            this.CCtableData = [];
+            this.formData.displayName = obj.displayName;
+          } else {
+            this.checkedCities = [];
+            this.editData = obj;
+            this.formData.oid = this.editData.oid;
+            this.formData.displayName = this.editData.displayName;
+            this.formData.work = this.editData.mactivity.name;
+            this.formData.workId = this.editData.mactivity.oid;
+            this.formData.workCode = this.editData.mactivity.code;
+            this.formData.workData = this.editData.dataType.name;
+            this.formData.workDataId = this.editData.dataType.oid;
+            this.formData.workDataCode = this.editData.dataType.code;
+            // this.formData.structure = this.editData.orgUnit?this.editData.orgUnit.id:''
+            // this.formData.checked = this.editData.hidden==1?true:false
+            this.formData.fremark = this.editData.fremark;
+            if (this.editData.permission == "1") {
+              this.checkedCities.push("由权限控制");
+            }
+            if (this.editData.mntNextJoin == "1") {
+              this.checkedCities.push("手工指定下一节点参与者");
+            }
+            if (this.editData.canSkip == "1") {
+              this.checkedCities.push("可略过");
+            }
+            if (this.editData.multMail == "1") {
+              this.checkedCities.push("多封邮件");
+            }
+            //this.checkedCities.push(this.editData.permission=='1'?'由权限控制':this.editData.mntNextJoin=='1'?'手工指定下一节点参与者':this.editData.canSkip=='1'?'可略过':this.editData.multMail=='1'?'多封邮件':null)
+            let tableDataNewSet = [];
+            this.editData.wfCopyTo.copyTo.forEach((item) => {
+              switch (item.type) {
+                case 3: //用户
+                  tableDataNewSet.push({
+                    fUsercode: "用户",
+                    fUsername: item.user.name,
+                    fUserRemake: item.expression,
+                    fUseroid: item.user.oid,
+                    oid: item.oid,
+                    type: item.type,
+                    typeName: "user",
+                  });
+                  break;
+                case 2: //角色
+                  tableDataNewSet.push({
+                    fUsercode: "角色",
+                    fUsername: item.role.name,
+                    fUserRemake: item.expression,
+                    fUseroid: item.role.oid,
+                    oid: item.oid,
+                    type: item.type,
+                    typeName: "role",
+                  });
+                  break;
+                case 4: //服务
+                  tableDataNewSet.push({
+                    fUsercode: "服务",
+                    fUsername: item.service.name,
+                    fUserRemake: item.expression,
+                    fUseroid: item.service.oid,
+                    oid: item.oid,
+                    type: item.type,
+                    typeName: "service",
+                  });
+                  break;
+                case 6: //职务
+                  tableDataNewSet.push({
+                    fUsercode: "职务",
+                    fUsername: item.position.name,
+                    fUserRemake: item.expression,
+                    fUseroid: item.position.oid,
+                    oid: item.oid,
+                    type: item.type,
+                    typeName: "position",
+                  });
+                  break;
+                case 5: //表达式
+                  tableDataNewSet.push({
+                    fUsercode: "表达式",
+                    fUsername: item.expression || "",
+                    fUserRemake: "",
+                    fUseroid: item.expression.oid || "",
+                    oid: item.oid,
+                    type: item.type,
+                    typeName: "expression",
+                  });
+                  break;
+
+                default:
+                  break;
+              }
+            });
+            if (this.CCtableData.length === 0 && tableDataNewSet.length !== 0) {
+              tableDataNewSet.forEach((item) => {
+                this.CCtableData.push(item);
+              });
+            }
+            let joinusertable = [];
+            this.editData.wfParticipator.participator.forEach((item) => {
+              switch (item.type) {
+                case 3: //用户
+                  joinusertable.push({
+                    fUsercode: "用户",
+                    fUsername: item.user.name,
+                    fUserRemake: item.expression,
+                    fUseroid: item.user.oid,
+                    oid: item.oid,
+                    type: item.type,
+                    typeName: "user",
+                  });
+                  break;
+                case 2: //角色
+                  joinusertable.push({
+                    fUsercode: "角色",
+                    fUsername: item.role.name,
+                    fUserRemake: item.expression,
+                    fUseroid: item.role.oid,
+                    oid: item.oid,
+                    type: item.type,
+                    typeName: "role",
+                  });
+                  break;
+                case 4: //服务
+                  joinusertable.push({
+                    fUsercode: "服务",
+                    fUsername: item.service.name,
+                    fUserRemake: item.expression,
+                    fUseroid: item.service.oid,
+                    oid: item.oid,
+                    type: item.type,
+                    typeName: "service",
+                  });
+                  break;
+                case 6: //职务
+                  joinusertable.push({
+                    fUsercode: "职务",
+                    fUsername: item.position.name,
+                    fUserRemake: item.expression,
+                    fUseroid: item.position.oid,
+                    oid: item.oid,
+                    type: item.type,
+                    typeName: "position",
+                  });
+                  break;
+                case 5: //表达式
+                  joinusertable.push({
+                    fUsercode: "表达式",
+                    fUsername: item.expression || "",
+                    fUserRemake: "",
+                    fUseroid: item.oid || "",
+                    oid: item.oid,
+                    type: item.type,
+                    typeName: "expression",
+                  });
+                  break;
+                default:
+                  break;
+              }
+            });
+            if (
+              this.joinusertableData.length === 0 &&
+              joinusertable.length !== 0
+            ) {
+              joinusertable.forEach((item) => {
+                this.joinusertableData.push(item);
+              });
             }
           }
-          
+        }
       },
       deep: true,
-      immediate: true
+      immediate: true,
     },
     // 监听对话框显示标识
     dialogVisible(bool) {
@@ -477,18 +506,7 @@ export default {
     // 对话框显示 自动聚焦name输入框
     visible(bool) {
       if (bool) {
-       
       } else {
-        this.formData.checkedCities = this.checkedCities;
-        this.formData.fremark = this.formData.fremark;
-        console.log(this.joinusertableData)
-        console.log(this.CCtableData)
-        this.$emit(
-          "saveFormData",
-          this.formData,
-          this.joinusertableData,
-          this.CCtableData,
-        ); 
       }
     },
     checked(val) {
@@ -503,23 +521,27 @@ export default {
         default:
           break;
       }
-    }
+    },
   },
   data() {
     return {
-      itemOptions:['由权限控制', '手工指定下一节点参与者', '可略过', '多封邮件'],
-      checkedCities:['由权限控制'],
-      editData:{},
-      fremark:"",
+      itemOptions: [
+        "由权限控制",
+        "手工指定下一节点参与者",
+        "可略过",
+        "多封邮件",
+      ],
+      checkedCities: ["由权限控制"],
+      editData: {},
+      fremark: "",
       displayName: "",
       formData: {
         permission: null,
         mntNextJoin: null,
         canSkip: null,
         multMail: null,
-        work:"",
-        displayName:'',
-
+        work: "",
+        displayName: "",
       },
       baseInputType: "",
       baseInputTitle: "",
@@ -539,116 +561,120 @@ export default {
       closeConfig: false,
       // 配置表单校验规则
       configRules: {
-        work: { required: true, message: "请选择业务工作", trigger: ['blur', 'change']},
+        work: {
+          required: true,
+          message: "请选择业务工作",
+          trigger: ["blur"],
+        },
         displayName: { required: true, message: "请输入名称", trigger: "blur" },
         performType: {
           required: true,
           message: "请选择参与类型",
-          trigger: "change"
-        }
+          trigger: "change",
+        },
       },
       // 对话框显示标识
       dialogVisible: this.visible,
       joinusercolumns: [
         {
-          type: "selection"
+          type: "selection",
         },
         {
           key: "fUsercode",
-          title: "类别"
+          title: "类别",
         },
         {
           key: "fUsername",
-          title: "内容"
+          title: "内容",
         },
         {
           key: "fUserRemake",
-          title: "描述"
-        }
+          title: "描述",
+        },
       ],
       CCcolumns: [
         {
-          type: "selection"
+          type: "selection",
         },
         {
           key: "fUsercode",
-          title: "类别"
+          title: "类别",
         },
         {
           key: "fUsername",
-          title: "内容"
+          title: "内容",
         },
         {
           key: "fUserRemake",
-          title: "描述"
-        }
+          title: "描述",
+        },
       ],
       joinusertableData: [],
       CCtableData: [],
       columns: [
         {
-          type: "selection"
+          type: "selection",
         },
         {
           key: "fcode",
-          title: "类别"
+          title: "类别",
         },
         {
           key: "fname",
-          title: "内容"
+          title: "内容",
         },
         {
           key: "fstatus",
-          title: "描述"
-        }
+          title: "描述",
+        },
       ],
       columns2: [
         {
           key: "fcode",
-          title: "节点"
+          title: "节点",
         },
         {
           key: "fname",
-          title: "节点类别"
+          title: "节点类别",
         },
         {
           key: "fstatus",
-          title: "选择"
-        }
+          title: "选择",
+        },
       ],
       columns3: [
         {
-          type: "selection"
+          type: "selection",
         },
         {
           key: "fcode",
-          title: "编码"
+          title: "编码",
         },
         {
           key: "fname",
-          title: "名称"
+          title: "名称",
         },
         {
           key: "fremark",
-          title: "描述"
-        }
+          title: "描述",
+        },
       ],
       columns4: [
         {
-          type: "selection"
+          type: "selection",
         },
         {
           key: "fcode",
-          title: "功能"
+          title: "功能",
         },
         {
           key: "fname",
-          title: "数据源"
+          title: "数据源",
         },
         {
           key: "fremark",
-          title: "生成关系"
-        }
+          title: "生成关系",
+        },
       ],
       // tableData: [],
       tableData2: [],
@@ -665,21 +691,21 @@ export default {
       baseInput: "",
       roleReq: {
         name: "",
-        role_expression: ""
+        role_expression: "",
       },
       serveReq: {
         fname: "",
-        fenglishname: ""
+        fenglishname: "",
       },
       posLReq: {
         fname: "",
-        fenglishname: ""
+        fenglishname: "",
       },
       UserListReq: {
         fname: "",
-        fenglishname: ""
+        fenglishname: "",
       },
-      baseTextarea: ""
+      baseTextarea: "",
     };
   },
   computed: {
@@ -697,26 +723,54 @@ export default {
     // }
   },
   methods: {
+    //保存
+    saveConfig(){
+      if(this.formData.displayName == ''){
+        this.$message.error("保存失败,请填写名称!");
+        return;
+      }
+      if(this.formData.work == ''){
+        this.$message.error("保存失败,请选择业务工作!");
+        return;
+      }
+      if(this.checkedCities.length ==0){
+        this.$message.error("保存失败,请选择参与者-控制权限!");
+        return;
+      }
+      if(this.joinusertableData.length ==0){
+        this.$message.error("保存失败,请选择参与者!");
+        return;
+      }
+      this.formData.checkedCities = this.checkedCities;
+      this.formData.fremark = this.formData.fremark;
+      this.$emit("saveFormData",this.formData,this.joinusertableData,this.CCtableData,"SAVE");
+    },
+    //取消
+    cancelConfig(){
+      this.formData.checkedCities = this.checkedCities;
+      this.formData.fremark = this.formData.fremark;
+      this.$emit("saveFormData",this.formData,this.joinusertableData,this.CCtableData,"CANCEL");
+    },
     handleClick(tab, event) {},
-    checkboxChange(e){
-        switch (e[e.length-1]) {
-          case "由权限控制":
-                for(let i =0 ; i<e.length; i++){
-                    if( e[i] == "可略过" ){
-                        e.splice(i,1)
-                    }
-                }
-            break;
-          case "可略过":
-                for(let j =0 ; j<e.length; j++){
-                    if( e[j] == "由权限控制" ){
-                        e.splice(j,1)
-                    }
-                }
-            break;
-          default:
-            break;
-        }
+    checkboxChange(e) {
+      switch (e[e.length - 1]) {
+        case "由权限控制":
+          for (let i = 0; i < e.length; i++) {
+            if (e[i] == "可略过") {
+              e.splice(i, 1);
+            }
+          }
+          break;
+        case "可略过":
+          for (let j = 0; j < e.length; j++) {
+            if (e[j] == "由权限控制") {
+              e.splice(j, 1);
+            }
+          }
+          break;
+        default:
+          break;
+      }
       this.checkedCities = e;
       // console.log(this.checkedCities)
     },
@@ -724,54 +778,54 @@ export default {
       this.baseActiveNameStr = tab.label;
       switch (this.baseActiveNameStr) {
         case "角色":
-              this.UserListReq = {};
-              this.serveReq = {};
-              this.posLReq = {};
-              this.baseTextarea = ''
+          this.UserListReq = {};
+          this.serveReq = {};
+          this.posLReq = {};
+          this.baseTextarea = "";
           break;
         case "用户":
-              this.roleReq = {};
-              this.serveReq = {};
-              this.posLReq = {};
-              this.baseTextarea = ''
+          this.roleReq = {};
+          this.serveReq = {};
+          this.posLReq = {};
+          this.baseTextarea = "";
           break;
         case "服务":
-              this.roleReq = {};
-              this.UserListReq = {};
-              this.posLReq = {};
-              this.baseTextarea = ''
+          this.roleReq = {};
+          this.UserListReq = {};
+          this.posLReq = {};
+          this.baseTextarea = "";
           break;
         case "表达式":
-              this.roleReq = {};
-              this.UserListReq = {};
-              this.posLReq = {};
-              this.serveReq = {};
+          this.roleReq = {};
+          this.UserListReq = {};
+          this.posLReq = {};
+          this.serveReq = {};
           break;
         case "职务":
-              this.roleReq = {};
-              this.UserListReq = {};
-              this.baseTextarea = ''
-              this.serveReq = {};
+          this.roleReq = {};
+          this.UserListReq = {};
+          this.baseTextarea = "";
+          this.serveReq = {};
           break;
-      
+
         default:
           break;
       }
     },
     //参与者，抄送查重
-    DuplicateCheck(tdata,name){
-      let TdataA=tdata;
-      let Reflag=true;
-      let nameS=name;
-      if(TdataA.length>0){
-          for(let i=0;i<TdataA.length;i++){
-              if(TdataA[i].fUsername===nameS){
-                  Reflag=false;
-                  break;
-              }
+    DuplicateCheck(tdata, name) {
+      let TdataA = tdata;
+      let Reflag = true;
+      let nameS = name;
+      if (TdataA.length > 0) {
+        for (let i = 0; i < TdataA.length; i++) {
+          if (TdataA[i].fUsername === nameS) {
+            Reflag = false;
+            break;
           }
+        }
       }
-      return Reflag+"";
+      return Reflag + "";
     },
     //业务工作-新增
     gridDataAdd() {
@@ -779,8 +833,11 @@ export default {
       } else if (this.titleStr === "新增参与者") {
         if (this.baseActiveNameStr == "角色") {
           if (this.roleReq.name) {
-            let FlagStr=this.DuplicateCheck(this.joinusertableData,this.roleReq.name);
-            if(FlagStr === "true"){
+            let FlagStr = this.DuplicateCheck(
+              this.joinusertableData,
+              this.roleReq.name
+            );
+            if (FlagStr === "true") {
               let roleObj = {};
               roleObj = this.roleReq;
               roleObj.type = 2;
@@ -790,14 +847,17 @@ export default {
               roleObj.fUsercode = this.baseActiveNameStr;
               roleObj.fUserRemake = roleObj.role_expression;
               this.joinusertableData.push(roleObj);
-            }else{
+            } else {
               this.$message.error("不能添加重复角色!");
             }
           }
         } else if (this.baseActiveNameStr == "用户") {
           if (this.UserListReq.fname) {
-            let FlagStr=this.DuplicateCheck(this.joinusertableData,this.UserListReq.fname);
-            if(FlagStr === "true"){
+            let FlagStr = this.DuplicateCheck(
+              this.joinusertableData,
+              this.UserListReq.fname
+            );
+            if (FlagStr === "true") {
               let UroleObj = {};
               UroleObj = this.UserListReq;
               UroleObj.type = 3;
@@ -808,14 +868,17 @@ export default {
               UroleObj.fUsercode = this.baseActiveNameStr;
               UroleObj.fUserRemake = UroleObj.fenglishname;
               this.joinusertableData.push(UroleObj);
-            }else{
+            } else {
               this.$message.error("不能添加重复用户!");
             }
           }
         } else if (this.baseActiveNameStr == "服务") {
           if (this.serveReq.fname) {
-            let FlagStr=this.DuplicateCheck(this.joinusertableData,this.serveReq.fname);
-            if(FlagStr === "true"){
+            let FlagStr = this.DuplicateCheck(
+              this.joinusertableData,
+              this.serveReq.fname
+            );
+            if (FlagStr === "true") {
               let SroleObj = {};
               SroleObj = this.serveReq;
               SroleObj.type = 4;
@@ -825,14 +888,17 @@ export default {
               SroleObj.fUsercode = this.baseActiveNameStr;
               SroleObj.fUserRemake = SroleObj.fenglishname;
               this.joinusertableData.push(SroleObj);
-            }else{
+            } else {
               this.$message.error("不能添加重复服务!");
             }
           }
         } else if (this.baseActiveNameStr == "职务") {
           if (this.posLReq.fname) {
-            let FlagStr=this.DuplicateCheck(this.joinusertableData,this.posLReq.fname);
-            if(FlagStr === "true"){
+            let FlagStr = this.DuplicateCheck(
+              this.joinusertableData,
+              this.posLReq.fname
+            );
+            if (FlagStr === "true") {
               let ProleObj = {};
               ProleObj = this.posLReq;
               ProleObj.type = 6;
@@ -842,14 +908,17 @@ export default {
               ProleObj.fUsercode = this.baseActiveNameStr;
               ProleObj.fUserRemake = ProleObj.fenglishname;
               this.joinusertableData.push(ProleObj);
-            }else{
+            } else {
               this.$message.error("不能添加重复职务!");
             }
           }
         } else if (this.baseActiveNameStr == "表达式") {
           if (this.baseTextarea) {
-            let FlagStr=this.DuplicateCheck(this.joinusertableData,this.baseTextarea);
-            if(FlagStr === "true"){
+            let FlagStr = this.DuplicateCheck(
+              this.joinusertableData,
+              this.baseTextarea
+            );
+            if (FlagStr === "true") {
               let BroleObj = {};
               BroleObj.type = 5;
               BroleObj.typeName = "expression";
@@ -858,7 +927,7 @@ export default {
               BroleObj.fUsercode = this.baseActiveNameStr;
               BroleObj.fUserRemake = "";
               this.joinusertableData.push(BroleObj);
-            }else{
+            } else {
               this.$message.error("不能添加重复表达式!");
             }
           }
@@ -866,8 +935,11 @@ export default {
       } else if (this.titleStr === "新增抄送") {
         if (this.baseActiveNameStr == "角色") {
           if (this.roleReq.name) {
-            let FlagStr=this.DuplicateCheck(this.CCtableData,this.roleReq.name);
-            if(FlagStr === "true"){
+            let FlagStr = this.DuplicateCheck(
+              this.CCtableData,
+              this.roleReq.name
+            );
+            if (FlagStr === "true") {
               let roleObj = {};
               roleObj = this.roleReq; //console.log(roleObj)
               roleObj.type = 2;
@@ -877,14 +949,17 @@ export default {
               roleObj.fUsercode = this.baseActiveNameStr;
               roleObj.fUserRemake = roleObj.role_expression;
               this.CCtableData.push(roleObj);
-            }else{
+            } else {
               this.$message.error("不能添加重复角色!");
             }
           }
         } else if (this.baseActiveNameStr == "用户") {
           if (this.UserListReq.fname) {
-            let FlagStr=this.DuplicateCheck(this.CCtableData,this.UserListReq.fname);
-            if(FlagStr === "true"){
+            let FlagStr = this.DuplicateCheck(
+              this.CCtableData,
+              this.UserListReq.fname
+            );
+            if (FlagStr === "true") {
               let UroleObj = {};
               UroleObj = this.UserListReq;
               UroleObj.type = 3;
@@ -895,14 +970,17 @@ export default {
               UroleObj.fUsercode = this.baseActiveNameStr;
               UroleObj.fUserRemake = UroleObj.fenglishname;
               this.CCtableData.push(UroleObj);
-            }else{
+            } else {
               this.$message.error("不能添加重复用户!");
             }
           }
         } else if (this.baseActiveNameStr == "服务") {
           if (this.serveReq.fname) {
-            let FlagStr=this.DuplicateCheck(this.CCtableData,this.serveReq.fname);
-            if(FlagStr === "true"){
+            let FlagStr = this.DuplicateCheck(
+              this.CCtableData,
+              this.serveReq.fname
+            );
+            if (FlagStr === "true") {
               let SroleObj = {};
               SroleObj = this.serveReq;
               SroleObj.type = 4;
@@ -912,14 +990,17 @@ export default {
               SroleObj.fUsercode = this.baseActiveNameStr;
               SroleObj.fUserRemake = SroleObj.fenglishname;
               this.CCtableData.push(SroleObj);
-            }else{
+            } else {
               this.$message.error("不能添加重复服务!");
             }
           }
         } else if (this.baseActiveNameStr == "职务") {
           if (this.posLReq.fname) {
-            let FlagStr=this.DuplicateCheck(this.CCtableData,this.posLReq.fname);
-            if(FlagStr === "true"){
+            let FlagStr = this.DuplicateCheck(
+              this.CCtableData,
+              this.posLReq.fname
+            );
+            if (FlagStr === "true") {
               let ProleObj = {};
               ProleObj = this.posLReq;
               ProleObj.type = 6;
@@ -929,14 +1010,17 @@ export default {
               ProleObj.fUsercode = this.baseActiveNameStr;
               ProleObj.fUserRemake = ProleObj.fenglishname;
               this.CCtableData.push(ProleObj);
-            }else{
+            } else {
               this.$message.error("不能添加重复职务!");
             }
           }
         } else if (this.baseActiveNameStr == "表达式") {
           if (this.baseTextarea) {
-            let FlagStr=this.DuplicateCheck(this.CCtableData,this.baseTextarea);
-            if(FlagStr === "true"){
+            let FlagStr = this.DuplicateCheck(
+              this.CCtableData,
+              this.baseTextarea
+            );
+            if (FlagStr === "true") {
               let BroleObj = {};
               BroleObj.type = 5;
               BroleObj.typeName = "expression";
@@ -945,7 +1029,7 @@ export default {
               BroleObj.fUsercode = this.baseActiveNameStr;
               BroleObj.fUserRemake = "";
               this.CCtableData.push(BroleObj);
-            }else{
+            } else {
               this.$message.error("不能添加重复表达式!");
             }
           }
@@ -1013,17 +1097,17 @@ export default {
     onSelectionWorkChange(val) {
       this.WorkmultipleSelection = val;
     },
-    workSearchTableBtn(){
-      this.pageNum = 1
+    workSearchTableBtn() {
+      this.pageNum = 1;
       this.workSearchTable();
     },
     // 业务工作-获取表格数据-重置
     reWorkSearchTable(formName) {
       //this.$refs[formName].resetFields();
-      this.pageNum = 1
-      this.formData.formCode="";
-      this.formData.formName="";
-      this.formData.formCtionTypeCon="";
+      this.pageNum = 1;
+      this.formData.formCode = "";
+      this.formData.formName = "";
+      this.formData.formCtionTypeCon = "";
       this.workSearchTable();
     },
     //业务工作弹窗
@@ -1031,6 +1115,10 @@ export default {
       this.titleStr = "业务工作";
       this.showInfoCheck = true;
       this.showBaseInfo = false;
+      this.pageNum = 1;
+      this.formData.formCode = "";
+      this.formData.formName = "";
+      this.formData.formCtionTypeCon = "";
       // 业务工作-搜索枚举项
       this.workSearchOption();
       this.workSearchTable();
@@ -1048,21 +1136,21 @@ export default {
       }
       if (this.formData.formCtionTypeCon) {
         fromdata.fmfunctiontypecon = Number(this.formData.formCtionTypeCon);
-      }else{
+      } else {
         fromdata.fmfunctiontypecon = 1;
       }
-      
+
       fromdata.page = this.pageNum;
       fromdata.size = this.pageSize;
       this.gridData = [];
       this.$api.processSet.workSearchData(fromdata).then(
-        res => {
+        (res) => {
           this.tableLoading = false;
           this.gridData = res.data.data.rows;
           this.pageNum = res.data.data.page;
           this.total = res.data.data.total;
         },
-        error => {
+        (error) => {
           console.log(error);
         }
       );
@@ -1071,12 +1159,12 @@ export default {
     workSearchOption() {
       this.options = [];
       this.$api.processSet.getWorkSearch().then(
-        res => {
+        (res) => {
           for (let i in res.data.data) {
             this.options.push({ value: i, label: res.data.data[i] });
           }
         },
-        error => {
+        (error) => {
           console.log(error);
         }
       );
@@ -1110,16 +1198,16 @@ export default {
         fname: this.formData.formName,
         fmfunctiontypecon: this.formData.formCtionTypeCon,
         page: this.pageNum,
-        size: this.pageSize
+        size: this.pageSize,
       };
       this.$api.processSet.workSearchData(data).then(
-        res => {
+        (res) => {
           this.tableLoading = false;
           this.gridData = res.data.data.rows;
           this.pageNum = res.data.data.page;
           this.total = res.data.data.total;
         },
-        error => {
+        (error) => {
           //console.log(error)
         }
       );
@@ -1149,15 +1237,15 @@ export default {
       }
       this.baseInputTableF = false;
     },
-    change(e){
-      this.$forceUpdate()
+    change(e) {
+      this.$forceUpdate();
     },
     //分页、下一页
     onCurrentChange(val) {
       this.pageNum = val;
       this.workSearchTable("");
-    }
-  }
+    },
+  },
 };
 </script>
 <style  lang="scss" scoped>
@@ -1183,8 +1271,8 @@ export default {
 /deep/ .el-form-item__content {
   display: flex;
 }
-.el-checkbox-group{
-      padding-left: 2px;
+.el-checkbox-group {
+  padding-left: 2px;
 }
 .icon-search {
   width: 24px;

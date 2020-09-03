@@ -238,6 +238,7 @@ export default {
          // 对话框显示 自动聚焦name输入框
         visible (bool) {//console.log(bool)
             this.dialogVisible = bool;
+            this.pageNum = 1;
             //角色查询
             if(this.type ==="角色"){
                 this.columns3=[
@@ -466,7 +467,6 @@ export default {
                 if(this.$refs['workflowConfigForm']){
                     this.$refs['workflowConfigForm'].resetFields();
                 }
-                
             }
             
         }

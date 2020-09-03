@@ -408,6 +408,7 @@ export default {
             let formDataA ={};
             formDataA.page=val;
             formDataA.size=this.pageSize;
+            formDataA.fpid=this.documentFpid;
             this.searchMenutable(formDataA);
         },
         //table选中事件
@@ -447,11 +448,6 @@ export default {
                     let tableArr=returndata.data.rows;
                     this.tableData=tableArr;
                     for (let i = 0; i < tableArr.length; i++) {
-                        if(1 == tableArr[i].flevel){
-                            tableArr[i].flevel = '一级';
-                        } else if(2 == tableArr[i].flevel){
-                            tableArr[i].flevel = '二级';
-                        }
                         //时间格式化
                         if(tableArr[i].fcreatetime){
                             tableArr[i].fcreatetime = this.formateDate(tableArr[i].fcreatetime);

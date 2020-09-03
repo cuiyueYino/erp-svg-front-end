@@ -184,7 +184,7 @@ import proData from '../../components/common/proData/proData';
 import DynamicTable from '../../components/common/dytable/dytable.vue';
 export default {
     props: {
-        rowEachPerEachTableDetailDataObj: Object,
+        rowEachPerEachTableDetailDataObj: "",
         rowEachPerEachTableDetailtype:Boolean,
     },
     components: {
@@ -323,7 +323,6 @@ export default {
         },
         //获取一人一表任务表详情
         getPersonalTableTaskDetail(data) {
-            debugger;
         this.$api.processSet.getPersonalTableTaskDetail(data)
         .then((res) => {
                 if(res.data.code == 0){
@@ -351,8 +350,8 @@ export default {
             },
         rowEachPerEachTableDetailtype(oldVal,newVal){
             this.ShowFinancVisible=this.rowEachPerEachTableDetailtype;
-             let PersonalTableTaskSelected = {};
-            PersonalTableTaskSelected.id = this.rowEachPerEachTableDetailDataObj.fsrcoId;
+            let PersonalTableTaskSelected = {};
+            PersonalTableTaskSelected.id = this.rowEachPerEachTableDetailDataObj;
             this.getPersonalTableTaskDetail(PersonalTableTaskSelected);
         }
         

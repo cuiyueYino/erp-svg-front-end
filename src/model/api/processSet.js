@@ -1,9 +1,20 @@
 import base from './base'; // 导入接口域名列表
 import httpReqest from '../../utils/https';
+import httpReqest2 from '../../utils/https2';
 const v = base.dev;
 //const testV = base.test;
 const processSet = {
-    
+    // 工作业务组（查看）
+    getWorkGroupDetail(params){
+        var valueS='?';
+        for(var item in params){
+            valueS+=item+"="+params[item]+"&";
+        }
+        if(valueS.slice(valueS.length-1,valueS.length) ==="&"){
+            valueS=valueS.slice(0,valueS.length-1);
+        }
+        return httpReqest.get('/api/wfInterfaces/workFlow/getWorkGroup'+valueS);
+    },
     // 新建工作业务组保存
     addWorkGroup(params){
         return httpReqest.post('/api/wfInterfaces/workFlow/saveWorkGroup', params);
@@ -26,6 +37,10 @@ const processSet = {
     // 删除
     deleteMsg(params){
         return httpReqest.get('/api/wfInterfaces/workFlow/deleteProcess?foid='+params);
+    },
+    // 删除（工作业务组）
+    delWorkGroupList(params){
+        return httpReqest.get('/api/wfInterfaces/workFlow/delWorkGroupList?foids='+params);
     },
 
      // 生效/禁用
@@ -143,7 +158,7 @@ const processSet = {
     },
     // 获取待办事项的popForm表单数据(部门年度计划)
     getDepYearPlanDetail(params){
-        return httpReqest.post('/api/scha/departmentYearPlan/findInfoById', params);
+        return httpReqest2.post('/api/scha/departmentYearPlan/findInfoById', params);
     },
     // 获取待办事项的popForm表单数据(一人一表任务表)
     getPersonalTableTaskDetail(params){

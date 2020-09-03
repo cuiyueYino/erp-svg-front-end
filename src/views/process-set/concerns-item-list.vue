@@ -49,9 +49,9 @@
                             <el-select v-model="DataForm.srcCompany" size="mini">
                                 <el-option
                                     v-for="item in companyoptions"
-                                    :key="item.value"
-                                    :label="item.label"
-                                    :value="item.value"
+                                    :key="item.id"
+                                    :label="item.name"
+                                    :value="item.id"
                                 ></el-option>
                             </el-select>
                         </el-col>
@@ -203,7 +203,7 @@ export default {
     inject: ['reload'],
     data() {
         return {
-            companyoptions: new proData().company,
+            companyoptions:[],
             dialogWFMVisible:false,
             rowPStype:false,
             rowUTStype:false,
@@ -312,11 +312,22 @@ export default {
         //fromdata1.infosBeginNum=0;
         //fromdata1.infosEndNum=2000;
         this.getmetaClass(fromdata1);
+        this.selectCom();
     },
     computed:{
         
     },
     methods:{
+        selectCom(){
+            this.$api.jobUserManagement.getCompanyData().then((res) => {
+                if (res.status == "200") {
+                    this.companyoptions= res.data.data.rows;
+                }
+            }),
+            (error) => {
+                console.log(error);
+            };
+        },
         //根据状态改背景色
         tableRowClassName({ row }) {
             if (row.fstatus === '暂停') {

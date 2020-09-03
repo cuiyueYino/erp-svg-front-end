@@ -56,9 +56,9 @@
                             <el-select v-model="DataForm.srcCompany" size="mini">
                                 <el-option
                                     v-for="item in companyData"
-                                    :key="item.value"
-                                    :label="item.label"
-                                    :value="item.value"
+                                    :key="item.id"
+                                    :label="item.name"
+                                    :value="item.id"
                                 ></el-option>
                             </el-select>
                         </el-col>
@@ -204,7 +204,7 @@ export default {
             rowWAAtype:false,
             rowWAADataObj:{},
             rowPSDataObj:{},
-            companyData:new proData().company,
+            companyData:[],
             commonMeta:new proData().commonMetaClass,
             objectoptions:new proData().project,
             formdata: {
@@ -269,6 +269,16 @@ export default {
         };
     },
     methods: {
+        selectCom(){
+            this.$api.jobUserManagement.getCompanyData().then((res) => {
+                if (res.status == "200") {
+                    this.companyData= res.data.data.rows;
+                }
+            }),
+            (error) => {
+                console.log(error);
+            };
+        },
         //关闭当前dialog时给父组件传值
         handleClose(){
             this.$emit('changeShow',false);
@@ -498,6 +508,7 @@ export default {
             //fromdata1.infosBeginNum=0;
             //fromdata1.infosEndNum=2000;
             this.getmetaClass(fromdata1);
+            this.selectCom();
         }
     }
 };

@@ -101,11 +101,6 @@ export default {
                 key: "sendTime",
                 title: "发送时间"
                 },
-                {
-                width: 80,
-                key: "isRead",
-                title: "是否已读"
-                }
             ],
             tableData: [],
             multipleSelection: [],
@@ -224,6 +219,7 @@ export default {
             this.$api.insideMail.getMailById(reqParam).then(
                 res => {
                 if(this.dataBack(res,"")){
+                  debugger;
                     let data = res.data.data;
                     this.$parent.$parent.$parent.toPage(data,"newMail");
                 };

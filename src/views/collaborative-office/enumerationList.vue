@@ -5,8 +5,8 @@
 				<el-dropdown trigger="click" @command="showForm = true;showSave = true;disabledUpd = false">
 					<el-button :disabled="showFigButton" type="success" plain><i class="el-icon-plus"></i>新建</el-button>
 					<el-dropdown-menu slot="dropdown">
-						<el-dropdown-item :disabled="showFig">类别</el-dropdown-item>
-						<el-dropdown-item :disabled="!showFig">内容</el-dropdown-item>
+						<el-dropdown-item :disabled="showFig" @click.native="create">类别</el-dropdown-item>
+						<el-dropdown-item :disabled="!showFig" @click.native="create">内容</el-dropdown-item>
 					</el-dropdown-menu>
 				</el-dropdown>
 				<el-button :disabled="showFigUpd" @click="toUpd()" type="danger" plain><i class="el-icon-edit"></i>修改</el-button>
@@ -15,7 +15,13 @@
 		<el-row :gutter="10">
 			<el-col :span="6">
 				<el-card>
-					<el-tree highlight-current :data="dataList" :props="defaultProps" @node-click="handleNodeClick"></el-tree>
+					<el-tree highlight-current :data="dataList" :props="defaultProps" @node-click="handleNodeClick">
+            <div slot-scope="{node,data}" class="customize-tree-p">
+              <el-tooltip class="item" effect="dark" :content="data.name" placement="top-start">
+                <span>{{data.name|labelShow}}</span>
+              </el-tooltip>
+            </div>
+          </el-tree>
 				</el-card>
 			</el-col>
 			<el-col :span="18">
@@ -25,9 +31,9 @@
 							<el-input clearable :disabled="disabledUpd" v-model="ruleForm.code" maxlength="50" placeholder="编码"></el-input>
 						</el-form-item>
 						<el-form-item prop="name" label="名称">
-							<el-input clearable v-model="ruleForm.name" maxlength="50" placeholder="名称"></el-input>
+							<el-input clearable v-model="ruleForm.name" maxlength="100" placeholder="名称"></el-input>
 						</el-form-item>
-						<el-form-item style="text-align: center;">
+						<el-form-item style="text-align: center;" v-if="showSubmit">
 							<el-button @click="toSave" type="success" plain><i class="el-icon-edit"></i>提交</el-button>
 						</el-form-item>
 					</el-form>
@@ -38,6 +44,16 @@
 </template>
 <script>
 	export default {
+    //树结构 label 过长，替换显示成"..."结构
+    filters: {
+      labelShow(value) {
+        if(!value) return ''
+        if(value.length > 18) {
+          return value.slice(0, 18) + '...'
+        }
+        return value
+      }
+    },
 		data() {
 			return {
 				//修改-编码
@@ -46,6 +62,8 @@
 				showFigUpd: false,
 				//表单
 				showForm: false,
+				//表单提交按钮
+        showSubmit: false,
 				//新增/修改
 				showSave: true,
 				//类别/内容
@@ -108,10 +126,29 @@
 						this.showFigButton = false
 						this.showFig = true
 					}
+					//右侧显示
+          this.$nextTick(() => {
+            this.showForm = true;
+            this.showSubmit = false;
+            this.ruleForm.code = data.code;
+            this.ruleForm.name = data.name;
+          });
 				}
 			},
+      create(){
+        this.showForm = true;
+        this.showSubmit = true;
+        this.ruleForm = {
+          code: "",
+          name: "",
+          id: "",
+          pid: "",
+          resList: []
+        }
+      },
 			clear() {
-				this.showForm = false
+				this.showForm = false;
+        this.showSubmit = false;
 				this.ruleForm = {
 					code: "",
 					name: "",
@@ -125,6 +162,7 @@
 					this.goOut("请选择")
 				} else {
 					this.showForm = true;
+          this.showSubmit = true;
 					this.ruleForm = this.rowClick;
 					this.showSave = false
 					this.disabledUpd = true
@@ -169,7 +207,7 @@
 	.el-card {
 		height: 80vh;
 	}
-	
+
 	.custom-tree-node {
 		flex: 1;
 		display: flex;

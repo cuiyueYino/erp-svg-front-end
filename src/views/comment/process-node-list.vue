@@ -54,7 +54,8 @@ import replypage from '../../components/common/reply/reply-main-page.vue';
 import elreplypage from '../../components/common/reply/el-reply-main.vue';
 export default {
     props: {
-        rowDataprocessObj:Array
+        rowDataprocessObj:Array,
+        rowDataprocessOid:Object
     },
     name: 'basetable',
     components: {
@@ -158,14 +159,16 @@ export default {
         //下一页
         onCurrentChange(val) {},
         EditFileVisible(){
-            let selectData=this.multipleSelection;
-            let finandata={};
-            finandata.finanrowname="";
-            finandata.finanrowId="";
-            finandata.nametitle="流程维护";
-            this.rowFCDDataObj=finandata;
-            this.rowFCDtype=true;
+            let selectData=this.rowDataprocessOid;
             //this.$emit('changeShow',this.rowDataprocessObj);
+            if(selectData.finanrowId){
+                let finandata = {};
+                finandata.finanrowname = selectData.finanrowname;
+                finandata.finanrowId = selectData.finanrowId;
+                finandata.nametitle = selectData.nametitle;
+                this.rowFCDDataObj = finandata;
+                this.rowFCDtype = true;
+            }
         },
         //回复按钮点击事件
         onRowbuttonClick(data){

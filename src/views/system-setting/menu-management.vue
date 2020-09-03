@@ -8,16 +8,16 @@
                             <el-select v-model="formInline.company" @change="Comchange" placeholder="公司" clearable>
                                 <el-option
                                     v-for="item in companyData"
-                                    :key="item.value"
-                                    :label="item.label"
-                                    :value="item.value"
+                                    :key="item.id"
+                                    :label="item.name"
+                                    :value="item.id"
                                 ></el-option>
                             </el-select>
                        </el-col>
                     </el-form>
                 </el-col>
                  <el-col :span="6" :offset="6">
-                    <el-button type="success" icon="el-icon-refresh" plain @click="createMainte">新建</el-button> 
+                    <el-button type="success" icon="el-icon-refresh" plain @click="createMainte">新建</el-button>
                     <el-button type="success" icon="el-icon-refresh" plain @click="editMainte">修改</el-button>
                     <el-button type="danger" icon="el-icon-notebook-2" plain @click="removeMainte">删除</el-button>
                  </el-col>
@@ -27,6 +27,7 @@
             <el-row>
                 <el-col :span="6" class="treeStyle">
                     <el-tree
+                      highlight-current
                         :data="treeData"
                         :props="defaultProps"
                         node-key="id"
@@ -69,7 +70,7 @@ export default {
     inject: ['reload'],
     data(){
         return{
-            companyData:new proData().company,
+            companyData:[],
             formInline: {
                 company:'_DefaultCompanyOId'
             },
@@ -129,6 +130,7 @@ export default {
         fromdata.size=this.pageSize;
         fromdata.company=this.formInline.company;
         this.searchMenutable(fromdata);
+        this.selectCom();
     },
     methods:{
         //公司改变
@@ -180,7 +182,7 @@ export default {
                 this.rowNMMDataObj=finandata;
             }else{
                 this.$message.error("请选择父菜单!");
-            } 
+            }
         },
         //修改菜单详情
         editMainte(){
@@ -233,7 +235,7 @@ export default {
                         </span>
                     )
                 }
-            }  
+            }
         },
         //树结构点击事件
         handleNodeClick(data) {
@@ -339,6 +341,16 @@ export default {
                 }
             });
         },
+        selectCom(){
+            this.$api.jobUserManagement.getCompanyData().then((res) => {
+                if (res.status == "200") {
+                    this.companyData= res.data.data.rows;
+                }
+            }),
+            (error) => {
+                console.log(error);
+            };
+        },
         //分页查询菜单
         searchMenutable(data){
             let fromdata=data;
@@ -359,7 +371,7 @@ export default {
                 } else {
                     this.$message.success('数据库没有该条数据!');
                 }
-            }); 
+            });
         },
     }
 }
