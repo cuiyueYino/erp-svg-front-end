@@ -82,7 +82,7 @@
 							<el-input v-model="form.departmentname" disabled size="small" autocomplete="off"></el-input>
 						</el-form-item>
 						<el-form-item label="禁用：" prop="fforbid" :label-width="formLabelWidth">
-							<el-checkbox v-model="checked" size="small"></el-checkbox>
+							<el-checkbox v-model="checked" size="small" @change="checkFun"></el-checkbox>
 						</el-form-item>
 
 					</el-col>
@@ -116,7 +116,7 @@
 			</div>
 		</el-dialog>
 		<!-- 禁用操作弹窗 -->
-		<el-dialog title="禁用操作编辑" top="20px" center class="user-forbiden" :visible.sync="userForbidenVisible" :close-on-click-modal="false">
+		<el-dialog title="操作编辑" top="20px" center class="user-forbiden" :visible.sync="userForbidenVisible" :close-on-click-modal="false">
 			<el-form :inline="true" class="demo-form-inline">
 				<el-form-item label="操作内容：" :span="10" :label-width="formLabelWidth" class="pop-select">
 					<el-select v-model="formCtionTypeCon" @change="aaa" placeholder="请选择">
@@ -310,6 +310,11 @@
 			this.$nextTick(() => {
 				this.getTableData();
 			});
+			// console.log("oooooooooooooooyyyyyyyyyyy");
+			// var time = new Date().Format("yyyy-MM-dd hh:mm:ss");
+			// console.log(time);
+			
+			
 		},
 		computed: {},
 		watch: {
@@ -339,7 +344,10 @@
 						break;
 				}
 			},
-			checked(val) {
+		},
+
+		methods: {
+			checkFun(val){
 				let data = {};
 				let newData = this.timeFormat(); //debugger
 				switch(val) {
@@ -347,33 +355,46 @@
 						let getTrueIndex = this.newIndex == 0 ? 0 : this.newIndex - 1;
 						if(this.tableData2[getTrueIndex] !== undefined) {
 							this.tableData2[getTrueIndex].foperationtime = newData;
-							this.tableData2[getTrueIndex].foperationcontent = '封号';
-							this.tableData2[getTrueIndex].foperationcause = '封号';
+							this.tableData2[getTrueIndex].foperationcontent = '禁用';
+							this.tableData2[getTrueIndex].foperationcause = 'OA封号';
+							return
+						}
+						this.newIndex = 0;
+						data = {
+							foperationtime: newData,
+							foperationcontent: '禁用',
+							foperationcause: 'OA封号',
+							index:this.newIndex,
+						}
+						this.tableData2.unshift(data); 
+						break;
+					case false:
+						let getTrueIndex2 = this.newIndex == 0 ? 0 : this.newIndex - 1;
+						if(this.tableData2[getTrueIndex2] !== undefined) {
+							this.tableData2[getTrueIndex2].foperationtime = newData;
+							this.tableData2[getTrueIndex2].foperationcontent = '启用';
+							this.tableData2[getTrueIndex2].foperationcause = 'OA解封';
 							return
 						}
 						this.newIndex = this.tableData2.length == 0 ? 0 : (this.tableData2.length + 1);
+						this.newIndex = 0;
 						data = {
 							foperationtime: newData,
-							foperationcontent: '封号',
-							foperationcause: '封号',
-							index: this.newIndex == 0 ? 0 : this.newIndex - 1,
+							foperationcontent: '禁用',
+							foperationcause: 'OA封号',
+							index:this.newIndex,
 						}
-						this.tableData2.push(data);
-						break;
-					case false:
-						let getFIndex = this.newIndex == 0 ? 0 : this.newIndex - 1;
-						this.tableData2[getFIndex].foperationtime = newData;
-						this.tableData2[getFIndex].foperationcontent = '其他';
-						this.tableData2[getFIndex].foperationcause = '其他';
+						this.tableData2.unshift(data); 
+						
 						break;
 
 					default:
 						break;
 				}
-			},
-		},
+				console.log("0000000000000000000011111122222");
+				console.log(this.tableData2[0].foperationtime);
 
-		methods: {
+			},
 			closeDialog(formName) {
 				this.dialogFormVisible = false;
 				this.$refs[formName].resetFields();
@@ -596,8 +617,16 @@
 							this.form.tuseroperationrecordReqVo = {}
 						}
 						if(this.isEdit) {
-							this.form.fstaff = this.form.staffId;
-							this.newIndex = null
+							this.newIndex = null;
+							if(this.tableData2[0].foperationcontent == '禁用' || this.tableData2[0].foperationcause == 'OA封号') {
+								this.form.tuseroperationrecordReqVo = {
+									'foperationcontent':1,
+									'foperationcause':1,
+									'fcreator':localStorage.getItem('ms_userId'),
+									'fcompanyoid':localStorage.getItem('ms_companyId'),
+									'foperationtime':this.tableData2[0].foperationtime,
+								}
+							}
 							this.$api.jobUserManagement.updateUserTableData(this.form).then(res => {
 									if(res.data.code == 0) {
 										this.dialogFormVisible = false;
@@ -656,20 +685,24 @@
 					};
 			},
 			addTableData() {
-				this.userForbidenVisible = false;
 				switch(this.formCtionTypeCon) {
-					case 1:
-						this.tableData2[this.newIndex - 1].foperationcontent = 1;
-						this.tableData2[this.newIndex - 1].foperationcause = 1;
+					case "1":
+						// this.tableData2[this.newIndex - 1].foperationcontent = 1;
+						// this.tableData2[this.newIndex - 1].foperationcause = 1;
+						this.tableData2[0].foperationcause = 'OA封号';
+						this.tableData2[0].foperationcontent = '禁用';
 						break;
-					case 2:
-						this.tableData2[this.newIndex - 1].foperationcontent = 2;
-						this.tableData2[this.newIndex - 1].foperationcause = 2;
+					case "2":
+						// this.tableData2[this.newIndex - 1].foperationcontent = 2;
+						// this.tableData2[this.newIndex - 1].foperationcause = 2;
+						this.tableData2[0].foperationcause = 'OA解封';
+						this.tableData2[0].foperationcontent = '启用';
 						break;
 
 					default:
 						break;
 				}
+				this.userForbidenVisible = false;
 			},
 			aaa(e) {
 				switch(e) {
@@ -722,9 +755,14 @@
 				return <div>{ret}</div>;
 			},
 			toEdit(Str) {
-				this.dialogFormVisible = true;
-				this.resetCheck = false;
+				
 				if(Str == '编辑') {
+					 if (this.multipleSelection.length != 1) {
+						this.$message.error("请选择一条数据查看详情");
+						return;
+					} else {
+					this.dialogFormVisible = true;
+					this.resetCheck = false;
 					this.isEdit = true;
 					let data = {
 						foid: this.multipleSelection[0].foid
@@ -766,17 +804,22 @@
 							console.log(error);
 						}
 				}
+				}
 			},
 			timeFormat() {
-				// 时间格式化 2019-09-08
-				let time = new Date();
-				let year = time.getFullYear();
-				let month = time.getMonth() + 1;
-				let day = time.getDate();
-				let hour = time.getHours();
-				let min = time.getMinutes();
-				let sec = time.getSeconds();
-				return year + "-" + month + "-" + day + " " + hour + ":" + min + ":" + sec;
+				var date = new Date();
+				var y = date.getFullYear();
+				var m = date.getMonth() + 1;
+				m = m < 10 ? ('0' + m) : m;
+				var d = date.getDate();
+				d = d < 10 ? ('0' + d) : d;
+				var h = date.getHours();
+				h = h < 10 ? ('0' + h) : h;
+				var minute = date.getMinutes();
+				var second = date.getSeconds();
+				minute = minute < 10 ? ('0' + minute) : minute;
+				second = second < 10 ? ('0' + second) : second;
+				return y + '-' + m + '-' + d + " " + h + ":" + minute + ":" + second;
 			},
 		}
 	};
