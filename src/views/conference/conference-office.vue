@@ -368,7 +368,7 @@
           ],
           fvolume: [{required: true, validator: checkInt, trigger: "blur"}],
           fsite: [
-            {required: false, message: "请输入地点", trigger: "blur"},
+            {required: true, message: "请输入地点", trigger: "blur"},
             {
               min: 1,
               max: 3000,

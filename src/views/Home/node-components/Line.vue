@@ -246,7 +246,8 @@ export default {
                     this.formData.serviceCode="";
                     this.formData.baseInputServe="";
                     this.formData.baseTextarea="";
-                    this.formData.name = obj.displayName
+                    this.formData.code='';
+                    this.formData.name = obj.displayName;
                 }else{
                     this.editData = obj;
                     this.formData.code = this.editData.linefcode

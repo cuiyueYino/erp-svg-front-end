@@ -724,10 +724,6 @@ export default {
         this.$message.error("保存失败,请选择业务工作!");
         return;
       }
-      if(this.checkedCities.length ==0){
-        this.$message.error("保存失败,请选择参与者-控制权限!");
-        return;
-      }
       if(this.joinusertableData.length ==0){
         this.$message.error("保存失败,请选择参与者!");
         return;

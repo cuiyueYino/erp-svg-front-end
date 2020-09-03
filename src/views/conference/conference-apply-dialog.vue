@@ -15,19 +15,24 @@
       <el-form :model="searchForm" :rules="rules" ref="searchForm" style="margin: 0px 20px;">
         <el-row :gutter="24">
           <el-col :span="11">
-            <el-form-item
-              label="公司："
-              :label-width="formLabelWidth"
-              style="position:relative;"
-              prop="fcompany"
-            >
-              <el-input
-                v-model="searchForm.fcompanyname"
-                autocomplete="off"
-                size="small"
-                @focus="baseInputTable('1','组织机构查询')"
-              ></el-input>
+            <el-form-item label="公司：" :label-width="formLabelWidth" class="pop-select" prop="fcompany">
+              <el-select v-model="searchForm.fcompanyname" size="small" clearable placeholder="请选择" @focus="getCompany">
+                <el-option v-for="item in options" :key="item.id" :label="item.name" :value="item.id"></el-option>
+              </el-select>
             </el-form-item>
+<!--            <el-form-item-->
+<!--              label="公司："-->
+<!--              :label-width="formLabelWidth"-->
+<!--              style="position:relative;"-->
+<!--              prop="fcompany"-->
+<!--            >-->
+<!--              <el-input-->
+<!--                v-model="searchForm.fcompanyname"-->
+<!--                autocomplete="off"-->
+<!--                size="small"-->
+<!--                @focus="baseInputTable('1','组织机构查询')"-->
+<!--              ></el-input>-->
+<!--            </el-form-item>-->
           </el-col>
         </el-row>
         <el-row :gutter="24">
@@ -579,6 +584,9 @@
     computed: {},
     watch: {
       visible(bool) {
+        if(bool){
+          this.getCurrentStaffInfo();
+        }
         this.dialogVisible = bool;
         if (this.foid != null && this.foid != "") {
           // 修改或者修订
@@ -636,6 +644,7 @@
         }
       };
       return {
+        options: [],
         pageNum: 1,
         pageSize: 10,
         total: 20,
@@ -744,6 +753,48 @@
       }
     },
     methods: {
+      //新建弹窗赋值默认值：当前user对应的人员信息
+      getCurrentStaffInfo(){
+        debugger;
+        let fromdata={};
+        fromdata.fcode = 'service10';
+        fromdata.fid=localStorage.getItem('ms_userId');
+        this.$api.confMangement
+          .findTServiceItemByParams(fromdata)
+          .then((res) => {
+            if (res.data.code == 0) {
+              // 召集人
+              // this.searchForm.fconvenername = data.fname;
+              this.$set(this.searchForm,"fconvenername",res.data.data.tname)
+              this.searchForm.fconvener = res.data.toid;
+              this.searchForm.fconvenerdeptname = res.data.data.tdepartmentname;
+              this.searchForm.fconvenerdept = res.data.data.tdepartmentoid;
+              // 联系人
+              // this.searchForm.fcontactname = data.fname;
+              this.$set(this.searchForm,"fcontactname",res.data.data.tname)
+              this.searchForm.fcontact = res.data.toid;
+              this.searchForm.fcontactdeptname = res.data.data.tdepartmentname;
+              this.searchForm.fcontactdept = res.data.data.tdepartmentoid;
+              //默认会议重要程度
+              this.searchForm.fimportanceValue = '0';
+            } else {
+              this.$message.error(res.data.msg);
+            }
+          }),
+          (error) => {
+            console.log(error);
+          };
+      },
+      //公司
+      getCompany() {
+        this.$api.jobUserManagement.getCompanyData().then(res => {
+          if(res.status == '200') {
+            this.options = res.data.data.rows
+          }
+        }), error => {
+          console.log(error);
+        }
+      },
       // 提交
       submitConfApply(formName) {
         this.$refs[formName].validate((valid) => {
@@ -774,30 +825,20 @@
       },
       // 暂存
       stagingConfApply(formName) {
-        this.$refs[formName].validate((valid) => {
-          if (valid) {
-            this.check();
-            console.log(this.searchForm);
-            this.$api.confMangement
-              .stagingConfApply(this.searchForm)
-              .then((res) => {
-                if (res.data.code == 0) {
-                  this.dialogVisible = false;
-                  this.closeDialog();
-                  this.pageNum = 1;
-                  this.$message.success("暂存成功");
-                } else {
-                  this.$message.error(res.data.msg);
-                }
-              }),
-              (error) => {
-                console.log(error);
-              };
-          } else {
-            console.log("error submit!!");
-            return false;
-          }
-        });
+        this.check();
+        console.log(this.searchForm);
+        this.$api.confMangement
+          .stagingConfApply(this.searchForm)
+          .then((res) => {
+            if (res.data.code == 0) {
+              this.dialogVisible = false;
+              this.closeDialog();
+              this.pageNum = 1;
+              this.$message.success("暂存成功");
+            } else {
+              this.$message.error(res.data.msg);
+            }
+          });
       },
       // 暂存或提交form表单校验
       check() {

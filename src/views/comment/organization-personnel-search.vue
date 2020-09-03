@@ -31,11 +31,10 @@
                         :table-data="tableData"
                         :total="total"
                         ref="multipleTable"
-                        :page-num="pageNum"
-                        :page-size="pageSize"
+                        :pageNum="pageNum"
+                        :pageSize="pageSize"
                         @current-change="onCurrentChange"
                         @selection-change="onSelectionChange"
-                        @size-change="onSizeChange"
                         v-loading="false"
                         element-loading-text="加载中"
                     ></dynamic-table>
@@ -215,10 +214,6 @@ export default {
         onSelectionChange(val) {
             this.multipleSelection = val;
         },
-        //分页
-        onSizeChange(val) {
-            this.pageSize = val;
-        },
         MoreSearchDS(data){
             this.rowDStype = true;
             let finandata=data;
@@ -249,6 +244,7 @@ export default {
                     let tableDataArr=returndata.data.rows;
                     this.tableData = tableDataArr;
                     this.total = returndata.data.total;
+                    this.pageNum=returndata.data.page;
                 } else {
                     this.$message.success('没有查到数据!');
                 }
@@ -284,7 +280,8 @@ export default {
         //获得查询结果
         onHandleMoreSearch() {
             let fromdata={};
-            fromdata.page=this.pageNum;
+            this.pageNum=1;
+            fromdata.page=1;
             fromdata.size=this.pageSize;
             let namevalueS=this.dialog.name;
             if(namevalueS && namevalueS!=''){
@@ -309,10 +306,16 @@ export default {
             this.$api.jobUserManagement.getPeopleTableData(fromdata).then(response => {
                 let responsevalue = response;
                 if (responsevalue) {
-                    let returndata = responsevalue.data;
-                    let tableDataArr=returndata.data.rows;
-                    this.tableData = tableDataArr;
-                    this.total = returndata.data.total;
+                    if(responsevalue.data != ''){
+                        let returndata = responsevalue.data;
+                        let tableDataArr=returndata.data.rows;
+                        this.pageNum=returndata.data.page;
+                        this.total = returndata.data.total;
+                        this.tableData = tableDataArr;
+                    }else{
+                        this.tableData =[];
+                        this.total=0;
+                    }
                     this.MoreSearchVisible = false;
                 } else {
                     this.$message.success('没有查到数据!');
@@ -358,7 +361,7 @@ export default {
             this.rowFincename=rowDataObj.finanrowname;
             this.dialog={};
             let fromdata={};
-            fromdata.page=this.pageNum;
+            fromdata.page=1;
             fromdata.size=this.pageSize;
             this.GetUSerData(fromdata);
             this.selectCom();
