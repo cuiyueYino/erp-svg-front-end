@@ -228,27 +228,27 @@ const processSet = {
 
     //获取邮件列表
     getMailInfo(params){
-        return httpReqest.post('api/wfInterfaces/workFlow/processMonitor/getMailInfoBypage', params);
+        return httpReqest.post('/api/wfInterfaces/workFlow/processMonitor/getMailInfoBypage', params);
     },
 
     //获取邮件详细信息
     getMailDetailInfo(params){
-        return httpReqest.post('api/wfInterfaces/workFlow/processMonitor/getMailDetail', params);
+        return httpReqest.post('/api/wfInterfaces/workFlow/processMonitor/getMailDetail', params);
     },
 
     //获取审批信息及回复信息
     getAuditAndReplyMsg(params){
-        return httpReqest.post('api/wfInterfaces/workFlow/processMonitor/getAuditAndReplyMsg', params);
+        return httpReqest.post('/api/wfInterfaces/workFlow/processMonitor/getAuditAndReplyMsg', params);
     },
 
     //新增审批回复信息
     addAuditReply(params){
-        return httpReqest.post('api/wfInterfaces/workFlow/processMonitor/addAuditReply', params);
+        return httpReqest.post('/api/wfInterfaces/workFlow/processMonitor/addAuditReply', params);
     },
 
     //删除邮件
     removeMail(params){
-        return httpReqest.post('api/wfInterfaces/workFlow/processMonitor/removeMail', params);
+        return httpReqest.post('/api/wfInterfaces/workFlow/processMonitor/removeMail', params);
     },
 
     // 查询公司
@@ -258,12 +258,12 @@ const processSet = {
 
     //获取业务数据列表
     getTmClass(){
-        return httpReqest.post('api/wfInterfaces/workFlow/processMonitor/getTmClass');
+        return httpReqest.post('/api/wfInterfaces/workFlow/processMonitor/getTmClass');
     },
 
     //保存编辑信息
     saveEdit(params){
-        return httpReqest.post('api/wfInterfaces/workFlow/processMonitor/confirm', params);
+        return httpReqest.post('/api/wfInterfaces/workFlow/processMonitor/confirm', params);
     },
 
     addSign(params){
