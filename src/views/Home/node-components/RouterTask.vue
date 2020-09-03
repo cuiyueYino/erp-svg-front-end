@@ -1,6 +1,6 @@
 <template>
 <!-- 弹出框内容 -->
-    <div v-show="visible">
+    <div v-if="visible">
         <el-form
         label-width="110px"
         :rules="configRules"
@@ -88,10 +88,10 @@ export default {
             closeConfig: false,
             // 配置表单校验规则
             configRules: {
-                name: { required: true, message: '请输入名称', trigger: 'blur' },
-                code: { required: true, message: '请输入编码', trigger: 'blur' },
-                displayName: { required: true, message: '请输入名称', trigger: 'blur' },
-                performType: { required: true, message: '请选择参与类型', trigger: 'change' }
+                name:[{ required: true, message: '请输入名称', trigger: 'blur' }],
+                code:[{ required: true, message: '请输入编码', trigger: 'blur' }],
+                displayName:[{ required: true, message: '请输入名称', trigger: 'blur' }],
+                performType:[{ required: true, message: '请选择参与类型', trigger: 'change' }]
             },
             // 对话框显示标识
             dialogVisible: this.visible,

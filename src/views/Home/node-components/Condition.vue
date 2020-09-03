@@ -1,6 +1,6 @@
 <template>
   <!-- 弹出框内容 -->
-  <div v-show="visible">
+  <div v-if="visible">
     <!-- TAB页 -->
     <el-form
       label-width="110px"
@@ -561,17 +561,8 @@ export default {
       closeConfig: false,
       // 配置表单校验规则
       configRules: {
-        work: {
-          required: true,
-          message: "请选择业务工作",
-          trigger: ["blur"],
-        },
-        displayName: { required: true, message: "请输入名称", trigger: "blur" },
-        performType: {
-          required: true,
-          message: "请选择参与类型",
-          trigger: "change",
-        },
+        work:[{required: true,message: "请选择业务工作",trigger: "blur"}],
+        displayName:[{required: true, message: "请输入名称", trigger: "blur"}],
       },
       // 对话框显示标识
       dialogVisible: this.visible,
