@@ -494,14 +494,24 @@ export default {
         //角色下一页
         onCurrentChange(val){
             let Roledata={};
-            Roledata.queryType='';
-            Roledata.page=val;
-            Roledata.size=this.pageSize;
-            this.getUserRole(Roledata);
+            this.pageNum = val;
+                Roledata.queryType='';
+                Roledata.page=this.pageNum;
+                Roledata.size=this.pageSize;
+                Roledata.code=this.formData.formCode;
+                Roledata.name=this.formData.formName;
+				this.getUserRole(Roledata);
         },
         //角色table选中事件
         onSelectionChange(val){
-            this.multipleSelection = val;
+            let Roledata={};
+                this.pageNum = val;
+                Roledata.queryType='';
+                Roledata.page=this.pageNum;
+                Roledata.size=this.pageSize;
+                Roledata.code=this.formData.formCode;
+                Roledata.name=this.formData.formName;
+				this.getUserRole(Roledata);
         },
         //部门下一页
         onDepCurrentChange(val){
