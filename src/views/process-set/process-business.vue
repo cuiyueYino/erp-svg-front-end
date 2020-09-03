@@ -183,7 +183,6 @@ export default {
             formLabelWidth: '120px',
             rules: {
                 fcompanyoid:[{ required: true, message: '请选择公司', trigger: 'blur' }],
-                departMentName:[{ required: true, message: '请选择部门', trigger: 'blur' }],
             }
             
         };

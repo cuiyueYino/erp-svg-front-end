@@ -23,7 +23,7 @@
      <!-- 新建用户&角色 -->
      <el-row :gutter="20">
         <el-col  v-show="type === '用户'" :span="8" class="tree-class">
-            <h3>角色</h3>
+            <h3>用户</h3>
                     <el-col :span="16">
                         <el-form-item label="搜索"  label-width="60px">
                             <el-input v-model="searchKeyW" clearable></el-input>
@@ -466,7 +466,7 @@ export default {
             if(this.type =='用户'){
                 if(this.multipleSelection.length > 1){
                     this.$message.error('只能选择一个');
-                }else if(this.multipleSelection.length == 0){
+                }else if(this.multipleSelection.length == 0 && this.$refs.tree.getCheckedNodes(false) == 0){
                     this.$message.error('请选择一项');
                 }else{
                     let SerchData={};
