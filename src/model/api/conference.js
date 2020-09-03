@@ -127,6 +127,12 @@ const confMangement = {
     editConfMnt(params) {
         return httpReqest.post('/api/interfaces/confMnt/editConfMnt', params);
     },
+
+    // 当前登录用户查找人员
+    findTServiceItemByParams(params) {
+      return httpReqest.post('/api/interfaces/tservice/findTServiceItemByParams', params);
+    },
+
 };
 
 export default confMangement;

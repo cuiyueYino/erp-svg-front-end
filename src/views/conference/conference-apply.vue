@@ -21,6 +21,9 @@
             </el-col>
             <el-form-item prop="selectVal">
               <el-input v-if="isNormal" clearable v-model="form.selectVal" placeholder="请输入任意查询内容"></el-input>
+              <el-select v-model="form.selectVal" v-if="isCompany" clearable placeholder="请选择">
+                <el-option v-for="item in options" :key="item.id" :label="item.name" :value="item.name"></el-option>
+              </el-select>
               <el-date-picker
                 v-if="isDate"
                 clearable
@@ -90,6 +93,8 @@
     },
     data() {
       return {
+        options: [],
+        isCompany: false,
         isDate: false,
         isNormal: true,
         isOvert: false,
@@ -192,19 +197,40 @@
           this.isDate = true;
           this.isNormal = false;
           this.isOvert = false;
+          this.isCompany = false;
         } else if (val == "fovert") {
           // 是否公开查询时
           this.isOvert = true;
           this.isDate = false;
           this.isNormal = false;
+          this.isCompany = false;
+        } else if(val == 'fcompanyname'){
+          this.isNormal = false;
+          this.isDate = false;
+          this.isOvert = false;
+          this.isCompany = true;
+          this.getCompany();
         } else {
           this.isNormal = true;
           this.isDate = false;
           this.isOvert = false;
+          this.isCompany = false;
         }
       },
     },
     methods: {
+      //公司
+      getCompany() {
+        this.$api.jobUserManagement.getCompanyData().then(res => {
+          if(res.status == '200') {
+            this.$nextTick(() => {
+              this.options = res.data.data.rows;
+            });
+          }
+        }), error => {
+          console.log(error);
+        }
+      },
       //分页、下一页
       onCurrentChange(val) {
         this.pageNum = val;
@@ -336,11 +362,16 @@
       },
       // 取消
       cancelMsg() {
+        debugger;
         if (this.multipleSelection.length != 1) {
           this.$message.error("请选择一条数据进行编辑");
           return;
         }
-        this.$confirm("确实要取消当前选择的记录吗?", "提示", {
+        if(this.multipleSelection[0].fstatus != 2){
+          this.$message.error("非生效状态的会议申请不可取消！");
+          return;
+        }
+        this.$confirm("确定要取消当前选择的记录吗?", "提示", {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
           type: "warning",
@@ -353,15 +384,16 @@
                   this.$message.success("已取消!");
                   //刷新表格
                   this.getTableData("");
-                } else {
-                  let errorMsg = res.data.msg;
-                  const h = this.$createElement;
-                  let params = h("p", null, [
-                    h("span", null, ""),
-                    h("p", null, errorMsg),
-                  ]);
-                  this.errorOpen(params);
                 }
+                // else {
+                //   let errorMsg = res.data.msg;
+                //   const h = this.$createElement;
+                //   let params = h("p", null, [
+                //     h("span", null, ""),
+                //     h("p", null, errorMsg),
+                //   ]);
+                //   this.errorOpen(params);
+                // }
               }),
               (error) => {
                 console.log(error);
