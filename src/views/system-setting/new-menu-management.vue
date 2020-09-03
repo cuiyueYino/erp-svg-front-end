@@ -220,7 +220,7 @@ export default {
                     this.$message.success('新建成功!');
                     this.ShowFinancVisible=false;
                     this.$emit('changeShow',false);
-                    this.reload();
+                    //this.reload();
                 } else {
                     this.$message.error(responsevalue.data.msg);
                 }
@@ -235,7 +235,7 @@ export default {
                     this.$message.success('修改成功!');
                     this.ShowFinancVisible=false;
                     this.$emit('changeShow',false);
-                    this.reload();
+                    //this.reload();
                 } else {
                     this.$message.error(responsevalue.data.msg);
                 }

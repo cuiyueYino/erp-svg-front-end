@@ -502,7 +502,8 @@ export default {
                         this.decisionSelection=[];
                         this.decisionSelData=[];
                         this.checkedCities = ['由权限控制'];
-                        this.formData.name = obj.displayName
+                        this.formData.name = obj.displayName;
+                        this.formData.work == '';
                         if(this.$refs.decisionTableReF){
                             this.$refs.decisionTableReF.$refs.refTable.clearSelection();
                         }

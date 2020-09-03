@@ -133,7 +133,8 @@ export default {
             handler (obj) {
                 if(obj.type === "Subprocess" || obj.name === "Subprocess"){
                 if(!obj.oid && (obj.isSaveFlag==undefined)){
-                    this.formData = {}
+                    this.formData = {};
+                    this.formData.code =='';
                     this.formData.name = obj.displayName
                 }else{
                     this.editData = obj;
