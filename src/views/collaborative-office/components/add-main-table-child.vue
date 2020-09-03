@@ -603,23 +603,22 @@
 					//时间控件计算差值
 					rowConList.forEach(itemChild => {
 						//通过‘-’符号确定需要计算的两边
-						if(item.serviceId == 5 && !this.noNull(itemChild.parameter) && itemChild.parameter.indexOf('-') != -1) {
+						if(item.serviceId == 5 && !this.noNull(item.parameter) && item.parameter.indexOf('-') != -1) {
 							//left right 分别是需要计算的两个值的字段名称
-							var index = itemChild.parameter.indexOf('-')
-							var left = itemChild.parameter.substring(0, index)
-							var right = itemChild.parameter.substring(index + 1)
+							var index = item.parameter.indexOf('-')
+							var left = item.parameter.substring(0, index)
+							var right = item.parameter.substring(index + 1)
 							//两个字段都要添加属性parameterList，里面存储需要计算的字段名和需要显示的字段名child
-							if(left == item.field || right == item.field) {
-								item.parameterList = {}
-								item.parameterList.left = left
-								item.parameterList.right = right
-								item.parameterList.child = itemChild.field
+							if(left == itemChild.field || right == itemChild.field) {
+								itemChild.parameterList = {}
+								itemChild.parameterList.left = left
+								itemChild.parameterList.right = right
+								itemChild.parameterList.child = item.field
 							}
-						} else {
-							//发现被添加服务的字段后，绑定双方
-							if(itemChild.parameter == item.field) {
-								item.parameterList.push(itemChild.field)
-							}
+						}
+						//发现被添加服务的字段后，绑定双方
+						if(itemChild.parameter == item.field) {
+							item.parameterList.push(itemChild.field)
 						}
 
 					})
