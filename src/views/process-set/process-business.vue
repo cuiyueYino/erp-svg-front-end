@@ -182,13 +182,8 @@ export default {
             },
             formLabelWidth: '120px',
             rules: {
-<<<<<<< HEAD
                 fcompanyoid:[{ required: true, message: '请选择公司', trigger: 'blur' }],
                 departMentName:[{ required: true, message: '请选择部门', trigger: 'blur' }],
-=======
-                departMentName:[{ required: true, message: '请输入部门', trigger: 'blur' }],
-                company:[{ required: true, message: '请选择公司', trigger: 'blur' }],
->>>>>>> cf9ed7435901ef533ac16da3cd5ac4567ccf7ebd
             }
             
         };
