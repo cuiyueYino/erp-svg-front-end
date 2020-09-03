@@ -286,6 +286,10 @@ const processSet = {
     getCompanyData(params){
         return httpReqest.post('/api/wfInterfaces/workFlow/getCompanyData', params);
     },
+    //根据用户查找公司
+    getUserCompany(params){
+        return httpReqest.get('/api/interfaces/organization/getCompanyByUser?userId=' + params);
+    },
     //流程业务新增
     saveProBusData(params){
         return httpReqest.post('/api/wfInterfaces/workFlow/saveProcessBussiness', params);

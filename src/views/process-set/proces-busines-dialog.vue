@@ -121,7 +121,7 @@
                         </el-select>
                     </el-form-item>
                 </el-col>-->
-                 <el-col :span="8">
+                 <!-- <el-col :span="8">
                     <el-form-item label="公司" v-show="type !== '用户'" label-width="70px" prop="fcompanyoid">
                          <el-select v-model="formData.fcompanyoid" clearable placeholder="请选择">
                             <el-option
@@ -132,7 +132,7 @@
                             </el-option>
                         </el-select>
                     </el-form-item>
-                </el-col>
+                </el-col> -->
                 <el-col :span="6" v-show="type !== '用户'">
                     <el-button type="primary" size="small" plain @click="reWorkSearchTable()">重置</el-button>
                     <el-button type="primary" size="small" plain @click="workSearchTable">搜索</el-button>
@@ -190,6 +190,10 @@ export default {
     },
     props: {
         type:{
+            type: String,
+            default: ''
+        },
+        companyId:{
             type: String,
             default: ''
         },
@@ -310,6 +314,7 @@ export default {
                 let Roledata={};
                 Roledata.page=this.pageNum;
                 Roledata.size=this.pageSize;
+                Roledata.company=this.companyId;
                 this.getDepartment(Roledata);
                 let Comdata={};
                 this.getCompany(Comdata);
@@ -452,7 +457,7 @@ export default {
                 Roledata.size=this.pageSize;
                 Roledata.code=this.formData.formCode;
                 Roledata.name=this.formData.formName;
-                Roledata.company=this.formData.formCompany;
+                Roledata.company=this.companyId;
                 this.getDepartment(Roledata);
             }
         },
@@ -503,6 +508,7 @@ export default {
             let Roledata={};
             Roledata.page=val;
             Roledata.size=this.pageSize;
+            Roledata.company=this.companyId;
             this.getDepartment(Roledata);
         },
         //部门table选中事件
