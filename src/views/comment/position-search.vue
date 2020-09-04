@@ -61,6 +61,7 @@ export default {
         //关闭当前dialog时给父组件传值
         handleClose(){
             //返回选中的父组件选中的row,并修某些改值
+            this.ShowFinancVisible = false;
             this.$emit('changeShow',this.rowPOSSDataObj,false);
         },
         ShowFinanc(){

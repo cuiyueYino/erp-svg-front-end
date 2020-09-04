@@ -51,6 +51,7 @@ export default {
     },
     methods:{
         handleClose(){
+            this.ShowFinancVisible = false;
             this.$emit('changeShow',false);
         },
         opentree(){

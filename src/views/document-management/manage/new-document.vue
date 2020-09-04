@@ -294,7 +294,6 @@ export default {
         },
         //submit 校验
         submitForm(formName,type) {
-          debugger;
           this.$refs[formName].validate((valid) => {
             if (valid) {
               this.onHandleSave(type);

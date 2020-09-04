@@ -179,6 +179,7 @@ export default {
             }else{
                 if(SelectData[0]){
                     this.rowBADataObj.selectBADataObj=SelectData[0];
+                    this.ShowFinancVisible = false;
                     this.$emit('changeShow',this.rowBADataObj,false);
                 }else{
                     this.$message.error("请选择一行数据!");

@@ -289,17 +289,15 @@ export default {
             if(oldVal){
                 this.showDetail()
             }
-            if(this.rowLWMtype){
-                this.ShowFinancVisible=this.rowLWMtype;
-                let finandata=this.rowLWMDataObj.finanrowId;
-                let formDataA ={};
-                formDataA.id=finandata;
-                let lookOrUpdate=this.rowLWMDataObj.lookflag;
-                if(lookOrUpdate ==='look'){
-                    this.LookOrupdate = false;
-                }else{
-                    this.LookOrupdate = true;
-                }
+            this.ShowFinancVisible=this.rowLWMtype;
+            let finandata=this.rowLWMDataObj.finanrowId;
+            let formDataA ={};
+            formDataA.id=finandata;
+            let lookOrUpdate=this.rowLWMDataObj.lookflag;
+            if(lookOrUpdate ==='look'){
+                this.LookOrupdate = false;
+            }else{
+                this.LookOrupdate = true;
             }
         }
     }

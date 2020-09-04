@@ -218,6 +218,7 @@ export default {
         },
         //关闭当前dialog时给父组件传值
         handleClose(){
+            this.ShowFinancVisible=false;
             this.$emit('changeShow',false);
         },
         //人员查询

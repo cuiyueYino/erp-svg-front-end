@@ -494,6 +494,7 @@ export default {
             let serchData=[];
             let dialogType=this.title;
             let typeS=this.type;
+            this.dialogVisible=false;
             this.$emit('closeDialog',serchData,dialogType,typeS);
         },
         searchKey(){
@@ -736,6 +737,7 @@ export default {
                     let serchData=this.multipleSelection;
                     let dialogType=this.title;
                     let typeS=this.type;
+                    this.dialogVisible=false;
                     this.$emit('closeDialog',serchData,dialogType,typeS);
                 }
             }else{
