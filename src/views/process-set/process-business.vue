@@ -438,6 +438,7 @@ export default {
                 let responsevalue = response;
                 if(responsevalue){
                     this.form=responsevalue.data.data;
+                    this.form.fcompanyoid=this.form.fcompanyid;
                     this.dialogFormVisible=true;
                     this.homeTitle=data;
                     let UBData=[];

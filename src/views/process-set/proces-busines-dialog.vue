@@ -330,7 +330,7 @@ export default {
                 Roledata.companyOid=this.companyId;
                 this.getDepartment(Roledata);
                 let Comdata={};
-                this.getCompany(Comdata);
+                // this.getCompany(Comdata);
             }
         }
     },
