@@ -66,7 +66,7 @@
                     </el-row>
                     <el-row>
                         <el-col :span="22">
-                            <el-form-item label="描述">
+                            <el-form-item label="描述(最长250字)">
                                 <el-input type="textarea" v-model="formdata.remark" maxlength="250" :rows="3" ></el-input>
                             </el-form-item>
                         </el-col>

@@ -15,8 +15,8 @@
 		<el-row :gutter="10">
 			<el-col :span="6">
 				<el-card>
-					<el-tree highlight-current :data="dataList" :props="defaultProps" @node-click="handleNodeClick">
-            <div slot-scope="{node,data}" class="customize-tree-p">
+					<el-tree  :data="dataList" :props="defaultProps" @node-click="handleNodeClick">
+            <div slot-scope="{data}" class="customize-tree-p">
               <el-tooltip class="item" effect="dark" :content="data.name" placement="top-start">
                 <span>{{data.name|labelShow}}</span>
               </el-tooltip>

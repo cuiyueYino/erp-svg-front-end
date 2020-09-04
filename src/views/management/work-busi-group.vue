@@ -133,7 +133,7 @@
         <el-row :gutter="22">
           <el-col :span="11">
             <el-form-item
-              label="公司11："
+              label="公司："
               :label-width="formLabelWidth"
               class="pop-select"
               prop="fcompanyoid"
