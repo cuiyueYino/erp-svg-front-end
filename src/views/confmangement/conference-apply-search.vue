@@ -101,6 +101,7 @@
     methods: {
       getTableData() {
         if(this.fconfid != ""){
+          debugger;
           this.$api.confMangement.getTodayApplyList(this.fconfid).then((res) => {
             if (res.data.code == 0) {
               let tableData = res.data.data;

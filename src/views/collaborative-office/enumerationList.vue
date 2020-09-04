@@ -31,7 +31,7 @@
 							<el-input clearable :disabled="disabledUpd" v-model="ruleForm.code" maxlength="50" placeholder="编码"></el-input>
 						</el-form-item>
 						<el-form-item prop="name" label="名称">
-							<el-input clearable v-model="ruleForm.name" maxlength="100" placeholder="名称"></el-input>
+							<el-input clearable :disabled="disabledShow" v-model="ruleForm.name" maxlength="100" placeholder="名称"></el-input>
 						</el-form-item>
 						<el-form-item style="text-align: center;" v-if="showSubmit">
 							<el-button @click="toSave" type="success" plain><i class="el-icon-edit"></i>提交</el-button>
@@ -58,6 +58,7 @@
 			return {
 				//修改-编码
 				disabledUpd: false,
+        disabledShow: false,
 				//修改
 				showFigUpd: false,
 				//表单
@@ -112,7 +113,9 @@
 				})
 			},
 			handleNodeClick(data) {
-				this.rowClick = data
+				this.rowClick = data;
+				this.disabledShow = true;
+				this.disabledUpd = true;
 				this.clear()
 				if(data.name == "枚举类别") {
 					this.showFigUpd = true
@@ -138,6 +141,7 @@
       create(){
         this.showForm = true;
         this.showSubmit = true;
+        this.disabledShow = false;
         this.ruleForm = {
           code: "",
           name: "",
@@ -158,6 +162,7 @@
 				}
 			},
 			toUpd() {
+        this.disabledShow = false;
 				if(this.noObject(this.rowClick)) {
 					this.goOut("请选择")
 				} else {

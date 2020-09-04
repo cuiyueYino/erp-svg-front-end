@@ -14,7 +14,7 @@
           <el-col :span="4">
             <el-form-item label="会议室：" label-width="100px" prop="fconfname">
               <el-select v-model="form.fconfname" size="small" clearable placeholder="请选择" @focus="getTableDataAll">
-                <el-option v-for="item in confOptions" :key="item.id" :label="item.name" :value="item.fconfname"></el-option>
+                <el-option v-for="item in confOptions" :key="item.foid" :label="item.fname" :value="item.fname"></el-option>
               </el-select>
 <!--              <el-input v-model="form.fconfname" :disabled="true" size="small" autocomplete="off" clearable></el-input>-->
             </el-form-item>
@@ -273,13 +273,14 @@ export default {
   methods: {
     // 查询会议室列表数据
     getTableDataAll() {
+      debugger;
       let data = {};
       if(this.form.fcompanyid){
         data.fcompanyid = this.form.fcompanyid;
       }
       data.page = 0;
       data.size = 10000;
-      this.$api.confMangement.getConfUsageDetail(data).then(
+      this.$api.confMangement.getConfOfficeList(data).then(
         (res) => {
           this.confOptions=[];
           this.confOptions = res.data.data.rows;
