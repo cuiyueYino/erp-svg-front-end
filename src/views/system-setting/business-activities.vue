@@ -179,6 +179,7 @@ export default {
             }else{
                 if(SelectData[0]){
                     this.rowBADataObj.selectBADataObj=SelectData[0];
+                    this.ShowFinancVisible = false;
                     this.$emit('changeShow',this.rowBADataObj,false);
                 }else{
                     this.$message.error("请选择一行数据!");
@@ -234,17 +235,19 @@ export default {
     },
     watch:{
         rowBAtype(oldVal,newVal){
-            this.ShowFinancVisible=this.rowBAtype;
-            let rowDataObj=this.rowBADataObj;
-            this.title=rowDataObj.nametitle;
-            this.formdata.searchName=rowDataObj.finanrowId;
-            this.rowFincename=rowDataObj.finanrowname;
-            this.dialog={};
-            let formData ={};
-            formData.page=1;
-            formData.size=this.pageSize;
-            this.getActivity(formData);
-            this.selectCom();
+            if(this.rowBAtype){
+                this.ShowFinancVisible=this.rowBAtype;
+                let rowDataObj=this.rowBADataObj;
+                this.title=rowDataObj.nametitle;
+                this.formdata.searchName=rowDataObj.finanrowId;
+                this.rowFincename=rowDataObj.finanrowname;
+                this.dialog={};
+                let formData ={};
+                formData.page=1;
+                formData.size=this.pageSize;
+                this.getActivity(formData);
+                this.selectCom();
+            }
         }
     }
 }

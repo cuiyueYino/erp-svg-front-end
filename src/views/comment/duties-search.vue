@@ -380,39 +380,41 @@ export default {
     },
     watch:{
         rowDUTStype(oldVal,newVal){
-            this.ShowFinancVisible=this.rowDUTStype;
-            let rowDataObj=this.rowDUTSDataObj;
-            this.title=rowDataObj.nametitle;
-            this.formdata.searchName=rowDataObj.finanrowId;
-            this.rowFincename=rowDataObj.finanrowname;
-            this.dialog={};
-            this.selectCom();
-            let fromdata={};
-            fromdata.page=this.pageNum;
-            fromdata.size=this.pageSize;
-            this.$api.jobUserManagement.getTableData(fromdata).then(response => {
-                let responsevalue = response;
-                if (responsevalue) {
-                    let returndata = responsevalue.data.data;
-                    let tableDataArr=returndata.rows;
-                    this.tableData = tableDataArr;
-                    for (let i in this.tableData) {
-                        switch (this.tableData[i].fstatus) {
-                        case 3:
-                            this.tableData[i].fstatus = "有效";
-                            break;
-                        case 8:
-                            this.tableData[i].fstatus = "禁用";
-                            break;
-                        default:
-                            break;
+            if(this.rowDUTStype){
+                this.ShowFinancVisible=this.rowDUTStype;
+                let rowDataObj=this.rowDUTSDataObj;
+                this.title=rowDataObj.nametitle;
+                this.formdata.searchName=rowDataObj.finanrowId;
+                this.rowFincename=rowDataObj.finanrowname;
+                this.dialog={};
+                this.selectCom();
+                let fromdata={};
+                fromdata.page=this.pageNum;
+                fromdata.size=this.pageSize;
+                this.$api.jobUserManagement.getTableData(fromdata).then(response => {
+                    let responsevalue = response;
+                    if (responsevalue) {
+                        let returndata = responsevalue.data.data;
+                        let tableDataArr=returndata.rows;
+                        this.tableData = tableDataArr;
+                        for (let i in this.tableData) {
+                            switch (this.tableData[i].fstatus) {
+                            case 3:
+                                this.tableData[i].fstatus = "有效";
+                                break;
+                            case 8:
+                                this.tableData[i].fstatus = "禁用";
+                                break;
+                            default:
+                                break;
+                            }
                         }
+                        this.total = returndata.total;
+                    } else {
+                        this.$message.success('没有查到数据!');
                     }
-                    this.total = returndata.total;
-                } else {
-                    this.$message.success('没有查到数据!');
-                }
-            });
+                });
+            }
         }
     }
 }

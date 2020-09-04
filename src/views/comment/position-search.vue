@@ -61,6 +61,7 @@ export default {
         //关闭当前dialog时给父组件传值
         handleClose(){
             //返回选中的父组件选中的row,并修某些改值
+            this.ShowFinancVisible = false;
             this.$emit('changeShow',this.rowPOSSDataObj,false);
         },
         ShowFinanc(){
@@ -135,24 +136,26 @@ export default {
     },
     watch:{
         rowPOSStype(oldVal,newVal){
-            this.ShowFinancVisible=this.rowPOSStype;
-            let rowDataObj=this.rowPOSSDataObj;
-            this.title=rowDataObj.nametitle;
-            let searchtype=rowDataObj.Searchtype;
-            if(searchtype=='Multiple'){
-                this.showcheckbox=true;
-            }else{
-                this.showcheckbox=false;
-            }
-            this.treeloading = true;
-            this.$api.management.selectAllOrganizationInfo().then(response => {
-                let responsevalue = response;
-                if (responsevalue) {
-                    let tabledata=eval('(' + responsevalue.data.data + ')');
-                    this.treeData=tabledata;
-                    this.treeloading = false;
+            if(this.rowPOSStype){
+                this.ShowFinancVisible=this.rowPOSStype;
+                let rowDataObj=this.rowPOSSDataObj;
+                this.title=rowDataObj.nametitle;
+                let searchtype=rowDataObj.Searchtype;
+                if(searchtype=='Multiple'){
+                    this.showcheckbox=true;
+                }else{
+                    this.showcheckbox=false;
                 }
-            }) 
+                this.treeloading = true;
+                this.$api.management.selectAllOrganizationInfo().then(response => {
+                    let responsevalue = response;
+                    if (responsevalue) {
+                        let tabledata=eval('(' + responsevalue.data.data + ')');
+                        this.treeData=tabledata;
+                        this.treeloading = false;
+                    }
+                }) 
+            }
         }
     }
 }

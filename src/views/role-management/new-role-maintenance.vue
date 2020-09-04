@@ -129,6 +129,7 @@ export default {
         handleClose(){
             this.ShowFinancVisible=false;
             this.$emit('changeShow',false);
+            //this.reload();
         },
         MoreSearchCSCSubject(){
             this.rowRMDtype = true;
@@ -212,35 +213,43 @@ export default {
                     savetype=true;
                 }else{
                     this.$message.error('请输入编号!');
-                    savetype=false
+                    savetype=false;
+                    return;
                 }
                 if(this.formdata.name){
                     fromdata.name=this.formdata.name;
                     savetype=true;
                 }else{
                     this.$message.error('请输入名称!');
-                    savetype=false
+                    savetype=false;
+                    return;
                 }
                 if(this.formdata.roleTypeName){
                     fromdata.roleType=this.formdata.roleType;
                     savetype=true;
                 }else{
                     this.$message.error('请选择角色类别!');
-                    savetype=false
+                    savetype=false;
+                    return;
                 }
                 if(this.formdata.remark){
                     fromdata.remark=this.formdata.remark;
                 }
-                if(SelectNodeDate.length ===0){
+                /*if(SelectNodeDate.length ===0){
                     this.$message.error('请选择业务权限!');
                     savetype=false;
+                    return;
                 }else{
                     let MenuObj={};
                     MenuObj.company=this.company;
                     MenuObj.menuIds=SelectNodeDate;
                     fromdata.roleMenu=MenuObj;
                     savetype=true;
-                }
+                }*/
+                let MenuObj={};
+                MenuObj.company=this.company;
+                MenuObj.menuIds=SelectNodeDate;
+                fromdata.roleMenu=MenuObj;
                 fromdata.company=this.company;
                 fromdata.creator=localStorage.getItem('ms_userId');
                 if(savetype){
@@ -264,30 +273,34 @@ export default {
                     savetype=true;
                 }else{
                     this.$message.error('请输入编号!');
-                    savetype=false
+                    savetype=false;
+                    return;
                 }
                 if(this.formdata.name){
                     fromdata.name=this.formdata.name;
                     savetype=true;
                 }else{
                     this.$message.error('请输入名称!');
-                    savetype=false
+                    savetype=false;
+                    return;
                 }
                 if(this.formdata.roleTypeName){
                     fromdata.roleType=this.formdata.roleType;
                     savetype=true;
                 }else{
                     this.$message.error('请选择角色类别!');
-                    savetype=false
+                    savetype=false;
+                    return;
                 }
                 if(this.formdata.remark){
                     fromdata.remark=this.formdata.remark;
                 }
                 fromdata.company=this.company;
                 fromdata.creator=localStorage.getItem('ms_userId');
-                if(SelectNodeDate.length ===0){
+                /*if(SelectNodeDate.length ===0){
                     this.$message.error('请选择业务权限!');
                     savetype=false;
+                    return;
                 }else{
                     let MenuObj={};
                     MenuObj.company=this.company;
@@ -295,7 +308,12 @@ export default {
                     MenuObj.menuIds=SelectNodeDate;
                     fromdata.roleMenu=MenuObj;
                     savetype=true;
-                }
+                }*/
+                let MenuObj={};
+                MenuObj.company=this.company;
+                MenuObj.roleId=this.formdata.id;
+                MenuObj.menuIds=SelectNodeDate;
+                fromdata.roleMenu=MenuObj;
                 if(savetype){
                     this.$api.RoleManagement.updateRoleModel(fromdata).then(response => {
                         let responsevalue = response;
@@ -421,29 +439,33 @@ export default {
     },
     watch:{
         rowNRMtype(oldVal,newVal){
-            this.ShowFinancVisible=this.rowNRMtype;
-            this.title=this.rowNRMDataObj.nametitle;
-            this.createtype=this.rowNRMDataObj.createtype;
-            if(this.rowNRMDataObj.createtype =="NEW"){
-                this.maketree(this.company);
-                this.formdata={};
-                this.selectCom();
-            }else{
-                let selectdata=this.rowNRMDataObj.SelectData;
-                this.selectCom();
-                let fromdata={};
-                fromdata.id=selectdata[0].id;
-                this.$api.RoleManagement.getRoleModel(fromdata).then(response => {
-                    let responsevalue = response;
-                    if (responsevalue) {
-                        let returndata = responsevalue.data;
-                        this.formdata=returndata.data;
-                        this.asyncCall(this.company,returndata.data.id);
-                    } else {
-                        this.$message.success('数据库没有该条数据!');
-                    }
-                });
-            }   
+            if(this.rowNRMtype){
+                this.ShowFinancVisible=this.rowNRMtype;
+                this.title=this.rowNRMDataObj.nametitle;
+                this.createtype=this.rowNRMDataObj.createtype;
+                if(this.rowNRMDataObj.createtype =="NEW"){
+                    this.checkdata=[];
+                    this.maketree(this.company);
+                    this.formdata={};
+                    this.selectCom();
+                }else{
+                    let selectdata=this.rowNRMDataObj.SelectData;
+                    this.selectCom();
+                    this.checkdata=[];
+                    let fromdata={};
+                    fromdata.id=selectdata[0].id;
+                    this.$api.RoleManagement.getRoleModel(fromdata).then(response => {
+                        let responsevalue = response;
+                        if (responsevalue) {
+                            let returndata = responsevalue.data;
+                            this.formdata=returndata.data;
+                            this.asyncCall(this.company,returndata.data.id);
+                        } else {
+                            this.$message.success('数据库没有该条数据!');
+                        }
+                    });
+                }
+            }  
         }
     }
 }

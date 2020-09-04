@@ -305,12 +305,11 @@ export default {
         },
         //下一页，分页
         onCurrentChange(val){
-            this.NodeClickData=data;
             let fromdata={};
             fromdata.page=val;
             fromdata.size=this.pageSize;
             if(this.NodeClickData.id){
-                fromdata.roleType=data.id;
+                fromdata.roleType=this.NodeClickData.id;
             }
             if(this.region=="name"){
                 if(this.formCode){
@@ -326,7 +325,6 @@ export default {
                 }
             }
             this.searchRole(fromdata);
-            
         },
         //选择，多选
         onSelectionChange(val){
@@ -338,7 +336,6 @@ export default {
         },
         //创建角色详情页
         createRoleMainte(){
-            this.rowNRMtype = true;
             let finandata={};
             finandata.finanrowname="";
             finandata.finanrowId="";
@@ -346,6 +343,7 @@ export default {
             finandata.createtype="NEW";
             finandata.SelectData=[];
             this.rowNRMDataObj=finandata;
+            this.rowNRMtype = true;
         },
         //角色详情页返回数据处理
         showRoleMainte(type){
@@ -362,7 +360,6 @@ export default {
                 this.$message.error("只能选择一个!");
             }else{
                 if(SelectData[0]){
-                    this.rowNRMtype = true;
                     let finandata={};
                     finandata.finanrowname="";
                     finandata.finanrowId="";
@@ -370,6 +367,7 @@ export default {
                     finandata.createtype="EDIT";
                     finandata.SelectData=SelectData;
                     this.rowNRMDataObj=finandata;
+                    this.rowNRMtype = true;
                 }else{
                     this.$message.error("请选择一行数据!");
                 }

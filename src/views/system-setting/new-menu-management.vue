@@ -149,26 +149,30 @@ export default {
                 SaveFlag=true;
             }else{
                 this.$message.error('请输入编号!');
-                SaveFlag=false
+                SaveFlag=false;
+                return;
             }
             if(this.formdata.name){
                 fromDataS.name=this.formdata.name;
                 SaveFlag=true;
             }else{
                 this.$message.error('请输入名称!');
-                SaveFlag=false
+                SaveFlag=false;
+                return;
             }
             if(this.formdata.orderNum){
                 SaveFlag=true;
             }else{
                 this.$message.error('请输入显示顺序!');
-                SaveFlag=false
+                SaveFlag=false;
+                return;
             }
             if(this.formdata.menuType){
                 SaveFlag=true;
             }else{
                 this.$message.error('请选择菜单类型!');
-                SaveFlag=false
+                SaveFlag=false;
+                return;
             }
             if(this.NewOrEditFlag==="NEW"){
                 fromDataS.creator=localStorage.getItem('ms_userId');
@@ -179,10 +183,12 @@ export default {
             }else{
                 fromDataS.activityId='';
             }
-            if(this.NewOrEditFlag==="NEW"){
-                this.saveNewMenu(fromDataS);
-            }else{
-                this.saveEditmenu(fromDataS);
+            if(SaveFlag){
+                if(this.NewOrEditFlag==="NEW"){
+                    this.saveNewMenu(fromDataS);
+                }else{
+                    this.saveEditmenu(fromDataS);
+                }
             }
         },
         //查询业务活动返回处理
@@ -244,18 +250,20 @@ export default {
     },
     watch:{
         rowNMMtype(oldVal,newVal){
-            this.ShowFinancVisible=this.rowNMMtype;
-            this.title=this.rowNMMDataObj.nametitle;
-            this.NewOrEditFlag=this.rowNMMDataObj.NewOrEditFlag;
-            if(this.rowNMMDataObj.NewOrEditFlag==="NEW"){
-                this.formdata={};
-                this.formdata.company=this.rowNMMDataObj.company;
-                this.formdata.parentId=this.rowNMMDataObj.parentId;
-                this.formdata.strutid=this.rowNMMDataObj.strutid;   
-            }else{
-                let fromdataA={};
-                fromdataA.id=this.rowNMMDataObj.MenuID;
-                this.getMenuByIDFunction(fromdataA);
+            if(this.rowNMMtype){
+                this.ShowFinancVisible=this.rowNMMtype;
+                this.title=this.rowNMMDataObj.nametitle;
+                this.NewOrEditFlag=this.rowNMMDataObj.NewOrEditFlag;
+                if(this.rowNMMDataObj.NewOrEditFlag==="NEW"){
+                    this.formdata={};
+                    this.formdata.company=this.rowNMMDataObj.company;
+                    this.formdata.parentId=this.rowNMMDataObj.parentId;
+                    this.formdata.strutid=this.rowNMMDataObj.strutid;   
+                }else{
+                    let fromdataA={};
+                    fromdataA.id=this.rowNMMDataObj.MenuID;
+                    this.getMenuByIDFunction(fromdataA);
+                }
             }
         }
     }

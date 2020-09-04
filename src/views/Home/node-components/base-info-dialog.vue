@@ -237,238 +237,239 @@ export default {
     watch: {
          // 对话框显示 自动聚焦name输入框
         visible (bool) {//console.log(bool)
-            this.dialogVisible = bool;
-            this.pageNum = 1;
-            //角色查询
-            if(this.type ==="角色"){
-                this.columns3=[
-                    {
-                        type: 'selection'
-                    },
-                    {
-                        key: 'code',
-                        title: '编码'
-                    },
-                    {
-                        key: 'name',
-                        title: '名称'
-                    },
-                    {
-                        key: 'roleTypeName',
-                        title: '角色类型'
-                    },
-                    {
-                        key: 'remark',
-                        title: '描述'
-                    },
-                    // {
-                    //     key: 'AdminS',
-                    //     title: '缺省管理员'
-                    // },
-                ];
-                let fromdata={};
-                fromdata.page=this.pageNum;
-                fromdata.size=this.pageSize
-                this.$api.processSet.getRolesData(fromdata).then(res=>{
-                    let resData=res.data.data.rows;
-                    for(var i=0;i< resData.length;i++){
-                        if(resData[i].admin){
-                            resData[i].AdminS="是";
-                        }else{
-                            resData[i].AdminS="否";
-                        }
-                        resData[i].foid=resData[i].oid;
-                        resData[i].oid="";
-                    }
-                    this.gridData = resData;
-                    this.total = res.data.data.total;
-                },error=>{
-                    console.log(error)
-                });
+            if(bool){
+                this.dialogVisible = bool;
+                this.pageNum = 1;
                 //角色查询
-                this.$api.svg.getRolesMsg().then(res => {
-                    let getMsg = res.data.data
-                    for( let i  in getMsg){
-                        this.roleoptions.push({
-                            label:getMsg[i] ,
-                            value:i ,
-                        })
-                    }                    
-                }),error=>{
-                    console.log(error)
-                }
-            }
-            //用户查询
-            if(this.type ==="用户"){
-                this.columns3=[
-                    {
-                        type: 'selection'
-                    },
-                    {
-                        key: 'usercode',
-                        title: '编码'
-                    },
-                    {
-                        key: 'fname',
-                        title: '名称'
-                    },
-                    {
-                        key: 'positionName',
-                        title: '职位'
-                    },
-                ];
-                if(this.title =='用户查询'){
-                    this.gridData =[];
-                    let fromdata={};
-                    fromdata.queryType='';
-                    this.$api.processSet.getUserTree(fromdata).then(res=>{
-                        let resData=res.data.data;
-                        let resDataArr= eval("("+resData+")");//console.log(resDataArr.JsonInfo[0])
-                        this.treeData = resDataArr.JsonInfo;
-                        this.totalpage=false;
-                    },error=>{
-                        console.log(error)
-                    })
-                }else if(this.title =='组织结构查询'){
+                if(this.type ==="角色"){
                     this.columns3=[
-                    {
-                        type: 'selection'
-                    },
-                    {
-                        key: 'fcode',
-                        title: '编码'
-                    },
-                    {
-                        key: 'fname',
-                        title: '名称'
-                    },
-                ];
+                        {
+                            type: 'selection'
+                        },
+                        {
+                            key: 'code',
+                            title: '编码'
+                        },
+                        {
+                            key: 'name',
+                            title: '名称'
+                        },
+                        {
+                            key: 'roleTypeName',
+                            title: '角色类型'
+                        },
+                        {
+                            key: 'remark',
+                            title: '描述'
+                        },
+                        // {
+                        //     key: 'AdminS',
+                        //     title: '缺省管理员'
+                        // },
+                    ];
                     let fromdata={};
-                    fromdata.queryType='org';
-                    this.gridData =[];
-                    this.$api.processSet.getUserTree(fromdata).then(res=>{
-                        let resData=res.data.data;
-                        let resDataArr= eval("("+resData+")");
-                        this.treeData = resDataArr;
-                        this.totalpage=false;
-                    },error=>{
-                        console.log(error)
-                    })
-                }
-                
-            }
-            //服务
-            if(this.type ==="服务"){
-                this.columns3=[
-                    {
-                        type: 'selection'
-                    },
-                    {
-                        key: 'fcode',
-                        title: '编码'
-                    },
-                    {
-                        key: 'fname',
-                        title: '名称'
-                    },
-                    {
-                        key: 'fremark',
-                        title: '备注'
-                    },
-                ];
-                this.gridData =[];
-                let fromdata={};
-                fromdata.page=this.pageNum;
-                fromdata.size=this.pageSize
-                this.$api.processSet.getWfBusinessService(fromdata).then(res=>{
-                    let resData=res.data.data.rows;
-                    this.gridData = resData;
-                    this.total = res.data.data.total;
-                    this.totalpage=true;
-                },error=>{
-                    console.log(error)
-                })
-            }
-            if(this.type ==="职务"){
-                this.columns3=[
-                    {
-                        type: 'selection'
-                    },
-                    {
-                        key: 'fcode',
-                        title: '编码'
-                    },
-                    {
-                        key: 'fname',
-                        title: '名称'
-                    },
-                    {
-                        key: 'positionType',
-                        title: '职务类型'
-                    },
-                    {
-                        key: 'fremark',
-                        title: '描述'
-                    },
-                ];
-                this.gridData =[];
-                let fromdata={};
-                fromdata.page=this.pageNum;
-                fromdata.size=this.pageSize
-                this.$api.processSet.positionList(fromdata).then(res=>{
-                    let resData=res.data.data.rows;
-                    if(resData && resData.length>0){
-                        for(let i=0;i<resData.length;i++){
-                            resData[i].oid='';
+                    fromdata.page=this.pageNum;
+                    fromdata.size=this.pageSize
+                    this.$api.processSet.getRolesData(fromdata).then(res=>{
+                        let resData=res.data.data.rows;
+                        for(var i=0;i< resData.length;i++){
+                            if(resData[i].admin){
+                                resData[i].AdminS="是";
+                            }else{
+                                resData[i].AdminS="否";
+                            }
+                            resData[i].foid=resData[i].oid;
+                            resData[i].oid="";
                         }
                         this.gridData = resData;
                         this.total = res.data.data.total;
-                        this.totalpage=true;
-                    }else{
+                    },error=>{
+                        console.log(error)
+                    });
+                    //角色查询
+                    this.$api.svg.getRolesMsg().then(res => {
+                        let getMsg = res.data.data
+                        for( let i  in getMsg){
+                            this.roleoptions.push({
+                                label:getMsg[i] ,
+                                value:i ,
+                            })
+                        }                    
+                    }),error=>{
+                        console.log(error)
+                    }
+                }
+                //用户查询
+                if(this.type ==="用户"){
+                    this.columns3=[
+                        {
+                            type: 'selection'
+                        },
+                        {
+                            key: 'usercode',
+                            title: '编码'
+                        },
+                        {
+                            key: 'fname',
+                            title: '名称'
+                        },
+                        {
+                            key: 'positionName',
+                            title: '职位'
+                        },
+                    ];
+                    if(this.title =='用户查询'){
+                        this.gridData =[];
+                        let fromdata={};
+                        fromdata.queryType='';
+                        this.$api.processSet.getUserTree(fromdata).then(res=>{
+                            let resData=res.data.data;
+                            let resDataArr= eval("("+resData+")");//console.log(resDataArr.JsonInfo[0])
+                            this.treeData = resDataArr.JsonInfo;
+                            this.totalpage=false;
+                        },error=>{
+                            console.log(error)
+                        })
+                    }else if(this.title =='组织结构查询'){
+                        this.columns3=[
+                        {
+                            type: 'selection'
+                        },
+                        {
+                            key: 'fcode',
+                            title: '编码'
+                        },
+                        {
+                            key: 'fname',
+                            title: '名称'
+                        },
+                    ];
+                        let fromdata={};
+                        fromdata.queryType='org';
+                        this.gridData =[];
+                        this.$api.processSet.getUserTree(fromdata).then(res=>{
+                            let resData=res.data.data;
+                            let resDataArr= eval("("+resData+")");
+                            this.treeData = resDataArr;
+                            this.totalpage=false;
+                        },error=>{
+                            console.log(error)
+                        })
+                    }
+                    
+                }
+                //服务
+                if(this.type ==="服务"){
+                    this.columns3=[
+                        {
+                            type: 'selection'
+                        },
+                        {
+                            key: 'fcode',
+                            title: '编码'
+                        },
+                        {
+                            key: 'fname',
+                            title: '名称'
+                        },
+                        {
+                            key: 'fremark',
+                            title: '备注'
+                        },
+                    ];
+                    this.gridData =[];
+                    let fromdata={};
+                    fromdata.page=this.pageNum;
+                    fromdata.size=this.pageSize
+                    this.$api.processSet.getWfBusinessService(fromdata).then(res=>{
+                        let resData=res.data.data.rows;
                         this.gridData = resData;
                         this.total = res.data.data.total;
                         this.totalpage=true;
+                    },error=>{
+                        console.log(error)
+                    })
+                }
+                if(this.type ==="职务"){
+                    this.columns3=[
+                        {
+                            type: 'selection'
+                        },
+                        {
+                            key: 'fcode',
+                            title: '编码'
+                        },
+                        {
+                            key: 'fname',
+                            title: '名称'
+                        },
+                        {
+                            key: 'positionType',
+                            title: '职务类型'
+                        },
+                        {
+                            key: 'fremark',
+                            title: '描述'
+                        },
+                    ];
+                    this.gridData =[];
+                    let fromdata={};
+                    fromdata.page=this.pageNum;
+                    fromdata.size=this.pageSize
+                    this.$api.processSet.positionList(fromdata).then(res=>{
+                        let resData=res.data.data.rows;
+                        if(resData && resData.length>0){
+                            for(let i=0;i<resData.length;i++){
+                                resData[i].oid='';
+                            }
+                            this.gridData = resData;
+                            this.total = res.data.data.total;
+                            this.totalpage=true;
+                        }else{
+                            this.gridData = resData;
+                            this.total = res.data.data.total;
+                            this.totalpage=true;
+                        }
+                    },error=>{
+                        console.log(error)
+                    })
+                }
+                //审核 
+                if(this.type ==="审核"){
+                    this.columns3=[
+                        {
+                            type: 'selection'
+                        },
+                        {
+                            key: 'fcode',
+                            title: '编码'
+                        },
+                        {
+                            key: 'fname',
+                            title: '名称'
+                        },
+                        {
+                            key: 'fremark',
+                            title: '描述'
+                        }
+                    ];
+                    let fromdata={};
+                    fromdata.page=this.pageNum;
+                    fromdata.size=this.pageSize
+                    this.$api.svg.getProcessData(fromdata).then(res=>{
+                        let resData=res.data.data.rows;
+                        this.gridData = resData;
+                        this.total = res.data.data.total;
+                    },error=>{
+                        console.log(error)
+                    })
+                }
+                if(!bool){
+                    if(this.$refs['workflowConfigForm']){
+                        this.$refs['workflowConfigForm'].resetFields();
                     }
-                },error=>{
-                    console.log(error)
-                })
-            }
-            //审核 
-            if(this.type ==="审核"){
-                  this.columns3=[
-                    {
-                        type: 'selection'
-                    },
-                    {
-                        key: 'fcode',
-                        title: '编码'
-                    },
-                    {
-                        key: 'fname',
-                        title: '名称'
-                    },
-                    {
-                        key: 'fremark',
-                        title: '描述'
-                    }
-                ];
-                let fromdata={};
-                fromdata.page=this.pageNum;
-                fromdata.size=this.pageSize
-                this.$api.svg.getProcessData(fromdata).then(res=>{
-                    let resData=res.data.data.rows;
-                    this.gridData = resData;
-                    this.total = res.data.data.total;
-                },error=>{
-                    console.log(error)
-                })
-            }
-            if(!bool){
-                if(this.$refs['workflowConfigForm']){
-                    this.$refs['workflowConfigForm'].resetFields();
                 }
             }
-            
         }
     },
     methods: {
@@ -493,6 +494,7 @@ export default {
             let serchData=[];
             let dialogType=this.title;
             let typeS=this.type;
+            this.dialogVisible=false;
             this.$emit('closeDialog',serchData,dialogType,typeS);
         },
         searchKey(){
@@ -735,6 +737,7 @@ export default {
                     let serchData=this.multipleSelection;
                     let dialogType=this.title;
                     let typeS=this.type;
+                    this.dialogVisible=false;
                     this.$emit('closeDialog',serchData,dialogType,typeS);
                 }
             }else{

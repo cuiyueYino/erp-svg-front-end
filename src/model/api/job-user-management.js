@@ -97,6 +97,18 @@ const jobUserManagement = {
     getDepartData(params){
         return httpReqest.get('/api/interfaces/organization/findDepartmentInfosByCompanyoid?companyOid=' + params);
     },
+    // 人员-部门查询(2)
+    getDepartData2(params){
+        var valueS='?';
+        for(var item in params){
+            valueS+=item+"="+params[item]+"&";
+        }
+        if(valueS.slice(valueS.length-1,valueS.length) ==="&"){
+            valueS=valueS.slice(0,valueS.length-1);
+        }
+        return httpReqest.get('/api/interfaces/organization/findDepartmentInfosByCompanyoid'+valueS);
+    },
+
 
     //  人员-编辑
     updatePeopleData(params){
