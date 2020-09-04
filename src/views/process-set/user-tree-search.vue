@@ -376,21 +376,23 @@ export default {
     },
     watch:{
         rowUTStype(oldVal,newVal){
-            this.ShowFinancVisible=this.rowUTStype;
-            let finandata=this.rowUTSDataObj.finanrowId;
-            let formDataA ={};
-            formDataA.id=finandata;
-            this.title=this.rowUTSDataObj.nametitle;
-            this.saveType=this.rowUTSDataObj.FunctionType;
-            let fromdata={};
-            fromdata.queryType='org';
-            this.$api.processSet.getUserTree(fromdata).then(res=>{
-                let resData=res.data.data;
-                let resDataArr= eval("("+resData+")");
-                this.treeData = resDataArr;
-            },error=>{
-                console.log(error)
-            })
+            if(this.rowUTStype){
+                this.ShowFinancVisible=this.rowUTStype;
+                let finandata=this.rowUTSDataObj.finanrowId;
+                let formDataA ={};
+                formDataA.id=finandata;
+                this.title=this.rowUTSDataObj.nametitle;
+                this.saveType=this.rowUTSDataObj.FunctionType;
+                let fromdata={};
+                fromdata.queryType='org';
+                this.$api.processSet.getUserTree(fromdata).then(res=>{
+                    let resData=res.data.data;
+                    let resDataArr= eval("("+resData+")");
+                    this.treeData = resDataArr;
+                },error=>{
+                    console.log(error)
+                })
+            }
         }
     }
 };

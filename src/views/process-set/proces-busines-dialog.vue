@@ -313,24 +313,26 @@ export default {
     watch: {
          // 对话框显示 自动聚焦name输入框
         visible (bool) {
-            this.dialogVisible = bool;
-            if(this.type =='用户'){
-                let fromdata={};
-                fromdata.id='_DefaultCompanyOId';
-                this.getUserTreeData(fromdata);
-                let Roledata={};
-                Roledata.queryType='';
-                Roledata.page=this.pageNum;
-                Roledata.size=this.pageSize;
-                this.getUserRole(Roledata);
-            }else{
-                let Roledata={};
-                Roledata.page=this.pageNum;
-                Roledata.size=this.pageSize;
-                Roledata.companyOid=this.companyId;
-                this.getDepartment(Roledata);
-                let Comdata={};
-                this.getCompany(Comdata);
+            if(bool){
+                this.dialogVisible = bool;
+                if(this.type =='用户'){
+                    let fromdata={};
+                    fromdata.id='_DefaultCompanyOId';
+                    this.getUserTreeData(fromdata);
+                    let Roledata={};
+                    Roledata.queryType='';
+                    Roledata.page=this.pageNum;
+                    Roledata.size=this.pageSize;
+                    this.getUserRole(Roledata);
+                }else{
+                    let Roledata={};
+                    Roledata.page=this.pageNum;
+                    Roledata.size=this.pageSize;
+                    Roledata.companyOid=this.companyId;
+                    this.getDepartment(Roledata);
+                    let Comdata={};
+                    this.getCompany(Comdata);
+                }
             }
         }
     },

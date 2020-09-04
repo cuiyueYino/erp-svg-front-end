@@ -533,31 +533,33 @@ export default {
     },
     watch:{
         rowNMMtype(oldVal,newVal){
-            this.isShowOperateRecord = true;
-            this.isShow = true;
-            this.isEdit = false;
-            this.ShowFinancVisible=this.rowNMMtype;
-            this.title=this.rowNMMDataObj.nametitle;
-            this.NewOrEditFlag=this.rowNMMDataObj.NewOrEditFlag;
-            if(this.rowNMMDataObj.NewOrEditFlag==="NEW"){
-                this.isShowOperateRecord = false;
-                this.formdata={};
-                this.formdata.flevel=this.rowNMMDataObj.flevel;
-                this.formdata.fcreator = localStorage.getItem('ms_username');
-                this.formdata.fcreatetime =new Date() ;
-            } else if (this.rowNMMDataObj.NewOrEditFlag==="EDIT"){
-                let fromdataA={};
-                fromdataA.from= '3';
-                fromdataA.foid=this.rowNMMDataObj.foid;
-                this.findDocManageById(fromdataA);
-            } else if (this.rowNMMDataObj.NewOrEditFlag==="SHOW"){
-                this.isShow = false;
-                this.isEdit = true;
-                let fromdataA={};
-                fromdataA.fuserid = localStorage.getItem('ms_userId'),
-                fromdataA.foid=this.rowNMMDataObj.foid;
-                fromdataA.from= '2';
-                this.findDocManageById(fromdataA);
+            if(this.rowNMMtype){
+                this.isShowOperateRecord = true;
+                this.isShow = true;
+                this.isEdit = false;
+                this.ShowFinancVisible=this.rowNMMtype;
+                this.title=this.rowNMMDataObj.nametitle;
+                this.NewOrEditFlag=this.rowNMMDataObj.NewOrEditFlag;
+                if(this.rowNMMDataObj.NewOrEditFlag==="NEW"){
+                    this.isShowOperateRecord = false;
+                    this.formdata={};
+                    this.formdata.flevel=this.rowNMMDataObj.flevel;
+                    this.formdata.fcreator = localStorage.getItem('ms_username');
+                    this.formdata.fcreatetime =new Date() ;
+                } else if (this.rowNMMDataObj.NewOrEditFlag==="EDIT"){
+                    let fromdataA={};
+                    fromdataA.from= '3';
+                    fromdataA.foid=this.rowNMMDataObj.foid;
+                    this.findDocManageById(fromdataA);
+                } else if (this.rowNMMDataObj.NewOrEditFlag==="SHOW"){
+                    this.isShow = false;
+                    this.isEdit = true;
+                    let fromdataA={};
+                    fromdataA.fuserid = localStorage.getItem('ms_userId'),
+                    fromdataA.foid=this.rowNMMDataObj.foid;
+                    fromdataA.from= '2';
+                    this.findDocManageById(fromdataA);
+                }              
             }
         }
     }

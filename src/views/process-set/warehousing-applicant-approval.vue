@@ -411,37 +411,39 @@ export default {
     },
     watch:{
         rowWAAtype(oldVal,newVal){
-            this.ShowFinancVisible=this.rowWAAtype;
-            let formDataA ={};
-            if(!this.isOa){
-                this.title=this.rowWAADataObj.nametitle;
-                let finandata=this.rowWAADataObj.selectData;
-                let rowData= {};
-                rowData.finanrowname = finandata[0].fsrcCompany+"/"+finandata[0].factivityName;
-                rowData.finanrowId = finandata[0].foid;
-                rowData.nametitle = finandata[0].fsubject;
-                this.rowDataprocessOid=rowData;
-                formDataA.oid=finandata[0].foid;
-                formDataA.userId=localStorage.getItem("ms_userId");
-            } else {
-                let rowData= {};
-                rowData.finanrowname = this.rowWAADataObj.fsrcCompany+"/"+this.rowWAADataObj.factivityName;
-                rowData.finanrowId = this.rowWAADataObj.foid;
-                rowData.nametitle = this.rowWAADataObj.fsubject;
-                this.rowDataprocessOid=rowData;
-                formDataA.oid= this.rowWAADataObj.fsrcoId;
-                formDataA.userId=localStorage.getItem("ms_userId");
-                this.title = "入库申请申请人审批";
-            }
-            this.$api.processSet.getunhandledTask(formDataA).then(response => {
-                let responsevalue = response;
-                if (responsevalue) {
-                    let returndata = responsevalue.data;
-                    this.DisplayOrHide(this.functionType,this.rowWAADataObj);
+            if(this.rowWAAtype){
+                this.ShowFinancVisible=this.rowWAAtype;
+                let formDataA ={};
+                if(!this.isOa){
+                    this.title=this.rowWAADataObj.nametitle;
+                    let finandata=this.rowWAADataObj.selectData;
+                    let rowData= {};
+                    rowData.finanrowname = finandata[0].fsrcCompany+"/"+finandata[0].factivityName;
+                    rowData.finanrowId = finandata[0].foid;
+                    rowData.nametitle = finandata[0].fsubject;
+                    this.rowDataprocessOid=rowData;
+                    formDataA.oid=finandata[0].foid;
+                    formDataA.userId=localStorage.getItem("ms_userId");
                 } else {
-                    this.$message.success('数据库没有该条数据!');
+                    let rowData= {};
+                    rowData.finanrowname = this.rowWAADataObj.fsrcCompany+"/"+this.rowWAADataObj.factivityName;
+                    rowData.finanrowId = this.rowWAADataObj.foid;
+                    rowData.nametitle = this.rowWAADataObj.fsubject;
+                    this.rowDataprocessOid=rowData;
+                    formDataA.oid= this.rowWAADataObj.fsrcoId;
+                    formDataA.userId=localStorage.getItem("ms_userId");
+                    this.title = "入库申请申请人审批";
                 }
-            });
+                this.$api.processSet.getunhandledTask(formDataA).then(response => {
+                    let responsevalue = response;
+                    if (responsevalue) {
+                        let returndata = responsevalue.data;
+                        this.DisplayOrHide(this.functionType,this.rowWAADataObj);
+                    } else {
+                        this.$message.success('数据库没有该条数据!');
+                    }
+                });
+            }
         }
     }
 };

@@ -280,10 +280,12 @@ export default {
     },
     watch:{
         rowRMDtype(oldVal,newVal){
-            this.ShowFinancVisible=this.rowRMDtype;
-            this.title=this.rowRMDDataObj.nametitle;
-            this.maketree();
-            this.searchRoleType(1,10);
+            if(this.rowRMDtype){
+                this.ShowFinancVisible=this.rowRMDtype;
+                this.title=this.rowRMDDataObj.nametitle;
+                this.maketree();
+                this.searchRoleType(1,10);
+            }
         }
     }
 }

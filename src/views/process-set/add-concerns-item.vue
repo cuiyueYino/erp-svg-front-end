@@ -492,23 +492,25 @@ export default {
     mounted() {
     },
     watch:{
-        rowACItype(oldVal,newVal){ 
-            this.ShowFinancVisible=this.rowACItype;
-            let finandata=this.rowACIDataObj.finanrowId;
-            let formDataA ={};
-            formDataA.id=finandata;
-            this.title=this.rowACIDataObj.nametitle;
-            let fromdata={};
-            fromdata.infosBeginNum=1;
-            fromdata.infosEndNum=this.pageSize;
-            fromdata.userId=localStorage.getItem("ms_userId")
-            this.getHunTableData(fromdata);
-            //查找业务数据
-            let fromdata1={};
-            //fromdata1.infosBeginNum=0;
-            //fromdata1.infosEndNum=2000;
-            this.getmetaClass(fromdata1);
-            this.selectCom();
+        rowACItype(oldVal,newVal){
+            if(this.rowACItype){
+                this.ShowFinancVisible=this.rowACItype;
+                let finandata=this.rowACIDataObj.finanrowId;
+                let formDataA ={};
+                formDataA.id=finandata;
+                this.title=this.rowACIDataObj.nametitle;
+                let fromdata={};
+                fromdata.infosBeginNum=1;
+                fromdata.infosEndNum=this.pageSize;
+                fromdata.userId=localStorage.getItem("ms_userId")
+                this.getHunTableData(fromdata);
+                //查找业务数据
+                let fromdata1={};
+                //fromdata1.infosBeginNum=0;
+                //fromdata1.infosEndNum=2000;
+                this.getmetaClass(fromdata1);
+                this.selectCom();
+            }
         }
     }
 };

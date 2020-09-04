@@ -354,6 +354,7 @@ export default {
     },
     watch:{
         rowOPStype(oldVal,newVal){
+            if(this.rowOPStype){
             this.ShowFinancVisible=this.rowOPStype;
             let rowDataObj=this.rowOPSDataObj;
             this.title=rowDataObj.nametitle;
@@ -364,7 +365,8 @@ export default {
             fromdata.page=1;
             fromdata.size=this.pageSize;
             this.GetUSerData(fromdata);
-            this.selectCom();
+            this.selectCom();         
+            }
         }
     }
 }

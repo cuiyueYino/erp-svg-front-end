@@ -330,6 +330,7 @@ export default {
     },
     watch:{
         rowPStype(oldVal,newVal){
+            if(this.rowPStype){
             this.ShowFinancVisible=this.rowPStype;
             let rowDataObj=this.rowPSDataObj;
             this.title=rowDataObj.nametitle;
@@ -340,6 +341,7 @@ export default {
             fromdata.size=this.pageSize;
             this.GetUSerData(fromdata);
             this.selectCom();
+            }
         }
     }
 }
