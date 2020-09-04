@@ -78,7 +78,6 @@ export default {
          */
         getHtmlPreviewAttachment(row){
             this.$api.insideMail.getHtmlPreviewAttachmentById(row.id).then(response => {
-                debugger;
                 let value =response.data.data;
                 if (value) {
                     this.rowNMMtype = true;
@@ -176,6 +175,7 @@ export default {
          * 上传
          */
         upload(){
+            debugger;
             let length = this.enclosureTableData.length;
             if(length==undefined||length==0){
                 return;
@@ -185,7 +185,7 @@ export default {
             // formData.append('files', this.uploadFiles);
 
             for(var i=0; i < length; i++ ){
-                if(this.enclosureTableData[0].id==null&&this.enclosureTableData[0].id==''){
+                if(this.enclosureTableData[0].id==null || this.enclosureTableData[0].id==''){
                     formData.append('file', this.enclosureTableData[0]);
                     formData.append('menuCode',this.enclosureConfig.menuCode);
                     if(creator){
