@@ -380,8 +380,8 @@
 						this.newIndex = 0;
 						data = {
 							foperationtime: newData,
-							foperationcontent: '禁用',
-							foperationcause: 'OA封号',
+							foperationcontent: '启用',
+							foperationcause: 'OA解封',
 							index:this.newIndex,
 						}
 						this.tableData2.unshift(data); 
