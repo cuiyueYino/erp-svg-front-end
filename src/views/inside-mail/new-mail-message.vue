@@ -23,10 +23,11 @@
                 <el-col :span="6">
                     <el-button type="text" @click="AddToUser('addressee',false)"><i class="el-icon-plus"></i>添加</el-button>
                     <el-button type="text" @click="clearAddToUser('addressee')"><i class="el-icon-delete"></i>清空</el-button>
-                    <el-button type="text" @click="ShoWAddCCUser"><i class="el-icon-edit-outline"></i>{{ShoWAddCC==true?'隐藏抄送':'添加抄送'}}</el-button>
+                    <!--<el-button type="text" @click="ShoWAddCCUser"><i class="el-icon-edit-outline"></i>{{ShoWAddCC==true?'隐藏抄送':'添加抄送'}}</el-button>-->
                 </el-col>
             </el-row>
-            <el-row v-if="ShoWAddCC==true">
+            <!--<el-row v-if="ShoWAddCC==true">-->
+            <el-row>
                 <el-col :span="14">
                     <el-form-item label="抄送" prop="duplicateName">
                         <el-input size="small" v-model="formData.duplicateName" disabled></el-input>
@@ -334,7 +335,7 @@ export default {
                     this.addresseeList.length = 0;
                 }
             }else if(data=="duplicate"){
-               this.formData.duplicateName = '';
+                this.formData.duplicateName = '';
                 if(this.defautltDuplicate!=null&&this.defautltDuplicate.length!=0){
                     this.defautltDuplicate.length = 0;
                 }

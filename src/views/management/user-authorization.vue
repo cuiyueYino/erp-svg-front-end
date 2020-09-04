@@ -68,7 +68,7 @@
 							<el-table-column prop="fcompanyname" size="small" label="公司名称"></el-table-column>
 						</el-table>
 						<div class="pagination" v-if="UsertableData.length >0">
-							<el-pagination :total="total" background layout="prev, pager, next,jumper,total" :page-size="pageSize" @current-change="onUserCurrentChange">
+							<el-pagination :total="total" background layout="prev, pager, next,jumper,total" :current-page="pageNum" :page-size="pageSize" @current-change="onUserCurrentChange">
 							</el-pagination>
 						</div>
 					</div>
@@ -79,33 +79,33 @@
 							<el-table-column prop="companyName" size="small" label="公司名称"></el-table-column>
 						</el-table>
 						<div class="pagination" v-if="roleLtableData.length >0">
-							<el-pagination :total="roleLtotal" background layout="prev, pager, next,jumper,total" @current-change="onroleLCurrentChange">
+							<el-pagination :total="roleLtotal" background layout="prev, pager, next,jumper,total" :current-page="roleLpageNum" :page-size="pageSize" @current-change="onroleLCurrentChange">
 							</el-pagination>
 						</div>
 					</div>
 				</el-col>
 				<el-col :span="11" :offset="1">
 					<div v-if="dimension" class="CheckTable">
-						<el-table ref="roleTable" :data="RoletableData" tooltip-effect="dark" size="small" border style="width: 100%" @select="onRoleSelectionChange">
+						<el-table ref="roleTable" :data="RoletableData" tooltip-effect="dark" size="small" border style="width: 100%" @select-all="onRoleSelectionALLChange" @select="onRoleSelectionChange">
 							<el-table-column type="selection" min-width="5%"></el-table-column>
 							<el-table-column prop="code" size="small" label="角色编码"></el-table-column>
 							<el-table-column prop="name" size="small" label="角色名称"></el-table-column>
 							<el-table-column prop="companyName" size="small" label="公司名称"></el-table-column>
 						</el-table>
 						<div class="pagination" v-if="RoletableData.length >0">
-							<el-pagination :total="total1" background layout="prev, pager, next,jumper,total" @current-change="onRoleCurrentChange">
+							<el-pagination :total="total1" background layout="prev, pager, next,jumper,total" :current-page="pageNum1" :page-size="pageSize" @current-change="onRoleCurrentChange">
 							</el-pagination>
 						</div>
 					</div>
 					<div v-else class="CheckTable">
-						<el-table ref="UserLTable" :data="UserLtableData" tooltip-effect="dark" size="small" border style="width: 100%" @select="onUserLSelectionChange">
+						<el-table ref="UserLTable" :data="UserLtableData" tooltip-effect="dark" size="small" border style="width: 100%" @select-all="onUserLSelectionALLChange" @select="onUserLSelectionChange">
 							<el-table-column type="selection" min-width="5%"></el-table-column>
 							<el-table-column prop="fcode" size="small" label="登录账户"></el-table-column>
 							<el-table-column prop="fname" size="small" label="用户名称"></el-table-column>
 							<el-table-column prop="fcompanyname" size="small" label="公司名称"></el-table-column>
 						</el-table>
 						<div class="pagination" v-if="UserLtableData.length >0">
-							<el-pagination :total="totalUserL" background layout="prev, pager, next,jumper,total" @current-change="onUserLCurrentChange">
+							<el-pagination :total="totalUserL" background layout="prev, pager, next,jumper,total" :current-page="pageNumUserL" :page-size="pageSize" @current-change="onUserLCurrentChange">
 							</el-pagination>
 						</div>
 					</div>
@@ -137,6 +137,8 @@
 				pageSize: 10,
 				total: 2,
 				pageNum1: 1,
+				pageNumUserL: 1,
+				roleLpageNum: 1,
 				pageSize1: 10,
 				pageSize2: 10,
 				total1: 2,
@@ -225,7 +227,9 @@
 						this.UserLtableData = tableDataArr;
 						this.UsertableData = tableDataArr;
 						this.total = responsevalue.data.data.total;
+						this.pageNum= responsevalue.data.data.page;
 						this.totalUserL = responsevalue.data.data.total;
+						this.pageNumUserL= responsevalue.data.data.page;
 						if(this.dimension === false) {
 							this.$nextTick(() => {
 								// 在这里面去设置人员选中
@@ -238,7 +242,7 @@
 				});
 			},
 			//通过ID字符串查用户
-			getUserDataByID(data, total) {
+			getUserDataByID(data, total,pageNum) {
 				let fromdata = data;
 				this.$api.management.getUserByIds(fromdata).then(response => {
 					let responsevalue = response;
@@ -248,7 +252,9 @@
 						this.UserLtableData = tableDataArr;
 						this.UsertableData = tableDataArr;
 						this.total = total;
+						this.pageNum= pageNum;
 						this.totalUserL = total;
+						this.pageNumUserL= pageNum;
 						if(this.dimension === false) {
 							this.$nextTick(() => {
 								// 在这里面去设置人员选中
@@ -271,7 +277,9 @@
 						this.roleLtableData = tableDataArr;
 						this.RoletableData = tableDataArr;
 						this.total1 = returndata.total;
+						this.pageNum1= returndata.page;
 						this.roleLtotal = returndata.total;
+						this.roleLpageNum = returndata.page;
 						if(this.dimension) {
 							this.$nextTick(() => {
 								// 在这里面去设置角色选中
@@ -288,7 +296,7 @@
 				this.ALLSelectFlage = false;
 				if(this.dimension == true) {
 					let fromdata = {};
-					fromdata.page = this.pageNum;
+					fromdata.page =1;
 					fromdata.size = this.pageSize;
 					if(this.formInline.regionleft == "name") {
 						fromdata.fname = this.formInline.searchValueleft;
@@ -300,7 +308,7 @@
 					this.getUserData(fromdata);
 				} else {
 					let fromdataU = {};
-					fromdataU.page = this.pageNum;
+					fromdataU.page = 1;
 					fromdataU.size = this.pageSize;
 					if(this.formInline.regionleft == "name") {
 						fromdataU.name = this.formInline.searchValueleft;
@@ -320,7 +328,7 @@
 				this.ALLSelectFlage = false;
 				if(this.dimension == true) {
 					let fromdataU = {};
-					fromdataU.page = this.pageNum;
+					fromdataU.page = 1;
 					fromdataU.size = this.pageSize1;
 					if(this.formInline.regionRight == "name") {
 						fromdataU.name = this.formInline.searchValueright;
@@ -332,7 +340,7 @@
 					this.searchRole(fromdataU);
 				} else {
 					let fromdata = {};
-					fromdata.page = this.pageNum;
+					fromdata.page = 1;
 					fromdata.size = this.pageSize2;
 					if(this.formInline.regionRight == "name") {
 						fromdata.fname = this.formInline.searchValueright;
@@ -349,12 +357,12 @@
 				this.ALLSelectFlage = false;
 				if(this.dimension == true) {
 					let fromdata = {};
-					fromdata.page = this.pageNum;
+					fromdata.page = 1;
 					fromdata.size = this.pageSize;
 					this.getUserData(fromdata);
 				} else {
 					let fromdataU = {};
-					fromdataU.page = this.pageNum;
+					fromdataU.page = 1;
 					fromdataU.size = this.pageSize;
 					this.searchRole(fromdataU);
 				}
@@ -365,12 +373,12 @@
 				this.disShowPager = true;
 				if(this.dimension == true) {
 					let fromdataU = {};
-					fromdataU.page = this.pageNum;
+					fromdataU.page = 1;
 					fromdataU.size = this.pageSize1;
 					this.searchRole(fromdataU);
 				} else {
 					let fromdata = {};
-					fromdata.page = this.pageNum;
+					fromdata.page = 1;
 					fromdata.size = this.pageSize2;
 					this.getUserData(fromdata);
 				}
@@ -401,11 +409,11 @@
 				//this.formInline.regionleft='';
 				//this.formInline.regionRight='';
 				let fromdata = {};
-				fromdata.page = this.pageNum;
+				fromdata.page = 1;
 				fromdata.size = this.pageSize;
 				this.searchRole(fromdata);
 				let fromdataU = {};
-				fromdataU.page = this.pageNum;
+				fromdataU.page = 1;
 				fromdataU.size = this.pageSize;
 				this.getUserData(fromdataU);
 			},
@@ -533,12 +541,19 @@
 			onRoleSelectionChange(data, val) {
 				this.getRRoleSelectedList(val.id);
 			},
+			//右侧角色全部选中事件
+			onRoleSelectionALLChange(data){
+				let RoleSData=data;
+				for(let i=0;i<RoleSData.length;i++){
+					this.getRRoleSelectedList(RoleSData[i].id);
+				}
+			},
 			//右侧已选中点击事件
 			RightSelecT() {
 				this.ALLSelectFlage = true;
 				if(this.dimension == true) {
 					let fromdataU = {};
-					fromdataU.page = this.pageNum;
+					fromdataU.page =1;
 					fromdataU.size = this.pageSize1;
 					if(this.RoleselectData.length > 0) {
 						let RoleRSelect = this.RoleselectData;
@@ -547,7 +562,7 @@
 					this.searchRole(fromdataU);
 				} else {
 					if(this.RUserLselectData.length > 0) {
-						this.UserSelectDataPage(this.pageNum, this.pageSize, this.RUserLselectData);
+						this.UserSelectDataPage(1, this.pageSize, this.RUserLselectData);
 					}
 				}
 			},
@@ -565,7 +580,7 @@
 					UserIDStr = UserIDStr.slice(0, UserIDStr.length - 1);
 					let fromdataU = {};
 					fromdataU.userIds = UserIDStr;
-					this.getUserDataByID(fromdataU, USerSelectData.length);
+					this.getUserDataByID(fromdataU, USerSelectData.length,pageNum);
 				}
 			},
 			//右侧角色选中去重
@@ -607,6 +622,13 @@
 						fromdata.fcompanyoid = this.formInline.searchValueright;
 					}
 					this.getUserData(fromdata);
+				}
+			},
+			//右侧人员全部选中事件
+			onUserLSelectionALLChange(data){
+				let SelectData=data;
+				for(let i=0;i<SelectData.length;i++){
+					this.getRUserSelectedList(SelectData[i].foid);
 				}
 			},
 			//右侧人员选中事件
