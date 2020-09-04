@@ -11,7 +11,7 @@
                     </el-select>
                 </el-col>
                 <el-col :span="5">
-                    <el-input v-if="isNormal" v-model="form.selectVal"  placeholder="根据标题或内容搜索"  prefix-icon="el-icon-search" size="mini" clearable />
+                    <el-input v-if="isNormal" v-model="form.selectVal"  placeholder="搜索内容"  prefix-icon="el-icon-search" size="mini" clearable />
                     <el-date-picker
                         v-if="isDate"
                         clearable

@@ -11,7 +11,7 @@
                     </el-select>
                 </el-col>
                 <el-col :span="5">
-                    <el-input v-if="isNormal" v-model="form.selectVal"  placeholder="根据标题或内容搜索"  prefix-icon="el-icon-search" size="mini" clearable />
+                    <el-input v-if="isNormal" v-model="form.selectVal"  placeholder="搜索内容"  prefix-icon="el-icon-search" size="mini" clearable />
                     <el-date-picker
                         v-if="isDate"
                         clearable
@@ -102,9 +102,14 @@ export default {
                 title: "发送时间"
                 },
                 {
+                width: 100,
+                key: "isRead",
+                title: "是否已读"
+                },
+                {
                 width: 80,
                 key: "status",
-                title: "来源"
+                title: "状态"
                 }
             ],
             tableData: [],
@@ -154,10 +159,10 @@ export default {
                         for(var i=0,len=this.tableData.length; i<len;i++ ){
                             switch(this.tableData[i].isRead){
                                 case 0:
-                                this.tableData[i].isRead = "未读";
+                                this.tableData[i].isRead = "否";
                                 break;
                                 case 1:
-                                this.tableData[i].isRead = "已读";
+                                this.tableData[i].isRead = "是";
                                 break;
                                 default :
                                 break;
