@@ -393,7 +393,23 @@ export default {
                 this.content = this.perData.content,
                 this.formData.subject= resData.subject
                 this.formData.addresseeList = this.perData.addresseeList
-                this.formData.duplicateList = this.perData.duplicateList
+                // this.formData.duplicateList = 
+
+                let nameString= '';
+                let checkId=[];
+                for(let i=0;i<this.perData.duplicateList.length;i++){
+                    nameString += this.perData.duplicateList[i].fname+",";
+                    checkId.push(this.perData.duplicateList[i].foid);
+                };
+                if(nameString!=''){
+                    nameString = nameString.slice(0,nameString.length-1);
+                }
+                this.formData.duplicateName = nameString;
+                this.defautltDuplicate = checkId;
+                this.formData.duplicateList = this.perData.duplicateList;
+
+
+                // this.formData.duplicateName = this.perData.duplicateList
                 this.enclosureConfig.voucherId = this.perData.mailCode;
                  // 主送人自动勾选数据,名字回显
                 let addresseeName= '';
