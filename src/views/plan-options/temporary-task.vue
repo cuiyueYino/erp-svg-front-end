@@ -375,13 +375,16 @@ export default {
     },
     watch:{
         rowTEMTasktype(oldVal){
-            this.ShowFinancVisible=this.rowTEMTasktype;
-            let temporartSelected = {};     
-            temporartSelected.id = this.rowTEMTaskDataObj;
-            temporartSelected.userId = localStorage.getItem("ms_userId");
-            this.getTemporaryMission(temporartSelected);
-            this.selectCom();
-            },
+            if(this.rowTEMTasktype){
+                this.ShowFinancVisible=this.rowTEMTasktype;
+                let temporartSelected = {};     
+                temporartSelected.id = this.rowTEMTaskDataObj;
+                temporartSelected.userId = localStorage.getItem("ms_userId");
+                this.getTemporaryMission(temporartSelected);
+                this.selectCom();
+            }
+            
+        },
     }
 }
 </script>

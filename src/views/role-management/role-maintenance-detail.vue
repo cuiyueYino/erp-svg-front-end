@@ -102,6 +102,7 @@ export default {
     methods: {
         //关闭当前dialog时给父组件传值
         handleClose(){
+            this.ShowFinancVisible=false;
             this.$emit('changeShow',this.rowRMDDataObj,false);
         },
         renderContent(h, { node, data, store }) {
@@ -270,6 +271,7 @@ export default {
                     //this.CeateTypeflag='EDIT';
                     //this.forDisabled=false;
                     this.rowRMDDataObj.SelectRMDData=SelectData;
+                    this.ShowFinancVisible=false;
                     this.$emit('changeShow',this.rowRMDDataObj,false);
                 }else{
                     this.$message.error("请选择一行数据!");
@@ -280,10 +282,12 @@ export default {
     },
     watch:{
         rowRMDtype(oldVal,newVal){
-            this.ShowFinancVisible=this.rowRMDtype;
-            this.title=this.rowRMDDataObj.nametitle;
-            this.maketree();
-            this.searchRoleType(1,10);
+            if(this.rowRMDtype){
+                this.ShowFinancVisible=this.rowRMDtype;
+                this.title=this.rowRMDDataObj.nametitle;
+                this.maketree();
+                this.searchRoleType(1,10);
+            }
         }
     }
 }

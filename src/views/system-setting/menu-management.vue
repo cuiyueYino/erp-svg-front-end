@@ -27,7 +27,6 @@
             <el-row>
                 <el-col :span="6" class="treeStyle">
                     <el-tree
-                      highlight-current
                         :data="treeData"
                         :props="defaultProps"
                         node-key="id"

@@ -209,6 +209,7 @@ export default {
         //关闭当前dialog时给父组件传值
         handleClose(){
             //返回选中的父组件选中的row,并修某些改值
+            this.ShowFinancVisible = false;
             this.$emit('changeShow',this.rowPSDataObj,false);
         },
         onSelectionChange(val) {
@@ -330,6 +331,7 @@ export default {
     },
     watch:{
         rowPStype(oldVal,newVal){
+            if(this.rowPStype){
             this.ShowFinancVisible=this.rowPStype;
             let rowDataObj=this.rowPSDataObj;
             this.title=rowDataObj.nametitle;
@@ -340,6 +342,7 @@ export default {
             fromdata.size=this.pageSize;
             this.GetUSerData(fromdata);
             this.selectCom();
+            }
         }
     }
 }

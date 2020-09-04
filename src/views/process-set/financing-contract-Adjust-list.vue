@@ -201,32 +201,34 @@ export default {
     },
     watch:{
         financingLFCAtype(oldVal,newVal){
-            this.ShowFinancVisible=this.financingLFCAtype;
-            this.selectCom();
-            let finandata=this.rowLFCADataObj.finanrowId;
-            let formDataA ={};
-            formDataA.id=finandata;
-            this.$api.task.getComplexCreditContractAdjustVO(formDataA).then(response => {
-                let responsevalue = response;
-                if (responsevalue) {
-                    let returndata = responsevalue.data;
-                    let tableDataArr=returndata.data;
-                    this.disabled = true;
-                    this.editabled=false; 
-                    tableDataArr.createtimeStr=this.$Uformat.formatDateTYMD(tableDataArr.createtime);
-                    tableDataArr.lastupdtimeStr=this.$Uformat.formatDateTYMD(tableDataArr.lastupdtime);
-                    tableDataArr.adjustdateStr=this.$Uformat.formatDateTYMD(tableDataArr.adjustdate);
-                    tableDataArr.voucherdateStr=this.$Uformat.formatDateTYMD(tableDataArr.voucherdate);
-                    this.formdata=tableDataArr;
-                    this.rowCVAListDataObj=tableDataArr.awardCreditBreedLineResVos;
-                    this.NewEditVisible= true;
-                    this.showCheckBox= false;
-                    this.checked=false;
-                    this.financingCVAListtype=true;
-                } else {
-                    this.$message.success('数据库没有该条数据!');
-                }
-            });
+            if(this.financingLFCAtype){
+                this.ShowFinancVisible=this.financingLFCAtype;
+                this.selectCom();
+                let finandata=this.rowLFCADataObj.finanrowId;
+                let formDataA ={};
+                formDataA.id=finandata;
+                this.$api.task.getComplexCreditContractAdjustVO(formDataA).then(response => {
+                    let responsevalue = response;
+                    if (responsevalue) {
+                        let returndata = responsevalue.data;
+                        let tableDataArr=returndata.data;
+                        this.disabled = true;
+                        this.editabled=false; 
+                        tableDataArr.createtimeStr=this.$Uformat.formatDateTYMD(tableDataArr.createtime);
+                        tableDataArr.lastupdtimeStr=this.$Uformat.formatDateTYMD(tableDataArr.lastupdtime);
+                        tableDataArr.adjustdateStr=this.$Uformat.formatDateTYMD(tableDataArr.adjustdate);
+                        tableDataArr.voucherdateStr=this.$Uformat.formatDateTYMD(tableDataArr.voucherdate);
+                        this.formdata=tableDataArr;
+                        this.rowCVAListDataObj=tableDataArr.awardCreditBreedLineResVos;
+                        this.NewEditVisible= true;
+                        this.showCheckBox= false;
+                        this.checked=false;
+                        this.financingCVAListtype=true;
+                    } else {
+                        this.$message.success('数据库没有该条数据!');
+                    }
+                });
+            }
         }
     }
 };

@@ -287,6 +287,7 @@ export default {
     },
     watch:{
         rowDStype(oldVal,newVal){
+            if(this.rowDStype){
             this.ShowFinancVisible=this.rowDStype;
             let rowDataObj=this.rowDSDataObj;
             this.title=rowDataObj.nametitle;
@@ -298,6 +299,7 @@ export default {
             fromdata.size=this.pageSize;
             this.getdepaData(fromdata);
             this.selectCom();
+            }
         }
     }
 }

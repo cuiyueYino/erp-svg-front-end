@@ -218,6 +218,7 @@ export default {
         },
         //关闭当前dialog时给父组件传值
         handleClose(){
+            this.ShowFinancVisible=false;
             this.$emit('changeShow',false);
         },
         //人员查询
@@ -247,18 +248,20 @@ export default {
     },
     watch:{
         rowCWMtype(oldVal,newVal){
-            if(oldVal){
-                this.showDetail()
-            }
-            this.ShowFinancVisible=this.rowCWMtype;
-            let finandata=this.rowCWMDataObj.finanrowId;
-            let formDataA ={};
-            formDataA.id=finandata;
-            let lookOrUpdate=this.rowCWMDataObj.lookflag;
-            if(lookOrUpdate ==='look'){
-                this.LookOrupdate = false;
-            }else{
-                this.LookOrupdate = true;
+            if(this.rowCWMtype){
+                if(oldVal){
+                    this.showDetail()
+                }
+                this.ShowFinancVisible=this.rowCWMtype;
+                let finandata=this.rowCWMDataObj.finanrowId;
+                let formDataA ={};
+                formDataA.id=finandata;
+                let lookOrUpdate=this.rowCWMDataObj.lookflag;
+                if(lookOrUpdate ==='look'){
+                    this.LookOrupdate = false;
+                }else{
+                    this.LookOrupdate = true;
+                }
             }
         }
     }
