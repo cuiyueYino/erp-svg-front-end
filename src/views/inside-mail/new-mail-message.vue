@@ -103,6 +103,7 @@
     </div>
 </template>
 <script>
+
 import enclosureFile from './enclosure-file.vue';
 import { quillEditor } from 'vue-quill-editor'; //调用编辑器
 import 'quill/dist/quill.snow.css';
