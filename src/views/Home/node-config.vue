@@ -4,6 +4,7 @@
     <el-dialog
         :title="title"
         :visible.sync="dialogVisible"
+        v-if="dialogVisible"
         :modal="false"
         :show-close="false"
         :close-on-click-modal="closeConfig"
@@ -211,6 +212,7 @@ export default {
         saveConFormData(e,e2,e3,e4){ 
             if(e4 ==='CANCEL'){
                 this.dialogVisible = false;
+                this.data =this.editConData;
                 return;
             }else{
                 this.formData = e;
@@ -311,6 +313,7 @@ export default {
         saveLineData(e,e1,e2){
             if(e2==='CANCEL'){
                 this.dialogVisible = false;
+                this.data=this.editLineData;
                 return;
             }else{
                 this.data.oid = e.oid;
@@ -354,6 +357,7 @@ export default {
         saveJoinData(e,e1,e2,e3,e4,e5,e6){
             if(e6 ==='CANCEL'){
                 this.dialogVisible = false;
+                this.data=this.editJoinData;
                 return;
             }else{
                 this.data.oid = e.oid;
@@ -515,6 +519,7 @@ export default {
         saveForkData(e,e2){
             if(e2 ==='CANCEL'){
                 this.dialogVisible = false;
+                this.data=this.editForkData;
                 return;
             }else{
                 this.data.oid = e.oid;
@@ -539,6 +544,7 @@ export default {
         saveRouteData(e,e2){
             if(e2 ==='CANCEL'){
                 this.dialogVisible = false;
+                this.data=this.editRouterData;
                 return;
             }else{
                 this.data.oid = e.oid;
@@ -555,6 +561,7 @@ export default {
         saveProcessData(e,e2){
             if(e2 ==='CANCEL'){
                 this.dialogVisible = false;
+                this.data=this.sditProcessData;
                 return;
             }else{
                 this.data.oid = e.oid;
