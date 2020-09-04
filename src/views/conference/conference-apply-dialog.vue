@@ -584,7 +584,8 @@
     computed: {},
     watch: {
       visible(bool) {
-        if(bool){
+        debugger;
+        if(bool && this.title === '新建会议申请'){
           this.getCurrentStaffInfo();
         }
         this.dialogVisible = bool;

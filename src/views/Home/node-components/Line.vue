@@ -237,58 +237,57 @@ export default {
         // 监听配置数据源
         data: {
             handler (obj) {
-             if(obj.name === "Line"){
-                if(!obj.oid && (obj.isSaveFlag==undefined)){
-                    this.formData={};
-                    this.formData.otherwise ="0";
-                    this.formData.conditional="";
-                    this.formData.serviceOid="";
-                    this.formData.serviceCode="";
-                    this.formData.baseInputServe="";
-                    this.formData.baseTextarea="";
-                    this.formData.code='';
-                    this.formData.name = obj.displayName;
-                }else{
-                    this.editData = obj;
-                    this.formData.code = this.editData.linefcode
-                    this.formData.oid = this.editData.oid
-                    this.formData.fremark = this.editData.lineremark
-                    this.formData.name = this.editData.displayName
-                    //条件判断
-                    if(this.editData.lineexpression){
-                        this.baseActiveName ='2';
-                    }else if(this.editData.lineotherwise =="1"){
-                        this.baseActiveName ='3';
-                    }else if(this.editData.service && this.editData.service.name){
-                        this.baseActiveName ='4';
+                if(obj.name === "Line"){
+                    if(!obj.oid && (obj.isSaveFlag==undefined)){
+                        this.formData={};
+                        this.formData.otherwise ="0";
+                        this.formData.conditional="";
+                        this.formData.serviceOid="";
+                        this.formData.serviceCode="";
+                        this.formData.baseInputServe="";
+                        this.formData.baseTextarea="";
+                        this.formData.code='';
+                        this.formData.name = obj.displayName;
                     }else{
-                        this.baseActiveName ='1';
-                    }
-                    this.formData.conditional = this.editData.lineexpression?this.editData.lineexpression:''
-                    this.formData.otherwise = this.editData.lineotherwise?this.editData.lineotherwise:''
-                    this.formData.baseInputServe = this.editData.service?this.editData.service.name:''
-                    this.formData.baseTextarea = this.editData.service?this.editData.service.expression:''
-                    this.formData.serviceOid = this.editData.service?this.editData.service.oid:''
-                    this.formData.serviceCode = this.editData.service?this.editData.service.code:''
-                    switch (this.editData.decisionType ) {
-                        case 1:
-                                this.formData.decisionType = '同意'
-                            break;
-                        case 2:
-                                this.formData.decisionType = '不同意'
-                            break;
-                        case 3:
-                                this.formData.decisionType = '待处理'
-                            break;
-                        case 4:
-                                this.formData.decisionType = '其他'
-                            break;
-                    
-                        default:
-                            break;
+                        this.editData = obj;
+                        this.formData.code = this.editData.linefcode;
+                        this.formData.oid = this.editData.oid;
+                        this.formData.fremark = this.editData.lineremark;
+                        this.formData.name = this.editData.displayName;
+                        //条件判断
+                        if(this.editData.lineexpression){
+                            this.baseActiveName ='2';
+                        }else if(this.editData.lineotherwise =="1"){
+                            this.baseActiveName ='3';
+                        }else if(this.editData.service && this.editData.service.name){
+                            this.baseActiveName ='4';
+                        }else{
+                            this.baseActiveName ='1';
+                        }
+                        this.formData.conditional = this.editData.lineexpression?this.editData.lineexpression:'';
+                        this.formData.otherwise = this.editData.lineotherwise?this.editData.lineotherwise:'';
+                        this.formData.baseInputServe = this.editData.service?this.editData.service.name:'';
+                        this.formData.baseTextarea = this.editData.service?this.editData.service.expression:'';
+                        this.formData.serviceOid = this.editData.service?this.editData.service.oid:'';
+                        this.formData.serviceCode = this.editData.service?this.editData.service.code:'';
+                        switch (this.editData.decisionType) {
+                            case 1:
+                                this.formData.decisionType = '同意';
+                                break;
+                            case 2:
+                                this.formData.decisionType = '不同意';
+                                break;
+                            case 3:
+                                this.formData.decisionType = '待处理';
+                                break;
+                            case 4:
+                                this.formData.decisionType = '其他';
+                                break;
+                            default:
+                                break;
+                        }
                     }
                 }
-             }
             },
             deep: true,
             immediate: true
@@ -305,13 +304,6 @@ export default {
         // 对话框显示 自动聚焦name输入框
         visible (bool) {
             this.dialogVisible = bool;
-            if (bool) {
-                // this.$refs['formData'].resetFields();
-                // setTimeout(() => {
-                //     this.$refs.nameInput.focus();
-                // }, 100);
-            }else{ 
-            }
         },
         baseActiveName(val){
             this.baseTextarea = ''
