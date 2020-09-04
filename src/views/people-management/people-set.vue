@@ -43,7 +43,7 @@
 			<dynamic-table :columns="columns" :table-data="tableData" :total="total" :page-num="pageNum" :page-size="pageSize" @current-change="onCurrentChange" @selection-change="onSelectionChange" v-loading="false" element-loading-text="加载中"></dynamic-table>
 		</el-card>
 		<!-- 弹出框 -->
-		<erpDialog erpDialogwidth="true" :title="isEdit?'编辑人员':'新建人员'" :dialogShow="dialogFormVisible">
+		<erpDialog erpDialogwidth="false" :title="isEdit?'编辑人员':'新建人员'" :dialogShow="dialogFormVisible">
 			<el-form :model="peopleForm" :rules="rules" ref="peopleForm">
 				<el-row :gutter="22">
 					<el-col :span="11">
@@ -147,7 +147,7 @@
 			</div>
 		</erpDialog>
 		<!-- 部门/职位弹窗 -->
-		<erpDialog erpDialogwidth="true" :title="choseDepart" :dialogShow="userVisible">
+		<erpDialog erpDialogwidth="false" :title="choseDepart" :dialogShow="userVisible">
 			<!-- 树状图 -->
 			<el-tree class="filter-tree" :data="treeData" :props="defaultProps" default-expand-all :filter-node-method="filterNode" ref="tree" @node-click="handleNodeClick"></el-tree>
 			<div slot="footer">
@@ -408,7 +408,8 @@
 			},
 			//部门
 			searchDepart(a, id) {
-				var data
+				// debugger;
+				var data = {};
 				if(a) {
 					data = id
 				} else {

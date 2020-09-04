@@ -28,16 +28,12 @@
 								<el-radio :label="7">禁用</el-radio>
 							</el-radio-group>
 						</el-form-item>
-
-						<el-form-item style="margin-left:100px;">
+						<el-form-item style="margin-left:0px;float:right;">
 							<el-button type="primary" plain @click="onSubmit">搜索</el-button>
+							<el-button type="primary" plain @click="resetForm('searchForm')">重置</el-button>
+							<el-button type="success" plain @click="add"> 新 增</el-button>
+							<el-button type="warning" plain @click="toEdit('编辑')"> 编 辑</el-button>
 						</el-form-item>
-						<el-form-item>
-							<el-button type="primary" plain @click="resetForm('searchForm')" class="search-all">重置</el-button>
-						</el-form-item>
-						<el-button type="success" class="el-icon-plus" plain @click="add"> 新 增</el-button>
-						<el-button type="warning" class="el-icon-edit" plain @click="toEdit('编辑')"> 编 辑</el-button>
-
 					</el-col>
 				</el-row>
 			</el-form>
