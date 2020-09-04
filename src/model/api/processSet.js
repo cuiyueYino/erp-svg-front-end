@@ -335,6 +335,10 @@ const processSet = {
         }
         return httpReqest.get('/api/wfInterfaces/workFlow/getProcessBussiness'+valueS);
     },
+    //根据公司获取部门
+    getDepartmentInfosByCompany(params){
+        return httpReqest.post('/api/wfInterfaces/workFlow/findDepartmentInfosByCompanyoid', params);
+    },
 };
 
 export default processSet;

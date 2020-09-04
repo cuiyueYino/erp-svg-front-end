@@ -5,14 +5,14 @@
 			<el-form :inline="true" :model="searchForm" ref="searchForm" class="demo-form-inline">
 				<el-row :gutter="24">
 					<el-col :span="24">
-						<el-form-item label="登录账号：" label-width="94px" prop="fcode">
+						<el-form-item label="登录账号：" label-width="94px">
 							<el-input clearable size="small" v-model="searchForm.fcode" placeholder="请输入"></el-input>
 						</el-form-item>
-						<el-form-item label="名称：" label-width="80px" prop="fname">
+						<el-form-item label="名称：" label-width="80px">
 							<el-input clearable size="small" v-model="searchForm.fname" placeholder="请输入"></el-input>
 						</el-form-item>
 
-						<el-form-item label="用户部门：" label-width="90px" prop="departmentname">
+						<el-form-item label="用户部门：" label-width="90px">
 							<el-input clearable size="small" v-model="searchForm.departmentname" placeholder="请输入"></el-input>
 
 						</el-form-item>
@@ -52,11 +52,11 @@
 								<el-option label="福佳集团" value="_DefaultCompanyOId"></el-option>
 							</el-select>
 						</el-form-item>
-						<el-form-item label="登录账号：" :label-width="formLabelWidth" prop="fcode">
-							<el-input v-model="form.fcode" size="small" autocomplete="off"></el-input>
+						<el-form-item label="登录账号：" :label-width="formLabelWidth" prop="fcodeStr">
+							<el-input v-model="form.fcodeStr" size="small" autocomplete="off"></el-input>
 						</el-form-item>
-						<el-form-item label="密码：" :label-width="formLabelWidth" prop="fpassword">
-							<el-input v-model="form.fpassword" type="password" size="small"></el-input>
+						<el-form-item label="密码：" :label-width="formLabelWidth" prop="fpasswordStr">
+							<el-input v-model="form.fpasswordStr" type="password" size="small"></el-input>
 						</el-form-item>
 						<el-form-item label="使用者：" :label-width="formLabelWidth" prop="fstaff">
 							<el-input v-model="form.fstaff" :disabled="isEdit && !isReset" size="small" autocomplete="off"></el-input>
@@ -224,7 +224,9 @@
 					fforbid: "",
 					fname: '',
 					fcode: '',
+					fcodeStr: '',
 					fpassword: "",
+					fpasswordStr: "",
 					fpasswordSure: '',
 					fstaff: "",
 					fremark: ""
@@ -248,7 +250,7 @@
 				],
 				formLabelWidth: "120px",
 				rules: {
-					fcode: [{
+					fcodeStr: [{
 							required: true,
 							message: "请输入帐号",
 							trigger: "blur"
@@ -260,7 +262,7 @@
 							trigger: "blur"
 						}
 					],
-					fpassword: [{
+					fpasswordStr: [{
 							required: true,
 							message: "请输入密码",
 							trigger: "blur"
@@ -623,6 +625,8 @@
 									'foperationtime':this.tableData2[0].foperationtime,
 								}
 							}
+							this.form.fcode=this.form.fcodeStr;
+							this.form.fpassword=this.form.fpasswordStr;
 							this.$api.jobUserManagement.updateUserTableData(this.form).then(res => {
 									if(res.data.code == 0) {
 										this.dialogFormVisible = false;
@@ -639,6 +643,8 @@
 								}
 						} else {
 							console.log(this.form);
+							this.form.fcode=this.form.fcodeStr;
+							this.form.fpassword=this.form.fpasswordStr;
 							this.$api.jobUserManagement.addUserTableData(this.form).then(res => {
 									this.newIndex = null
 									if(res.data.data.msg = "success") {
@@ -767,6 +773,8 @@
 							if(res.status == '200') {
 								this.tableData2 = []
 								this.form = res.data.data;
+								this.form.fcodeStr=this.form.fcode;
+								this.form.fpasswordStr=this.form.fpassword;
 								this.form.fpasswordSure = this.form.fpassword
 								this.tableData2 = res.data.data.tuseroperationrecordList; //console.log(this.tableData2)
 								if(res.data.data.fforbid == 1) {

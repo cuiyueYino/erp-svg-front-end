@@ -435,10 +435,10 @@ export default {
         getLCData(params,data){
             let fromdata=params;
             this.$api.processSet.getProBusData(fromdata).then(response => {
-                console.log(response)
                 let responsevalue = response;
                 if(responsevalue){
                     this.form=responsevalue.data.data;
+                    this.form.fcompanyoid=this.form.fcompanyid;
                     this.dialogFormVisible=true;
                     this.homeTitle=data;
                     let UBData=[];
@@ -500,7 +500,7 @@ export default {
                 if(type =='部门'){
                     let depData=data.DepSelection;
                     if(depData[0]){
-                        this.form.departMentName=depData[0].name;
+                        this.form.departMentName=depData[0].fname;
                         this.form.fdepartmentid=depData[0].foid;
                     }
                 }else{

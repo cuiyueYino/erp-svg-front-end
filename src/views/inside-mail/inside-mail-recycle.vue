@@ -211,6 +211,10 @@ export default {
          * 显示全部
          */
         showAll() {
+            this.form.select=[];
+            this.form.selectVal="";
+            this.form.startTime="";
+            this.form.endTime="";
             this.emptyParam();
             this.pageNum = 1;
             this.getRecycleMail();
