@@ -16,7 +16,7 @@
           </el-select>
         </el-col>
         <el-col :span="8">
-          <el-button type="primary" icon="el-icon-arrow-left" size="mini"></el-button>
+<!--          <el-button type="primary" icon="el-icon-arrow-left" size="mini"></el-button>-->
           <el-date-picker
             class="dateSelect"
             v-model="value2"
@@ -28,7 +28,7 @@
             :editable="false"
             disabled
           ></el-date-picker>
-          <el-button type="primary" icon="el-icon-arrow-right" size="mini"></el-button>
+<!--          <el-button type="primary" icon="el-icon-arrow-right" size="mini"></el-button>-->
         </el-col>
         <el-col :span="9" style="text-align: right;" v-if="buttonShow">
           <button class="bt-style bt-start" @click="editStatus(0)">开始</button>

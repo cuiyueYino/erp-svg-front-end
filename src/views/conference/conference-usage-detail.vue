@@ -4,6 +4,13 @@
     <el-card class="box-card">
       <el-form :model="form" ref="form" style="margin-right: 60px;">
         <el-row :gutter="14">
+          <el-col :span="5">
+            <el-form-item label="公司：" :label-width="formLabelWidth" class="pop-select" prop="fcompany">
+              <el-select v-model="form.fcompanyname" size="small" clearable placeholder="请选择">
+                <el-option v-for="item in options" :key="item.id" :label="item.name" :value="item.id"></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
           <el-col :span="4">
             <el-form-item label="会议室：" label-width="100px" prop="fconfname">
               <el-input v-model="form.fconfname" :disabled="true" size="small" autocomplete="off" clearable></el-input>
@@ -18,11 +25,11 @@
               @click="queryConfOffice('2')"
             ></el-button>
           </el-col>
-          <el-col :span="4">
-            <el-form-item label="会议室地点：" label-width="100px" prop="fsite">
-              <el-input v-model="form.fsite" size="small" autocomplete="off" clearable></el-input>
-            </el-form-item>
-          </el-col>
+<!--          <el-col :span="4">-->
+<!--            <el-form-item label="会议室地点：" label-width="100px" prop="fsite">-->
+<!--              <el-input v-model="form.fsite" size="small" autocomplete="off" clearable></el-input>-->
+<!--            </el-form-item>-->
+<!--          </el-col>-->
           <el-col :span="4">
             <el-form-item label="起始时间：" label-width="100px" prop="fstartdate">
               <el-date-picker
@@ -51,25 +58,25 @@
           </el-col>
         </el-row>
         <el-row :gutter="14">
-          <el-col :span="4">
-            <el-form-item label="人员：" label-width="100px" prop="fstaffname">
-              <el-input v-model="form.fstaffname" :disabled="true" size="small" autocomplete="off"></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="1" class="el-positionType">
-            <el-button
-              type="primary"
-              size="mini"
-              icon="el-icon-search"
-              style="padding:7px 8px"
-              @click="baseInputTable('2','用户查询')"
-            ></el-button>
-          </el-col>
-          <el-col :span="4">
-            <el-form-item label="联系方式：" label-width="100px" prop="fphone">
-              <el-input v-model="form.fphone" size="small" autocomplete="off" clearable></el-input>
-            </el-form-item>
-          </el-col>
+<!--          <el-col :span="4">-->
+<!--            <el-form-item label="人员：" label-width="100px" prop="fstaffname">-->
+<!--              <el-input v-model="form.fstaffname" :disabled="true" size="small" autocomplete="off"></el-input>-->
+<!--            </el-form-item>-->
+<!--          </el-col>-->
+<!--          <el-col :span="1" class="el-positionType">-->
+<!--            <el-button-->
+<!--              type="primary"-->
+<!--              size="mini"-->
+<!--              icon="el-icon-search"-->
+<!--              style="padding:7px 8px"-->
+<!--              @click="baseInputTable('2','用户查询')"-->
+<!--            ></el-button>-->
+<!--          </el-col>-->
+<!--          <el-col :span="4">-->
+<!--            <el-form-item label="联系方式：" label-width="100px" prop="fphone">-->
+<!--              <el-input v-model="form.fphone" size="small" autocomplete="off" clearable></el-input>-->
+<!--            </el-form-item>-->
+<!--          </el-col>-->
           <el-col :span="4">
             <el-form-item label="对内对外：" label-width="100px" prop="fexternal">
               <el-select v-model="form.fexternal" placeholder="请选择" clearable size="small">
