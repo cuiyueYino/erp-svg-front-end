@@ -350,12 +350,18 @@ export default {
         //查询角色
         getUserRole(data){
             let fromdata=data;
+            if((fromdata.code != '' && fromdata.code != undefined) || (fromdata.name != '' && fromdata.name != undefined)){
+                if(!fromdata.changePage){//处理当前页数不在第一页时，发生条件搜索的情况
+                    fromdata.page = 1;
+                }
+            }
             this.$api.processSet.findRolePage(fromdata).then(res=>{
                 let resData=res;
                 let returndata = resData.data;
                 let tableDataArr=returndata.data.rows;
                 this.gridData=tableDataArr;
                 this.total=returndata.data.total;
+                this.pageNum=returndata.data.page;
             },error=>{
                 console.log(error)
             })
@@ -363,11 +369,22 @@ export default {
         //查询部门
         getDepartment(data){
             // debugger;
-            let fromdata=data;
-            this.$api.jobUserManagement.getDepartData2(fromdata).then(res=>{
+            let fromdata = {};
+            fromdata.company = data.companyOid;
+            fromdata.code = data.fcode;
+            fromdata.name = data.fname;
+            fromdata.page = data.page;
+            fromdata.size = data.size;
+            if((fromdata.code != '' && fromdata.code != undefined) || (fromdata.name != '' && fromdata.name != undefined)){
+                if(!fromdata.changePage){//处理当前页数不在第一页时，发生条件搜索的情况
+                    fromdata.page = 1;
+                }
+            }
+            this.$api.processSet.getDepartmentInfosByCompany(fromdata).then(res=>{
                 let resData=res;
                 this.griddepData=resData.data.data.rows;
                 this.total3=resData.data.data.total;
+                this.pageNum3=resData.data.data.page;
             },error=>{
                 console.log(error)
             })
@@ -446,13 +463,13 @@ export default {
             if(this.type =='用户'){
                 let Roledata={};
                 Roledata.queryType='';
-                Roledata.page=this.pageNum;
+                Roledata.page=1;
                 Roledata.size=this.pageSize;
                 this.getUserRole(Roledata);
             }else{
                 let Roledata={};
                 Roledata.queryType='';
-                Roledata.page=this.pageNum;
+                Roledata.page=1;
                 Roledata.size=this.pageSize;
                 Roledata.companyOid=this.companyId;
                 this.getDepartment(Roledata);
@@ -469,7 +486,6 @@ export default {
         },
         //条件查询 role table
         workSearchTable(){
-            debugger;
             if(this.type =='用户'){
                 let Roledata={};
                 Roledata.queryType='';
@@ -486,8 +502,6 @@ export default {
                 Roledata.fcode=this.formData.formCodeDep;
                 Roledata.fname=this.formData.formNameDep;
                 Roledata.companyOid=this.companyId;
-                console.log("sly000000000000");
-                console.log(Roledata);
                 this.getDepartment(Roledata);
             }
         },
@@ -495,10 +509,14 @@ export default {
         saveConfig(){
             if(this.type =='用户'){
                 if(this.multipleSelection.length > 1){
-                    this.$message.error('只能选择一个');
+                    this.$message.error('只能选择一个!');
                 }else if(this.multipleSelection.length == 0 && this.$refs.tree.getCheckedNodes(false) == 0){
-                    this.$message.error('请选择一项');
-                }else{
+                    this.$message.error('请选择人员和角色!');
+                } else if(this.$refs.tree.getCheckedNodes(false) == 0) {
+                    this.$message.error('请至少选择一个人员!');
+                } else if(this.multipleSelection.length == 0) {
+                    this.$message.error('请选择角色!');
+                } else{
                     let SerchData={};
                     SerchData.RoleSelection=this.multipleSelection;
                     SerchData.DepSelection=this.DepmultipleSelection;
@@ -530,6 +548,7 @@ export default {
                 Roledata.size=this.pageSize;
                 Roledata.code=this.formData.formCode;
                 Roledata.name=this.formData.formName;
+                Roledata.changePage=true;
 				this.getUserRole(Roledata);
         },
         //角色table选中事件
@@ -550,6 +569,9 @@ export default {
             Roledata.page=val;
             Roledata.size=this.pageSize;
             Roledata.companyOid=this.companyId;
+            Roledata.code=this.formData.formCodeDep;
+            Roledata.name=this.formData.formNameDep;
+            Roledata.changePage=true;
             this.getDepartment(Roledata);
         },
         //部门table选中事件
