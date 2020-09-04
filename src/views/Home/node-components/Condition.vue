@@ -328,6 +328,7 @@ export default {
             this.joinusertableData = [];
             this.CCtableData = [];
             this.formData.displayName = obj.displayName;
+            this.formData.work == '';
           } else {
             this.checkedCities = [];
             this.editData = obj;

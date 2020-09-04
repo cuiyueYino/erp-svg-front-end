@@ -273,6 +273,17 @@ export default {
         tableRowClassName(){},
         showAddMenu(type){
             if(type === false){
+                let NodeCheckData=this.NodeClickObj;
+                this.firstnode=[];
+                if(NodeCheckData.id){
+                    this.firstnode.push(NodeCheckData.id);
+                }
+                this.maketree(this.formInline.company);
+                let fromdata={};
+                fromdata.page=1;
+                fromdata.size=this.pageSize;
+                fromdata.company=this.formInline.company;
+                this.searchMenutable(fromdata);
                 this.rowNMMtype = false
             }else{
                 this.rowNMMtype = true
@@ -298,7 +309,6 @@ export default {
                     parent.push(obj);//数组加数组值
                     this.firstnode.push(obj.id);
                 }
-
             }
             let index=1;
             children(parent,index);

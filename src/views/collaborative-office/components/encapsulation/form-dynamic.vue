@@ -542,6 +542,7 @@
 			},
 			//计算时间差值
 			getDate(row) {
+				console.log(row)
 				//change写在所有的时间控件中，首先判断当前点击控件是否需要计算差值，且双方必须都有值
 				if(typeof(row.parameterList.child) != "undefined") {
 					//同上（太长了，不想写一起，屏幕太小显示不下）noNull是非空的公共方法，详见base.js
@@ -550,6 +551,7 @@
 						this.formData.rowList.forEach((item, index) => {
 							item.colList.forEach((val, index2) => {
 								//确认当前控件里面有绑定的child数据（就是要接收差值的字段）并且服务code为“计算差值”
+								console.log(val)
 								if(val.field == row.parameterList.child && val.serviceNow.fcode == "service05") {
 									state = true
 								}
