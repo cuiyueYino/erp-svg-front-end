@@ -16,7 +16,7 @@
         <el-row :gutter="24">
           <el-col :span="11">
             <el-form-item label="公司：" :label-width="formLabelWidth" class="pop-select" prop="fcompany">
-              <el-select v-model="searchForm.fcompany" @change="selectChange(searchForm.fcompany)" size="small" clearable placeholder="请选择" @focus="getCompany">
+              <el-select v-model="searchForm.fcompanyname" @change="selectChange(searchForm.fcompanyname)" size="small" clearable placeholder="请选择" @focus="getCompany">
                 <el-option v-for="item in options" :key="item.id" :label="item.name" :value="item.id"></el-option>
               </el-select>
             </el-form-item>
@@ -755,15 +755,15 @@
     },
     methods: {
       //公司下拉选择
-      selectChange(value){
-        this.options.forEach(item => {
-          if(item.id == value) {
-            this.$nextTick(() => {
-              this.searchForm.fcompanyname = item.name;
-            });
-          }
-        });
-      },
+      // selectChange(value){
+      //   this.options.forEach(item => {
+      //     if(item.id == value) {
+      //       this.$nextTick(() => {
+      //         this.searchForm.fcompanyname = item.name;
+      //       });
+      //     }
+      //   });
+      // },
       //新建弹窗赋值默认值：当前user对应的人员信息
       getCurrentStaffInfo(){
         debugger;
@@ -777,13 +777,13 @@
               // 召集人
               // this.searchForm.fconvenername = data.fname;
               this.$set(this.searchForm,"fconvenername",res.data.data.tname)
-              this.searchForm.fconvener = res.data.toid;
+              this.searchForm.fconvener = res.data.data.toid;
               this.searchForm.fconvenerdeptname = res.data.data.tdepartmentname;
               this.searchForm.fconvenerdept = res.data.data.tdepartmentoid;
               // 联系人
               // this.searchForm.fcontactname = data.fname;
               this.$set(this.searchForm,"fcontactname",res.data.data.tname)
-              this.searchForm.fcontact = res.data.toid;
+              this.searchForm.fcontact = res.data.data.toid;
               this.searchForm.fcontactdeptname = res.data.data.tdepartmentname;
               this.searchForm.fcontactdept = res.data.data.tdepartmentoid;
               //默认会议重要程度
@@ -889,7 +889,7 @@
           } else if (type === "3") {
             // 联系人
             // this.searchForm.fcontactname = data.fname;
-            this.$set(this.searchForm,"fcontactname",data.fname)
+            this.$set(this.searchForm,"fcontactname",data.fname);
             this.searchForm.fcontact = data.foid;
             this.searchForm.fcontactdeptname = data.fdeptname;
             this.searchForm.fcontactdept = data.fdeptid;
