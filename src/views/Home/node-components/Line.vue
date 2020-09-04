@@ -250,10 +250,10 @@ export default {
                         this.formData.name = obj.displayName;
                     }else{
                         this.editData = obj;
-                        this.formData.code = this.editData.linefcode
-                        this.formData.oid = this.editData.oid
-                        this.formData.fremark = this.editData.lineremark
-                        this.formData.name = this.editData.displayName
+                        this.formData.code = this.editData.linefcode;
+                        this.formData.oid = this.editData.oid;
+                        this.formData.fremark = this.editData.lineremark;
+                        this.formData.name = this.editData.displayName;
                         //条件判断
                         if(this.editData.lineexpression){
                             this.baseActiveName ='2';
@@ -264,24 +264,24 @@ export default {
                         }else{
                             this.baseActiveName ='1';
                         }
-                        this.formData.conditional = this.editData.lineexpression?this.editData.lineexpression:''
-                        this.formData.otherwise = this.editData.lineotherwise?this.editData.lineotherwise:''
-                        this.formData.baseInputServe = this.editData.service?this.editData.service.name:''
-                        this.formData.baseTextarea = this.editData.service?this.editData.service.expression:''
-                        this.formData.serviceOid = this.editData.service?this.editData.service.oid:''
-                        this.formData.serviceCode = this.editData.service?this.editData.service.code:''
+                        this.formData.conditional = this.editData.lineexpression?this.editData.lineexpression:'';
+                        this.formData.otherwise = this.editData.lineotherwise?this.editData.lineotherwise:'';
+                        this.formData.baseInputServe = this.editData.service?this.editData.service.name:'';
+                        this.formData.baseTextarea = this.editData.service?this.editData.service.expression:'';
+                        this.formData.serviceOid = this.editData.service?this.editData.service.oid:'';
+                        this.formData.serviceCode = this.editData.service?this.editData.service.code:'';
                         switch (this.editData.decisionType) {
                             case 1:
-                                    this.formData.decisionType = '同意'
+                                this.formData.decisionType = '同意';
                                 break;
                             case 2:
-                                    this.formData.decisionType = '不同意'
+                                this.formData.decisionType = '不同意';
                                 break;
                             case 3:
-                                    this.formData.decisionType = '待处理'
+                                this.formData.decisionType = '待处理';
                                 break;
                             case 4:
-                                    this.formData.decisionType = '其他'
+                                this.formData.decisionType = '其他';
                                 break;
                             default:
                                 break;
