@@ -4,27 +4,30 @@
     <el-card class="box-card">
       <el-form :model="form" ref="form" style="margin-right: 60px;">
         <el-row :gutter="14">
-          <el-col :span="5">
-            <el-form-item label="公司：" :label-width="formLabelWidth" class="pop-select" prop="fcompany">
-              <el-select v-model="form.fcompanyname" size="small" clearable placeholder="请选择">
+          <el-col :span="4">
+            <el-form-item label="公司：" label-width="100px" class="pop-select" prop="fcompany">
+              <el-select v-model="form.fcompanyid" size="small" clearable placeholder="请选择" @focus="getCompany">
                 <el-option v-for="item in options" :key="item.id" :label="item.name" :value="item.id"></el-option>
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="4">
             <el-form-item label="会议室：" label-width="100px" prop="fconfname">
-              <el-input v-model="form.fconfname" :disabled="true" size="small" autocomplete="off" clearable></el-input>
+              <el-select v-model="form.fconfname" size="small" clearable placeholder="请选择" @focus="getTableDataAll">
+                <el-option v-for="item in confOptions" :key="item.id" :label="item.name" :value="item.fconfname"></el-option>
+              </el-select>
+<!--              <el-input v-model="form.fconfname" :disabled="true" size="small" autocomplete="off" clearable></el-input>-->
             </el-form-item>
           </el-col>
-          <el-col :span="1" class="el-positionType">
-            <el-button
-              type="primary"
-              size="mini"
-              icon="el-icon-search"
-              style="padding:7px 8px"
-              @click="queryConfOffice('2')"
-            ></el-button>
-          </el-col>
+<!--          <el-col :span="1" class="el-positionType">-->
+<!--            <el-button-->
+<!--              type="primary"-->
+<!--              size="mini"-->
+<!--              icon="el-icon-search"-->
+<!--              style="padding:7px 8px"-->
+<!--              @click="queryConfOffice('2')"-->
+<!--            ></el-button>-->
+<!--          </el-col>-->
 <!--          <el-col :span="4">-->
 <!--            <el-form-item label="会议室地点：" label-width="100px" prop="fsite">-->
 <!--              <el-input v-model="form.fsite" size="small" autocomplete="off" clearable></el-input>-->
@@ -251,6 +254,8 @@ export default {
   },
   data() {
     return {
+      options: [],
+      confOptions: [],
       pageNum: 1,
       pageSize: 10,
       total: 20,
@@ -266,6 +271,44 @@ export default {
     };
   },
   methods: {
+    // 查询会议室列表数据
+    getTableDataAll() {
+      let data = {};
+      if(this.form.fcompanyid){
+        data.fcompanyid = this.form.fcompanyid;
+      }
+      data.page = 0;
+      data.size = 10000;
+      this.$api.confMangement.getConfUsageDetail(data).then(
+        (res) => {
+          this.confOptions=[];
+          this.confOptions = res.data.data.rows;
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+    },
+    //公司
+    getCompany() {
+      this.$api.jobUserManagement.getCompanyData().then(res => {
+        if(res.status == '200') {
+          this.options = res.data.data.rows;
+        }
+      }), error => {
+        console.log(error);
+      }
+    },
+    //公司下拉选择
+    // selectChange(value){
+    //   this.options.forEach(item => {
+    //     if(item.id == value) {
+    //       this.$nextTick(() => {
+    //         this.form.fcompanyname = item.name;
+    //       });
+    //     }
+    //   });
+    // },
     //分页、下一页
     onCurrentChange(val) {
       this.pageNum = val;
@@ -314,6 +357,7 @@ export default {
     },
     // 打开会议室弹窗
     queryConfOffice(type) {
+      debugger;
       this.type = type;
       this.officeTableVsible = true;
     },
@@ -341,6 +385,7 @@ export default {
       }
       this.staffTableVsible = false;
     },
+
   },
 };
 </script>
