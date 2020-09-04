@@ -113,6 +113,7 @@ export default {
     },
     data(){
         return{
+            zancunCount:'',
             //文本编辑器
             content: '',
             editorOption: {
@@ -242,6 +243,9 @@ export default {
          * 暂存
          */
         saveCDD(){
+            this.zancunCount ++;
+            var zancunCount2 = this.zancunCount;
+            if(zancunCount2 == 1){
             let reqParam = {
                 id: this.formData.id,
                 subject:this.formData.subject,
@@ -261,6 +265,8 @@ export default {
                     this.$parent.$parent.$parent.toPage(null,"drafts");
                 };
             })
+            }
+            
         },
         /**
          * 添加 主送/抄送用户点击事件
