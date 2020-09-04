@@ -281,11 +281,11 @@ export default {
                     type: 'selection'
                 },
                 {
-                    key: 'code',
+                    key: 'fcode',
                     title: '编码'
                 },
                 {
-                    key: 'name',
+                    key: 'fname',
                     title: '名称'
                 },
             ],
@@ -327,7 +327,7 @@ export default {
                 let Roledata={};
                 Roledata.page=this.pageNum;
                 Roledata.size=this.pageSize;
-                Roledata.company=this.companyId;
+                Roledata.companyOid=this.companyId;
                 this.getDepartment(Roledata);
                 let Comdata={};
                 this.getCompany(Comdata);
@@ -362,8 +362,9 @@ export default {
         },
         //查询部门
         getDepartment(data){
+            // debugger;
             let fromdata=data;
-            this.$api.processSet.getdepartmentList(fromdata).then(res=>{
+            this.$api.jobUserManagement.getDepartData2(fromdata).then(res=>{
                 let resData=res;
                 this.griddepData=resData.data.data.rows;
                 this.total3=resData.data.data.total;
@@ -371,6 +372,7 @@ export default {
                 console.log(error)
             })
         },
+        //
         //查询公司
         getCompany(data){
             let fromdata=data;
@@ -449,9 +451,20 @@ export default {
                 this.getUserRole(Roledata);
             }else{
                 let Roledata={};
+                Roledata.queryType='';
                 Roledata.page=this.pageNum;
                 Roledata.size=this.pageSize;
+                Roledata.companyOid=this.companyId;
                 this.getDepartment(Roledata);
+                // let Roledata={};
+                // Roledata.page=this.pageNum;
+                // Roledata.size=this.pageSize;
+                // Roledata.company=this.companyId;
+                // this.getDepartment(Roledata);
+                // let Comdata={};
+                // this.getCompany(Comdata);
+
+
             }
         },
         //条件查询 role table
@@ -467,11 +480,14 @@ export default {
                 this.getUserRole(Roledata);
             }else{
                 let Roledata={};
+                Roledata.queryType='';
                 Roledata.page=this.pageNum;
                 Roledata.size=this.pageSize;
-                Roledata.code=this.formData.formCodeDep;
-                Roledata.name=this.formData.formNameDep;
-                Roledata.company=this.companyId;
+                Roledata.fcode=this.formData.formCodeDep;
+                Roledata.fname=this.formData.formNameDep;
+                Roledata.companyOid=this.companyId;
+                console.log("sly000000000000");
+                console.log(Roledata);
                 this.getDepartment(Roledata);
             }
         },
@@ -518,21 +534,22 @@ export default {
         },
         //角色table选中事件
         onSelectionChange(val){
-            let Roledata={};
-                this.pageNum = val;
-                Roledata.queryType='';
-                Roledata.page=this.pageNum;
-                Roledata.size=this.pageSize;
-                Roledata.code=this.formData.formCode;
-                Roledata.name=this.formData.formName;
-				this.getUserRole(Roledata);
+                // let Roledata={};
+                //     this.pageNum = val;
+                //     Roledata.queryType='';
+                //     Roledata.page=this.pageNum;
+                //     Roledata.size=this.pageSize;
+                //     Roledata.code=this.formData.formCode;
+                //     Roledata.name=this.formData.formName;
+                // this.getUserRole(Roledata);
+                 this.multipleSelection = val;
         },
         //部门下一页
         onDepCurrentChange(val){
             let Roledata={};
             Roledata.page=val;
             Roledata.size=this.pageSize;
-            Roledata.company=this.companyId;
+            Roledata.companyOid=this.companyId;
             this.getDepartment(Roledata);
         },
         //部门table选中事件
