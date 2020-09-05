@@ -276,7 +276,7 @@ export default {
       debugger;
       let data = {};
       if(this.form.fcompanyid){
-        data.fcompanyid = this.form.fcompanyid;
+        data.fcompany = this.form.fcompanyid;
       }
       data.page = 0;
       data.size = 10000;
