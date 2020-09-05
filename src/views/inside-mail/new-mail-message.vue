@@ -41,7 +41,7 @@
             <el-row>
                 <el-col :span="14">
                     <el-form-item label="主题" prop="subject">
-                        <el-input clearable size="small" v-model="formData.subject"></el-input>
+                        <el-input clearable size="small" v-model="formData.subject" @input="change($event)" maxlength="3000"></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>
@@ -203,6 +203,9 @@ export default {
         }
     },
     methods:{
+        change(e) {
+          this.$forceUpdate();
+        },
         //滑块切换
         handleClick(tab){
             var tabsname =tab.paneName;
