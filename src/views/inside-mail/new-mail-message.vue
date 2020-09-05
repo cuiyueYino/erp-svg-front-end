@@ -294,7 +294,6 @@ export default {
                     this.treeData = reqData;
                     this.operateUserTree(this.treeData);
 
-
                     if(fromFlag == 'searchFlag') {
                         // for(var i=0;i<)
                         // for(var i of reqData) {
