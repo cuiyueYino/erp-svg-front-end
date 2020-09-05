@@ -47,7 +47,7 @@
 			<el-form :model="form" :rules="rules" ref="form">
 				<el-row :gutter="24">
 					<el-col :span="12">
-						<el-form-item label="公司：" :label-width="formLabelWidth" class="pop-select" prop="fcompanyoid">
+						<el-form-item label="公司111111111：" :label-width="formLabelWidth" class="pop-select" prop="fcompanyoid">
 							<el-select disabled v-model="form.fcompanyoid" size="small" clearable placeholder="请选择">
 								<el-option label="福佳集团" value="_DefaultCompanyOId"></el-option>
 							</el-select>
@@ -483,13 +483,16 @@
 			},
 			addPeopleData(data) {
 				this.$api.jobUserManagement.addPeopleData(data).then(res => {
-					console.log(res)
-					if(res.status == '200') {
+					console.log(res);
+					if(res.data.code == 0) {
+						// debugger;
 						this.form.staffId = res.data.data.toid;
 						this.form.fstaff = res.data.data.tname;
 						this.form.departmentname = res.data.data.tdepartmentname;
 
-					}
+					} else {
+							this.$message.error(res.data.msg);
+						}
 				}), error => {
 					console.log(error);
 				};
@@ -616,7 +619,8 @@
 						}
 						if(this.isEdit) {
 							this.newIndex = null;
-							if(this.tableData2[0].foperationcontent == '禁用' || this.tableData2[0].foperationcause == 'OA封号') {
+							if(this.tableData2[0] != undefined) {
+								if(this.tableData2[0].foperationcontent == '禁用' || this.tableData2[0].foperationcause == 'OA封号') {
 								this.form.tuseroperationrecordReqVo = {
 									'foperationcontent':1,
 									'foperationcause':1,
@@ -625,6 +629,8 @@
 									'foperationtime':this.tableData2[0].foperationtime,
 								}
 							}
+							}
+							
 							this.form.fcode=this.form.fcodeStr;
 							this.form.fpassword=this.form.fpasswordStr;
 							this.$api.jobUserManagement.updateUserTableData(this.form).then(res => {
@@ -646,15 +652,16 @@
 							this.form.fcode=this.form.fcodeStr;
 							this.form.fpassword=this.form.fpasswordStr;
 							this.$api.jobUserManagement.addUserTableData(this.form).then(res => {
+								debugger;
 									this.newIndex = null
-									if(res.data.data.msg = "success") {
+									if(res.data.code == 0) {
 										this.dialogFormVisible = false;
 										this.$message.success("新增成功");
 										this.$refs[formName].resetFields();
 										//刷新表格
 										this.getTableData();
 									} else {
-										this.$message.success(res.data.msg);
+										this.$message.error(res.data.msg);
 									}
 								}),
 								error => {
@@ -770,7 +777,7 @@
 						foid: this.multipleSelection[0].foid
 					}
 					this.$api.jobUserManagement.addUserData(data).then(res => {
-							if(res.status == '200') {
+							if(res.data.code == 0) {
 								this.tableData2 = []
 								this.form = res.data.data;
 								this.form.fcodeStr=this.form.fcode;
@@ -802,7 +809,9 @@
 									}
 								});
 								this.addPeopleData(this.form.fstaff);
-							}
+							} else {
+									this.$message.error(res.data.msg);
+								}
 						}),
 						error => {
 							console.log(error);
