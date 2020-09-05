@@ -224,6 +224,7 @@ export default {
                 res => {
                 if(this.dataBack(res,"")){
                     let data = res.data.data;
+                    data['typeFlag'] = 'draftsEdit';
                     this.$parent.$parent.$parent.toPage(data,"newMail");
                 };
                 }
