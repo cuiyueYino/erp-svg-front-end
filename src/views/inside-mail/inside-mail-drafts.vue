@@ -64,6 +64,7 @@
 </template>
 <script>
 import DynamicTable from "../../components/common/dytable/dytable.vue";
+
 export default {
     name: 'mailDrafts',
     data() {
@@ -99,7 +100,7 @@ export default {
                 {
                 width: 300,
                 key: "sendTime",
-                title: "发送时间"
+                title: "暂存时间"
                 },
             ],
             tableData: [],
@@ -284,6 +285,7 @@ export default {
         },
     },
     watch: {
+        
         querySelect(val) {
         this.form.selectVal = null;
         if (val == "sendTime") {

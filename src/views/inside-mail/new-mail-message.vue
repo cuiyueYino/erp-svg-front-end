@@ -267,7 +267,7 @@ export default {
             this.$api.insideMail.sendInsideMail(reqParam).then(res=>{
                 if(this.dataBack(res,"成功存储")){
                     this.enclosureConfig.voucherId = res.data.data;
-                    enclosureFile.methods.upload();
+                    this.$refs.child.upload();
                     this.$parent.$parent.$parent.toPage(null,"drafts");
                 };
             })
