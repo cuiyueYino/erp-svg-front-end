@@ -47,7 +47,7 @@
 			<el-form :model="form" :rules="rules" ref="form">
 				<el-row :gutter="24">
 					<el-col :span="12">
-						<el-form-item label="公司111111111：" :label-width="formLabelWidth" class="pop-select" prop="fcompanyoid">
+						<el-form-item label="公司：" :label-width="formLabelWidth" class="pop-select" prop="fcompanyoid">
 							<el-select disabled v-model="form.fcompanyoid" size="small" clearable placeholder="请选择">
 								<el-option label="福佳集团" value="_DefaultCompanyOId"></el-option>
 							</el-select>
@@ -485,7 +485,6 @@
 				this.$api.jobUserManagement.addPeopleData(data).then(res => {
 					console.log(res);
 					if(res.data.code == 0) {
-						// debugger;
 						this.form.staffId = res.data.data.toid;
 						this.form.fstaff = res.data.data.tname;
 						this.form.departmentname = res.data.data.tdepartmentname;
@@ -652,7 +651,6 @@
 							this.form.fcode=this.form.fcodeStr;
 							this.form.fpassword=this.form.fpasswordStr;
 							this.$api.jobUserManagement.addUserTableData(this.form).then(res => {
-								debugger;
 									this.newIndex = null
 									if(res.data.code == 0) {
 										this.dialogFormVisible = false;
