@@ -45,7 +45,8 @@
           {'module background-img-1': (item.fconfshow == null && isclick != index)},
           {'module background-img-2 leisure-click': (item.fconfshow == null && isclick == index)},
           {'module background-img-3': (item.fconfshow != null && isclick != index)},
-          {'module background-img-4 using-click': (item.fconfshow != null && isclick == index)}
+          {'module background-img-4 using-click': (item.fconfshow != null && isclick == index)},
+          {'module background-img-5': (item.fstatus != null && item.fstatus == 1)}
           ]"
                @click="button(item,index)"
                @dblclick="showConf(item)">
@@ -53,7 +54,8 @@
               {'mark-style mark-un-using': (item.fconfshow == null && isclick != index)},
               {'mark-style mark-un-using-click': (item.fconfshow == null && isclick == index)},
               {'mark-style mark-using': (item.fconfshow != null && isclick != index)},
-              {'mark-style mark-using-click': (item.fconfshow != null && isclick == index)}
+              {'mark-style mark-using-click': (item.fconfshow != null && isclick == index)},
+              {'mark-style mark-unusing': (item.fstatus != null && item.fstatus == 1)}
             ]">
               {{index + 1}}
             </div>
@@ -304,6 +306,7 @@
                 resRows[i].fconfshow.confDatePeriod = startDate + "-" + endDate;
               }
             }
+            debugger;
             this.tableData = resRows;
             console.log(this.tableData);
             this.total = res.data.data.total;

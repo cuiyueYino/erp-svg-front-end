@@ -121,6 +121,11 @@
     background-image: url("./img/el-icon-using-check.png");
 }
 
+.background-img-5 {
+    background-image: url("./img/el-icon-unusing.png");
+    pointer-events: none;
+}
+
 .usingConf-fontStyle {
     font-family: Microsoft YaHei;
     font-weight: 800;
@@ -213,6 +218,11 @@
 .mark-using-click {
     background: #FF9000;
     color: #FFC743;
+}
+
+.mark-unusing {
+    background: #f9f7f7 !important;
+    color: #dae6ec !important;
 }
 
 .mark-un-using {
