@@ -117,7 +117,7 @@
           </el-col>
           <el-col :span="11" style="margin-left: 32px;">
             <el-form-item label="参会人数：" :label-width="formLabelWidth" prop="fcpmcount">
-              <el-input v-model="searchForm.fcpmcount" size="small" autocomplete="off"></el-input>
+              <el-input v-model="searchForm.fcpmcount" size="small" autocomplete="off" @change="fcpmcountMethod"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="11">
@@ -584,7 +584,6 @@
     computed: {},
     watch: {
       visible(bool) {
-        debugger;
         if(bool && this.title === '新建会议申请'){
           this.getCurrentStaffInfo();
         }
@@ -754,19 +753,12 @@
       }
     },
     methods: {
-      //公司下拉选择
-      // selectChange(value){
-      //   this.options.forEach(item => {
-      //     if(item.id == value) {
-      //       this.$nextTick(() => {
-      //         this.searchForm.fcompanyname = item.name;
-      //       });
-      //     }
-      //   });
-      // },
+      // 参会人数变化，清空会议室
+      fcpmcountMethod(){
+        this.searchForm.fconfname = '';
+      },
       //新建弹窗赋值默认值：当前user对应的人员信息
       getCurrentStaffInfo(){
-        debugger;
         let fromdata={};
         fromdata.fcode = 'service10';
         fromdata.fid=localStorage.getItem('ms_userId');
