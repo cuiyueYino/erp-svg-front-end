@@ -1,26 +1,26 @@
 <template>
-
- <el-container>
-        <el-main>
-             <el-card class="box-card">
-                 <span class="tab-title">流程中心</span>
-                 <span class="tab-title-tips">Workflow</span>
-                 <el-divider></el-divider>
-                  <el-tabs v-model="activeName" @tab-click="handleClick">
+    <div>
+        <el-container>
+            <el-main>
+                <el-card class="box-card">
+                    <span class="tab-title">流程中心</span>
+                    <span class="tab-title-tips">Workflow</span>
+                    <el-divider></el-divider>
+                    <el-tabs v-model="activeName" @tab-click="handleClick">
                         <el-tab-pane label="待办事项" name="1">
                             <template v-for="item in getunhandledTaskList" class="li-box">
-                            <ul class="ul-middle" @click="toLookItems(item)" :key="item.foid">
-                                <li>{{item.fsubject}}<span class="li-after" v-show="item.fisread=='0'"></span></li>
-                            </ul>
-                            <ul class="ul-middle" :key="item.foid">
-                                <li @click="taskDetail(item.fsrcoId,item.classId,item.factivity,item.fsubject,item.foid,)">{{item.fsrcCompany}}</li>
-                            </ul>
-                            <ul class="ul-middle" :key="item.foid">
-                                <li>{{item.faddresser}}</li>
-                            </ul>
-                            <ul class="ul-middle" @click="toLookItems(item)" :key="item.foid">
-                                <li>{{item.freceiveTime}}</li>
-                            </ul>
+                                <ul class="ul-middle" @click="toLookItems(item)" :key="item.foid">
+                                    <li>{{item.fsubject}}<span class="li-after" v-show="item.fisread=='0'"></span></li>
+                                </ul>
+                                <ul class="ul-middle" :key="item.foid">
+                                    <li @click="taskDetail(item.fsrcoId,item.classId,item.factivity,item.fsubject,item.foid,)">{{item.fsrcCompany}}</li>
+                                </ul>
+                                <ul class="ul-middle" :key="item.foid">
+                                    <li>{{item.faddresser}}</li>
+                                </ul>
+                                <ul class="ul-middle" @click="toLookItems(item)" :key="item.foid">
+                                    <li>{{item.freceiveTime}}</li>
+                                </ul>
                             </template>
                         </el-tab-pane>
                         <el-tab-pane label="关注事项" name="2">
@@ -56,7 +56,7 @@
                             </template>
                         </el-tab-pane>
                         <el-tab-pane label="已发事项" name="4">
-                             <template v-for="item in getIssuedItemsList" class="li-box">
+                            <template v-for="item in getIssuedItemsList" class="li-box">
                                 <ul class="ul-middle" @click="toLookItems(item)" :key="item.foid">
                                     <li>{{item.fsubject}}<span class="li-after" v-show="item.fisread=='0'"></span></li>
                                 </ul>
@@ -72,7 +72,7 @@
                             </template>
                         </el-tab-pane>
                         <el-tab-pane label="回收站" name="5">
-                             <template v-for="item in getRecycleBinList" class="li-box">
+                            <template v-for="item in getRecycleBinList" class="li-box">
                                 <ul class="ul-middle" @click="toLookItems(item)" :key="item.foid">
                                     <li>{{item.fsubject}}<span class="li-after" v-show="item.fisread=='0'"></span></li>
                                 </ul>
@@ -86,15 +86,15 @@
                                     <li>{{item.freceiveTime}}</li>
                                 </ul>
                             </template>
-                        </el-tab-pane>
+                        </el-tab-pane>   
                     </el-tabs>
-             </el-card>
-             <el-card class="box-card">
-                 <span class="tab-title">我的邮件</span>
-                 <span class="tab-title-tips">Mail</span>
-                 <span class="tab-title-more-tips" @click="toOaSER">more</span>
-                 <el-divider></el-divider>
-                  <el-tabs v-model="activeNameMail" @tab-click="handleClickMail">
+                </el-card>
+                <el-card class="box-card">
+                    <span class="tab-title">我的邮件</span>
+                    <span class="tab-title-tips">Mail</span>
+                    <span class="tab-title-more-tips" @click="toOaSER">more</span>
+                    <el-divider></el-divider>
+                    <el-tabs v-model="activeNameMail" @tab-click="handleClickMail">
                         <el-tab-pane label="收件箱" name="1">
                             <template v-for="item in getReceiveMailList" class="li-box">
                                 <ul class="ul-left" @click="toLookMail(item)" :key="item.foid">
@@ -106,7 +106,7 @@
                             </template>
                         </el-tab-pane>
                         <el-tab-pane label="草稿箱" name="2">
-                             <template v-for="item in getDraftMailList" class="li-box">
+                            <template v-for="item in getDraftMailList" class="li-box">
                                 <ul class="ul-left" @click="toLookMail(item)" :key="item.foid">
                                     <li>{{item.subject}}<span class="li-after" v-show="item.isRead== 0"></span></li>
                                 </ul>
@@ -116,7 +116,7 @@
                             </template>
                         </el-tab-pane>
                         <el-tab-pane label="发件箱" name="3">
-                              <template v-for="item in getSendMailList" class="li-box">
+                            <template v-for="item in getSendMailList" class="li-box">
                                 <ul class="ul-left" @click="toLookMail(item)" :key="item.foid">
                                     <li>{{item.subject}}<span class="li-after" v-show="item.isRead== 0"></span></li>
                                 </ul>
@@ -126,7 +126,7 @@
                             </template>
                         </el-tab-pane>
                         <el-tab-pane label="回收站" name="4">
-                             <template v-for="item in getRecycleMailList" class="li-box">
+                            <template v-for="item in getRecycleMailList" class="li-box">
                                 <ul class="ul-left" @click="toLookMail(item)" :key="item.foid">
                                     <li>{{item.subject}}<span class="li-after" v-show="item.isRead== 0"></span></li>
                                 </ul>
@@ -136,41 +136,42 @@
                             </template>
                         </el-tab-pane>
                     </el-tabs>
-             </el-card>
-        </el-main>
-        <el-aside  width="530px">
-            <div class="img1 website"  @click="toWebsite">
-                <div  >
-                    <img src="../../assets/img/oa2.png">
-                    <img src="../../assets/img/oa5.png" class="img5">
+                </el-card>
+            </el-main>
+            <el-aside  width="530px">
+                <div class="img1 website"  @click="toWebsite">
+                    <div  >
+                        <img src="../../assets/img/oa2.png">
+                        <img src="../../assets/img/oa5.png" class="img5">
+                    </div>
                 </div>
-            </div>
-            <div class="img2 website" @click="toTel">
-                <div  >
-                    <img src="../../assets/img/oa4.png">
-                    <span>通讯录</span>
+                <div class="img2 website" @click="toTel">
+                    <div  >
+                        <img src="../../assets/img/oa4.png">
+                        <span>通讯录</span>
+                    </div>
                 </div>
-            </div>
-            <el-card class="box-card-right">
-                <span class="tab-title">日历</span>
-                <span class="tab-title-tips">Calendar</span>
-                <el-divider></el-divider>
-                <el-calendar v-model="value">
-                </el-calendar>
-            </el-card>
-        </el-aside>
-        <el-dialog
-            :title="formData.fname"
-            :visible.sync="dialogVisible"
-            center
-            :close-on-click-modal="false">
-            <div>
+                <el-card class="box-card-right">
+                    <span class="tab-title">日历</span>
+                    <span class="tab-title-tips">Calendar</span>
+                    <el-divider></el-divider>
+                    <el-calendar v-model="value">
+                    </el-calendar>
+                </el-card>
+            </el-aside>
+            <el-dialog
+                :title="formData.fname"
+                :visible.sync="dialogVisible"
+                center
+                :close-on-click-modal="false"
+            >
                 <el-form
-                :model="formData"
-                label-width="100px"
-                class="dataForm"
-                size="mini"
-                :label-position="labelPosition">
+                    :model="formData"
+                    label-width="100px"
+                    class="dataForm"
+                    size="mini"
+                    :label-position="labelPosition"
+                >
                     <el-row>
                         <el-col :span="14">
                             <el-form-item label="发件人" prop="senderName">
@@ -224,14 +225,10 @@
                         </el-col>
                     </el-row>
                 </el-form>
-            </div>
-            <!--<div class="dialog-content" >
-                <div class="dialog-h5" v-html="detailMsg.content"></div>
-            </div>-->
-        </el-dialog>
-        <WAApage  :rowWAADataObj="rowWAADataObj" :rowWAAtype="rowWAAtype" :isOa="isOa" @changeShow="showORhideForWAA" :functionType="functionType" />
-    </el-container>
- 
+            </el-dialog>
+            <WAApage  :rowWAADataObj="rowWAADataObj" :rowWAAtype="rowWAAtype" :isOa="isOa" @changeShow="showORhideForWAA" :functionType="functionType" />
+        </el-container>
+    </div>
 </template>
 
 <script>
@@ -291,10 +288,10 @@ export default {
         enclosurefile
     },
     created(){
-        this.$nextTick(()=>{
+        /*this.$nextTick(()=>{
             this.getReceiveMail()
             this.getunhandledTask()
-        })
+        })*/
     },
     computed:{
         
