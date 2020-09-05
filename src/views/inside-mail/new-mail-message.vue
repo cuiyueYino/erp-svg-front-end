@@ -17,11 +17,11 @@
             <el-row>
                 <el-col :span="14">
                     <el-form-item label="主送" prop="addresseeName">
-                        <el-input size="small" v-model="formData.addresseeName" readonly></el-input>
+                        <el-input size="small" v-model="formData.addresseeName" disabled></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="6">
-                    <el-button type="text" @click="AddToUser('addressee',false)"><i class="el-icon-plus"></i>添加</el-button>
+                    <el-button type="text" @click="AddToUser('addressee',false,'2')"><i class="el-icon-plus"></i>添加</el-button>
                     <el-button type="text" @click="clearAddToUser('addressee')"><i class="el-icon-delete"></i>清空</el-button>
                     <!--<el-button type="text" @click="ShoWAddCCUser"><i class="el-icon-edit-outline"></i>{{ShoWAddCC==true?'隐藏抄送':'添加抄送'}}</el-button>-->
                 </el-col>
@@ -34,7 +34,7 @@
                     </el-form-item>
                 </el-col>
                 <el-col :span="6">
-                    <el-button type="text" @click="AddToUser('duplicate',false)"><i class="el-icon-plus"></i>添加</el-button>
+                    <el-button type="text" @click="AddToUser('duplicate',false,'2')"><i class="el-icon-plus"></i>添加</el-button>
                     <el-button type="text" @click="clearAddToUser('duplicate')"><i class="el-icon-delete"></i>清空</el-button>
                 </el-col>
             </el-row>
@@ -92,6 +92,7 @@
                 show-checkbox
                 node-key="foid"
                 :default-checked-keys="defautChecked"
+		:default-expanded-keys="treeDataObject"
                 :props="defaultProps">
                 </el-tree>
             </div>
@@ -114,6 +115,7 @@ export default {
     },
     data(){
         return{
+            treeDataObject:[],
             zancunCount:'',
             //文本编辑器
             content: '',
@@ -291,6 +293,37 @@ export default {
                     console.log(reqData)
                     this.treeData = reqData;
                     this.operateUserTree(this.treeData);
+
+
+                    if(fromFlag == 'searchFlag') {
+                        // for(var i=0;i<)
+                        // for(var i of reqData) {
+                        //     for(var j of i.children[j]) {
+                        //         for(var n of j.children[n]) {
+                        //             console.log("sly--------------console............");
+                        //             console.log();
+                        //             alert('进入了循环了。。。。。。。。。');
+                        //         }
+                        //     }
+                        // }
+                        // debugger;
+                        // let count = 0;
+                        // for(var a=0;a<reqData.length;a++) {
+                        //     for(var b=0;b<reqData[a].children.length;b++) {
+                        //             // this.treeDataObject.push(reqData[a].children[b].children[c].foid);
+                        //             // console.log("sly----------------------------------1")
+                        //             // console.log(reqData[a].children.length);
+                        //             // count ++;
+                        //         // for(var c=0;c< reqData[a].children[b].length;c++) {
+                        //         //     this.treeDataObject.push(reqData[a].children[b].children[c].foid);
+                        //         //     console.log("sly----------------------------------1")
+                        //         //     console.log(this.treeDataObject);
+                        //         // }
+                        //     }
+                        // }
+                        
+                    }
+		    
                 }
             })
             if(data=="addressee"){
@@ -305,7 +338,7 @@ export default {
             this.dialogTree=true;
         },
         treeSearch(){
-            this.AddToUser(this.treeTpye,true)
+            this.AddToUser(this.treeTpye,true,'searchFlag')
         },
         // 选择人员树时，公司部门层级不可点击
         operateUserTree(staffTree) {
@@ -396,20 +429,20 @@ export default {
                 this.content = this.perData.content,
                 this.formData.subjectName= resData.subject + "";
                 this.formData.addresseeList = this.perData.addresseeList
-                // this.formData.duplicateList = 
-
-                let nameString= '';
-                let checkId=[];
-                for(let i=0;i<this.perData.duplicateList.length;i++){
-                    nameString += this.perData.duplicateList[i].fname+",";
-                    checkId.push(this.perData.duplicateList[i].foid);
-                };
-                if(nameString!=''){
-                    nameString = nameString.slice(0,nameString.length-1);
+                if(this.perData.typeFlag == 'draftsEdit') {
+                    let nameString= '';
+                    let checkId=[];
+                    for(let i=0;i<this.perData.duplicateList.length;i++){
+                        nameString += this.perData.duplicateList[i].fname+",";
+                        checkId.push(this.perData.duplicateList[i].foid);
+                    };
+                    if(nameString!=''){
+                        nameString = nameString.slice(0,nameString.length-1);
+                    }
+                    this.formData.duplicateName = nameString;
+                    this.defautltDuplicate = checkId;
+                    this.formData.duplicateList = this.perData.duplicateList;
                 }
-                this.formData.duplicateName = nameString;
-                this.defautltDuplicate = checkId;
-                this.formData.duplicateList = this.perData.duplicateList;
 
 
                 // this.formData.duplicateName = this.perData.duplicateList
