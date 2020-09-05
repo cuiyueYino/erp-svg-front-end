@@ -188,17 +188,17 @@ export default {
             handler (obj) {
             if(obj.name === "Task"){
                 if(!obj.oid && (obj.isSaveFlag==undefined)){
-                    this.formData = {}
-                    this.formData.name = obj.displayName
-                    this.formData.code = ""
+                    this.formData = {};
+                    this.formData.name = obj.displayName;
+                    this.formData.code = "";
                 }else{
                     this.editData = obj;
                     this.formData.oid = this.editData.oid;
-                    this.formData.code = this.editData.code
-                    this.formData.name = this.editData.displayName
-                    this.formData.fremark = this.editData.fremark
-                    this.checked = this.editData.hidden==1?true:false
-                    this.join = this.editData.join==1?true:false
+                    this.formData.code = this.editData.code;
+                    this.formData.name = this.editData.displayName;
+                    this.formData.fremark = this.editData.fremark;
+                    this.checked = this.editData.hidden==1?true:false;
+                    this.join = this.editData.join==1?true:false;
                 }
             }// console.log( this.formData)
             },

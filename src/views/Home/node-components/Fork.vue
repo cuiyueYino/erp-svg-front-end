@@ -273,21 +273,21 @@ export default {
             handler (obj) {
                 if(obj.name === "Fork"){
                     if(!obj.oid && (obj.isSaveFlag==undefined)){
-                        this.formData = {}
-                        this.formData.name = obj.displayName
+                        this.formData = {};
+                        this.formData.name = obj.displayName;
                         this.formData.work ="";
                     }else{
                         this.editData = obj;
                         this.formData.oid = this.editData.oid;
-                        this.formData.name = this.editData.displayName
-                        this.formData.work = this.editData.mactivity.name
-                        this.formData.workId = this.editData.mactivity.oid
-                        this.formData.workCode = this.editData.mactivity.code
-                        this.formData.workData = this.editData.dataType.name
-                        this.formData.workDataId = this.editData.dataType.oid
-                        this.formData.workDataCode = this.editData.dataType.code
-                        this.formData.checked = this.editData.hidden==1?true:false
-                        this.formData.fremark = this.editData.fremark  
+                        this.formData.name = this.editData.displayName;
+                        this.formData.work = this.editData.mactivity.name;
+                        this.formData.workId = this.editData.mactivity.oid;
+                        this.formData.workCode = this.editData.mactivity.code;
+                        this.formData.workData = this.editData.dataType.name;
+                        this.formData.workDataId = this.editData.dataType.oid;
+                        this.formData.workDataCode = this.editData.dataType.code;
+                        this.formData.checked = this.editData.hidden==1?true:false;
+                        this.formData.fremark = this.editData.fremark;
                     }
                 }
             },

@@ -512,31 +512,31 @@ export default {
                         this.checkedCities = [];
                         this.editData = obj;
                         this.formData.oid = this.editData.oid;
-                        this.formData.name = this.editData.displayName
-                        this.formData.work = this.editData.mactivity.name
-                        this.formData.workId = this.editData.mactivity.oid
-                        this.formData.workCode = this.editData.mactivity.code
-                        this.formData.workData = this.editData.srcActivity.name
-                        this.formData.workDataId = this.editData.srcActivity.oid
-                        this.formData.workDataCode = this.editData.srcActivity.code
-                        this.formData.fmclassOid = this.editData.dataType.oid
-                        this.formData.fmclassCode = this.editData.dataType.code
-                        this.formData.fmclassName = this.editData.dataType.name
-                        this.formData.fremark = this.editData.fremark    
-                        this.formData.maxWorkTime = this.editData.maxWorkTime
+                        this.formData.name = this.editData.displayName;
+                        this.formData.work = this.editData.mactivity.name;
+                        this.formData.workId = this.editData.mactivity.oid;
+                        this.formData.workCode = this.editData.mactivity.code;
+                        this.formData.workData = this.editData.srcActivity.name;
+                        this.formData.workDataId = this.editData.srcActivity.oid;
+                        this.formData.workDataCode = this.editData.srcActivity.code;
+                        this.formData.fmclassOid = this.editData.dataType.oid;
+                        this.formData.fmclassCode = this.editData.dataType.code;
+                        this.formData.fmclassName = this.editData.dataType.name;
+                        this.formData.fremark = this.editData.fremark;
+                        this.formData.maxWorkTime = this.editData.maxWorkTime;
                         //this.formData.timeUnit = this.editData.timeUnit
-                        this.formData.timeUnit = this.editData.timeUnit==1?true:false       
-                        this.formData.autoSubmit = this.editData.autoSubmit==1?true:false 
-                        this.formData.autoHurry = this.editData.autoHurry==1?true:false
+                        this.formData.timeUnit = this.editData.timeUnit==1?true:false;       
+                        this.formData.autoSubmit = this.editData.autoSubmit==1?true:false;
+                        this.formData.autoHurry = this.editData.autoHurry==1?true:false;
                         switch (this.editData.wfAuditType) {
                             case 1:
-                            this.formData.wfAuditType = '普通审批'
+                            this.formData.wfAuditType = '普通审批';
                             break;
                             case 2:
-                            this.formData.wfAuditType = '并行会签'
+                            this.formData.wfAuditType = '并行会签';
                             break;
                             case 3:
-                            this.formData.wfAuditType = '串行会签'
+                            this.formData.wfAuditType = '串行会签';
                             break;
                             default:
                             break;
@@ -622,10 +622,10 @@ export default {
                         }
                         if( this.joinusertableData.length === 0 && joinusertable.length !== 0){
                             joinusertable.forEach(item=>{
-                                this.joinusertableData.push(item)
+                                this.joinusertableData.push(item);
                             })
                         }
-                        let tableDataNewSet = []
+                        let tableDataNewSet = [];
                         this.tableData=[];
                         if( this.editData.wfCopyTo.copyTo.length == 0){}else{
                             this.editData.wfCopyTo.copyTo.forEach(item=>{
@@ -692,7 +692,7 @@ export default {
                         }
                         if( this.tableData.length === 0 && tableDataNewSet.length !== 0){
                             tableDataNewSet.forEach(item=>{
-                                this.tableData.push(item)
+                                this.tableData.push(item);
                             })
                         }
                         this.decisionSelData=this.editData.decisions.decision;
