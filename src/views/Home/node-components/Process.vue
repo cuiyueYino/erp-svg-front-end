@@ -135,7 +135,7 @@ export default {
                 if(!obj.oid && (obj.isSaveFlag==undefined)){
                     this.formData = {};
                     this.formData.code =='';
-                    this.formData.name = obj.displayName
+                    this.formData.name = obj.displayName;
                 }else{
                     this.editData = obj;
                     this.formData.oid = this.editData.oid;
