@@ -40,8 +40,8 @@
             </el-row>
             <el-row>
                 <el-col :span="14">
-                    <el-form-item label="主题" prop="subjectName">
-                        <el-input size="small" v-model="formData.subjectName"></el-input>
+                    <el-form-item label="主题" prop="subject">
+                        <el-input clearable size="small" v-model="formData.subject" @input="change($event)" maxlength="3000"></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>
@@ -140,7 +140,7 @@ export default {
             },
             formData:{
                 id:'',
-                subjectName:'',
+                subjcet:'',
                 addresseeName: '',
                 duplicateName: '',
                 addresseeList: [],
@@ -176,7 +176,7 @@ export default {
             },
 
             rules: {
-               subjectName: [
+               subject: [
                     { required: true, message: "请输入主题", trigger: "blur" }
                 ],
                 addresseeName: [
@@ -199,13 +199,13 @@ export default {
     },
     props: {
         perData:{
-            type: Object,
-            default () {
-                return {}
-            }
+            type: Object
         }
     },
     methods:{
+        change(e) {
+          this.$forceUpdate();
+        },
         //滑块切换
         handleClick(tab){
             var tabsname =tab.paneName;
@@ -224,7 +224,7 @@ export default {
         editCDD(){
             let reqParam = {
                 id: this.formData.id,
-                subject:this.formData.subjectName,
+                subject:this.formData.subject,
                 content:this.content,
                 sender: this.sender,
                 senderName: this.senderName,
@@ -252,7 +252,7 @@ export default {
             if(zancunCount2 == 1){
             let reqParam = {
                 id: this.formData.id,
-                subject:this.formData.subjectName,
+                subject:this.formData.subject,
                 content:this.content,
                 sender: this.sender,
                 senderName: this.senderName,
@@ -391,10 +391,11 @@ export default {
          */
         persetParam(){
             if(this.perData!=null){
-                this.formData.id = this.perData.id;
-                this.content = this.perData.content;
-                this.formData.subjectName= this.perData.subject + "";
-                this.formData.addresseeList = this.perData.addresseeList;
+                let resData = this.perData;
+                this.formData.id = this.perData.id,
+                this.content = this.perData.content,
+                this.formData.subject= resData.subject
+                this.formData.addresseeList = this.perData.addresseeList
                 // this.formData.duplicateList = 
 
                 let nameString= '';

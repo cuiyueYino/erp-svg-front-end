@@ -175,7 +175,6 @@ export default {
          * 上传
          */
         upload(){
-            debugger;
             let length = this.enclosureTableData.length;
             if(length==undefined||length==0){
                 return;
