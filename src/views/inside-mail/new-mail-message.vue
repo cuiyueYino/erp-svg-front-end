@@ -188,6 +188,7 @@ export default {
         }
     },
     created(){
+        // alert("编辑页面");
         this.$nextTick(() => {
             this.persetParam();
         });
@@ -422,6 +423,7 @@ export default {
          * 预设值（回复，转发，编辑跳转带过来的值）
          */
         persetParam(){
+            // alert()
             if(this.perData!=null){
                 let resData = this.perData;
                 this.formData.id = this.perData.id,
@@ -431,10 +433,12 @@ export default {
                 if(this.perData.typeFlag == 'draftsEdit') {
                     let nameString= '';
                     let checkId=[];
-                    for(let i=0;i<this.perData.duplicateList.length;i++){
+                    if(this.perData.duplicateList != null) {
+                        for(let i=0;i<this.perData.duplicateList.length;i++){
                         nameString += this.perData.duplicateList[i].fname+",";
                         checkId.push(this.perData.duplicateList[i].foid);
                     };
+                    }
                     if(nameString!=''){
                         nameString = nameString.slice(0,nameString.length-1);
                     }
@@ -442,9 +446,6 @@ export default {
                     this.defautltDuplicate = checkId;
                     this.formData.duplicateList = this.perData.duplicateList;
                 }
-
-
-                // this.formData.duplicateName = this.perData.duplicateList
                 this.enclosureConfig.voucherId = this.perData.mailCode;
                  // 主送人自动勾选数据,名字回显
                 let addresseeName= '';
