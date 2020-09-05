@@ -174,7 +174,7 @@
                     <el-row>
                         <el-col :span="14">
                             <el-form-item label="发件人" prop="senderName">
-                                <el-input  size="small" v-model="formData.senderName1" readonly></el-input>
+                                <el-input  size="small" v-model="formData.senderName" readonly></el-input>
                             </el-form-item>
                         </el-col>
                     </el-row>
