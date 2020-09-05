@@ -288,10 +288,10 @@ export default {
         enclosurefile
     },
     created(){
-        /*this.$nextTick(()=>{
+        this.$nextTick(()=>{
             this.getReceiveMail()
             this.getunhandledTask()
-        })*/
+        })
     },
     computed:{
         
@@ -312,6 +312,14 @@ export default {
                 });
             }) //获取员工树信息
             this.getStaffTreeList()
+        },
+        //登录时获取员工树信息
+        getStaffTreeList() {
+            this.$api.confMangement.getStaffTreeList({}).then(res => {
+                let resData = res.data.data;
+                let resDataArr = eval("(" + resData + ")");
+                localStorage.setItem('conf_staffTree', JSON.stringify(resDataArr));
+            })
         },
         changeTabs(tab){
             let name = tab.name;
