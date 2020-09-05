@@ -92,6 +92,7 @@
              <el-card class="box-card">
                  <span class="tab-title">我的邮件</span>
                  <span class="tab-title-tips">Mail</span>
+                 <span class="tab-title-more-tips" @click="toOaSER">more</span>
                  <el-divider></el-divider>
                   <el-tabs v-model="activeNameMail" @tab-click="handleClickMail">
                         <el-tab-pane label="收件箱" name="1">
@@ -137,33 +138,96 @@
                     </el-tabs>
              </el-card>
         </el-main>
-    <el-aside  width="530px">
-        <div class="img1 website"  @click="toWebsite">
-            <div  >
-                <img src="../../assets/img/oa2.png">
-                <img src="../../assets/img/oa5.png" class="img5">
+        <el-aside  width="530px">
+            <div class="img1 website"  @click="toWebsite">
+                <div  >
+                    <img src="../../assets/img/oa2.png">
+                    <img src="../../assets/img/oa5.png" class="img5">
+                </div>
             </div>
-        </div>
-        <div class="img2 website" @click="toTel">
-            <div  >
-                <img src="../../assets/img/oa4.png">
-                <span>通讯录</span>
+            <div class="img2 website" @click="toTel">
+                <div  >
+                    <img src="../../assets/img/oa4.png">
+                    <span>通讯录</span>
+                </div>
             </div>
-        </div>
-        <el-card class="box-card-right">
-             <span class="tab-title">日历</span>
-            <span class="tab-title-tips">Calendar</span>
-             <el-divider></el-divider>
-             <el-calendar v-model="value">
-             </el-calendar>
-        </el-card>
-    </el-aside>
-     <el-dialog
-        :title="detailMsg.fname"
-        :visible.sync="dialogVisible"
-        center
-        :close-on-click-modal="false">
-            <span v-html="detailMsg.content" ></span>
+            <el-card class="box-card-right">
+                <span class="tab-title">日历</span>
+                <span class="tab-title-tips">Calendar</span>
+                <el-divider></el-divider>
+                <el-calendar v-model="value">
+                </el-calendar>
+            </el-card>
+        </el-aside>
+        <el-dialog
+            :title="formData.fname"
+            :visible.sync="dialogVisible"
+            center
+            :close-on-click-modal="false">
+            <div>
+                <el-form
+                :model="formData"
+                label-width="100px"
+                class="dataForm"
+                size="mini"
+                :label-position="labelPosition">
+                    <el-row>
+                        <el-col :span="14">
+                            <el-form-item label="发件人" prop="senderName">
+                                <el-input  size="small" v-model="formData.senderName1" readonly></el-input>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-row>
+                        <el-col :span="14">
+                            <el-form-item label="主送" prop="addresseeName">
+                                <el-input  size="small" v-model="formData.addresseeName" readonly></el-input>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-row>
+                        <el-col :span="14">
+                            <el-form-item label="抄送" prop="duplicateName">
+                                <el-input  size="small" v-model="formData.duplicateName" readonly></el-input>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-row>
+                        <el-col :span="14">
+                            <el-form-item label="主题" prop="subject">
+                                <el-input  size="small" v-model="formData.subject"  readonly></el-input>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-row>
+                        <el-col :span="14">
+                            <el-form-item label="发送时间" prop="sendTime">
+                                <el-input  size="small" v-model="formData.sendTime" readonly></el-input>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-row>
+                        <el-col :span="20">
+                            <el-tabs v-model="atctiveName" @tab-click="changeTabs">
+                                <el-tab-pane label="内容" name="article">
+                                    <quill-editor
+                                        v-model="content"
+                                        ref="myQuillEditor"
+                                        :options="editorOption"
+                                        style="height:400px"
+                                    ></quill-editor>
+                                </el-tab-pane>
+                                <el-tab-pane label="附件" name="enclosure">
+                                    <enclosurefile :enclosureConfig="enclosureConfig"/>
+                                </el-tab-pane>
+                            </el-tabs>
+                        </el-col>
+                    </el-row>
+                </el-form>
+            </div>
+            <!--<div class="dialog-content" >
+                <div class="dialog-h5" v-html="detailMsg.content"></div>
+            </div>-->
         </el-dialog>
         <WAApage  :rowWAADataObj="rowWAADataObj" :rowWAAtype="rowWAAtype" :isOa="isOa" @changeShow="showORhideForWAA" :functionType="functionType" />
     </el-container>
@@ -172,18 +236,24 @@
 
 <script>
 import WAApage from '../process-set/warehousing-applicant-approval';
+import enclosurefile from '../inside-mail/enclosure-file.vue';
+import { quillEditor } from 'vue-quill-editor'; //调用编辑器
+import 'quill/dist/quill.snow.css';
+import * as Quill from 'quill';
 export default {
     name:'oaPersonalHome',
     data() {
         return {
+            labelPosition: 'left',
+            atctiveName:'article',
             functionType:'',
             factivity:'',
             fsubject:'',
             isOa:false,
-             rowWAADataObj:{},
-              rowWAAtype:false,
+            rowWAADataObj:{},
+            rowWAAtype:false,
             dialogVisible:false,
-             detailMsg:[],
+            detailMsg:[],
             activeName: '1',
             activeNameMail:'1',
             value: new Date(),
@@ -196,10 +266,29 @@ export default {
             getHunTableDataList:[],
             getIssuedItemsList:[],
             getRecycleBinList:[],
+            formData:{},
+            //文本编辑器
+            content: '',
+            editorOption: {
+                placeholder: '请输入内容',
+                modules: {
+                    toolbar: null
+                }
+            },
+            // 附件
+            enclosureConfig:{
+                voucherId: '',
+                isShowButton: false,
+                menuCode: 'insideMail',
+                isDownload:true,
+                isSearch:false,
+            },
         };
     },
     components: {
-        WAApage
+        WAApage,
+        quillEditor,
+        enclosurefile
     },
     created(){
         this.$nextTick(()=>{
@@ -211,6 +300,26 @@ export default {
         
     },
     methods:{
+        toOaSER() {
+            sessionStorage.setItem("oaMenu", false);
+            //根据token查询登陆人的信息并存入缓存
+            //通过用户ID查询菜单
+            this.$api.common.findMenuByComputer({
+                userId: localStorage.getItem('ms_userId')
+            }).then(data2 => {
+                //菜单放入本地缓存,并跳转首页
+                sessionStorage.setItem("menuList", JSON.stringify(data2.data.data));
+                this.$parent.show()
+                this.$router.push({
+                    name: "insideMailCommon"
+                });
+            }) //获取员工树信息
+            this.getStaffTreeList()
+        },
+        changeTabs(tab){
+            let name = tab.name;
+            this.atctiveName  = name
+        },
         taskDetail(fsrcoId,type,factivity,fsubject,foid) {
                 this.rowWAAtype = true;
                 this.isOa = true;
@@ -264,9 +373,12 @@ export default {
             }
             this.$api.insideMail.getMailById(data).then(
                 res => {
-                    this.detailMsg = res.data.data;
+                    this.formData={};
+                    this.formData = res.data.data;
+                    this.content=this.formData.content;
+                    this.enclosureConfig.voucherId = this.formData.mailCode;
                     this.dialogVisible = true
-                    console.log(this.detailMsg )
+                    console.log(this.formData )
                 }
             )
         },
@@ -300,6 +412,7 @@ export default {
                 userId:localStorage.getItem('ms_userId')
           }
            this.$api.processSet.getunhandledTask(data).then(res=>{
+                this.getunhandledTaskList=[];
                 this.getunhandledTaskList = res.data.data.rows; 
                 console.log(this.getunhandledTaskList);
                 //去未读红点
@@ -326,6 +439,7 @@ export default {
                 userId: localStorage.getItem('ms_userId')
           }
            this.$api.processSet.attentionTask(data).then(res=>{
+                this.getAttentionTaskList=[];
                 this.getAttentionTaskList = res.data.data.rows;
                 console.log(this.getAttentionTaskList);
                 //去未读红点
@@ -346,6 +460,7 @@ export default {
                 userId: localStorage.getItem('ms_userId')
           }
            this.$api.processSet.handledTask(data).then(res=>{
+                this.getHunTableDataList=[];
                 this.getHunTableDataList = res.data.data.rows;
                 console.log(this.getHunTableDataList);
                 //去未读红点
@@ -366,6 +481,7 @@ export default {
                 userId: localStorage.getItem('ms_userId')
           }
            this.$api.processSet.sendedTask(data).then(res=>{
+                this.getIssuedItemsList=[];
                 this.getIssuedItemsList = res.data.data.rows;
                 console.log(this.getIssuedItemsList);
                 //去未读红点
@@ -386,6 +502,7 @@ export default {
                 userId: localStorage.getItem('ms_userId')
           }
            this.$api.processSet.getRecycleBinList(data).then(res=>{
+                this.getRecycleBinList=[];
                 this.getRecycleBinList = res.data.data.rows;
                 console.log(this.getRecycleBinList);
                 //去未读红点
@@ -423,12 +540,14 @@ export default {
      */
        getReceiveMail(){
            let data ={
-            //    owner: localStorage.getItem('ms_userId'),
-                owner:"BFPID000000LSN000E",
+                //owner:"BFPID000000LSN000E",
+                //owner: localStorage.getItem('ms_userId'),
+                owner: localStorage.getItem('ms_staffId'),
                 page: 1,
                 size: 10
            }
         this.$api.insideMail.getReceiveMail(data).then(res=>{
+            this.getReceiveMailList=[];
             this.getReceiveMailList = res.data.data.rows
             console.log( this.getReceiveMailList)
         })
@@ -436,25 +555,29 @@ export default {
     //    草稿箱
     getDraftMail(){
         let data ={
-               //    owner: localStorage.getItem('ms_userId'),
-                owner:"BFPID000000LSN000E",
+                //owner: localStorage.getItem('ms_userId'),
+                owner: localStorage.getItem('ms_staffId'),
+                //owner:"BFPID000000LSN000E",
                 page: 1,
                 size: 10
            }
         this.$api.insideMail.getDraftMail(data).then(res=>{
-             this.getDraftMailList = res.data.data.rows
+            this.getDraftMailList=[];
+            this.getDraftMailList = res.data.data.rows
             console.log( this.getDraftMailList)
         })
     },
      //    发件箱
     getSendMail(){
         let data ={
-              //    owner: localStorage.getItem('ms_userId'),
-                owner:"BFPID000000LSN000E",
+                //owner: localStorage.getItem('ms_userId'),
+                owner: localStorage.getItem('ms_staffId'),
+                //owner:"BFPID000000LSN000E",
                 page: 1,
                 size: 10
            }
         this.$api.insideMail.getSendMail(data).then(res=>{
+            this.getSendMailList=[];
             this.getSendMailList = res.data.data.rows
             console.log( this.getSendMailList)
         })
@@ -462,12 +585,14 @@ export default {
      //    回收站
     getRecycleMail(){
         let data ={
-               //    owner: localStorage.getItem('ms_userId'),
-                owner:"BFPID000000LSN000E",
+                //owner: localStorage.getItem('ms_userId'),
+                owner: localStorage.getItem('ms_staffId'),
+                //owner:"BFPID000000LSN000E",
                 page: 1,
                 size: 10
            }
         this.$api.insideMail.getRecycleMail(data).then(res=>{
+            this.getRecycleMailList=[];
             this.getRecycleMailList = res.data.data.rows
             console.log( this.getRecycleMailList)
         })
@@ -547,6 +672,12 @@ export default {
         color: #B8B8B8;
         font-size:14px;
         margin-left: 10px;
+    }
+    .tab-title-more-tips{
+        color: #181717;
+        font-size:18px;
+        float:right;
+        margin-right: 10px;
     }
     .img1{
       background-image: url("../../assets/img/oa1.png");
@@ -634,5 +765,13 @@ export default {
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
+}
+.dialog-content {
+  overflow-y:auto;
+  overflow-x:auto;
+}
+
+.dialog-h5 >>> img,p,span {
+  width: 100%;
 }
 </style>

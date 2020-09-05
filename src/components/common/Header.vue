@@ -140,6 +140,13 @@
 				this.fullscreen = !this.fullscreen;
 			}
 		},
+		watch: {
+			$route (to) {
+				if(to.name ==='insideMailCommon'){
+					this.showFig = false;
+				}
+			}
+		}
 	};
 </script>
 <style scoped lang="scss">

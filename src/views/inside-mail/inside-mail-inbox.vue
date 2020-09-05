@@ -50,7 +50,6 @@
         </el-col>
       </el-row>
     </el-card>
-    <!-- 表格   :row-class-name="tableRowClassName"-->
     <el-card>
       <dynamic-table
         ref="dataTable"
@@ -74,9 +73,9 @@ import DynamicTable from "../../components/common/dytable/dytable.vue";
 export default {
   name: 'mailInbox',
   data() {
+    const { rendersubject } = this;
     return {
       name: "insideMailInbox",
-
       userName: localStorage.getItem('ms_username'),
       userId: localStorage.getItem('ms_staffId'),
       //搜索内容
@@ -105,7 +104,8 @@ export default {
         },
         {
           key: "subject",
-          title: "主题"
+          title: "主题",
+          render:rendersubject
         },
         {
           width: 300,
@@ -130,14 +130,34 @@ export default {
   },
   created() {
     this.$nextTick(() => {
-      this.getReceiveMail();
+      this.getReceiveMail('2');
     });
   },
   methods: {
+    // 未读邮件的格式化
+    rendersubject(v) {
+      let subjectName = v.row.subject;
+      switch(v.row.isRead){
+        case '未读':
+          return <div class='subjectStyle'>{subjectName}<span class="li-after"></span></div>;
+          break;
+        case '已读':
+          return <div>{subjectName}</div>;
+          break;
+        default :
+          break;
+      }
+          // if (v.row.projectNo) {
+          //     let projectNoS = v.row.projectNo;
+          //     projectNoS = projectNoS.split('-(')[0];
+          //     return <div>{projectNoS}</div>;
+          // }
+      },
     /**
      * 获取收件箱信息
      */
-    getReceiveMail(){
+    getReceiveMail(type){
+      // debugger;
       //表格查询基础参数
       let reqParam={
         owner: this.userId,
@@ -165,11 +185,14 @@ export default {
                   break;
               }
             }
-            this.$api.insideMail.unReadCountById(reqParam).then(
+            if(type == '2') {
+              this.$api.insideMail.unReadCountById(reqParam).then(
               res => {
                 this.unReadCount = res.data.data;
               }
             );
+            }
+            
           };
         }
       );
@@ -181,7 +204,7 @@ export default {
      */
     onCurrentChange(val) {
       this.pageNum = val;
-      this.getReceiveMail();
+      this.getReceiveMail('2');
     },
 
     /**
@@ -193,7 +216,7 @@ export default {
       this.params.isRead= 0;
       this.pageNum = 1;
       // 刷新列表
-      this.getReceiveMail();
+      this.getReceiveMail('2');
     },
 
     /**
@@ -213,7 +236,7 @@ export default {
       }
       this.pageNum = 1;
       // 刷新列表
-      this.getReceiveMail();
+      this.getReceiveMail('1');
     },
 
     /**
@@ -226,7 +249,7 @@ export default {
        this.form.endTime="";
        this.emptyParam();
        this.pageNum = 1;
-       this.getReceiveMail();
+       this.getReceiveMail('2');
      },
 
     /**
@@ -256,7 +279,7 @@ export default {
         res => {
           if(this.dataBack(res,"修改成功")){
             // 刷新表格
-            this.getReceiveMail();
+            this.getReceiveMail('2');
           };
         },
       );
@@ -277,7 +300,7 @@ export default {
         res => {
           if(this.dataBack(res,"")){
             // 刷新表格
-            this.getReceiveMail();
+            this.getReceiveMail('2');
           };
         },
       );
@@ -393,7 +416,7 @@ export default {
         res => {
           if(this.dataBack(res,"删除成功")){
             // 刷新表格
-            this.getReceiveMail();
+            this.getReceiveMail('2');
           };
         },
       );
@@ -449,8 +472,19 @@ export default {
 
 }
 </script>
-<style lang="scss" scoped>
-/deep/ .el-table__fixed-right::before{
+<style>
+.el-table__fixed-right::before{
 background-color:revert;
+}
+.subjectStyle {
+  color: red !important;
+}
+.li-after {
+  display: inline-block;
+  margin: 0 0 4px 4px;
+  width: 6px;
+  height: 6px;
+  background-color: red;
+  border-radius: 4px;
 }
 </style>

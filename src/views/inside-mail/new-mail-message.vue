@@ -40,8 +40,8 @@
             </el-row>
             <el-row>
                 <el-col :span="14">
-                    <el-form-item label="主题" prop="subject">
-                        <el-input clearable size="small" v-model="formData.subject" @input="change($event)" maxlength="3000"></el-input>
+                    <el-form-item label="主题" prop="subjectName">
+                        <el-input clearable size="small" v-model="formData.subjectName" @input="change($event)" maxlength="3000"></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>
@@ -176,7 +176,7 @@ export default {
             },
 
             rules: {
-               subject: [
+               subjectName: [
                     { required: true, message: "请输入主题", trigger: "blur" }
                 ],
                 addresseeName: [
@@ -224,7 +224,7 @@ export default {
         editCDD(){
             let reqParam = {
                 id: this.formData.id,
-                subject:this.formData.subject,
+                subject:this.formData.subjectName,
                 content:this.content,
                 sender: this.sender,
                 senderName: this.senderName,
@@ -252,7 +252,7 @@ export default {
             if(zancunCount2 == 1){
             let reqParam = {
                 id: this.formData.id,
-                subject:this.formData.subject,
+                subject:this.formData.subjectName,
                 content:this.content,
                 sender: this.sender,
                 senderName: this.senderName,
@@ -394,7 +394,7 @@ export default {
                 let resData = this.perData;
                 this.formData.id = this.perData.id,
                 this.content = this.perData.content,
-                this.formData.subject= resData.subject
+                this.formData.subjectName= resData.subject + "";
                 this.formData.addresseeList = this.perData.addresseeList
                 // this.formData.duplicateList = 
 

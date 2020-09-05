@@ -73,8 +73,8 @@ export default {
     },
     methods: {
         toPage(data,page){
-            this.common = page,
-            this.perData = data
+            this.common = page;
+            this.perData = data;
             this.refresh(page);
         },
 
