@@ -42,7 +42,7 @@
 							<!-- 浏览框 -->
 							<a @click="toNew(ruleForm[item.field])" v-if="dis == '1' && item.toSelect.id == '7'" href="javascript:void(0)">{{ruleForm[item.field+'_NameShow']}}</a>
 							<el-input v-else style="width: 100%;" v-model="ruleForm[item.field+'_NameShow']" disabled>
-								<el-button @click="findDialogVisible(item)" slot="append" icon="el-icon-search"></el-button>
+								<el-button @click="findDialogVisible(item)" slot="append"  icon="el-icon-search"></el-button>
 							</el-input>
 						</el-form-item>
 						<el-form-item v-else :label="item.fieldName" :prop="item.field">
@@ -257,7 +257,7 @@
 			//计算公式服务
 			fuwu(row) {
 				if(row.serviceId == 11) {
-					//row.parameter 计算公式 
+					//row.parameter 计算公式
 					let result = computed(row.parameter, this.ruleForm)
 					if(result.successCon) {
 						this.formData.rowList.forEach(item => {
@@ -268,7 +268,7 @@
 									} else if(val.fieldType == 5) {
 										this.ruleForm[row.field] = result.con.toFixed(4)
 									} else {
-										this.ruleForm[row.field] = result.con
+										this.ruleForm[row.field] = result.con.toFixed(4)
 									}
 								}
 							})
@@ -280,7 +280,7 @@
 			},
 			//查看页面根据ID获取浏览框内容 _NameShow  主表1 子表2
 			get_NameShow(state) {
-				//获取当前form应该展示的所有数据 
+				//获取当前form应该展示的所有数据
 				var valObject = {}
 				if(state == 1) {
 					//主表在外层
@@ -600,7 +600,7 @@
 							})
 							//存入值
 							this.$set(this.ruleForm, listChild.colList[i2].field, conNow.id)
-							//							this.$set(this.ruleForm, listChild.colList[i2].field + "_NameShow", conNow.name)
+							this.$set(this.ruleForm, listChild.colList[i2].field + "_NameShow", conNow.name)
 						}
 					}
 				}
@@ -647,9 +647,9 @@
 			},
 			/*
 			 父子联动查询
-			 * 
+			 *
 			 * 这里是分批分次的查询，！！‘联动的值可能是多个’！！，同样只有查询到值并整理好赋值之后，才会进入下层循环
-			 * 
+			 *
 			 * */
 			async toGetServiceNow(row, id) {
 				//通过传入的子查询字段，找到最终的传入值
@@ -779,7 +779,7 @@
 		height: 300px;
 		overflow: auto;
 	}
-	
+
 	>>>.el-dialog__body {
 		border-bottom: 1px solid #dcdfe6;
 		min-height: calc(100vh - 300px);

@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div class="formWrapper">
 		<el-card>
 			<formIcon :dis="dis" :showAdd="showAdd" :key="count" ref="mainTableChild" show="1" :form-data="formData.top">
 				<slot></slot>
@@ -217,6 +217,12 @@
 	}
 </script>
 
+<style>
+	.formWrapper {
+		height:750px;
+		overflow-y:scroll;
+	}
+</style>
 <style scoped>
 	>>>.el-upload--text {
 		height: 30px!important;
