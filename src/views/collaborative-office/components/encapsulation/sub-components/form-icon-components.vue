@@ -9,6 +9,7 @@
 
 <template>
 	<div>
+			<input type="hidden" v-model="valueInput" />
 		<div v-if="showFig == 'organization' " class="treeDivClass">
 			<el-tree :default-checked-keys="dataCon.echo" :default-expanded-keys="dataCon.echo" show-checkbox ref="treeDialogVisible" highlight-current :data="dataCon.context" :props="defaultProps" node-key="foid" accordion></el-tree>
 		</div>
@@ -93,6 +94,7 @@
 		},
 		data() {
 			return {
+				valueInput :0,
 				loading: true,
 				//公司部门职位 tree 默认显示值
 				defaultProps: {
@@ -165,7 +167,8 @@
 						url = "staffManage/findStaffsNoPage"
 						con = this.formInlineTName
 						this.$api.collaborativeOffice.findConList(url, con).then(data => {
-							this.dataCon.context = data.data.data
+							this.$set(this.dataCon, "context", data.data.data)
+							this.valueInput++
 						})
 						break;
 						//用户
@@ -173,7 +176,8 @@
 						url = "userManage/findUserBypage"
 						con = this.formInlineTNameUser
 						this.$api.collaborativeOffice.findConList(url, con).then(data => {
-							this.dataCon.context = data.data.data.rows
+							this.$set(this.dataCon, "context", data.data.data.rows)
+							this.valueInput++
 						})
 						break;
 						//职务
@@ -181,7 +185,8 @@
 						url = "positionmnt/findPositionList"
 						con = this.formInlineTNameJob
 						this.$api.collaborativeOffice.findConList(url, con).then(data => {
-							this.dataCon.context = data.data.data.rows
+							this.$set(this.dataCon, "context", data.data.data.rows)
+							this.valueInput++
 						})
 						break;
 				}
