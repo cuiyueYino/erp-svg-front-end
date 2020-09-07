@@ -23,7 +23,7 @@
 		</el-card>
 		<!--弹出框-->
 		<el-dialog title="工作事项主板模板" top="1vh" :destroy-on-close="true" center :visible.sync="dialogVisible" width="80%">
-			<selectMainTable show="1" ref="childMain"></selectMainTable>
+			<selectMainTable show="1" status="3" :company="company" ref="childMain"></selectMainTable>
 			<div slot="footer" class="dialog-footer">
 				<el-button @click="dialogVisible = false">取 消</el-button>
 				<el-button type="primary" @click="getDialogVisible">确 定</el-button>

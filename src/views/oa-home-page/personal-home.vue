@@ -1,26 +1,27 @@
 <template>
-
- <el-container>
-        <el-main>
-             <el-card class="box-card">
-                 <span class="tab-title">流程中心</span>
-                 <span class="tab-title-tips">Workflow</span>
-                 <el-divider></el-divider>
-                  <el-tabs v-model="activeName" @tab-click="handleClick">
+    <div>
+        <el-container>
+            <el-main>
+                <el-card class="box-card">
+                    <span class="tab-title">流程中心</span>
+                    <span class="tab-title-tips">Workflow</span>
+                    <span class="tab-title-more-tips" @click="toOaSER('Workflow')">more</span>
+                    <el-divider></el-divider>
+                    <el-tabs v-model="activeName" @tab-click="handleClick">
                         <el-tab-pane label="待办事项" name="1">
                             <template v-for="item in getunhandledTaskList" class="li-box">
-                            <ul class="ul-middle" @click="toLookItems(item)" :key="item.foid">
-                                <li>{{item.fsubject}}<span class="li-after" v-show="item.fisread=='0'"></span></li>
-                            </ul>
-                            <ul class="ul-middle" :key="item.foid">
-                                <li @click="taskDetail(item.fsrcoId,item.classId,item.factivity,item.fsubject,item.foid,)">{{item.fsrcCompany}}</li>
-                            </ul>
-                            <ul class="ul-middle" :key="item.foid">
-                                <li>{{item.faddresser}}</li>
-                            </ul>
-                            <ul class="ul-middle" @click="toLookItems(item)" :key="item.foid">
-                                <li>{{item.freceiveTime}}</li>
-                            </ul>
+                                <ul class="ul-middle" @click="toLookItems(item)" :key="item.foid">
+                                    <li>{{item.fsubject}}<span class="li-after" v-show="item.fisread=='0'"></span></li>
+                                </ul>
+                                <ul class="ul-middle" :key="item.foid">
+                                    <li @click="taskDetail(item.fsrcoId,item.classId,item.factivity,item.fsubject,item.foid,)">{{item.fsrcCompany}}</li>
+                                </ul>
+                                <ul class="ul-middle" :key="item.foid">
+                                    <li>{{item.faddresser}}</li>
+                                </ul>
+                                <ul class="ul-middle" @click="toLookItems(item)" :key="item.foid">
+                                    <li>{{item.freceiveTime}}</li>
+                                </ul>
                             </template>
                         </el-tab-pane>
                         <el-tab-pane label="关注事项" name="2">
@@ -56,7 +57,7 @@
                             </template>
                         </el-tab-pane>
                         <el-tab-pane label="已发事项" name="4">
-                             <template v-for="item in getIssuedItemsList" class="li-box">
+                            <template v-for="item in getIssuedItemsList" class="li-box">
                                 <ul class="ul-middle" @click="toLookItems(item)" :key="item.foid">
                                     <li>{{item.fsubject}}<span class="li-after" v-show="item.fisread=='0'"></span></li>
                                 </ul>
@@ -72,7 +73,7 @@
                             </template>
                         </el-tab-pane>
                         <el-tab-pane label="回收站" name="5">
-                             <template v-for="item in getRecycleBinList" class="li-box">
+                            <template v-for="item in getRecycleBinList" class="li-box">
                                 <ul class="ul-middle" @click="toLookItems(item)" :key="item.foid">
                                     <li>{{item.fsubject}}<span class="li-after" v-show="item.fisread=='0'"></span></li>
                                 </ul>
@@ -86,15 +87,15 @@
                                     <li>{{item.freceiveTime}}</li>
                                 </ul>
                             </template>
-                        </el-tab-pane>
+                        </el-tab-pane>   
                     </el-tabs>
-             </el-card>
-             <el-card class="box-card">
-                 <span class="tab-title">我的邮件</span>
-                 <span class="tab-title-tips">Mail</span>
-                 <span class="tab-title-more-tips" @click="toOaSER">more</span>
-                 <el-divider></el-divider>
-                  <el-tabs v-model="activeNameMail" @tab-click="handleClickMail">
+                </el-card>
+                <el-card class="box-card">
+                    <span class="tab-title">我的邮件</span>
+                    <span class="tab-title-tips">Mail</span>
+                    <span class="tab-title-more-tips" @click="toOaSER('Mail')">more</span>
+                    <el-divider></el-divider>
+                    <el-tabs v-model="activeNameMail" @tab-click="handleClickMail">
                         <el-tab-pane label="收件箱" name="1">
                             <template v-for="item in getReceiveMailList" class="li-box">
                                 <ul class="ul-left" @click="toLookMail(item)" :key="item.foid">
@@ -106,7 +107,7 @@
                             </template>
                         </el-tab-pane>
                         <el-tab-pane label="草稿箱" name="2">
-                             <template v-for="item in getDraftMailList" class="li-box">
+                            <template v-for="item in getDraftMailList" class="li-box">
                                 <ul class="ul-left" @click="toLookMail(item)" :key="item.foid">
                                     <li>{{item.subject}}<span class="li-after" v-show="item.isRead== 0"></span></li>
                                 </ul>
@@ -116,7 +117,7 @@
                             </template>
                         </el-tab-pane>
                         <el-tab-pane label="发件箱" name="3">
-                              <template v-for="item in getSendMailList" class="li-box">
+                            <template v-for="item in getSendMailList" class="li-box">
                                 <ul class="ul-left" @click="toLookMail(item)" :key="item.foid">
                                     <li>{{item.subject}}<span class="li-after" v-show="item.isRead== 0"></span></li>
                                 </ul>
@@ -126,7 +127,7 @@
                             </template>
                         </el-tab-pane>
                         <el-tab-pane label="回收站" name="4">
-                             <template v-for="item in getRecycleMailList" class="li-box">
+                            <template v-for="item in getRecycleMailList" class="li-box">
                                 <ul class="ul-left" @click="toLookMail(item)" :key="item.foid">
                                     <li>{{item.subject}}<span class="li-after" v-show="item.isRead== 0"></span></li>
                                 </ul>
@@ -136,45 +137,46 @@
                             </template>
                         </el-tab-pane>
                     </el-tabs>
-             </el-card>
-        </el-main>
-        <el-aside  width="530px">
-            <div class="img1 website"  @click="toWebsite">
-                <div  >
-                    <img src="../../assets/img/oa2.png">
-                    <img src="../../assets/img/oa5.png" class="img5">
+                </el-card>
+            </el-main>
+            <el-aside  width="530px">
+                <div class="img1 website"  @click="toWebsite">
+                    <div  >
+                        <img src="../../assets/img/oa2.png">
+                        <img src="../../assets/img/oa5.png" class="img5">
+                    </div>
                 </div>
-            </div>
-            <div class="img2 website" @click="toTel">
-                <div  >
-                    <img src="../../assets/img/oa4.png">
-                    <span>通讯录</span>
+                <div class="img2 website" @click="toTel">
+                    <div  >
+                        <img src="../../assets/img/oa4.png">
+                        <span>通讯录</span>
+                    </div>
                 </div>
-            </div>
-            <el-card class="box-card-right">
-                <span class="tab-title">日历</span>
-                <span class="tab-title-tips">Calendar</span>
-                <el-divider></el-divider>
-                <el-calendar v-model="value">
-                </el-calendar>
-            </el-card>
-        </el-aside>
-        <el-dialog
-            :title="formData.fname"
-            :visible.sync="dialogVisible"
-            center
-            :close-on-click-modal="false">
-            <div>
+                <el-card class="box-card-right">
+                    <span class="tab-title">日历</span>
+                    <span class="tab-title-tips">Calendar</span>
+                    <el-divider></el-divider>
+                    <el-calendar v-model="value">
+                    </el-calendar>
+                </el-card>
+            </el-aside>
+            <el-dialog
+                :title="formData.fname"
+                :visible.sync="dialogVisible"
+                center
+                :close-on-click-modal="false"
+            >
                 <el-form
-                :model="formData"
-                label-width="100px"
-                class="dataForm"
-                size="mini"
-                :label-position="labelPosition">
+                    :model="formData"
+                    label-width="100px"
+                    class="dataForm"
+                    size="mini"
+                    :label-position="labelPosition"
+                >
                     <el-row>
                         <el-col :span="14">
                             <el-form-item label="发件人" prop="senderName">
-                                <el-input  size="small" v-model="formData.senderName1" readonly></el-input>
+                                <el-input  size="small" v-model="formData.senderName" readonly></el-input>
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -224,26 +226,26 @@
                         </el-col>
                     </el-row>
                 </el-form>
-            </div>
-            <!--<div class="dialog-content" >
-                <div class="dialog-h5" v-html="detailMsg.content"></div>
-            </div>-->
-        </el-dialog>
-        <WAApage  :rowWAADataObj="rowWAADataObj" :rowWAAtype="rowWAAtype" :isOa="isOa" @changeShow="showORhideForWAA" :functionType="functionType" />
-    </el-container>
- 
+            </el-dialog>
+            <WAApage  :rowWAADataObj="rowWAADataObj" :rowWAAtype="rowWAAtype" :isOa="isOa" @changeShow="showORhideForWAA" :functionType="functionType" />
+        </el-container>
+    </div>
 </template>
-
 <script>
-import WAApage from '../process-set/warehousing-applicant-approval';
+import WAApage from '../process-set/warehousing-applicant-approval.vue';
 import enclosurefile from '../inside-mail/enclosure-file.vue';
 import { quillEditor } from 'vue-quill-editor'; //调用编辑器
 import 'quill/dist/quill.snow.css';
 import * as Quill from 'quill';
 export default {
     name:'oaPersonalHome',
+    components: {
+        WAApage,
+        quillEditor,
+        enclosurefile
+    },
     data() {
-        return {
+        return{
             labelPosition: 'left',
             atctiveName:'article',
             functionType:'',
@@ -283,24 +285,19 @@ export default {
                 isDownload:true,
                 isSearch:false,
             },
-        };
-    },
-    components: {
-        WAApage,
-        quillEditor,
-        enclosurefile
+        }
     },
     created(){
         this.$nextTick(()=>{
-            this.getReceiveMail()
-            this.getunhandledTask()
+            this.getReceiveMail();
+            this.getunhandledTask();
         })
     },
     computed:{
         
     },
     methods:{
-        toOaSER() {
+        toOaSER(ValStr) {
             sessionStorage.setItem("oaMenu", false);
             //根据token查询登陆人的信息并存入缓存
             //通过用户ID查询菜单
@@ -309,25 +306,40 @@ export default {
             }).then(data2 => {
                 //菜单放入本地缓存,并跳转首页
                 sessionStorage.setItem("menuList", JSON.stringify(data2.data.data));
+                //获取员工树信息
+                this.getStaffTreeList(ValStr)
+            }) 
+        },
+        //登录时获取员工树信息
+        getStaffTreeList(ValStr) {
+            this.$api.confMangement.getStaffTreeList({}).then(res => {
+                let resData = res.data.data;
+                let resDataArr = eval("(" + resData + ")");
+                localStorage.setItem('conf_staffTree', JSON.stringify(resDataArr));
                 this.$parent.show()
-                this.$router.push({
-                    name: "insideMailCommon"
-                });
-            }) //获取员工树信息
-            this.getStaffTreeList()
+                if(ValStr=='Workflow'){
+                    this.$router.push({
+                        name: "todolist"
+                    }); 
+                }else{
+                    this.$router.push({
+                        name: "insideMailCommon"
+                    });
+                }
+            })
         },
         changeTabs(tab){
             let name = tab.name;
             this.atctiveName  = name
         },
         taskDetail(fsrcoId,type,factivity,fsubject,foid) {
-                this.rowWAAtype = true;
-                this.isOa = true;
-                this.functionType = type;
-                this.rowWAADataObj.fsrcoId = fsrcoId;
-                this.rowWAADataObj.factivity = factivity;
-                this.rowWAADataObj.fsubject = fsubject;
-                this.rowWAADataObj.foid = foid;
+            this.rowWAAtype = true;
+            this.isOa = true;
+            this.functionType = type;
+            this.rowWAADataObj.fsrcoId = fsrcoId;
+            this.rowWAADataObj.factivity = factivity;
+            this.rowWAADataObj.fsubject = fsubject;
+            this.rowWAADataObj.foid = foid;
         },
         showORhideForWAA(data){
             if(data == false){
@@ -336,274 +348,252 @@ export default {
                 this.rowWAAtype = true
             }
         },
-        closeDialog(){
-            // this.detailMsg.isRead = 1
-            // this.childList.forEach((items,index)=>{
-            //     items.forEach((item,idx)=>{
-            //         if( item.foid == this.detailMsg.foid ){
-            //             this.$set(items,idx, this.detailMsg);
-            //             this.dialogVisible = false
-            //         }
-            //         })
-            // });
-        },
         toLookItems(val){
-            let  finandata={}
-            let data={
-                oid:val.foid
-            }
-            //去未读红点
+            let finandata = val;
+            finandata.selectData = val;
+            finandata.finanrowname="人员缺省查询方案";
+            finandata.finanrowId="QS_0056";
+            finandata.nametitle = "入库申请申请人审批";
+            finandata.foid = val.foid;
+            this.rowWAADataObj = finandata;
+            this.functionType = val.classId;
+            this.rowWAAtype=true;
+            this.isOa = true;
             let localKey = localStorage.getItem('ms_userId') + "_" + val.foid;
             localStorage.setItem(localKey, "1");
-            this.$api.processSet.getunhandledTask(data).then(
-                res => {
-                    finandata.finanrowname="人员缺省查询方案";
-                    finandata.finanrowId="QS_0056";
-                    finandata.nametitle="入库申请申请人审批";
-                    this.rowWAADataObj=finandata;
-                    this.detailMsg = '流程中心';
-                    this.rowWAAtype=true;
-                    this.isOa = true;
-                }
-            )
+            /*
+            let data={
+                oid:val.foid,
+                userId:localStorage.getItem('ms_userId')
+            }
+            let localKey = localStorage.getItem('ms_userId') + "_" + val.foid;
+            localStorage.setItem(localKey, "1");
+            this.$api.processSet.getunhandledTask(data).then(res => {
+                let  finandata={}
+                finandata.finanrowname="人员缺省查询方案";
+                finandata.finanrowId="QS_0056";
+                finandata.nametitle="入库申请申请人审批";
+                this.rowWAADataObj=finandata;
+                this.detailMsg = '流程中心';
+                this.rowWAAtype=true;
+                this.isOa = true;
+            })*/
         },
         toLookMail(val){
             let data={
                 id:val.id
             }
-            this.$api.insideMail.getMailById(data).then(
-                res => {
-                    this.formData={};
-                    this.formData = res.data.data;
-                    this.content=this.formData.content;
-                    this.enclosureConfig.voucherId = this.formData.mailCode;
-                    this.dialogVisible = true
-                    console.log(this.formData )
-                }
-            )
+            this.$api.insideMail.getMailById(data).then(res => {
+                this.formData={};
+                this.formData = res.data.data;
+                this.content=this.formData.content;
+                this.enclosureConfig.voucherId = this.formData.mailCode;
+                this.dialogVisible = true;
+            })
         },
         handleClick() {
             switch (this.activeName) {
-                    case '1':
-                        this.getunhandledTask()
-                        break;
-                    case '2':
-                        this.getAttentionTask()
-                        break;
-                    case '3':
-                        this.getHunTableData()
-                        break;
-                    case '4':
-                        this.getIssuedItems()
-                        break;
-                    case '5':
-                        this.getRecycleBinItems()
-                        break;
-                
-                    default:
-                        break;
+                case '1':
+                    this.getunhandledTask();
+                    break;
+                case '2':
+                    this.getAttentionTask();
+                    break;
+                case '3':
+                    this.getHunTableData();
+                    break;
+                case '4':
+                    this.getIssuedItems();
+                    break;
+                case '5':
+                    this.getRecycleBinItems();
+                    break;
+                default:
+                    break;
             }
-      },
-      //待办事项
-      getunhandledTask(){
-          let data={
+        },
+        //待办事项
+        getunhandledTask(){
+            let data={
                 infosBeginNum: 1,
                 infosEndNum: 10,
                 userId:localStorage.getItem('ms_userId')
-          }
-           this.$api.processSet.getunhandledTask(data).then(res=>{
-                this.getunhandledTaskList=[];
-                this.getunhandledTaskList = res.data.data.rows; 
-                console.log(this.getunhandledTaskList);
+            }
+            this.$api.processSet.getunhandledTask(data).then(res=>{
+                let unhandledTaskList=[];
+                unhandledTaskList = res.data.data.rows; 
                 //去未读红点
-                this.getunhandledTaskList.forEach((item, index) => {
-                    let finandata = {};
-                    finandata.selectData = item;
-                    finandata.nametitle = "入库申请申请人审批";
-                    finandata.foid = item.foid;
-                    this.rowWAADataObj = finandata;
-                    this.functionType = item.classId;
+                unhandledTaskList.forEach((item, index) => {
                     let localKey = localStorage.getItem('ms_userId') + "_" + item.foid;
                     item.fisread = "0";
                     if (localStorage.getItem(localKey)){
                         item.fisread = "1";
                     }
                 });
+                this.getunhandledTaskList = unhandledTaskList;
            })
-      },
-       //关注事项
-      getAttentionTask(){
-          let data={
+        },
+        //关注事项
+        getAttentionTask(){
+            let data={
                 infosBeginNum: 1,
                 infosEndNum: 10,
                 userId: localStorage.getItem('ms_userId')
-          }
-           this.$api.processSet.attentionTask(data).then(res=>{
-                this.getAttentionTaskList=[];
-                this.getAttentionTaskList = res.data.data.rows;
-                console.log(this.getAttentionTaskList);
+            }
+            this.$api.processSet.attentionTask(data).then(res=>{
+                let AttentionTaskList=[];
+                AttentionTaskList = res.data.data.rows;
                 //去未读红点
-                this.getAttentionTaskList.forEach((item, index) => {
+                AttentionTaskList.forEach((item, index) => {
                     let localKey = localStorage.getItem('ms_userId') + "_" + item.foid;
                     item.fisread = "0";
                     if (localStorage.getItem(localKey)){
                         item.fisread = "1";
                     }
                 });
-           })
-      },
-       //已办事项
-      getHunTableData(){
-          let data={
+                this.getAttentionTaskList =AttentionTaskList;
+            })
+        },
+        //已办事项
+        getHunTableData(){
+            let data={
                 infosBeginNum: 1,
                 infosEndNum: 10,
                 userId: localStorage.getItem('ms_userId')
-          }
-           this.$api.processSet.handledTask(data).then(res=>{
-                this.getHunTableDataList=[];
-                this.getHunTableDataList = res.data.data.rows;
-                console.log(this.getHunTableDataList);
+            }
+            this.$api.processSet.handledTask(data).then(res=>{
+                let HunTableDataList=[];
+                HunTableDataList = res.data.data.rows;
                 //去未读红点
-                this.getHunTableDataList.forEach((item, index) => {
+                HunTableDataList.forEach((item, index) => {
                     let localKey = localStorage.getItem('ms_userId') + "_" + item.foid;
                     item.fisread = "0";
                     if (localStorage.getItem(localKey)){
                         item.fisread = "1";
                     }
                 });
+                this.getHunTableDataList =HunTableDataList;
            })
-      },
-       //已发事项
-      getIssuedItems(){
-          let data={
+        },
+        //已发事项
+        getIssuedItems(){
+            let data={
                 infosBeginNum: 1,
                 infosEndNum: 10,
                 userId: localStorage.getItem('ms_userId')
-          }
-           this.$api.processSet.sendedTask(data).then(res=>{
-                this.getIssuedItemsList=[];
-                this.getIssuedItemsList = res.data.data.rows;
-                console.log(this.getIssuedItemsList);
+            }
+            this.$api.processSet.sendedTask(data).then(res=>{
+                let IssuedItemsList=[];
+                IssuedItemsList = res.data.data.rows;
                 //去未读红点
-                this.getIssuedItemsList.forEach((item, index) => {
+                IssuedItemsList.forEach((item, index) => {
                     let localKey = localStorage.getItem('ms_userId') + "_" + item.foid;
                     item.fisread = "0";
                     if (localStorage.getItem(localKey)){
                         item.fisread = "1";
                     }
                 });
-           })
-      },
-       //回收站
-      getRecycleBinItems(){
-          let data={
+                this.getIssuedItemsList =IssuedItemsList;
+            })
+        },
+        //回收站
+        getRecycleBinItems(){
+            let data={
                 infosBeginNum: 1,
                 infosEndNum: 10,
                 userId: localStorage.getItem('ms_userId')
-          }
-           this.$api.processSet.getRecycleBinList(data).then(res=>{
-                this.getRecycleBinList=[];
-                this.getRecycleBinList = res.data.data.rows;
-                console.log(this.getRecycleBinList);
+            }
+            this.$api.processSet.getRecycleBinList(data).then(res=>{
+                let RecycleBinList=[];
+                RecycleBinList= res.data.data.rows;
                 //去未读红点
-                this.getRecycleBinList.forEach((item, index) => {
+                RecycleBinList.forEach((item, index) => {
                     let localKey = localStorage.getItem('ms_userId') + "_" + item.foid;
                     item.fisread = "0";
                     if (localStorage.getItem(localKey)){
                         item.fisread = "1";
                     }
                 });
-           })
-      },
-
-      handleClickMail() {
-        switch (this.activeNameMail) {
-            case '1':
-                this.getReceiveMail()
-                break;
-            case '2':
-                this.getDraftMail()
-                break;
-            case '3':
-                this.getSendMail()
-                break;
-            case '4':
-                this.getRecycleMail()
-                break;
-        
-            default:
-                break;
-        }
-      },
-      /**
-     * 获取收件箱信息
-     */
-       getReceiveMail(){
-           let data ={
+                this.getRecycleBinList=RecycleBinList;
+            })
+        },
+        handleClickMail() {
+            switch (this.activeNameMail) {
+                case '1':
+                    this.getReceiveMail();
+                    break;
+                case '2':
+                    this.getDraftMail();
+                    break;
+                case '3':
+                    this.getSendMail();
+                    break;
+                case '4':
+                    this.getRecycleMail();
+                    break;
+                default:
+                    break;
+            }
+        },
+        //获取收件箱信息
+        getReceiveMail(){
+            let data ={
                 //owner:"BFPID000000LSN000E",
                 //owner: localStorage.getItem('ms_userId'),
                 owner: localStorage.getItem('ms_staffId'),
                 page: 1,
                 size: 10
-           }
-        this.$api.insideMail.getReceiveMail(data).then(res=>{
-            this.getReceiveMailList=[];
-            this.getReceiveMailList = res.data.data.rows
-            console.log( this.getReceiveMailList)
-        })
-       },
-    //    草稿箱
-    getDraftMail(){
-        let data ={
+            }
+            this.$api.insideMail.getReceiveMail(data).then(res=>{
+                this.getReceiveMailList = res.data.data.rows;
+            })
+        },
+        //草稿箱
+        getDraftMail(){
+            let data ={
                 //owner: localStorage.getItem('ms_userId'),
                 owner: localStorage.getItem('ms_staffId'),
                 //owner:"BFPID000000LSN000E",
                 page: 1,
                 size: 10
-           }
-        this.$api.insideMail.getDraftMail(data).then(res=>{
-            this.getDraftMailList=[];
-            this.getDraftMailList = res.data.data.rows
-            console.log( this.getDraftMailList)
-        })
-    },
-     //    发件箱
-    getSendMail(){
-        let data ={
+            }
+            this.$api.insideMail.getDraftMail(data).then(res=>{
+                this.getDraftMailList = res.data.data.rows;
+            })
+        },
+        //发件箱
+        getSendMail(){
+            let data ={
                 //owner: localStorage.getItem('ms_userId'),
                 owner: localStorage.getItem('ms_staffId'),
                 //owner:"BFPID000000LSN000E",
                 page: 1,
                 size: 10
-           }
-        this.$api.insideMail.getSendMail(data).then(res=>{
-            this.getSendMailList=[];
-            this.getSendMailList = res.data.data.rows
-            console.log( this.getSendMailList)
-        })
-    },
-     //    回收站
-    getRecycleMail(){
-        let data ={
+            }
+            this.$api.insideMail.getSendMail(data).then(res=>{
+                this.getSendMailList = res.data.data.rows;
+            })
+        },
+        //回收站
+        getRecycleMail(){
+            let data ={
                 //owner: localStorage.getItem('ms_userId'),
                 owner: localStorage.getItem('ms_staffId'),
                 //owner:"BFPID000000LSN000E",
                 page: 1,
                 size: 10
-           }
-        this.$api.insideMail.getRecycleMail(data).then(res=>{
-            this.getRecycleMailList=[];
-            this.getRecycleMailList = res.data.data.rows
-            console.log( this.getRecycleMailList)
-        })
-    },
+            }
+            this.$api.insideMail.getRecycleMail(data).then(res=>{
+                this.getRecycleMailList = res.data.data.rows
+            })
+        },
         toWebsite() {
-      window.open("http://www.fujiagroup.com/");
-    },
-    toTel() {
-      window.open("http://192.168.85.96:8092/file/txl.htm");
-    },
-    },
+            window.open("http://www.fujiagroup.com/");
+        },
+        toTel() {
+            window.open("http://192.168.85.96:8092/file/txl.html");
+        },
+    }
 }
 </script>
 <style lang="scss" scoped>
@@ -765,13 +755,5 @@ export default {
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
-}
-.dialog-content {
-  overflow-y:auto;
-  overflow-x:auto;
-}
-
-.dialog-h5 >>> img,p,span {
-  width: 100%;
 }
 </style>

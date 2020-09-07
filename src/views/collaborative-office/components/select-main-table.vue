@@ -3,7 +3,7 @@
 		<el-card class="box-card">
 			<el-row :gutter="24">
 				<el-col :span="14">
-					<el-form label-width="10px" :model="formInline" class="demo-form-inline">
+					<el-form label-width="10px" :model="formInline">
 						<el-row>
 							<el-col :span="6">
 								<el-form-item>
@@ -13,7 +13,7 @@
 									</el-select>
 								</el-form-item>
 							</el-col>
-							<el-col :span="6">
+							<el-col :span="6" >
 								<el-form-item>
 									<el-input clearable v-model="selectData"></el-input>
 								</el-form-item>
@@ -56,6 +56,8 @@
 		},
 		props: {
 			show: String,
+			status: String,
+			company:Object
 		},
 		data() {
 			return {
@@ -78,6 +80,8 @@
 					page: 1,
 					size: 10
 				},
+				companyName:{},
+				CompanyData: JSON.parse(localStorage.getItem('CompanyData')),
 				currentTotal: 0,
 				tableData: [],
 				rowClickId: "",
@@ -90,6 +94,9 @@
 			}
 		},
 		created() {
+			if(this.company){
+				this.companyName=this.company;
+			}
 			this.toSelect()
 		},
 		methods: {
@@ -182,6 +189,12 @@
 			toSelect() {
 				if(typeof(this.toSelectData[this.selectCon]) != "undefined") {
 					this.toSelectData[this.selectCon] = this.selectData
+				}
+				if(this.companyName){
+					this.toSelectData.company=this.companyName.id;
+				}
+				if(this.status){
+					this.toSelectData.status=this.status;
 				}
 				this.$api.collaborativeOffice.findWorkItemTempPage(this.toSelectData).then(data => {
 					this.tableData = data.data.data.rows

@@ -142,7 +142,7 @@
 		},
 		watch: {
 			$route (to) {
-				if(to.name ==='insideMailCommon'){
+				if(to.name ==='insideMailCommon' || to.name ==='todolist'){
 					this.showFig = false;
 				}
 			}

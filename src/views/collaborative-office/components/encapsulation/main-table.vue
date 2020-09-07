@@ -5,14 +5,14 @@
 				<el-row>
 					<el-col :span="6">
 						<el-form-item prop="name">
-							<el-input clearable v-model="formInline.name" placeholder="主表模板名称"></el-input>
+							<el-input clearable v-model="formInline.name" placeholder="主表名称"></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :span="10">
 						<el-form-item>
 							<el-button type="primary" @click="toSelect()">搜索</el-button>
 							<el-button type="primary" plain @click="$refs.formInline.resetFields();showFig == 2 ? '' : clear();">重置</el-button>
-							<el-button v-if="showFig == 2" type="primary" plain @click="getAll()">全部</el-button>
+							<el-button v-if="showFig == 2" type="primary" plain @click="getAll('formInline')">全部</el-button>
 							<el-button v-if="showFig == 2" type="primary" plain @click="getConList()">已选中</el-button>
 						</el-form-item>
 					</el-col>
@@ -26,9 +26,9 @@
 			</el-form>
 			<vxe-table border ref="multipleTable" align="center" size="small" :highlight-current-row="showFig != 2" @cell-click="clickRow" height="700" :data="tableData">
 				<vxe-table-column v-if="showFig == 2" type="checkbox" width="60"></vxe-table-column>
-				<vxe-table-column field="code" title="主表模板编码"></vxe-table-column>
-				<vxe-table-column field="name" title="主表模板名称"></vxe-table-column>
-				<vxe-table-column field="workItemTypeName" title="主表模板分类"></vxe-table-column>
+				<vxe-table-column field="code" title="主表编码"></vxe-table-column>
+				<vxe-table-column field="name" title="主表名称"></vxe-table-column>
+				<vxe-table-column field="workItemTypeName" title="主表分类"></vxe-table-column>
 				<vxe-table-column field="remark" title="描述"></vxe-table-column>
 			</vxe-table>
 		</el-card>
@@ -43,7 +43,8 @@
 		data() {
 			return {
 				formInline: {
-					name: ''
+					name: '',
+                    status: 3,
 				},
 				tableData: [],
 				selectCon: "",
@@ -57,16 +58,22 @@
 			this.toSelect()
 		},
 		methods: {
-			getAll() {
-				var list = JSON.parse(JSON.stringify(this.$refs.multipleTable.getCheckboxRecords()))
-				this.tableData = JSON.parse(JSON.stringify(this.conList))
-				this.tableData.forEach((item, index) => {
-					list.forEach(val => {
-						if(val.id == item.id) {
-							this.$refs.multipleTable.toggleCheckboxRow(this.tableData[index]);
-						}
-					})
+			getAll(formInline) {
+				this.$refs[formInline].resetFields();
+				this.$api.collaborativeOffice.apiUrl("workItemTemp/findByParams", this.formInline).then(data => {
+					this.conList = data.data.data
+					this.tableData = JSON.parse(JSON.stringify(this.conList))
 				})
+
+				// var list = JSON.parse(JSON.stringify(this.$refs.multipleTable.getCheckboxRecords()))
+				// this.tableData = JSON.parse(JSON.stringify(this.conList))
+				// this.tableData.forEach((item, index) => {
+				// 	list.forEach(val => {
+				// 		if(val.id == item.id) {
+				// 			this.$refs.multipleTable.toggleCheckboxRow(this.tableData[index]);
+				// 		}
+				// 	})
+				// })
 			},
 			getConList() {
 				this.tableData = []
@@ -156,7 +163,7 @@
 		background-color: rgb(148, 185, 205);
 		color: white;
 	}
-	
+
 	.box-card:first-child {
 		margin-bottom: 16px;
 	}
