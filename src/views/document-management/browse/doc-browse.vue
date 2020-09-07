@@ -139,7 +139,16 @@ export default {
 
             ],
             tableData:[],
-            treeData:[],
+            treeData:[
+              {
+                foid : '0', //选中树节点时，判断需要foid,所以给个
+                fcode : '000',
+                fname : '文档类别',
+                forder : 1,
+                fisportalshow : '0',
+                children : []
+              }
+            ],
             firstnode:[],
             multipleSelection:[],
             defaultProps: {
@@ -278,7 +287,7 @@ export default {
                 let responsevalue = response;
                 if (responsevalue) {
                     let returndata = responsevalue.data;
-                    this.treeData = eval('(' + responsevalue.data.data + ')');
+                    this.treeData[0].children = eval('(' + responsevalue.data.data + ')');
                 } else {
                     this.$message.success('数据库没有该条数据!');
                 }

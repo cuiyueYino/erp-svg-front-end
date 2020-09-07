@@ -133,7 +133,16 @@ export default {
                 },
             ],
             tableData:[],
-            treeData:[],
+            treeData:[
+              {
+                foid : '0', //选中树节点时，判断需要foid,所以给个
+                fcode : '000',
+                fname : '文档类别',
+                forder : 1,
+                fisportalshow : '0',
+                children : []
+              }
+            ],
             firstnode:[],
             multipleSelection:[],
             defaultProps: {
@@ -244,6 +253,7 @@ export default {
         },
         //新增文档类别维护
         createDocumentCategory(){
+          debugger;
             //校验当前是否为2级菜单
             if(this.documentLevel == 2){
                 this.$message.error("不可增加三级菜单!");
@@ -348,7 +358,7 @@ export default {
                 let responsevalue = response;
                 if (responsevalue) {
                     let returndata = responsevalue.data;
-                    this.treeData = eval('(' + responsevalue.data.data + ')');
+                    this.treeData[0].children = eval('(' + responsevalue.data.data + ')');
                 } else {
                     this.$message.success('数据库没有该条数据!');
                 }
