@@ -18,43 +18,52 @@
                 </el-col>
                 <el-col :span="18" :offset="1">
                     <el-card class="box-card">
-                        <el-row :gutter="24">
-                            <el-col :span="8">
-                                <el-form :inline="true"  class="demo-form-inline">
-                                    <el-col :span="8">
-                                        <el-select v-model="formInline.document" @change="selectChange" placeholder="-请选择-" clearable>
-                                            <el-option
-                                                v-for="item in documentData"
-                                                :key="item.value"
-                                                :label="item.label"
-                                                :value="item.value"
-                                            ></el-option>
-                                        </el-select>
-                                    </el-col>
-                                    <el-col :span="8">
-                                        <el-input v-model="input" placeholder="请输入内容" v-if="false"></el-input>
-                                        <el-date-picker
-                                          v-if="true"
-                                          clearable
-                                          v-model="input"
-                                          value-format="yyyy-MM-dd HH:mm"
-                                          type="date"
-                                          placeholder="选择日期"
-                                        ></el-date-picker>
-                                    </el-col>
-                                    <el-col :span="8">
-                                        <el-button type="primary" plain @click="findData">查询</el-button>
-                                    </el-col>
-                                </el-form>
+                        <el-row :gutter="14">
+                            <el-col :span="4">
+                                <el-select v-model="formInline.document" @change="selectChange" placeholder="-请选择-" clearable>
+                                    <el-option
+                                        v-for="item in documentData"
+                                        :key="item.value"
+                                        :label="item.label"
+                                        :value="item.value"
+                                    ></el-option>
+                                </el-select>
                             </el-col>
-                            <el-col :span="16">
-                                <el-button type="success" icon="el-icon-plus" plain @click="createDocumentCategory">新建</el-button>
-                                <el-button type="success" icon="el-icon-edit" plain @click="editDocumentCategory()" >修改</el-button>
-                                <el-button type="primary" icon="el-icon-top" plain @click="operateDocumentCategory(1)">置顶</el-button>
-                                <el-button type="primary" icon="el-icon-bottom" plain @click="operateDocumentCategory(2)">取消置顶</el-button>
-                                <el-button type="primary" icon="el-icon-star-on" plain @click="operateDocumentCategory(3)">发布</el-button>
-                                <el-button type="primary" icon="el-icon-star-off" plain @click="operateDocumentCategory(4)">取消发布</el-button>
-                                <el-button type="primary" icon="el-icon-notebook-2" plain @click="showDocumentCategory">查看</el-button>
+                            <el-col :span="5">
+                              <el-input v-model="input" placeholder="请输入内容" v-if="isInput"></el-input>
+                            </el-col>
+                            <el-col :span="5">
+                                <el-date-picker
+                                  v-if="isDate"
+                                  clearable
+                                  v-model="beginDate"
+                                  type="date"
+                                  placeholder="选择开始日期"
+                                ></el-date-picker>
+                            </el-col>
+                            <el-col :span="5">
+                              <el-date-picker
+                                v-if="isDate"
+                                clearable
+                                v-model="endDate"
+                                type="date"
+                                placeholder="选择结束日期"
+                              ></el-date-picker>
+                            </el-col>
+                            <el-col :span="1">
+                                <el-button type="primary" plain @click="findData">查询</el-button>
+                            </el-col>
+                        </el-row>
+
+                        <el-row :gutter="14">
+                            <el-col :span="16" style="margin-top: 20px;">
+                              <el-button type="success" icon="el-icon-plus" plain @click="createDocumentCategory">新建</el-button>
+                              <el-button type="success" icon="el-icon-edit" plain @click="editDocumentCategory()" >修改</el-button>
+                              <el-button type="primary" icon="el-icon-top" plain @click="operateDocumentCategory(1)">置顶</el-button>
+                              <el-button type="primary" icon="el-icon-bottom" plain @click="operateDocumentCategory(2)">取消置顶</el-button>
+                              <el-button type="primary" icon="el-icon-star-on" plain @click="operateDocumentCategory(3)">发布</el-button>
+                              <el-button type="primary" icon="el-icon-star-off" plain @click="operateDocumentCategory(4)">取消发布</el-button>
+                              <el-button type="primary" icon="el-icon-notebook-2" plain @click="showDocumentCategory">查看</el-button>
                             </el-col>
                         </el-row>
                     </el-card>
@@ -103,6 +112,10 @@ export default {
     inject: ['reload'],
     data(){
         return{
+            isInput: true,
+            isDate:false,
+            beginDate:'',
+            endDate:'',
             flag: '',
             documentLevel: '',
             documentFpid:'',
@@ -176,6 +189,7 @@ export default {
     methods:{
         //查询按钮
         findData(){
+          debugger;
             let field = this.formInline.document;
             let fromdata={};
             fromdata.page=this.pageNum;
@@ -184,10 +198,9 @@ export default {
                 fromdata.fcode=this.input;
             } else if ("fname" == field){
                 fromdata.fname=this.input;
-            } else if ("fbegintime" == field){
-                fromdata.fbegintime = this.input;
-            } else if ("fendtime" == field){
-                fromdata.fendtime=this.input;
+            } else if ("fcreatetime" == field){
+                fromdata.fbegintime = this.beginDate;
+                fromdata.fendtime=this.endDate;
             } else if ("fdescription" == field){
                 fromdata.fdescription=this.input;
             } else if ("fdocstatus" == field){
@@ -198,6 +211,14 @@ export default {
         //下拉框改变
         selectChange(data){
             this.formInline.document=data;
+            if(data == 'fcreatetime'){
+                this.isInput = false;
+                this.isDate = true;
+            } else {
+                this.isInput = true;
+                this.isDate = false;
+            }
+
         },
         //删除文档管理
         // removeDocumentCategory(){
