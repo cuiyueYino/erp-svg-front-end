@@ -163,6 +163,7 @@
 				})
 			},
 			workItemAuthRole() {
+				// debugger;
 				if(typeof(this.roleCon.id) == "undefined" || this.roleCon.id == "") {
 					this.goOut("请选择数据")
 					return
