@@ -5,6 +5,7 @@
                 <el-card class="box-card">
                     <span class="tab-title">流程中心</span>
                     <span class="tab-title-tips">Workflow</span>
+                    <span class="tab-title-more-tips" @click="toOaSER('Workflow')">more</span>
                     <el-divider></el-divider>
                     <el-tabs v-model="activeName" @tab-click="handleClick">
                         <el-tab-pane label="待办事项" name="1">
@@ -92,7 +93,7 @@
                 <el-card class="box-card">
                     <span class="tab-title">我的邮件</span>
                     <span class="tab-title-tips">Mail</span>
-                    <span class="tab-title-more-tips" @click="toOaSER">more</span>
+                    <span class="tab-title-more-tips" @click="toOaSER('Mail')">more</span>
                     <el-divider></el-divider>
                     <el-tabs v-model="activeNameMail" @tab-click="handleClickMail">
                         <el-tab-pane label="收件箱" name="1">
@@ -296,7 +297,7 @@ export default {
         
     },
     methods:{
-        toOaSER() {
+        toOaSER(ValStr) {
             sessionStorage.setItem("oaMenu", false);
             //根据token查询登陆人的信息并存入缓存
             //通过用户ID查询菜单
@@ -305,19 +306,26 @@ export default {
             }).then(data2 => {
                 //菜单放入本地缓存,并跳转首页
                 sessionStorage.setItem("menuList", JSON.stringify(data2.data.data));
-                this.$parent.show()
-                this.$router.push({
-                    name: "insideMailCommon"
-                });
-            }) //获取员工树信息
-            this.getStaffTreeList()
+                //获取员工树信息
+                this.getStaffTreeList(ValStr)
+            }) 
         },
         //登录时获取员工树信息
-        getStaffTreeList() {
+        getStaffTreeList(ValStr) {
             this.$api.confMangement.getStaffTreeList({}).then(res => {
                 let resData = res.data.data;
                 let resDataArr = eval("(" + resData + ")");
                 localStorage.setItem('conf_staffTree', JSON.stringify(resDataArr));
+                this.$parent.show()
+                if(ValStr=='Workflow'){
+                    this.$router.push({
+                        name: "todolist"
+                    }); 
+                }else{
+                    this.$router.push({
+                        name: "insideMailCommon"
+                    });
+                }
             })
         },
         changeTabs(tab){

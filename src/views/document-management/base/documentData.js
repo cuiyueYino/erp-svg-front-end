@@ -10,8 +10,20 @@ class documentData {
                 label: '名称'
             },
             {
+                value: 'fname',
+                label: '创建人'
+            },
+            {
+                value: 'fname',
+                label: '创建时间'
+            },
+            {
                 value: 'fdescription',
                 label: '描述'
+            },
+            {
+                value: 'fdescription',
+                label: '状态'
             }
         ],
         this.docAuthority = [
@@ -27,11 +39,11 @@ class documentData {
         this.docRoleAuth = [
             {
                 value: 'code',
-                label: '编码'
+                label: '角色编码'
             },
             {
                 value: 'name',
-                label: '名称'
+                label: '角色名称'
             },
             {
                 value: 'companyName',
