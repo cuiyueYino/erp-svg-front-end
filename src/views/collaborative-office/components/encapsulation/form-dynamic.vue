@@ -42,7 +42,7 @@
 							<!-- 浏览框 -->
 							<a @click="toNew(ruleForm[item.field])" v-if="dis == '1' && item.toSelect.id == '7'" href="javascript:void(0)">{{ruleForm[item.field+'_NameShow']}}</a>
 							<el-input v-else style="width: 100%;" v-model="ruleForm[item.field+'_NameShow']" disabled>
-								<el-button @click="findDialogVisible(item)" slot="append" icon="el-icon-search"></el-button>
+								<el-button @click="findDialogVisible(item)" slot="append"  icon="el-icon-search"></el-button>
 							</el-input>
 						</el-form-item>
 						<el-form-item v-else :label="item.fieldName" :prop="item.field">
@@ -600,7 +600,7 @@
 							})
 							//存入值
 							this.$set(this.ruleForm, listChild.colList[i2].field, conNow.id)
-							//							this.$set(this.ruleForm, listChild.colList[i2].field + "_NameShow", conNow.name)
+							this.$set(this.ruleForm, listChild.colList[i2].field + "_NameShow", conNow.name)
 						}
 					}
 				}
