@@ -392,8 +392,10 @@ export default {
             let foid ='';
             data.fpid = this.rowNMMDataObj.fpid;
             let formDataA =data;
-            let creator = localStorage.getItem('ms_userId');
-            formDataA.fcreator = creator;
+            if (this.rowNMMDataObj.NewOrEditFlag==="NEW"){
+                let creator = localStorage.getItem('ms_userId');
+                formDataA.fcreator = creator;
+            }            
             formDataA.fistop = '2';
             if(type == 1){//提交
               formDataA.fdocstatus = '2';
@@ -436,8 +438,10 @@ export default {
               return;
             }
             let formDataA =data;
-            let creator = localStorage.getItem('ms_userId');
-            formDataA.fcreator = creator;
+            if(this.rowNMMDataObj.NewOrEditFlag==="NEW"){
+                let creator = localStorage.getItem('ms_userId');
+                formDataA.fcreator = creator;
+            }
             this.$api.documentManagement.updateDocumentManage(formDataA).then(response => {
                 let responsevalue = response;
                 if (responsevalue.data.data) {
@@ -490,7 +494,6 @@ export default {
         },
         //删除附件
         delFile(){
-            debugger
             let ids = '';
             let list = this.delFileFoids.forEach(element => {
                 ids = ids + '\'' + element +'\','
@@ -555,7 +558,8 @@ export default {
                     this.isShowOperateRecord = false;
                     this.formdata={};
                     this.formdata.flevel=this.rowNMMDataObj.flevel;
-                    this.formdata.fcreator = localStorage.getItem('ms_username');
+                    this.formdata.fcreatorname = localStorage.getItem('ms_username');
+                    this.formdata.fcreator = localStorage.getItem('ms_userId');
                     this.formdata.fcreatetime =new Date() ;
                 } else if (this.rowNMMDataObj.NewOrEditFlag==="EDIT"){
                     let fromdataA={};
