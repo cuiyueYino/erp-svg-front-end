@@ -205,6 +205,8 @@ export default {
                 fromdata.fdescription=this.input;
             } else if ("fdocstatus" == field){
                 fromdata.fdocstatus=this.input;
+            } else if ("fcreator" == field){
+              fromdata.fcreator=this.input;
             }
             this.searchMenutable(fromdata);
         },
