@@ -204,7 +204,7 @@ export default {
                                     fromdata.id=SelectData[0].foid;
                                     this.$api.documentManagement.deleteDocumentCategory(fromdata).then(response => {
                                         let responsevalue = response;
-                                        if (responsevalue.data.data.msg=="success") {
+                                        if (responsevalue.data.code == 0 ) {
                                             this.$message.success('删除成功!');
                                             this.reload();
                                         } else {

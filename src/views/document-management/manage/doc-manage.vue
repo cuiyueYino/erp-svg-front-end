@@ -32,7 +32,15 @@
                                         </el-select>
                                     </el-col>
                                     <el-col :span="8">
-                                        <el-input v-model="input" placeholder="请输入内容"></el-input>
+                                        <el-input v-model="input" placeholder="请输入内容" v-if="false"></el-input>
+                                        <el-date-picker
+                                          v-if="true"
+                                          clearable
+                                          v-model="input"
+                                          value-format="yyyy-MM-dd HH:mm"
+                                          type="date"
+                                          placeholder="选择日期"
+                                        ></el-date-picker>
                                     </el-col>
                                     <el-col :span="8">
                                         <el-button type="primary" plain @click="findData">查询</el-button>
@@ -176,8 +184,14 @@ export default {
                 fromdata.fcode=this.input;
             } else if ("fname" == field){
                 fromdata.fname=this.input;
+            } else if ("fbegintime" == field){
+                fromdata.fbegintime = this.input;
+            } else if ("fendtime" == field){
+                fromdata.fendtime=this.input;
             } else if ("fdescription" == field){
                 fromdata.fdescription=this.input;
+            } else if ("fdocstatus" == field){
+                fromdata.fdocstatus=this.input;
             }
             this.searchMenutable(fromdata);
         },
@@ -268,8 +282,10 @@ export default {
                         finandata.fistop="2";
                     } else if(3 == param){
                         finandata.fdocstatus="3";
+                        finandata.fpublisher=localStorage.getItem('ms_userId');
                     } else if(4 == param){
                         finandata.fdocstatus="2";
+                        finandata.fpublisher=localStorage.getItem('ms_userId');
                     }
                     finandata.foid=SelectData[0].foid;
                     let creator = localStorage.getItem('ms_userId');
@@ -418,13 +434,16 @@ export default {
         // 改变table行样式
         tableRowClassName(){},
         //是否展示dialog弹窗
-        showAddMenu(type){
+        showAddMenu(type,operate){
             if(type === false){
                 this.rowNMMtype = false;
             }else{
                 this.rowNMMtype = true;
             }
+          //弹窗取消或×掉 时不刷新树结构
+          if(operate == 0){
             this.reload();
+          }
         },
         //生成树
         maketree(){

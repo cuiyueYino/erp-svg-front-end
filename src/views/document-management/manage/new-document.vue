@@ -44,7 +44,7 @@
                     </el-row>
                     <el-row>
                         <el-col :span="22">
-                            <el-form-item label="描述">
+                            <el-form-item label="描述"  prop="fdescription">
                                 <el-input type="textarea" v-model="formdata.fdescription" :rows="10" :disabled="isEdit"></el-input>
                             </el-form-item>
                         </el-col>
@@ -194,7 +194,19 @@ export default {
             rules: {
                 fcode:[
                     { required: true, message: '请输入编码', trigger: 'blur' },
-                    { max: 50, message: "编码最大长度 50 字节", trigger: "blur"}
+                    { max: 50, message: "编码最大长度 50 字节", trigger: "blur"},
+                    {
+                      validator: function(rule, value, callback) {
+                        //  校验字母、数字和英文符号的正则
+                        if (/^[a-z_A-Z0-9-\.!@#\$%\\\^&\*\)\(\+=\{\}\[\]\/",'<>~\·`\?:;|]+$/.test(value) == false) {
+                          callback(new Error("仅支持字母、数字和英文符号"));
+                        } else {
+                          //校验通过
+                          callback();
+                        }
+                      },
+                      trigger: "blur"
+                    }
                     ],
                 fname:[
                     { required: true, message: '请输入名称', trigger: 'blur' },
@@ -290,7 +302,7 @@ export default {
         //关闭当前dialog时给父组件传值
         handleClose(){
             this.ShowFinancVisible=false;
-            this.$emit('changeShow',false);
+            this.$emit('changeShow',false,1);
         },
         //submit 校验
         submitForm(formName,type) {
@@ -400,7 +412,7 @@ export default {
                     }
                     this.$message.success(type == 1? '新建成功!': '暂存成功!');
                     this.ShowFinancVisible=false;
-                    this.$emit('changeShow',false);
+                    this.$emit('changeShow',false,0);
                 } else {
                     this.$message.error(responsevalue.data.msg);
                 }
@@ -438,7 +450,7 @@ export default {
                     }
                     this.$message.success('修改成功!');
                     this.ShowFinancVisible=false;
-                    this.$emit('changeShow',false);
+                    this.$emit('changeShow',false,0);
                 } else {
                     this.$message.error(responsevalue.data.msg);
                 }
@@ -558,7 +570,7 @@ export default {
                     fromdataA.foid=this.rowNMMDataObj.foid;
                     fromdataA.from= '2';
                     this.findDocManageById(fromdataA);
-                }              
+                }
             }
         }
     }
