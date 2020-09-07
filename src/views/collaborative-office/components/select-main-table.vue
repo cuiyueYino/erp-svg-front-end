@@ -187,6 +187,9 @@
 			},
 			//搜索
 			toSelect() {
+			    if(this.show==1){
+                    this.toSelectData.status = 3
+                }
 				if(typeof(this.toSelectData[this.selectCon]) != "undefined") {
 					this.toSelectData[this.selectCon] = this.selectData
 				}

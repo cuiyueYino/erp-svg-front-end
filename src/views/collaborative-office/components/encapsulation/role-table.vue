@@ -217,6 +217,11 @@
 	}
 </script>
 
+<style>
+.col--gutter {
+	background: #eee;
+}
+</style>
 <style scoped>
 	>>>.vxe-table--header {
 		background-color: rgb(148, 185, 205);

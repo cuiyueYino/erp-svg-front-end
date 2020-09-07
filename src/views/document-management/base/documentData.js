@@ -10,11 +10,11 @@ class documentData {
                 label: '名称'
             },
             {
-                value: 'fname',
+                value: 'fcreator',
                 label: '创建人'
             },
             {
-                value: 'fname',
+                value: 'fcreatetime',
                 label: '创建时间'
             },
             {
@@ -22,7 +22,7 @@ class documentData {
                 label: '描述'
             },
             {
-                value: 'fdescription',
+                value: 'fdocstatus',
                 label: '状态'
             }
         ],
