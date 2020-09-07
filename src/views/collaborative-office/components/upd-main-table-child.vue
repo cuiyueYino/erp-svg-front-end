@@ -282,6 +282,14 @@
 				tServiceByParamsCon: "",
 				//校验规则-表单
 				rules: {
+					showName: [{
+						required: true,
+						message: '请输入显示名称',
+						trigger: 'change'
+					}, {
+						pattern: /^[a-z_A-Z0-9-\.!@#\$%\\\^&\*\)\(\+=\{\}\[\]\/",'<>~\·`\?:;|]+$/,
+						message: '可输入英文、数字、英文符号，限制长度50字节'
+					}],
 					code: [{
 							required: true,
 							message: '请输入主表分类编码',
