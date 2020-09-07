@@ -12,7 +12,7 @@
 						<el-form-item>
 							<el-button type="primary" @click="toSelect()">搜索</el-button>
 							<el-button type="primary" plain @click="$refs.formInline.resetFields();showFig == 2 ? '' : clear();">重置</el-button>
-							<el-button v-if="showFig == 2" type="primary" plain @click="getAll()">全部</el-button>
+							<el-button v-if="showFig == 2" type="primary" plain @click="getAll('formInline')">全部</el-button>
 							<el-button v-if="showFig == 2" type="primary" plain @click="getConList()">已选中</el-button>
 						</el-form-item>
 					</el-col>
@@ -57,16 +57,22 @@
 			this.toSelect()
 		},
 		methods: {
-			getAll() {
-				var list = JSON.parse(JSON.stringify(this.$refs.multipleTable.getCheckboxRecords()))
-				this.tableData = JSON.parse(JSON.stringify(this.conList))
-				this.tableData.forEach((item, index) => {
-					list.forEach(val => {
-						if(val.id == item.id) {
-							this.$refs.multipleTable.toggleCheckboxRow(this.tableData[index]);
-						}
-					})
+			getAll(formInline) {
+				this.$refs[formInline].resetFields();
+				this.$api.collaborativeOffice.apiUrl("workItemTemp/findByParams", this.formInline).then(data => {
+					this.conList = data.data.data
+					this.tableData = JSON.parse(JSON.stringify(this.conList))
 				})
+
+				// var list = JSON.parse(JSON.stringify(this.$refs.multipleTable.getCheckboxRecords()))
+				// this.tableData = JSON.parse(JSON.stringify(this.conList))
+				// this.tableData.forEach((item, index) => {
+				// 	list.forEach(val => {
+				// 		if(val.id == item.id) {
+				// 			this.$refs.multipleTable.toggleCheckboxRow(this.tableData[index]);
+				// 		}
+				// 	})
+				// })
 			},
 			getConList() {
 				this.tableData = []
