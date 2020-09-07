@@ -42,18 +42,18 @@
 							<!-- 浏览框 -->
 							<a @click="toNew(ruleForm[item.field])" v-if="dis == '1' && item.toSelect.id == '7'" href="javascript:void(0)">{{ruleForm[item.field+'_NameShow']}}</a>
 							<el-input v-else style="width: 100%;" v-model="ruleForm[item.field+'_NameShow']" disabled>
-								<el-button @click="findDialogVisible(item)" slot="append"  icon="el-icon-search"></el-button>
+								<el-button @click="findDialogVisible(item)" v-if="item.edit" slot="append"  icon="el-icon-search"></el-button>
 							</el-input>
 						</el-form-item>
 						<el-form-item v-else :label="item.fieldName" :prop="item.field">
 							<!-- 字符型 / 文本框 / 整型 / 浮点型 -->
 							<el-input @focus="fuwu(item)" v-if="item.fieldTypeName=='character' || item.fieldTypeName=='textType' || item.fieldTypeName=='integers' || item.fieldTypeName=='floatingPoint' && item.show" style="width: 100%;" v-model="ruleForm[item.field]" :disabled="!item.edit" />
 							<!--富文本-->
-							<quill-editor v-if="item.fieldTypeName == 'richText' && item.show" style="width: 100%;" v-model="ruleForm[item.field]" ref="myQuillEditor" :options="editorOption" @blur="onEditorBlur($event)" @focus="onEditorFocus($event)" @change="onEditorChange($event)"></quill-editor>
+							<quill-editor v-if="item.fieldTypeName == 'richText' && item.show" style="width: 100%;" v-model="ruleForm[item.field]" ref="myQuillEditor" :options="editorOption" @blur="onEditorBlur($event)" @focus="onEditorFocus($event,item.edit)" @change="onEditorChange($event)"></quill-editor>
 							<!-- 日期选择器 -->
 							<el-date-picker v-if="item.fieldTypeName == 'dateControl' && item.show" @change="getDate(item)" style="width: 100%;" :disabled="!item.edit" v-model="ruleForm[item.field]" type="date" value-format="yyyy-MM-dd" placeholder="选择日期" />
 							<!--时间控件-->
-							<el-date-picker value-format="yyyy-MM-dd HH:mm:ss" format="yyyy-MM-dd HH:mm:ss" type="datetime" v-if="item.fieldTypeName == 'timeControl' && item.show" style="width: 100%;" v-model="ruleForm[item.field]"></el-date-picker>
+							<el-date-picker value-format="yyyy-MM-dd HH:mm:ss" format="yyyy-MM-dd HH:mm:ss" type="datetime" :disabled="!item.edit" v-if="item.fieldTypeName == 'timeControl' && item.show" style="width: 100%;" v-model="ruleForm[item.field]"></el-date-picker>
 							<!-- 下拉框 -->
 							<el-select v-if="item.fieldTypeName == 'select' && item.show" style="width: 100%;" v-model="ruleForm[item.field]" clearable :disabled="!item.edit" :placeholder="item.placeholder">
 								<el-option v-for="itemSelect in item.resList" :key="itemSelect.id" :label="itemSelect.name" :value="itemSelect.id" />
@@ -762,8 +762,9 @@
 			},
 			//富文本事件
 			onEditorBlur() {}, // 失去焦点事件
-			onEditorFocus(event) {
-				if(this.formDisabled == true) {
+			onEditorFocus(event,edit) {
+				//if(this.formDisabled == true) {
+				if(!edit) {
 					event.enable(false);
 				} else {
 					event.enable(true);
