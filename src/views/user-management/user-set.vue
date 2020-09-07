@@ -485,9 +485,11 @@
 				this.$api.jobUserManagement.addPeopleData(data).then(res => {
 					console.log(res);
 					if(res.data.code == 0) {
-						this.form.staffId = res.data.data.toid;
-						this.form.fstaff = res.data.data.tname;
-						this.form.departmentname = res.data.data.tdepartmentname;
+						if(res.data.data != null) {
+							this.form.staffId = res.data.data.toid;
+							this.form.fstaff = res.data.data.tname;
+							this.form.departmentname = res.data.data.tdepartmentname;
+						}
 
 					} else {
 							this.$message.error(res.data.msg);
@@ -632,6 +634,7 @@
 							
 							this.form.fcode=this.form.fcodeStr;
 							this.form.fpassword=this.form.fpasswordStr;
+							this.form.fstaff = "";
 							this.$api.jobUserManagement.updateUserTableData(this.form).then(res => {
 									if(res.data.code == 0) {
 										this.dialogFormVisible = false;
@@ -776,6 +779,7 @@
 					}
 					this.$api.jobUserManagement.addUserData(data).then(res => {
 							if(res.data.code == 0) {
+								
 								this.tableData2 = []
 								this.form = res.data.data;
 								this.form.fcodeStr=this.form.fcode;
