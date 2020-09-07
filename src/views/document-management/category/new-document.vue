@@ -27,7 +27,7 @@
                     <el-row>
                         <el-col :span="10">
                             <el-form-item label="文档类别级别">
-                                <el-input v-model="formdata.flevel"  :disabled="true" ></el-input>
+                                <el-input v-model="formdata.flevelName"  :disabled="true" ></el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="10" :offset="2">
@@ -188,9 +188,9 @@ export default {
                     let returndata = responsevalue.data;
                     let tableDataArr=returndata.data;
                     if(1 == tableDataArr.flevel){
-                        tableDataArr.flevel = '一级';
+                        tableDataArr.flevelName = '一级';
                     } else if(2 == tableDataArr.flevel){
-                        tableDataArr.flevel = '二级';
+                        tableDataArr.flevelName = '二级';
                     }
                     if('是' == tableDataArr.fisportalshow ){
                         tableDataArr.fisportalshow = true;
@@ -211,9 +211,9 @@ export default {
             } else {
                 data.fisportalshow = '0';
             }
-            if('一级' == data.flevel){
+            if('一级' == data.flevelName){
                 data.flevel = 1;
-            } else if('二级' == data.flevel) {
+            } else if('二级' == data.flevelName) {
                 data.flevel = 2;
             }
             data.fpid = this.rowNMMDataObj.fpid;
@@ -223,9 +223,9 @@ export default {
                 if(responsevalue.data.code != 0){
                     this.$message.success(responsevalue.data.msg);
                     debugger;
-                    if( 1 == data.flevel){
+                    if( 1 == data.flevelName){
                       data.flevel = '一级';
-                    } else if(2 == data.flevel) {
+                    } else if(2 == data.flevelName) {
                       data.flevel = '二级';
                     }
                 } else {
@@ -248,9 +248,9 @@ export default {
             } else {
                 data.fisportalshow = '0';
             }
-            if('一级' == data.flevel){
+            if('一级' == data.flevelName){
                 data.flevel = 1;
-            } else if('二级' == data.flevel) {
+            } else if('二级' == data.flevelName) {
                 data.flevel = 2;
             }
             this.$api.documentManagement.updateDocumentCategory(formDataA).then(response => {
