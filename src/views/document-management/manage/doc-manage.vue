@@ -243,12 +243,16 @@ export default {
         },
         //新增文档管理
         createDocumentCategory(){
-            this.rowNMMtype = true;
-            let finandata={};
-            finandata.fpid=this.documentFpid;
-            finandata.nametitle="文档管理新增";
-            finandata.NewOrEditFlag="NEW";
-            this.rowNMMDataObj=finandata;
+            if(this.documentFpid && this.documentFpid != '1'){
+                this.rowNMMtype = true;
+                let finandata={};
+                finandata.fpid=this.documentFpid;
+                finandata.nametitle="文档管理新增";
+                finandata.NewOrEditFlag="NEW";
+                this.rowNMMDataObj=finandata;
+            } else {
+                this.$message.error("请选择一个文档类别!");
+            }
         },
         //修改文档管理
         editDocumentCategory(){
