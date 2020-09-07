@@ -424,15 +424,15 @@
 			//弹出框确定
 			getDialogVisible() {
 				var dataBack = this.$refs.child.getDataBack()
+				var label = ""
+				var value = ""
 				if(!this.dialogVisibleCon.choice) {
 					if(dataBack.length > 1) {
 						this.goOut("请单选")
 						return
 					}
-				} else {
-					var label = ""
-					var value = ""
-					dataBack.forEach((item, index) => {
+				}
+				dataBack.forEach((item, index) => {
 						if(index == dataBack.length - 1) {
 							if(this.showCon == "personnel") {
 								label = label + item.tname
@@ -451,7 +451,6 @@
 							}
 						}
 					})
-				}
 				//获取子组件返回的id和name
 				this.$set(this.tableRowCon, this.dialogVisibleCon.field + '_NameShow', label)
 				this.$set(this.tableRowCon, this.dialogVisibleCon.field, value)
