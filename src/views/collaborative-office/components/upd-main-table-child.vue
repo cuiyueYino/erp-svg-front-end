@@ -666,21 +666,28 @@
 				})
 				//列序按照填写排序
 				var index = 0
-				cur.sort((a, b) => {
-					a.colList.sort((a1, b1) => {
-						//return a1.orderNum - b1.orderNum
-						return Number(a1.orderNum) - Number(b1.orderNum)
-					})
-					if(index == 0) {
-						b.colList.sort((a1, b1) => {
+				if(cur.length > 1){
+					cur.sort((a, b) => {
+						a.colList.sort((a1, b1) => {
 							//return a1.orderNum - b1.orderNum
 							return Number(a1.orderNum) - Number(b1.orderNum)
 						})
-						index++
-					}
-					//return a.showNum - b.showNum
-					return Number(a.showNum) - Number(b.showNum)
-				})
+						if(index == 0) {
+							b.colList.sort((a1, b1) => {
+								//return a1.orderNum - b1.orderNum
+								return Number(a1.orderNum) - Number(b1.orderNum)
+							})
+							index++
+						}
+						//return a.showNum - b.showNum
+						return Number(a.showNum) - Number(b.showNum)
+					})
+				}else{
+					cur[0].colList.sort((a1, b1) => {
+						//return a1.orderNum - b1.orderNum
+						return Number(a1.orderNum) - Number(b1.orderNum)
+					})
+				}
 				this.conData.top.rowList = cur
 			},
 			//添加校验（显示的值的校验)
@@ -818,21 +825,28 @@
 							})
 							//列序按照填写排序
 							var index = 0
-							cur.sort((a, b) => {
-								a.colList.sort((a1, b1) => {
-									//return a1.orderNum - b1.orderNum
-									return Number(a1.orderNum) - Number(b1.orderNum)
-								})
-								if(index == 0) {
-									b.colList.sort((a1, b1) => {
+							if(cur.length > 1){
+								cur.sort((a, b) => {
+									a.colList.sort((a1, b1) => {
 										//return a1.orderNum - b1.orderNum
 										return Number(a1.orderNum) - Number(b1.orderNum)
 									})
-									index++
-								}
-								//return a.showNum - b.showNum
-								return Number(a.showNum) - Number(b.showNum)
-							})
+									if(index == 0) {
+										b.colList.sort((a1, b1) => {
+											//return a1.orderNum - b1.orderNum
+											return Number(a1.orderNum) - Number(b1.orderNum)
+										})
+										index++
+									}
+									//return a.showNum - b.showNum
+									return Number(a.showNum) - Number(b.showNum)
+								})
+							}else{
+								cur[0].colList.sort((a1, b1) => {
+									//return a1.orderNum - b1.orderNum
+									return Number(a1.orderNum) - Number(b1.orderNum)
+								})
+							}
 							if(this.conData.bottom[0].type == 2) {
 								this.$set(this.conData.bottom[0], "conList", [])
 								cur.forEach(val1 => {
