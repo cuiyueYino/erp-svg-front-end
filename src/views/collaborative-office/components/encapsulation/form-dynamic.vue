@@ -704,12 +704,6 @@
 			findDialogVisible(row) {
 				//取到中间值
 				this.dialogVisibleCon = row
-				//工作流打开一个特殊的弹框（就数它事多）
-				if(row.toSelect.id == 7) {
-					this.$refs.childWork.dialogVisible = true
-				} else {
-					this.dialogVisible = true
-				}
 				/*
 				 * 判断浏览框内显示的内容，并放入数据（公司，部门，职位在上层已经查询出来，直接放里面就行，
 				 * 其他数据需要接口查询后才能显示
@@ -739,15 +733,27 @@
 					case "4":
 						this.showCon = "personnel"
 						this.titleShow = "人员"
+						//数据回显(保证选中后再次打开数据依旧被选中)下面两条一样
+						typeof(this.ruleForm[row.field]) != "undefined" ? this.$set(this.dataCon, "echo", this.ruleForm[row.field].split(',')): this.$set(this.dataCon, "echo", [])
 						break;
 					case "5":
 						this.showCon = "user"
 						this.titleShow = "用户"
+						//数据回显(保证选中后再次打开数据依旧被选中)下面两条一样
+						typeof(this.ruleForm[row.field]) != "undefined" ? this.$set(this.dataCon, "echo", this.ruleForm[row.field].split(',')): this.$set(this.dataCon, "echo", [])
 						break;
 					case "6":
 						this.showCon = "jobSet"
 						this.titleShow = "职务"
+						//数据回显(保证选中后再次打开数据依旧被选中)下面两条一样
+						typeof(this.ruleForm[row.field]) != "undefined" ? this.$set(this.dataCon, "echo", this.ruleForm[row.field].split(',')): this.$set(this.dataCon, "echo", [])
 						break;
+				}
+				//工作流打开一个特殊的弹框（就数它事多）
+				if(row.toSelect.id == 7) {
+					this.$refs.childWork.dialogVisible = true
+				} else {
+					this.dialogVisible = true
 				}
 			},
 			//提交

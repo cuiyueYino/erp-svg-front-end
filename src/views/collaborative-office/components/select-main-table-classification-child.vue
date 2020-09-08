@@ -71,9 +71,11 @@
 		},
 		props: {
 			show: String,
+			company:String,
 		},
 		data() {
 			return {
+				// company:'',
 				statusList: [{
 					id: "1",
 					value: "暂存"
@@ -94,6 +96,7 @@
 					value: "关闭/结清"
 				}],
 				formInline: {
+					company:'',
 					code: "",
 					name: "",
 					remark: "",
@@ -195,6 +198,7 @@
 			},
 			//搜索
 			toSelect() {
+				this.formInline.company = this.company;
 				this.$api.collaborativeOffice.apiUrl("workItemTypeSub/findWorkItemTypeSubPage", this.formInline).then(data => {
 					this.tableData = data.data.data.rows
 					this.currentTotal = data.data.data.total
@@ -205,7 +209,7 @@
 				this.rowClickId = row.id
 				this.rowClick = row
 			},
-		}
+		},
 	}
 </script>
 
