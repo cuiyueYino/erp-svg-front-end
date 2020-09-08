@@ -320,8 +320,14 @@ export default {
                         finandata.fdocstatus="3";
                         finandata.fpublisher=localStorage.getItem('ms_userId');
                     } else if(4 == param){
+                      if(SelectData[0].fdocstatus != "已发布"){
+                        this.$message.error("该文档状态无法取消发布！");
+                        return;
+                      } else {
                         finandata.fdocstatus="2";
                         finandata.fpublisher=localStorage.getItem('ms_userId');
+                      }
+
                     }
                     finandata.foid=SelectData[0].foid;
                     let creator = localStorage.getItem('ms_userId');

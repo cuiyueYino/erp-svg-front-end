@@ -320,7 +320,13 @@ export default {
             let fromDataS={};
             fromDataS=this.formdata;
             if(type == 0){//暂存
-              fromDataS.fdocstatus = '1';
+              debugger;
+              if("暂存"==fromDataS.fdocstatus){
+                fromDataS.fdocstatus = '1';
+              } else {
+                this.$message.error('当前状态不可以暂存!');
+                return;
+              }
             } else if(type == 1){//提交
               fromDataS.fdocstatus = '2';
             }
