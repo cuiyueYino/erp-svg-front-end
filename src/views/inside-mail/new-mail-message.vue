@@ -472,7 +472,7 @@ export default {
                     nameString += staffList[i].fname+",";
                     checkId.push(staffList[i].foid);
                 };
-                nameString += searchFromPersonName;
+                // nameString += searchFromPersonName;
                 if(nameString!=''){
                     nameString = nameString.slice(0,nameString.length-1);
                 }
@@ -490,7 +490,7 @@ export default {
                     nameString += staffList[i].fname+",";
                     checkId.push(staffList[i].foid);
                 };
-                nameString += searchDuplicateName;
+                // nameString += searchDuplicateName;
                 if(nameString!=''){
                     nameString = nameString.slice(0,nameString.length-1);
                 }

@@ -516,15 +516,17 @@
 							var index = 0
 							cur.sort((a, b) => {
 								a.colList.sort((a1, b1) => {
-									return a1.orderNum - b1.orderNum
+									return Number(a1.orderNum) - Number(b1.orderNum)
 								})
 								if(index == 0) {
 									b.colList.sort((a1, b1) => {
-										return a1.orderNum - b1.orderNum
+										return Number(a1.orderNum) - Number(b1.orderNum)
+										//return a1.orderNum - b1.orderNum
 									})
 									index++
 								}
-								return a.showNum - b.showNum
+								//return a.showNum - b.showNum
+								return Number(a.showNum) - Number(b.showNum)
 							})
 							this.conData.top.rowList = cur
 							//打开预览页面
