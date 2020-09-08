@@ -472,8 +472,8 @@ export default {
                 }
             });
         },
-        //附件上传
-        uploadFile(menuCode,voucherId){
+        //附件上传 ：同步上传
+        async uploadFile(menuCode,voucherId){
             if(menuCode==""||menuCode===undefined||menuCode==null){
                 layer.alert("请填写menuCode");
                 return;
@@ -483,13 +483,12 @@ export default {
                 return;
             }
             let creator = localStorage.getItem('ms_userId');
-            var formData = new FormData();
             // formData.append('files', this.uploadFiles);
             let length = this.uploadFiles.length;
             let count = 0;
-          debugger
             for(var i=0; i < length; i++ ){
-                formData.append('file', this.uploadFiles[0]);
+                var formData = new FormData();
+                formData.append('file', this.uploadFiles[i]);
                 formData.append('menuCode',menuCode);
                 if(creator){
                     formData.append('userCode',creator);
@@ -498,7 +497,13 @@ export default {
                 }
                 formData.append('voucherId',voucherId);
                 // this.$api.documentManagement.uploadFileBatch(formData).then((response) => {
-                this.$api.documentManagement.uploadFile(formData).then((response) => {
+                await this.$api.documentManagement.uploadFile(formData).then((response) => {
+                    return new Promise(resolve => {
+                      //返回id和name 用于显示或者存储(服务10不出意外应该是input，无法显示和存储不同，暂时没法解决，只能显示id)
+                      resolve({
+
+                      });
+                    });
                     if(response.data.code == 0 && response.data.data){
                         count++;
                     }
@@ -531,6 +536,7 @@ export default {
                 let responsevalue = response;
                 if (responsevalue.data.data) {
                     let values = responsevalue.data.data;
+                    debugger;
                     let rowObj = {};
                     rowObj.operateFlag ='QUERY';
                     //主表单的操作 //show标志传到附件中，控制 新增/删除 button隐藏

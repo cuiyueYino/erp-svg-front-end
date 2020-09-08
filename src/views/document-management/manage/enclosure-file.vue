@@ -44,7 +44,7 @@
                                     <el-button type="primary" slot="trigger" icon="el-icon-search"  size="mini" ></el-button>
                                 </el-upload>
                             </el-col>
-                            
+
                         </el-row>
                     </template>
                     <!-- <template slot-scope="scope">
@@ -139,7 +139,7 @@ export default {
         }
     },
     mounted(){
-        
+
     },
     methods: {
         //选取图片后自动回调，里面可以获取到文件 //参数形式：imgSaveToUrl(event或file) -- event.raw ：获取到File对象
@@ -199,15 +199,15 @@ export default {
             /*for(var i = 0;i<file.length;i++){
                 //    上传类型判断
                 var imgName = file[i].name;
-                var idx = imgName.lastIndexOf(".");  
+                var idx = imgName.lastIndexOf(".");
                 if (idx != -1){
-                    var ext = imgName.substr(idx+1).toUpperCase();   
-                    ext = ext.toLowerCase( ); 
+                    var ext = imgName.substr(idx+1).toUpperCase();
+                    ext = ext.toLowerCase( );
                     if (ext!='pdf' && ext!='doc' && ext!='docx'){
 
                     }else{
                         this.addArr.push(file[i]);
-                    }   
+                    }
                 }else{
                 }
             }*/
@@ -224,7 +224,7 @@ export default {
             //new一个FileReader实例
             let reader = new FileReader();
             let _this = this;
-            // reader.readAsText(this.file)  //文本读取，默认utf-8，格式 其他格式：reader.readAsText(this.file, "GBK")  
+            // reader.readAsText(this.file)  //文本读取，默认utf-8，格式 其他格式：reader.readAsText(this.file, "GBK")
             reader.readAsDataURL(this.file)  //base 64 读取
             reader.onload=function(e){
                 // 读取结果
@@ -237,7 +237,7 @@ export default {
             console.log(event);
             this.$emit('enclosureFile', event.file);
             });
-            
+
         }
     },
     watch:{
@@ -245,6 +245,7 @@ export default {
         rowDataFileObj(oldVal,newVal){
             if(this.rowDataFileObj.operateFlag==="QUERY"){
                 //父组件传来的附件集合
+              debugger;
                 let attachments = this.rowDataFileObj.values;
                 let flag = true;
                 for(var i= 0;i<attachments.length;i++){
@@ -274,7 +275,7 @@ export default {
                     this.authenStatus = false;
                 }
             }
-            
+
         }
     }
 }
