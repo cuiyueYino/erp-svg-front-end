@@ -81,7 +81,8 @@
 
 			},
 			check() {
-				this.$refs.multipleTable.setAllCheckboxRow(false)
+				this.$refs.multipleTable.setAllCheckboxRow(false);
+				this.tableData = this.roleCon.allData;
 				this.tableData.forEach((item, index) => {
 					for(var i = 0; i < this.roleCon.list.length; i++) {
 						if(this.roleCon.list[i] == item.id) {

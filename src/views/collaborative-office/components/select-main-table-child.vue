@@ -192,7 +192,7 @@
 			},
 			//分页改变
 			pageChange(pageIndex) {
-				this.formInline.page = pageIndex;
+				this.toSelectData.page = pageIndex;
 				this.toSelect()
 			},
 			//搜索
