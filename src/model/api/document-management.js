@@ -11,8 +11,8 @@ const documentManagement = {
 
     //---------------------------------文件类别维护接口-begin--------------------------------------------------------- 
     //获取文件类别组织
-    getDocumentCategoryOrgArch(){
-        return httpReqest.get(baseURI + 'documentcategory/getDocumentCategoryOrgArch');
+    getDocumentCategoryOrgArch(isportalshow){
+        return httpReqest.get(baseURI + 'documentcategory/getDocumentCategoryOrgArch?isportalshow='+isportalshow);
     },
     //查询文件类别:分页
     findDocumentCategoryByPage(params){

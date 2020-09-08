@@ -427,7 +427,8 @@ export default {
         },
         //修改文档管理提交
         saveEditmenu(data,type){
-            if(type == 0 && data.fdocstatus != "暂存") { //暂存
+          debugger;
+            if(type == 0 && data.fdocstatus != "1") { //暂存
               this.$message.error("非暂存态不可以暂存!");
               return;
             }
