@@ -409,7 +409,9 @@
 
 			},
 			handleNodeClick(data) {
+				console.log(data)
 				this.form.fstaff = data.fname;
+				this.form.fname = data.fname;
 				this.form.departmentname = data.fdepartmentName;
 				this.form.fstaffId = data.foid;
 			},
@@ -900,4 +902,5 @@
 		left: 230px;
 		cursor: pointer;
 	}
+
 </style>
