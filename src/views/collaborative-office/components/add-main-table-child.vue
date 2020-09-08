@@ -805,18 +805,18 @@
 								return Number(a.showNum) - Number(b.showNum)
 							})
 							if(this.conData.bottom[0].type == 2) {
-        this.$set(this.conData.bottom[0], "conList", [])
-        cur.forEach(val1 => {
-         val1.colList.forEach(val2 => {
-          this.conData.bottom[0].conList.push(val2)
-         })
-        })
-        this.conData.bottom[0].conList.sort((a1, b1) => {
-		 //return a1.orderNum - b1.orderNum
-		 return Number(a1.orderNum) - Number(b1.orderNum)
-        })
-       }
-       this.conData.bottom[0].rowList = cur
+								this.$set(this.conData.bottom[0], "conList", [])
+								cur.forEach(val1 => {
+									val1.colList.forEach(val2 => {
+										this.conData.bottom[0].conList.push(val2)
+									})
+								})
+								this.conData.bottom[0].conList.sort((a1, b1) => {
+									//return a1.orderNum - b1.orderNum
+									return Number(a1.orderNum) - Number(b1.orderNum)
+								})
+							}
+							this.conData.bottom[0].rowList = cur
 							//打开预览页面
 							this.showFigForm = true
 						} else {
