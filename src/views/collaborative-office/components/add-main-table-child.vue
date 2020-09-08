@@ -235,7 +235,7 @@
 		},
 		props: {
 			//查看
-			showFigNum: String,
+			showFigNum:Number,
 			//值
 			context: Object
 		},
