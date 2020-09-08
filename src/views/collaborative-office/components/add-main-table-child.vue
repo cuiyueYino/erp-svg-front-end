@@ -832,6 +832,9 @@
 						id: this.$refs.child.rowClick.id
 					}).then(data => {
 						data.data.data.lines.forEach(item => {
+							if(!item.forbid) {
+
+							
 							//为每一条数据定义好字段
 							var con = JSON.parse(JSON.stringify(this.rowConNew))
 							//枚举
@@ -863,6 +866,7 @@
 							con.fieldName = item.fieldName
 							con.fieldType = item.fieldType
 							this.ruleForm.lines.push(con)
+							}
 						})
 					})
 					//子表分类名称显示
