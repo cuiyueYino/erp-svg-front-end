@@ -204,12 +204,17 @@
 			},
 			//选中行
 			clickRow(row) {
-				this.rowClick = row.row
+				this.rowClick = row.row;
+				this.$api.collaborativeOffice.apiUrl("workItemTemp/findByParams", {"name":"","status":3}).then(data => {
+					this.conList = data.data.data
+					let tableDataAll = JSON.parse(JSON.stringify(this.conList));
+					this.tableAllData = tableDataAll;
+				})
 				if(this.showFig == 2) {
 					this.$api.collaborativeOffice.findWorkItemByUser({
 						userId: row.row.toid
 					}).then(data => {
-						this.$emit("getCon", data.data.data, row.row.toid)
+						this.$emit("getCon", data.data.data, row.row.toid,this.tableAllData)
 					})
 				}
 			},
