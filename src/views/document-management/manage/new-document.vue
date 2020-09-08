@@ -319,6 +319,11 @@ export default {
         onHandleSave(type){
             let fromDataS={};
             fromDataS=this.formdata;
+            if(type == 0){//暂存
+              fromDataS.fdocstatus = '1';
+            } else if(type == 1){//提交
+              fromDataS.fdocstatus = '2';
+            }
             let SaveFlag=false;
             if(this.formdata.fcode){
                 fromDataS.fcode=this.formdata.fcode;
@@ -395,7 +400,7 @@ export default {
             if (this.rowNMMDataObj.NewOrEditFlag==="NEW"){
                 let creator = localStorage.getItem('ms_userId');
                 formDataA.fcreator = creator;
-            }            
+            }
             formDataA.fistop = '2';
             if(type == 1){//提交
               formDataA.fdocstatus = '2';
@@ -422,7 +427,8 @@ export default {
         },
         //修改文档管理提交
         saveEditmenu(data,type){
-            if(type == 0 && data.fdocstatus != "暂存") { //暂存
+          debugger;
+            if(type == 0 && data.fdocstatus != "1") { //暂存
               this.$message.error("非暂存态不可以暂存!");
               return;
             }
@@ -547,6 +553,7 @@ export default {
     },
     watch:{
         rowNMMtype(oldVal,newVal){
+          this.atctiveName = 'first';
             if(this.rowNMMtype){
                 this.isShowOperateRecord = true;
                 this.isShow = true;

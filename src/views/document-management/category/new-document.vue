@@ -137,6 +137,7 @@ export default {
         },
         //提交
         onHandleSave(){
+          debugger;
             let fromDataS={};
             fromDataS=this.formdata;
             let SaveFlag=false;
@@ -157,8 +158,9 @@ export default {
                 }
             }
             if(SaveFlag){
+              debugger;
                 if(this.formdata.forder){
-                    fromDataS.forder=this.formdata.forder;
+                    fromDataS.forder=Number(this.formdata.forder);
                     SaveFlag=true;
                 }else{
                     this.$message.error('请输入显示顺序!');
@@ -166,7 +168,7 @@ export default {
                 }
             }
             if(this.NewOrEditFlag==="NEW"){
-                fromDataS.creator=localStorage.getItem('ms_userId');
+                fromDataS.fcreator=localStorage.getItem('ms_userId');
             }else{
                 fromDataS.handler=localStorage.getItem('ms_userId');
             }
@@ -223,10 +225,10 @@ export default {
                 if(responsevalue.data.code != 0){
                     this.$message.success(responsevalue.data.msg);
                     debugger;
-                    if( 1 == data.flevelName){
-                      data.flevel = '一级';
-                    } else if(2 == data.flevelName) {
-                      data.flevel = '二级';
+                    if( 1 == data.flevel){
+                      data.flevelName = '一级';
+                    } else if(2 == data.flevel) {
+                      data.flevelName = '二级';
                     }
                 } else {
                     if (responsevalue.data.data.msg=="success") {
@@ -272,9 +274,16 @@ export default {
             this.title=this.rowNMMDataObj.nametitle;
             this.NewOrEditFlag=this.rowNMMDataObj.NewOrEditFlag;
             if(this.rowNMMDataObj.NewOrEditFlag==="NEW"){
+              debugger;
                 this.isEdit = false;
                 this.formdata={};
-                this.formdata.flevel=this.rowNMMDataObj.flevel;
+                if('一级' == this.rowNMMDataObj.flevel){
+                  this.formdata.flevelName = this.rowNMMDataObj.flevel;
+                  this.formdata.flevel = 1;
+                } else if('二级' == this.rowNMMDataObj.flevel) {
+                  this.formdata.flevelName = this.rowNMMDataObj.flevel;
+                  this.formdata.flevel = 2;
+                }
             } else if (this.rowNMMDataObj.NewOrEditFlag==="EDIT"){
                 this.isEdit = false;
                 let fromdataA={};

@@ -642,15 +642,18 @@
 				var index = 0
 				cur.sort((a, b) => {
 					a.colList.sort((a1, b1) => {
-						return a1.orderNum - b1.orderNum
+						//return a1.orderNum - b1.orderNum
+						return Number(a1.orderNum) - Number(b1.orderNum)
 					})
 					if(index == 0) {
 						b.colList.sort((a1, b1) => {
-							return a1.orderNum - b1.orderNum
+							//return a1.orderNum - b1.orderNum
+							return Number(a1.orderNum) - Number(b1.orderNum)
 						})
 						index++
 					}
-					return a.showNum - b.showNum
+					//return a.showNum - b.showNum
+					return Number(a.showNum) - Number(b.showNum)
 				})
 				this.conData.top.rowList = cur
 			},
@@ -788,15 +791,18 @@
 							var index = 0
 							cur.sort((a, b) => {
 								a.colList.sort((a1, b1) => {
-									return a1.orderNum - b1.orderNum
+									//return a1.orderNum - b1.orderNum
+									return Number(a1.orderNum) - Number(b1.orderNum)
 								})
 								if(index == 0) {
 									b.colList.sort((a1, b1) => {
-										return a1.orderNum - b1.orderNum
+										//return a1.orderNum - b1.orderNum
+										return Number(a1.orderNum) - Number(b1.orderNum)
 									})
 									index++
 								}
-								return a.showNum - b.showNum
+								//return a.showNum - b.showNum
+								return Number(a.showNum) - Number(b.showNum)
 							})
 							if(this.conData.bottom[0].type == 2) {
         this.$set(this.conData.bottom[0], "conList", [])
@@ -806,7 +812,8 @@
          })
         })
         this.conData.bottom[0].conList.sort((a1, b1) => {
-         return a1.orderNum - b1.orderNum
+		 //return a1.orderNum - b1.orderNum
+		 return Number(a1.orderNum) - Number(b1.orderNum)
         })
        }
        this.conData.bottom[0].rowList = cur
