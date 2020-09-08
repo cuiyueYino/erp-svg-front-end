@@ -22,7 +22,7 @@
 			<formAndTable :files="files" dis="2" showAdd="1" ref="child" :form-data="conData"></formAndTable>
 		</el-card>
 		<!--弹出框-->
-		<el-dialog title="工作事项主表模板" top="1vh" :destroy-on-close="true" v-if="dialogVisible" center :visible.sync="dialogVisible" width="80%">
+		<el-dialog title="工作事项模板主表" top="1vh" :destroy-on-close="true" v-if="dialogVisible" center :visible.sync="dialogVisible" width="80%">
 			<selectMainTable show="1" status="3" :userId="UserId" :company="companyID" ref="childMain"></selectMainTable>
 			<div slot="footer" class="dialog-footer">
 				<el-button @click="dialogVisible = false">取 消</el-button>
