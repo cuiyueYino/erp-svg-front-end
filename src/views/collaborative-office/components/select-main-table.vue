@@ -56,6 +56,7 @@
 		},
 		props: {
 			show: String,
+			userId: String,
 			status: String,
 			company:Object
 		},
@@ -198,6 +199,9 @@
 				}
 				if(this.status){
 					this.toSelectData.status=this.status;
+				}
+				if(this.userId){
+					this.toSelectData.userId=this.userId;
 				}
 				this.$api.collaborativeOffice.findWorkItemTempPage(this.toSelectData).then(data => {
 					this.tableData = data.data.data.rows

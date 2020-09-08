@@ -114,6 +114,9 @@ export default {
     },
     data(){
         return{
+            searchFromPersonArrayNew:[],
+            searchFromDuplicateArrayNew:[],
+            searchClickFlag:false,
             treeDataObject:[],
             zancunCount:'',
             //文本编辑器
@@ -331,6 +334,7 @@ export default {
             this.dialogTree=true;
         },
         treeSearch(){
+            this.searchClickFlag = true;
             this.AddToUser(this.treeTpye,true,'searchFlag')
         },
         // 选择人员树时，公司部门层级不可点击
@@ -462,7 +466,9 @@ export default {
          */
         choiceTree(){
             let searchFromPersonName = this.formData.addresseeName;
+            let searchFromPersonArray = this.formData.addresseeList;
             let searchDuplicateName = this.formData.duplicateName;
+           
             if(this.treeTpye=="addressee"){
                 let staffList = this.$refs.tree.getCheckedNodes(true);
                 let nameString= '';
@@ -471,32 +477,41 @@ export default {
                 for(let i=0;i<staffList.length;i++){
                     nameString += staffList[i].fname+",";
                     checkId.push(staffList[i].foid);
+                    this.searchFromPersonArrayNew.push(staffList[i]);
                 };
-                // nameString += searchFromPersonName;
-                if(nameString!=''){
+                if(this.searchClickFlag) {
+                    nameString += searchFromPersonName;
+                    for(var m= 0;m < searchFromPersonArray.lenght;m++) {
+                        this.searchFromPersonArrayNew.push(searchFromPersonArray[m]);
+                    }
+                }
+                if(nameString!='' && !this.searchClickFlag){
                     nameString = nameString.slice(0,nameString.length-1);
                 }
                 this.formData.addresseeName = nameString;
                 this.defautltAddressee = checkId;
-                this.formData.addresseeList = staffList;
-
+                this.formData.addresseeList = this.searchFromPersonArrayNew;
             }else if(this.treeTpye=="duplicate"){
-                
                 let staffList = this.$refs.tree.getCheckedNodes(true)
-
                 let nameString= '';
                 let checkId=[];
                 for(let i=0;i<staffList.length;i++){
                     nameString += staffList[i].fname+",";
                     checkId.push(staffList[i].foid);
+                    this.searchFromDuplicateArrayNew.push(staffList[i]);
                 };
-                // nameString += searchDuplicateName;
-                if(nameString!=''){
+                if(this.searchClickFlag) {
+                    nameString += searchDuplicateName;
+                    for(var m= 0;m < searchFromPersonArray.lenght;m++) {
+                        this.searchFromDuplicateArrayNew.push(searchFromPersonArray[m]);
+                    }
+                }
+                if(nameString!='' && !this.searchClickFlag){
                     nameString = nameString.slice(0,nameString.length-1);
                 }
                 this.formData.duplicateName = nameString;
                 this.defautltDuplicate = checkId;
-                this.formData.duplicateList = staffList;
+                this.formData.duplicateList = this.searchFromDuplicateArrayNew;
             }
 
             this.dialogTree= false;
