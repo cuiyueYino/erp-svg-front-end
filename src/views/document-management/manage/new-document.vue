@@ -321,7 +321,7 @@ export default {
             fromDataS=this.formdata;
             if(type == 0){//暂存
               debugger;
-              if("暂存"==fromDataS.fdocstatus){
+              if( !fromDataS.fdocstatus || "暂存"==fromDataS.fdocstatus){
                 fromDataS.fdocstatus = '1';
               } else {
                 this.$message.error('当前状态不可以暂存!');
@@ -487,6 +487,7 @@ export default {
             // formData.append('files', this.uploadFiles);
             let length = this.uploadFiles.length;
             let count = 0;
+          debugger
             for(var i=0; i < length; i++ ){
                 formData.append('file', this.uploadFiles[0]);
                 formData.append('menuCode',menuCode);

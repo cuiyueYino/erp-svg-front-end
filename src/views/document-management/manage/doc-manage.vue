@@ -312,6 +312,8 @@ export default {
             }else{
                 if(SelectData[0]){
                     let finandata={};
+                    //标识：操作为发布/取消发布/置顶/取消置顶操作，后台区分 update 操作记录
+                    finandata.flag = '1';
                     if(1 == param){
                         finandata.fistop="1";
                     } else if(2 == param){
