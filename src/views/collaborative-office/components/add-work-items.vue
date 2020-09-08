@@ -15,15 +15,15 @@
 				<el-col :span="6" style="text-align: right;">
 					<el-button v-if="showFig" @click="submitForm(2)" type="success" size="mini" icon="el-icon-check">提交</el-button>
 					<el-button v-if="showFig" @click="submitForm(1)" type="success" size="mini" icon="el-icon-finished">暂存</el-button>
-					<el-button @click="dialogVisible =  true" type="success" size="mini" icon="el-icon-s-promotion">选择模板</el-button>
+					<el-button @click="selectMainTable" type="success" size="mini" icon="el-icon-s-promotion">选择模板</el-button>
 					<el-button type="danger" @click="$parent.toSelect()" size="mini" icon="el-icon-close">返回</el-button>
 				</el-col>
 			</el-row>
 			<formAndTable :files="files" dis="2" showAdd="1" ref="child" :form-data="conData"></formAndTable>
 		</el-card>
 		<!--弹出框-->
-		<el-dialog title="工作事项主板模板" top="1vh" :destroy-on-close="true" center :visible.sync="dialogVisible" width="80%">
-			<selectMainTable show="1" status="3" :company="company" ref="childMain"></selectMainTable>
+		<el-dialog title="工作事项主表模板" top="1vh" :destroy-on-close="true" v-if="dialogVisible" center :visible.sync="dialogVisible" width="80%">
+			<selectMainTable show="1" status="3" :userId="UserId" :company="companyID" ref="childMain"></selectMainTable>
 			<div slot="footer" class="dialog-footer">
 				<el-button @click="dialogVisible = false">取 消</el-button>
 				<el-button type="primary" @click="getDialogVisible">确 定</el-button>
@@ -54,6 +54,8 @@
 				dialogVisible: false,
 				//选择公司
 				company: "",
+				UserId: "",
+				companyID:{},
 				//全部服务
 				tServiceByParams: JSON.parse(localStorage.getItem('tServiceByParams')),
 				//全部公司
@@ -87,6 +89,12 @@
 			})
 		},
 		methods: {
+			//选择模板
+			selectMainTable(){
+				this.companyID=this.company;
+				this.UserId=localStorage.getItem("ms_staffId");
+				this.dialogVisible = true;
+			},
 			//提交/暂存
 			submitForm(status) {
 				//校验所有必填字段
