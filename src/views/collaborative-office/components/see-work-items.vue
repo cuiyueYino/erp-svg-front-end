@@ -183,7 +183,8 @@
 					})
 					//子表模板排序
 					this.conData.bottom.sort((a1, b1) => {
-						return a1.orderNum - b1.orderNum
+						//return a1.orderNum - b1.orderNum
+						return Number(a1.orderNum) - Number(b1.orderNum)
 					})
 				})
 			},
@@ -246,15 +247,18 @@
 				var index = 0
 				cur.sort((a, b) => {
 					a.colList.sort((a1, b1) => {
-						return a1.orderNum - b1.orderNum
+						//return a1.orderNum - b1.orderNum
+						return Number(a1.orderNum) - Number(b1.orderNum)
 					})
 					if(index == 0) {
 						b.colList.sort((a1, b1) => {
-							return a1.orderNum - b1.orderNum
+							//return a1.orderNum - b1.orderNum
+							return Number(a1.orderNum) - Number(b1.orderNum)
 						})
 						index++
 					}
-					return a.showNum - b.showNum
+					//return a.showNum - b.showNum
+					return Number(a.showNum) - Number(b.showNum)
 				})
 				//如果是主表，直接存入数据，如果是子表，输入全部存入conList里，并且排序
 				if(state == 1) {
@@ -268,7 +272,8 @@
 							})
 						})
 						this.conData.bottom[rowIndex].conList.sort((a1, b1) => {
-							return a1.orderNum - b1.orderNum
+							//return a1.orderNum - b1.orderNum
+							return Number(a1.orderNum) - Number(b1.orderNum)
 						})
 					}
 					this.conData.bottom[rowIndex].rowList = cur
