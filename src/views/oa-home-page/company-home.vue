@@ -89,15 +89,15 @@ export default {
   },
   methods: {
     async firstGetMenu(){
-      let getItems = []
+      let getItems = [];
        this.$api.documentManagement
-        .getDocumentCategoryOrgArch()
+        .getDocumentCategoryOrgArch('1')
         .then((res) => {
-          this.menuList = eval("(" + res.data.data + ")")[0].children; //console.log(this.menuList )
+          this.menuList = eval("(" + res.data.data + ")"); //console.log(this.menuList )
           if (this.menuList) { 
             this.menuList.forEach((item, index) => {
               if(item.children){
-                  getItems.push( this.firstGetItem(item.children[0].foid) )
+                  getItems.push( this.firstGetItem(item.children.foid) )
               }
              Promise.all(getItems).then(res=>{
                   this.childList = res
@@ -107,8 +107,8 @@ export default {
         })
     },
     async firstGetItem(data){
-      let getDetail = await this.getChildList(data)
-      return getDetail
+      let getDetail = await this.getChildList(data);
+      return getDetail;
     },
     handleClick(tab) {
     //   console.log(tab);
@@ -160,7 +160,7 @@ export default {
     //   获取菜单list
     getMenuList() {
       this.$api.documentManagement
-        .getDocumentCategoryOrgArch()
+        .getDocumentCategoryOrgArch('1')
         .then((res) => {
           this.menuList = eval("(" + res.data.data + ")")[0].children;
         //   console.log(this.menuList);

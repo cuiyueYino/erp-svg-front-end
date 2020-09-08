@@ -253,7 +253,6 @@ export default {
         },
         //新增文档类别维护
         createDocumentCategory(){
-          debugger;
             //校验当前是否为2级菜单
             if(this.documentLevel == 2){
                 this.$message.error("不可增加三级菜单!");
@@ -354,7 +353,7 @@ export default {
         },
         //生成树
         maketree(){
-            this.$api.documentManagement.getDocumentCategoryOrgArch().then(response => {
+            this.$api.documentManagement.getDocumentCategoryOrgArch('').then(response => {
                 let responsevalue = response;
                 if (responsevalue) {
                     let returndata = responsevalue.data;

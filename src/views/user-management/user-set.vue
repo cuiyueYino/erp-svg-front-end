@@ -409,7 +409,9 @@
 
 			},
 			handleNodeClick(data) {
+				console.log(data)
 				this.form.fstaff = data.fname;
+				this.form.fname = data.fname;
 				this.form.departmentname = data.fdepartmentName;
 				this.form.fstaffId = data.foid;
 			},
@@ -634,7 +636,7 @@
 							
 							this.form.fcode=this.form.fcodeStr;
 							this.form.fpassword=this.form.fpasswordStr;
-							this.form.fstaff = "";
+							this.form.fstaff = this.form.fstaffId;
 							this.$api.jobUserManagement.updateUserTableData(this.form).then(res => {
 									if(res.data.code == 0) {
 										this.dialogFormVisible = false;
@@ -900,4 +902,5 @@
 		left: 230px;
 		cursor: pointer;
 	}
+
 </style>
