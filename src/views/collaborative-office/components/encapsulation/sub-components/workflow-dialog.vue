@@ -5,7 +5,7 @@
 -->
 
 <template>
-	<el-dialog title="工作事项主表模板" top="1vh" :destroy-on-close="true" center :visible.sync="dialogVisible" width="80%">
+	<el-dialog title="工作事项模板主表" top="1vh" :destroy-on-close="true" center :visible.sync="dialogVisible" width="80%">
 		<selectWorkItems show="1" ref="childMain"></selectWorkItems>
 		<div slot="footer" class="dialog-footer">
 			<el-button @click="dialogVisible = false">取 消</el-button>
