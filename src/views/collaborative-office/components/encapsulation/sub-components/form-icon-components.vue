@@ -9,7 +9,7 @@
 
 <template>
 	<div>
-			<input type="hidden" v-model="valueInput" />
+		<input type="hidden" v-model="valueInput" />
 		<div v-if="showFig == 'organization' " class="treeDivClass">
 			<el-tree :default-checked-keys="dataCon.echo" :default-expanded-keys="dataCon.echo" show-checkbox ref="treeDialogVisible" highlight-current :data="dataCon.context" :props="defaultProps" node-key="foid" accordion></el-tree>
 		</div>
@@ -173,15 +173,24 @@
 					});
 					this.loading = false
 				})
+			}else{
+				console.log("data",this.dataCon)
 			}
 		},
 		methods: {
 			tableSelect(){
 				this.$refs.multipleTable.clearCheckboxRow();
 				this.dataCon.context.forEach(row => {
-					if(this.RoleselectData.includes(row.foid)) {
-						this.$refs.multipleTable.toggleCheckboxRow(row);
-					}
+					if(this.showFig == "personnel"){
+						if(this.RoleselectData.includes(row.tcode)) {
+							this.$refs.multipleTable.toggleCheckboxRow(row);
+						}
+					}else{
+						if(this.RoleselectData.includes(row.foid)) {
+							this.$refs.multipleTable.toggleCheckboxRow(row);
+						}
+					}	
+					
 				});
 			},
 			//查询
