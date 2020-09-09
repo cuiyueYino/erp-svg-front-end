@@ -98,6 +98,10 @@ import CooTaskDetailPage from '../plan-options/cooperate-task-detail.vue';// 配
 import ConferenceApplyPage from '../plan-options/conference-apply-detail.vue';// 会议申请
 import EconomicIndicatorsPage from '../plan-options/economic-Indicators-detail.vue';// 经济指标
 
+
+// import seeWorkItem from '../../views/collaborative-office/components/see-work-items';
+
+
 export default {
     props: {
         rowWAADataObj: Object,
