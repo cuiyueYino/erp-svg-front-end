@@ -140,6 +140,10 @@
 			//修改状态
 			updateStatus(status) {
 				if(this.getRowClickId()) {
+                    if(this.rowClick.status==1){
+                        this.$message.error("状态不可修改");
+                        return;
+                    }
 					this.$api.collaborativeOffice.updateStatusTemp({
 						id: this.rowClickId,
 						status: status,
@@ -175,6 +179,10 @@
 			//修改
 			toUpd() {
 				if(this.getRowClickId()) {
+                    if(this.rowClick.status==3||this.rowClick.status==2){
+                        this.$message.error("状态不可修改");
+                        return;
+                    }
 					this.$api.collaborativeOffice.getWorkItemTempSubModel({
 						id: this.rowClickId
 					}).then(data => {
