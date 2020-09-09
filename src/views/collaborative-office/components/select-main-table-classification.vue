@@ -57,7 +57,7 @@
 				<el-table-column prop="code" label="主表分类编码" width="180" align="center"></el-table-column>
 				<el-table-column prop="name" label="主表分类名称" width="180" align="center"></el-table-column>
 				<el-table-column prop="tableName" label="数据库表名" width="180" align="center"></el-table-column>
-				<el-table-column prop="remark" label="描述" align="center"></el-table-column>
+				<el-table-column prop="remark" label="描述" align="center" :show-overflow-tooltip="true"></el-table-column>
 			</el-table>
 			<pageNation :total="currentTotal" v-if="currentTotal != 0" ref="pageNation" @pageChange="pageChange"></pageNation>
 		</el-card>
@@ -210,9 +210,9 @@
 						let resultList =  data.data.data.rows;
 						resultList.forEach(item => {
 							//只显示有效数据
-							if (item.status == "3"){
+							// if (item.status == "3"){
 								this.tableData.push(item)
-							}
+							// }
 						});
 						this.currentTotal = this.tableData.total;
 				})
