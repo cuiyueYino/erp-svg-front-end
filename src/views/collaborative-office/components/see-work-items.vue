@@ -15,6 +15,7 @@
 				<el-col style="text-align: right;" v-if="showSeeOrUpd == 3" :span="6">
 					<el-button @click="submitForm(2)" type="success" size="mini" icon="el-icon-check">提交</el-button>
 					<el-button @click="submitForm(1)" type="success" size="mini" icon="el-icon-check">暂存</el-button>
+					<el-button @click="selectMainTable" type="success" size="mini" icon="el-icon-s-promotion">选择模板</el-button>
 					<el-button type="danger" @click="$parent.toSelect()" size="mini" icon="el-icon-close">返回</el-button>
 				</el-col>
 				<el-col style="text-align: right;" v-if="showSeeOrUpd != 3" :span="6">
@@ -23,6 +24,14 @@
 			</el-row>
 			<formAndTable :files="context.files" :dis="showSeeOrUpd" showAdd="2" ref="child" :form-data="conData"></formAndTable>
 		</el-card>
+		<!--弹出框-->
+		<el-dialog title="工作事项模板主表" top="1vh" :destroy-on-close="true" v-if="dialogVisible" center :visible.sync="dialogVisible" width="80%">
+			<selectMainTable show="1" status="3" :userId="UserId" :company="companyID" ref="childMain"></selectMainTable>
+			<div slot="footer" class="dialog-footer">
+				<el-button @click="dialogVisible = false">取 消</el-button>
+				<el-button type="primary" @click="getDialogVisible">确 定</el-button>
+			</div>
+		</el-dialog>
 	</div>
 </template>
 <script>
@@ -42,6 +51,10 @@
 		},
 		data() {
 			return {
+				UserId: "",
+				companyID:{},
+				//主表弹出框
+				dialogVisible: false,
 				company: "",
 				//主表ID
 				tempId: "",
@@ -78,6 +91,12 @@
 			this.getDialogVisible()
 		},
 		methods: {
+			//选择模板
+			selectMainTable(){
+				this.companyID=this.company;
+				this.UserId=localStorage.getItem("ms_staffId");
+				this.dialogVisible = true;
+			},
 			//提交/暂存
 			submitForm(status) {
 				//校验所有必填字段
@@ -186,6 +205,10 @@
 						//return a1.orderNum - b1.orderNum
 						return Number(a1.orderNum) - Number(b1.orderNum)
 					})
+					//关闭弹出框
+					this.dialogVisible = false
+					//显示提交按钮
+					this.showFig = true
 				})
 			},
 			//数据整理
