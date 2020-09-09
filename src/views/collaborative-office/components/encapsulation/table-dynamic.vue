@@ -29,7 +29,7 @@
 						</el-form-item>
 					</template>
 				</el-table-column>
-				<el-table-column align="right" width="100">
+				<el-table-column align="right" width="100" v-if="dis != '1'">
 					<template slot="header" slot-scope="scope">
 						<el-button size="mini" @click="addRow()">新建</el-button>
 					</template>

@@ -38,6 +38,7 @@
                         <EachPerEachTableAdjPage  :rowEachPerEachTableAdjDataObj="rowEachPerEachTableAdjDataObj" :rowEachPerEachTableAdjtype="rowEachPerEachTableAdjtype" @changeShow="showLookOrUpdate"/>
                         <ConferenceApplyPage  :rowConferenceApplyDataObj="rowConferenceApplyDataObj" :rowConferenceApplytype="rowConferenceApplytype" @changeShow="showLookOrUpdate"/>
                         <EconomicIndicatorsPage  :rowEconomicIndicatorsDataObj="rowEconomicIndicatorsDataObj" :rowEconomicIndicatorstype="rowEconomicIndicatorstype" @changeShow="showLookOrUpdate"/>
+                        <WorkItemPage  :context="context" :showSeeOrUpd ="showSeeOrUpd" :todoFlag="todoFlag" @changeShow="showLookOrUpdate"/>
                     </el-row>  
                     <el-row>
                         <el-col :span="22">
@@ -97,9 +98,7 @@ import EmpApprTabNumDetailPage from '../plan-options/employees-appraisal-table-n
 import CooTaskDetailPage from '../plan-options/cooperate-task-detail.vue';// 配合任务  A
 import ConferenceApplyPage from '../plan-options/conference-apply-detail.vue';// 会议申请
 import EconomicIndicatorsPage from '../plan-options/economic-Indicators-detail.vue';// 经济指标
-
-
-// import seeWorkItem from '../../views/collaborative-office/components/see-work-items';
+import WorkItemPage from '../../views/collaborative-office/components/see-work-items.vue';// 工作事项的详情
 
 
 export default {
@@ -140,11 +139,14 @@ export default {
         EmpApprTabNumDetailPage,
         CooTaskDetailPage,
         ConferenceApplyPage,
-        EconomicIndicatorsPage    
+        EconomicIndicatorsPage,
+        WorkItemPage    
     },
     inject: ['reload'],
     data: function() {   
         return {
+            todoFlag:true,
+            showSeeOrUpd:'',
             atctiveName: 'first',
             ShowFinancVisible:false,
             labelPosition: 'left',
@@ -198,6 +200,8 @@ export default {
             rowEachPerEachTableAdjDataObj:{},
             rowConferenceApplyDataObj:{},
             rowEconomicIndicatorsDataObj:"",
+            contextObj:{},
+            context:{},
             pageNum: 1,
             pageSize: 10,
             total: 20,
@@ -294,8 +298,6 @@ export default {
             twfauditObj["fresult"] = 1;
             twfauditObj["fopinion"] = this.formdata.remark;
             paramsData["twfaudit"] = twfauditObj;
-            console.log("提交。。。。。。。。。。。。。。。。");
-            console.log(paramsData);
             this.$api.processSet.addWfsubmit(paramsData).then(res=>{
                 if( res.data.code == 0 ){
                     this.$message.success('保存成功');
@@ -317,52 +319,92 @@ export default {
             } else {
                 currentDatd = dataContent.selectData[0].fsrcoId;
             }
-            if(dataType === 'CoordinationTask'){
-                this.rowCooTaskDetailtype=true;
-                this.rowCooTaskDetailDataObj = currentDatd;
-            }else if(dataType === 'DepartmentYearPlan'){
-                this.rowDepartAnnPlanDettype=true;
-                this.rowDepartAnnPlanDetDataObj = currentDatd;
-            }else if(dataType === 'CompanyYearPlanCollect'){   
-                this.rowComPanDetaitype=true;
-                this.rowComPanDetaiDataObj = currentDatd;
-            } else if(dataType === 'DepartmentMonthPlan'){
-                this.rowDepartMonPlanDettype=true;
-                this.rowDepartMonPlanDetDataObj = currentDatd;
-            } else if(dataType === 'TemporaryMission'){
-                this.rowTEMTasktype=true;
-                this.rowTEMTaskDataObj = currentDatd;
-            } else if(dataType === 'FormPost'){
-                this.rowEACHPerEachJobDettype=true;
-                this.rowEACHPerEachJobDetDataObj = currentDatd;
-            } else if(dataType === 'TaskReport'){
-                this.rowEachPerEachTableReporttype=true;
-            } else if(dataType === 'TaskSelfEvaluateApplyzp'){
-                this.rowEachPerEachTableAsstype=true;
-            } else if(dataType === 'TaskDelayApply'){
-                this.rowEachPerEachTableDelaytype=true;
-                 this.rowEachPerEachTableDelayDataObj = currentDatd;
-            } else if(dataType === 'TaskCancelApply'){
-                this.rowEachPerEachTableInvalidtype=true;
-            } else if(dataType === 'TaskAdjust'){
-                this.rowEachPerEachTableAdjtype=true;
-            } else if(dataType === 'AssignerChange'){
-                this.rowEachPerEachTablePersontype=true;
-            } else if(dataType === 'TaskEntrust'){
-                this.rowEachPerEachTableEntrusttype=true;
-            } else if(dataType === 'PersonalTableTask'){
-                this.rowEachPerEachTableDetailtype=true;
-                this.rowEachPerEachTableDetailDataObj = currentDatd;
-            } else if(dataType === 'StaffAppraisals'){
-                this.rowEmpApprTabDetailtype=true;
-            } else if(dataType === 'StaffAppraisalsCollect'){
-                this.rowEmpApprTabNumDetailtype=true;
-            } else if(dataType === 'Meetingapplication'){
-                this.rowConferenceApplytype=true;
-            } else if(dataType === 'OptionIndex'){
-                this.rowEconomicIndicatorstype=true;
-                this.rowEconomicIndicatorsDataObj = currentDatd;
-            } 
+            // 判断是否为工作事项的flag
+            if(dataType.indexOf("OA")  == 0) {
+                // alert("OA项目");
+                // this.rowCooTaskDetailtype=true;
+                //获取工作事项的请求参数接口
+                this.$api.processSet.getWorkItemsParams({
+                    srcId: currentDatd,
+                })
+                .then((res) => {
+                        if(res.data.code == 0){
+                            // debugger;
+                            this.contextObj['srcId'] = res.data.data.srcId;
+                            this.contextObj['status'] = res.data.data.status;
+                            this.contextObj['tableName'] = res.data.data.tableName;
+                            this.contextObj['tempId'] = res.data.data.tempId;
+                            //相关事项的详情接口
+                                this.$api.collaborativeOffice.findDataBySrcId({
+                                    srcId: this.contextObj['srcId'],
+                                    tempId: this.contextObj['tempId'],
+                                    tableName: this.contextObj['tableName']
+                                }).then(data => {
+                                    if(this.dataBack(data)) {
+                                        this.$api.collaborativeOffice.findlnfosList({
+                                            voucherId: JSON.parse(data.data.data).id,
+                                            userCode: localStorage.getItem('ms_userId'),
+                                            menuCode: "workItem"
+                                        }).then(val => {
+                                            this.context = JSON.parse(data.data.data);
+                                            this.context.tempId = res.data.data.tempId;
+                                            this.context.files = val.data.data;
+                                            this.showSeeOrUpd = "1";
+                                        })
+                                    }
+                                })
+                        }
+                    }),error => {
+                    console.log(error);
+                    }
+            } else {
+                if(dataType === 'CoordinationTask'){
+                    this.rowCooTaskDetailtype=true;
+                    this.rowCooTaskDetailDataObj = currentDatd;
+                }else if(dataType === 'DepartmentYearPlan'){
+                    this.rowDepartAnnPlanDettype=true;
+                    this.rowDepartAnnPlanDetDataObj = currentDatd;
+                }else if(dataType === 'CompanyYearPlanCollect'){   
+                    this.rowComPanDetaitype=true;
+                    this.rowComPanDetaiDataObj = currentDatd;
+                } else if(dataType === 'DepartmentMonthPlan'){
+                    this.rowDepartMonPlanDettype=true;
+                    this.rowDepartMonPlanDetDataObj = currentDatd;
+                } else if(dataType === 'TemporaryMission'){
+                    this.rowTEMTasktype=true;
+                    this.rowTEMTaskDataObj = currentDatd;
+                } else if(dataType === 'FormPost'){
+                    this.rowEACHPerEachJobDettype=true;
+                    this.rowEACHPerEachJobDetDataObj = currentDatd;
+                } else if(dataType === 'TaskReport'){
+                    this.rowEachPerEachTableReporttype=true;
+                } else if(dataType === 'TaskSelfEvaluateApplyzp'){
+                    this.rowEachPerEachTableAsstype=true;
+                } else if(dataType === 'TaskDelayApply'){
+                    this.rowEachPerEachTableDelaytype=true;
+                    this.rowEachPerEachTableDelayDataObj = currentDatd;
+                } else if(dataType === 'TaskCancelApply'){
+                    this.rowEachPerEachTableInvalidtype=true;
+                } else if(dataType === 'TaskAdjust'){
+                    this.rowEachPerEachTableAdjtype=true;
+                } else if(dataType === 'AssignerChange'){
+                    this.rowEachPerEachTablePersontype=true;
+                } else if(dataType === 'TaskEntrust'){
+                    this.rowEachPerEachTableEntrusttype=true;
+                } else if(dataType === 'PersonalTableTask'){
+                    this.rowEachPerEachTableDetailtype=true;
+                    this.rowEachPerEachTableDetailDataObj = currentDatd;
+                } else if(dataType === 'StaffAppraisals'){
+                    this.rowEmpApprTabDetailtype=true;
+                } else if(dataType === 'StaffAppraisalsCollect'){
+                    this.rowEmpApprTabNumDetailtype=true;
+                } else if(dataType === 'Meetingapplication'){
+                    this.rowConferenceApplytype=true;
+                } else if(dataType === 'OptionIndex'){
+                    this.rowEconomicIndicatorstype=true;
+                    this.rowEconomicIndicatorsDataObj = currentDatd;
+                } 
+            }
         },
         //转发按钮点击事件
         baseInputTable(data){
