@@ -62,6 +62,7 @@
 		},
 		props: {
 			show: String,
+			company:String,
 		},
 		data() {
 			return {
@@ -233,6 +234,7 @@
 			},
 			//搜索
 			toSelect() {
+
 				var toGet = JSON.parse(JSON.stringify(this.formInline))
 				if(this.value != 'time') {
 					if(!this.noNull(this.value)) {

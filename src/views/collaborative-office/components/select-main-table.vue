@@ -216,14 +216,15 @@
 			},
 			//搜索
 			toSelect() {
+				console.log(this.company);
 			    if(this.show==1){
                     this.toSelectData.status = 3
                 }
 				if(typeof(this.toSelectData[this.selectCon]) != "undefined") {
 					this.toSelectData[this.selectCon] = this.selectData
 				}
-				if(this.companyName){
-					this.toSelectData.company=this.companyName.id;
+				if(this.company.id){
+					this.toSelectData.company = this.company.id;
 				}
 				if(this.status){
 					this.toSelectData.status=this.status;
@@ -231,8 +232,8 @@
 				if(this.userId){
 					this.toSelectData.userId=this.userId;
 				}
-				this.toSelectData.company = this.companyId;
-				// company
+				console.log("sly....");
+				console.log(this.company);
 				this.$api.collaborativeOffice.findWorkItemTempPage(this.toSelectData).then(data => {
 					this.tableData = data.data.data.rows
 					this.currentTotal = data.data.data.total
