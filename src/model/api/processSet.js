@@ -90,6 +90,17 @@ const processSet = {
     getunhandledTask(params){
         return httpReqest.post('/api/wfInterfaces/workFlow/unhandledTask', params);
     },
+    // 获取工作事项请求参数接口   
+    getWorkItemsParams(params){
+        var valueS='?';
+        for(var item in params){
+            valueS+=item+"="+params[item]+"&";
+        }
+        if(valueS.slice(valueS.length-1,valueS.length) ==="&"){
+            valueS=valueS.slice(0,valueS.length-1);
+        }
+        return httpReqest.get('/api/interfaces/workItem/findBySrcId'+valueS);
+    },
     // 获取待办事项的popForm表单数据(临时任务派发)
     getTemporaryMissionDetail(params){
         var valueS='?';

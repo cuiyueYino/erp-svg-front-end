@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<tabViews :showSeeOrUpd="dis" :context="context" :is="tabViews"></tabViews>
+		<tabViews :showSeeOrUpd="dis" :context="context" :is="tabViews" :todoFlag="todoFlag"></tabViews>
 	</div>
 </template>
 <script>
@@ -15,6 +15,7 @@
 		},
 		data() {
 			return {
+				todoFlag:false,
 				tabViews: "selectWorkItems",
 				//查看1  新增2   修改3
 				dis:"1",

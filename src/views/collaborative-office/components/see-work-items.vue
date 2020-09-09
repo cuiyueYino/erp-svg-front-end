@@ -2,7 +2,7 @@
 	<div style="height: 85vh; overflow-y:scroll">
 		<el-card class="box-card">
 			<el-row>
-				<el-col style="text-align: center;" :span="24">工作事项</el-col>
+				<el-col style="text-align: center;" :span="24" v-if="!todoFlag">工作事项</el-col>
 			</el-row>
 			<el-row style="margin-bottom: 10px;">
 				<el-col :span="18">
@@ -18,7 +18,7 @@
 					<el-button @click="selectMainTable" type="success" size="mini" icon="el-icon-s-promotion">选择模板</el-button>
 					<el-button type="danger" @click="$parent.toSelect()" size="mini" icon="el-icon-close">返回</el-button>
 				</el-col>
-				<el-col style="text-align: right;" v-if="showSeeOrUpd != 3" :span="6">
+				<el-col style="text-align: right;" v-if="!todoFlag && showSeeOrUpd != 3" :span="6">
 					<el-button type="danger" @click="$parent.toSelect()" size="mini" icon="el-icon-close">返回</el-button>
 				</el-col>
 			</el-row>
@@ -47,7 +47,8 @@
 		props: {
 			//值
 			context: Object,
-			showSeeOrUpd: String
+			showSeeOrUpd: String,
+			todoFlag:Boolean
 		},
 		data() {
 			return {
@@ -90,6 +91,14 @@
 			})
 			this.getDialogVisible()
 		},
+		watch: {
+			context: {
+		         handler(newVal, oldVal){
+					this.getDialogVisible()
+		        },
+		         deep: true
+		    }
+		}, 
 		methods: {
 			//选择模板
 			selectMainTable(){

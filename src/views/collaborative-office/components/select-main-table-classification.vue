@@ -181,7 +181,7 @@
 			toUpd() {
 				if(this.getRowClickId()) {
                     if(this.rowClick.status==3||this.rowClick.status==2){
-                        this.$message.error("该状态的数据不可修改");
+                        this.$message.error("有效状态的数据不可修改");
                         return;
                     }
 					this.$api.collaborativeOffice.getWorkItemTypeModel({
@@ -210,9 +210,10 @@
 					this.formInline.status = 3;
 				}
 				this.$api.collaborativeOffice.findWorkItemTypePage(this.formInline).then(data => {
-						this.tableData = data.data.data.rows;
-						this.currentTotal = this.tableData.total;
-				})
+					let resultList =  data.data.data.rows;
+					this.tableData=resultList;
+					this.currentTotal = data.data.data.total;
+})
 			},
 			//选中行
 			clickRow(row) {
