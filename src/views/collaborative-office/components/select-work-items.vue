@@ -119,16 +119,17 @@
                         confirmButtonText: '确定',
                         cancelButtonText: '取消',
                         type: 'warning'
-                    }).then(
-                        this.$api.collaborativeOffice.apiUrl("workItem/delWorkItem", {
-                            srcId: this.rowClick.srcId,
-                            tempId: this.rowClick.tempId,
-                            tableName: this.rowClick.tableName
-                        }).then(data => {
-                            if(this.dataBack(data), "删除成功") {
-                                this.toSelect()
-                            }
-                        })
+                    }).then( () => {
+                            this.$api.collaborativeOffice.apiUrl("workItem/delWorkItem", {
+                                srcId: this.rowClick.srcId,
+                                tempId: this.rowClick.tempId,
+                                tableName: this.rowClick.tableName
+                            }).then(data => {
+                                if(this.dataBack(data, "删除成功")) {
+                                    this.toSelect()
+                                }
+                            })
+                    }
                     ).catch(() => {
                         this.$message({
                             type: 'info',
