@@ -146,6 +146,12 @@ export default {
         imgSaveToUrl(event){
             let tableLen = this.enclosuretableData.length;
             let localFile = event.raw; //选中的File对象
+            //文件大小控制
+            const isLt2M = localFile.size / 1024 / 1024 < 150;
+            if (!isLt2M) {
+              this.$message.error('上传文件大小不能超过 150MB！');
+              return;
+            }
             let tval =  this.enclosuretableData[tableLen - 1];
             tval.fileName = event.name;
             this.enclosuretableData.splice(tableLen - 1, 1);
@@ -245,7 +251,6 @@ export default {
         rowDataFileObj(oldVal,newVal){
             if(this.rowDataFileObj.operateFlag==="QUERY"){
                 //父组件传来的附件集合
-              debugger;
                 let attachments = this.rowDataFileObj.values;
                 let flag = true;
                 for(var i= 0;i<attachments.length;i++){

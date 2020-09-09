@@ -110,7 +110,6 @@ export default {
     methods: {
         //只允许1.录入数字 2.允许输入两位小数
         changeForder () {
-            debugger;
             this.formdata.forder = this.formdata.forder.replace(/[^\d.]/g, '');
             if(this.formdata.forder.indexOf(".") != -1){
                 let s = this.formdata.forder.substring('.');
@@ -137,7 +136,6 @@ export default {
         },
         //提交
         onHandleSave(){
-          debugger;
             let fromDataS={};
             fromDataS=this.formdata;
             let SaveFlag=false;
@@ -158,7 +156,6 @@ export default {
                 }
             }
             if(SaveFlag){
-              debugger;
                 if(this.formdata.forder){
                     fromDataS.forder=Number(this.formdata.forder);
                     SaveFlag=true;
@@ -207,7 +204,6 @@ export default {
         },
         //新建文档类别提交
         saveNewMenu(data){
-            debugger;
             if(true == data.fisportalshow){
                 data.fisportalshow = '1';
             } else {
@@ -224,7 +220,6 @@ export default {
                 let responsevalue = response;
                 if(responsevalue.data.code != 0){
                     this.$message.success(responsevalue.data.msg);
-                    debugger;
                     if( 1 == data.flevel){
                       data.flevelName = '一级';
                     } else if(2 == data.flevel) {
@@ -274,7 +269,6 @@ export default {
             this.title=this.rowNMMDataObj.nametitle;
             this.NewOrEditFlag=this.rowNMMDataObj.NewOrEditFlag;
             if(this.rowNMMDataObj.NewOrEditFlag==="NEW"){
-              debugger;
                 this.isEdit = false;
                 this.formdata={};
                 if('一级' == this.rowNMMDataObj.flevel){

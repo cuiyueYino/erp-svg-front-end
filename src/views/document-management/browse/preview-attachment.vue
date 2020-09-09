@@ -1,11 +1,11 @@
 <template>
     <div>
-        <el-dialog 
-            @close="handleClose" 
-            :visible.sync="ShowFinancVisible" 
-            :append-to-body="true" 
-            v-if="ShowFinancVisible" 
-            :close-on-click-modal="false" 
+        <el-dialog
+            @close="handleClose"
+            :visible.sync="ShowFinancVisible"
+            :append-to-body="true"
+            v-if="ShowFinancVisible"
+            :close-on-click-modal="false"
             :close-on-press-escape="true"
             :center="true"
             width="100%"
@@ -34,19 +34,17 @@ export default {
     methods: {
         //关闭当前dialog时给父组件传值
         handleClose(){
-            debugger;
             this.ShowFinancVisible=false;
             this.$emit('changeShow',false);
         },
     },
     watch:{
         rowNMMtype(oldVal,newVal){
-            debugger
             if(oldVal){
                 this.ShowFinancVisible=true;
                 this.html=this.rowNMMDataObj.value;
             }
-            
+
         }
     }
 }
