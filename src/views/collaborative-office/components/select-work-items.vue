@@ -114,7 +114,7 @@
 			},
 			//删除
 			del() {
-				if(this.getRowClickId()) {
+				if(this.getRowClickId('del')) {
 					this.$api.collaborativeOffice.apiUrl("workItem/delWorkItem", {
 						srcId: this.rowClick.srcId,
 						tempId: this.rowClick.tempId,
@@ -128,7 +128,7 @@
 			},
 			//查看
 			toSee() {
-				if(this.getRowClickId()) {
+				if(this.getRowClickId('other')) {
 					this.$api.collaborativeOffice.findDataBySrcId({
 						srcId: this.rowClick.srcId,
 						tempId: this.rowClick.tempId,
@@ -171,7 +171,7 @@
 			},
 			//修改
 			toUpd() {
-				if(this.getRowClickId()) {
+				if(this.getRowClickId('other')) {
 					this.$api.collaborativeOffice.findDataBySrcId({
 						srcId: this.rowClick.srcId,
 						tempId: this.rowClick.tempId,
@@ -188,13 +188,27 @@
 					})
 				}
 			},
+			
+
 			//判断是否选中ROW
-			getRowClickId() {
-				if(this.rowClick.srcId) {
-					return true
-				} else {
-					this.$message.error("请选择数据");
-				}
+			getRowClickId(flag) {
+				if(flag == 'del') {
+					if(this.rowClick.srcId) {
+						if(this.rowClick.status == 2) {
+						this.$message.error("已经提交的数据不可以被删除");
+						} else {
+							return true
+						}
+					} else {
+							this.$message.error("请选择数据");
+						}
+					} else {
+						if(this.rowClick.srcId) {
+							return true
+						} else {
+							this.$message.error("请选择数据");
+						}
+					}	
 			},
 			//分页改变
 			pageChange(pageIndex) {
@@ -208,7 +222,7 @@
 					if(!this.noNull(this.value)) {
 						toGet[this.value] = this.selectData
 					}
-				} else {
+				} else { 
 					toGet.beginTime = this.value1[0]
 					toGet.endTime = this.value1[1]
 				}

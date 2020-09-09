@@ -7,7 +7,7 @@
 			<el-row style="margin-top: 10px;">
 				<el-col :span="18">
 					公司：
-					<el-select size='mini' v-model="ruleForm.company" placeholder="公司">
+					<el-select size='mini' v-model="ruleForm.company" placeholder="公司" @change="selectChanged">
 						<el-option v-for="item in CompanyData" :key="item.id" :label="item.name" :value="item.id">
 						</el-option>
 					</el-select>
@@ -182,16 +182,16 @@
 				</el-form>
 			</el-card>
 			<!--弹出框-->
-			<el-dialog title="工作事项模板子表分类" top="1vh" :destroy-on-close="true" center :visible.sync="dialogVisibleChild" width="80%">
-				<selectMainTableClassificationChild show="1" ref="child"></selectMainTableClassificationChild>
+			<el-dialog title="工作事项模板子表分类" top="1vh" :destroy-on-close="true" center :visible.sync="dialogVisibleChild" width="80%"  v-if="dialogVisibleChild">
+				<selectMainTableClassificationChild show="1" ref="child" :company="this.ruleForm.company"></selectMainTableClassificationChild>
 				<div slot="footer" class="dialog-footer">
 					<el-button @click="dialogVisibleChild = false">取 消</el-button>
 					<el-button type="primary" @click="getSelectMainTableClassification">确 定</el-button>
 				</div>
 			</el-dialog>
 			<!--弹出框-->
-			<el-dialog title="工作事项主板模板" top="1vh" :destroy-on-close="true" center :visible.sync="dialogVisible" width="80%">
-				<selectMainTable show="1" ref="childMain"></selectMainTable>
+			<el-dialog title="工作事项主板模板" top="1vh" :destroy-on-close="true" center :visible.sync="dialogVisible" width="80%" v-if="dialogVisible">
+				<selectMainTable show="1" ref="childMain" :companyId="this.ruleForm.company"></selectMainTable>
 				<div slot="footer" class="dialog-footer">
 					<el-button @click="dialogVisible = false">取 消</el-button>
 					<el-button type="primary" @click="getDialogVisible">确 定</el-button>
@@ -235,7 +235,7 @@
 		},
 		props: {
 			//查看
-			showFigNum: String,
+			showFigNum:Number,
 			//值
 			context: Object
 		},
@@ -451,6 +451,11 @@
 			})
 		},
 		methods: {
+			//公司select选择的时候
+			selectChanged(val) {
+				this.ruleForm.workItemTypeSubName = '';
+				this.ruleForm.workItemTempName = '';
+			},
 			//子表类型（校验不同）
 			getType(type) {
 				this.$nextTick(() => {
@@ -640,21 +645,28 @@
 				})
 				//列序按照填写排序
 				var index = 0
-				cur.sort((a, b) => {
-					a.colList.sort((a1, b1) => {
-						//return a1.orderNum - b1.orderNum
-						return Number(a1.orderNum) - Number(b1.orderNum)
-					})
-					if(index == 0) {
-						b.colList.sort((a1, b1) => {
+				if(cur.length > 1){
+					cur.sort((a, b) => {
+						a.colList.sort((a1, b1) => {
 							//return a1.orderNum - b1.orderNum
 							return Number(a1.orderNum) - Number(b1.orderNum)
 						})
-						index++
-					}
-					//return a.showNum - b.showNum
-					return Number(a.showNum) - Number(b.showNum)
-				})
+						if(index == 0) {
+							b.colList.sort((a1, b1) => {
+								//return a1.orderNum - b1.orderNum
+								return Number(a1.orderNum) - Number(b1.orderNum)
+							})
+							index++
+						}
+						//return a.showNum - b.showNum
+						return Number(a.showNum) - Number(b.showNum)
+					})
+				}else{
+					cur[0].colList.sort((a1, b1) => {
+						//return a1.orderNum - b1.orderNum
+						return Number(a1.orderNum) - Number(b1.orderNum)
+					})
+				}
 				this.conData.top.rowList = cur
 			},
 			//服务类型
@@ -805,18 +817,18 @@
 								return Number(a.showNum) - Number(b.showNum)
 							})
 							if(this.conData.bottom[0].type == 2) {
-        this.$set(this.conData.bottom[0], "conList", [])
-        cur.forEach(val1 => {
-         val1.colList.forEach(val2 => {
-          this.conData.bottom[0].conList.push(val2)
-         })
-        })
-        this.conData.bottom[0].conList.sort((a1, b1) => {
-		 //return a1.orderNum - b1.orderNum
-		 return Number(a1.orderNum) - Number(b1.orderNum)
-        })
-       }
-       this.conData.bottom[0].rowList = cur
+								this.$set(this.conData.bottom[0], "conList", [])
+								cur.forEach(val1 => {
+									val1.colList.forEach(val2 => {
+										this.conData.bottom[0].conList.push(val2)
+									})
+								})
+								this.conData.bottom[0].conList.sort((a1, b1) => {
+									//return a1.orderNum - b1.orderNum
+									return Number(a1.orderNum) - Number(b1.orderNum)
+								})
+							}
+							this.conData.bottom[0].rowList = cur
 							//打开预览页面
 							this.showFigForm = true
 						} else {

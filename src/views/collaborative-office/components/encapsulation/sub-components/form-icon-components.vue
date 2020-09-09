@@ -119,6 +119,7 @@
 					page: 1,
 					size: 100000
 				},
+				RoleselectData:[],
 				//返回变量
 				backCon: {
 					label: "",
@@ -129,12 +130,20 @@
 		created() {
 			if(this.showFig == "personnel") {
 				this.loading = true
+				this.RoleselectData=[];
+				this.RoleselectData=this.dataCon.echo;
 				this.dataCon.context = []
 				this.$api.collaborativeOffice.findConList("staffManage/findStaffsNoPage", {}).then(data => {
 					this.$set(this.dataCon, "context", data.data.data)
+					this.$nextTick(() => {
+						// 在这里面去设置选中
+						this.tableSelect();
+					});
 					this.loading = false
 				})
 			} else if(this.showFig == "user") {
+				this.RoleselectData=[];
+				this.RoleselectData=this.dataCon.echo;
 				this.dataCon.context = []
 				this.loading = true
 				this.$api.collaborativeOffice.findConList("userManage/findUserBypage", {
@@ -142,9 +151,15 @@
 					size: 100000
 				}).then(data => {
 					this.$set(this.dataCon, "context", data.data.data.rows)
+					this.$nextTick(() => {
+						// 在这里面去设置选中
+						this.tableSelect();
+					});
 					this.loading = false
 				})
 			} else if(this.showFig == "jobSet") {
+				this.RoleselectData=[];
+				this.RoleselectData=this.dataCon.echo;
 				this.dataCon.context = []
 				this.loading = true
 				this.$api.collaborativeOffice.findConList("positionmnt/findPositionList", {
@@ -152,11 +167,23 @@
 					size: 100000
 				}).then(data => {
 					this.$set(this.dataCon, "context", data.data.data.rows)
+					this.$nextTick(() => {
+						// 在这里面去设置选中
+						this.tableSelect();
+					});
 					this.loading = false
 				})
 			}
 		},
 		methods: {
+			tableSelect(){
+				this.$refs.multipleTable.clearCheckboxRow();
+				this.dataCon.context.forEach(row => {
+					if(this.RoleselectData.includes(row.foid)) {
+						this.$refs.multipleTable.toggleCheckboxRow(row);
+					}
+				});
+			},
 			//查询
 			toSelect() {
 				var url = ""
@@ -169,6 +196,10 @@
 						this.$api.collaborativeOffice.findConList(url, con).then(data => {
 							this.$set(this.dataCon, "context", data.data.data)
 							this.valueInput++
+							this.$nextTick(() => {
+								// 在这里面去设置选中
+								this.tableSelect();
+							});
 						})
 						break;
 						//用户
@@ -178,6 +209,10 @@
 						this.$api.collaborativeOffice.findConList(url, con).then(data => {
 							this.$set(this.dataCon, "context", data.data.data.rows)
 							this.valueInput++
+							this.$nextTick(() => {
+								// 在这里面去设置选中
+								this.tableSelect();
+							});
 						})
 						break;
 						//职务
@@ -187,6 +222,10 @@
 						this.$api.collaborativeOffice.findConList(url, con).then(data => {
 							this.$set(this.dataCon, "context", data.data.data.rows)
 							this.valueInput++
+							this.$nextTick(() => {
+								// 在这里面去设置选中
+								this.tableSelect();
+							});
 						})
 						break;
 				}

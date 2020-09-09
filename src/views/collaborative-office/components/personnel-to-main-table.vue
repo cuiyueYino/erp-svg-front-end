@@ -35,9 +35,10 @@
 				this.$refs.mainTable.toSelect()
 				this.$refs.mainTable.clear()
 			},
-			getCon(list, id) {
+			getCon(list, id, data) {
 				this.roleCon.id = id
 				this.roleCon.list = list
+				this.roleCon.allData = data;
 				this.$refs.mainTable.check()
 			}
 		}

@@ -58,7 +58,8 @@
 			show: String,
 			userId: String,
 			status: String,
-			company:Object
+			company:Object,
+			companyId:'',
 		},
 		data() {
 			return {
@@ -90,7 +91,8 @@
 				selectCon: "",
 				toSelectData: {
 					page: 1,
-					size: 10
+					size: 10,
+					company:''
 				},
 			}
 		},
@@ -203,6 +205,8 @@
 				if(this.userId){
 					this.toSelectData.userId=this.userId;
 				}
+				this.toSelectData.company = this.companyId;
+				// company
 				this.$api.collaborativeOffice.findWorkItemTempPage(this.toSelectData).then(data => {
 					this.tableData = data.data.data.rows
 					this.currentTotal = data.data.data.total

@@ -34,6 +34,7 @@
                             </el-col>
                             <el-col :span="5">
                                 <el-date-picker
+                                  value-format="yyyy-MM-dd"
                                   v-if="isDate"
                                   clearable
                                   v-model="beginDate"
@@ -43,6 +44,7 @@
                             </el-col>
                             <el-col :span="5">
                               <el-date-picker
+                                value-format="yyyy-MM-dd"
                                 v-if="isDate"
                                 clearable
                                 v-model="endDate"
@@ -77,7 +79,6 @@
                         :page-size="pageSize"
                         @current-change="onCurrentChange"
                         @selection-change="onSelectionChange"
-                        :tableRowClassName="tableRowClassName"
                         v-loading="false"
                         element-loading-text="加载中"
                     ></dynamic-table>
@@ -198,10 +199,10 @@ export default {
     methods:{
         //查询按钮
         findData(){
-          debugger;
+            this.pageNum = 1;
             let field = this.formInline.document;
             let fromdata={};
-            fromdata.page=this.pageNum;
+            fromdata.page= 1;
             fromdata.size=this.pageSize;
             if("fcode" == field){
                 fromdata.fcode=this.input;
@@ -312,6 +313,8 @@ export default {
             }else{
                 if(SelectData[0]){
                     let finandata={};
+                    //标识：操作为发布/取消发布/置顶/取消置顶操作，后台区分 update 操作记录
+                    finandata.flag = '1';
                     if(1 == param){
                         finandata.fistop="1";
                     } else if(2 == param){
@@ -463,7 +466,23 @@ export default {
         },
         //分页，下一页
         onCurrentChange(val){
+            this.pageNum = val;
+            let field = this.formInline.document;
             let formDataA ={};
+            if("fcode" == field){
+              formDataA.fcode=this.input;
+            } else if ("fname" == field){
+              formDataA.fname=this.input;
+            } else if ("fcreatetime" == field){
+              formDataA.fbegintime = this.beginDate;
+              formDataA.fendtime=this.endDate;
+            } else if ("fdescription" == field){
+              formDataA.fdescription=this.input;
+            } else if ("fdocstatus" == field){
+              formDataA.fdocstatus=this.input;
+            } else if ("fcreator" == field){
+              formDataA.fcreator=this.input;
+            }
             formDataA.page=val;
             formDataA.size=this.pageSize;
             formDataA.fpid=this.documentFpid;
@@ -507,7 +526,6 @@ export default {
                 if (responsevalue) {
                     let returndata = responsevalue.data;
                     let tableArr=returndata.data.rows;
-                    this.tableData=tableArr;
                     for (let i = 0; i < tableArr.length; i++) {
                         //时间格式化
                         if(tableArr[i].fcreatetime){
@@ -517,6 +535,7 @@ export default {
                             tableArr[i].fpublishtime= this.formateDate(tableArr[i].fpublishtime);
                         }
                     }
+                    this.tableData=tableArr;
                     this.total=returndata.data.total;
                 } else {
                     this.$message.success('数据库没有该条数据!');
