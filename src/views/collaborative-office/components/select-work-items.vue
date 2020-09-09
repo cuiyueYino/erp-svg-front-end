@@ -115,15 +115,26 @@
 			//删除
 			del() {
 				if(this.getRowClickId('del')) {
-					this.$api.collaborativeOffice.apiUrl("workItem/delWorkItem", {
-						srcId: this.rowClick.srcId,
-						tempId: this.rowClick.tempId,
-						tableName: this.rowClick.tableName
-					}).then(data => {
-						if(this.dataBack(data), "删除成功") {
-							this.toSelect()
-						}
-					})
+                    this.$confirm('此操作将永久删除该单据, 是否继续?', '提示', {
+                        confirmButtonText: '确定',
+                        cancelButtonText: '取消',
+                        type: 'warning'
+                    }).then(
+                        this.$api.collaborativeOffice.apiUrl("workItem/delWorkItem", {
+                            srcId: this.rowClick.srcId,
+                            tempId: this.rowClick.tempId,
+                            tableName: this.rowClick.tableName
+                        }).then(data => {
+                            if(this.dataBack(data), "删除成功") {
+                                this.toSelect()
+                            }
+                        })
+                    ).catch(() => {
+                        this.$message({
+                            type: 'info',
+                            message: '已取消删除'
+                        });
+                    });
 				}
 			},
 			//查看
@@ -172,6 +183,10 @@
 			//修改
 			toUpd() {
 				if(this.getRowClickId('other')) {
+                    if(this.rowClick.status==3||this.rowClick.status==2){
+                        this.$message.error("已提交的数据不可修改");
+                        return;
+                    }
 					this.$api.collaborativeOffice.findDataBySrcId({
 						srcId: this.rowClick.srcId,
 						tempId: this.rowClick.tempId,
@@ -188,7 +203,7 @@
 					})
 				}
 			},
-			
+
 
 			//判断是否选中ROW
 			getRowClickId(flag) {
@@ -208,7 +223,7 @@
 						} else {
 							this.$message.error("请选择数据");
 						}
-					}	
+					}
 			},
 			//分页改变
 			pageChange(pageIndex) {
@@ -222,7 +237,7 @@
 					if(!this.noNull(this.value)) {
 						toGet[this.value] = this.selectData
 					}
-				} else { 
+				} else {
 					toGet.beginTime = this.value1[0]
 					toGet.endTime = this.value1[1]
 				}
