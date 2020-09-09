@@ -376,7 +376,7 @@
 							//添加浮点型校验
 							this.rules[item.field].push({
 								pattern: /^([1-9]\d{0,15}|0)(\.\d{1,4})?$/,
-								message: '请输入正确的' + item.fieldName,
+								message: '请输入最多4位小数',
 								trigger: 'change'
 							})
 							this.rules[item.field].push({
