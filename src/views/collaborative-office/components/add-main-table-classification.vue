@@ -242,6 +242,7 @@
 				CompanyData: JSON.parse(localStorage.getItem('CompanyData')),
 			}
 		},
+		
 		created() {
 			if(this.showFigNum == "2") {
 				this.showFig = true
