@@ -209,6 +209,7 @@
 			//搜索
 			toSelect() {
 				if (this.show == 1){
+					var tempParm = this.formInline.status + '';
 					this.formInline.status = 3;
 				}
                                 this.formInline.company = this.company;
@@ -216,7 +217,10 @@
 					let resultList =  data.data.data.rows;
 					this.tableData=resultList;
 					this.currentTotal = data.data.data.total;
-})
+					if (this.show == 1){
+						this.formInline.status = tempParm;
+					}
+				});
 			},
 			//选中行
 			clickRow(row) {

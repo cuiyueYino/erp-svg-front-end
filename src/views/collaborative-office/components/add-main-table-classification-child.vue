@@ -65,7 +65,7 @@
 					<el-table-column prop="date" label="字段类型" align="center">
 						<template slot-scope="scope">
 							<el-form-item :prop="'lines[' + scope.$index + '].fieldType'" :rules="rulesTable.fieldType">
-								<el-select clearable :disabled="scope.row.showFig || showFigAll" style="width: 100%;" v-model="scope.row.fieldType" placeholder="字段类型">
+								<el-select @change="fieldTypeSave(scope.row)" clearable :disabled="scope.row.showFig || showFigAll" style="width: 100%;" v-model="scope.row.fieldType" placeholder="字段类型">
 									<el-option v-for="item in fieldTypeList" :key="item.id" :label="item.label" :value="item.id">
 									</el-option>
 								</el-select>
@@ -152,7 +152,7 @@
 						},
 						{
 							pattern: /^[a-z_A-Z0-9-\.!@#\$%\\\^&\*\)\(\+=\{\}\[\]\/",'<>~\·`\?:;|]+$/,
-							message: '请输入正确的子表分类编码'
+							message: '请输入英文、数字、英文符号的子表分类编码'
 						}
 					],
 					name: [{
@@ -162,7 +162,7 @@
 						},
 						{
 							pattern: "[\u4e00-\u9fa5]",
-							message: '请输入正确的子表分类名称'
+							message: '请输入中文的子表分类名称'
 						}
 					],
 					tableName: [{
@@ -195,7 +195,7 @@
 						},
 						{
 							pattern: "[\u4e00-\u9fa5]",
-							message: '请输入正确的字段显示名称'
+							message: '请输入中文的字段显示名称'
 						}
 					],
 					fieldType: [{
@@ -300,7 +300,8 @@
 			},
 			//字段类型改变
 			fieldTypeSave(row) {
-				row.fieldContent = ""
+				row.fieldContent = "";
+				row.fieldContentName = "";
 			},
 			//打开字段内容
 			toFieldContent(row) {

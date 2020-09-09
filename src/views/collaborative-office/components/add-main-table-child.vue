@@ -279,22 +279,22 @@
 				rules: {
 					code: [{
 							required: true,
-							message: '请输入英文、数字、英文符号的子表编码',
+							message: '请输入子表分类编码',
 							trigger: 'change'
 						},
 						{
 							pattern: /^[a-z_A-Z0-9-\.!@#\$%\\\^&\*\)\(\+=\{\}\[\]\/",'<>~\·`\?:;|]+$/,
-							message: '请输入英文、数字、英文符号的子表编码'
+							message: '请输入英文、数字、英文符号的子表分类编码'
 						}
 					],
 					name: [{
 							required: true,
-							message: '请输入中文的子表名称',
+							message: '请输入子表分类名称',
 							trigger: 'change'
 						},
 						{
 							pattern: "[\u4e00-\u9fa5]",
-							message: '请输入中文的子表名称'
+							message: '请输入中文的子表分类名称'
 						}
 					],
 					workItemTypeSubName: [{
