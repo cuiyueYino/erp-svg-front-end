@@ -266,9 +266,11 @@
 									if(val.fieldType == 4) {
 										this.ruleForm[row.field] = result.con.toFixed(0)
 									} else if(val.fieldType == 5) {
-										this.ruleForm[row.field] = result.con.toFixed(4)
+										//this.ruleForm[row.field] = result.con.toFixed(4)
+										this.ruleForm[row.field] = result.con
 									} else {
-										this.ruleForm[row.field] = result.con.toFixed(4)
+										//this.ruleForm[row.field] = result.con.toFixed(4)
+										this.ruleForm[row.field] = result.con
 									}
 								}
 							})
