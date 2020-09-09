@@ -539,7 +539,7 @@
 							case "4":
 								//添加整型校验
 								this.rules[item.field].push({
-									pattern: /^-?[1-9]\d*$/,
+									pattern: /^-?[0-9]\d*$/,
 									message: '请输入正确的' + item.fieldName,
 									trigger: 'change'
 								})
