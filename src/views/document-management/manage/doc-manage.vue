@@ -353,7 +353,6 @@ export default {
         },
         //取消置顶
         unTopDocumentCategory(){
-            debugger;
             let SelectData=this.multipleSelection;
             if(SelectData.length > 1){
                 this.$message.error("只能选择一个!");

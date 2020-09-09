@@ -59,7 +59,7 @@
                             <el-tab-pane label="内容" name="first" >
                                 <div id="print" >
                                     <p v-html="formdata.fcontent" ></p>
-                                </div> 
+                                </div>
                                 <!-- <quill-editor id="print"
                                     :disabled="isEdit"
                                     v-model="formdata.fcontent"
@@ -133,7 +133,7 @@ export default {
                     key: 'foperatetime',
                     title: '操作时间'
                 }
-                
+
             ],
             isShow:true,
             isEdit: false,
@@ -171,7 +171,6 @@ export default {
         },
         //滑块切换
         handleClick(tab){
-            debugger;
             var tabsname =tab.paneName;
             if(tabsname){
                 if(tabsname ==="first"){
@@ -187,7 +186,7 @@ export default {
             }
         },
         // 失去焦点事件
-        onEditorBlur() {}, 
+        onEditorBlur() {},
         // 获得焦点事件
         onEditorFocus(event) {
             if (this.formDisabled == true) {
@@ -195,9 +194,9 @@ export default {
             } else {
                 event.enable(true);
             }
-        }, 
+        },
         // 内容改变事件
-        onEditorChange() {}, 
+        onEditorChange() {},
         //附件
         showFileData(data){
             this.FiletableData=data;
@@ -315,7 +314,7 @@ export default {
     size:  auto;   /* auto is the initial value */
     margin: 3mm;  /* this affects the margin in the printer settings */
   }
- 
+
   html{
     background-color: #FFFFFF;
     margin: 0;  /* this affects the margin on the html before sending to printer */

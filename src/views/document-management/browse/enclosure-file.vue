@@ -148,7 +148,6 @@ export default {
         //附件预览
         getHtmlPreviewAttachment(row){
             this.$api.documentManagement.getHtmlPreviewAttachmentById(row.fileFoid).then(response => {
-                debugger;
                 let responsevalue = response;
                 let value =response.data.data;
                 if (value) {
@@ -164,7 +163,6 @@ export default {
         },
         //是否展示dialog弹窗
         showAddMenu(type){
-            debugger;
             if(type === false){
                 this.rowNMMtype = false;
             }else{
@@ -199,7 +197,6 @@ export default {
         },
         //下载文件
         download (data,fileName) {
-            debugger;
             if (!data) {
                 return
             }
@@ -276,7 +273,7 @@ export default {
             //new一个FileReader实例
             let reader = new FileReader();
             let _this = this;
-            // reader.readAsText(this.file)  //文本读取，默认utf-8，格式 其他格式：reader.readAsText(this.file, "GBK")  
+            // reader.readAsText(this.file)  //文本读取，默认utf-8，格式 其他格式：reader.readAsText(this.file, "GBK")
             reader.readAsDataURL(this.file)  //base 64 读取
             reader.onload=function(e){
                 // 读取结果
@@ -288,7 +285,7 @@ export default {
             }*/
             console.log(event);
             this.$emit('enclosureFile', event.file);
-            
+
         }
     },
     watch:{
@@ -317,7 +314,7 @@ export default {
                     flag = true;
                 }
             }
-            
+
         }
     }
 }

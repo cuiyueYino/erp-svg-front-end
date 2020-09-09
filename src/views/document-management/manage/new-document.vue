@@ -266,7 +266,6 @@ export default {
         onEditorChange() {},
         //分页查询菜单
         searchMenutable(data){
-            debugger
             let creator = localStorage.getItem('ms_userId');
             let fromdata=data;
             this.$api.documentManagement.getDocumentRecordByMasterid(fromdata).then(response => {
@@ -320,7 +319,6 @@ export default {
             let fromDataS={};
             fromDataS=this.formdata;
             if(type == 0){//暂存
-              debugger;
               if( !fromDataS.fdocstatus || "暂存"==fromDataS.fdocstatus){
                 fromDataS.fdocstatus = '1';
               } else {
@@ -433,7 +431,6 @@ export default {
         },
         //修改文档管理提交
         saveEditmenu(data,type){
-          debugger;
             if(type == 0 && data.fdocstatus != "1") { //暂存
               this.$message.error("非暂存态不可以暂存!");
               return;
@@ -536,7 +533,6 @@ export default {
                 let responsevalue = response;
                 if (responsevalue.data.data) {
                     let values = responsevalue.data.data;
-                    debugger;
                     let rowObj = {};
                     rowObj.operateFlag ='QUERY';
                     //主表单的操作 //show标志传到附件中，控制 新增/删除 button隐藏
