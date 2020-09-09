@@ -81,7 +81,7 @@
 		created() {
 			//最上端公司选择
 			this.CompanyData.forEach(item => {
-				if(item.name == "福佳集团") {
+				if(item.id == this.context.company) {
 					this.company = item
 				}
 			})
