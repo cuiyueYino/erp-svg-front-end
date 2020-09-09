@@ -14,6 +14,10 @@ const collaborativeOffice = {
 	updateStatusTemp(params) {
 		return httpReqest.post('/api/interfaces/workItemTemp/updateStatus', params);
 	},
+    // 修改状态子表，7禁用、3有效
+	updateStatusTempSub(params) {
+		return httpReqest.post('/api/interfaces/workItemTempSub/updateStatus', params);
+	},
 	// 根据ID查询工作事项模版主表分类
 	getWorkItemTypeModel(params) {
 		var valueS = '?';

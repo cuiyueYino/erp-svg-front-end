@@ -170,7 +170,7 @@
 						return "回收"
 						break;
 					case 7:
-						return "作废"
+						return "禁用"
 						break;
 					case 8:
 						return "关闭/结清"
@@ -181,7 +181,7 @@
 			toUpd() {
 				if(this.getRowClickId()) {
                     if(this.rowClick.status==3||this.rowClick.status==2){
-                        this.$message.error("状态不可修改");
+                        this.$message.error("该状态的数据不可修改");
                         return;
                     }
 					this.$api.collaborativeOffice.getWorkItemTypeModel({
