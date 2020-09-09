@@ -228,13 +228,18 @@ export default {
             let nodes = this.$refs.tree.getCheckedNodes();
             let categoryfoids = []; //选中的文档类别
             let managefoids = [];   //选中的文档
+          debugger;
             for(var i=0; i<nodes.length; i++){
                 let node = nodes[i];
-                if( node.flevel == 1) {
+                if( node.flevel == 1 && node.children) {
                     categoryfoids.push(node.foid);
                 } else if( node.flevel == 2) {
                     managefoids.push(node.foid);
                 }
+            }
+            if(categoryfoids.length == 0 && managefoids.length ==0){
+              this.$message.error("请选择有效二级的文档类别进行授权!");
+              return;
             }
             let SelectData=this.multipleSelection; // 选中的角色
             if(SelectData.length < 1){

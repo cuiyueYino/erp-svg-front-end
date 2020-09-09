@@ -31,7 +31,7 @@
 					</el-col>
 					<el-col :span="6">
 						<el-form-item prop="tableName" label="数据库表名">
-							<el-input style="width: 150%;" clearable :disabled="showFig || showFigAll" v-model="ruleForm.tableName" maxlength="50" placeholder="数据库表名"></el-input>
+							<el-input style="width: 150%;" clearable :disabled="showFig || showFigAll" v-model="ruleForm.tableName" maxlength="25" placeholder="数据库表名"></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
@@ -51,7 +51,7 @@
 					<el-table-column prop="date" label="数据库字段名" align="center">
 						<template slot-scope="scope">
 							<el-form-item :prop="'lines[' + scope.$index + '].field'" :rules="rulesTable.field">
-								<el-input clearable :disabled="scope.row.showFig || showFigAll" v-model="scope.row.field" maxlength="50" placeholder="数据库字段名"></el-input>
+								<el-input clearable :disabled="scope.row.showFig || showFigAll" v-model="scope.row.field" maxlength="30" placeholder="数据库字段名"></el-input>
 							</el-form-item>
 						</template>
 					</el-table-column>
