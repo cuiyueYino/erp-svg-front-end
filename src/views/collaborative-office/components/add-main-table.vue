@@ -7,7 +7,7 @@
 			<el-row style="margin-top: 10px;">
 				<el-col :span="18">
 					公司：
-					<el-select size='mini' v-model="ruleForm.company" placeholder="公司">
+					<el-select size='mini' v-model="ruleForm.company" placeholder="公司" @change="selectChanged">
 						<el-option v-for="item in CompanyData" :key="item.id" :label="item.name" :value="item.id">
 						</el-option>
 					</el-select>
@@ -148,8 +148,8 @@
 				</el-form>
 			</el-card>
 			<!--弹出框-->
-			<erpDialog title="工作事项模板主表分类" erpDialogwidth="true" :dialogShow="dialogVisible">
-				<selectMainTableClassification show="1" ref="child"></selectMainTableClassification>
+			<erpDialog title="工作事项模板主表分类" erpDialogwidth="true" :dialogShow="dialogVisible" v-if="dialogVisible" width="80%">
+				<selectMainTableClassification show="1" ref="child" :company="this.ruleForm.company"></selectMainTableClassification>
 				<div slot="footer">
 					<el-button @click="dialogVisible = false">取 消</el-button>
 					<el-button type="primary" @click="getSelectMainTableClassification">确 定</el-button>
@@ -356,6 +356,11 @@
 			})
 		},
 		methods: {
+			//公司select选择的时候
+			selectChanged(val) {
+				this.ruleForm.workItemTypeSubName = '';
+				this.ruleForm.workItemTempName = '';
+			},
 			//服务类型
 			ftypeShow(row) {
 				switch(row.ftype) {

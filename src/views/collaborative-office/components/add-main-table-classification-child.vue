@@ -6,7 +6,7 @@
 		<el-row style="margin-top: 10px;">
 			<el-col :span="18">
 				公司：
-				<el-select :disabled="showFigAll" size='mini' v-model="ruleForm.company" placeholder="公司">
+				<el-select :disabled="!showFigAll" size='mini' v-model="ruleForm.company" placeholder="公司">
 					<el-option v-for="item in CompanyData" :key="item.id" :label="item.name" :value="item.id">
 					</el-option>
 				</el-select>
@@ -254,8 +254,8 @@
 				this.ruleForm = this.context
 			}
 			this.CompanyData.forEach(item => {
-				if(item.name == "福佳集团") {
-					this.ruleForm.company = item.id
+				if(item.id == this.context.company) {
+					this.company = item
 				}
 			})
 		},
