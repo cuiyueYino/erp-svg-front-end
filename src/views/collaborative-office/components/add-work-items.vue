@@ -111,7 +111,7 @@
 					//标题
 					backData.title = JSON.parse(JSON.stringify(backData.jsonStr.title))
 					//经办人
-					backData.gestor = JSON.parse(JSON.stringify(backData.jsonStr.gestor))
+					backData.gestor = localStorage.getItem('ms_staffId');
 					//经办部门
 					backData.gestorDept = JSON.parse(JSON.stringify(backData.jsonStr.gestorDept))
 					//经办时间

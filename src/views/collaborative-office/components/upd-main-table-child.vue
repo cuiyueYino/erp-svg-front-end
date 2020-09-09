@@ -433,23 +433,23 @@
 			})
 			this.$api.collaborativeOffice.findList({}).then(data => {
 				this.selectList = data.data.data
-			})
-			//全部服务
-			this.getDialogVisible(false)
-			this.ruleForm.lines.forEach(item => {
-				this.tServiceByParams.forEach(val => {
-					if(item.serviceId != null && item.serviceId == val.foid) {
-						//服务显示名称
-						this.$set(item, 'serviceCon', val.fname)
-						//查询服务的参数：fid是根据条件查询的“条件” fcode是具体查询哪条服务的内容
-						this.$set(item, 'serviceNow', {
-							fid: "",
-							fcode: val.fcode
-						})
-					}
+				//全部服务
+				this.getDialogVisible(false)
+				this.ruleForm.lines.forEach(item => {
+					this.tServiceByParams.forEach(val => {
+						if(item.serviceId != null && item.serviceId == val.foid) {
+							//服务显示名称
+							this.$set(item, 'serviceCon', val.fname)
+							//查询服务的参数：fid是根据条件查询的“条件” fcode是具体查询哪条服务的内容
+							this.$set(item, 'serviceNow', {
+								fid: "",
+								fcode: val.fcode
+							})
+						}
+					})
 				})
+				this.getType(this.ruleForm.type)
 			})
-			this.getType(this.ruleForm.type)
 		},
 		methods: {
 			//公司select选择的时候
@@ -666,21 +666,28 @@
 				})
 				//列序按照填写排序
 				var index = 0
-				cur.sort((a, b) => {
-					a.colList.sort((a1, b1) => {
-						//return a1.orderNum - b1.orderNum
-						return Number(a1.orderNum) - Number(b1.orderNum)
-					})
-					if(index == 0) {
-						b.colList.sort((a1, b1) => {
+				if(cur.length > 1){
+					cur.sort((a, b) => {
+						a.colList.sort((a1, b1) => {
 							//return a1.orderNum - b1.orderNum
 							return Number(a1.orderNum) - Number(b1.orderNum)
 						})
-						index++
-					}
-					//return a.showNum - b.showNum
-					return Number(a.showNum) - Number(b.showNum)
-				})
+						if(index == 0) {
+							b.colList.sort((a1, b1) => {
+								//return a1.orderNum - b1.orderNum
+								return Number(a1.orderNum) - Number(b1.orderNum)
+							})
+							index++
+						}
+						//return a.showNum - b.showNum
+						return Number(a.showNum) - Number(b.showNum)
+					})
+				}else{
+					cur[0].colList.sort((a1, b1) => {
+						//return a1.orderNum - b1.orderNum
+						return Number(a1.orderNum) - Number(b1.orderNum)
+					})
+				}
 				this.conData.top.rowList = cur
 			},
 			//添加校验（显示的值的校验)
@@ -818,33 +825,41 @@
 							})
 							//列序按照填写排序
 							var index = 0
-							cur.sort((a, b) => {
-								a.colList.sort((a1, b1) => {
-									//return a1.orderNum - b1.orderNum
-									return Number(a1.orderNum) - Number(b1.orderNum)
-								})
-								if(index == 0) {
-									b.colList.sort((a1, b1) => {
+							if(cur.length > 1){
+								cur.sort((a, b) => {
+									a.colList.sort((a1, b1) => {
 										//return a1.orderNum - b1.orderNum
 										return Number(a1.orderNum) - Number(b1.orderNum)
 									})
-									index++
-								}
-								//return a.showNum - b.showNum
-								return Number(a.showNum) - Number(b.showNum)
-							})
+									if(index == 0) {
+										b.colList.sort((a1, b1) => {
+											//return a1.orderNum - b1.orderNum
+											return Number(a1.orderNum) - Number(b1.orderNum)
+										})
+										index++
+									}
+									//return a.showNum - b.showNum
+									return Number(a.showNum) - Number(b.showNum)
+								})
+							}else{
+								cur[0].colList.sort((a1, b1) => {
+									//return a1.orderNum - b1.orderNum
+									return Number(a1.orderNum) - Number(b1.orderNum)
+								})
+							}
 							if(this.conData.bottom[0].type == 2) {
 								this.$set(this.conData.bottom[0], "conList", [])
 								cur.forEach(val1 => {
-								val1.colList.forEach(val2 => {
-								this.conData.bottom[0].conList.push(val2)
-								})
+									val1.colList.forEach(val2 => {
+										this.conData.bottom[0].conList.push(val2)
+									})
 								})
 								this.conData.bottom[0].conList.sort((a1, b1) => {
-								//return a1.orderNum - b1.orderNum
-								return Number(a1.orderNum) - Number(b1.orderNum)
+									//return a1.orderNum - b1.orderNum
+									return Number(a1.orderNum) - Number(b1.orderNum)
 								})
 							}
+							this.conData.bottom[0].rowList = cur
 							//打开预览页面
 							this.showFigForm = true
 						} else {

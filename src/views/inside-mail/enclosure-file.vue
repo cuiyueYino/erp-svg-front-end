@@ -174,18 +174,19 @@ export default {
         /**
          * 上传
          */
-        upload(){
+        async upload(){
             let length = this.enclosureTableData.length;
             if(length==undefined||length==0){
                 return;
             }
             let creator = localStorage.getItem('ms_staffId');
-            var formData = new FormData();
+            
             // formData.append('files', this.uploadFiles);
 
             for(var i=0; i < length; i++ ){
-                if(this.enclosureTableData[0].id==null || this.enclosureTableData[0].id==''){
-                    formData.append('file', this.enclosureTableData[0]);
+                var formData = new FormData();
+                if(this.enclosureTableData[i].id==null || this.enclosureTableData[i].id==''){
+                    formData.append('file', this.enclosureTableData[i]);
                     formData.append('menuCode',this.enclosureConfig.menuCode);
                     if(creator){
                         formData.append('userCode',creator);
@@ -195,7 +196,13 @@ export default {
                     formData.append('voucherId',this.enclosureConfig.voucherId);
                     console.log(formData);
                     // this.$api.insideMail.uploadFileBatch(formData).then((response) => {
-                    this.$api.insideMail.uploadFile(formData).then((response) => {
+                    await this.$api.insideMail.uploadFile(formData).then((response) => {
+                         return new Promise(resolve => {
+                            //返回id和name 用于显示或者存储(服务10不出意外应该是input，无法显示和存储不同，暂时没法解决，只能显示id)
+                            resolve({
+
+                            });
+                            });
                         if(response.data.code == 0 && response.data.data){
                         }
                     });
