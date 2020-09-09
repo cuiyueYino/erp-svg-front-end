@@ -29,7 +29,7 @@
 						</el-form-item>
 					</template>
 				</el-table-column>
-				<el-table-column align="right" width="100">
+				<el-table-column v-if="dis != '1'" align="right" width="100">
 					<template slot="header" slot-scope="scope">
 						<el-button size="mini" @click="addRow()">新建</el-button>
 					</template>
@@ -342,10 +342,31 @@
 						}
 					}
 					switch(item.fieldType) {
+						case "2":
+							this.rules[item.field].push({
+								max: 1500,
+								message: '请输入正确的' + item.fieldName,
+								trigger: 'change'
+							})
+							return "integers"
+							break;
+						case "3":
+							this.rules[item.field].push({
+								max: 1500,
+								message: '请输入正确的' + item.fieldName,
+								trigger: 'change'
+							})
+							return "integers"
+							break;
 						case "4":
 							//添加整型校验
 							this.rules[item.field].push({
 								pattern: /^-?[1-9]\d*$/,
+								message: '请输入正确的' + item.fieldName,
+								trigger: 'change'
+							})
+							this.rules[item.field].push({
+								max: 20,
 								message: '请输入正确的' + item.fieldName,
 								trigger: 'change'
 							})
@@ -355,6 +376,11 @@
 							//添加浮点型校验
 							this.rules[item.field].push({
 								pattern: /^([1-9]\d{0,15}|0)(\.\d{1,4})?$/,
+								message: '请输入正确的' + item.fieldName,
+								trigger: 'change'
+							})
+							this.rules[item.field].push({
+								max: 20,
 								message: '请输入正确的' + item.fieldName,
 								trigger: 'change'
 							})
@@ -433,24 +459,24 @@
 					}
 				}
 				dataBack.forEach((item, index) => {
-						if(index == dataBack.length - 1) {
-							if(this.showCon == "personnel") {
-								label = label + item.tname
-								value = value + item.toid
-							} else {
-								label = label + item.fname
-								value = value + item.foid
-							}
+					if(index == dataBack.length - 1) {
+						if(this.showCon == "personnel") {
+							label = label + item.tname
+							value = value + item.toid
 						} else {
-							if(this.showCon == "personnel") {
-								label = label + item.tname + ","
-								value = value + item.toid + ","
-							} else {
-								label = label + item.fname + ","
-								value = value + item.foid + ","
-							}
+							label = label + item.fname
+							value = value + item.foid
 						}
-					})
+					} else {
+						if(this.showCon == "personnel") {
+							label = label + item.tname + ","
+							value = value + item.toid + ","
+						} else {
+							label = label + item.fname + ","
+							value = value + item.foid + ","
+						}
+					}
+				})
 				//获取子组件返回的id和name
 				this.$set(this.tableRowCon, this.dialogVisibleCon.field + '_NameShow', label)
 				this.$set(this.tableRowCon, this.dialogVisibleCon.field, value)
@@ -537,19 +563,19 @@
 						this.showCon = "organization"
 						this.titleShow = "公司"
 						this.$set(this.dataCon, "context", row.browseBoxList)
-						typeof(this.tableRowCon[row.field]) != "undefined" ? this.$set(this.dataCon,"echo",this.tableRowCon[row.field].split(',')) : this.$set(this.dataCon,"echo",[])
+						typeof(this.tableRowCon[row.field]) != "undefined" ? this.$set(this.dataCon, "echo", this.tableRowCon[row.field].split(',')): this.$set(this.dataCon, "echo", [])
 						break;
 					case "2":
 						this.showCon = "organization"
 						this.titleShow = "部门"
 						this.$set(this.dataCon, "context", row.browseBoxList)
-						typeof(this.tableRowCon[row.field]) != "undefined" ? this.$set(this.dataCon,"echo",this.tableRowCon[row.field].split(',')) : this.$set(this.dataCon,"echo",[])
+						typeof(this.tableRowCon[row.field]) != "undefined" ? this.$set(this.dataCon, "echo", this.tableRowCon[row.field].split(',')): this.$set(this.dataCon, "echo", [])
 						break;
 					case "3":
 						this.showCon = "organization"
 						this.titleShow = "职位"
 						this.$set(this.dataCon, "context", row.browseBoxList)
-						typeof(this.tableRowCon[row.field]) != "undefined" ? this.$set(this.dataCon,"echo",this.tableRowCon[row.field].split(',')) : this.$set(this.dataCon,"echo",[])
+						typeof(this.tableRowCon[row.field]) != "undefined" ? this.$set(this.dataCon, "echo", this.tableRowCon[row.field].split(',')): this.$set(this.dataCon, "echo", [])
 						break;
 					case "4":
 						this.showCon = "personnel"

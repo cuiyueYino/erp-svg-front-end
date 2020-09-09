@@ -8,7 +8,7 @@
 				<el-row>
 					<el-col :span="18">
 						公司：
-						<el-select size='mini' v-model="ruleForm.company" placeholder="公司">
+						<el-select size='mini' :disabled="showFigNum == 1" v-model="ruleForm.company" placeholder="公司">
 							<el-option v-for="item in CompanyData" :key="item.id" :label="item.name" :value="item.id">
 							</el-option>
 						</el-select>

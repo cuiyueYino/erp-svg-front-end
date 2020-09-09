@@ -57,7 +57,7 @@
 				<el-table-column prop="code" label="主表分类编码" width="180" align="center"></el-table-column>
 				<el-table-column prop="name" label="主表分类名称" width="180" align="center"></el-table-column>
 				<el-table-column prop="tableName" label="数据库表名" width="180" align="center"></el-table-column>
-				<el-table-column prop="remark" label="描述" align="center"></el-table-column>
+				<el-table-column prop="remark" label="描述" align="center" :show-overflow-tooltip="true"></el-table-column>
 			</el-table>
 			<pageNation :total="currentTotal" v-if="currentTotal != 0" ref="pageNation" @pageChange="pageChange"></pageNation>
 		</el-card>
@@ -181,7 +181,7 @@
 			toUpd() {
 				if(this.getRowClickId()) {
                     if(this.rowClick.status==3||this.rowClick.status==2){
-                        this.$message.error("该状态的数据不可修改");
+                        this.$message.error("有效状态的数据不可修改");
                         return;
                     }
 					this.$api.collaborativeOffice.getWorkItemTypeModel({
@@ -206,10 +206,14 @@
 			},
 			//搜索
 			toSelect() {
+				if (this.show == 1){
+					this.formInline.status = 3;
+				}
 				this.$api.collaborativeOffice.findWorkItemTypePage(this.formInline).then(data => {
-					this.tableData = data.data.data.rows
-					this.currentTotal = data.data.data.total
-				})
+					let resultList =  data.data.data.rows;
+					this.tableData=resultList;
+					this.currentTotal = data.data.data.total;
+})
 			},
 			//选中行
 			clickRow(row) {

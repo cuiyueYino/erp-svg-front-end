@@ -181,7 +181,7 @@
 			toUpd() {
 				if(this.getRowClickId()) {
                     if(this.rowClick.status==3||this.rowClick.status==2){
-                        this.$message.error("该状态的数据不可修改");
+                        this.$message.error("有效状态的数据不可修改");
                         return;
                     }
 					this.$api.collaborativeOffice.getWorkItemTypeSubModel({
@@ -206,6 +206,9 @@
 			},
 			//搜索
 			toSelect() {
+			    if(this.show==1){
+                    this.formInline.status = 3;
+                }
 				this.formInline.company = this.company;
 				this.$api.collaborativeOffice.apiUrl("workItemTypeSub/findWorkItemTypeSubPage", this.formInline).then(data => {
 					this.tableData = data.data.data.rows
