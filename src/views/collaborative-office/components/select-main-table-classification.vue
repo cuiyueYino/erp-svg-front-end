@@ -55,9 +55,9 @@
 			<el-table size="small" @row-dblclick="rowDblClick" :height="$GLOBAL.tableHeight" highlight-current-row @row-click="clickRow" :data="tableData" border>
 				<el-table-column :formatter="statusShow" prop="status" label="状态" width="180" align="center"></el-table-column>
 				<el-table-column prop="code" label="主表分类编码" width="180" align="center"></el-table-column>
-				<el-table-column prop="name" label="主表分类名称" width="180" align="center"></el-table-column>
-				<el-table-column prop="tableName" label="数据库表名" width="180" align="center"></el-table-column>
-				<el-table-column prop="remark" label="描述" align="center" :show-overflow-tooltip="true"></el-table-column>
+				<el-table-column prop="name" label="主表分类名称" width="380" align="center"></el-table-column>
+				<el-table-column prop="tableName" label="数据库表名" width="280" align="center"></el-table-column>
+				<el-table-column prop="remark" label="描述" align="center" width="580" :show-overflow-tooltip="true"></el-table-column>
 			</el-table>
 			<pageNation :total="currentTotal" v-if="currentTotal != 0" ref="pageNation" @pageChange="pageChange"></pageNation>
 		</el-card>
@@ -74,25 +74,25 @@
 		},
 		data() {
 			return {
-				statusList: [{
+				statusList: [/*{
 					id: "1",
 					value: "暂存"
 				}, {
 					id: "2",
 					value: "提交"
-				}, {
+				}, */{
 					id: "3",
 					value: "有效"
-				}, {
+				}, /*{
 					id: "4",
 					value: "回收"
-				}, {
+				}, */{
 					id: "7",
 					value: "禁用"
-				}, {
+				}, /*{
 					id: "8",
 					value: "关闭/结清"
-				}],
+				}*/],
 				formInline: {
 					code: "",
 					name: "",
