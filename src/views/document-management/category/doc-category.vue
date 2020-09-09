@@ -166,6 +166,7 @@ export default {
 
         //查询按钮
         findData(){
+            this.pageNum = 1;
             let field = this.formInline.document;
             let fromdata={};
             fromdata.page=this.pageNum;
@@ -327,6 +328,7 @@ export default {
         },
         //分页，下一页
         onCurrentChange(val){
+            this.pageNum = val;
             let formDataA ={};
             formDataA.page=val;
             formDataA.size=this.pageSize;
