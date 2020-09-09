@@ -181,16 +181,15 @@
 			tableSelect(){
 				this.$refs.multipleTable.clearCheckboxRow();
 				this.dataCon.context.forEach(row => {
-					if(this.showFig == "personnel"){
-						if(this.RoleselectData.includes(row.tcode)) {
-							this.$refs.multipleTable.toggleCheckboxRow(row);
-						}
-					}else{
+					if(row.foid){
 						if(this.RoleselectData.includes(row.foid)) {
 							this.$refs.multipleTable.toggleCheckboxRow(row);
 						}
-					}	
-					
+					}else if(row.toid){
+						if(this.RoleselectData.includes(row.toid)) {
+							this.$refs.multipleTable.toggleCheckboxRow(row);
+						}
+					}
 				});
 			},
 			//查询
