@@ -186,6 +186,7 @@
       },
       // 用户查询时，公司部门层级不可点击
       operateUserTree(staffTree) {
+        debugger;
         this.treeData = [];
         for (let i in staffTree) {
           // 第一级

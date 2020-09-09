@@ -76,25 +76,25 @@
 		data() {
 			return {
 				// company:'',
-				statusList: [{
+				statusList: [/*{
 					id: "1",
 					value: "暂存"
 				}, {
 					id: "2",
 					value: "提交"
-				}, {
+				}, */{
 					id: "3",
 					value: "有效"
-				}, {
+				}, /*{
 					id: "4",
 					value: "回收"
-				}, {
+				},*/ {
 					id: "7",
 					value: "禁用"
-				}, {
+				}, /*{
 					id: "8",
 					value: "关闭/结清"
-				}],
+				}*/],
 				formInline: {
 					company:'',
 					code: "",

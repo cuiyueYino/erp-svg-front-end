@@ -42,7 +42,7 @@
 							<!-- 浏览框 -->
 							<a @click="toNew(ruleForm[item.field])" v-if="dis == '1' && item.toSelect.id == '7'" href="javascript:void(0)">{{ruleForm[item.field+'_NameShow']}}</a>
 							<el-input v-else style="width: 100%;" v-model="ruleForm[item.field+'_NameShow']" disabled>
-								<el-button @click="findDialogVisible(item)" v-if="item.edit" slot="append"  icon="el-icon-search"></el-button>
+								<el-button @click="findDialogVisible(item)" v-if="item.edit" slot="append" icon="el-icon-search"></el-button>
 							</el-input>
 						</el-form-item>
 						<el-form-item v-else :label="item.fieldName" :prop="item.field">
@@ -266,9 +266,11 @@
 									if(val.fieldType == 4) {
 										this.ruleForm[row.field] = result.con.toFixed(0)
 									} else if(val.fieldType == 5) {
-										this.ruleForm[row.field] = result.con.toFixed(4)
+										//this.ruleForm[row.field] = result.con.toFixed(4)
+										this.ruleForm[row.field] = result.con
 									} else {
-										this.ruleForm[row.field] = result.con.toFixed(4)
+										//this.ruleForm[row.field] = result.con.toFixed(4)
+										this.ruleForm[row.field] = result.con
 									}
 								}
 							})
@@ -518,10 +520,31 @@
 						}
 						//浮点和整型校验 特殊对待一下
 						switch(item.fieldType) {
+							case "2":
+								this.rules[item.field].push({
+									max: 1500,
+									message: '请输入正确的' + item.fieldName,
+									trigger: 'change'
+								})
+								return "integers"
+								break;
+							case "3":
+								this.rules[item.field].push({
+									max: 1500,
+									message: '请输入正确的' + item.fieldName,
+									trigger: 'change'
+								})
+								return "integers"
+								break;
 							case "4":
 								//添加整型校验
 								this.rules[item.field].push({
-									pattern: /^-?[1-9]\d*$/,
+									pattern: /^-?[0-9]\d*$/,
+									message: '请输入正确的' + item.fieldName,
+									trigger: 'change'
+								})
+								this.rules[item.field].push({
+									max: 20,
 									message: '请输入正确的' + item.fieldName,
 									trigger: 'change'
 								})
@@ -531,6 +554,11 @@
 								//添加浮点型校验
 								this.rules[item.field].push({
 									pattern: /^([1-9]\d{0,15}|0)(\.\d{1,4})?$/,
+									message: '请输入最多4位小数',
+									trigger: 'change'
+								})
+								this.rules[item.field].push({
+									max: 20,
 									message: '请输入正确的' + item.fieldName,
 									trigger: 'change'
 								})
@@ -768,7 +796,7 @@
 			},
 			//富文本事件
 			onEditorBlur() {}, // 失去焦点事件
-			onEditorFocus(event,edit) {
+			onEditorFocus(event, edit) {
 				//if(this.formDisabled == true) {
 				if(!edit) {
 					event.enable(false);
@@ -786,7 +814,7 @@
 		height: 300px;
 		overflow: auto;
 	}
-
+	
 	>>>.el-dialog__body {
 		border-bottom: 1px solid #dcdfe6;
 		min-height: calc(100vh - 300px);

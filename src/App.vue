@@ -45,6 +45,6 @@ export default {
 /* @import "./assets/css/theme-green/color-green.css";   浅绿色主题*/
 /*el-table 选中行颜色*/
 	.el-table__body tr.current-row>td {
-		background-color: #e6f7ff !important;
+		background-color: #409EFF !important;
 	}
 </style>
