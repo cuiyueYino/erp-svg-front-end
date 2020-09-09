@@ -216,7 +216,6 @@
 			},
 			//搜索
 			toSelect() {
-				console.log(this.company);
 			    if(this.show==1){
                     this.toSelectData.status = 3
                 }
@@ -232,8 +231,6 @@
 				if(this.userId){
 					this.toSelectData.userId=this.userId;
 				}
-				console.log("sly....");
-				console.log(this.company);
 				this.$api.collaborativeOffice.findWorkItemTempPage(this.toSelectData).then(data => {
 					this.tableData = data.data.data.rows
 					this.currentTotal = data.data.data.total
