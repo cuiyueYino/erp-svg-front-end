@@ -23,7 +23,7 @@
 					<el-button type="primary" plain @click="resetForm('formInlineTName')" class="search-all">重置</el-button>
 				</el-form-item>
 			</el-form>
-			<vxe-table border :loading="loading" ref="multipleTable" align="center" size="small" highlight-current-row  height="380" :data="dataCon.context">
+			<vxe-table border :loading="loading" ref="multipleTable" align="center" size="small" highlight-current-row  height="330" :data="dataCon.context">
 				<vxe-table-column type="checkbox" width="60"></vxe-table-column>
 				<vxe-table-column field="tcode" title="人员编码"></vxe-table-column>
 				<vxe-table-column field="tname" title="人员名称"></vxe-table-column>
@@ -33,7 +33,7 @@
 
 		<div v-if="showFig == 'user'" style="margin-bottom: 40px;">
 			<el-form label-width="80px" :inline="true" ref="formInlineTNameUser" :model="formInlineTNameUser" class="demo-form-inline">
-				<el-form-item label="名称：" prop="tname">
+				<el-form-item label="名称：" prop="fname">
 					<el-input clearable v-model="formInlineTNameUser.fname" placeholder="名称"></el-input>
 				</el-form-item>
 				<el-form-item label="部门：" prop="departmentname">
@@ -44,7 +44,7 @@
 					<el-button type="primary" plain @click="resetForm('formInlineTNameUser')" class="search-all">重置</el-button>
 				</el-form-item>
 			</el-form>
-			<vxe-table border :loading="loading" ref="multipleTable" align="center" size="small" highlight-current-row height="600" :data="dataCon.context">
+			<vxe-table border :loading="loading" ref="multipleTable" align="center" size="small" highlight-current-row height="330" :data="dataCon.context">
 				<vxe-table-column type="checkbox" width="60"></vxe-table-column>
 				<vxe-table-column field="fname" title="名称"></vxe-table-column>
 				<vxe-table-column field="fcompanyname" title="公司"></vxe-table-column>
@@ -55,10 +55,10 @@
 
 		<div v-if="showFig == 'jobSet'" style="margin-bottom: 40px;">
 			<el-form label-width="80px" :inline="true" ref="formInlineTNameJob" :model="formInlineTNameJob" class="demo-form-inline">
-				<el-form-item label="编码：" prop="tname">
+				<el-form-item label="编码：" prop="fcode">
 					<el-input clearable v-model="formInlineTNameJob.fcode" placeholder="编码"></el-input>
 				</el-form-item>
-				<el-form-item label="名称：" prop="departmentname">
+				<el-form-item label="名称：" prop="fname">
 					<el-input clearable v-model="formInlineTNameJob.fname" placeholder="名称"></el-input>
 				</el-form-item>
 				<el-form-item>
@@ -66,7 +66,7 @@
 					<el-button type="primary" plain @click="resetForm('formInlineTNameJob')" class="search-all">重置</el-button>
 				</el-form-item>
 			</el-form>
-			<vxe-table border :loading="loading" ref="multipleTable" align="center" size="small" highlight-current-row height="600" :data="dataCon.context">
+			<vxe-table border :loading="loading" ref="multipleTable" align="center" size="small" highlight-current-row height="330" :data="dataCon.context">
 				<vxe-table-column type="checkbox" width="60"></vxe-table-column>
 				<vxe-table-column field="fcode" title="编码"></vxe-table-column>
 				<vxe-table-column field="fname" title="名称"></vxe-table-column>
