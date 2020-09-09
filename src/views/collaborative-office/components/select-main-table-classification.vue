@@ -71,6 +71,7 @@
 		},
 		props: {
 			show: String,
+			company:String,
 		},
 		data() {
 			return {
@@ -94,6 +95,7 @@
 					value: "关闭/结清"
 				}*/],
 				formInline: {
+    				        company:'',
 					code: "",
 					name: "",
 					remark: "",
@@ -209,6 +211,7 @@
 				if (this.show == 1){
 					this.formInline.status = 3;
 				}
+                                this.formInline.company = this.company;
 				this.$api.collaborativeOffice.findWorkItemTypePage(this.formInline).then(data => {
 					let resultList =  data.data.data.rows;
 					this.tableData=resultList;
