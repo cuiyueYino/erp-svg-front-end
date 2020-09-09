@@ -206,6 +206,9 @@
 			},
 			//搜索
 			toSelect() {
+			    if(this.show==1){
+                    this.formInline.status = 3;
+                }
 				this.formInline.company = this.company;
 				this.$api.collaborativeOffice.apiUrl("workItemTypeSub/findWorkItemTypeSubPage", this.formInline).then(data => {
 					this.tableData = data.data.data.rows

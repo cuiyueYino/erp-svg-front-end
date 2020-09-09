@@ -42,8 +42,8 @@
 				<el-table-column prop="code" label="子表编码" width="180" align="center"></el-table-column>
 				<el-table-column prop="name" label="子表名称" width="180" align="center"></el-table-column>
 				<el-table-column prop="workItemTypeSubName" label="子表分类" width="180" align="center"></el-table-column>
-				<el-table-column prop="type" label="子表类型" width="180" align="center"></el-table-column>
-				<el-table-column prop="workItemTypeName" label="主表" width="180" align="center"></el-table-column>
+				<el-table-column :formatter="typeShow" prop="type" label="子表类型" width="180" align="center"></el-table-column>
+				<el-table-column prop="workItemTempName" label="主表" width="180" align="center"></el-table-column>
 				<el-table-column prop="showName" label="显示名称" width="180" align="center"></el-table-column>
 				<el-table-column prop="orderNum" label="显示顺序" width="180" align="center"></el-table-column>
 				<el-table-column prop="remark" label="描述" align="center"></el-table-column>
@@ -176,11 +176,21 @@
 						break;
 				}
 			},
+            typeShow(row) {
+                switch(row.type) {
+                    case "1":
+                        return "子表"
+                        break;
+                    case "2":
+                        return "明细表"
+                        break;
+                }
+            },
 			//修改
 			toUpd() {
 				if(this.getRowClickId()) {
                     if(this.rowClick.status==3||this.rowClick.status==2){
-                        this.$message.error("该状态的数据不可修改");
+                        this.$message.error("有效状态的数据不可修改");
                         return;
                     }
 					this.$api.collaborativeOffice.getWorkItemTempSubModel({
