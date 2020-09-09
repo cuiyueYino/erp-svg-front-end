@@ -144,7 +144,7 @@
                         this.$message.error("状态不可修改");
                         return;
                     }
-					this.$api.collaborativeOffice.updateStatusTemp({
+					this.$api.collaborativeOffice.updateStatusTempSub({
 						id: this.rowClickId,
 						status: status,
 					}).then(data => {

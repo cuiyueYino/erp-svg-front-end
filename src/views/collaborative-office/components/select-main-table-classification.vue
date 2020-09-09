@@ -170,7 +170,7 @@
 						return "回收"
 						break;
 					case 7:
-						return "作废"
+						return "禁用"
 						break;
 					case 8:
 						return "关闭/结清"
