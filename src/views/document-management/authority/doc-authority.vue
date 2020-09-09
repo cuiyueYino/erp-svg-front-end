@@ -24,6 +24,7 @@
                             node-key="foid"
                             ref="tree"
                             show-checkbox
+                            @check="checkboxClick"
                             accordion
                             @node-click="handleNodeClick">
                               <div slot-scope="{node,data}" class="customize-tree-p">
@@ -79,6 +80,7 @@
                             size="small"
                             border
                             style="width: 100%"
+                            @select-all="onSelectionChange"
                             @select="onSelectionChange">
                             <el-table-column type="selection" min-width="5%"></el-table-column>
                             <el-table-column prop="code" size="small" label="角色编码" ></el-table-column>
@@ -196,20 +198,19 @@ export default {
                 fromdata.fauth = '1';//给个已选中标识，后台做筛选
             }
             let docmanageids= '';
-                let nodes = this.$refs.tree.getCheckedNodes();
-                let docmanageidSet = [];
-                for(var i=0; i<nodes.length; i++){
-                    let node = nodes[i];
-                    if( node.flevel == 2) {
-                        docmanageidSet.push(node.foid);
-                        docmanageids = docmanageids + '\'' + node.foid +'\',';
-                    }
+            let nodes = this.$refs.tree.getCheckedNodes();
+            let docmanageidSet = [];
+            for(var i=0; i<nodes.length; i++){
+                let node = nodes[i];
+                if( node.flevel == 2) {
+                    docmanageidSet.push(node.foid);
+                    docmanageids = docmanageids + '\'' + node.foid +'\',';
                 }
-                docmanageids = docmanageids.substring(0,docmanageids.length-1)
-                fromdata.docmanageids = docmanageids;
-                fromdata.docmanageidSet = docmanageidSet;
-                console.log(fromdata.docmanageids);
-            fromdata.roleType = "af44136dae274b95bc154985cb7b942a";
+            }
+            docmanageids = docmanageids.substring(0,docmanageids.length-1)
+            fromdata.docmanageids = docmanageids;
+            fromdata.docmanageidSet = docmanageidSet;
+            console.log(fromdata.docmanageids);
             this.searchMenutable(fromdata);
         },
         //下拉框改变
@@ -293,8 +294,8 @@ export default {
                 }
             }
         },
-        //树结构点击事件
-        handleNodeClick(data) {
+        //树的多选框点击事件
+        checkboxClick(data, checkedParm){
             this.documentLevel = data.flevel;
             this.documentFpid = data.foid;
             let fromdata={};
@@ -307,6 +308,19 @@ export default {
                 fromdata.companyName=this.input;
             }
             fromdata.fauthtype = this.formInSelect.select; //权限类型
+            let docmanageids= '';
+            let nodes = this.$refs.tree.getCheckedNodes();
+            let docmanageidSet = [];
+            for(var i=0; i<nodes.length; i++){
+                let node = nodes[i];
+                if( node.flevel == 2) {
+                    docmanageidSet.push(node.foid);
+                    docmanageids = docmanageids  + node.foid +',';
+                }
+            }
+            docmanageids = docmanageids.substring(0,docmanageids.length-1)
+            fromdata.docmanageids = docmanageids;
+            fromdata.docmanageidSet = docmanageidSet;
 
             this.searchMenutable(fromdata);
         },
@@ -340,7 +354,6 @@ export default {
         //分页查询菜单
         searchMenutable(data){
             let fromdata=data;
-            fromdata.roleType = "af44136dae274b95bc154985cb7b942a";
             this.$api.documentManagement.findOARoleInfosByPage(fromdata).then(response => {
                 let responsevalue = response;
                 if (responsevalue) {

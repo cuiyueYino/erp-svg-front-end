@@ -195,7 +195,7 @@
 				</div>
 			</el-dialog>
 			<!--弹出框-->
-			<el-dialog title="工作事项主板模板" top="1vh" :destroy-on-close="true" center :visible.sync="dialogVisible" width="80%" v-if="dialogVisible">
+			<el-dialog title="工作事项模板主表" top="1vh" :destroy-on-close="true" center :visible.sync="dialogVisible" width="80%" v-if="dialogVisible">
 				<selectMainTable show="1" ref="childMain" :companyId="this.ruleForm.company"></selectMainTable>
 				<div slot="footer" class="dialog-footer">
 					<el-button @click="dialogVisible = false">取 消</el-button>
@@ -982,23 +982,23 @@
 		color: red;
 		font-size: 20px;
 	}
-	
+
 	>>>.el-card {
 		margin-bottom: 10px;
 	}
-	
+
 	>>>.el-card__body {
 		padding: 10px;
 	}
-	
+
 	>>>.el-input.is-disabled .el-input__inner {
 		color: #000000 !important;
 	}
-	
+
 	>>>.el-textarea.is-disabled .el-textarea__inner {
 		color: #000000 !important;
 	}
-	
+
 	>>>.el-checkbox__input.is-disabled.is-checked .el-checkbox__inner::after {
 		border-color: #000000!important;
 	}
