@@ -47,7 +47,7 @@
 						<el-col :span="6">
 							<el-form-item prop="workItemTempName" label="主表">
 								<el-input style="width: 110%;" disabled placeholder="主表" v-model="ruleForm.workItemTempName">
-									<el-button @click="dialogVisible = true" slot="append" icon="el-icon-search"></el-button>
+									<el-button disabled @click="dialogVisible = true" slot="append" icon="el-icon-search"></el-button>
 								</el-input>
 							</el-form-item>
 						</el-col>
