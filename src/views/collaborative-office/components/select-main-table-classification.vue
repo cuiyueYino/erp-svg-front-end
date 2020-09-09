@@ -206,14 +206,11 @@
 			},
 			//搜索
 			toSelect() {
+				if (this.show == 1){
+					this.formInline.status = 3;
+				}
 				this.$api.collaborativeOffice.findWorkItemTypePage(this.formInline).then(data => {
-						let resultList =  data.data.data.rows;
-						resultList.forEach(item => {
-							//只显示有效数据
-							// if (item.status == "3"){
-								this.tableData.push(item)
-							// }
-						});
+						this.tableData = data.data.data.rows;
 						this.currentTotal = this.tableData.total;
 				})
 			},
