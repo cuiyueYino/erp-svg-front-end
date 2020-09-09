@@ -183,9 +183,20 @@
 		</div>
 		<div v-if="showFigForm">
 			<formAndTable :files="files" dis="2" showAdd="2" :form-data="conData">
-				<el-row style="text-align: right;margin-bottom: 10px;">
-					<el-button icon="el-icon-arrow-left" size="mini" type="danger" plain @click="showFigForm = false">返回</el-button>
+				<el-card class="box-card">
+				<el-row>
+					<el-col :span="18">
+						公司：
+						<el-select size='mini' v-model="ruleForm.company" placeholder="公司">
+							<el-option v-for="item in CompanyData" :key="item.id" :label="item.name" :value="item.id">
+							</el-option>
+						</el-select>
+					</el-col>
+					<el-col :span="6" style="text-align: right;">
+						<el-button icon="el-icon-arrow-left" size="mini" type="danger" plain @click="showFigForm = false">返回</el-button>
+					</el-col>
 				</el-row>
+				</el-card>
 			</formAndTable>
 		</div>
 	</div>
@@ -622,7 +633,7 @@
 					msg = "暂存成功"
 				} else {
 					this.ruleForm.status = 7
-					msg = "新增成功"
+					msg = "修改成功"
 				}
 				this.$refs.ruleForm.validate((valid) => {
 					if(valid) {
