@@ -93,14 +93,14 @@
 								</el-form-item>
 							</template>
 						</el-table-column>
-						<el-table-column prop="orderNum" label="显示顺序" align="center">
+						<el-table-column prop="orderNum" width="110px" label="显示顺序" align="center">
 							<template slot-scope="scope">
 								<el-form-item :prop="'lines[' + scope.$index + '].orderNum'" :rules="rulesTable.orderNum">
 									<el-input v-model="scope.row.orderNum" placeholder=""></el-input>
 								</el-form-item>
 							</template>
 						</el-table-column>
-						<el-table-column prop="showNum" label="显示行数" align="center">
+						<el-table-column prop="showNum" width="110px" label="显示行数" align="center">
 							<template slot-scope="scope">
 								<el-form-item :prop="'lines[' + scope.$index + '].showNum'" :rules="rulesTable.showNum">
 									<el-input v-model="scope.row.showNum" placeholder=""></el-input>
@@ -532,35 +532,38 @@
 						data.data.data.lines.forEach(item => {
 							//为每一条数据定义好字段
 							var con = JSON.parse(JSON.stringify(this.rowConNew))
-							//枚举
-							if(item.fieldType == 9) {
-								//前台显示用，查看字段内容
-								con.fieldContentName = item.fieldContentName
-								//获取枚举LIST里面和字段相同的内容，并放入数据中，为了在后面显示用
-								this.selectList.forEach(val => {
-									if(item.fieldContent == val.id) {
-										//resList 枚举的list
-										con.resList = val.resList
-										//枚举的ID
-										con.fieldContent = val.id
-									}
-								})
+							//已禁用的除外
+							if (!item.forbid){
+								//枚举
+								if(item.fieldType == 9) {
+									//前台显示用，查看字段内容
+									con.fieldContentName = item.fieldContentName
+									//获取枚举LIST里面和字段相同的内容，并放入数据中，为了在后面显示用
+									this.selectList.forEach(val => {
+										if(item.fieldContent == val.id) {
+											//resList 枚举的list
+											con.resList = val.resList
+											//枚举的ID
+											con.fieldContent = val.id
+										}
+									})
+								}
+								//浏览框，同上面枚举
+								if(item.fieldType == 1) {
+									con.fieldContentName = item.fieldContentName;
+									this.fieldBrowseList.forEach(val => {
+										if(item.fieldContent == val.id) {
+											con.toSelect = val;
+											con.fieldContent = val.id;
+										}
+									})
+								}
+								//获取其他字段，放入要传走的数据中
+								con.field = item.field;
+								con.fieldName = item.fieldName;
+								con.fieldType = item.fieldType;
+								this.ruleForm.lines.push(con);
 							}
-							//浏览框，同上面枚举
-							if(item.fieldType == 1) {
-								con.fieldContentName = item.fieldContentName
-								this.fieldBrowseList.forEach(val => {
-									if(item.fieldContent == val.id) {
-										con.toSelect = val
-										con.fieldContent = val.id
-									}
-								})
-							}
-							//获取其他字段，放入要传走的数据中
-							con.field = item.field
-							con.fieldName = item.fieldName
-							con.fieldType = item.fieldType
-							this.ruleForm.lines.push(con)
 						})
 					})
 					//主表分类名称显示

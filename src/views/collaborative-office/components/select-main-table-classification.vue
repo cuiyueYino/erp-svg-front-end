@@ -207,8 +207,14 @@
 			//搜索
 			toSelect() {
 				this.$api.collaborativeOffice.findWorkItemTypePage(this.formInline).then(data => {
-					this.tableData = data.data.data.rows
-					this.currentTotal = data.data.data.total
+						let resultList =  data.data.data.rows;
+						resultList.forEach(item => {
+							//只显示有效数据
+							if (item.status == "3"){
+								this.tableData.push(item)
+							}
+						});
+						this.currentTotal = this.tableData.total;
 				})
 			},
 			//选中行
