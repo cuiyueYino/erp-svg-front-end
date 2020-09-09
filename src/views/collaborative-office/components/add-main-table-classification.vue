@@ -26,7 +26,7 @@
 					</el-col>
 					<el-col :span="6">
 						<el-form-item prop="name" label="主表分类名称">
-							<el-input style="width: 150%;" clearable :disabled="showFigAll" v-model="ruleForm.name" maxlength="50" placeholder="主表分类名称"></el-input>
+							<el-input style="width: 150%;" clearable :disabled="showFigAll" v-model="ruleForm.name" maxlength="100" placeholder="主表分类名称"></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
@@ -36,7 +36,7 @@
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="描述">
-							<el-input clearable style="width: 150%;" :rows="1" :disabled="showFigAll" type="textarea" maxlength="1500" v-model="ruleForm.remark" placeholder="描述"></el-input>
+							<el-input clearable style="width: 150%;" :rows="1" :disabled="showFigAll" type="textarea" maxlength="3000" v-model="ruleForm.remark" placeholder="描述"></el-input>
 						</el-form-item>
 					</el-col>
 				</el-row>
@@ -58,14 +58,14 @@
 					<el-table-column prop="name" label="字段显示名称" align="center">
 						<template slot-scope="scope">
 							<el-form-item :prop="'lines[' + scope.$index + '].fieldName'" :rules="rulesTable.fieldName">
-								<el-input clearable :disabled="scope.row.showFig || showFigAll" v-model="scope.row.fieldName" maxlength="25" placeholder="字段显示名称"></el-input>
+								<el-input clearable :disabled="scope.row.showFig || showFigAll" v-model="scope.row.fieldName" maxlength="50" placeholder="字段显示名称"></el-input>
 							</el-form-item>
 						</template>
 					</el-table-column>
 					<el-table-column prop="date" label="字段类型" align="center">
 						<template slot-scope="scope">
 							<el-form-item :prop="'lines[' + scope.$index + '].fieldType'" :rules="rulesTable.fieldType">
-								<el-select clearable :disabled="scope.row.showFig || showFigAll" style="width: 100%;" v-model="scope.row.fieldType" placeholder="字段类型">
+								<el-select clearable :disabled="scope.row.showFig || showFigAll" style="width: 100%;" v-model="scope.row.fieldType" placeholder="字段类型" @change="fieldChange(scope.row)">
 									<el-option v-for="item in fieldTypeList" :key="item.id" :label="item.label" :value="item.id">
 									</el-option>
 								</el-select>
@@ -152,7 +152,7 @@
 						},
 						{
 							pattern: /^[a-z_A-Z0-9-\.!@#\$%\\\^&\*\)\(\+=\{\}\[\]\/",'<>~\·`\?:;|]+$/,
-							message: '请输入正确的主表分类编码'
+							message: '请输入主表分类编码为英文、数字、英文符号'
 						}
 					],
 					name: [{
@@ -162,7 +162,7 @@
 						},
 						{
 							pattern: "[\u4e00-\u9fa5]",
-							message: '请输入正确的主表分类名称'
+							message: '请输入主表分类名称为中文'
 						}
 					],
 					tableName: [{
@@ -172,7 +172,8 @@
 					}, {
 						pattern: /^[a-z_A-Z0-9-\.!@#\$%\\\^&\*\)\(\+=\{\}\[\]\/",'<>~\·`\?:;|]+$/,
 						message: '请输入正确的数据库表名'
-					}]
+					}
+          ]
 				},
 				//校验规则-table
 				rulesTable: {
@@ -186,7 +187,7 @@
 						trigger: "change"
 					}, {
 						pattern: /^[a-zA-Z]+$/,
-						message: '请输入正确的数据库字段名'
+						message: '请输入数据库字段名为英文'
 					}],
 					fieldName: [{
 							required: true,
@@ -195,14 +196,14 @@
 						},
 						{
 							pattern: "[\u4e00-\u9fa5]",
-							message: '请输入正确的字段显示名称'
+							message: '请输入字段显示名称为中文'
 						}
 					],
 					fieldType: [{
 						required: true,
 						message: "请选择字段类型",
 						trigger: "change"
-					}],
+					}]
 				},
 				//字段内容中间变量
 				fieldContent: {},
@@ -259,6 +260,13 @@
 			})
 		},
 		methods: {
+		  //字段类型改变
+      fieldChange(row){
+        if(row.fieldType != 9){
+          this.fieldContent.fieldContent = null;
+          this.fieldContent.fieldContentName = null;
+        }
+      },
 			//状态改变
 			forbidChange(row) {
 				if(this.showFig) {
@@ -273,7 +281,7 @@
 			toDelTable(index) {
 				this.ruleForm.lines.splice(index, 1)
 			},
-			//提交			
+			//提交
 			submitForm(formName) {
 				this.$refs.ruleForm.validate((valid) => {
 					if(valid) {
@@ -333,19 +341,19 @@
 		color: red;
 		font-size: 20px;
 	}
-	
+
 	>>>.el-card {
 		/*margin-bottom: 10px;*/
 	}
-	
+
 	>>>.el-card__body {
 		padding: 10px;
 	}
-	
+
 	>>>.el-input.is-disabled .el-input__inner {
 		color: #000000 !important;
 	}
-	
+
 	>>>.el-textarea.is-disabled .el-textarea__inner {
 		color: #000000 !important;
 	}

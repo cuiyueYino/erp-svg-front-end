@@ -398,6 +398,54 @@
 						break;
 				}
 			},
+			maketree(data,type){
+				let parent=[];
+				for(var i = data[0].children.length - 1; i >= 0; i--) {
+					if(type =="公司"){
+						if(data[0].children[i].ftype == 1){
+							parent.push(data[0].children[i]);
+						}
+					}else{
+						if(data[0].children[i].ftype == 1 || data[0].children[i].ftype == 2){
+							parent.push(data[0].children[i]);
+						}
+					}
+				}
+				children(parent,type);
+				function children(parent,type) {
+					if(parent){
+						for(var i = parent.length - 1; i >= 0; i--) {
+							if(parent[i].children){
+								let obj = parent[i];
+								obj.childrenList=[];
+								for(var j = parent[i].children.length - 1; j >= 0; j--) {
+									if(type =="公司"){
+										if(parent[i].children[j].ftype == 1){
+											obj.childrenList.push(parent[i].children[j]);
+										}
+									}else{
+										if(parent[i].children[j].ftype == 1 || parent[i].children[j].ftype == 2){
+											obj.childrenList.push(parent[i].children[j]);
+										}
+									}
+								}
+								obj.children=[];
+								obj.children=obj.childrenList;
+								delete obj.childrenList;
+								parent[i]=obj;
+								children(parent[i].children,type);	
+							}else{
+								parent[i].children=[];
+							}
+						}
+					}
+				}
+				let Fdata= data[0];
+				Fdata.children=parent;
+				let RetrunData=[];
+				RetrunData.push(Fdata);
+				return RetrunData;
+			},
 			fieldTypeShow(item) {
 				if(item.fieldType == 9) {
 					this.selectList.forEach(val => {
@@ -421,7 +469,7 @@
 						//公司
 						if(item.toSelect.id == 1) {
 							//删除部门和职位信息
-							for(var i = list[0].children.length - 1; i >= 0; i--) {
+							/*for(var i = list[0].children.length - 1; i >= 0; i--) {
 								if(list[0].children[i].ftype == 2) {
 									list[0].children.splice(i, 1)
 								} else {
@@ -429,10 +477,13 @@
 								}
 							}
 							item.browseBoxList = list
+							*/
+							let ComData=this.maketree(list,'公司');
+							item.browseBoxList = ComData;
 							//部门
 						} else if(item.toSelect.id == 2) {
 							//删除职位信息
-							list[0].children.forEach(val => {
+							/*list[0].children.forEach(val => {
 								if(typeof(val.children) != "undefined") {
 									val.children.forEach(valChild => {
 										valChild.children = []
@@ -440,6 +491,9 @@
 								}
 							})
 							item.browseBoxList = list
+							*/
+							let ZhiwuData=this.maketree(list,'职位');
+							item.browseBoxList = ZhiwuData
 							//职位（无需删除，保留原数据）
 						} else if(item.toSelect.id == 3) {
 							item.browseBoxList = list
