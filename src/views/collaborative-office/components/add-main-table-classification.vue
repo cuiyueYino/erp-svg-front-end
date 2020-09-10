@@ -226,7 +226,7 @@
 					tableName: "",
 					remark: "",
 					creator: localStorage.getItem('ms_userId'),
-					company: "",
+					company: "_DefaultCompanyOId",
 					lines: [{
 						field: "",
 						fieldName: "",
