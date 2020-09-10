@@ -273,7 +273,6 @@ export default {
   methods: {
     // 查询会议室列表数据
     getTableDataAll() {
-      debugger;
       let data = {};
       if(this.form.fcompanyid){
         data.fcompany = this.form.fcompanyid;
@@ -322,7 +321,10 @@ export default {
     },
     // 导出
     upload() {
-      this.$api.confMangement.confUsageDetailExport();
+      let data = this.form;
+      data.page = this.pageNum;
+      data.size = this.pageSize;
+      this.$api.confMangement.confUsageDetailExport(data);
     },
     // 获取表格数据
     getTableData() {
