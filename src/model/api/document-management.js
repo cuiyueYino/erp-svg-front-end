@@ -9,10 +9,14 @@ const baseURI = '/api/interfaces/';
 
 const documentManagement = {
 
-    //---------------------------------文件类别维护接口-begin--------------------------------------------------------- 
+    //---------------------------------文件类别维护接口-begin---------------------------------------------------------
     //获取文件类别组织
     getDocumentCategoryOrgArch(isportalshow){
         return httpReqest.get(baseURI + 'documentcategory/getDocumentCategoryOrgArch?isportalshow='+isportalshow);
+    },
+    //获取文件类别组织带文档
+    getDocumentManageOrgArch(isportalshow){
+        return httpReqest.get(baseURI + 'documentcategory/getDocumentManageOrgArch?isportalshow='+isportalshow);
     },
     //查询文件类别:分页
     findDocumentCategoryByPage(params){
@@ -34,9 +38,9 @@ const documentManagement = {
     findDocumentCategoryById(params){
         return httpReqest.get(baseURI + 'documentcategory/findDocumentCategoryById?id='+params.id);
     },
-    //---------------------------------文件类别维护接口-end----------------------------------------------------------- 
+    //---------------------------------文件类别维护接口-end-----------------------------------------------------------
 
-    //---------------------------------文件管理-begin--------------------------------------------------------- 
+    //---------------------------------文件管理-begin---------------------------------------------------------
     //查询文件管理:分页
     findDocumentManageByPage(params){
         return httpReqest.post(baseURI + 'documentmanage/findDocumentManageByPage',params);
@@ -61,9 +65,9 @@ const documentManagement = {
     getDocumentRecordByMasterid(params){
         return httpReqest.post(baseURI + 'documentmanage/getDocumentRecordByMasterid',params);
     },
-    //---------------------------------文件管理-end----------------------------------------------------------- 
+    //---------------------------------文件管理-end-----------------------------------------------------------
 
-    //---------------------------------文件授权-begin--------------------------------------------------------- 
+    //---------------------------------文件授权-begin---------------------------------------------------------
     //查询文件授权:分页
     findDocumentAuthorityByPage(params){
         return httpReqest.post(baseURI + 'documentauthority/findDocumentAuthorityByPage',params);
@@ -92,7 +96,7 @@ const documentManagement = {
     isHaveDocAuthority(params){
         return httpReqest.post(baseURI + 'documentauthority/isHaveDocAuthority',params);
     },
-    //---------------------------------文件授权-end----------------------------------------------------------- 
+    //---------------------------------文件授权-end-----------------------------------------------------------
 
     //---------------------------------附件-begin-----------------------------------------------------------
     //单文件上传
