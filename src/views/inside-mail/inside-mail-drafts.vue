@@ -188,13 +188,14 @@ export default {
          * 显示全部
          */
         showAll() {
-            this.form.select=[];
+            this.form.select=undefined;
             this.form.selectVal="";
             this.form.startTime="";
             this.form.endTime="";
             this.emptyParam();
             this.pageNum = 1;
             this.getDraftMail();
+
         },
 
         /**
@@ -285,7 +286,7 @@ export default {
         },
     },
     watch: {
-        
+
         querySelect(val) {
         this.form.selectVal = null;
         if (val == "sendTime") {

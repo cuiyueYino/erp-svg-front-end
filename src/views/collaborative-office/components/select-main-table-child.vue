@@ -54,7 +54,7 @@
 				<el-table-column prop="orderNum" label="显示顺序" width="180" align="center"></el-table-column>
 				<el-table-column prop="remark" label="描述" align="center"></el-table-column>
 			</el-table>
-			<pageNation :total="currentTotal" v-if="currentTotal != 0" ref="pageNation" @pageChange="pageChange"></pageNation>
+			<pageNation :total="currentTotal" ref="pageNation" @pageChange="pageChange"></pageNation>
 		</el-card>
 	</div>
 </template>

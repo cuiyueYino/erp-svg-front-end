@@ -43,7 +43,7 @@
 			<dynamic-table :columns="columns" :table-data="tableData" :total="total" :page-num="pageNum" :page-size="pageSize" @current-change="onCurrentChange" @selection-change="onSelectionChange" v-loading="false" element-loading-text="加载中"></dynamic-table>
 		</el-card>
 		<!-- 弹出框 -->
-		<el-dialog :title="isEdit?'编辑用户':'新建用户'" class="add-user" center top="20px" :visible.sync="dialogFormVisible" :close-on-click-modal="false">
+		<el-dialog :title="isEdit?'编辑用户':'新建用户'" class="add-user" center top="20px" v-if="dialogFormVisible" :visible.sync="dialogFormVisible" :close-on-click-modal="false">
 			<el-form :model="form" :rules="rules" ref="form">
 				<el-row :gutter="24">
 					<el-col :span="12">
@@ -53,10 +53,10 @@
 							</el-select>
 						</el-form-item>
 						<el-form-item label="登录账号：" :label-width="formLabelWidth" prop="fcodeStr">
-							<el-input v-model="form.fcodeStr" size="small" autocomplete="off"></el-input>
+							<el-input v-model="form.fcodeStr" @input="change($event)" size="small" autocomplete="off"></el-input>
 						</el-form-item>
 						<el-form-item label="密码：" :label-width="formLabelWidth" prop="fpasswordStr">
-							<el-input v-model="form.fpasswordStr" type="password" size="small"></el-input>
+							<el-input v-model="form.fpasswordStr" @input="change($event)" type="password" size="small"></el-input>
 						</el-form-item>
 						<el-form-item label="使用者：" :label-width="formLabelWidth" prop="fstaff">
 							<el-input v-model="form.fstaff" :disabled="isEdit && !isReset" size="small" autocomplete="off"></el-input>
@@ -73,7 +73,7 @@
 						</el-form-item>
 
 						<el-form-item label="确认密码：" :label-width="formLabelWidth" prop="fpasswordSure">
-							<el-input v-model="form.fpasswordSure" type="password" size="small"></el-input>
+							<el-input v-model="form.fpasswordSure" @input="change($event)" type="password" size="small"></el-input>
 						</el-form-item>
 						<el-form-item label="所在部门：" :label-width="formLabelWidth" prop="departmentname">
 							<el-input v-model="form.departmentname" disabled size="small" autocomplete="off"></el-input>
@@ -329,12 +329,12 @@
 				switch(val) {
 					case true:
 						this.isReset = val;
-						this.form.fpassword = '111111';
+						this.form.fpasswordStr = '111111';
 						this.form.fpasswordSure = '111111';
 						break;
 					case false:
 						this.isReset = val;
-						this.form.fpassword = '';
+						this.form.fpasswordStr = '';
 						this.form.fpasswordSure = '';
 						break;
 
@@ -427,8 +427,8 @@
 			},
 			// 搜索
 			onSubmit() {
-				this.getTableData(this.formCode);
 				this.pageNum = 1;
+				this.getTableData(this.formCode);
 			},
 			// 获取表格数据
 			getTableData() {
@@ -468,6 +468,7 @@
 			},
 			resetForm(formName) {
 				this.$refs[formName].resetFields();
+				this.pageNum = 1;
 				this.getTableData();
 			},
 			//新增
@@ -816,6 +817,9 @@
 				}
 				}
 			},
+			change(e){
+            	this.$forceUpdate()
+        	},
 			timeFormat() {
 				var date = new Date();
 				var y = date.getFullYear();

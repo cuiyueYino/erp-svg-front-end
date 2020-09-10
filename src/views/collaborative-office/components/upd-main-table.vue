@@ -15,7 +15,7 @@
 					</el-col>
 					<el-col v-if="showFigNum == 2" :span="6" style="text-align: right;">
 						<el-button @click="submitForm(2)" type="success" size="mini" icon="el-icon-check">提交</el-button>
-						<el-button @click="submitForm(1)" type="primary" size="mini" icon="el-icon-finished">暂存</el-button>
+						<el-button @click="submitForm(1)" type="success" size="mini" icon="el-icon-finished">暂存</el-button>
 						<el-button @click="preview()" type="primary" plain size="mini" icon="el-icon-view">预览</el-button>
 						<el-button type="danger" @click="$parent.toSelect()" size="mini" icon="el-icon-close">返回</el-button>
 					</el-col>
@@ -84,7 +84,7 @@
 						</el-table-column>
 						<el-table-column prop="lengthType" label="字段长度类型" align="center" width="180">
 							<template slot-scope="scope">
-								<el-form-item :prop="'lines[' + scope.$index + '].lengthType'" :rules="rulesTable.lengthType">
+								<el-form-item :prop="'lines[' + scope.$index + '].lengthType'" :rules="rulesShow(scope.row,'lengthType')">
 									<el-select style="width: 100%;" v-model="scope.row.lengthType" placeholder="字段长度类型">
 										<el-option v-for="item in lengthTypeList" :key="item.id" :label="item.name" :value="item.id"></el-option>
 									</el-select>
@@ -107,14 +107,14 @@
 						</el-table-column>
 						<el-table-column prop="orderNum" label="显示顺序" align="center">
 							<template slot-scope="scope">
-								<el-form-item :prop="'lines[' + scope.$index + '].orderNum'" :rules="rulesTable.orderNum">
+								<el-form-item :prop="'lines[' + scope.$index + '].orderNum'" :rules="rulesShow(scope.row,'orderNum')">
 									<el-input v-model="scope.row.orderNum" placeholder=""></el-input>
 								</el-form-item>
 							</template>
 						</el-table-column>
 						<el-table-column prop="showNum" label="显示行数" align="center">
 							<template slot-scope="scope">
-								<el-form-item :prop="'lines[' + scope.$index + '].showNum'" :rules="rulesTable.showNum">
+								<el-form-item :prop="'lines[' + scope.$index + '].showNum'" :rules="rulesShow(scope.row,'showNum')">
 									<el-input v-model="scope.row.showNum" placeholder=""></el-input>
 								</el-form-item>
 							</template>
@@ -380,6 +380,14 @@
 			})
 		},
 		methods: {
+			//不是显示状态时,不加check
+			rulesShow(row,con) {
+				if(row.show) {
+					return this.rulesTable[con];
+				} else {
+					return "";
+				}
+			},
 			getTitle() {
 				if(this.showFigNum == 1) {
 					return "工作事项模板主表-查看"

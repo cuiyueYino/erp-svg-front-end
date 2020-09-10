@@ -135,7 +135,7 @@
                 <!-- Condition -->
                 <el-row :gutter="24" class="joinTableBox">
                     <el-col :span="24">
-                        <dynamic-table
+                        <!--<dynamic-table
                         :columns="columns4"
                         ref="decisionTableReF"
                         tooltip-effect="dark"
@@ -144,7 +144,27 @@
                         @selection-change="onSelectionDecision"
                         v-loading="false"
                         element-loading-text="加载中"
-                        ></dynamic-table>
+                        ></dynamic-table>-->
+                        <el-table
+                            :data="tableData3"
+                            ref="decisionTableReF"
+                            tooltip-effect="dark"
+                            border
+                            size="mini"
+                            @selection-change="onSelectionDecision"
+                            v-loading="false"
+                            element-loading-text="加载中"
+                        >
+                            <el-table-column type="selection"></el-table-column>
+                            <el-table-column prop="decisionText" label="功能" width="80"></el-table-column>
+                            <el-table-column prop="fname" label="显示标签" align="center">
+                                <template slot-scope="scope">
+                                    <el-form-item>
+                                        <el-input v-model="scope.row.fname"></el-input>
+                                    </el-form-item>
+                                </template>
+                            </el-table-column>
+                        </el-table>
                     </el-col>
                 </el-row>
                 <!-- Condition END-->
@@ -423,10 +443,10 @@ export default {
                 key: 'decisionText',
                 title: '功能'
                 },
-                // {
-                //     key: 'fname',
-                //     title: '显示标签'
-                // }
+                {
+                key: 'fname',
+                title: '显示标签'
+                }
             ],
             joinusertableData:[],
             tableData:[],
@@ -435,18 +455,22 @@ export default {
             tableData3:[
                 {
                 "decisionType":"1",
-                "decisionText":"同意"
+                "decisionText":"同意",
+                "fname":""
                 },
                 {
                 "decisionType":"2",
+                "fname":"",
                 "decisionText":"不同意"
                 },
                 {
                 "decisionType":"3",
+                "fname":"",
                 "decisionText":"待处理"
                 },
                 {
                 "decisionType":"4",
+                "fname":"",
                 "decisionText":"其他"
                 },
             ],
@@ -505,7 +529,7 @@ export default {
                         this.formData.name = obj.displayName;
                         this.formData.work == '';
                         if(this.$refs.decisionTableReF){
-                            this.$refs.decisionTableReF.$refs.refTable.clearSelection();
+                            this.$refs.decisionTableReF.clearSelection();
                         }
                     }else{
                         this.activeName='1';
@@ -695,19 +719,50 @@ export default {
                                 this.tableData.push(item);
                             })
                         }
-                        this.decisionSelData=this.editData.decisions.decision;
+                        this.decisionSelData=[];    
+                        if(this.editData.decisions.decision.length == 0){}else{
+                            this.decisionSelData=this.editData.decisions.decision;
+                            let TableData=[];
+                            for(let i=1;i<5;i++){
+                                if(i==1){
+                                    TableData.push({
+                                        decisionType: "1",
+                                        fname:'',
+                                        decisionText: "同意"
+                                    })
+                                }else if(i==2){
+                                    TableData.push({
+                                        decisionType: "2",
+                                        fname:'',
+                                        decisionText: "不同意"
+                                    })
+                                }else if(i==3){
+                                    TableData.push({
+                                        decisionType: "3",
+                                        fname:'',
+                                        decisionText: "待处理"
+                                    })
+                                }else{
+                                    TableData.push({
+                                        decisionType: "4",
+                                        fname:'',
+                                        decisionText: "其他"
+                                    })
+                                } 
+                            }
+                            TableData.forEach(item=>{
+                                this.decisionSelData.forEach(itemS=>{
+                                    if(item.decisionType ===itemS.decisionType){
+                                        item.fname=itemS.decisionText;
+                                    }
+                                })
+                            })
+                            this.tableData3=TableData;   
+                        }
+                        
                         this.$nextTick(()=>{
                             //设置审核活动决策类型选中
                             this.tableRowSelect();
-                            /*//设置审核活动选中
-                            this.tableData2.forEach((item)=>{
-                            this.editData.wfViewOtherComments.wfViewOtherComment.forEach(row2 => {
-                            if (row2.fname === item.fname) {
-                            this.$refs.joinTable.toggleRowSelection(item,true);
-                            }
-                            });
-                            })
-                            */
                         })
                     }
                 }
@@ -825,7 +880,7 @@ export default {
         },
         tableRowSelect(){
             //this.$refs.decisionTableReF.clearSelection();
-            this.$refs.decisionTableReF.$refs.refTable.clearSelection()
+            this.$refs.decisionTableReF.clearSelection()
             this.tableData3.forEach(row => {
                 this.decisionSelData.forEach(row1 => {
                     if (row1.decisionText === row.decisionText) {
