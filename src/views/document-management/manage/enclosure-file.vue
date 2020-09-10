@@ -1,7 +1,7 @@
 <template>
     <div>
         <div style="width:200px;height:40px;float:right;">
-            <el-button size="small" style="margin-left:50px;magin-right:5px;" @click.prevent="addfileRow()" v-show="isShowButton">新增</el-button>
+            <el-button size="small" style="margin-left:50px;magin-right:5px;" @click.prevent="addfileRow()" v-show="isShowButton">新增111</el-button>
             <el-button size="small" @click.prevent="delfileData()" v-show="isShowButton">删除</el-button>
         </div>
         <div>
@@ -165,6 +165,12 @@ export default {
         },
         // 增加附件行
         addfileRow () {
+            if(this.rowNum >1){
+                if(!this.enclosuretableData[this.rowNum-2].fileName){
+                    this.$message.error("请先添加附件");
+                    return;
+                }
+            }
             var list = {
             rowNum:this.rowNum,
             filestyle:'',
@@ -193,6 +199,7 @@ export default {
                         }
                     })
                 })
+                this.rowNum--
             }
             // 删除完数据之后清除勾选框
             this.$refs.table.clearSelection();

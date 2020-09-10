@@ -240,6 +240,12 @@ export default {
          * 增加附件行
          */
         addFileRow () {
+           if(this.rowNum >1){
+               if(!this.enclosureTableData[this.rowNum-2].name){
+                   this.$message.error("请先添加附件");
+                   return;
+               }
+           }
             var list = {
                 rowNum:this.rowNum,
                 filestyle:'',
@@ -272,6 +278,7 @@ export default {
                         }
                     })
                 })
+                this.rowNum--
             }
             // 删除完数据之后清除勾选框
             this.$refs.table.clearSelection();
