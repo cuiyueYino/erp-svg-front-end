@@ -5,8 +5,8 @@
 -->
 
 <template>
-	<el-dialog title="工作事项模板主表" top="1vh" :destroy-on-close="true" center :visible.sync="dialogVisible" width="80%">
-		<selectWorkItems show="1" ref="childMain"></selectWorkItems>
+	<el-dialog :title="title?title:'工作事项模板主表'" top="1vh" :destroy-on-close="true" center :visible.sync="dialogVisible" width="80%">
+		<selectWorkItems show="1" :status="status" ref="childMain"></selectWorkItems>
 		<div slot="footer" class="dialog-footer">
 			<el-button @click="dialogVisible = false">取 消</el-button>
 			<el-button type="primary" @click="getDialogVisible">确 定</el-button>
@@ -20,9 +20,13 @@
 		components: {
 			selectWorkItems
 		},
-		props: {},
+		props: {
+			status:String,
+			title:String
+		},
 		data() {
 			return {
+				
 				dialogVisible: false
 			};
 		},

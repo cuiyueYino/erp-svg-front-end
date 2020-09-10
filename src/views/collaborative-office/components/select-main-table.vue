@@ -222,8 +222,10 @@
 				if(typeof(this.toSelectData[this.selectCon]) != "undefined") {
 					this.toSelectData[this.selectCon] = this.selectData
 				}
-				if(this.company.id){
-					this.toSelectData.company = this.company.id;
+				if(this.company){
+					if(this.company.id){
+						this.toSelectData.company = this.company.id;
+					}
 				}
 				if(this.status){
 					this.toSelectData.status=this.status;
