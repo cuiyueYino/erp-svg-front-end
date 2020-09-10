@@ -6,7 +6,7 @@
 		<el-row style="margin-top: 10px;">
 			<el-col :span="18">
 				公司：
-				<el-select :disabled="!showFigAll" size='mini' v-model="ruleForm.company" placeholder="公司">
+				<el-select :disabled="showFig || showFigAll" size='mini' v-model="ruleForm.company" placeholder="公司">
 					<el-option v-for="item in CompanyData" :key="item.id" :label="item.name" :value="item.id">
 					</el-option>
 				</el-select>
@@ -252,12 +252,14 @@
 			} else if(this.showFigNum == "3") {
 				this.showFigAll = true
 				this.ruleForm = this.context
+			}else{
+				this.CompanyData.forEach(item => {
+					if(item.name == "福佳集团") {
+						this.ruleForm.company = item.id
+					}
+				})
 			}
-			this.CompanyData.forEach(item => {
-				if(item.id == this.context.company) {
-					this.company = item
-				}
-			})
+			
 		},
 		methods: {
 			//状态改变
