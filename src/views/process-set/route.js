@@ -105,7 +105,7 @@ const PROJECT = [
         }
     },
     {
-        path: 'plan/companyAnnual',
+        path: 'companyAnnual',
         name: 'companyAnnual',
         component: companyAnnual,
         meta: {
@@ -313,7 +313,7 @@ const PROJECT = [
         }
     },
     {
-        path: 'plan/taskForceChangeRequest',
+        path: 'taskForceChangeRequest',
         name: 'taskForceChangeRequest',
         component: taskForceChangeRequest,
         meta: {
@@ -329,7 +329,7 @@ const PROJECT = [
         }
     },
     {
-        path: 'plan/companyMonth',
+        path: 'companyMonth',
         name: 'companyMonth',
         component: companyMonth,
         meta: {
@@ -385,7 +385,7 @@ const PROJECT = [
         }
     },
     {
-        path: 'plan/recordOfLossesIncurred',
+        path: 'recordOfLossesIncurred',
         name: 'recordOfLossesIncurred',
         component: recordOfLossesIncurred,
         meta: {
@@ -401,7 +401,7 @@ const PROJECT = [
         }
     },
     {
-        path: 'plan/quantificationOfPlannedTasks',
+        path: 'quantificationOfPlannedTasks',
         name: 'quantificationOfPlannedTasks',
         component: quantificationOfPlannedTasks,
         meta: {
@@ -409,7 +409,7 @@ const PROJECT = [
         }
     },
     {
-        path: 'plan/taskStatus',
+        path: 'taskStatus',
         name: 'taskStatus',
         component: taskStatus,
         meta: {
@@ -417,7 +417,7 @@ const PROJECT = [
         }
     },
     {
-        path: 'plan/taskExtensionApproval',
+        path: 'taskExtensionApproval',
         name: 'taskExtensionApproval',
         component: taskExtensionApproval,
         meta: {
@@ -425,7 +425,7 @@ const PROJECT = [
         }
     },
     {
-        path: 'plan/temporaryTaskEstablishment',
+        path: 'temporaryTaskEstablishment',
         name: 'temporaryTaskEstablishment',
         component: temporaryTaskEstablishment,
         meta: {
