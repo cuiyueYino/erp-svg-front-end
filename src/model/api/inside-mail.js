@@ -72,6 +72,10 @@ const insideMail = {
     uploadFile(params){
       return httpUpload.post('/api/interfaces/attachment/uploadFile',params);
     },
+    //新增附件信息
+    addAttachmentInfo(params){
+        return httpUpload.post('/api/interfaces/attachment/addAttachmentInfo',params);
+    },
     //批量上传文件
     uploadFileBatch(params){
       return httpUpload.post('/api/interfaces/attachment/uploadFileBatch',params);

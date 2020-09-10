@@ -457,6 +457,7 @@
 			},
 			resetForm(formName) {
 				this.$refs[formName].resetFields();
+				this.pageNum = 1;
 				this.getTableData("");
 			},
 			handleNodeClick(data) {
@@ -517,6 +518,7 @@
 			},
 			// 搜索
 			onSubmit() {
+				this.pageNum = 1;
 				this.getTableData(this.form.select);
 
 			},
