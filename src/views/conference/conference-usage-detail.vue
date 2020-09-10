@@ -317,6 +317,7 @@ export default {
     },
     // 查询
     search() {
+      this.pageNum = 1;
       this.getTableData();
     },
     // 导出
