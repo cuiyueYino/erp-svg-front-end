@@ -191,7 +191,7 @@ export default {
          * 显示全部
          */
         showAll() {
-            this.form.select=[];
+            this.form.select=undefined;
             this.form.selectVal="";
             this.form.startTime="";
             this.form.endTime="";

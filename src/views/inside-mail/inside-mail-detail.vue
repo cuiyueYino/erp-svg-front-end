@@ -113,6 +113,7 @@ export default {
                 menuCode: 'insideMail',
                 isDownload:true,
                 isSearch:false,
+                authStatus:true,
             },
         }
     },

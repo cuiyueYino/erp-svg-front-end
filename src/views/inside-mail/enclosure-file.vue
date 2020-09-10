@@ -21,17 +21,21 @@
                             <el-col :span="14">
                                 <el-input v-model="scope.row.name" size="mini" style="padding:5px" readonly="readonly"></el-input>
                             </el-col>
-                            <el-col :span="2" style="padding:5px">
+                            <el-col :span="2" style="padding:5px" >
                                 <el-upload
                                     action=""
                                     :disabled="authStatus"
                                     :file-list="scope.row.fileList"
                                     :on-change="fileChange"
                                     :show-file-list="false"
-                                    :auto-upload="false">
-                                    <el-button type="primary" slot="trigger" icon="el-icon-search"  size="mini"  v-show="isSearch"></el-button>
+                                    :auto-upload="false"
+                                >
+                                    <el-button type="primary" slot="trigger" icon="el-icon-search"  size="mini" v-show="isSearch" ></el-button>
                                     <el-button type="primary" slot="trigger" icon="el-icon-download" @click="downLoadFile(scope.row)" size="mini" v-show="isDownload"></el-button>
                                 </el-upload>
+                            </el-col>
+                            <el-col :span="2" style="padding:5px" >
+
                             </el-col>
                             <!--<el-col :span="2" style="padding:5px">
                                 <el-button type="primary" icon="el-icon-view" @click="getHtmlPreviewAttachment(scope.row)" size="mini" ></el-button>
@@ -64,7 +68,7 @@ export default {
             rowNMMDataObj:{},
 
             isShowButton:this.enclosureConfig.isShowButton,
-            authStatus:false,
+            authStatus:this.enclosureConfig.authStatus,
             isDownload:this.enclosureConfig.isDownload,
             isSearch:this.enclosureConfig.isSearch,
         }
@@ -180,7 +184,7 @@ export default {
                 return;
             }
             let creator = localStorage.getItem('ms_staffId');
-            
+
             // formData.append('files', this.uploadFiles);
 
             for(var i=0; i < length; i++ ){
@@ -206,6 +210,19 @@ export default {
                         if(response.data.code == 0 && response.data.data){
                         }
                     });
+                }else if(this.enclosureConfig.haveAttachment){
+                    formData.append('menuCode', this.enclosureConfig.menuCode);
+                    formData.append('voucherId',this.enclosureConfig.voucherId );
+                    formData.append('fileFullPath',this.enclosureTableData[i].fullPath );
+                    formData.append('fileSize',this.enclosureTableData[i].fileSize );
+                    formData.append('fileName', this.enclosureTableData[i].name);
+                    if(creator){
+                        formData.append('userCode', creator);
+                    } else {
+                        formData.append('userCode','test');
+                    }
+                    console.log(formData)
+                    this.$api.insideMail.addAttachmentInfo(formData).then();
                 }
 
             }
@@ -283,9 +300,11 @@ export default {
                             let file = {
                                 rowNum: this.rowNum,
                                 name: attachment.fileName,
-                                id: attachment.id
+                                id: attachment.id,
+                                fullPath:attachment.fullPath,
+                                fileSize:attachment.fileSize,
                             };
-                            console.log(attachment)
+                        console.log(attachment)
                             this.enclosureTableData.unshift(file);
                             this.rowNum += 1;
                     }
@@ -298,8 +317,11 @@ export default {
     watch:{
         enclosureConfig: {
             handler:function(val,oldval){
-                console.log(this.enclosureConfig.voucherId)
-                this.showFileData(this.enclosureConfig.voucherId)
+
+                if(this.enclosureConfig.voucherId){
+                    console.log(this.enclosureConfig.voucherId)
+                    this.showFileData(this.enclosureConfig.voucherId)
+                }
             },
             deep:true//对象内部的属性监听，也叫深度监听
         }

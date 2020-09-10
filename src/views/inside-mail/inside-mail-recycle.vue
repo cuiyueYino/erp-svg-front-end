@@ -211,7 +211,7 @@ export default {
          * 显示全部
          */
         showAll() {
-            this.form.select=[];
+            this.form.select=undefined;
             this.form.selectVal="";
             this.form.startTime="";
             this.form.endTime="";
@@ -328,7 +328,7 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-/deep/ .el-table__fixed-right::before {
-background-color: revert;
+/deep/ .el-table__fixed-right::before{
+background-color:revert;
 }
 </style>

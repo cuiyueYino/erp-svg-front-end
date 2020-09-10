@@ -177,6 +177,8 @@ export default {
                 menuCode: 'insideMail',
                 isDownload:false,
                 isSearch:true,
+                haveAttachment:false,
+                authStatus:false
             },
 
             rules: {
@@ -275,7 +277,7 @@ export default {
                 };
             })
             }
-            
+
         },
         /**
          * 添加 主送/抄送用户点击事件
@@ -316,10 +318,10 @@ export default {
                                 this.treeDataObject.push(searchArray[i].foid);
                             }
                         }
-                        
+
                     }
-                    
-		    
+
+
                 }
             })
             if(data=="addressee"){
@@ -425,7 +427,7 @@ export default {
                 let resData = this.perData;
                 this.formData.id = this.perData.id,
                 this.content = this.perData.content,
-                this.formData.subjectName= resData.subject + "";
+                this.formData.subjectName= this.perData.subject + "";
                 this.formData.addresseeList = this.perData.addresseeList
                 if(this.perData.typeFlag == 'draftsEdit') {
                     let nameString= '';
@@ -444,6 +446,9 @@ export default {
                     this.formData.duplicateList = this.perData.duplicateList;
                 }
                 this.enclosureConfig.voucherId = this.perData.mailCode;
+                if(!this.perData.status){
+                    this.enclosureConfig.haveAttachment = true;
+                }
                  // 主送人自动勾选数据,名字回显
                 let addresseeName= '';
                 let defautltAddressee=[];
@@ -456,6 +461,7 @@ export default {
                 }
                 this.formData.addresseeName = addresseeName;
                 this.defautltAddressee = defautltAddressee;
+
             }
            this.$parent.$parent.$parent.clearPerData();
         },
@@ -468,7 +474,7 @@ export default {
             let searchFromPersonName = this.formData.addresseeName;
             let searchFromPersonArray = this.formData.addresseeList;
             let searchDuplicateName = this.formData.duplicateName;
-           
+
             if(this.treeTpye=="addressee"){
                 let staffList = this.$refs.tree.getCheckedNodes(true);
                 let nameString= '';
