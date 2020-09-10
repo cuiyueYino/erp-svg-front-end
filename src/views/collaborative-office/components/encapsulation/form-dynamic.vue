@@ -533,7 +533,7 @@
 								this.rules[item.field].push({
 									max: 1500,
 									message: '请输入正确的' + item.fieldName,
-									trigger: 'change'
+									trigger: 'blur'
 								})
 								return "integers"
 								break;
