@@ -6,8 +6,7 @@
       center
       :visible.sync="dialogVisible"
       v-if="dialogVisible && (title === '新建会议申请' || title === '修改会议申请' || title === '修订会议申请')"
-      :modal="false"
-      :close-on-click-modal="closeConfig"
+      :close-on-click-modal="false"
       :close-on-press-escape="closeConfig"
       @close="closeDialog"
       style="z-index:2007"
