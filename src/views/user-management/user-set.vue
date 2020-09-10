@@ -427,8 +427,8 @@
 			},
 			// 搜索
 			onSubmit() {
-				this.getTableData(this.formCode);
 				this.pageNum = 1;
+				this.getTableData(this.formCode);
 			},
 			// 获取表格数据
 			getTableData() {
@@ -468,6 +468,7 @@
 			},
 			resetForm(formName) {
 				this.$refs[formName].resetFields();
+				this.pageNum = 1;
 				this.getTableData();
 			},
 			//新增
