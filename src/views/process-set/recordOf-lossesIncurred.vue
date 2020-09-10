@@ -1,7 +1,7 @@
 <template>
     
     <div class="most-warapper">     
-       <iframe :src="$GLOBAL.htmlUrl + 'plan/recordOfLossesIncurred' " style="width:100%;height:764px;border:0px;padding:0px;"  class="recordOfLossesIncurred"></iframe>
+       <iframe :src="$GLOBAL.htmlUrl + 'recordOfLossesIncurred' " style="width:100%;height:764px;border:0px;padding:0px;"  class="recordOfLossesIncurred"></iframe>
     </div>
 </template>
 
