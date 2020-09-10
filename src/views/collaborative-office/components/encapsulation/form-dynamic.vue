@@ -51,9 +51,9 @@
 							<!--富文本-->
 							<quill-editor v-if="item.fieldTypeName == 'richText' && item.show" style="width: 100%;" v-model="ruleForm[item.field]" ref="myQuillEditor" :options="editorOption" @blur="onEditorBlur($event)" @focus="onEditorFocus($event,item.edit)" @change="onEditorChange($event)"></quill-editor>
 							<!-- 日期选择器 -->
-							<el-date-picker v-if="item.fieldTypeName == 'dateControl' && item.show" @change="getDate(item)" style="width: 100%;" :disabled="!item.edit" v-model="ruleForm[item.field]" type="date" value-format="yyyy-MM-dd" placeholder="选择日期" />
+							<el-date-picker v-if="item.fieldTypeName == 'dateControl' && item.show" @change="getDate(item)"  style="width: 100%;" :disabled="!item.edit" v-model="ruleForm[item.field]" type="date" value-format="yyyy-MM-dd" placeholder="选择日期" />
 							<!--时间控件-->
-							<el-date-picker value-format="yyyy-MM-dd HH:mm:ss" format="yyyy-MM-dd HH:mm:ss" type="datetime" :disabled="!item.edit" v-if="item.fieldTypeName == 'timeControl' && item.show" style="width: 100%;" v-model="ruleForm[item.field]"></el-date-picker>
+							<el-date-picker value-format="yyyy-MM-dd HH:mm:ss" format="yyyy-MM-dd HH:mm:ss" type="datetime" placeholder="请选择日期时间" :disabled="!item.edit" v-if="item.fieldTypeName == 'timeControl' && item.show" style="width: 100%;" v-model="ruleForm[item.field]"></el-date-picker>
 							<!-- 下拉框 -->
 							<el-select v-if="item.fieldTypeName == 'select' && item.show" style="width: 100%;" v-model="ruleForm[item.field]" clearable :disabled="!item.edit" :placeholder="item.placeholder">
 								<el-option v-for="itemSelect in item.resList" :key="itemSelect.id" :label="itemSelect.name" :value="itemSelect.id" />
@@ -277,7 +277,7 @@
 							})
 						})
 					} else {
-						this.goOut2("数据或者公式不正确, 请重新输入.")
+						this.goOut("数据或者公式不正确, 请重新输入.")
 					}
 				}
 			},
