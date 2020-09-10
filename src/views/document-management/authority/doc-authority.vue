@@ -228,12 +228,11 @@ export default {
             let nodes = this.$refs.tree.getCheckedNodes();
             let categoryfoids = []; //选中的文档类别
             let managefoids = [];   //选中的文档
-          debugger;
             for(var i=0; i<nodes.length; i++){
                 let node = nodes[i];
-                if( node.flevel == 1 && node.children) {
+                if( ( node.flevel == 1 || node.flevel == 2 ) && node.children) {
                     categoryfoids.push(node.foid);
-                } else if( node.flevel == 2) {
+                } else if( node.flevel == 3) {
                     managefoids.push(node.foid);
                 }
             }
@@ -346,7 +345,7 @@ export default {
         },
         //生成树
         maketree(){
-            this.$api.documentManagement.getDocumentCategoryOrgArch('').then(response => {
+            this.$api.documentManagement.getDocumentManageOrgArch('').then(response => {
                 let responsevalue = response;
                 if (responsevalue) {
                     let returndata = responsevalue.data;

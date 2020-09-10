@@ -1,5 +1,5 @@
-<template> 
-	<div class="login-wrap"> 
+<template>
+	<div class="login-wrap">
 		<iframe :src="$GLOBAL.htmlUrl + 'login' " style="width:100%;height:764px;border:0px;padding:0px;display:none" class="taskStructure" ref="iframe"></iframe>
 		<div class="ms-login">
 			<div class="ms-title01"><img src="../../assets/img/logo-bg.png" height="45" width="360" /></div>
@@ -17,7 +17,7 @@
 						</el-input>
 					</el-form-item>
 					<div class="login-btn">
-						<el-button type="primary" @click="submitForm()">登录</el-button>   
+						<el-button type="primary" @click="submitForm()">登录</el-button>
 					</div>
 				</el-form>
 			</div>
@@ -88,6 +88,8 @@
 								localStorage.setItem('ms_companyId', data.data.principal.companyId);
 								//公司名称
 								localStorage.setItem('ms_companyName', data.data.principal.companyName);
+                //该用户所拥有角色
+                localStorage.setItem('ms_roles', data.data.principal.roles);
 								//获取工作事项相关参数
 								this.getContext();
 								// 向html的login方法发送数据
@@ -172,7 +174,7 @@
 		background-image: url(../../assets/img/Logo-title.png);
 		background-size: 100%;
 	}
-	
+
 	.ms-title {
 		width: 100%;
 		line-height: 50px;
@@ -181,7 +183,7 @@
 		color: #000;
 		border-bottom: 1px solid #ddd;
 	}
-	
+
 	.ms-login {
 		position: absolute;
 		left: 50%;
@@ -191,29 +193,29 @@
 		border-radius: 5px;
 		overflow: hidden;
 	}
-	
+
 	.ms-content01 {
 		background: rgba(255, 255, 255, 0.3);
 	}
-	
+
 	.ms-content {
 		padding: 30px 30px;
 	}
-	
+
 	.login-btn {
 		text-align: center;
 	}
-	
+
 	.login-btn button {
 		width: 100%;
 		height: 36px;
 		margin-bottom: 10px;
 	}
-	
+
 	.ms-title01 {
 		margin-bottom: 50px;
 	}
-	
+
 	.login-tips {
 		font-size: 12px;
 		line-height: 30px;
