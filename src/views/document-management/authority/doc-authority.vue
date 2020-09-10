@@ -346,7 +346,7 @@ export default {
         },
         //生成树
         maketree(){
-            this.$api.documentManagement.getDocumentManageOrgArch('').then(response => {
+            this.$api.documentManagement.getDocumentManageOrgArch('-1').then(response => {
                 let responsevalue = response;
                 if (responsevalue) {
                     let returndata = responsevalue.data;

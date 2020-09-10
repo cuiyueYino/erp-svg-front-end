@@ -300,6 +300,7 @@ export default {
         searchMenutable(data){
             let fromdata=data;
             fromdata.fuserid = localStorage.getItem('ms_userId');
+            fromdata.fdocstatus = '3';
             this.$api.documentManagement.findDocumentManageByPage(fromdata).then(response => {
                 let responsevalue = response;
                 if (responsevalue) {
