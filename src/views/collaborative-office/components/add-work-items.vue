@@ -92,7 +92,7 @@
 			//选择模板
 			selectMainTable(){
 				this.companyID=this.company;
-				this.UserId=localStorage.getItem("ms_staffId");
+				this.UserId=localStorage.getItem("ms_userId");
 				this.dialogVisible = true;
 			},
 			//提交/暂存
