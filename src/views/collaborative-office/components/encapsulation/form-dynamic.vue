@@ -76,7 +76,7 @@
 			</erpDialog>
 		</div>
 		<!--弹出框-工作流-->
-		<workflowDialog ref="childWork"></workflowDialog>
+		<workflowDialog ref="childWork" :status="status" title="工作事项" ></workflowDialog>
 	</div>
 </template>
 
@@ -119,6 +119,7 @@
 		},
 		data() {
 			return {
+				status:'3',
 				//固定栏校验写死
 				rules: {
 					title: [{
@@ -266,9 +267,11 @@
 									if(val.fieldType == 4) {
 										this.ruleForm[row.field] = result.con.toFixed(0)
 									} else if(val.fieldType == 5) {
-										this.ruleForm[row.field] = result.con.toFixed(4)
+										//this.ruleForm[row.field] = result.con.toFixed(4)
+										this.ruleForm[row.field] = result.con
 									} else {
-										this.ruleForm[row.field] = result.con.toFixed(4)
+										//this.ruleForm[row.field] = result.con.toFixed(4)
+										this.ruleForm[row.field] = result.con
 									}
 								}
 							})
@@ -537,7 +540,7 @@
 							case "4":
 								//添加整型校验
 								this.rules[item.field].push({
-									pattern: /^-?[1-9]\d*$/,
+									pattern: /^-?[0-9]\d*$/,
 									message: '请输入正确的' + item.fieldName,
 									trigger: 'change'
 								})
@@ -552,7 +555,7 @@
 								//添加浮点型校验
 								this.rules[item.field].push({
 									pattern: /^([1-9]\d{0,15}|0)(\.\d{1,4})?$/,
-									message: '请输入正确的' + item.fieldName,
+									message: '请输入最多4位小数',
 									trigger: 'change'
 								})
 								this.rules[item.field].push({

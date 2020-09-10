@@ -62,6 +62,8 @@
 		},
 		props: {
 			show: String,
+			status:String,
+			company:String,
 		},
 		data() {
 			return {
@@ -233,6 +235,7 @@
 			},
 			//搜索
 			toSelect() {
+
 				var toGet = JSON.parse(JSON.stringify(this.formInline))
 				if(this.value != 'time') {
 					if(!this.noNull(this.value)) {
@@ -241,6 +244,9 @@
 				} else {
 					toGet.beginTime = this.value1[0]
 					toGet.endTime = this.value1[1]
+				}
+				if(this.status){
+					toGet.status=this.status;
 				}
 				this.$api.collaborativeOffice.findPage(toGet).then(data => {
 					this.tableData = data.data.data.rows

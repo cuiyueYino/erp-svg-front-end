@@ -7,17 +7,23 @@
 						<el-row>
 							<el-col :span="6">
 								<el-form-item>
-									<el-select style="width: 100%;" clearable @change="selectChange" v-model="value" value-key="id">
-										<el-option v-for="item in formInlineList" :key="item.id" :label="item.name" :value="item">
+									<el-select style="width: 100%;" clearable @change="selectChange" v-model="value" value-key="id" >
+										<el-option v-for="item in formInlineList" :key="item.id" :label="item.name" :value="item" >
 										</el-option>
 									</el-select>
 								</el-form-item>
 							</el-col>
-							<el-col :span="6" >
+							<el-col :span="6" v-if="value.id != 'status'">
 								<el-form-item>
 									<el-input clearable v-model="selectData"></el-input>
 								</el-form-item>
 							</el-col>
+                            <el-col :span="6" v-else>
+                                <el-select style="width: 100%;" clearable v-model="selectData" value-key="id" >
+                                    <el-option v-for="item in formStatusList" :key="item.id" :label="item.name" :value="item.id" >
+                                    </el-option>
+                                </el-select>
+                            </el-col>
 							<el-col :span="6">
 								<el-form-item>
 									<el-button type="primary" @click="$refs.pageNation.toBegin()">搜索</el-button>
@@ -77,7 +83,19 @@
 				}, {
 					id: "remark",
 					name: "描述"
-				}],
+				},{
+                    id: "status",
+                    name: "状态"
+                }],
+                formStatusList:[
+                    {
+                        id: "3",
+                        name: "有效"
+                    },{
+                        id: "7",
+                        name: "禁用"
+                    },
+                ],
 				formInline: {
 					page: 1,
 					size: 10
@@ -204,8 +222,10 @@
 				if(typeof(this.toSelectData[this.selectCon]) != "undefined") {
 					this.toSelectData[this.selectCon] = this.selectData
 				}
-				if(this.companyName){
-					this.toSelectData.company=this.companyName.id;
+				if(this.company){
+					if(this.company.id){
+						this.toSelectData.company = this.company.id;
+					}
 				}
 				if(this.status){
 					this.toSelectData.status=this.status;
@@ -213,8 +233,6 @@
 				if(this.userId){
 					this.toSelectData.userId=this.userId;
 				}
-				this.toSelectData.company = this.companyId;
-				// company
 				this.$api.collaborativeOffice.findWorkItemTempPage(this.toSelectData).then(data => {
 					this.tableData = data.data.data.rows
 					this.currentTotal = data.data.data.total

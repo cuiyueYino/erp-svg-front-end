@@ -1,7 +1,7 @@
 <template>
     
     <div class="most-warapper">     
-       <iframe :src="$GLOBAL.htmlUrl + 'plan/temporaryTaskEstablishment' " style="width:100%;height:764px;border:0px;padding:0px;"  class="temporaryTaskEstablishment"></iframe>
+       <iframe :src="$GLOBAL.htmlUrl + 'temporaryTaskEstablishment' " style="width:100%;height:764px;border:0px;padding:0px;"  class="temporaryTaskEstablishment"></iframe>
     </div>
 </template>
 

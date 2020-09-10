@@ -5,14 +5,14 @@
 			<el-form :inline="true" :model="searchForm" ref="searchForm" class="demo-form-inline">
 				<el-row :gutter="24">
 					<el-col :span="24">
-						<el-form-item label="登录账号：" label-width="94px">
+						<el-form-item label="登录账号：" label-width="94px" prop="fcode">
 							<el-input clearable size="small" v-model="searchForm.fcode" placeholder="请输入"></el-input>
 						</el-form-item>
-						<el-form-item label="名称：" label-width="80px">
+						<el-form-item label="名称：" label-width="80px" prop="fname">
 							<el-input clearable size="small" v-model="searchForm.fname" placeholder="请输入"></el-input>
 						</el-form-item>
 
-						<el-form-item label="用户部门：" label-width="90px">
+						<el-form-item label="用户部门：" label-width="90px" prop="departmentname">
 							<el-input clearable size="small" v-model="searchForm.departmentname" placeholder="请输入"></el-input>
 
 						</el-form-item>
@@ -60,7 +60,8 @@
 						</el-form-item>
 						<el-form-item label="使用者：" :label-width="formLabelWidth" prop="fstaff">
 							<el-input v-model="form.fstaff" :disabled="isEdit && !isReset" size="small" autocomplete="off"></el-input>
-							<img class="icon-search" v-show="!isEdit || isReset" src="../../assets/img/search.svg" @click="addDepart();loading = true" />
+							<el-button type="primary" v-show="!isEdit || isReset" size="mini" icon="el-icon-search" @click="addDepart();loading = true"></el-button>
+							<!--<img class="icon-search" v-show="!isEdit || isReset" src="../../assets/img/search.svg" @click="addDepart();loading = true" />-->
 						</el-form-item>
 						<el-form-item v-show="isEdit" label="重置密码：" :label-width="formLabelWidth">
 							<el-checkbox v-model="resetCheck" size="small"></el-checkbox>
@@ -101,8 +102,7 @@
 		<!-- 使用者弹窗 -->
 		<el-dialog title="使用者查询" top="20px" :visible.sync="userVisible" :close-on-click-modal="false">
 
-			<el-input placeholder="输入关键字进行过滤" v-model="filterText">></el-input>
-
+			<!-- <el-input placeholder="输入关键字进行过滤" v-model="filterText"></el-input>-->
 			<!-- 树状图 -->
 			<el-tree class="filter-tree" :data="treeData" v-loading="loading" element-loading-text="拼命加载中" :props="defaultProps" :default-expand-all="false" accordion :filter-node-method="filterNode" ref="tree" @node-click="handleNodeClick">
 			</el-tree>
@@ -389,9 +389,6 @@
 					default:
 						break;
 				}
-				console.log("0000000000000000000011111122222");
-				console.log(this.tableData2[0].foperationtime);
-
 			},
 			closeDialog(formName) {
 				this.dialogFormVisible = false;
@@ -437,7 +434,6 @@
 			getTableData() {
 				this.searchForm.page = this.pageNum;
 				this.searchForm.size = this.pageSize;
-
 				this.$api.jobUserManagement.getUserTableData(this.searchForm).then(
 					res => {
 						this.tableData = res.data.data.rows;
@@ -552,7 +548,6 @@
 							this.toUpd(item.children)
 						}
 					})
-					console.log(this.treeData)
 					this.loading = false
 					//					console.log(eval('(' +res.data.data+ ')'))
 					//					return
@@ -587,7 +582,6 @@
 									newTableRow = this.tableData2[i]
 								}
 							});
-							console.log(this.tableData2, newTableRow)
 							if(newTableRow) {
 								switch(newTableRow.foperationcontent) {
 									case '其他':
@@ -734,8 +728,7 @@
 
 			},
 			// 封装表格
-			contantSelect(V) {
-				console.log(V); //debugger
+			contantSelect(V) {//debugger
 				const {
 					onRowProjectnameClick
 				} = this;
