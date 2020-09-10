@@ -76,7 +76,7 @@
 			</erpDialog>
 		</div>
 		<!--弹出框-工作流-->
-		<workflowDialog ref="childWork"></workflowDialog>
+		<workflowDialog ref="childWork" :status="status" title="工作事项" ></workflowDialog>
 	</div>
 </template>
 
@@ -119,6 +119,7 @@
 		},
 		data() {
 			return {
+				status:'3',
 				//固定栏校验写死
 				rules: {
 					title: [{
