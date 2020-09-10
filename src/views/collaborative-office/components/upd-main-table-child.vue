@@ -437,11 +437,11 @@
 		},
 		created() {
 			this.ruleForm = this.context
-			this.CompanyData.forEach(item => {
+			/*this.CompanyData.forEach(item => {
 				if(item.name == "福佳集团") {
 					this.ruleForm.company = item.id
 				}
-			})
+			})*/
 			this.$api.collaborativeOffice.findList({}).then(data => {
 				this.selectList = data.data.data
 				//全部服务

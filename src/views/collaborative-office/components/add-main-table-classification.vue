@@ -255,12 +255,14 @@
 			} else if(this.showFigNum == "3") {
 				this.showFigAll = true
 				this.ruleForm = this.context
+			}else{
+				this.CompanyData.forEach(item => {
+					if(item.name == "福佳集团") {
+					this.ruleForm.company = item.id
+					}
+				})
 			}
-			/*this.CompanyData.forEach(item => {
-				if(item.id == this.context.company) {
-					this.company = item
-				}
-			})*/
+			
 		},
 		methods: {
 		  	//字段类型改变
