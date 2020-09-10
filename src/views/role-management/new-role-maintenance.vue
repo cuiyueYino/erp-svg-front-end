@@ -45,7 +45,7 @@
                             <el-row>
                                 <el-col :span="11">
                                     <el-form-item label="公司" prop="company">
-                                        <el-select v-model="company" @change="CompanyChange" value-key="value" >
+                                        <el-select v-model="company" @change="companyChange" value-key="value" >
                                             <el-option
                                                 v-for="item in companyoptions"
                                                 :key="item.id"
@@ -140,10 +140,11 @@ export default {
             this.rowRMDDataObj=finandata;
         },
         //改变公司事件
-        CompanyChange(event) {
+        companyChange(event) {
             if(this.createtype ==="NEW"){
                 this.maketree(event);
             }else{
+                this.checkdata = [];
                 this.asyncCall(this.company,this.formdata.id);
             }
         },
