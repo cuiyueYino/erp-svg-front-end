@@ -88,6 +88,7 @@
 				this.selectList = data.data.data
 			})
 		},
+		
 		methods: {
 			//选择模板
 			selectMainTable(){
