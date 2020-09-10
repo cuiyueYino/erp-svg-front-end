@@ -19,6 +19,7 @@
                         权限
                         <el-col>
                             <el-tree
+                              highlight-current
                             :data="treeData"
                             :props="defaultProps"
                             node-key="foid"
@@ -300,6 +301,7 @@ export default {
         },
         //树的多选框点击事件
         checkboxClick(data, checkedParm){
+          debugger;
             this.documentLevel = data.flevel;
             this.documentFpid = data.foid;
             let fromdata={};
@@ -317,7 +319,7 @@ export default {
             let docmanageidSet = [];
             for(var i=0; i<nodes.length; i++){
                 let node = nodes[i];
-                if( node.flevel == 2) {
+                if( node.flevel == 3) {
                     docmanageidSet.push(node.foid);
                     docmanageids = docmanageids  + node.foid +',';
                 }
@@ -345,7 +347,7 @@ export default {
         },
         //生成树
         maketree(){
-            this.$api.documentManagement.getDocumentManageOrgArch('').then(response => {
+            this.$api.documentManagement.getDocumentManageOrgArch('-1').then(response => {
                 let responsevalue = response;
                 if (responsevalue) {
                     let returndata = responsevalue.data;

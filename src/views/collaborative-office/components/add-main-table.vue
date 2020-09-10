@@ -342,7 +342,8 @@
 					b: 2,
 					c: 3,
 					d: 4
-				}
+				},
+				clickFlg:0
 			}
 		},
 		created() {
@@ -649,6 +650,9 @@
 			},
 			//服务--确定
 			getTServiceByParams() {
+				if (this.clickFlg == 0){
+					this.tServiceByParamsCon = "";
+				}
 				//服务显示名称
 				this.$set(this.rowCon, 'serviceCon', this.tServiceByParamsCon.fname)
 				//查询服务的参数：fid是根据条件查询的“条件” fcode是具体查询哪条服务的内容
@@ -659,6 +663,7 @@
 				//行内添加服务ID，需要后台存储
 				this.rowCon.serviceId = this.tServiceByParamsCon.foid
 				this.dialogVisible_TServiceByParams = false
+				this.clickFlg = 0;
 			},
 			//提交/暂存（1：提交，2：暂存）
 			submitForm(formName) {
@@ -691,7 +696,8 @@
 			//选中行
 			clickRow(row) {
 				//绑定中间值
-				this.tServiceByParamsCon = row
+				this.tServiceByParamsCon = row;
+				this.clickFlg = 1;
 			},
 		}
 	}
