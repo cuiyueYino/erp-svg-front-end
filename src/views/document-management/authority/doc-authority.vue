@@ -19,6 +19,7 @@
                         权限
                         <el-col>
                             <el-tree
+                              highlight-current
                             :data="treeData"
                             :props="defaultProps"
                             node-key="foid"

@@ -4,6 +4,7 @@
             <el-row>
                 <el-col :span="4" class="treeStyle">
                     <el-tree
+                        highlight-current
                         :data="treeData"
                         :props="defaultProps"
                         node-key="foid"
