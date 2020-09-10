@@ -300,6 +300,7 @@ export default {
         },
         //树的多选框点击事件
         checkboxClick(data, checkedParm){
+          debugger;
             this.documentLevel = data.flevel;
             this.documentFpid = data.foid;
             let fromdata={};
@@ -317,7 +318,7 @@ export default {
             let docmanageidSet = [];
             for(var i=0; i<nodes.length; i++){
                 let node = nodes[i];
-                if( node.flevel == 2) {
+                if( node.flevel == 3) {
                     docmanageidSet.push(node.foid);
                     docmanageids = docmanageids  + node.foid +',';
                 }
