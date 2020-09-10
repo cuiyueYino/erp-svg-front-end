@@ -352,9 +352,10 @@
 				fieldBrowseList: JSON.parse(localStorage.getItem('fieldBrowseList')),
 				//公司部门职位的合集
 				allOrganizationInfo: JSON.parse(localStorage.getItem('allOrganizationInfo')),
+				clickFlg:0
 			}
 		},
-		created() {
+		created() {			
 			this.ruleForm = this.context
 			this.CompanyData.forEach(item => {
 				if(item.name == "福佳集团") {
@@ -392,7 +393,7 @@
 				if(this.showFigNum == 1) {
 					return "工作事项模板主表-查看"
 				} else {
-					return "工作事项模板主表-修改"
+					return "工作事项模板主表-修改"					
 				}
 			},
 			//服务类型
@@ -677,6 +678,9 @@
 			},
 			//服务--确定
 			getTServiceByParams() {
+				if (this.clickFlg == 0){
+					this.tServiceByParamsCon = "";
+				}
 				//服务显示名称
 				this.$set(this.rowCon, 'serviceCon', this.tServiceByParamsCon.fname)
 				//查询服务的参数：fid是根据条件查询的“条件” fcode是具体查询哪条服务的内容
@@ -687,6 +691,7 @@
 				//行内添加服务ID，需要后台存储
 				this.rowCon.serviceId = this.tServiceByParamsCon.foid
 				this.dialogVisible_TServiceByParams = false
+				this.clickFlg = 0;
 			},
 			submitForm(formName) {
 				var msg = ""
@@ -721,6 +726,7 @@
 			},
 			//选中行
 			clickRow(row) {
+				this.clickFlg = 1;
 				this.tServiceByParamsCon = row
 			},
 		}

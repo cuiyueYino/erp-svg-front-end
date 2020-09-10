@@ -15,7 +15,7 @@
 					</el-col>
 					<el-col v-if="showFigNum == 2" :span="6" style="text-align: right;">
 						<el-button @click="submitForm(2)" type="success" size="mini" icon="el-icon-check">提交</el-button>
-						<el-button @click="submitForm(1)" type="primary" size="mini" icon="el-icon-finished">暂存</el-button>
+						<el-button @click="submitForm(1)" type="success" size="mini" icon="el-icon-finished">暂存</el-button>
 						<el-button @click="preview()" type="primary" plain size="mini" icon="el-icon-view">预览</el-button>
 						<el-button type="danger" @click="$parent.toSelect()" size="mini" icon="el-icon-close">返回</el-button>
 					</el-col>
