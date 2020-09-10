@@ -277,7 +277,7 @@
 							})
 						})
 					} else {
-						this.goOut2("数据或者公式不全" + "\n计算数据:" + result.errorCon)
+						this.goOut2("数据或者公式不正确, 请重新输入.")
 					}
 				}
 			},

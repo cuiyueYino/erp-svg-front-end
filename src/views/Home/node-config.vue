@@ -507,7 +507,7 @@ export default {
                     decisionsObj = 
                         {
                             "decisionType": item.decisionType,
-                            "decisionText": item.decisionText,
+                            "decisionText": item.fname?item.fname:item.decisionText,
                         }
                     this.data.decisions.decision.push(decisionsObj)
                 })

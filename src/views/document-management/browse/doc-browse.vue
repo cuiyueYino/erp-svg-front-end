@@ -196,10 +196,11 @@ export default {
                 this.$message.error("只能选择一个!");
             }else{
                 if(SelectData[0]){
+                  debugger;
                     //验证是否有权限
                     let finandata={};
                     finandata.fdocmanageoid = SelectData[0].foid;
-                    finandata.froleid = localStorage.removeItem('ms_roleId');
+                    finandata.froleid = localStorage.getItem('ms_roles');
                     //测试暂用假数据
                     // finandata.froleid = '7f6496f161c14e2e83a7a5f8aa3b2ece';
                     finandata.fauth = '1';

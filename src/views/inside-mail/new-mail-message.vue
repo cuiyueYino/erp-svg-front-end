@@ -487,9 +487,12 @@ export default {
                 };
                 if(this.searchClickFlag) {
                     nameString += searchFromPersonName;
-                    for(var m= 0;m < searchFromPersonArray.lenght;m++) {
-                        this.searchFromPersonArrayNew.push(searchFromPersonArray[m]);
+                    if(searchFromPersonArray !=null) {
+                        for(var m= 0;m < searchFromPersonArray.lenght;m++) {
+                            this.searchFromPersonArrayNew.push(searchFromPersonArray[m]);
+                        }
                     }
+                    
                 }
                 if(nameString!='' && !this.searchClickFlag){
                     nameString = nameString.slice(0,nameString.length-1);
