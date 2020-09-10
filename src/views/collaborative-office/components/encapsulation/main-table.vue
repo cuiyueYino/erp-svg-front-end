@@ -11,7 +11,7 @@
 					<el-col :span="10">
 						<el-form-item>
 							<el-button type="primary" @click="toSelect()">搜索</el-button>
-							<el-button type="primary" plain @click="$refs.formInline.resetFields();showFig == 2 ? '' : clear();">重置</el-button>
+							<el-button type="primary" plain @click="$refs.formInline.resetFields();showFig == 2 ? clear2() : clear();">重置</el-button>
 							<el-button v-if="showFig == 2" type="primary" plain @click="getAll('formInline')">全部</el-button>
 							<el-button v-if="showFig == 2" type="primary" plain @click="getConList()">已选中</el-button>
 						</el-form-item>
@@ -131,6 +131,7 @@
 			},
 			//搜索
 			toSelect() {
+				console.log(11111111)
 				this.$api.collaborativeOffice.apiUrl("workItemTemp/findByParams", this.formInline).then(data => {
 					this.conList = data.data.data
 					this.tableData = JSON.parse(JSON.stringify(this.conList))
@@ -154,6 +155,11 @@
 				this.rowClick = {}
 				this.toSelect()
 				this.$emit("getCon", "", "")
+			},
+			clear2() {
+				this.rowClick = {}
+				this.toSelect()
+//				this.$emit("getCon", "", "")
 			}
 		}
 	}
