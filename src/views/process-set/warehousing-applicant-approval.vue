@@ -417,7 +417,7 @@ export default {
             finandata.finanrowId="QS_0056";
             finandata.nametitle="待办事项";
             finandata.SelectionData=this.rowWAADataObj.selectData;
-            //finandata.FunctionType=data;
+            finandata.FunctionType=data;
             this.rowUTSDataObj=finandata;
         },
         closeBaseInfo(data){

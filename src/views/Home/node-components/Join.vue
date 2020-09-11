@@ -631,12 +631,12 @@ export default {
                                     case 5://表达式
                                     joinusertable.push({
                                         fUsercode: "表达式",
-                                        fUsername: item.expression.name,
-                                        fUserRemake: item.expression,
-                                        fUseroid:item.expression.oid,
-                                        oid:item.oid,
-                                        type:item.type,
-                                        typeName:'expression',
+                                        fUsername: item.expression || "",
+                                        fUserRemake: "",
+                                        fUseroid: item.expression.oid || "",
+                                        oid: item.oid,
+                                        type: item.type,
+                                        typeName: "expression",
                                     })
                                     break;
                                     default:
@@ -701,12 +701,12 @@ export default {
                                     case 5://表达式
                                     tableDataNewSet.push({
                                         fUsercode: "表达式",
-                                        fUsername: item.expression.name,
-                                        fUserRemake: item.expression,
-                                        fUseroid:item.expression.oid,
-                                        oid:item.oid,
-                                        type:item.type,
-                                        typeName:'expression',
+                                        fUsername: item.expression || "",
+                                        fUserRemake: "",
+                                        fUseroid: item.expression.oid || "",
+                                        oid: item.oid,
+                                        type: item.type,
+                                        typeName: "expression",
                                     })
                                     break;
                                     default:

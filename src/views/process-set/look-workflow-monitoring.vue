@@ -237,6 +237,7 @@ export default {
             finandata.finanrowname="人员缺省查询方案";
             finandata.finanrowId="QS_0056";
             finandata.nametitle="待办事项";
+            finandata.FunctionType='人员查询';
             this.rowUTSDataObj=finandata;
         },
         //人员查询结果处理
@@ -250,7 +251,6 @@ export default {
 
                 this.formdata.currReviewers = tmpReviewers.substring(0,tmpReviewers.length-1)
             }
-            console.log(this.newReviewers)
             this.rowUTStype = false
         },
         //流程图
