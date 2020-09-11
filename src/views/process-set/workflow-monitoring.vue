@@ -525,6 +525,19 @@ export default {
         },
         toEdit(){
            let selectOption = this.multipleSelection;
+           if(selectOption.statusTyp != "待办"){
+               this.$message.error('非待办邮件邮件，不能修改参与人或委托！');
+               return;
+           }
+
+           var s = new Array("作废","加签","转发","抄送","正在加签");
+			for(var i=0;i<s.length;i++){
+				if(selectOption.statusStr.indexOf(s[i])==0){
+					this.$message.error("当前邮件是"+s[i]+"邮件，不能修改参与人或委托！");
+					return;
+				}
+            }
+            
             if(selectOption.length >0){
                 if(selectOption.length >1){
                     this.$message.error('只能选择一行!');

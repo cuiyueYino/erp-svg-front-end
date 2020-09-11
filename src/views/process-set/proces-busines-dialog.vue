@@ -508,20 +508,36 @@ export default {
         //提交
         saveConfig(){
             if(this.type =='用户'){
+                let users = this.$refs.tree.getCheckedNodes(false);
                 if(this.multipleSelection.length > 1){
                     this.$message.error('只能选择一个!');
-                }else if(this.multipleSelection.length == 0 && this.$refs.tree.getCheckedNodes(false) == 0){
+                }else if(this.multipleSelection.length == 0 && users.length == 0){
                     this.$message.error('请选择人员和角色!');
-                } else if(this.$refs.tree.getCheckedNodes(false) == 0) {
+                } else if(users.length == 0) {
                     this.$message.error('请至少选择一个人员!');
                 } else if(this.multipleSelection.length == 0) {
                     this.$message.error('请选择角色!');
                 } else{
+                    //去掉人员中的空部门
+                    let relUserList = new Array();
+                    for(var i = 0; i < users.length; i++) {
+                        if(!users[i].hasOwnProperty("children")) {
+                            if(users[i].fstruid == undefined){
+                                relUserList.push(users[i]);
+                            }
+                        }
+                        
+                    }
+
+                    if(relUserList.length == 0){
+                        this.$message.error('人员无效，至少选择一个有效的人员！(没有人员的公司或部门为无效选择)');
+                        return;
+                    }
+
                     let SerchData={};
                     SerchData.RoleSelection=this.multipleSelection;
                     SerchData.DepSelection=this.DepmultipleSelection;
-                    let NodeCheckData=this.$refs.tree.getCheckedNodes(false);
-                    SerchData.NodeCheckData=NodeCheckData;
+                    SerchData.NodeCheckData=relUserList;
                     this.$emit('closeDialog',SerchData,this.type);
                 }
             }else{
