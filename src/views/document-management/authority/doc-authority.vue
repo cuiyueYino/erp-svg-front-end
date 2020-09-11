@@ -222,6 +222,7 @@ export default {
         selectDocAuthorityChange(data){
             this.formInSelect.select=data;
             this.findData(1);
+            this.$refs.tree.setCheckedKeys([]);
         },
 
         //提交文档授权

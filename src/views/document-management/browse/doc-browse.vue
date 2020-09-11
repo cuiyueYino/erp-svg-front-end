@@ -100,8 +100,7 @@ export default {
             rowNMMDataObj:{},
             pageNum: 1,
             pageSize: 10,
-            total: 20,
-            printFlg:'',
+            total: 20,            
             columns: [
                 {
                     type: 'selection'
@@ -205,25 +204,25 @@ export default {
                     finandata.froleid = localStorage.getItem('ms_roles');
                     //测试暂用假数据
                     // finandata.froleid = '7f6496f161c14e2e83a7a5f8aa3b2ece';
-                    finandata.fauth = '1';
+                    finandata.fauth = '2';
                     this.$api.documentManagement.isHaveDocAuthority(finandata).then(response => {
                         let responsevalue = response;                       
                         if (responsevalue.data.data == 1) {
-                            this.printFlg = '1';
                             this.rowNMMtype = true;
                             let finandata={};
+                            finandata.printFlg = '2';
                             finandata.nametitle="文档浏览查看";
                             finandata.NewOrEditFlag="SHOW";
                             finandata.foid=SelectData[0].foid;
                             this.rowNMMDataObj=finandata;
                         } else {
-                            finandata.fauth = '2';
+                            finandata.fauth = '1';
                             this.$api.documentManagement.isHaveDocAuthority(finandata).then(response => {
                                 let responsevalue = response;                       
-                                if (responsevalue.data.data == 2) {
-                                    this.printFlg = '2';
+                                if (responsevalue.data.data == 1) {
                                     this.rowNMMtype = true;
                                     let finandata={};
+                                    finandata.printFlg = '2';
                                     finandata.nametitle="文档浏览查看";
                                     finandata.NewOrEditFlag="SHOW";
                                     finandata.foid=SelectData[0].foid;

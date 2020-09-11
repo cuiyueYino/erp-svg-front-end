@@ -146,6 +146,7 @@ export default {
                 fcreatetime:new Date(),
             },
             checked:false,
+            printFlg:'',
             title:'',
             labelPosition: 'left',
             rules: {
@@ -270,6 +271,7 @@ export default {
             this.isShow = true;
             this.isEdit = false;
             this.ShowFinancVisible=this.rowNMMtype;
+            this.printFlg=this.rowNMMDataObj.printFlg;
             this.title=this.rowNMMDataObj.nametitle;
             this.NewOrEditFlag=this.rowNMMDataObj.NewOrEditFlag;
             if (this.rowNMMDataObj.NewOrEditFlag==="SHOW"){
