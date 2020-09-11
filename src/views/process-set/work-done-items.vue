@@ -7,7 +7,7 @@
                     <el-button type="success" icon="el-icon-refresh" plain @click="refresh">刷新</el-button>
                     <el-button type="success" icon="el-icon-search" plain @click="search">查询</el-button>
                     <el-button type="warning" icon="el-icon-document" plain @click="Tolook">查看</el-button>
-                    <el-button type="success" icon="el-icon-share" plain @click="baseInputTable()">转发</el-button>
+                    <el-button type="success" icon="el-icon-share" plain @click="baseInputTable('转发')">转发</el-button>
                     <el-button type="danger" icon="el-icon-more" plain @click="AdditionalApp()">加批</el-button>
                     <el-button type="danger" icon="el-icon-view" plain @click="basefollow()">关注</el-button>
                     <el-button type="danger" icon="el-icon-printer" plain @click="basePrinting()">打印</el-button>
@@ -476,11 +476,7 @@ export default {
             };
         },
         closeBaseInfo(data){
-            if(data === false){
-                this.rowUTStype = false
-            }else{
-                this.rowUTStype = true
-            }
+            this.rowUTStype = false
         },
         //打印
         basePrinting(){

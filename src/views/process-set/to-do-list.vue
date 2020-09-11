@@ -37,7 +37,7 @@
             icon="el-icon-document-checked"
             plain
             @click="handle()"
-          >处理1</el-button>
+          >处理</el-button>
           <el-button
             type="success"
             icon="el-icon-share"
@@ -48,7 +48,7 @@
             type="danger"
             icon="el-icon-s-order"
             plain
-            @click="baseInputTable('委  托')"
+            @click="baseInputTable('委托')"
           >委托</el-button>
           <el-button
             type="danger"
@@ -632,8 +632,7 @@ export default {
         finandata.finanrowId = "QS_0056";
         finandata.nametitle = "待办事项";
         finandata.SelectionData = this.multipleSelection;
-        //finandata.FunctionType = data;
-        
+        finandata.FunctionType = data;
         this.rowUTSDataObj = finandata;
       }
     },
