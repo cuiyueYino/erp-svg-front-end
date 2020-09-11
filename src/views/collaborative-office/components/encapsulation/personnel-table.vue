@@ -11,7 +11,7 @@
 					<el-col :span="10">
 						<el-form-item>
 							<el-button type="primary" @click="selectList()">搜索</el-button>
-							<el-button type="primary" plain @click="$refs.formInline.resetFields();showFig == 2 ? '' : clear();">重置</el-button>
+							<el-button type="primary" plain @click="$refs.formInline.resetFields();showFig == 1 ? clear2() : clear();">重置</el-button>
 							<el-button v-if="showFig == 1" type="primary" plain @click="getAll('formInline')">全部</el-button>
 							<el-button v-if="showFig == 1" type="primary" plain @click="getConList()">已选中</el-button>
 						</el-form-item>
@@ -222,7 +222,12 @@
 				this.rowClick = {}
 				this.getRoleList()
 				this.$emit("getCon", "", "")
+			},
+			clear2() {
+				this.rowClick = {}
+				this.getRoleList()
 			}
+
 		}
 	}
 </script>
