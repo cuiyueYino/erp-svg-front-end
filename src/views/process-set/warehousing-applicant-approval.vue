@@ -186,7 +186,7 @@ export default {
             rowEFListDataObj: {},
             rowTEMTaskDataObj: "",
             rowEACHPerEachJobDetDataObj: "",
-            rowEachPerEachTableDelayDataObj: {},
+            rowEachPerEachTableDelayDataObj: "",
             rowEachPerEachTableReportDataObj: {},
             rowEachPerEachTableInvalidDataObj: {},
             rowEachPerEachTablePersonDataObj: {},
@@ -302,6 +302,7 @@ export default {
             this.$api.processSet.addWfsubmit(paramsData).then(res=>{
                 if( res.data.code == 0 ){
                     this.$message.success('保存成功');
+                    this.ShowFinancVisible = false;
                     //sessionStorage.setItem("eidtMsg",null);
                 }else{
                     this.$message.error("保存失败,请填写完整信息");
