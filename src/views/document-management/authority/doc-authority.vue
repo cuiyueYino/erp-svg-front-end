@@ -224,7 +224,7 @@ export default {
             this.findData(1);
         },
 
-        //查看文档授权
+        //提交文档授权
         submitAuth(){
             let nodes = this.$refs.tree.getCheckedNodes();
             let categoryfoids = []; //选中的文档类别
@@ -242,9 +242,9 @@ export default {
               return;
             }
             let SelectData=this.multipleSelection; // 选中的角色
-            if(SelectData.length < 1){
-                this.$message.error("请选择一个角色授权!");
-            }else{
+            // if(SelectData.length < 1){
+            //     this.$message.error("请选择一个角色授权!");
+            // }else{
                 let rolefoids = [];
                 for(var i=0; i<SelectData.length; i++){
                     rolefoids.push(SelectData[i].id);
@@ -269,7 +269,7 @@ export default {
                         this.$message.success('数据库没有该条数据!');
                     }
                 });
-            }
+            // }
         },
 
         //树结构节点样式设置
@@ -347,7 +347,7 @@ export default {
         },
         //生成树
         maketree(){
-            this.$api.documentManagement.getDocumentManageOrgArch('-1').then(response => {
+            this.$api.documentManagement.getDocumentManageOrgArch('').then(response => {
                 let responsevalue = response;
                 if (responsevalue) {
                     let returndata = responsevalue.data;

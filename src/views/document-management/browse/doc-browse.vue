@@ -101,6 +101,7 @@ export default {
             pageNum: 1,
             pageSize: 10,
             total: 20,
+            printFlg:'',
             columns: [
                 {
                     type: 'selection'
@@ -206,8 +207,9 @@ export default {
                     // finandata.froleid = '7f6496f161c14e2e83a7a5f8aa3b2ece';
                     finandata.fauth = '1';
                     this.$api.documentManagement.isHaveDocAuthority(finandata).then(response => {
-                        let responsevalue = response;
+                        let responsevalue = response;                       
                         if (responsevalue.data.data == 1) {
+                            this.printFlg = '1';
                             this.rowNMMtype = true;
                             let finandata={};
                             finandata.nametitle="文档浏览查看";
@@ -215,10 +217,23 @@ export default {
                             finandata.foid=SelectData[0].foid;
                             this.rowNMMDataObj=finandata;
                         } else {
-                            this.$message.error("无该文档查看权限!");
+                            finandata.fauth = '2';
+                            this.$api.documentManagement.isHaveDocAuthority(finandata).then(response => {
+                                let responsevalue = response;                       
+                                if (responsevalue.data.data == 2) {
+                                    this.printFlg = '2';
+                                    this.rowNMMtype = true;
+                                    let finandata={};
+                                    finandata.nametitle="文档浏览查看";
+                                    finandata.NewOrEditFlag="SHOW";
+                                    finandata.foid=SelectData[0].foid;
+                                    this.rowNMMDataObj=finandata;
+                                } else {
+                                    this.$message.error("无该文档查看权限!");
+                                }
+                            });
                         }
                     });
-
                 }else{
                     this.$message.error("请选择一行数据!");
                 }

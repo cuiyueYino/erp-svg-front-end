@@ -3,7 +3,7 @@
         <el-dialog :title="title" @close="handleClose" :visible.sync="ShowFinancVisible" :append-to-body="true" v-if="ShowFinancVisible" :close-on-click-modal="false" width="50%">
             <el-card>
                 <el-row>
-                    <el-col :span="2" :offset="22">
+                    <el-col v-show="this.printFlg == '2'" :span="2" :offset="22">
                         <el-button size="small" v-print="printObj" @click="printMethod">打印</el-button>
                     </el-col>
                 </el-row>
