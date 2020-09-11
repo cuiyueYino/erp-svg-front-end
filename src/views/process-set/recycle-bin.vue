@@ -113,6 +113,8 @@ export default {
         let fromdata={};
         fromdata.infosBeginNum=0;
         fromdata.infosEndNum=this.pageSize;
+        fromdata.size=this.pageSize;
+        fromdata.page=this.pageNum;
         fromdata.oid=localStorage.getItem("ms_userId")
         this.getrecycleBin(fromdata);
     },
@@ -123,6 +125,7 @@ export default {
         //查询回收站数据
         getrecycleBin(params){
             let fromdata=params;
+            console.log(params)
             this.$api.processSet.getRecycleBinList(fromdata).then(response => {
                 let responsevalue = response;
                 if (responsevalue) {
@@ -150,6 +153,8 @@ export default {
             let fromdata={};
             fromdata.infosBeginNum=(val-1)*10;
             fromdata.infosEndNum=val*10;
+            fromdata.size=this.pageSize;
+            fromdata.page=this.pageNum;
             fromdata.oid=localStorage.getItem("ms_userId")
             this.getrecycleBin(fromdata);
         },
