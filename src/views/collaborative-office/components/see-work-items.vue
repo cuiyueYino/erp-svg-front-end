@@ -118,7 +118,7 @@
 					 * 存入外层信息
 					 * */
 					//单据编号
-					backData.voucherId = JSON.parse(JSON.stringify(backData.jsonStr.voucherId))
+					backData.voucherId = "";
 					//标题
 					backData.title = JSON.parse(JSON.stringify(backData.jsonStr.title))
 					//经办人

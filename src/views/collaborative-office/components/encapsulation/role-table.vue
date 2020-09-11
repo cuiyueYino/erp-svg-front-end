@@ -24,7 +24,7 @@
 					</el-col>
 				</el-row>
 			</el-form>
-			<vxe-table border align="center" :loading="loading" ref="multipleTable"  size="small" :highlight-current-row="showFig != 1" @cell-click="clickRow" height="700" :data="roleList">
+			<vxe-table border align="center" :loading="loading" ref="multipleTable" size="small" :highlight-current-row="showFig != 1" @cell-click="clickRow" height="700" :data="roleList">
 				<vxe-table-column v-if="showFig == 1" width="50">
 					<template v-slot:header>
 						<vxe-checkbox v-model="checkCon" :indeterminate="getIndeterminate" @change="checkClickAll()"></vxe-checkbox>
@@ -48,7 +48,7 @@
 		},
 		data() {
 			return {
-				tableAllData:[],
+				tableAllData: [],
 				loading: true,
 				formInline: {
 					name: "",
@@ -58,7 +58,7 @@
 				roleIds: [],
 				rowClick: {},
 				conList: [],
-				checkCon:false
+				checkCon: false
 			}
 		},
 		computed: {
@@ -200,17 +200,19 @@
 			//选中行
 			clickRow(row) {
 				this.rowClick = row.row;
-				this.$api.collaborativeOffice.apiUrl("workItemTemp/findByParams", {"name":"","status":3}).then(data => {
-					this.conList = data.data.data
-					let tableDataAll = JSON.parse(JSON.stringify(this.conList));
-					this.tableAllData = tableDataAll;
-				})
-				
 				if(this.showFig == 2) {
+					this.$api.collaborativeOffice.apiUrl("workItemTemp/findByParams", {
+						"name": "",
+						"status": 3
+					}).then(data => {
+						this.conList = data.data.data
+						let tableDataAll = JSON.parse(JSON.stringify(this.conList));
+						this.tableAllData = tableDataAll;
+					})
 					this.$api.collaborativeOffice.findWorkItemByRoleId({
 						roleId: row.row.id
 					}).then(data => {
-						this.$emit("getCon", data.data.data, row.row.id,this.tableAllData);
+						this.$emit("getCon", data.data.data, row.row.id, this.tableAllData);
 					})
 				}
 			},
@@ -230,9 +232,9 @@
 </script>
 
 <style>
-.col--gutter {
-	background: #eee;
-}
+	.col--gutter {
+		background: #eee;
+	}
 </style>
 <style scoped>
 	>>>.vxe-table--header {

@@ -580,21 +580,32 @@ export default {
       } else if (this.multipleSelection.length == 0) {
         this.$message.error("请选择一项");
       } else {
-        let selectData = this.multipleSelection;
-        let fromdata = {};
-        fromdata.foids = selectData[0].foid;
-        fromdata.oid = localStorage.getItem("ms_userId");
-        this.$api.processSet.RemoveTBin(fromdata).then(
-          (res) => {
-            let resData = res;
-            this.ShowFinancVisible = false;
-            this.reload();
-            this.$emit("changeShow", false);
-          },
-          (error) => {
-            console.log(error);
-          }
-        );
+        this.$confirm("是否确认移除此单据?", "提示", {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning",
+        }).then(() => {
+          let selectData = this.multipleSelection;
+          let fromdata = {};
+          fromdata.foids = selectData[0].foid;
+          fromdata.oid = localStorage.getItem("ms_userId");
+          this.$api.processSet.RemoveTBin(fromdata).then(
+            (res) => {
+              let resData = res;
+              this.ShowFinancVisible = false;
+              this.reload();
+              this.$emit("changeShow", false);
+            },
+            (error) => {
+              console.log(error);
+            }
+          );
+        }).catch(() => {
+            this.$message({
+              type: "info",
+              message: "已取消移除",
+            });
+          });
       }
     },
     //根据状态改背景色

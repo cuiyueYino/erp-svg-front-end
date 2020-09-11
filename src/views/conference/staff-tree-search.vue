@@ -44,6 +44,7 @@
             show-checkbox
             check-on-click-node
             @check-change="handleNodeClick"
+            :default-expanded-keys="treeDataObject"
           ></el-tree>
         </div>
         <el-row :gutter="20"></el-row>
@@ -83,6 +84,7 @@
     },
     data() {
       return {
+        treeDataObject:[],
         // 表单属性
         form: {
           selectVal: "",
@@ -161,6 +163,27 @@
               let resData = res.data.data;
               staffTree = eval("(" + resData + ")");
               // 员工树数据处理
+              //树形结检索展开
+              let searchArray = staffTree;
+              for(var i=0;i<searchArray.length;i++){
+                  if(searchArray[i].children != undefined) {
+                      for(var j= 0;j<searchArray[i].children.length;j++) {
+                          if(searchArray[i].children[j].children != undefined) {
+                              for(var m= 0;m<searchArray[i].children[j].children.length;m++){
+                                  if(searchArray[i].children[j].children[m].children != undefined) {
+                                      this.treeDataObject.push(searchArray[i].children[j].children[m].foid);
+                                  } else {
+                                      this.treeDataObject.push(searchArray[i].children[j].children[m].foid);
+                                  }
+                              }
+                          } else {
+                              this.treeDataObject.push(searchArray[i].children[j].foid);
+                          }
+                      }
+                  } else {
+                      this.treeDataObject.push(searchArray[i].foid);
+                  }
+              }
               this.operateUserTree(staffTree);
             },
             (error) => {
@@ -186,7 +209,6 @@
       },
       // 用户查询时，公司部门层级不可点击
       operateUserTree(staffTree) {
-        debugger;
         this.treeData = [];
         for (let i in staffTree) {
           // 第一级

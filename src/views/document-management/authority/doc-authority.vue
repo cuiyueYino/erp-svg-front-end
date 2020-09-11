@@ -301,7 +301,7 @@ export default {
         },
         //树的多选框点击事件
         checkboxClick(data, checkedParm){
-          debugger;
+        //   debugger;
             this.documentLevel = data.flevel;
             this.documentFpid = data.foid;
             let fromdata={};

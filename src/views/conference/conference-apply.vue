@@ -362,7 +362,6 @@
       },
       // 取消
       cancelMsg() {
-        debugger;
         if (this.multipleSelection.length != 1) {
           this.$message.error("请选择一条数据进行编辑");
           return;
