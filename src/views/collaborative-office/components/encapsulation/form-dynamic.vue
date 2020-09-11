@@ -51,7 +51,7 @@
 							<!--富文本-->
 							<quill-editor v-if="item.fieldTypeName == 'richText' && item.show" style="width: 100%;" v-model="ruleForm[item.field]" ref="myQuillEditor" :options="editorOption" @blur="onEditorBlur($event)" @focus="onEditorFocus($event,item.edit)" @change="onEditorChange($event)"></quill-editor>
 							<!-- 日期选择器 -->
-							<el-date-picker v-if="item.fieldTypeName == 'dateControl' && item.show" @change="getDate(item)"  style="width: 100%;" :disabled="!item.edit" v-model="ruleForm[item.field]" type="date" value-format="yyyy-MM-dd" placeholder="选择日期" />
+							<el-date-picker v-if="item.fieldTypeName == 'dateControl' && item.show" @change="getDate(item)" style="width: 100%;" :disabled="!item.edit" v-model="ruleForm[item.field]" type="date" value-format="yyyy-MM-dd" placeholder="选择日期" />
 							<!--时间控件-->
 							<el-date-picker value-format="yyyy-MM-dd HH:mm:ss" format="yyyy-MM-dd HH:mm:ss" type="datetime" placeholder="请选择日期时间" :disabled="!item.edit" v-if="item.fieldTypeName == 'timeControl' && item.show" style="width: 100%;" v-model="ruleForm[item.field]"></el-date-picker>
 							<!-- 下拉框 -->
@@ -76,7 +76,7 @@
 			</erpDialog>
 		</div>
 		<!--弹出框-工作流-->
-		<workflowDialog ref="childWork" :status="status" title="工作事项" ></workflowDialog>
+		<workflowDialog ref="childWork" :status="status" title="工作事项"></workflowDialog>
 	</div>
 </template>
 
@@ -119,12 +119,16 @@
 		},
 		data() {
 			return {
-				status:'3',
+				status: '3',
 				//固定栏校验写死
 				rules: {
 					title: [{
 						required: true,
 						message: '请输入标题',
+						trigger: 'change'
+					}, {
+						max: 50,
+						message: '标题长度不能超过50个汉字',
 						trigger: 'change'
 					}]
 				},
