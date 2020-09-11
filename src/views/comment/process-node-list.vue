@@ -172,9 +172,12 @@ export default {
         },
         //回复按钮点击事件
         onRowbuttonClick(data){
-            let rowdata=data;
-            rowdata.senduser=localStorage.getItem('ms_name');
+            let rowdata={};
+            rowdata.senduser=localStorage.getItem('ms_username');
             rowdata.senduserId=localStorage.getItem('ms_userId');
+            rowdata.staffId=data.handler2;
+            rowdata.staffName=data.handler;
+            rowdata.foid=data.foid;
             this.rowRMPDataObj=rowdata;
             this.rowRMPtype= true;
         }
