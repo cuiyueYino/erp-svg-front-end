@@ -145,6 +145,7 @@ export default {
     inject: ['reload'],
     data: function() {   
         return {
+            
             itemsFlag:false,
             todoFlag:true,
             showSeeOrUpd:'',

@@ -11,7 +11,7 @@
             <el-row>
                 <el-col :span="6">
                     <el-form-item label="公司：">
-                        <el-select v-model="formdata.company" value-key="value" :disabled="true">
+                        <el-select v-model="formdata.companyName" value-key="value" :disabled="true">
                             <el-option
                                 v-for="item in companyData"
                                 :key="item.value"
@@ -23,9 +23,9 @@
                 </el-col>
                 <el-col :span="6" :offset="2">
                     <el-form-item label="项目：">
-                        <el-select v-model="formdata.project" value-key="value" :disabled="true">
+                        <el-select v-model="formdata.projectName" value-key="value" :disabled="true">
                             <el-option
-                                v-for="item in companyData"
+                                v-for="item in projectData"
                                 :key="item.value"
                                 :label="item.label"
                                 :value="item.value"
@@ -37,17 +37,17 @@
             <el-row>
                 <el-col :span="6">
                     <el-form-item label="部门：">
-                        <el-input v-model="formdata.bumen" :disabled="true"></el-input>
+                        <el-input v-model="formdata.departmentName" :disabled="true"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="6" :offset="2">
                     <el-form-item label="任务状态：">
-                        <el-input v-model="formdata.renwuzhaungtai" :disabled="true"></el-input>
+                        <el-input v-model="formdata.taskStatus" :disabled="true"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="6" :offset="2">
                     <el-form-item label="任务类型：">
-                        <el-input v-model="formdata.renwuleixing" :disabled="true"></el-input>
+                        <el-input v-model="formdata.taskType" :disabled="true"></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>
@@ -214,7 +214,7 @@ import proData from '../../components/common/proData/proData';
 import DynamicTable from '../../components/common/dytable/dytable.vue';
 export default {
     props: {
-        rowEachPerEachTableEntrustDataObj: Object,
+        rowEachPerEachTableEntrustDataObj: String,
         rowEachPerEachTableEntrusttype:Boolean,
     },
     components: {
@@ -222,6 +222,8 @@ export default {
     },
     data(){
         return{
+            companyData:[],
+            projectData:[],
             formLabelWidth: '120px',
             tableFirstData:[
                 {
@@ -282,8 +284,10 @@ export default {
             ShowFinancVisible:false,
             peopleJobgsTableVisible: false,
             labelPosition: 'left',
-            formdata:{},
-            companyData:new proData().company,
+            formdata:{
+                companyName:'',
+                projectName:'',
+            },
             pageNum: 1,
             pageSize: 10,
             total: 20,
@@ -301,50 +305,97 @@ export default {
         }
     },
     methods: {
-        objectSpanMethod({ row, column, rowIndex, columnIndex }) {
-            if (columnIndex === 0) {
-                if (rowIndex === 1) {
-                    return {
-                    rowspan: 8,
-                    colspan: 1
-                    };
-                } else if (rowIndex === 0) {
-                return {
-                    rowspan: 1,
-                    colspan: 1
-                    };
-                } else {
-                    return {
-                    rowspan: 0,
-                    colspan: 0
-                    };
+        //获取任务委托详情
+        getEntrustDetail(data) {
+        this.$api.processSet.getPersonalTableTaskDetail({
+            id: data.id,
+        })
+        .then((res) => {
+                if(res.data.code == 0){
+                this.formdata = res.data.data;
+                let taskStateParams = res.data.data.taskStatus;
+                let taskTypeParams = res.data.data.taskType;
+                switch(taskTypeParams) {
+                    case 1: 
+                        this.formdata.taskType = '主任务';
+                        break;
+                    case 2:
+                        this.formdata.taskType = '临时任务';
+                        break;
+                    case 3:
+                        this.formdata.taskType = '配合任务';
+                        break;
+                    default:
+                        break; 
+                };
+                switch(taskStateParams) {
+                    case "1": 
+                        this.formdata.taskState = '可执行';
+                        break;
+                    case "2":
+                        this.formdata.taskState = '已完成';
+                        break;
+                    case "3":
+                        this.formdata.taskState = '未完成';
+                        break;
+                    case "4":
+                        this.formdata.taskState = '延期';
+                        break;
+                    case '5':
+                        this.formdata.taskState ='作废';
+                        break;
+                    case '0':
+                        this.formdata.taskState ='未发生';
+                        break;
+                    case '10':
+                        this.formdata.taskState ='已报待批';
+                        break;
+                    default:
+                        break; 
                 }
+                // let taskTypeParams = res.data.data.taskType;
+                // let taskLeveParams = res.data.data.taskLevel;
+                // let taskStateParams = res.data.data.taskState;
+                // let tableDataObj = {};
+                // tableDataObj["key1"] = '计划值';
+                // tableDataObj["key2"] = 'Q 累计预计计划完成指标';
+                // tableDataObj["optionValue"] = res.data.data.optionValue;
+                // tableDataObj["unit"] = res.data.data.unit;
+                // this.tableData.push(tableDataObj);
+                }
+            }),error => {
+            console.log(error);
             }
         },
         //pop框里面的新增表格行
-        baseInputTable(Str) {
-            this.peopleJobgsTableVisible = true;
-        },
-        MoreSearchPS(){
+        // baseInputTable(Str) {
+        //     this.peopleJobgsTableVisible = true;
+        // },
+        // MoreSearchPS(){
 
-        },
+        // }, 
     },
     watch:{
-        //新建一岗一表行数据清空
-        peopleJobgsTableVisible(val){
-            switch (val) {
-                case false:
-                    this.$refs['peopleTableForm'].resetFields();
-                    this.checked = false;
-                break;
-            
-                default:
-                break;
-            }
-            },
         rowEachPerEachTableEntrusttype(oldVal,newVal){
             this.ShowFinancVisible=this.rowEachPerEachTableEntrusttype;
+             let entrustSelected = {};
+            entrustSelected.id = this.rowEachPerEachTableEntrustDataObj;
+            this.getEntrustDetail(entrustSelected);
         }
+        //  peopleJobgsTableVisible(val){
+        //     switch (val) {
+        //         case false:
+        //             this.$refs['peopleTableForm'].resetFields();
+        //             this.checked = false;
+        //         break;
+            
+        //         default:
+        //         break;
+        //     }
+        //     },
+        // rowEachPerEachTableEntrusttype(oldVal,newVal){
+        //     this.ShowFinancVisible=this.rowEachPerEachTableEntrusttype;
+        // } 
     }
 }
 </script>
