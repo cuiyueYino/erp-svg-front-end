@@ -180,7 +180,7 @@ const processSet = {
         if(valueS.slice(valueS.length-1,valueS.length) ==="&"){
             valueS=valueS.slice(0,valueS.length-1);
         }
-        return httpReqest.post('/api/scha/personalTableTask/findPersonalTableTaskById'+valueS);
+        return httpReqest.post('/api/scha/taskEvaluate/findTaskEvaluateAndAdjustById'+valueS); 
     },
      //获取处理表单详情数据
      getunhandledTaskFormDetail(params){
