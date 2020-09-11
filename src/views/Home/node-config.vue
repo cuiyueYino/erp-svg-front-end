@@ -463,7 +463,7 @@ export default {
                 e2.forEach(item => {
                         copyToObj =
                             {
-                            "oid":item.oid?item.oid:'',
+                                "oid":item.oid?item.oid:'',
                                 "type": item.type,
                                 //表达式的值 
                                 [item.typeName]:{

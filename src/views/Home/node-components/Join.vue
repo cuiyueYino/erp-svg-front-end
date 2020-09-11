@@ -518,6 +518,7 @@ export default {
         data: {
             handler (obj) {
                 if(obj.name === "Join"){
+                    //console.log("obj",obj)
                     if(!obj.oid && (obj.isSaveFlag==undefined)){
                         this.formData = {};
                         this.editData= {};
@@ -633,7 +634,7 @@ export default {
                                         fUsercode: "表达式",
                                         fUsername: item.expression || "",
                                         fUserRemake: "",
-                                        fUseroid: item.expression.oid || "",
+                                        fUseroid: item.oid || "",
                                         oid: item.oid,
                                         type: item.type,
                                         typeName: "expression",
@@ -703,7 +704,7 @@ export default {
                                         fUsercode: "表达式",
                                         fUsername: item.expression || "",
                                         fUserRemake: "",
-                                        fUseroid: item.expression.oid || "",
+                                        fUseroid: item.oid || "",
                                         oid: item.oid,
                                         type: item.type,
                                         typeName: "expression",
@@ -759,7 +760,6 @@ export default {
                             })
                             this.tableData3=TableData;   
                         }
-                        
                         this.$nextTick(()=>{
                             //设置审核活动决策类型选中
                             this.tableRowSelect();
@@ -880,14 +880,16 @@ export default {
         },
         tableRowSelect(){
             //this.$refs.decisionTableReF.clearSelection();
-            this.$refs.decisionTableReF.clearSelection()
-            this.tableData3.forEach(row => {
-                this.decisionSelData.forEach(row1 => {
-                    if (row1.decisionText === row.decisionText) {
-                        this.$refs.decisionTableReF.toggleRowSelection(row,true);
-                    }
-                })    
-            })
+            if(this.$refs.decisionTableReF){
+                this.$refs.decisionTableReF.clearSelection()
+                this.tableData3.forEach(row => {
+                    this.decisionSelData.forEach(row1 => {
+                        if (row1.decisionType === row.decisionType) {
+                            this.$refs.decisionTableReF.toggleRowSelection(row,true);
+                        }
+                    })    
+                })
+            }
         },
         handleClick() {//
             if(this.activeName == '5'){//

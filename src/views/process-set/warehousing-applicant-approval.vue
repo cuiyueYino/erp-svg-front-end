@@ -488,6 +488,17 @@ export default {
                     if (responsevalue) {
                         let returndata = responsevalue.data;
                         this.DisplayOrHide(this.functionType,this.rowWAADataObj);
+                        let DataF={};
+                        DataF.oid=this.rowDataprocessOid.finanrowId;
+                        this.$api.processSet.auditDetailSearch(DataF).then(res=>{
+                            if(res.data.code ==0){
+                                this.rowDataprocessObj=res.data.data.rows;    
+                            }else{
+                                this.rowDataprocessObj=[];
+                            }
+                        },error=>{
+                            console.log(error)
+                        })
                     } else {
                         this.$message.success('数据库没有该条数据!');
                     }

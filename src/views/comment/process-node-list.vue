@@ -8,13 +8,13 @@
             @selection-change="onSelectionChange"
             element-loading-text="加载中"
         >
-            <el-table-column label="流程节点" prop="nodName"></el-table-column>
-            <el-table-column label="审批人" prop="staffName"></el-table-column>
-            <el-table-column label="审批结论" prop="auditResult"></el-table-column>
-            <el-table-column label="审批说明" prop="remark"></el-table-column>
-            <el-table-column label="审批时间" prop="fcreatetime"></el-table-column>
-            <el-table-column label="标准时间" prop="ftimeunit"></el-table-column>
-            <el-table-column label="耗时" prop="fmaxworktime"></el-table-column>
+            <el-table-column label="流程节点" prop="fname"></el-table-column>
+            <el-table-column label="审批人" prop="handler"></el-table-column>
+            <el-table-column label="审批结论" prop="fresult"></el-table-column>
+            <el-table-column label="审批说明" prop="fopinion"></el-table-column>
+            <el-table-column label="审批时间" prop="fcreateTime"></el-table-column>
+            <el-table-column label="标准时间" prop="fmaxWorkTime"></el-table-column>
+            <el-table-column label="耗时" prop="takeTime"></el-table-column>
             <el-table-column label="回复" >
                 <template slot-scope="scope" >
                     <el-button size="mini" type="primary" @click="onRowbuttonClick(scope.row)">回复</el-button>
@@ -27,19 +27,19 @@
                     </el-form>
                 </template>
             </el-table-column>
-            <el-table-column label="纸质签收日期" prop="frewritedate"></el-table-column>
+            <!--<el-table-column label="纸质签收日期" prop="frewritedate"></el-table-column> 孙双说删除-->
         </el-table>
-        <div class="pagination" v-if="processtableData.length > 0">
-                <el-pagination
-                    :total="total"
-                    background
-                    layout="prev, pager, next,jumper,total"
-                    :page-size="pageSize"
-                    @size-change="onSizeChange"
-                    @current-change="onCurrentChange"
-                >
-                </el-pagination>
-            </div>
+        <!--<div class="pagination" v-if="processtableData.length > 0">
+            <el-pagination
+                :total="total"
+                background
+                layout="prev, pager, next,jumper,total"
+                :page-size="pageSize"
+                @size-change="onSizeChange"
+                @current-change="onCurrentChange"
+            >
+            </el-pagination>
+        </div>-->
         <div><el-button @click="EditFileVisible()">查看流程图</el-button></div>
         <flowchart  :rowFCDDataObj="rowFCDDataObj" :rowFCDtype="rowFCDtype" @changeShow="closeflowchart"/>
         <replypage  :rowRMPDataObj="rowRMPDataObj" :rowRMPtype="rowRMPtype" @changeShow="closeReplyPage"/>
