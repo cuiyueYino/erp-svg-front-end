@@ -406,6 +406,19 @@ export default {
                 if(selectOption.length >1){
                     this.$message.error('只能选择一行!');
                 }else{
+                    if(selectOption[0].statusTyp != "待办"){
+                        this.$message.error('非待办邮件邮件，不能流转！');
+                        return;
+                    }
+
+                    var s = new Array("作废","加签","转发","抄送","正在加签");
+                    for(var i=0;i<s.length;i++){
+                        if(selectOption[0].statusStr.indexOf(s[i])==0){
+                            this.$message.error("当前邮件是"+s[i]+"邮件，不能流转！");
+                            return;
+                        }
+                    }
+
                     this.rowCWMtype=true;
                     let finandata={};
                     finandata.foid=selectOption[0].foid;
@@ -525,10 +538,24 @@ export default {
         },
         toEdit(){
            let selectOption = this.multipleSelection;
+            
             if(selectOption.length >0){
                 if(selectOption.length >1){
                     this.$message.error('只能选择一行!');
                 }  else{
+                    if(selectOption[0].statusTyp != "待办"){
+                        this.$message.error('非待办邮件邮件，不能修改参与人或委托！');
+                        return;
+                    }
+
+                    var s = new Array("作废","加签","转发","抄送","正在加签");
+                    for(var i=0;i<s.length;i++){
+                        if(selectOption[0].statusStr.indexOf(s[i])==0){
+                            this.$message.error("当前邮件是"+s[i]+"邮件，不能修改参与人或委托！");
+                            return;
+                        }
+                    }
+
                     this.rowLWMtype=true;
                     let finandata={};
                     finandata.foid=selectOption[0].foid;

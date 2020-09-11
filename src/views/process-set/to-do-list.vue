@@ -37,7 +37,7 @@
             icon="el-icon-document-checked"
             plain
             @click="handle()"
-          >处理1</el-button>
+          >处理</el-button>
           <el-button
             type="success"
             icon="el-icon-share"
@@ -48,7 +48,7 @@
             type="danger"
             icon="el-icon-s-order"
             plain
-            @click="baseInputTable('委  托')"
+            @click="baseInputTable('委托')"
           >委托</el-button>
           <el-button
             type="danger"
@@ -580,21 +580,32 @@ export default {
       } else if (this.multipleSelection.length == 0) {
         this.$message.error("请选择一项");
       } else {
-        let selectData = this.multipleSelection;
-        let fromdata = {};
-        fromdata.foids = selectData[0].foid;
-        fromdata.oid = localStorage.getItem("ms_userId");
-        this.$api.processSet.RemoveTBin(fromdata).then(
-          (res) => {
-            let resData = res;
-            this.ShowFinancVisible = false;
-            this.reload();
-            this.$emit("changeShow", false);
-          },
-          (error) => {
-            console.log(error);
-          }
-        );
+        this.$confirm("是否确认移除此单据?", "提示", {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning",
+        }).then(() => {
+          let selectData = this.multipleSelection;
+          let fromdata = {};
+          fromdata.foids = selectData[0].foid;
+          fromdata.oid = localStorage.getItem("ms_userId");
+          this.$api.processSet.RemoveTBin(fromdata).then(
+            (res) => {
+              let resData = res;
+              this.ShowFinancVisible = false;
+              this.reload();
+              this.$emit("changeShow", false);
+            },
+            (error) => {
+              console.log(error);
+            }
+          );
+        }).catch(() => {
+            this.$message({
+              type: "info",
+              message: "已取消移除",
+            });
+          });
       }
     },
     //根据状态改背景色
@@ -621,8 +632,7 @@ export default {
         finandata.finanrowId = "QS_0056";
         finandata.nametitle = "待办事项";
         finandata.SelectionData = this.multipleSelection;
-        //finandata.FunctionType = data;
-        
+        finandata.FunctionType = data;
         this.rowUTSDataObj = finandata;
       }
     },

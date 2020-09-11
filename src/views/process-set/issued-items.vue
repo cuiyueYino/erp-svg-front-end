@@ -12,7 +12,7 @@
                      <el-button type="primary" icon="el-icon-refresh" plain @click="Basecarsh">刷新</el-button>
                      <el-button type="primary" icon="el-icon-search" plain @click="search">查询</el-button>
                      <el-button type="primary" icon="el-icon-document"  plain @click="Tolook">查看</el-button>
-                     <el-button type="primary" icon="el-icon-share" plain @click="baseInputTable">转发</el-button>
+                     <el-button type="primary" icon="el-icon-share" plain @click="baseInputTable('转发')">转发</el-button>
                      <el-button type="primary" icon="el-icon-view" plain @click="basefollow">关注</el-button>
                  </el-col>
             </el-row>

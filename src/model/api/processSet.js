@@ -173,7 +173,14 @@ const processSet = {
     },
     // 获取待办事项的popForm表单数据(一人一表任务表)
     getPersonalTableTaskDetail(params){
-        return httpReqest.post('/api/scha/personalTableTask/findPersonalTableTaskById', params);
+        var valueS='?';
+        for(var item in params){
+            valueS+=item+"="+params[item]+"&";
+        }
+        if(valueS.slice(valueS.length-1,valueS.length) ==="&"){
+            valueS=valueS.slice(0,valueS.length-1);
+        }
+        return httpReqest.post('/api/scha/taskEvaluate/findTaskEvaluateAndAdjustById'+valueS); 
     },
      //获取处理表单详情数据
      getunhandledTaskFormDetail(params){

@@ -408,7 +408,7 @@ export default {
                     fUsercode: "表达式",
                     fUsername: item.expression || "",
                     fUserRemake: "",
-                    fUseroid: item.expression.oid || "",
+                    fUseroid: item.oid || "",
                     oid: item.oid,
                     type: item.type,
                     typeName: "expression",

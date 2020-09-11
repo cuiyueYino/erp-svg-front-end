@@ -95,7 +95,7 @@
                 </el-card>
             </el-form>
             <span slot="footer" class="dialog-footer">
-                <el-button  type="primary" @click="handleClose">确定</el-button>
+                <el-button  type="primary" @click="saveConfig">确定</el-button>
             </span>
         </el-dialog>
     </div>
@@ -195,8 +195,12 @@ export default {
         //关闭当前dialog时给父组件传值
         handleClose(){
             this.ShowFinancVisible=false;
-            this.$emit('changeShow',this.teldata);
-            this.teldata = [];
+            if(this.saveType ==='转发' || this.saveType ==='委托'|| this.saveType ==='加签'){
+                this.$emit('changeShow',false);
+            }else{
+                this.teldata = [];
+                this.$emit('changeShow',this.teldata);
+            }
         },
         //table选中事件
         onSelectionChange(val) {
@@ -312,6 +316,8 @@ export default {
                     this.transmit(ParentSelectData[0].foid,participator);
                 }else if(this.saveType ==='加签'){
                     this.setAddTag(ParentSelectData[0].foid,participator);
+                }else{
+                    this.$emit('changeShow',this.teldata);
                 }
             }else{
                 this.$message.error("请选择人员!");

@@ -38,7 +38,7 @@
                         <EachPerEachTableAdjPage  :rowEachPerEachTableAdjDataObj="rowEachPerEachTableAdjDataObj" :rowEachPerEachTableAdjtype="rowEachPerEachTableAdjtype" @changeShow="showLookOrUpdate"/>
                         <ConferenceApplyPage  :rowConferenceApplyDataObj="rowConferenceApplyDataObj" :rowConferenceApplytype="rowConferenceApplytype" @changeShow="showLookOrUpdate"/>
                         <EconomicIndicatorsPage  :rowEconomicIndicatorsDataObj="rowEconomicIndicatorsDataObj" :rowEconomicIndicatorstype="rowEconomicIndicatorstype" @changeShow="showLookOrUpdate"/>
-                        <WorkItemPage  :context="context" :showSeeOrUpd ="showSeeOrUpd" :todoFlag="todoFlag" @changeShow="showLookOrUpdate"/>
+                        <WorkItemPage  v-if="itemsFlag" :context="context" :showSeeOrUpd ="showSeeOrUpd" :todoFlag="todoFlag" @changeShow="showLookOrUpdate" />
                     </el-row>  
                     <el-row>
                         <el-col :span="22">
@@ -145,6 +145,7 @@ export default {
     inject: ['reload'],
     data: function() {   
         return {
+            itemsFlag:false,
             todoFlag:true,
             showSeeOrUpd:'',
             atctiveName: 'first',
@@ -185,7 +186,7 @@ export default {
             rowEFListDataObj: {},
             rowTEMTaskDataObj: "",
             rowEACHPerEachJobDetDataObj: "",
-            rowEachPerEachTableDelayDataObj: {},
+            rowEachPerEachTableDelayDataObj: "",
             rowEachPerEachTableReportDataObj: {},
             rowEachPerEachTableInvalidDataObj: {},
             rowEachPerEachTablePersonDataObj: {},
@@ -301,6 +302,7 @@ export default {
             this.$api.processSet.addWfsubmit(paramsData).then(res=>{
                 if( res.data.code == 0 ){
                     this.$message.success('保存成功');
+                    this.ShowFinancVisible = false;
                     //sessionStorage.setItem("eidtMsg",null);
                 }else{
                     this.$message.error("保存失败,请填写完整信息");
@@ -321,6 +323,7 @@ export default {
             }
             // 判断是否为工作事项的flag
             if(dataType.indexOf("OA")  == 0) {
+                this.itemsFlag = true;
                 // alert("OA项目");
                 // this.rowCooTaskDetailtype=true;
                 //获取工作事项的请求参数接口
@@ -391,6 +394,7 @@ export default {
                     this.rowEachPerEachTablePersontype=true;
                 } else if(dataType === 'TaskEntrust'){
                     this.rowEachPerEachTableEntrusttype=true;
+                    this.rowEachPerEachTableEntrustDataObj = currentDatd;
                 } else if(dataType === 'PersonalTableTask'){
                     this.rowEachPerEachTableDetailtype=true;
                     this.rowEachPerEachTableDetailDataObj = currentDatd;
@@ -414,7 +418,7 @@ export default {
             finandata.finanrowId="QS_0056";
             finandata.nametitle="待办事项";
             finandata.SelectionData=this.rowWAADataObj.selectData;
-            //finandata.FunctionType=data;
+            finandata.FunctionType=data;
             this.rowUTSDataObj=finandata;
         },
         closeBaseInfo(data){
@@ -485,6 +489,17 @@ export default {
                     if (responsevalue) {
                         let returndata = responsevalue.data;
                         this.DisplayOrHide(this.functionType,this.rowWAADataObj);
+                        let DataF={};
+                        DataF.oid=this.rowDataprocessOid.finanrowId;
+                        this.$api.processSet.auditDetailSearch(DataF).then(res=>{
+                            if(res.data.code ==0){
+                                this.rowDataprocessObj=res.data.data.rows;    
+                            }else{
+                                this.rowDataprocessObj=[];
+                            }
+                        },error=>{
+                            console.log(error)
+                        })
                     } else {
                         this.$message.success('数据库没有该条数据!');
                     }
