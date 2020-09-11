@@ -197,7 +197,7 @@ export default {
                 this.$message.error("只能选择一个!");
             }else{
                 if(SelectData[0]){
-                  debugger;
+                //   debugger;
                     //验证是否有权限
                     let finandata={};
                     finandata.fdocmanageoid = SelectData[0].foid;
