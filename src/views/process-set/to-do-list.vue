@@ -639,6 +639,7 @@ export default {
     closeBaseInfo(data) {
       if (data === false) {
         this.rowUTStype = false;
+        this.reload();
       } else {
         this.rowUTStype = true;
       }
