@@ -1,5 +1,5 @@
 <template>
-    <div>     
+    <div>
     <!-- 搜索框 -->
         <el-card class="box-table">
            <el-row :gutter="24">
@@ -31,8 +31,8 @@
         </el-card>
         <!-- 弹出框 查询 -->
         <el-dialog title="已办事项查询" :visible.sync="dialogWFMVisible" :close-on-click-modal="false" width="50%">
-            <el-form 
-                :model="DataForm" 
+            <el-form
+                :model="DataForm"
                 label-width="97px"
                 label-suffix="："
                 size="small"
@@ -88,7 +88,7 @@
                        <el-col :span="22" :offset="2">
                             <el-form-item label="发起人" label-width="120px">
                                 <el-input clearable  v-model="DataForm.displaystartMan" placeholder="请输入" class="Carfiles"></el-input>
-                                 <img class="icon-search"  
+                                 <img class="icon-search"
                                     @click="MoreSearchPS(DataForm)"
                                     src="../../assets/img/search.svg">
                             </el-form-item>
@@ -121,8 +121,8 @@
             </div>
         </el-dialog>
         <el-dialog title="已办事项" :visible.sync="dialogAddVisible" :close-on-click-modal="false" width="30%">
-            <el-form 
-                :model="DataAddForm" 
+            <el-form
+                :model="DataAddForm"
                 label-width="97px"
                 label-suffix="："
                 size="small"
@@ -197,7 +197,7 @@ export default {
                 key: 'fname',
                 title: '角色'
             },
-           
+
         ],
         columns1: [
             {
@@ -214,6 +214,10 @@ export default {
              {
                 key: 'factivityName',
                 title: '业务工作'
+            },
+            {
+                key: 'faddresser',
+                title: '发起人'
             },
             {
                 key: 'freceiveTime',
@@ -239,6 +243,10 @@ export default {
                 key: 'takeTime',
                 title: '已耗时'
             },
+            {
+                key: 'entityoName',
+                title: '当前审批人'
+            },
              {
                 key: 'trustMan',
                 title: '转发人'
@@ -255,7 +263,7 @@ export default {
                 key: 'repeatTime',
                 title: '委托时间'
             },
-           
+
         ],
         tableData:[],
         options:[],
@@ -282,7 +290,7 @@ export default {
          },
         };
     },
-    
+
     created(){
         let fromdata={};
         fromdata.infosBeginNum=1;
@@ -295,7 +303,7 @@ export default {
         this.selectCom();
     },
     computed:{
-        
+
     },
     methods:{
         selectCom(){
@@ -563,7 +571,7 @@ export default {
                             this.$message.success('数据库没有该条数据!');
                         }
                     });
-                }  
+                }
             }
         },
     },
@@ -609,7 +617,7 @@ export default {
          margin-bottom: 10px;
      }
      /deep/ .el-button+.el-button{
-         margin-left: 0; 
+         margin-left: 0;
      }
  }
 

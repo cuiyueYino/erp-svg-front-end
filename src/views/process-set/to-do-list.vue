@@ -1,5 +1,5 @@
 <template>
-  
+
   <div>
     <!-- 搜索框 -->
     <el-card class="box-card">
@@ -299,7 +299,6 @@
                 v-model="DataForm.startTimeFrom"
                 type="datetime"
                 size="mini"
-                default-time="12:00:00"
                 value-format="yyyy-MM-dd HH:mm:ss"
                 placeholder="选择日期"
               >
@@ -356,6 +355,7 @@
         slot="footer"
         class="dialog-footer"
       >
+        <el-button @click="reset()">重置</el-button>
         <el-button @click="dialogWFMVisible = false">取 消</el-button>
         <el-button
           type="primary"
@@ -734,7 +734,7 @@ export default {
         this.rowFCDtype = true;
         console.log(selectData)
       }
-      
+
       /*let finandata = {};
       finandata.finanrowname = "人员缺省查询方案";
       finandata.finanrowId = "QS_0056";
@@ -753,6 +753,9 @@ export default {
     //查询
     search() {
       this.dialogWFMVisible = true;
+    },
+    reset(){
+        this.DataForm = {}
     },
     //查询搜索
     onHandleMoreSearch() {
