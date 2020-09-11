@@ -662,6 +662,8 @@
         searchForm: {
           fovert: 0,
           fexternal: 0,
+          internalmans:[],
+          internalMansName:"",
           fcompanyid: "_DefaultCompanyOId",
           fcompanyname: "福佳集团",
           fcreator: localStorage.getItem('ms_userId'),
@@ -899,8 +901,13 @@
               };
               internalmans.push(staff);
             }
-            this.searchForm.internalmans = internalmans;
-            this.searchForm.internalMansName = internalMansName;
+            this.searchForm.internalmans = this.searchForm.internalmans.concat(internalmans);
+            console.log(this.searchForm.internalmans);
+            if(this.searchForm.internalMansName == ""){
+              this.searchForm.internalMansName += internalMansName;
+            }else{
+              this.searchForm.internalMansName += ',' + internalMansName;
+            }
           }
           this.staffTableVisible = false;
         }
