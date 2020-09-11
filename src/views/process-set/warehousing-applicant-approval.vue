@@ -38,7 +38,7 @@
                         <EachPerEachTableAdjPage  :rowEachPerEachTableAdjDataObj="rowEachPerEachTableAdjDataObj" :rowEachPerEachTableAdjtype="rowEachPerEachTableAdjtype" @changeShow="showLookOrUpdate"/>
                         <ConferenceApplyPage  :rowConferenceApplyDataObj="rowConferenceApplyDataObj" :rowConferenceApplytype="rowConferenceApplytype" @changeShow="showLookOrUpdate"/>
                         <EconomicIndicatorsPage  :rowEconomicIndicatorsDataObj="rowEconomicIndicatorsDataObj" :rowEconomicIndicatorstype="rowEconomicIndicatorstype" @changeShow="showLookOrUpdate"/>
-                        <WorkItemPage  :context="context" :showSeeOrUpd ="showSeeOrUpd" :todoFlag="todoFlag" @changeShow="showLookOrUpdate"/>
+                        <WorkItemPage  v-if="itemsFlag" :context="context" :showSeeOrUpd ="showSeeOrUpd" :todoFlag="todoFlag" @changeShow="showLookOrUpdate" />
                     </el-row>  
                     <el-row>
                         <el-col :span="22">
@@ -145,6 +145,7 @@ export default {
     inject: ['reload'],
     data: function() {   
         return {
+            itemsFlag:false,
             todoFlag:true,
             showSeeOrUpd:'',
             atctiveName: 'first',
@@ -321,6 +322,7 @@ export default {
             }
             // 判断是否为工作事项的flag
             if(dataType.indexOf("OA")  == 0) {
+                this.itemsFlag = true;
                 // alert("OA项目");
                 // this.rowCooTaskDetailtype=true;
                 //获取工作事项的请求参数接口
@@ -391,6 +393,7 @@ export default {
                     this.rowEachPerEachTablePersontype=true;
                 } else if(dataType === 'TaskEntrust'){
                     this.rowEachPerEachTableEntrusttype=true;
+                    this.rowEachPerEachTableEntrustDataObj = currentDatd;
                 } else if(dataType === 'PersonalTableTask'){
                     this.rowEachPerEachTableDetailtype=true;
                     this.rowEachPerEachTableDetailDataObj = currentDatd;
