@@ -257,11 +257,15 @@ export default {
             fromdata.bizMailId=fid;
             fromdata.participator=user;
             this.$api.processSet.setencyclic(fromdata).then(res=>{
-                let resData=res;                   
-                this.ShowFinancVisible=false;
-                //this.reload();
-                this.$emit('changeShow',false);
-                
+                let resData=res;
+                if(resData.data ==''){
+                    this.ShowFinancVisible=false;
+                    //this.reload();
+                    this.$emit('changeShow',false);
+                    this.$message.success('转发成功!');
+                }else{
+                    this.$message.error(resData.data+"!");
+                }               
             },error=>{
                 console.log(error)
             })  
@@ -274,11 +278,15 @@ export default {
             fromdata.participator=user;
             fromdata.advice=this.formdata.remark;;
             this.$api.processSet.transmit(fromdata).then(res=>{
-                let resData=res;                   
-                this.ShowFinancVisible=false;
-                //this.reload();
-                this.$emit('changeShow',false);
-                
+                let resData=res;
+                if(resData.data ==''){
+                    this.ShowFinancVisible=false;
+                    //this.reload();
+                    this.$emit('changeShow',false);
+                    this.$message.success('委托成功!');
+                }else{
+                    this.$message.error(resData.data+"!");
+                }
             },error=>{
                 console.log(error)
             })
@@ -291,11 +299,15 @@ export default {
             fromdata.fpublicity=this.formdata.checked;
             fromdata.fremark=this.formdata.remark;
             this.$api.processSet.SeTaddTag(fromdata).then(res=>{
-                let resData=res;                   
-                this.ShowFinancVisible=false;
-                //this.reload();
-                this.$emit('changeShow',false);
-                
+                let resData=res;
+                if(resData.data ==''){
+                    this.ShowFinancVisible=false;
+                    //this.reload();
+                    this.$emit('changeShow',false);
+                    this.$message.success('加签成功!');
+                }else{
+                    this.$message.error(resData.data+"!");
+                } 
             },error=>{
                 console.log(error)
             })

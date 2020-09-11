@@ -258,7 +258,10 @@ const processSet = {
     getAuditAndReplyMsg(params){
         return httpReqest.post('/api/wfInterfaces/workFlow/processMonitor/getAuditAndReplyMsg', params);
     },
-
+    //获取审批信息workFlow/auditDetailSearch
+    auditDetailSearch(params){
+        return httpReqest.post('/api/wfInterfaces/workFlow/auditDetailSearch', params);
+    },
     //新增审批回复信息
     addAuditReply(params){
         return httpReqest.post('/api/wfInterfaces/workFlow/processMonitor/addAuditReply', params);
