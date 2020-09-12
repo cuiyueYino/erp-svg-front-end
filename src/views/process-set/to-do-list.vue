@@ -355,7 +355,7 @@
         slot="footer"
         class="dialog-footer"
       >
-        <el-button @click="reset()">重置</el-button>
+        <el-button @click="reset()">重 置</el-button>
         <el-button @click="dialogWFMVisible = false">取 消</el-button>
         <el-button
           type="primary"

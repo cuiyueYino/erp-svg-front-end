@@ -1,5 +1,5 @@
 <template>
-    <div>     
+    <div>
     <!-- 搜索框 -->
         <el-card class="box-table">
            <el-row :gutter="24">
@@ -34,8 +34,8 @@
         </el-card>
     <!-- 弹出框 查询 -->
         <el-dialog title="已发事项查询" :visible.sync="dialogWFMVisible" :close-on-click-modal="false" width="50%">
-            <el-form 
-                :model="DataForm" 
+            <el-form
+                :model="DataForm"
                 label-width="97px"
                 label-suffix="："
                 size="small"
@@ -91,7 +91,7 @@
                        <el-col :span="22" :offset="2">
                             <el-form-item label="发起人" label-width="120px">
                                 <el-input clearable  v-model="DataForm.displaystartMan" placeholder="请输入" class="Carfiles"></el-input>
-                                 <img class="icon-search"  
+                                 <img class="icon-search"
                                     @click="MoreSearchPS(DataForm)"
                                     src="../../assets/img/search.svg">
                             </el-form-item>
@@ -119,6 +119,7 @@
                  </el-row>
             </el-form>
             <div slot="footer" class="dialog-footer">
+                <el-button @click="reset()">重 置</el-button>
                 <el-button @click="dialogWFMVisible = false" size="medium">取 消</el-button>
                 <el-button type="primary" @click="addSubmit('form')" size="medium">确 定</el-button>
             </div>
@@ -218,7 +219,7 @@ export default {
                 key: 'trustTime',
                 title: '委托时间'
             },
-           
+
         ],
         tableData:[],
         options:[],
@@ -249,7 +250,7 @@ export default {
          },
         };
     },
-    
+
     created(){
         let fromdata={};
         fromdata.infosBeginNum=1;
@@ -262,7 +263,7 @@ export default {
         this.selectCom();
     },
     computed:{
-        
+
     },
     methods:{
         selectCom(){
@@ -318,7 +319,7 @@ export default {
                 } else {
                     this.$message.success('数据库没有该条数据!');
                 }
-            }); 
+            });
         },
         //查询发起人员
         MoreSearchPS(data){
@@ -419,6 +420,9 @@ export default {
         search(){
            this.dialogWFMVisible =true;
         },
+        reset(){
+            this.DataForm = {}
+        },
         //查看
         Tolook(){
             if(this.multipleSelection.length > 1){
@@ -478,7 +482,7 @@ export default {
                             this.$message.success('数据库没有该条数据!');
                         }
                     });
-                }  
+                }
             }
         },
         //多选
@@ -545,7 +549,7 @@ export default {
          margin-bottom: 10px;
      }
      /deep/ .el-button+.el-button{
-         margin-left: 0; 
+         margin-left: 0;
      }
  }
 

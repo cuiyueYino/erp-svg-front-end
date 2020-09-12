@@ -116,6 +116,7 @@
                  </el-row>
             </el-form>
             <div slot="footer" class="dialog-footer">
+                <el-button @click="reset()">重 置</el-button>
                 <el-button @click="dialogWFMVisible = false" size="medium">取 消</el-button>
                 <el-button type="primary" @click="addSubmit()" size="medium">确 定</el-button>
             </div>
@@ -439,6 +440,9 @@ export default {
         //查询按钮点击事件
         search(){
            this.dialogWFMVisible =true;
+        },
+        reset(){
+            this.DataForm = {}
         },
         //查看
         Tolook(){
