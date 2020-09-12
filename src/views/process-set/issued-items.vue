@@ -126,7 +126,7 @@
         </el-dialog>
         <PSpage  :rowPSDataObj="rowPSDataObj" :rowPStype="rowPStype" @changeShow="showORhideForPS"/>
         <baseInfoDialog  :rowUTSDataObj="rowUTSDataObj" :rowUTStype="rowUTStype" @changeShow="closeBaseInfo"/>
-        <WAApage  :rowWAADataObj="rowWAADataObj" :rowWAAtype="rowWAAtype" @changeShow="showORhideForWAA"/>
+        <WAApage  :rowWAADataObj="rowWAADataObj" :rowWAAtype="rowWAAtype" :functionType="functionType" @changeShow="showORhideForWAA"/>
     </div>
 </template>
 
@@ -147,6 +147,7 @@ export default {
     inject: ['reload'],
     data() {
         return {
+            functionType:'',
             homeTitle:'',
             userType:'',
             rowDStype:false,
@@ -431,11 +432,12 @@ export default {
                 this.$message.error('请选择一项');
             }else{
                 let selectData=this.multipleSelection;
+                this.functionType = this.multipleSelection[0].classId;
                 let finandata={};
                 finandata.selectData=selectData;
                 finandata.finanrowname="人员缺省查询方案";
                 finandata.finanrowId="QS_0056";
-                finandata.nametitle="入库申请申请人审批";
+                finandata.nametitle=this.multipleSelection[0].fsrcCompany;
                 this.rowWAADataObj=finandata;
                 this.rowWAAtype=true;
                 this.financingLFCAtype=true;
