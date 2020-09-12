@@ -11,12 +11,23 @@
             >
                 <el-card>
                     <el-row :gutter="24">
-                        <el-col :span="12" :offset="12">
+                        <el-col :span="10" :offset="14" v-if="rowFstatus == 4?true:false">
+                            <el-button type="success" icon="el-icon-share" plain @click="baseInputTable('转发')">转发</el-button>
+                            <el-button type="danger" icon="el-icon-view" plain @click="basefollow()">关注</el-button>
+                            <el-button type="success" icon="el-icon-success" plain @click="removeBizMail">已阅</el-button>
+                        </el-col>
+                        <el-col :span="12" :offset="12" v-else-if="rowFstatus == 1?true:false">
                             <el-button type="danger" icon="el-icon-circle-plus-outline" plain @click="baseInputTable('加签')">加签</el-button>
                             <el-button type="success" icon="el-icon-share" plain @click="baseInputTable('转发')">转发</el-button>
                             <el-button type="danger" icon="el-icon-s-order" plain @click="baseInputTable('委托')">委托</el-button>
                             <el-button type="danger" icon="el-icon-view" plain @click="basefollow()">关注</el-button>
                             <el-button type="success" icon="el-icon-success" plain @click="effectOrDisableMsg">提交</el-button>
+                        </el-col>
+                        <el-col :span="12" :offset="12" v-else>
+                            <el-button type="danger" icon="el-icon-circle-plus-outline" plain @click="baseInputTable('加签')">加签</el-button>
+                            <el-button type="success" icon="el-icon-share" plain @click="baseInputTable('转发')">转发</el-button>
+                            <el-button type="danger" icon="el-icon-s-order" plain @click="baseInputTable('委托')">委托</el-button>
+                            <el-button type="danger" icon="el-icon-view" plain @click="basefollow()">关注</el-button>
                         </el-col>
                     </el-row>
                     <el-row :gutter="24">
@@ -39,7 +50,7 @@
                         <ConferenceApplyPage  :rowConferenceApplyDataObj="rowConferenceApplyDataObj" :rowConferenceApplytype="rowConferenceApplytype" @changeShow="showLookOrUpdate"/>
                         <EconomicIndicatorsPage  :rowEconomicIndicatorsDataObj="rowEconomicIndicatorsDataObj" :rowEconomicIndicatorstype="rowEconomicIndicatorstype" @changeShow="showLookOrUpdate"/>
                         <WorkItemPage  v-if="itemsFlag" :context="context" :showSeeOrUpd ="showSeeOrUpd" :todoFlag="todoFlag" @changeShow="showLookOrUpdate" />
-			<EachPerEachTableModifyPage  :rowEachPerEachTableModifyDataObj="rowEachPerEachTableModifyDataObj" :rowEachPerEachTableModifyype="rowEachPerEachTableModifyype" @changeShow="showLookOrUpdate"/>
+			            <EachPerEachTableModifyPage  :rowEachPerEachTableModifyDataObj="rowEachPerEachTableModifyDataObj" :rowEachPerEachTableModifyype="rowEachPerEachTableModifyype" @changeShow="showLookOrUpdate"/>
                     </el-row>
                     <el-row>
                         <el-col :span="22">
@@ -110,12 +121,12 @@ export default {
         factivity:String,
         fsubject:String,
         rowWAAtype:{
-             type: Boolean,
-             default: false
+            type: Boolean,
+            default: false
         },
         isOa:{
-                type: Boolean,
-             default: false
+            type: Boolean,
+            default: false
         }
     },
     name: 'basetable',
@@ -160,6 +171,7 @@ export default {
                 radio:0,
                 remark:''
             },
+            rowFstatus:0,
             rowUTStype:false,
             rowCOOTasktype:false,
             rowComPanDetaitype:false,
@@ -172,7 +184,7 @@ export default {
             rowEachPerEachTableInvalidtype:false,
             rowEachPerEachTablePersontype:false,
             rowEachPerEachTableEntrusttype:false,
-	    rowEachPerEachTableModifyype:false,
+	        rowEachPerEachTableModifyype:false,
             rowEachPerEachTableDetailtype:false,
             rowDepartAnnPlanDettype:false,
             rowDepartMonPlanDettype:false,
@@ -302,7 +314,7 @@ export default {
             paramsData["processCode"] = "schedule";
             paramsData["twfbizmailReqVo"] = twfbizmailReqVoObj;
             let twfauditObj = {};
-            twfauditObj["fresult"] = 1;
+            twfauditObj["fresult"] = this.formdata.radio;
             twfauditObj["fopinion"] = this.formdata.remark;
             paramsData["twfaudit"] = twfauditObj;
             this.$api.processSet.addWfsubmit(paramsData).then(res=>{
@@ -344,24 +356,24 @@ export default {
                             this.contextObj['tableName'] = res.data.data.tableName;
                             this.contextObj['tempId'] = res.data.data.tempId;
                             //相关事项的详情接口
-                                this.$api.collaborativeOffice.findDataBySrcId({
-                                    srcId: this.contextObj['srcId'],
-                                    tempId: this.contextObj['tempId'],
-                                    tableName: this.contextObj['tableName']
-                                }).then(data => {
-                                    if(this.dataBack(data)) {
-                                        this.$api.collaborativeOffice.findlnfosList({
-                                            voucherId: JSON.parse(data.data.data).id,
-                                            userCode: localStorage.getItem('ms_userId'),
-                                            menuCode: "workItem"
-                                        }).then(val => {
-                                            this.context = JSON.parse(data.data.data);
-                                            this.context.tempId = res.data.data.tempId;
-                                            this.context.files = val.data.data;
-                                            this.showSeeOrUpd = "1";
-                                        })
-                                    }
-                                })
+                            this.$api.collaborativeOffice.findDataBySrcId({
+                                srcId: this.contextObj['srcId'],
+                                tempId: this.contextObj['tempId'],
+                                tableName: this.contextObj['tableName']
+                            }).then(data => {
+                                if(this.dataBack(data)) {
+                                    this.$api.collaborativeOffice.findlnfosList({
+                                        voucherId: JSON.parse(data.data.data).id,
+                                        userCode: localStorage.getItem('ms_userId'),
+                                        menuCode: "workItem"
+                                    }).then(val => {
+                                        this.context = JSON.parse(data.data.data);
+                                        this.context.tempId = res.data.data.tempId;
+                                        this.context.files = val.data.data;
+                                        this.showSeeOrUpd = "1";
+                                    })
+                                }
+                            })
                         }
                     }),error => {
                     console.log(error);
@@ -401,7 +413,7 @@ export default {
                     this.rowEachPerEachTableAdjDataObj = currentDatd;
                 } else if(dataType === 'AssignerChange'){
                     this.rowEachPerEachTablePersontype=true;
-		    this.rowEachPerEachTablePersonDataObj = currentDatd;
+		            this.rowEachPerEachTablePersonDataObj = currentDatd;
                 } else if(dataType === 'TaskEntrust'){
                     this.rowEachPerEachTableEntrusttype=true;
                     this.rowEachPerEachTableEntrustDataObj = currentDatd;
@@ -485,6 +497,63 @@ export default {
                 });
             }
         },
+        //已阅处理
+        removeBizMail(){
+            let selectData=[];
+            if(!this.isOa){
+                selectData = this.rowWAADataObj.selectData;
+            }else{
+                selectData.push(this.rowWAADataObj);
+            }
+            let fromdata={};
+            fromdata.bizMailId=selectData[0].foid;
+            fromdata.currUserId=localStorage.getItem("ms_userId");
+            this.$api.processSet.removeBizMail(fromdata).then(response => {
+                let responsevalue = response;
+                if (responsevalue.code != 999) {
+                    //this.reload();
+                    this.$message.success('已阅成功!');
+                    this.$emit('changeShow',false);
+                    //this.WFMtypeoptions=returndata.data.rows;
+                } else {
+                    this.$message.error(responsevalue.msg+'!');
+                }
+            });
+        },
+        getDataprocess(data){
+            let DataF={};
+            DataF.oid=data;
+            return this.$api.processSet.auditDetailSearch(DataF).then(res=>{
+                if(res.data.code ==0){
+                    this.rowDataprocessObj=res.data.data.rows;
+                }else{
+                    this.rowDataprocessObj=[];
+                }
+            },error=>{
+                console.log(error)
+            })
+        },
+        //判断转发 或委托
+        getDataType(data){
+            let DataF={};
+            DataF.bizmailId=data;
+            DataF.currentUserId=localStorage.getItem("ms_userId");
+            return this.$api.processSet.getWFBizMailInfoByUserId(DataF).then(res=>{
+                if(res.data.code == 0){
+                    let SetelData=res.data.data;
+                    this.rowFstatus=SetelData.fstatus;
+                }
+            },error=>{
+                console.log(error)
+            })  
+        },
+        //异步变同步
+        async asyncCall(type,data,foid) {
+            await this.getDataprocess(foid);
+            await this.getDataType(foid);
+            this.DisplayOrHide(type,data);
+            this.ShowFinancVisible=this.rowWAAtype;
+        }
     },
     mounted() {
 
@@ -492,7 +561,6 @@ export default {
     watch:{
         rowWAAtype(oldVal,newVal){
             if(this.rowWAAtype){
-                this.ShowFinancVisible=this.rowWAAtype;
                 let formDataA ={};
                 if(!this.isOa){
                     this.title=this.rowWAADataObj.nametitle;
@@ -518,18 +586,7 @@ export default {
                     let responsevalue = response;
                     if (responsevalue) {
                         let returndata = responsevalue.data;
-                        this.DisplayOrHide(this.functionType,this.rowWAADataObj);
-                        let DataF={};
-                        DataF.oid=this.rowDataprocessOid.finanrowId;
-                        this.$api.processSet.auditDetailSearch(DataF).then(res=>{
-                            if(res.data.code ==0){
-                                this.rowDataprocessObj=res.data.data.rows;
-                            }else{
-                                this.rowDataprocessObj=[];
-                            }
-                        },error=>{
-                            console.log(error)
-                        })
+                        this.asyncCall(this.functionType,this.rowWAADataObj,this.rowDataprocessOid.finanrowId);
                     } else {
                         this.$message.success('数据库没有该条数据!');
                     }
