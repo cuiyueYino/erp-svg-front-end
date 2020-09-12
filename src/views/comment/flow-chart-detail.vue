@@ -109,7 +109,12 @@ export default {
                         this.treeData=tableDataArr;
                         this.ShowFinancVisible=this.rowFCDtype;
                     } else {
-                        this.$message.error(returndata.msg);
+                        if(returndata.msg){
+                            this.$message.error(returndata.msg);
+                        }else{
+                            this.$message.error('查询流程图失败!');
+                        }
+                        this.$emit('changeShow',false);
                     }
                 });
             }
