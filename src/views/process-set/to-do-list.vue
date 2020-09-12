@@ -671,9 +671,7 @@ export default {
       } else {
         let selectData = this.multipleSelection;
         let subject = selectData[0].fsubject;
-        if (subject.indexOf("转发") > -1) {
-          this.$message.error("转发邮件不能添加关注!");
-        } else if (subject.indexOf("抄送") > -1) {
+        if (subject.indexOf("抄送") > -1) {
           this.$message.error("抄送邮件不能添加关注!");
         } else if (subject.indexOf("加签") > -1) {
           this.$message.error("加签邮件不能添加关注!");

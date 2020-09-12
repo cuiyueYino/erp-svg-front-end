@@ -474,10 +474,10 @@ export default {
         },
         //关注点击事件
         basefollow(){
+            let selectData=[];
             if(!this.isOa){
-                let selectData = this.rowWAADataObj.selectData;
+                selectData = this.rowWAADataObj.selectData;
             }else{
-                let selectData=[];
                 selectData.push(this.rowWAADataObj);
             }
             let subject=selectData[0].fsubject;
