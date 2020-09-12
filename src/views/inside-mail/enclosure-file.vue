@@ -292,12 +292,12 @@ export default {
             let formDataA ={};
             let creator = localStorage.getItem('ms_staffId');
             formDataA.voucherId = data;
-            formDataA.menuCode = this.enclosureConfig.menuCode;
-            if(creator){
-                formDataA.userCode =  creator;
-            } else {
-                formDataA.userCode =  'test';
-            }
+            // formDataA.menuCode = this.enclosureConfig.menuCode;
+            // if(creator){
+            //     formDataA.userCode =  creator;
+            // } else {
+            //     formDataA.userCode =  'test';
+            // }
             this.$api.insideMail.findInfosList(formDataA).then(response => {
                 if (response.data.data) {
                     let values = response.data.data;
@@ -324,7 +324,6 @@ export default {
     watch:{
         enclosureConfig: {
             handler:function(val,oldval){
-
                 if(this.enclosureConfig.voucherId){
                     console.log(this.enclosureConfig.voucherId)
                     this.showFileData(this.enclosureConfig.voucherId)
@@ -337,6 +336,10 @@ export default {
             if(this.enclosureConfig.operateFlag==="QUERY"){
             }
         }*/
+    },
+    created(){
+        console.log("sly--------------");
+        console.log(this.enclosureConfig);
     }
 }
 </script>
