@@ -145,6 +145,10 @@ export default {
                     title: '名称'
                 },
                 {
+                    key: 'usercode',
+                    title: '账号'
+                },
+                {
                     key: 'positionName',
                     title: '职位'
                 },
