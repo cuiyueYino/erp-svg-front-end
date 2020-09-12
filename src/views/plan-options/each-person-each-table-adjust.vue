@@ -201,6 +201,9 @@
             </el-row>
             <el-tabs v-model="atctiveName" @tab-click="handleClick">
                 <el-tab-pane label="附件" name="first">
+                    <enclosureFile ref="child" :enclosureConfig="enclosureConfig"/>
+                </el-tab-pane>
+                <!-- <el-tab-pane label="附件" name="first">
                     <dynamic-table
                         :columns="attachColumns"
                         :table-data="tableData"
@@ -213,7 +216,7 @@
                         v-loading="false"
                         element-loading-text="加载中"
                     ></dynamic-table>
-                </el-tab-pane>
+                </el-tab-pane> -->
             </el-tabs>
         </el-form>
     </div>
@@ -222,6 +225,7 @@
 <script>
 import proData from '../../components/common/proData/proData';
 import DynamicTable from '../../components/common/dytable/dytable.vue';
+import enclosureFile from '../inside-mail/enclosure-file.vue';
 export default {
     props: {
         rowEachPerEachTableAdjDataObj: String,
@@ -229,9 +233,20 @@ export default {
     },
     components: {
         DynamicTable,
+        enclosureFile
     },
     data(){
         return{
+            // 附件
+            enclosureConfig:{
+                voucherId: '',
+                isShowButton: false,
+                menuCode: 'insideMail',
+                isDownload:true,
+                isSearch:false,
+                haveAttachment:false,
+                authStatus:false
+            },
             itemOptions:['集团重点','公司重点','部门重点'],
             attachColumns:[
                 {
@@ -458,6 +473,7 @@ export default {
                 this.tableFirstData[7].unit = res.data.data.xunit;
                 this.tableFirstData[8].num = res.data.data.yvalue;
                 this.tableFirstData[8].unit = res.data.data.yunit;
+                this.enclosureConfig.voucherId = data.id;
                 }
             }),error => {
             console.log(error);
