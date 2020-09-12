@@ -425,12 +425,24 @@ export default {
         },
         //转发按钮点击事件
         baseInputTable(data){
+            if(!this.isOa){
+                let selectData = this.rowWAADataObj.selectData;
+            }else{
+                let selectData=[];
+                selectData.push(this.rowWAADataObj);
+            }
+            if(selectData[0].repeat !=''){
+                if(data =='委托' || data =='加签'){
+                    this.$message.error("被转发邮件不能"+data+"!");
+                    return;
+                }
+            }
             this.rowUTStype = true;
             let finandata={};
             finandata.finanrowname="人员缺省查询方案";
             finandata.finanrowId="QS_0056";
             finandata.nametitle="待办事项";
-            finandata.SelectionData=this.rowWAADataObj.selectData;
+            finandata.SelectionData=selectData;
             finandata.FunctionType=data;
             this.rowUTSDataObj=finandata;
         },
@@ -443,7 +455,12 @@ export default {
         },
         //关注点击事件
         basefollow(){
-            let selectData=this.rowWAADataObj.selectData;
+            if(!this.isOa){
+                let selectData = this.rowWAADataObj.selectData;
+            }else{
+                let selectData=[];
+                selectData.push(this.rowWAADataObj);
+            }
             let subject=selectData[0].fsubject;
             if(subject.indexOf('转发')>-1){
                 this.$message.error('转发邮件不能添加关注!');

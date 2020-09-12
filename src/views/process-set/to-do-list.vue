@@ -565,11 +565,11 @@ export default {
       let fromdata = data;
       this.$api.processSet.getProcessClass(fromdata).then((response) => {
         let responsevalue = response;
-        if (responsevalue) {
+        if (responsevalue.data) {
           let returndata = responsevalue.data;
           this.WFMtypeoptions = returndata.data.rows;
         } else {
-          this.$message.success("数据库没有该条数据!");
+          this.$message.success("数据库没有业务数据!");
         }
       });
     },
@@ -626,6 +626,19 @@ export default {
       } else if (this.multipleSelection.length == 0) {
         this.$message.error("请选择一项");
       } else {
+        let selectData = this.multipleSelection;
+        if(selectData[0].repeat !=''){
+          if(data =='委托' || data =='加签'){
+            this.$message.error("被转发邮件不能"+data+"!");
+            return;
+          }
+        }
+        /*if(selectData[0].trustMan !=''){
+          if(data =='委托' || data =='加签'){
+            this.$message.error("被委托邮件不能"+data+"!");
+            return;
+          }
+        }*/
         this.rowUTStype = true;
         let finandata = {};
         finandata.finanrowname = "人员缺省查询方案";
@@ -734,13 +747,6 @@ export default {
         this.rowFCDDataObj = finandata;
         this.rowFCDtype = true;
       }
-
-      /*let finandata = {};
-      finandata.finanrowname = "人员缺省查询方案";
-      finandata.finanrowId = "QS_0056";
-      finandata.nametitle = "入库申请申请人审批";
-      this.rowFCDDataObj = finandata;
-      this.rowFCDtype = true;*/
     },
     //流程图关闭
     closeflowchart(data) {
