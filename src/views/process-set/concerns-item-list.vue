@@ -171,16 +171,19 @@
 </template>
 <style>
 .el-table .green {
-    background: rgba(130, 255, 140, 0.2);
+  background: rgba(130, 255, 140, 0.2);
 }
 .el-table .gray {
-    background: rgba(192, 192, 192, 0.616);
+  background: rgba(192, 192, 192, 0.616);
 }
 .el-table .red {
-    background: rgba(248, 15, 15, 0.178);
+  background: rgba(248, 15, 15, 0.178);
 }
 .el-table .white {
-    background: rgba(255, 255, 255, 1);
+  background: rgba(255, 255, 255, 1);
+}
+.el-table .orange {
+  background: #ffa000;
 }
 </style>
 <script>
@@ -338,6 +341,8 @@ export default {
                 return 'red';
             } else if (row.fstatus === '已完结') {
                 return 'green';
+            }else if(row.timeOutStatus =='1'){
+                return "orange";
             }
             return '';
         },

@@ -399,6 +399,9 @@
 .el-table .white {
   background: rgba(255, 255, 255, 1);
 }
+.el-table .orange {
+  background: #ffa000;
+}
 </style>
 <script>
 import DynamicTable from "../../components/common/dytable/dytable.vue";
@@ -616,6 +619,8 @@ export default {
         return "red";
       } else if (row.fstatus === "已完结") {
         return "green";
+      }else if(row.timeOutStatus =='1'){
+        return "orange";
       }
       return "";
     },

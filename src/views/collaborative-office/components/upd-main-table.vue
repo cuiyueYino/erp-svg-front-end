@@ -386,7 +386,7 @@
 				if(row.show) {
 					return this.rulesTable[con];
 				} else {
-					return "";
+					return;
 				}
 			},
 			getTitle() {
