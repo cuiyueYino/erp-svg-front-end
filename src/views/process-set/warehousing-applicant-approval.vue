@@ -39,10 +39,10 @@
                         <ConferenceApplyPage  :rowConferenceApplyDataObj="rowConferenceApplyDataObj" :rowConferenceApplytype="rowConferenceApplytype" @changeShow="showLookOrUpdate"/>
                         <EconomicIndicatorsPage  :rowEconomicIndicatorsDataObj="rowEconomicIndicatorsDataObj" :rowEconomicIndicatorstype="rowEconomicIndicatorstype" @changeShow="showLookOrUpdate"/>
                         <WorkItemPage  v-if="itemsFlag" :context="context" :showSeeOrUpd ="showSeeOrUpd" :todoFlag="todoFlag" @changeShow="showLookOrUpdate" />
-                    </el-row>  
+                    </el-row>
                     <el-row>
                         <el-col :span="22">
-                            <processnodelist :rowDataprocessObj="rowDataprocessObj" :rowDataprocessOid="rowDataprocessOid"  @changeShow="showprocessData"/> 
+                            <processnodelist :rowDataprocessObj="rowDataprocessObj" :rowDataprocessOid="rowDataprocessOid"  @changeShow="showprocessData"/>
                         </el-col>
                     </el-row>
                     <el-tabs v-model="atctiveName" @tab-click="handleClick">
@@ -140,10 +140,10 @@ export default {
         CooTaskDetailPage,
         ConferenceApplyPage,
         EconomicIndicatorsPage,
-        WorkItemPage    
+        WorkItemPage
     },
     inject: ['reload'],
-    data: function() {   
+    data: function() {
         return {
             itemsFlag:false,
             todoFlag:true,
@@ -154,7 +154,7 @@ export default {
             disabled:false,
             objectoptions:new proData().project,
             formdata: {
-                radio:1,
+                radio:0,
                 remark:''
             },
             rowUTStype:false,
@@ -273,7 +273,7 @@ export default {
                 }else{
                     //附件列表
                     this.financingEFListtype=true;
-                    
+
                 }
             }
         },
@@ -294,7 +294,7 @@ export default {
             }
             paramsData["currUserId"] = localStorage.getItem("ms_userId");
             paramsData["processCode"] = "schedule";
-            paramsData["twfbizmailReqVo"] = twfbizmailReqVoObj;    
+            paramsData["twfbizmailReqVo"] = twfbizmailReqVoObj;
             let twfauditObj = {};
             twfauditObj["fresult"] = 1;
             twfauditObj["fopinion"] = this.formdata.remark;
@@ -307,7 +307,7 @@ export default {
                 }else{
                     this.$message.error("保存失败,请填写完整信息");
                 }
-                
+
             },error=>{
                 console.log(error)
             });
@@ -367,7 +367,7 @@ export default {
                 }else if(dataType === 'DepartmentYearPlan'){
                     this.rowDepartAnnPlanDettype=true;
                     this.rowDepartAnnPlanDetDataObj = currentDatd;
-                }else if(dataType === 'CompanyYearPlanCollect'){   
+                }else if(dataType === 'CompanyYearPlanCollect'){
                     this.rowComPanDetaitype=true;
                     this.rowComPanDetaiDataObj = currentDatd;
                 } else if(dataType === 'DepartmentMonthPlan'){
@@ -407,7 +407,7 @@ export default {
                 } else if(dataType === 'OptionIndex'){
                     this.rowEconomicIndicatorstype=true;
                     this.rowEconomicIndicatorsDataObj = currentDatd;
-                } 
+                }
             }
         },
         //转发按钮点击事件
@@ -456,8 +456,8 @@ export default {
             }
         },
     },
-    mounted() {  
-        
+    mounted() {
+
     },
     watch:{
         rowWAAtype(oldVal,newVal){
@@ -493,7 +493,7 @@ export default {
                         DataF.oid=this.rowDataprocessOid.finanrowId;
                         this.$api.processSet.auditDetailSearch(DataF).then(res=>{
                             if(res.data.code ==0){
-                                this.rowDataprocessObj=res.data.data.rows;    
+                                this.rowDataprocessObj=res.data.data.rows;
                             }else{
                                 this.rowDataprocessObj=[];
                             }
