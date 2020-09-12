@@ -202,12 +202,11 @@ export default {
                     let finandata={};
                     finandata.fdocmanageoid = SelectData[0].foid;
                     finandata.froleid = localStorage.getItem('ms_roles');
-                    //测试暂用假数据
-                    // finandata.froleid = '7f6496f161c14e2e83a7a5f8aa3b2ece';
+
                     finandata.fauth = '2';
                     this.$api.documentManagement.isHaveDocAuthority(finandata).then(response => {
                         let responsevalue = response;                       
-                        if (responsevalue.data.data == 1) {
+                        if (responsevalue.data.data >= 1) {
                             this.rowNMMtype = true;
                             let finandata={};
                             finandata.printFlg = '2';
@@ -219,10 +218,10 @@ export default {
                             finandata.fauth = '1';
                             this.$api.documentManagement.isHaveDocAuthority(finandata).then(response => {
                                 let responsevalue = response;                       
-                                if (responsevalue.data.data == 1) {
+                                if (responsevalue.data.data >= 1) {
                                     this.rowNMMtype = true;
                                     let finandata={};
-                                    finandata.printFlg = '2';
+                                    finandata.printFlg = '1';
                                     finandata.nametitle="文档浏览查看";
                                     finandata.NewOrEditFlag="SHOW";
                                     finandata.foid=SelectData[0].foid;
@@ -297,7 +296,7 @@ export default {
             }else{
                 this.rowNMMtype = true;
             }
-            this.reload();
+            // this.reload();
         },
         //生成树
         maketree(){

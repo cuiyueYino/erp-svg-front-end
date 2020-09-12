@@ -255,7 +255,7 @@ export default {
                 fromdata.managefoids=managefoids;
                 fromdata.rolefoids=rolefoids;
                 fromdata.fauth = this.formInSelect.select;
-                fromdata.fhandler = localStorage.removeItem('ms_userId');
+                fromdata.fhandler = localStorage.getItem('ms_userId');
                 this.$api.documentManagement.insertDocumentAuthority(fromdata).then(response => {
                     let responsevalue = response;
                     if (responsevalue) {
