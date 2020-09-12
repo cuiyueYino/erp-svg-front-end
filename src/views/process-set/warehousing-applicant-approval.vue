@@ -345,7 +345,7 @@ export default {
                 // alert("OA项目");
                 // this.rowCooTaskDetailtype=true;
                 //获取工作事项的请求参数接口
-                this.$api.processSet.getWorkItemsParams({
+                return this.$api.processSet.getWorkItemsParams({
                     srcId: currentDatd,
                 })
                 .then((res) => {
@@ -432,7 +432,8 @@ export default {
                 } else if(dataType === 'TaskSelfUpdateApply'){
                     this.rowEachPerEachTableModifyype=true;
                     this.rowEachPerEachTableModifyDataObj = currentDatd;
-                } 
+                }
+                return;
             }
         },
         //转发按钮点击事件
@@ -551,8 +552,8 @@ export default {
         async asyncCall(type,data,foid) {
             await this.getDataprocess(foid);
             await this.getDataType(foid);
-            this.DisplayOrHide(type,data);
-            this.ShowFinancVisible=this.rowWAAtype;
+            await this.DisplayOrHide(this.functionType,this.rowWAADataObj);
+            return;
         }
     },
     mounted() {
@@ -587,6 +588,7 @@ export default {
                     if (responsevalue) {
                         let returndata = responsevalue.data;
                         this.asyncCall(this.functionType,this.rowWAADataObj,this.rowDataprocessOid.finanrowId);
+                        this.ShowFinancVisible=this.rowWAAtype;
                     } else {
                         this.$message.success('数据库没有该条数据!');
                     }
