@@ -177,18 +177,7 @@
             </el-row>
             <el-tabs v-model="atctiveName" @tab-click="handleClick">
                 <el-tab-pane label="附件" name="first">
-                    <dynamic-table
-                        :columns="attachColumns"
-                        :table-data="tableData"
-                        :total="total"
-                        size="mini"
-                        :isShowPager="false"
-                        ref="multipleTable"
-                        :page-num="pageNum"
-                        :page-size="pageSize"
-                        v-loading="false"
-                        element-loading-text="加载中"
-                    ></dynamic-table>
+                    <enclosureFile ref="child" :enclosureConfig="enclosureConfig"/>
                 </el-tab-pane>
             </el-tabs>
         </el-form>
@@ -198,6 +187,7 @@
 <script>
 import proData from '../../components/common/proData/proData';
 import DynamicTable from '../../components/common/dytable/dytable.vue';
+import enclosureFile from '../inside-mail/enclosure-file.vue';
 export default {
     props: {
         rowEachPerEachTableAssDataObj: String,
@@ -205,9 +195,20 @@ export default {
     },
     components: {
         DynamicTable,
+        enclosureFile
     },
     data(){
         return{
+            // 附件
+            enclosureConfig:{
+                voucherId: '',
+                isShowButton: false,
+                menuCode: 'insideMail',
+                isDownload:true,
+                isSearch:false,
+                haveAttachment:false,
+                authStatus:false
+            },
             attachColumns:[
                 {
                     key: 'key1',
@@ -409,6 +410,7 @@ export default {
                 this.tableFirstData[7].unit = res.data.data.xunit;
                 this.tableFirstData[8].num = res.data.data.yvalue;
                 this.tableFirstData[8].unit = res.data.data.yunit;
+                this.enclosureConfig.voucherId = data.id;
                 }
             }),error => {
             console.log(error);

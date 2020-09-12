@@ -203,20 +203,6 @@
                 <el-tab-pane label="附件" name="first">
                     <enclosureFile ref="child" :enclosureConfig="enclosureConfig"/>
                 </el-tab-pane>
-                <!-- <el-tab-pane label="附件" name="first">
-                    <dynamic-table
-                        :columns="attachColumns"
-                        :table-data="tableData"
-                        :total="total"
-                        size="mini"
-                        :isShowPager="false"
-                        ref="multipleTable"
-                        :page-num="pageNum"
-                        :page-size="pageSize"
-                        v-loading="false"
-                        element-loading-text="加载中"
-                    ></dynamic-table>
-                </el-tab-pane> -->
             </el-tabs>
         </el-form>
     </div>
