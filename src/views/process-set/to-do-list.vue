@@ -683,7 +683,7 @@ export default {
     //分页、下一页
     onCurrentChange(val) {
       let fromdata = {};
-      fromdata.infosBeginNum = (val - 1) * 10;
+      fromdata.infosBeginNum = ((val - 1) * 10)+1;
       fromdata.infosEndNum = val * 10;
       fromdata.userId = localStorage.getItem("ms_userId");
       this.getHunTableData(fromdata);
@@ -733,7 +733,6 @@ export default {
         finandata.nametitle = selectData[0].fsubject;
         this.rowFCDDataObj = finandata;
         this.rowFCDtype = true;
-        console.log(selectData)
       }
 
       /*let finandata = {};

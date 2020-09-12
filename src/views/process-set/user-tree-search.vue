@@ -122,6 +122,7 @@ export default {
             title:'',
             formdata:{
                 searchKeyW:'',
+                checked:false
             },
             leftDisabled:true,
             rightDisabled:true,
@@ -258,13 +259,13 @@ export default {
             fromdata.participator=user;
             this.$api.processSet.setencyclic(fromdata).then(res=>{
                 let resData=res;
-                if(resData.data ==''){
+                if(resData.data.data.code == 0){
                     this.ShowFinancVisible=false;
                     //this.reload();
                     this.$emit('changeShow',false);
                     this.$message.success('转发成功!');
                 }else{
-                    this.$message.error(resData.data+"!");
+                    this.$message.error(resData.data.data.msg+"!");
                 }               
             },error=>{
                 console.log(error)
@@ -279,13 +280,13 @@ export default {
             fromdata.advice=this.formdata.remark;;
             this.$api.processSet.transmit(fromdata).then(res=>{
                 let resData=res;
-                if(resData.data ==''){
+                if(resData.data.data.code == 0){
                     this.ShowFinancVisible=false;
                     //this.reload();
                     this.$emit('changeShow',false);
                     this.$message.success('委托成功!');
                 }else{
-                    this.$message.error(resData.data+"!");
+                    this.$message.error(resData.data.data.msg+"!");
                 }
             },error=>{
                 console.log(error)
@@ -300,13 +301,13 @@ export default {
             fromdata.fremark=this.formdata.remark;
             this.$api.processSet.SeTaddTag(fromdata).then(res=>{
                 let resData=res;
-                if(resData.data ==''){
+                if(resData.data.data.code == 0){
                     this.ShowFinancVisible=false;
                     //this.reload();
                     this.$emit('changeShow',false);
                     this.$message.success('加签成功!');
                 }else{
-                    this.$message.error(resData.data+"!");
+                    this.$message.error(resData.data.data.msg+"!");
                 } 
             },error=>{
                 console.log(error)
@@ -377,10 +378,15 @@ export default {
             let fromdata = data;
             this.$api.processSet.getUserTree(fromdata).then(res=>{
                 let resData=res.data.data;
-                let resDataArr= eval("("+resData+")");
-                if(resDataArr.JsonInfo){
-                    this.gridData=resDataArr.JsonInfo;
-                    this.total=resDataArr.pageInfo.total;
+                if(resData){
+                    let resDataArr= eval("("+resData+")");
+                    if(resDataArr.JsonInfo){
+                        this.gridData=resDataArr.JsonInfo;
+                        this.total=resDataArr.pageInfo.total;
+                    }else{
+                        this.gridData=[];
+                        this.total=0;
+                    }
                 }else{
                     this.gridData=[];
                     this.total=0;
