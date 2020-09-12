@@ -182,6 +182,17 @@ const processSet = {
         }
         return httpReqest.post('/api/scha/taskEvaluate/findTaskEvaluateAndAdjustById'+valueS); 
     },
+    //任务自评修改申请詳情
+    getPersonalTableModifyDetail(params){
+        var valueS='?';
+        for(var item in params){
+            valueS+=item+"="+params[item]+"&";
+        }
+        if(valueS.slice(valueS.length-1,valueS.length) ==="&"){
+            valueS=valueS.slice(0,valueS.length-1);
+        }
+        return httpReqest.post('/api/scha/taskUpdateApply/findTaskEvaluateUpdateApplyById'+valueS); 
+    },
      //获取处理表单详情数据
      getunhandledTaskFormDetail(params){
         return httpReqest.post('/api/scha/workFlow/unhandledTaskFormDetail', params);

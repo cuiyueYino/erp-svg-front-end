@@ -39,6 +39,7 @@
                         <ConferenceApplyPage  :rowConferenceApplyDataObj="rowConferenceApplyDataObj" :rowConferenceApplytype="rowConferenceApplytype" @changeShow="showLookOrUpdate"/>
                         <EconomicIndicatorsPage  :rowEconomicIndicatorsDataObj="rowEconomicIndicatorsDataObj" :rowEconomicIndicatorstype="rowEconomicIndicatorstype" @changeShow="showLookOrUpdate"/>
                         <WorkItemPage  v-if="itemsFlag" :context="context" :showSeeOrUpd ="showSeeOrUpd" :todoFlag="todoFlag" @changeShow="showLookOrUpdate" />
+			<EachPerEachTableModifyPage  :rowEachPerEachTableModifyDataObj="rowEachPerEachTableModifyDataObj" :rowEachPerEachTableModifyype="rowEachPerEachTableModifyype" @changeShow="showLookOrUpdate"/>
                     </el-row>
                     <el-row>
                         <el-col :span="22">
@@ -91,6 +92,7 @@ import EachPerEachTableInvalidPage from '../plan-options/each-person-each-table-
 import EachPerEachTablePersonPage from '../plan-options/each-person-each-table-person.vue';//一人一表任务表（人员变更）L
 import EachPerEachTableEntrustPage from '../plan-options/each-person-each-table-entrust.vue';//一人一表任务表（任务委托）M
 import EachPerEachTableDetailPage from '../plan-options/each-person-each-table-detail.vue';//一人一表任务表（查看功能）O
+import EachPerEachTableModifyPage from '../plan-options/each-person-each-table-modify.vue';//一人一表任务表（任务自评修改申请）
 import DepartAnnPlanDetPage from '../plan-options/department-annual-plan-detail.vue';//部门年度计划  B
 import DepartMonPlanDetPage from '../plan-options/department-month-plan-detail.vue';//部门月度计划  D
 import EmpApprTabDetailPage from '../plan-options/employees-appraisal-table-detail.vue';//员工考评表 P
@@ -140,7 +142,8 @@ export default {
         CooTaskDetailPage,
         ConferenceApplyPage,
         EconomicIndicatorsPage,
-        WorkItemPage
+        WorkItemPage,
+        EachPerEachTableModifyPage
     },
     inject: ['reload'],
     data: function() {
@@ -169,6 +172,7 @@ export default {
             rowEachPerEachTableInvalidtype:false,
             rowEachPerEachTablePersontype:false,
             rowEachPerEachTableEntrusttype:false,
+	    rowEachPerEachTableModifyype:false,
             rowEachPerEachTableDetailtype:false,
             rowDepartAnnPlanDettype:false,
             rowDepartMonPlanDettype:false,
@@ -187,19 +191,20 @@ export default {
             rowTEMTaskDataObj: "",
             rowEACHPerEachJobDetDataObj: "",
             rowEachPerEachTableDelayDataObj: "",
-            rowEachPerEachTableReportDataObj: {},
-            rowEachPerEachTableInvalidDataObj: {},
-            rowEachPerEachTablePersonDataObj: {},
-            rowEachPerEachTableAssDataObj: {},
+            rowEachPerEachTableReportDataObj: '',
+            rowEachPerEachTableInvalidDataObj: '',
+            rowEachPerEachTablePersonDataObj: '',
+            rowEachPerEachTableAssDataObj: "",
             rowEachPerEachTableEntrustDataObj: "",
+            rowEachPerEachTableModifyDataObj:'',
             rowEachPerEachTableDetailDataObj: "",
-            rowDepartAnnPlanDetDataObj:{},
+            rowDepartAnnPlanDetDataObj:'',
             rowDepartMonPlanDetDataObj:"",
-            rowEmpApprTabDetailDataObj:{},
-            rowEmpApprTabNumDetailDataObj:{},
+            rowEmpApprTabDetailDataObj:'',
+            rowEmpApprTabNumDetailDataObj:'',
             rowCooTaskDetailDataObj:"",
-            rowEachPerEachTableAdjDataObj:{},
-            rowConferenceApplyDataObj:{},
+            rowEachPerEachTableAdjDataObj:"",
+            rowConferenceApplyDataObj:'',
             rowEconomicIndicatorsDataObj:"",
             contextObj:{},
             context:{},
@@ -227,6 +232,7 @@ export default {
             this.rowEachPerEachTableInvalidtype=false;
             this.rowEachPerEachTablePersontype=false;
             this.rowEachPerEachTableEntrusttype=false;
+            this.rowEachPerEachTableModifyype=false;
             this.rowEachPerEachTableDetailtype=false;
             this.rowDepartAnnPlanDettype=false;
             this.rowDepartMonPlanDettype=false;
@@ -381,17 +387,21 @@ export default {
                     this.rowEACHPerEachJobDetDataObj = currentDatd;
                 } else if(dataType === 'TaskReport'){
                     this.rowEachPerEachTableReporttype=true;
-                } else if(dataType === 'TaskSelfEvaluateApplyzp'){
+                } else if(dataType === 'TaskSelfEvaluateApply'){
                     this.rowEachPerEachTableAsstype=true;
+                    this.rowEachPerEachTableAssDataObj = currentDatd;
                 } else if(dataType === 'TaskDelayApply'){
                     this.rowEachPerEachTableDelaytype=true;
                     this.rowEachPerEachTableDelayDataObj = currentDatd;
                 } else if(dataType === 'TaskCancelApply'){
                     this.rowEachPerEachTableInvalidtype=true;
+                    this.rowEachPerEachTableInvalidDataObj = currentDatd;
                 } else if(dataType === 'TaskAdjust'){
                     this.rowEachPerEachTableAdjtype=true;
+                    this.rowEachPerEachTableAdjDataObj = currentDatd;
                 } else if(dataType === 'AssignerChange'){
                     this.rowEachPerEachTablePersontype=true;
+		    this.rowEachPerEachTablePersonDataObj = currentDatd;
                 } else if(dataType === 'TaskEntrust'){
                     this.rowEachPerEachTableEntrusttype=true;
                     this.rowEachPerEachTableEntrustDataObj = currentDatd;
@@ -407,7 +417,10 @@ export default {
                 } else if(dataType === 'OptionIndex'){
                     this.rowEconomicIndicatorstype=true;
                     this.rowEconomicIndicatorsDataObj = currentDatd;
-                }
+                } else if(dataType === 'TaskSelfUpdateApply'){
+                    this.rowEachPerEachTableModifyype=true;
+                    this.rowEachPerEachTableModifyDataObj = currentDatd;
+                } 
             }
         },
         //转发按钮点击事件

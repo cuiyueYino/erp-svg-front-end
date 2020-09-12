@@ -11,7 +11,7 @@
             <el-row>
                 <el-col :span="6">
                     <el-form-item label="公司：">
-                        <el-select v-model="formdata.company" value-key="value" :disabled="true">
+                        <el-select v-model="formdata.companyName" value-key="value" :disabled="true" placeholder="">
                             <el-option
                                 v-for="item in companyData"
                                 :key="item.value"
@@ -23,9 +23,9 @@
                 </el-col>
                 <el-col :span="6" :offset="2">
                     <el-form-item label="项目：">
-                        <el-select v-model="formdata.project" value-key="value" :disabled="true">
+                        <el-select v-model="formdata.projectName" value-key="value" :disabled="true" placeholder="">
                             <el-option
-                                v-for="item in companyData"
+                                v-for="item in projectData"
                                 :key="item.value"
                                 :label="item.label"
                                 :value="item.value"
@@ -37,38 +37,36 @@
             <el-row>
                 <el-col :span="6">
                     <el-form-item label="部门：">
-                        <el-input v-model="formdata.bumen" :disabled="true"></el-input>
+                        <el-input v-model="formdata.departmentName" :disabled="true"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="6" :offset="2">
                     <el-form-item label="任务状态：">
-                        <el-input v-model="formdata.renwuzhaungtai" :disabled="true"></el-input>
+                        <el-input v-model="formdata.taskStatus" :disabled="true"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="6" :offset="2">
                     <el-form-item label="任务类型：">
-                        <el-input v-model="formdata.renwuleixing" :disabled="true"></el-input>
+                        <el-input v-model="formdata.taskType" :disabled="true"></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>
             <el-row>
                 <el-col :span="6">
                     <el-form-item label="任务级别：">
-                        <el-input v-model="formdata.renwujibie" :disabled="true"></el-input>
+                        <el-input v-model="formdata.taskLevel" :disabled="true"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="3" :offset="1">
-                    <el-form-item label="周期性任务：" ><el-checkbox v-model="formdata.checked" :disabled="true"></el-checkbox></el-form-item>
+                    <el-form-item label="周期性任务："><el-checkbox v-model="formdata.periodicityTask" :disabled="true"></el-checkbox></el-form-item>
                 </el-col>
                 <el-col :span="2">
-                    <el-form-item label="年计划调整：" ><el-checkbox v-model="formdata.checked" :disabled="true"></el-checkbox></el-form-item>
+                    <el-form-item label="年计划调整："><el-checkbox v-model="formdata.yearPlan" :disabled="true"></el-checkbox></el-form-item>
                 </el-col>
                 <el-col :span="9" :offset="2">
                     <el-form-item label="重点级别：">
-                        <el-checkbox-group v-model="focusLevelCheckList" :disabled="true">
-                            <el-checkbox label="集团重点"></el-checkbox>
-                            <el-checkbox label="公司重点"></el-checkbox>
-                            <el-checkbox label="部门重点"></el-checkbox>
+                        <el-checkbox-group v-model="focusLevelCheckList">
+                            <el-checkbox v-for="item in itemOptions"  :label="item" :key="item" disabled>{{item}}</el-checkbox>
                         </el-checkbox-group>
                     </el-form-item>
                 </el-col>  
@@ -76,63 +74,63 @@
             <el-row>
                 <el-col :span="6">
                     <el-form-item label="工作名称：">
-                        <el-input v-model="formdata.gongzuomingcheng" :disabled="true"></el-input>
+                        <el-input v-model="formdata.workName" :disabled="true"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="14" :offset="2">
                     <el-form-item label="工作标准：">
-                        <el-input v-model="formdata.gongzuobiaozhun" :disabled="true"></el-input>
+                        <el-input v-model="formdata.workStandard" :disabled="true"></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>  
             <el-row>
                 <el-col :span="6">
                     <el-form-item label="责任人：">
-                        <el-input v-model="formdata.bumen" :disabled="true"></el-input>
+                        <el-input v-model="formdata.responsibleName" :disabled="true"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="6" :offset="2">
                     <el-form-item label="检查人：">
-                        <el-input v-model="formdata.renwuzhaungtai" :disabled="true"></el-input>
+                        <el-input v-model="formdata.examinerName" :disabled="true"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="6" :offset="2">
                     <el-form-item label="交办人：">
-                        <el-input v-model="formdata.renwuleixing" :disabled="true"></el-input>
+                        <el-input v-model="formdata.assignerName" :disabled="true"></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>
             <el-row>
                 <el-col :span="6">
                     <el-form-item label="开始时间：">
-                        <el-input v-model="formdata.starttime" :disabled="true"></el-input>
+                        <el-input v-model="formdata.beginDate" :disabled="true"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="6" :offset="2">
                     <el-form-item label="完成时间：">
-                        <el-input v-model="formdata.endtime" :disabled="true"></el-input>
+                        <el-input v-model="formdata.endDate" :disabled="true"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="6" :offset="2">
                     <el-form-item label="秘书：">
-                        <el-input v-model="formdata.mishu" :disabled="true"></el-input>
+                        <el-input v-model="formdata.secretaryName" :disabled="true"></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>
             <el-row>
                 <el-col :span="6">
                      <el-form-item label="完成情况(%)：">
-                        <el-input v-model="formdata.text1" :disabled="true"></el-input>
+                        <el-input v-model="formdata.completion" :disabled="true"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="6" :offset="2">
                     <el-form-item label="经办人：">
-                        <el-input v-model="formdata.text1" :disabled="true"></el-input>
+                        <el-input v-model="formdata.gestorName" :disabled="true"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="6" :offset="2">
                     <el-form-item label="经办时间：">
-                        <el-input v-model="formdata.text1" :disabled="true"></el-input>
+                        <el-input v-model="formdata.voucherDate" :disabled="true"></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>
@@ -166,14 +164,14 @@
             <el-row class="table-bottom">
                 <el-col :span="22">
                     <el-form-item label="情况说明：">
-                        <el-input v-model="formdata.text1" :disabled="true"></el-input>
+                        <el-input v-model="formdata.reasonInfo" :disabled="true"></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>
             <el-row>
                 <el-col :span="22">
                     <el-form-item label="备注：">
-                        <el-input v-model="formdata.text1" :disabled="true"></el-input>
+                        <el-input v-model="formdata.remark" :disabled="true"></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>
@@ -186,7 +184,7 @@ import proData from '../../components/common/proData/proData';
 import DynamicTable from '../../components/common/dytable/dytable.vue';
 export default {
     props: {
-        rowEachPerEachTableInvalidDataObj: Object,
+        rowEachPerEachTableInvalidDataObj: String,
         rowEachPerEachTableInvalidtype:Boolean,
     },
     components: {
@@ -254,14 +252,38 @@ export default {
             ShowFinancVisible:false,
             peopleJobgsTableVisible: false,
             labelPosition: 'left',
-            formdata:{},
-            companyData:new proData().company,
+            formdata:{
+                companyName:'',
+                projectName:'',
+                departmentName:'',
+                taskStatus:'',
+                taskType:'',
+                taskLevel:'',
+                periodicityTask:'',
+                yearPlan:'',
+                workName:'',
+                workStandard:'',
+                responsibleName:'',
+                examinerName:'',
+                assignerName:'',
+                beginDate:'',
+                endDate:'',
+                secretaryName:'',
+                completion:'',
+                gestorName:'',
+                voucherDate:'',
+                reasonInfo:'',
+                remark:''
+            },
+            companyData:[],
+            projectData:[],
             pageNum: 1,
             pageSize: 10,
             total: 20,
             isEdit: false,
             isLook:false,
-            focusLevelCheckList: ['集团重点','公司重点'],
+            focusLevelCheckList: [],
+            itemOptions:['集团重点','公司重点','部门重点'],
             peopleTableForm:{
                 zhibiaoku: "",
                 guanjinzhibiao: "",
@@ -273,6 +295,7 @@ export default {
         }
     },
     methods: {
+        //表格排序
         objectSpanMethod({ row, column, rowIndex, columnIndex }) {
             if (columnIndex === 0) {
                 if (rowIndex === 1) {
@@ -293,30 +316,81 @@ export default {
                 }
             }
         },
-        //pop框里面的新增表格行
-        baseInputTable(Str) {
-            alert("新增111111111");
-            this.peopleJobgsTableVisible = true;
-        },
-        MoreSearchPS(){
-
+        //获取任务委托详情
+        getEntrustDetail(data) {
+        this.$api.processSet.getPersonalTableTaskDetail({
+            id: data.id,
+        })
+        .then((res) => {
+                if(res.data.code == 0){
+                this.formdata = res.data.data;
+                let taskStateParams = res.data.data.taskStatus;
+                switch(taskStateParams) {
+                    case 1: 
+                        this.formdata.taskStatus = '可执行';
+                        break;
+                    case 2:
+                        this.formdata.taskStatus = '已完成';
+                        break;
+                    case 3:
+                        this.formdata.taskStatus = '未完成';
+                        break;
+                    case 4:
+                        this.formdata.taskStatus = '延期';
+                        break;
+                    case 5:
+                        this.formdata.taskStatus ='作废';
+                        break;
+                    case 0:
+                        this.formdata.taskStatus ='未发生';
+                        break;
+                    case 10:
+                        this.formdata.taskStatus ='已报待批';
+                        break;
+                    default:
+                        break; 
+                }
+                if(res.data.data.groupPoint) {
+                    this.focusLevelCheckList.push('集团重点');
+                } else if(res.data.data.companyPoint) {
+                    this.focusLevelCheckList.push('公司重点');
+                }  else if(res.data.data.departmentPoint) {
+                    this.focusLevelCheckList.push('部门重点')
+                } else {
+                    this.focusLevelCheckList.push('');
+                }
+                //页面返回的值得赋值
+                let tableDataObj = {};
+                this.tableFirstData[0].num = res.data.data.planFinish;
+                this.tableFirstData[0].unit = res.data.data.unit;
+                this.tableFirstData[1].num = res.data.data.fvalue;
+                this.tableFirstData[1].unit = res.data.data.funit;
+                this.tableFirstData[2].num = res.data.data.jvalue;
+                this.tableFirstData[2].unit = res.data.data.junit;
+                this.tableFirstData[3].num = res.data.data.hvalue;
+                this.tableFirstData[3].unit = res.data.data.hunit;
+                this.tableFirstData[4].num = res.data.data.nvalue;
+                this.tableFirstData[4].unit = res.data.data.nvalue;
+                this.tableFirstData[5].num = res.data.data.ovalue;
+                this.tableFirstData[5].unit = res.data.data.ounit;
+                this.tableFirstData[6].num = res.data.data.pvalue;
+                this.tableFirstData[6].unit = res.data.data.punit;
+                this.tableFirstData[7].num = res.data.data.xvalue;
+                this.tableFirstData[7].unit = res.data.data.xunit;
+                this.tableFirstData[8].num = res.data.data.yvalue;
+                this.tableFirstData[8].unit = res.data.data.yunit;
+                }
+            }),error => {
+            console.log(error);
+            }
         },
     },
     watch:{
-        //新建一岗一表行数据清空
-        peopleJobgsTableVisible(val){
-            switch (val) {
-                case false:
-                    this.$refs['peopleTableForm'].resetFields();
-                    this.checked = false;
-                break;
-            
-                default:
-                break;
-            }
-            },
         rowEachPerEachTableInvalidtype(oldVal,newVal){
             this.ShowFinancVisible=this.rowEachPerEachTableInvalidtype;
+             let invalidSelected = {};
+            invalidSelected.id = this.rowEachPerEachTableInvalidDataObj;
+            this.getEntrustDetail(invalidSelected);
         }
     }
 }

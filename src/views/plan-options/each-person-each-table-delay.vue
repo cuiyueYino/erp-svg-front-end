@@ -141,7 +141,7 @@
                     </el-form-item>
                 </el-col>
                 <el-col :span="6" :offset="2">
-                    <el-form-item label="延期完成时间：" :label-width="formLabelWidth">
+                    <el-form-item label="延期完成时间：" :label-width="formLabelWidth" :disabled="true">
                         <el-date-picker
                             clearable
                             v-model="formdata.delayEndDate"
@@ -218,14 +218,14 @@
             <el-row class="table-bottom">
                 <el-col :span="22">
                     <el-form-item label="情况说明：">
-                        <el-input v-model="formdata.text1" :disabled="true"></el-input>
+                        <el-input v-model="formdata.reasonInfo" :disabled="true"></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>
             <el-row>
                 <el-col :span="22">
                     <el-form-item label="备注：">
-                        <el-input v-model="formdata.text1" :disabled="true"></el-input>
+                        <el-input v-model="formdata.remark" :disabled="true"></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>
@@ -266,11 +266,11 @@ export default {
             projectData:[],
             attachColumns:[
                 {
-                    key: 'key1',
+                    key: 'num',
                     title: '序号'
                 },
                 {
-                    key: 'key2',
+                    key: 'fileName',
                     title: '名称'
                 },
                 {
@@ -338,7 +338,35 @@ export default {
             ShowFinancVisible:false,
             peopleJobgsTableVisible: false,
             labelPosition: 'left',
-            formdata:{},
+            formdata:{
+                companyName:'',
+                projectName:'',
+                departmentName:'',
+                taskStatus:'',
+                taskType:'',
+                taskLevel:'',
+                periodicityTask:'',
+                yearPlan:'',
+                workName:'',
+                workStandard:'',
+                responsibleName:'',
+                examinerName:'',
+                assignerName:'',
+                beginDate:'',
+                endDate:'',
+                secretaryName:'',
+                completion:'',
+                gestorName:'',
+                voucherDate:'',
+                yendDate:'',
+                delayEndDate:'',
+                target:'',
+                metting:'',
+                meetDate:'',
+                solution:'',
+                reasonInfo:'',
+                remark:'',
+            },
             companyData:new proData().company,
             atctiveName:'first',
             pageNum: 1,
@@ -386,11 +414,9 @@ export default {
                 id: data.id,
             })
         .then((res) => {
-            // debugger;
                 if(res.data.code == 0){
                 this.formdata = res.data.data;
                 let taskStateParams = res.data.data.taskStatus;
-                // debugger;
                 switch(taskStateParams) {
                     case 1: 
                         this.formdata.taskStatus = '可执行';
@@ -455,7 +481,7 @@ export default {
         rowEachPerEachTableDelaytype(oldVal,newVal){
             this.ShowFinancVisible=this.rowEachPerEachTableDelaytype;
              let delaySelected = {};
-             delaySelected.id = this.rowEachPerEachTableEntrustDataObj;
+             delaySelected.id = this.rowEachPerEachTableDelayDataObj;
              this.getDelayDetail(delaySelected);
         }
     }

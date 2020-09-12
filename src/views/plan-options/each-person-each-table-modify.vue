@@ -46,8 +46,8 @@
                     </el-form-item>
                 </el-col>
                 <el-col :span="6" :offset="2">
-                    <el-form-item label="任务类型：">
-                        <el-input v-model="formdata.taskType" :disabled="true"></el-input>
+                    <el-form-item label="工作名称：">
+                        <el-input v-model="formdata.workName" :disabled="true"></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>
@@ -73,8 +73,8 @@
             </el-row>
             <el-row>
                 <el-col :span="6">
-                    <el-form-item label="工作名称：">
-                        <el-input v-model="formdata.workName" :disabled="true"></el-input>
+                    <el-form-item label="任务类型：">
+                        <el-input v-model="formdata.taskType" :disabled="true"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="14" :offset="2">
@@ -175,22 +175,6 @@
                     </el-form-item>
                 </el-col>
             </el-row>
-            <el-tabs v-model="atctiveName" @tab-click="handleClick">
-                <el-tab-pane label="附件" name="first">
-                    <dynamic-table
-                        :columns="attachColumns"
-                        :table-data="tableData"
-                        :total="total"
-                        size="mini"
-                        :isShowPager="false"
-                        ref="multipleTable"
-                        :page-num="pageNum"
-                        :page-size="pageSize"
-                        v-loading="false"
-                        element-loading-text="加载中"
-                    ></dynamic-table>
-                </el-tab-pane>
-            </el-tabs>
         </el-form>
     </div>
     
@@ -200,56 +184,15 @@ import proData from '../../components/common/proData/proData';
 import DynamicTable from '../../components/common/dytable/dytable.vue';
 export default {
     props: {
-        rowEachPerEachTableAssDataObj: String,
-        rowEachPerEachTableAsstype:Boolean,
+        rowEachPerEachTableModifyDataObj: String,
+        rowEachPerEachTableModifyype:Boolean,
     },
     components: {
         DynamicTable,
     },
     data(){
         return{
-            attachColumns:[
-                {
-                    key: 'key1',
-                    title: '文件类型'
-                },
-                {
-                    key: 'key2',
-                    title: '文件'
-                },
-                {
-                    key: 'key3',
-                    title: '必须'
-                },
-                {
-                    key: 'key4',
-                    title: '编制单位'
-                },
-                {
-                    key: 'key5',
-                    title: '负责人'
-                },
-                {
-                    key: 'key6',
-                    title: '审核单位'
-                },
-                {
-                    key: 'key7',
-                    title: '审核人'
-                },
-                {
-                    key: 'key8',
-                    title: '定版日期'
-                },
-                {
-                    key: 'key9',
-                    title: '文档密级'
-                },
-                {
-                    key: 'key10',
-                    title: '保管期限'
-                },
-            ],
+            itemOptions:['集团重点','公司重点','部门重点'],
             formLabelWidth: '120px',
             tableFirstData:[
                 {
@@ -310,21 +253,39 @@ export default {
             ShowFinancVisible:false,
             peopleJobgsTableVisible: false,
             labelPosition: 'left',
-            formdata:{},
+            formdata:{
+                companyName:'',
+                projectName:'',
+                departmentName:'',
+                taskStatus:'',
+                workName:'',
+                taskLevel:'',
+                periodicityTask:'',
+                yearPlan:'',
+                taskType:'',
+                workStandard:'',
+                responsibleName:'',
+                examinerName:'',
+                assignerName:'',
+                beginDate:'',
+                endDate:'',
+                secretaryName:'',
+                completion:'',
+                gestorName:'',
+                voucherDate:'',
+                reasonInfo:'',
+                remark:''
+            },
             companyData:[],
-            projectData:[],
-            atctiveName:'first',
             pageNum: 1,
             pageSize: 10,
             total: 20,
             isEdit: false,
             isLook:false,
             focusLevelCheckList: [],
-            itemOptions:['集团重点','公司重点','部门重点'],
-            tableData:[],
         }
     },
-   methods: {
+    methods: {
         //表格排序
         objectSpanMethod({ row, column, rowIndex, columnIndex }) {
             if (columnIndex === 0) {
@@ -346,9 +307,9 @@ export default {
                 }
             }
         },
-        //获取任务自评详情
-        getAsstDetail(data) {
-        this.$api.processSet.getPersonalTableTaskDetail({
+        //获取任务调整详情
+        getModifyDetail(data) {
+        this.$api.processSet.getPersonalTableModifyDetail({
             id: data.id,
         })
         .then((res) => {
@@ -416,11 +377,11 @@ export default {
         },
     },
     watch:{
-        rowEachPerEachTableAsstype(oldVal,newVal){
-            this.ShowFinancVisible=this.rowEachPerEachTableAsstype;
-             let asstSelected = {};
-             asstSelected.id = this.rowEachPerEachTableAssDataObj;
-             this.getAsstDetail(asstSelected);
+        rowEachPerEachTableModifyype(oldVal,newVal){
+            this.ShowFinancVisible=this.rowEachPerEachTableModifyype;
+             let modifySelected = {};
+            modifySelected.id = this.rowEachPerEachTableModifyDataObj;
+            this.getModifyDetail(modifySelected);
         }
     }
 }

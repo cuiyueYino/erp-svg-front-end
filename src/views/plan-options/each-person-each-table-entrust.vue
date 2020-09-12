@@ -11,7 +11,7 @@
             <el-row>
                 <el-col :span="6">
                     <el-form-item label="公司：">
-                        <el-select v-model="formdata.companyName" value-key="value" :disabled="true">
+                        <el-select v-model="formdata.companyName" value-key="value" :disabled="true" placeholder="">
                             <el-option
                                 v-for="item in companyData"
                                 :key="item.value"
@@ -23,7 +23,7 @@
                 </el-col>
                 <el-col :span="6" :offset="2">
                     <el-form-item label="项目：">
-                        <el-select v-model="formdata.projectName" value-key="value" :disabled="true">
+                        <el-select v-model="formdata.projectName" value-key="value" :disabled="true" placeholder="">
                             <el-option
                                 v-for="item in projectData"
                                 :key="item.value"
@@ -192,14 +192,14 @@
             <el-row class="table-bottom">
                 <el-col :span="22">
                     <el-form-item label="情况说明：">
-                        <el-input v-model="formdata.text1" :disabled="true"></el-input>
+                        <el-input v-model="formdata.reasonInfo" :disabled="true"></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>
             <el-row>
                 <el-col :span="22">
                     <el-form-item label="备注：">
-                        <el-input v-model="formdata.text1" :disabled="true"></el-input>
+                        <el-input v-model="formdata.remark" :disabled="true"></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>
@@ -307,6 +307,8 @@ export default {
                 recipientName:'',
                 entrustDate:'',
                 taskCancel:'',
+                reasonInfo:'',
+                remark:''
             },
             pageNum: 1,
             pageSize: 10,
@@ -351,11 +353,9 @@ export default {
             id: data.id,
         })
         .then((res) => {
-            // debugger;
                 if(res.data.code == 0){
                 this.formdata = res.data.data;
                 let taskStateParams = res.data.data.taskStatus;
-                // debugger;
                 switch(taskStateParams) {
                     case 1: 
                         this.formdata.taskStatus = '可执行';
