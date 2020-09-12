@@ -88,8 +88,8 @@
 								localStorage.setItem('ms_companyId', data.data.principal.companyId);
 								//公司名称
 								localStorage.setItem('ms_companyName', data.data.principal.companyName);
-                //该用户所拥有角色
-                localStorage.setItem('ms_roles', data.data.principal.roles);
+								//该用户所拥有角色
+								localStorage.setItem('ms_roles', data.data.principal.roles);
 								//获取工作事项相关参数
 								this.getContext();
 								// 向html的login方法发送数据
