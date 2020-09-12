@@ -1,5 +1,5 @@
 <template>
-    <div>     
+    <div>
         <!-- 搜索框 -->
         <el-card class="box-card">
            <el-row :gutter="24">
@@ -30,8 +30,8 @@
         </el-card>
         <!-- 查询 -->
         <el-dialog title="关注事项" :visible.sync="dialogWFMVisible" :close-on-click-modal="false" width="50%">
-            <el-form 
-                :model="DataForm" 
+            <el-form
+                :model="DataForm"
                 label-width="100px"
                 class="dataForm"
                 size="mini"
@@ -157,6 +157,7 @@
                 </el-card>
             </el-form>
             <div slot="footer" class="dialog-footer">
+                <el-button @click="reset()">重 置</el-button>
                 <el-button @click="dialogWFMVisible = false">取 消</el-button>
                 <el-button type="primary" @click="onHandleMoreSearch()">确 定</el-button>
             </div>
@@ -300,7 +301,7 @@ export default {
             formLabelWidth: '120px',
         };
     },
-    
+
     created(){
         let fromdata={};
         fromdata.infosBeginNum=1;
@@ -315,7 +316,7 @@ export default {
         this.selectCom();
     },
     computed:{
-        
+
     },
     methods:{
         selectCom(){
@@ -465,7 +466,7 @@ export default {
                 this.financingLFCAtype=true;
             }
         },
-        
+
         //查看返回处理
         showORhideForWAA(data){
             if(data === false){
@@ -495,6 +496,9 @@ export default {
         //查询
         search(){
             this.dialogWFMVisible=true;
+        },
+        reset(){
+            this.DataForm = {}
         },
         //高级搜索关注事项
         onHandleMoreSearch(){
