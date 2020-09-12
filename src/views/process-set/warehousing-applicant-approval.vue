@@ -61,9 +61,14 @@
                         <el-tab-pane label="审批意见" name="first">
                             <el-row >
                                 <el-col :span="12" >
-                                    <el-form-item label="决策类型" prop="code">
-                                        <el-radio v-model="formdata.radio" label="1">同意</el-radio>
-                                        <el-radio v-model="formdata.radio" label="2">不同意</el-radio>
+                                    <!-- prop="code" -->
+                                    <el-form-item label="决策类型" >
+                                        <el-radio-group v-model="formdata.fresult">
+                                            <el-radio label="1" v-if="fresultArray.indexOf('1') !=-1">同意</el-radio>
+                                            <el-radio label="2" v-if="fresultArray.indexOf('2') !=-1">不同意</el-radio>
+                                            <el-radio label="3" v-if="fresultArray.indexOf('3') !=-1">待处理</el-radio>
+                                            <el-radio label="4" v-if="fresultArray.indexOf('4') !=-1">其他</el-radio> 
+                                        </el-radio-group>
                                     </el-form-item>
                                 </el-col>
                             </el-row>
@@ -159,6 +164,7 @@ export default {
     inject: ['reload'],
     data: function() {
         return {
+            fresultArray:[],
             itemsFlag:false,
             todoFlag:true,
             showSeeOrUpd:'',
@@ -168,7 +174,7 @@ export default {
             disabled:false,
             objectoptions:new proData().project,
             formdata: {
-                radio:0,
+                fresult:1,
                 remark:''
             },
             rowFstatus:0,
@@ -314,7 +320,7 @@ export default {
             paramsData["processCode"] = "schedule";
             paramsData["twfbizmailReqVo"] = twfbizmailReqVoObj;
             let twfauditObj = {};
-            twfauditObj["fresult"] = this.formdata.radio;
+            twfauditObj["fresult"] = this.formdata.fresult;
             twfauditObj["fopinion"] = this.formdata.remark;
             paramsData["twfaudit"] = twfauditObj;
             this.$api.processSet.addWfsubmit(paramsData).then(res=>{
@@ -548,10 +554,27 @@ export default {
                 console.log(error)
             })  
         },
+        //获取决策类型数据
+        getDecisionType(data){
+            let DataF={};
+            DataF.mailId = data;
+            return this.$api.processSet.getWfDecisionTypeConByCurNode(DataF).then(res=>{
+                if(res.data.code == 0){
+                    let SetelData=res.data.data;
+                    this.fresultArray = Object.keys(SetelData);
+                    console.log("121212121111111111111111");
+                    // debugger
+                    // console.log(this.fresultArray.indexOf('4'));
+                }
+            },error=>{
+                console.log(error)
+            })  
+        },
         //异步变同步
         async asyncCall(type,data,foid) {
             await this.getDataprocess(foid);
             await this.getDataType(foid);
+            await this.getDecisionType(foid);
             await this.DisplayOrHide(this.functionType,this.rowWAADataObj);
             return;
         }

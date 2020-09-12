@@ -253,6 +253,17 @@ const processSet = {
     handledTask(params){
         return httpReqest.post('/api/wfInterfaces/workFlow/handledTask', params);
     },
+    //获取决策类型数据
+    getWfDecisionTypeConByCurNode(params){
+        var valueS='?';
+        for(var item in params){
+            valueS+=item+"="+params[item]+"&";
+        }
+        if(valueS.slice(valueS.length-1,valueS.length) ==="&"){
+            valueS=valueS.slice(0,valueS.length-1);
+        }
+        return httpReqest.get('/api/wfInterfaces/workFlow/getWfDecisionTypeConByCurNode'+valueS);
+    },
     //加批
     //查询邮件状态wfInterfaces/workFlow/getWFBizMailInfoByUserId?mailId=f8db2a76c7644ed98386b3b931c03c94&userId=BFPID000000OZ9200A
     getWFBizMailInfoByUserId(params){
