@@ -254,7 +254,21 @@ const processSet = {
         return httpReqest.post('/api/wfInterfaces/workFlow/handledTask', params);
     },
     //加批
-
+    //查询邮件状态wfInterfaces/workFlow/getWFBizMailInfoByUserId?mailId=f8db2a76c7644ed98386b3b931c03c94&userId=BFPID000000OZ9200A
+    getWFBizMailInfoByUserId(params){
+        var valueS='?';
+        for(var item in params){
+            valueS+=item+"="+params[item]+"&";
+        }
+        if(valueS.slice(valueS.length-1,valueS.length) ==="&"){
+            valueS=valueS.slice(0,valueS.length-1);
+        }
+        return httpReqest.get('/api/wfInterfaces/workFlow/getWFBizMailInfoByUserId'+valueS);
+    },
+    //操作已阅
+    removeBizMail(params){
+        return httpReqest.post('/api/wfInterfaces/workFlow/removeBizMail', params);
+    },
     //获取邮件列表
     getMailInfo(params){
         return httpReqest.post('/api/wfInterfaces/workFlow/processMonitor/getMailInfoBypage', params);
