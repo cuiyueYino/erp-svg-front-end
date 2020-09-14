@@ -327,6 +327,7 @@ export default {
                 if( res.data.code == 0 ){
                     this.$message.success('保存成功');
                     this.ShowFinancVisible = false;
+                    this.$emit('changeShow',false);
                     //sessionStorage.setItem("eidtMsg",null);
                 }else{
                     this.$message.error("保存失败,请填写完整信息");
@@ -502,6 +503,7 @@ export default {
                         let returndata = responsevalue.data;
                         //this.reload();
                         this.$message.success('添加关注成功!');
+                        this.$emit('changeShow',false);
                         //this.WFMtypeoptions=returndata.data.rows;
                     } else {
                         this.$message.success('数据库没有该条数据!');
