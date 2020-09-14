@@ -65,10 +65,9 @@
                         </el-tab-pane>
                         <el-tab-pane label="操作记录" name="third" v-if='isShowOperateRecord'>
                             <el-card class="box-card" >
-                                <el-row :gutter="20"  class="el-row">
+                                <el-row :gutter="24"  class="el-row">
                                     <el-col :span="24">
                                         <dynamic-table
-                                            class='dynamic-table'
                                             :columns="columns"
                                             :table-data="formdata1"
                                             :total="total"
@@ -150,7 +149,7 @@ export default {
                         [{ font: [] }], //字体
                         [{ align: [] }], //对齐方式
                         ['clean'], //清除字体样式
-                        ['image'] //上传图片、上传视频
+                        ['image'], //上传图片、上传视频
                     ]
                 }
             },

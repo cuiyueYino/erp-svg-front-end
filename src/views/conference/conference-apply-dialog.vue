@@ -15,7 +15,7 @@
         <el-row :gutter="24">
           <el-col :span="11">
             <el-form-item label="公司：" :label-width="formLabelWidth" class="pop-select" prop="fcompany">
-              <el-select v-model="searchForm.fcompanyname" @change="selectChange(searchForm.fcompanyname)" size="small" clearable placeholder="请选择" @focus="getCompany">
+              <el-select v-model="searchForm.fcompany" size="small" clearable placeholder="请选择" @focus="getCompany">
                 <el-option v-for="item in options" :key="item.id" :label="item.name" :value="item.id"></el-option>
               </el-select>
             </el-form-item>
