@@ -49,6 +49,28 @@ class documentData {
                 value: 'companyName',
                 label: '公司名称'
             }
+        ],
+        this.documentBrowse = [
+          {
+            value: 'fcode',
+            label: '编码'
+          },
+          {
+            value: 'fname',
+            label: '名称'
+          },
+          {
+            value: 'fcreator',
+            label: '创建人'
+          },
+          {
+            value: 'fcreatetime',
+            label: '创建时间'
+          },
+          {
+            value: 'fdescription',
+            label: '描述'
+          }
         ]
     }
 }
