@@ -164,6 +164,17 @@ const collaborativeOffice = {
 		}
 		return httpReqest.get('/api/interfaces/workItem/findDataBySrcId' + valueS);
 	},
+	//根据ID查询工作事项详情
+	findDataByVoucherId(params) {
+		var valueS = '?';
+		for(var item in params) {
+			valueS += item + "=" + params[item] + "&";
+		}
+		if(valueS.slice(valueS.length - 1, valueS.length) === "&") {
+			valueS = valueS.slice(0, valueS.length - 1);
+		}
+		return httpReqest.get('/api/interfaces/workItem/findDataByVoucherId' + valueS);
+	},
 	//根据ID查询工作事项模版
 	findById(params) {
 		var valueS = '?';

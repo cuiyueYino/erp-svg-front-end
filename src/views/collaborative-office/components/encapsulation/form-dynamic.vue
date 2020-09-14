@@ -243,8 +243,8 @@
 		methods: {
 			//工作流打开新页面
 			toNew(id) {
-				this.$api.collaborativeOffice.findDataBySrcId({
-					srcId: id,
+				this.$api.collaborativeOffice.findDataByVoucherId({
+					voucherId: this.itemChildOther.voucherId,
 					tempId: this.itemChildOther.tempId,
 					tableName: this.itemChildOther.tableName
 				}).then(data => {
