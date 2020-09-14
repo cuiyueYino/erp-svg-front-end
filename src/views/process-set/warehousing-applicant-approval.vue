@@ -345,6 +345,11 @@ export default {
             } else {
                 currentDatd = dataContent.selectData[0].fsrcoId;
             }
+            if(dataContent.selectData[0].fsubject.substring(0,3) == '退回：' & dataContent.selectData[0].fcreator1 == localStorage.getItem("ms_userId")) {
+                this.showSeeOrUpd = "3";
+            } else {
+                console.log("no.......");
+            }
             // 判断是否为工作事项的flag
             if(dataType.indexOf("OA")  == 0) {
                 this.itemsFlag = true;
@@ -376,7 +381,7 @@ export default {
                                         this.context = JSON.parse(data.data.data);
                                         this.context.tempId = res.data.data.tempId;
                                         this.context.files = val.data.data;
-                                        this.showSeeOrUpd = "1";
+                                        
                                     })
                                 }
                             })
