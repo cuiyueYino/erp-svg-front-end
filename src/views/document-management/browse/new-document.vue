@@ -268,6 +268,7 @@ export default {
     },
     watch:{
         rowNMMtype(oldVal,newVal){
+            this.atctiveName = 'first';
             this.isShow = true;
             this.isEdit = false;
             this.ShowFinancVisible=this.rowNMMtype;

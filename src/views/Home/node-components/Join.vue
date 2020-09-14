@@ -859,10 +859,25 @@ export default {
                 this.$message.error("保存失败,请选择决策类型!");
                 return;
             }
-            if(this.formData.wfAuditType=='并行会签' || this.formData.wfAuditType=='串行会签'){
-                if(!this.joinusertableData || this.joinusertableData.length < 2){
-                    this.$message.error("保存失败!选中并行会签或串行会,签参与者必须多人!");
-                    return;
+            let ChecTS=this.checkedCities;
+            if(ChecTS.join(',').indexOf('可略过') != -1){
+            }else{
+                if(this.formData.wfAuditType=='并行会签' || this.formData.wfAuditType=='串行会签'){
+                    if(!this.joinusertableData){
+                        this.$message.error("保存失败!选中并行会签或串行会签,参与者必选!");
+                        return;
+                    }else if(this.joinusertableData.length < 2){
+                        let TErData=this.joinusertableData;
+                        if(TErData.length ==1){
+                            if(TErData[0].fUsercode==='用户'){
+                                this.$message.error("保存失败!选中并行会签或串行会签,参与者用户必须多人!");
+                                return;
+                            }
+                        }else{
+                            this.$message.error("保存失败!选中并行会签或串行会签,参与者必选!");
+                            return; 
+                        }
+                    }
                 }
             }
             this.formData.checkedCities = this.checkedCities;
@@ -876,7 +891,7 @@ export default {
             tableData3Chose,
             this.gridData,
             "SAVE"
-            ); 
+            );
         },
         tableRowSelect(){
             //this.$refs.decisionTableReF.clearSelection();

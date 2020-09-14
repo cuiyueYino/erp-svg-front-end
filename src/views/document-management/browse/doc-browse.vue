@@ -20,9 +20,9 @@
                 <el-col :span="18" :offset="1">
                     <el-card class="box-card">
                         <el-row :gutter="24">
-                            <el-col :span="8">
+                            <el-col :span="22">
                                 <el-form :inline="true"  class="demo-form-inline">
-                                    <el-col :span="8">
+                                    <el-col :span="3">
                                         <el-select v-model="formInline.document" @change="selectChange" placeholder="-请选择-" clearable>
                                             <el-option
                                                 v-for="item in documentData"
@@ -32,15 +32,35 @@
                                             ></el-option>
                                         </el-select>
                                     </el-col>
-                                    <el-col :span="8">
-                                        <el-input v-model="input" placeholder="请输入内容"></el-input>
+                                    <el-col :span="5">
+                                        <el-input v-model="input" placeholder="请输入内容" v-if="isInput" ></el-input>
                                     </el-col>
-                                    <el-col :span="8">
+                                    <el-col :span="5">
+                                      <el-date-picker
+                                        value-format="yyyy-MM-dd"
+                                        v-if="isDate"
+                                        clearable
+                                        v-model="beginDate"
+                                        type="date"
+                                        placeholder="选择开始日期"
+                                      ></el-date-picker>
+                                    </el-col>
+                                    <el-col :span="5">
+                                      <el-date-picker
+                                        value-format="yyyy-MM-dd"
+                                        v-if="isDate"
+                                        clearable
+                                        v-model="endDate"
+                                        type="date"
+                                        placeholder="选择结束日期"
+                                      ></el-date-picker>
+                                    </el-col>
+                                    <el-col :span="1" >
                                         <el-button type="primary" icon="el-icon-search" plain @click="findData">查询</el-button>
                                     </el-col>
                                 </el-form>
                             </el-col>
-                            <el-col :span="2" :offset="14">
+                            <el-col :span="2" >
                                 <el-button type="primary" icon="el-icon-notebook-2" plain @click="showDocumentCategory" >查看</el-button>
                             </el-col>
                         </el-row>
@@ -90,17 +110,21 @@ export default {
     inject: ['reload'],
     data(){
         return{
+            isInput: true,
+            isDate:false,
+            beginDate:'',
+            endDate:'',
             flag: '',
             documentLevel: '',
             documentFpid:'',
             input: '',
-            documentData: new documentData().document,
+            documentData: new documentData().documentBrowse,
             formInline: {},
             rowNMMtype:false,
             rowNMMDataObj:{},
             pageNum: 1,
             pageSize: 10,
-            total: 20,            
+            total: 20,
             columns: [
                 {
                     type: 'selection'
@@ -181,7 +205,12 @@ export default {
                 fromdata.fcode=this.input;
             } else if ("fname" == field){
                 fromdata.fname=this.input;
-            } else if ("fdescription" == field){
+            }else if ("fcreatetime" == field){
+              fromdata.fbegintime = this.beginDate;
+              fromdata.fendtime=this.endDate;
+            }else if ("fcreator" == field){
+              fromdata.fcreator=this.input;
+            }else if ("fdescription" == field){
                 fromdata.fdescription=this.input;
             }
             this.searchMenutable(fromdata);
@@ -189,6 +218,13 @@ export default {
         //下拉框改变
         selectChange(data){
             this.formInline.document=data;
+            if(data == 'fcreatetime'){
+              this.isInput = false;
+              this.isDate = true;
+            } else {
+              this.isInput = true;
+              this.isDate = false;
+            }
         },
         //查看文档管理
         showDocumentCategory(){
@@ -205,7 +241,7 @@ export default {
 
                     finandata.fauth = '2';
                     this.$api.documentManagement.isHaveDocAuthority(finandata).then(response => {
-                        let responsevalue = response;                       
+                        let responsevalue = response;
                         if (responsevalue.data.data >= 1) {
                             this.rowNMMtype = true;
                             let finandata={};
@@ -217,7 +253,7 @@ export default {
                         } else {
                             finandata.fauth = '1';
                             this.$api.documentManagement.isHaveDocAuthority(finandata).then(response => {
-                                let responsevalue = response;                       
+                                let responsevalue = response;
                                 if (responsevalue.data.data >= 1) {
                                     this.rowNMMtype = true;
                                     let finandata={};
@@ -278,6 +314,18 @@ export default {
         onCurrentChange(val){
             this.pageNum = val;
             let formDataA ={};
+            if("fcode" == field){
+              formDataA.fcode=this.input;
+            } else if ("fname" == field){
+              formDataA.fname=this.input;
+            }else if ("fcreatetime" == field){
+              formDataA.fbegintime = this.beginDate;
+              formDataA.fendtime=this.endDate;
+            }else if ("fcreator" == field){
+              formDataA.fcreator=this.input;
+            }else if ("fdescription" == field){
+              formDataA.fdescription=this.input;
+            }
             formDataA.page=val;
             formDataA.size=this.pageSize;
             formDataA.fpid=this.documentFpid
