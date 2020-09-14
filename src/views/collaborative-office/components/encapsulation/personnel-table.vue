@@ -5,7 +5,7 @@
 				<el-row>
 					<el-col :span="6">
 						<el-form-item prop="tname">
-							<el-input clearable v-model="formInline.tname" placeholder="人员名称"></el-input>
+							<el-input clearable v-model="formInline.tname" placeholder="用户名称"></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :span="10">
@@ -33,8 +33,8 @@
 						<vxe-checkbox @change="checkClick(row)" :value="checkValue(row)"></vxe-checkbox>
 					</template>
 				</vxe-table-column>
-				<vxe-table-column field="tcode" title="人员编码"></vxe-table-column>
-				<vxe-table-column field="tname" title="人员名称"></vxe-table-column>
+				<vxe-table-column field="tcode" title="用户编码"></vxe-table-column>
+				<vxe-table-column field="tname" title="用户名称"></vxe-table-column>
 				<vxe-table-column field="tcompanyName" title="公司名称"></vxe-table-column>
 			</vxe-table>
 		</el-card>
@@ -240,7 +240,7 @@
 		background-color: rgb(148, 185, 205);
 		color: white;
 	}
-	
+
 	.box-card:first-child {
 		margin-bottom: 16px;
 	}

@@ -237,6 +237,7 @@
 					selectVal: "",
 					selectFormVal: '',
 				},
+                reqSelect:[],
 				peopleForm: {
 					ffirmpositionname: '',
 					tcompanyoid: "",
@@ -505,7 +506,7 @@
 			//分页、下一页
 			onCurrentChange(val) {
 				this.pageNum = val;
-				this.getTableData(this.form.select);
+				this.getTableData(this.reqSelect);
 			},
 			getCompany() {
 				this.$api.jobUserManagement.getCompanyData().then(res => {
@@ -519,7 +520,8 @@
 			// 搜索
 			onSubmit() {
 				this.pageNum = 1;
-				this.getTableData(this.form.select);
+				this.reqSelect = this.form.select
+				this.getTableData(this.reqSelect);
 
 			},
 			// 获取表格数据
@@ -619,7 +621,7 @@
 					}
 				);
 			},
-			//新增 
+			//新增
 			add() {
 				this.dialogFormVisible = true;
 				this.isEdit = false;
@@ -733,35 +735,35 @@
 		background-color: #409EFF !important;
 		color: white;
 	}
-	
+
 	.el-input.is-disabled .el-input__inner {
 		color: #000000 !important;
 	}
-	
+
 	.el-textarea.is-disabled .el-textarea__inner {
 		color: #000000 !important;
 	}
-	
+
 	.el-checkbox__input.is-disabled.is-checked .el-checkbox__inner::after {
 		border-color: #000000!important;
 	}
-	
+
 	/deep/ .el-textarea .el-input__count {
 		background: #fff0;
 	}
-	
+
 	/deep/ .el-select {
 		width: 100%;
 	}
-	
+
 	.box-card:first-child {
 		margin-bottom: 16px;
 	}
-	
+
 	.search-all {
 		margin: 0 50px;
 	}
-	
+
 	.icon-search {
 		width: 24px;
 		height: auto;
