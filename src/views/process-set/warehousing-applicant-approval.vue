@@ -260,7 +260,7 @@ export default {
             this.rowEachPerEachTableAdjtype=false;
             this.rowConferenceApplytype=false;
             this.rowEconomicIndicatorstype=false;
-            this.reload();
+            //this.reload();
             this.$emit('changeShow',false);
         },
         onSelectionChange(val) {
@@ -328,6 +328,7 @@ export default {
                     this.$message.success('保存成功');
                     this.ShowFinancVisible = false;
                     this.$emit('changeShow',false);
+                    this.reload();
                     //sessionStorage.setItem("eidtMsg",null);
                 }else{
                     this.$message.error("保存失败,请填写完整信息");
@@ -501,7 +502,7 @@ export default {
                     let responsevalue = response;
                     if (responsevalue) {
                         let returndata = responsevalue.data;
-                        //this.reload();
+                        this.reload();
                         this.$message.success('添加关注成功!');
                         this.$emit('changeShow',false);
                         //this.WFMtypeoptions=returndata.data.rows;
@@ -525,7 +526,7 @@ export default {
             this.$api.processSet.removeBizMail(fromdata).then(response => {
                 let responsevalue = response;
                 if (responsevalue.code != 999) {
-                    //this.reload();
+                    this.reload();
                     this.$message.success('已阅成功!');
                     this.$emit('changeShow',false);
                     //this.WFMtypeoptions=returndata.data.rows;
@@ -569,7 +570,6 @@ export default {
                 if(res.data.code == 0){
                     let SetelData=res.data.data;
                     this.fresultArray = Object.keys(SetelData);
-                    console.log("121212121111111111111111");
                     // debugger
                     // console.log(this.fresultArray.indexOf('4'));
                 }
