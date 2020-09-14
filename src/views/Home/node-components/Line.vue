@@ -249,25 +249,27 @@ export default {
                         this.formData.code='';
                         this.formData.name = obj.displayName;
                     }else{
+                        console.log(obj)
                         this.editData = obj;
                         this.formData.code = this.editData.linefcode;
                         this.formData.oid = this.editData.oid;
                         this.formData.fremark = this.editData.lineremark;
                         this.formData.name = this.editData.displayName;
                         //条件判断
-                        if(this.editData.lineexpression){
+                        if(this.editData.lineexpression && this.editData.service.name ==''){
                             this.baseActiveName ='2';
+                            this.formData.conditional = this.editData.lineexpression?this.editData.lineexpression:'';
                         }else if(this.editData.lineotherwise =="1"){
                             this.baseActiveName ='3';
                         }else if(this.editData.service && this.editData.service.name){
                             this.baseActiveName ='4';
+                            this.formData.conditional = '';
                         }else{
                             this.baseActiveName ='1';
                         }
-                        this.formData.conditional = this.editData.lineexpression?this.editData.lineexpression:'';
                         this.formData.otherwise = this.editData.lineotherwise?this.editData.lineotherwise:'';
                         this.formData.baseInputServe = this.editData.service?this.editData.service.name:'';
-                        this.formData.baseTextarea = this.editData.service?this.editData.service.expression:'';
+                        this.formData.baseTextarea = this.editData.service?this.editData.lineexpression:'';
                         this.formData.serviceOid = this.editData.service?this.editData.service.oid:'';
                         this.formData.serviceCode = this.editData.service?this.editData.service.code:'';
                         switch (this.editData.decisionType) {

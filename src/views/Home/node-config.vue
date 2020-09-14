@@ -318,8 +318,13 @@ export default {
             }else{
                 this.data.oid = e.oid;
                 this.data.otherwise =e.otherwise;
-                this.data.expression =e.conditional;
-                this.data.lineexpression=e.conditional;
+                if(e.baseInputServe){
+                    this.data.expression =e.baseTextarea;
+                    this.data.lineexpression=e.baseTextarea;
+                }else{
+                    this.data.expression =e.conditional;
+                    this.data.lineexpression=e.conditional;
+                }
                 this.data.lineotherwise=e.otherwise;
                 this.data.code =e.code;
                 this.data.linefcode =e.code;
