@@ -248,15 +248,25 @@
 					tempId: this.itemChildOther.tempId,
 					tableName: this.itemChildOther.tableName
 				}).then(data => {
-					let routeData = this.$router.resolve({　　
-						path: '/seeWorkItem',
-						　　query: {
-							context: data.data.data,
-							tempId: this.formData.wholeData.tempId,
-							showSeeOrUpd: 1
-						}
-					});
-					window.open(routeData.href, '_blank');
+					this.$api.collaborativeOffice.findlnfosList({
+						voucherId: this.itemChildOther.voucherId,
+						userCode: localStorage.getItem('ms_userId'),
+						menuCode: "workItem"
+					}).then(val => {
+						console.log(val)
+						var a = JSON.parse(data.data.data)
+						a.files = val.data.data
+						let routeData = this.$router.resolve({　　
+							path: '/erp/seeWorkItem',
+							　　query: {
+								context: JSON.stringify(a),
+								tempId: this.formData.wholeData.tempId,
+								showSeeOrUpd: 1
+							}
+						});
+						window.open(routeData.href, '_blank');
+					})
+
 				})
 			},
 			//计算公式服务
