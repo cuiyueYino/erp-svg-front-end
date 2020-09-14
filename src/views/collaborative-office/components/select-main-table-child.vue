@@ -52,7 +52,7 @@
 				<el-table-column prop="workItemTempName" label="主表" width="180" align="center"></el-table-column>
 				<el-table-column prop="showName" label="显示名称" width="180" align="center"></el-table-column>
 				<el-table-column prop="orderNum" label="显示顺序" width="180" align="center"></el-table-column>
-				<el-table-column prop="remark" label="描述" align="center"></el-table-column>
+				<el-table-column :formatter="textLength" prop="remark" label="描述" align="center"></el-table-column>
 			</el-table>
 			<pageNation :total="currentTotal" ref="pageNation" @pageChange="pageChange"></pageNation>
 		</el-card>
@@ -201,6 +201,12 @@
                     case "2":
                         return "明细表"
                         break;
+                }
+            },
+            //描述显示
+            textLength(row){
+                if(row.remark.length>50){
+                    return "...";
                 }
             },
 			//修改

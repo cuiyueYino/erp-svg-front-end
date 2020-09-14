@@ -1,5 +1,5 @@
 <template>
-    <div>     
+    <div>
     <!-- 搜索框 -->
         <el-card class="box-card">
            <el-row :gutter="24">
@@ -8,7 +8,7 @@
                     <el-form-item >
                         <el-input clearable v-model="formCode" placeholder="请输入任意查询内容"></el-input>
                     </el-form-item>
-                    
+
                     <el-form-item>
                         <el-button type="primary" plain @click="onSubmit">搜索</el-button>
                     </el-form-item>
@@ -57,12 +57,12 @@
                 </el-row>
                 <el-row :gutter="24">
                     <el-col :span="10">
-                        <el-form-item label="子流程：" :label-width="formLabelWidth"> 
+                        <el-form-item label="子流程：" :label-width="formLabelWidth">
                             <el-checkbox v-model="checked"></el-checkbox>
                         </el-form-item>
                     </el-col>
                     <el-col :span="10" :offset="2">
-                        <el-form-item label="按退回节点重新提交："> 
+                        <el-form-item label="按退回节点重新提交：">
                             <el-checkbox v-model="backchecked"></el-checkbox>
                         </el-form-item>
                     </el-col>
@@ -82,7 +82,7 @@
                         </el-form-item>
                     </el-col>
                 </el-row>
-                
+
             </el-form>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="closeDialog('form')">取 消</el-button>
@@ -280,7 +280,7 @@ export default {
              });
 
         },
-        
+
         //删除
         deleteMsg(){
             if(this.multipleSelection.length > 1){
@@ -290,7 +290,12 @@ export default {
                 this.$message.error('请选择一项删除');
                  return;
             };
-            this.$api.processSet.deleteMsg(this.multipleSelection[0].foid).then(res=>{
+            this.$confirm('确定要删除当前选择的流程?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).then(() => {
+                this.$api.processSet.deleteMsg(this.multipleSelection[0].foid).then(res=>{
                     if(res.data.code == 0){
                         this.$message.success('删除成功');
                         //刷新表格
@@ -301,6 +306,13 @@ export default {
                 }),error=>{
                     console.log(error);
                 }
+            }).catch(() => {
+                this.$message({
+                    type: 'info',
+                    message: '已取消删除'
+                });
+            });
+
         },
          //生效/禁用
         effectOrDisableMsg(stat){
@@ -335,7 +347,7 @@ export default {
                         this.$message.success('操作成功');
                         //刷新表格
                         this.getTableData('')
-                       
+
                     } else {
                         this.$message.error(res.data.msg);
                     }
