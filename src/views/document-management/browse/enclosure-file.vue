@@ -147,6 +147,14 @@ export default {
     methods: {
         //附件预览
         getHtmlPreviewAttachment(row){
+            //获取最后一个.的位置
+            var index = row.fileName.lastIndexOf(".");
+            //获取后缀
+            var ext = row.fileName.substr(index+1);
+            if(this.isAssetTypeAnImage(ext)){
+              this.$message.error("暂不支持图片预览!");
+              return;
+            }
             this.$api.documentManagement.getHtmlPreviewAttachmentById(row.fileFoid).then(response => {
                 let responsevalue = response;
                 let value =response.data.data;
@@ -160,6 +168,12 @@ export default {
                     this.$message.success('查询失败!');
                 }
             });
+        },
+        //是否是文件
+        isAssetTypeAnImage(ext) {
+          return [
+            'png', 'jpg', 'jpeg', 'bmp', 'gif', 'webp', 'psd', 'svg', 'tiff'].
+          indexOf(ext.toLowerCase()) !== -1;
         },
         //是否展示dialog弹窗
         showAddMenu(type){
