@@ -53,7 +53,7 @@
                                     :auto-upload="false"
                                     :http-request="uploadSectionFile"
                                 >
-                                <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
+                                <el-button slot="trigger" size="small" type="medium">选取文件</el-button>
                                 </el-upload>
                             </el-form-item>
                         </el-col>
@@ -61,8 +61,8 @@
                 </el-card>
             </el-form>
             <span slot="footer"  class="dialog-footer">
-                <el-button type="primary" @click="ShowFinancVisible=false">取消</el-button>
-                <el-button @click="saveNewAndEdit()">提交</el-button>
+                <el-button  @click="ShowFinancVisible=false" type="warning"  icon="el-icon-close" size="medium">取消</el-button>
+                <el-button @click="saveNewAndEdit()" type="success" icon="el-icon-copy-document" size="medium">提交</el-button>
             </span>
         </el-dialog>
     </div>

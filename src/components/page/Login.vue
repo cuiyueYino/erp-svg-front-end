@@ -17,7 +17,7 @@
 						</el-input>
 					</el-form-item>
 					<div class="login-btn">
-						<el-button type="primary" @click="submitForm()">登录</el-button>
+						<el-button type="primary" @click="submitForm()" size="medium">登录</el-button>
 					</div>
 				</el-form>
 			</div>

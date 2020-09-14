@@ -36,8 +36,8 @@
             <el-dialog title="裁剪图片" :visible.sync="dialogVisible" width="30%" :close-on-click-modal='false'>
                 <vue-cropper ref='cropper' :src="imgSrc" :ready="cropImage" :zoom="cropImage" :cropmove="cropImage" style="width:100%;height:300px;"></vue-cropper>
                 <span slot="footer" class="dialog-footer">
-                    <el-button @click="cancelCrop">取 消</el-button>
-                    <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+                    <el-button @click="cancelCrop" type="warning"  icon="el-icon-close" size="medium">取消</el-button>
+                    <el-button type="success"  icon="el-icon-check" size="medium" @click="dialogVisible = false">确定</el-button>
                 </span>
             </el-dialog>
         </div>
