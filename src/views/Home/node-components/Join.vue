@@ -860,9 +860,16 @@ export default {
                 return;
             }
             if(this.formData.wfAuditType=='并行会签' || this.formData.wfAuditType=='串行会签'){
-                if(!this.joinusertableData || this.joinusertableData.length < 2){
-                    this.$message.error("保存失败!选中并行会签或串行会,签参与者必须多人!");
+                if(!this.joinusertableData){
+                    this.$message.error("保存失败!选中并行会签或串行会签,参与者必须多人!");
                     return;
+                }else if(this.joinusertableData.length < 2){
+                    let TErData=this.joinusertableData;
+                    if(TErData[0].fUsercode==='表达式'){
+                    }else{
+                        this.$message.error("保存失败!选中并行会签或串行会签,参与者必须多人!");
+                        return;
+                    }
                 }
             }
             this.formData.checkedCities = this.checkedCities;
