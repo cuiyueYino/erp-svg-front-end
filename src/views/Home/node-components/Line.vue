@@ -249,7 +249,6 @@ export default {
                         this.formData.code='';
                         this.formData.name = obj.displayName;
                     }else{
-                        console.log(obj)
                         this.editData = obj;
                         this.formData.code = this.editData.linefcode;
                         this.formData.oid = this.editData.oid;
@@ -261,11 +260,13 @@ export default {
                             this.formData.conditional = this.editData.lineexpression?this.editData.lineexpression:'';
                         }else if(this.editData.lineotherwise =="1"){
                             this.baseActiveName ='3';
+                            this.formData.conditional = '';
                         }else if(this.editData.service && this.editData.service.name){
                             this.baseActiveName ='4';
                             this.formData.conditional = '';
                         }else{
                             this.baseActiveName ='1';
+                            this.formData.conditional = '';
                         }
                         this.formData.otherwise = this.editData.lineotherwise?this.editData.lineotherwise:'';
                         this.formData.baseInputServe = this.editData.service?this.editData.service.name:'';
