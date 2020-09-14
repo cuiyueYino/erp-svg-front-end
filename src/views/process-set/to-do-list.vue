@@ -511,6 +511,9 @@ export default {
       companyoptions:[],
       commonMeta: new proData().commonMetaClass,
       formLabelWidth: "120px",
+
+      // 查询条件
+        fromdata: {},
     };
   },
   created() {
@@ -700,11 +703,10 @@ export default {
     },
     //分页、下一页
     onCurrentChange(val) {
-      let fromdata = {};
-      fromdata.infosBeginNum = ((val - 1) * 10)+1;
-      fromdata.infosEndNum = val * 10;
-      fromdata.userId = localStorage.getItem("ms_userId");
-      this.getHunTableData(fromdata);
+      this.fromdata.infosBeginNum = ((val - 1) * 10)+1;
+        this.fromdata.infosEndNum = val * 10;
+        this.fromdata.userId = localStorage.getItem("ms_userId");
+      this.getHunTableData(this.fromdata);
     },
     //刷新
     refresh() {
@@ -770,55 +772,55 @@ export default {
     },
     //查询搜索
     onHandleMoreSearch() {
-      let fromdata = {};
-      fromdata.infosBeginNum = this.pageNum;
-      fromdata.infosEndNum = this.pageSize;
+      this.fromdata = {};
+        this.fromdata.infosBeginNum = this.pageNum;
+        this.fromdata.infosEndNum = this.pageSize;
       let CompanyS = this.DataForm.srcCompany;
       if (CompanyS && CompanyS != "") {
-        fromdata.srcCompany = this.DataForm.srcCompany;
+          this.fromdata.srcCompany = this.DataForm.srcCompany;
       }
       let ComMCS = this.DataForm.commonMetaClass;
       if (ComMCS && ComMCS != "") {
-        fromdata.commonMetaClass = this.DataForm.commonMetaClass;
+          this.fromdata.commonMetaClass = this.DataForm.commonMetaClass;
       }
       let MetaCS = this.DataForm.metaClass;
       if (MetaCS && MetaCS != "") {
-        fromdata.metaClass = this.DataForm.metaClass;
+          this.fromdata.metaClass = this.DataForm.metaClass;
       }
       let activNS = this.DataForm.activityName;
       if (activNS && activNS != "") {
-        fromdata.activityName = this.DataForm.activityName;
+          this.fromdata.activityName = this.DataForm.activityName;
       }
       let subjectS = this.DataForm.subject;
       if (subjectS && subjectS != "") {
-        fromdata.subject = this.DataForm.subject;
+          this.fromdata.subject = this.DataForm.subject;
       }
       let receTFS = this.DataForm.receiveTimeFrom;
       if (receTFS && receTFS != "") {
-        fromdata.receiveTimeFrom = this.DataForm.receiveTimeFrom;
+          this.fromdata.receiveTimeFrom = this.DataForm.receiveTimeFrom;
       }
       let receTTS = this.DataForm.receiveTimeTo;
       if (receTTS && receTTS != "") {
-        fromdata.receiveTimeTo = this.DataForm.receiveTimeTo;
+          this.fromdata.receiveTimeTo = this.DataForm.receiveTimeTo;
       }
       let dispsMS = this.DataForm.displaystartMan;
       if (dispsMS && dispsMS != "") {
-        fromdata.displaystartMan = this.DataForm.displaystartManId;
+          this.fromdata.displaystartMan = this.DataForm.displaystartManId;
       }
       let StartTFS = this.DataForm.startTimeFrom;
       if (StartTFS && StartTFS != "") {
-        fromdata.startTimeFrom = this.DataForm.startTimeFrom;
+          this.fromdata.startTimeFrom = this.DataForm.startTimeFrom;
       }
       let StartTTS = this.DataForm.startTimeTo;
       if (StartTTS && StartTTS != "") {
-        fromdata.startTimeTo = this.DataForm.startTimeTo;
+          this.fromdata.startTimeTo = this.DataForm.startTimeTo;
       }
       let overTimeS = this.DataForm.overTime;
       if (overTimeS && overTimeS != "") {
-        fromdata.overTime = this.DataForm.overTime;
+          this.fromdata.overTime = this.DataForm.overTime;
       }
-      fromdata.userId = localStorage.getItem("ms_userId");
-      this.getHunTableData(fromdata);
+        this.fromdata.userId = localStorage.getItem("ms_userId");
+      this.getHunTableData(this.fromdata);
     },
     //查询发起人员
     MoreSearchPS(data) {
