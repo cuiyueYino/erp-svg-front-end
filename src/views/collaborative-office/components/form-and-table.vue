@@ -12,7 +12,7 @@
 			</el-tab-pane>
 			<el-tab-pane name="wobuxinnengchongfu" label="附件">
 				<el-upload :disabled="dis == 1" :on-preview="downFiles" :auto-upload="false" :on-change="getFile" :on-remove="delFile" multiple :data="uploadData" ref="upload" class="upload-demo" action="" :file-list="fileList">
-					<el-button size="small" type="primary">点击上传</el-button>
+					<el-button size="medium" type="primary">点击上传</el-button>
 				</el-upload>
 			</el-tab-pane>
 		</el-tabs>

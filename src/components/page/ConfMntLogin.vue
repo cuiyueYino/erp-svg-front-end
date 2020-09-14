@@ -21,7 +21,7 @@
             <el-checkbox v-model="remember" style="color: #c1c1e0;">记住我的登录信息</el-checkbox>
           </el-form-item>
           <div class="login-btn">
-            <el-button type="primary" @click="submitForm()">登录</el-button>
+            <el-button type="medium" @click="submitForm()">登录</el-button>
           </div>
         </el-form>
       </div>

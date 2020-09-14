@@ -23,8 +23,8 @@
             >
                 <p>您确定删除[{{item.data.displayName.substring(0,10)}}]吗？</p>
                 <div style="text-align: center;">
-                    <el-button size="mini" type="primary" @click="$emit('delete', item);item.visible = false">确定</el-button>
-                    <el-button size="mini" type="danger" @click="item.visible = false">取消</el-button>
+                    <el-button size="medium" type="success" @click="$emit('delete', item);item.visible = false" icon='el-icon-check'>确定</el-button>
+                    <el-button size="medium" type="warning" @click="item.visible = false" icon='el-icon-close'>取消</el-button>
                 </div>
                 <el-button
                     :class="{'delete-btn': true}"

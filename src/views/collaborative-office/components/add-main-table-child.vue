@@ -13,10 +13,10 @@
 					</el-select>
 				</el-col>
 				<el-col :span="6" style="text-align: right;">
-					<el-button @click="submitForm(2)" type="success" size="mini" icon="el-icon-check">提交</el-button>
-					<el-button @click="submitForm(1)" type="success" size="mini" icon="el-icon-finished">暂存</el-button>
-					<el-button @click="preview()" type="primary" plain size="mini" icon="el-icon-view">预览</el-button>
-					<el-button type="danger" @click="$parent.toSelect()" size="mini" icon="el-icon-close">返回</el-button>
+					<el-button @click="submitForm(2)" type="success" size="medium" icon="el-icon-copy-document">提交</el-button>
+					<el-button @click="submitForm(1)" type="success" size="medium" icon="el-icon-folder-remove">暂存</el-button>
+					<el-button @click="preview()" type="primary" plain size="medium" icon="el-icon-view">预览</el-button>
+					<el-button type="danger" @click="$parent.toSelect()" size="medium" icon="el-icon-close">返回</el-button>
 				</el-col>
 			</el-row>
 			<el-card style="margin-top: 10px;">
@@ -185,16 +185,16 @@
 			<el-dialog title="工作事项模板子表分类" top="1vh" :destroy-on-close="true" center :visible.sync="dialogVisibleChild" width="80%"  v-if="dialogVisibleChild">
 				<selectMainTableClassificationChild show="1" ref="child" :company="this.ruleForm.company"></selectMainTableClassificationChild>
 				<div slot="footer" class="dialog-footer">
-					<el-button @click="dialogVisibleChild = false">取 消</el-button>
-					<el-button type="primary" @click="getSelectMainTableClassification">确 定</el-button>
+					<el-button @click="getSelectMainTableClassification" type="success"  icon="el-icon-check" size="medium">确定</el-button>
+					<el-button @click="dialogVisibleChild = false" type="warning"  icon="el-icon-close" size="medium">取消</el-button>
 				</div>
 			</el-dialog>
 			<!--弹出框-->
 			<el-dialog title="工作事项模板主表" top="1vh" :destroy-on-close="true" center :visible.sync="dialogVisible" width="80%" v-if="dialogVisible">
 				<selectMainTable show="1" ref="childMain" :companyId="this.ruleForm.company"></selectMainTable>
 				<div slot="footer" class="dialog-footer">
-					<el-button @click="dialogVisible = false">取 消</el-button>
-					<el-button type="primary" @click="getDialogVisible">确 定</el-button>
+					<el-button type="success" icon="el-icon-check" size="medium" @click="getDialogVisible">确定</el-button>
+					<el-button @click="dialogVisible = false" type="warning"  icon="el-icon-close" size="medium">取消</el-button>
 				</div>
 			</el-dialog>
 			<!--弹出框-->
@@ -206,15 +206,15 @@
 					<el-table-column prop="fdescription" label="描述"></el-table-column>
 				</el-table>
 				<div slot="footer" class="dialog-footer">
-					<el-button @click="dialogVisible_TServiceByParams = false">取 消</el-button>
-					<el-button type="primary" @click="getTServiceByParams">确 定</el-button>
+					<el-button type="success" icon="el-icon-check" size="medium" @click="getTServiceByParams">确定</el-button>
+					<el-button type="warning"  icon="el-icon-close" size="medium" @click="dialogVisible_TServiceByParams = false">取消</el-button>
 				</div>
 			</el-dialog>
 		</div>
 		<div v-if="showFigForm">
 			<formAndTable :files="files" dis="2" showAdd="1" :form-data="conData">
 				<el-row style="text-align: right;margin-bottom: 10px;">
-					<el-button icon="el-icon-arrow-left" size="mini" type="danger" plain @click="showFigForm = false">返回</el-button>
+					<el-button icon="el-icon-arrow-left" size="medium" type="danger" plain @click="showFigForm = false">返回</el-button>
 				</el-row>
 			</formAndTable>
 		</div>

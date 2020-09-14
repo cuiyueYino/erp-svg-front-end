@@ -253,7 +253,7 @@ export default {
                     title: '发起时间'
                 },
                 {
-                    key: 'fpreAddresser',
+                    key: 'entityoName',
                     title: '当前审批人'
                 },
                 {

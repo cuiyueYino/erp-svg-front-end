@@ -1,8 +1,8 @@
 <template>
     <div>
         <div style="width:200px;height:40px;float:right;">
-            <el-button size="small" style="margin-left:50px;magin-right:5px;" @click.prevent="addRow()">新增</el-button>
-            <el-button size="small" @click.prevent="delRowData()">删除</el-button>
+            <el-button style="margin-left:50px;magin-right:5px;" @click.prevent="addRow()" type="success" icon="el-icon-folder-add" size="medium">新增</el-button>
+            <el-button  @click.prevent="delRowData()" type="danger" icon="el-icon-delete" size="medium">删除</el-button>
         </div>
         <div>
             <el-table
