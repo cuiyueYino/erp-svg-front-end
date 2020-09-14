@@ -350,7 +350,7 @@ export default {
             if(dataContent.selectData[0].fsubject.substring(0,3) == '退回：' & dataContent.selectData[0].fcreator1 == localStorage.getItem("ms_userId")) {
                 this.showSeeOrUpd = "3";
             } else {
-                console.log("no.......");
+                this.showSeeOrUpd = "1";
             }
             // 判断是否为工作事项的flag
             if(dataType.indexOf("OA")  == 0) {
