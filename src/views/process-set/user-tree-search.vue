@@ -263,13 +263,14 @@ export default {
             fromdata.participator=user;
             this.$api.processSet.setencyclic(fromdata).then(res=>{
                 let resData=res;
-                if(resData.data.data.code == 0){
+                console.log(resData)
+                if(resData.data.data){
                     this.ShowFinancVisible=false;
                     //this.reload();
                     this.$emit('changeShow',false);
                     this.$message.success('转发成功!');
                 }else{
-                    this.$message.error(resData.data.data.msg+"!");
+                    this.$message.error(resData.data.msg+"!");
                 }               
             },error=>{
                 console.log(error)
@@ -284,13 +285,13 @@ export default {
             fromdata.advice=this.formdata.remark;;
             this.$api.processSet.transmit(fromdata).then(res=>{
                 let resData=res;
-                if(resData.data.data.code == 0){
+                if(resData.data.data){
                     this.ShowFinancVisible=false;
                     //this.reload();
                     this.$emit('changeShow',false);
                     this.$message.success('委托成功!');
                 }else{
-                    this.$message.error(resData.data.data.msg+"!");
+                    this.$message.error(resData.data.msg+"!");
                 }
             },error=>{
                 console.log(error)
@@ -305,13 +306,13 @@ export default {
             fromdata.fremark=this.formdata.remark;
             this.$api.processSet.SeTaddTag(fromdata).then(res=>{
                 let resData=res;
-                if(resData.data.data.code == 0){
+                if(resData.data.data){
                     this.ShowFinancVisible=false;
                     //this.reload();
                     this.$emit('changeShow',false);
                     this.$message.success('加签成功!');
                 }else{
-                    this.$message.error(resData.data.data.msg+"!");
+                    this.$message.error(resData.data.msg+"!");
                 } 
             },error=>{
                 console.log(error)
