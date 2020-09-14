@@ -100,14 +100,22 @@
 			</div>
 		</el-dialog>
 		<!-- 使用者弹窗 -->
-		<el-dialog title="使用者查询" top="20px" :visible.sync="userVisible" :close-on-click-modal="false">
-
+		<el-dialog title="使用者查询"  @close="closUserVisible" top="20px" :visible.sync="userVisible" :close-on-click-modal="false">
+			<el-row :gutter="24">
+				<el-col :span="12">
+					<el-input placeholder="输入用户名" size="mini" v-model="filterText"></el-input>
+				</el-col>
+				<el-col :span="6" :offset="6">
+					<el-button type="primary" size="mini" @click="searchDepart">查询</el-button>
+					<el-button size="mini" @click="ALLUsertree">重置</el-button>
+				</el-col>
+			</el-row>
 			<!-- <el-input placeholder="输入关键字进行过滤" v-model="filterText"></el-input>-->
 			<!-- 树状图 -->
 			<el-tree class="filter-tree" :data="treeData" v-loading="loading" element-loading-text="拼命加载中" :props="defaultProps" :default-expand-all="false" accordion :filter-node-method="filterNode" ref="tree" @node-click="handleNodeClick">
 			</el-tree>
 			<div slot="footer" class="dialog-footer">
-				<el-button @click="userVisible = false">取 消</el-button>
+				<el-button @click="closUserVisible">取 消</el-button>
 				<el-button type="primary" @click="sureDepart">确 定</el-button>
 			</div>
 		</el-dialog>
@@ -323,7 +331,7 @@
 				}
 			},
 			filterText(val) {
-				this.$refs.tree.filter(val);
+				//this.$refs.tree.filter(val);
 			},
 			resetCheck(val) {
 				switch(val) {
@@ -345,6 +353,10 @@
 		},
 
 		methods: {
+			closUserVisible(){
+				this.filterText='';
+				this.userVisible=false;
+			},
 			checkFun(val){
 				let data = {};
 				let newData = this.timeFormat(); //debugger
@@ -402,11 +414,46 @@
 			baseInputTable() {
 				this.userVisible = true;
 			},
+			ALLUsertree(){
+				this.filterText='';
+				this.loading = true;
+				this.$api.jobUserManagement.getStaffTree({}).then(res => {
+					this.treeData = eval('('  + res.data.data +  ')')
+					this.treeData.forEach(item => {
+						item.name = item.fname
+						if(typeof(item.children) != "undefined") {
+							this.toUpd(item.children)
+						}
+					})
+					this.loading = false
+				}), error => {
+					console.log(error);
+				};
+			},
 			searchDepart() {
-
+				if(this.filterText && this.filterText!=''){
+					this.loading = true;
+					this.userVisible = true;
+					let data = {
+						"name": this.filterText
+					}
+					this.$api.jobUserManagement.getStaffTree(data).then(res => {
+						this.treeData = eval('('  + res.data.data +  ')')
+						this.treeData.forEach(item => {
+							item.name = item.fname
+							if(typeof(item.children) != "undefined") {
+								this.toUpd(item.children)
+							}
+						})
+						this.loading = false
+					}), error => {
+						console.log(error);
+					};
+				}else{
+					this.$message.error('请输入查询条件!');
+				}
 			},
 			handleNodeClick(data) {
-				console.log(data)
 				this.form.fstaff = data.fname;
 				this.form.fname = data.fname;
 				this.form.departmentname = data.fdepartmentName;
@@ -482,7 +529,6 @@
 			},
 			addPeopleData(data) {
 				this.$api.jobUserManagement.addPeopleData(data).then(res => {
-					console.log(res);
 					if(res.data.code == 0) {
 						if(res.data.data != null) {
 							this.form.staffId = res.data.data.toid;
@@ -550,19 +596,6 @@
 						}
 					})
 					this.loading = false
-					//					console.log(eval('(' +res.data.data+ ')'))
-					//					return
-					//					if(res.status == '200') {
-					//						let getData = [];
-					//						this.getTreeData = Array.from(res.data.data);
-					//						this.getTreeData.forEach(item => {
-					//							getData.push(item.department);
-					//							this.treeData.push({
-					//								label: item.name,
-					//								children: this.getChildrenList(item.department)
-					//							})
-					//						})
-					//					}
 				}), error => {
 					console.log(error);
 				};
@@ -572,7 +605,8 @@
 				this.$refs[formName].validate(valid => {
 					if(valid) {
 						let newTableRow;
-						this.form.fcreator = 'BFPID000000LQW0007';
+						//this.form.fcreator = 'BFPID000000LQW0007';
+						this.form.fcreator =localStorage.getItem("ms_userId");
 						this.form.fforbid = this.checked ? '1' : '0';
 						this.form.fstatus = this.checked ? '7' : '3';
 						this.form.fstaff = this.isEdit ? this.form.fstaff : this.form.fstaffId;
@@ -603,7 +637,8 @@
 								}
 								this.form.tuseroperationrecordReqVo = {
 									fcompanyoid: this.form.fcompanyoid,
-									fcreator: 'BFPID000000LQW0007',
+									//fcreator: 'BFPID000000LQW0007',
+									fcreator:localStorage.getItem("ms_userId"),
 									foperationtime: newTableRow.foperationtime,
 									foperationcontent: newTableRow.content,
 									foperationcause: newTableRow.cause,
