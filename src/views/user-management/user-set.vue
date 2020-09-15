@@ -155,6 +155,7 @@
 				userVisible: false,
 				isEdit: false,
 				resetCheck: false,
+				searchflag: false,
 				formCtionTypeCon: '',
 				formForbidenRes: '',
 				searchName: '',
@@ -474,14 +475,22 @@
 			},
 			// 搜索
 			onSubmit() {
+				this.searchflag=true;
 				this.pageNum = 1;
 				this.getTableData(this.formCode);
 			},
 			// 获取表格数据
 			getTableData() {
-				this.searchForm.page = this.pageNum;
-				this.searchForm.size = this.pageSize;
-				this.$api.jobUserManagement.getUserTableData(this.searchForm).then(
+				let formData={};
+				if(this.searchflag){
+					this.searchForm.page = this.pageNum;
+					this.searchForm.size = this.pageSize;
+					formData=this.searchForm;
+				}else{
+					formData.page = this.pageNum;
+					formData.size = this.pageSize;	
+				}
+				this.$api.jobUserManagement.getUserTableData(formData).then(
 					res => {
 						this.tableData = res.data.data.rows;
 						this.total = res.data.data.total;
@@ -514,6 +523,7 @@
 				);
 			},
 			resetForm(formName) {
+				this.searchflag=false;
 				this.$refs[formName].resetFields();
 				this.pageNum = 1;
 				this.getTableData();

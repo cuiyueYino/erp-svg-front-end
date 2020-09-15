@@ -187,6 +187,7 @@
 				dialogFormVisible: false,
 				userVisible: false,
 				isEdit: false,
+				searchflag: false,
 				treeData: [],
 				defaultProps: {
 					children: "children",
@@ -458,6 +459,7 @@
 			},
 			resetForm(formName) {
 				this.$refs[formName].resetFields();
+				this.searchflag=false;
 				this.pageNum = 1;
 				this.getTableData("");
 			},
@@ -506,7 +508,12 @@
 			//分页、下一页
 			onCurrentChange(val) {
 				this.pageNum = val;
-				this.getTableData(this.reqSelect);
+				this.reqSelect = this.form.select
+				if(this.searchflag){
+					this.getTableData(this.reqSelect);
+				}else{
+					this.getTableData("");
+				}
 			},
 			getCompany() {
 				this.$api.jobUserManagement.getCompanyData().then(res => {
@@ -519,6 +526,7 @@
 			},
 			// 搜索
 			onSubmit() {
+				this.searchflag=true;
 				this.pageNum = 1;
 				this.reqSelect = this.form.select
 				this.getTableData(this.reqSelect);
