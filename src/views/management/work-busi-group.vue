@@ -643,12 +643,13 @@ export default {
       switch (Str) {
         case "新增":
             this.form.fcompanyName = this.options[0].id;
+            this.form.fcompanyoid = this.options[0].id;
             this.form.fteamleader = '';
             this.form.fteamname = '';
             this.form.fteamid = '';
             this.form.fremark = '';
-            this.form.transStaffRelUser =[];
-            this.form.staffRelUsers =[];
+            this.form.transStaffRelUser ={};
+            this.form.staffRelUsers ={};
             this.form.fteamleaderName = '';
             this.form.staffRelUsersNames = '';
           this.saveBtnFlag = false;
