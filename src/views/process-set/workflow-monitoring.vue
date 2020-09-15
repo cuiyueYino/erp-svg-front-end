@@ -380,6 +380,7 @@ export default {
                     finandata.operationType=false;
                     finandata.lookflag = 'look'
                     finandata.nametitle="工作流监控";
+                    finandata.selectOption=selectOption;
                     this.rowLWMDataObj=finandata;
                 }
             }else{
@@ -423,13 +424,15 @@ export default {
                         }
                     }
 
-                    this.rowCWMtype=true;
+                    
                     let finandata={};
                     finandata.foid=selectOption[0].foid;
                     finandata.srcOid=selectOption[0].srcOid;
                     finandata.operationType=false;
                     finandata.nametitle="工作流监控";
+                    finandata.selectOption=selectOption;
                     this.rowCWMDataObj=finandata;
+                    this.rowCWMtype=true;
                 }
             }else{
                 this.$message.error('请选择一行你要查看的数据!');
@@ -560,15 +563,15 @@ export default {
                             return;
                         }
                     }
-
-                    this.rowLWMtype=true;
                     let finandata={};
                     finandata.foid=selectOption[0].foid;
                     finandata.srcOid=selectOption[0].srcOid;
                     finandata.operationType=false;
                     finandata.lookflag = 'edit';
                     finandata.nametitle="工作流监控";
+                    finandata.selectOption=selectOption;
                     this.rowLWMDataObj=finandata;
+                    this.rowLWMtype=true;
                 }
             }else{
                 this.$message.error('请选择一行你要查看的数据!');
