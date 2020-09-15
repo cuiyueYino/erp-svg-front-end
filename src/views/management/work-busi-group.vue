@@ -649,6 +649,7 @@ export default {
             this.form.fremark = '';
             this.form.transStaffRelUser =[];
             this.form.staffRelUsers =[];
+            this.form.fteamleaderName = '';
             this.form.staffRelUsersNames = '';
           this.saveBtnFlag = false;
           this.isAdd = true;
