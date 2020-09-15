@@ -500,6 +500,7 @@ export default {
                 [this.form.region]:this.formCode
             }
         }
+        this.pageNum = 1;
       this.getTableDataGroup();
     },
     getAll() {
