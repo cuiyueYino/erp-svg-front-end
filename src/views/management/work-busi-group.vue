@@ -30,10 +30,10 @@
         </el-form>
        </el-col>
         <el-col :span="8" style="text-align: right;">
-            <el-button type="success" icon="el-icon-folder-add" size="medium" plain class="el-icon-plus" @click="toEdit('新增')"> 新增</el-button>
+            <el-button type="success" icon="el-icon-folder-add" size="medium" plain @click="toEdit('新增')"> 新增</el-button>
             <el-button type="danger" plain icon="el-icon-delete" size="medium" @click="deleteMsg"> 删除</el-button>
-            <el-button type="warning" plain icon="el-icon-document-copy" size="medium" class="el-icon-edit" @click="toEdit('编辑')"> 编辑</el-button>
-            <el-button type="info" plain icon="el-icon-view"  size="medium" class="el-icon-view" @click="toEdit('查看')"> 查看</el-button>
+            <el-button type="warning" plain icon="el-icon-document-copy" size="medium" @click="toEdit('编辑')"> 编辑</el-button>
+            <el-button type="info" plain icon="el-icon-view"  size="medium" @click="toEdit('查看')"> 查看</el-button>
         </el-col>
     </el-row>
 

@@ -44,6 +44,7 @@
             show-checkbox
             check-on-click-node
             @check-change="handleNodeClick"
+            :default-checked-keys="defautChecked"
             :default-expanded-keys="treeDataObject"
           ></el-tree>
         </div>
@@ -84,6 +85,7 @@
     },
     data() {
       return {
+        defautChecked:[],
         treeDataObject:[],
         // 表单属性
         form: {
@@ -119,6 +121,7 @@
           this.form.selectVal = "";
           this.strictly = false;
           let resDataArr = null;
+          debugger;
           let staffTree = JSON.parse(localStorage.getItem('conf_staffTree'));
           if (staffTree == null) {
             this.$api.confMangement.getStaffTreeList(this.fromData).then(
