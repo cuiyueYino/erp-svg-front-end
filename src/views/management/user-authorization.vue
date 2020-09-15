@@ -2,7 +2,7 @@
 	<div>
 		<el-card class="box-card">
 			<el-row :gutter="24">
-				<el-col :span="12">
+				<!--<el-col :span="12">
 					<el-form :inline="true" class="demo-form-inline">
 						<el-col :span="5">
 							<el-select v-model="formInline.company" placeholder="公司" clearable>
@@ -10,8 +10,8 @@
 							</el-select>
 						</el-col>
 					</el-form>
-				</el-col>
-				<el-col :span="6" :offset="6">
+				</el-col>-->
+				<el-col :span="6" :offset="18">
 					<el-button type="success" icon="el-icon-refresh" plain @click="Changedimension">切换维度</el-button>
 					<el-button type="success" icon="el-icon-refresh" plain @click="determineSave">确定</el-button>
 				</el-col>

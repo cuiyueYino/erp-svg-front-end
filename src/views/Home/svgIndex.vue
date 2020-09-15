@@ -35,15 +35,15 @@
                                 加载
                             </el-button> -->
                             <el-button
-                                type="warning"
-                                size="medium"
+                                size="mini"
+                                type="text"
                                 icon="el-icon-circle-close"
                                 @click="handleClose"
                             >关闭</el-button>
                             <el-button
                                 v-show="isEditF"
-                                size="medium"
-                                type="success"
+                                size="mini"
+                                type="text"
                                 :disabled="saveBtnStatus"
                                 icon="el-icon-copy-document"
                                 @click="saveEditWorkflow(workflowNodes)"
@@ -52,8 +52,8 @@
                             </el-button>
                             <el-button
                                 v-show="isNewF"
-                                size="medium"
-                                type="success"
+                                size="mini"
+                                type="text"
                                 :disabled="saveBtnStatus"
                                 icon="el-icon-copy-document"
                                 @click="saveNewWorkflow(workflowNodes)"
@@ -70,16 +70,16 @@
                                 清空
                             </el-button> -->
                             <el-button
-                                size="medium"
-                                type="primary"
-                            icon="el-icon-zoom-in"
+                                size="mini"
+                                type="text"
+                                icon="el-icon-zoom-in"
                                 @click="bigger"
                             >
                                 放大
                             </el-button>
                             <el-button
-                                size="medium"
-                                type="primary"
+                                size="mini"
+                                type="text"
                                 icon="el-icon-zoom-out"
                                 @click="smaller"
                             >
