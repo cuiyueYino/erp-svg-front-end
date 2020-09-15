@@ -116,6 +116,8 @@
         :visible="staffTableVisible"
         :type="baseInputType"
         :title="baseInputTitle"
+        :fteamleaderId='fteamleaderId'
+        :transStaffRelUserIds='transStaffRelUserIds'
         @closeDialog="closeBaseInfo"
       ></staff-tree-search>
       <!-- :fcompanyid="fcompanyid" -->
@@ -132,6 +134,8 @@ export default {
   inject: ['reload'],
   data() {
     return {
+      transStaffRelUserIds:[],
+      fteamleaderId:[],
       saveBtnFlag:false,
       baseInputType: "",
       formProcess: {},
@@ -309,15 +313,15 @@ export default {
             this.form.fcompanyoid = res.data.data.fcompanyoid;
             this.form.fteamleaderName = res.data.data.fteamleaderName;
             this.form.fteamleader = res.data.data.fteamleader;
+            this.fteamleaderId.push(res.data.data.fteamleader);
+            console.log(this.fteamleaderId);
+            for (var transStaffRelUserIds in (res.data.data.staffRelUsers))
+            this.transStaffRelUserIds.push(transStaffRelUserIds);
             this.form.fteamname = res.data.data.fteamname;
             this.form.fteamid = res.data.data.fteamid;
             this.form.fremark = res.data.data.fremark;
             this.form.transStaffRelUser = res.data.data.transStaffRelUser;
             this.form.staffRelUsers = res.data.data.staffRelUsers;
-            // this.form.staffRelUsersNames = res.data.data.staffRelUsersNames;
-            // res.data.data;
-            console.log("8888888888");
-            console.log(res.data.data);
             this.form.staffRelUsersNames = Object.values(res.data.data.staffRelUsers);
             // this.form.transStaffRelUser = Object.values(res.data.data.transStaffRelUser);
             // this.form.fcompanyName = this.form.fcompanyName
