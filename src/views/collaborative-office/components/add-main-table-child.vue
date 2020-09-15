@@ -441,11 +441,12 @@
 		},
 		created() {
 			//最上端公司选择
-			this.CompanyData.forEach(item => {
+			/*this.CompanyData.forEach(item => {
 				if(item.name == "福佳集团") {
 					this.ruleForm.company = item.id
 				}
-			})
+			})*/
+            this.ruleForm.company = this.CompanyData[0].id
 			this.$api.collaborativeOffice.findList({}).then(data => {
 				this.selectList = data.data.data
 			})
@@ -721,7 +722,7 @@
 								obj.children=obj.childrenList;
 								delete obj.childrenList;
 								parent[i]=obj;
-								children(parent[i].children,type);	
+								children(parent[i].children,type);
 							}else{
 								parent[i].children=[];
 							}
