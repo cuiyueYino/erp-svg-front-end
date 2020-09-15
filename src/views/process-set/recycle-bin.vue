@@ -4,7 +4,7 @@
         <el-card class="box-card">
            <el-row :gutter="24">
                  <el-col :span="2" :offset="22">
-                     <el-button type="success" icon="el-icon-more" plain @click="RestoreData">还原</el-button>
+                     <el-button type="warning" icon="el-icon-bangzhu" size="medium" plain @click="RestoreData">还原</el-button>
                  </el-col>
             </el-row>
         </el-card>

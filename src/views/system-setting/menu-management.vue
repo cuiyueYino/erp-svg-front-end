@@ -17,9 +17,9 @@
                     </el-form>
                 </el-col>
                  <el-col :span="6" :offset="6">
-                    <el-button type="success" icon="el-icon-refresh" plain @click="createMainte">新建</el-button>
-                    <el-button type="success" icon="el-icon-refresh" plain @click="editMainte">修改</el-button>
-                    <el-button type="danger" icon="el-icon-notebook-2" plain @click="removeMainte">删除</el-button>
+                    <el-button type="success" icon='el-icon-folder-add' size="medium" plain @click="createMainte">新增</el-button>
+                    <el-button type="warning" icon="el-icon-edit-outline" size="medium" plain @click="editMainte">修改</el-button>
+                    <el-button type="danger" icon='el-icon-delete' size="medium" plain @click="removeMainte">删除</el-button>
                  </el-col>
             </el-row>
         </el-card>

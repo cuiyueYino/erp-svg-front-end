@@ -6,7 +6,7 @@
                  <el-col :span="10" :offset="14">
                     <el-dropdown trigger="click">
                         <span class="el-dropdown-link">
-                            <el-button type="success" icon="el-icon-refresh" plain >新建</el-button>
+                            <el-button type="success" icon="el-icon-folder-add" size="medium" plain >新增</el-button>
                         </span>
                         <el-dropdown-menu slot="dropdown">
                             <el-dropdown-item>
@@ -20,11 +20,11 @@
                             </el-dropdown-item>
                         </el-dropdown-menu>
                     </el-dropdown>
-                     <el-button type="success" icon="el-icon-refresh" plain @click="editCDD">修改</el-button>
-                     <el-button type="success" icon="el-icon-search" plain @click="saveCDD">保存</el-button>
-                     <el-button type="danger" icon="el-icon-notebook-2" plain @click="remove">删除</el-button>
-                     <el-button type="warning" icon="el-icon-document-checked" plain @click="tovoid">作废</el-button>
-                     <el-button type="success" icon="el-icon-share" plain @click="toNotvoid">反作废</el-button>
+                     <el-button type="warning" plain icon="el-icon-edit-outline" size="medium" @click="editCDD">修改</el-button>
+                     <el-button type="success" icon='el-icon-copy-document' size="medium" plain @click="saveCDD">保存</el-button>
+                     <el-button type="danger" plain icon="el-icon-delete" size="medium" @click="remove">删除</el-button>
+                     <el-button type="danger" icon="el-icon-document-remove" size="medium" plain @click="tovoid">作废</el-button>
+                     <el-button type="info" icon="el-icon-document-remove" size="medium" plain @click="toNotvoid">反作废</el-button>
                  </el-col>
             </el-row>
         </el-card>

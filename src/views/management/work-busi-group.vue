@@ -55,14 +55,14 @@
 
             <el-form-item>
               <el-button
-                type="primary"
+               type="primary" icon='el-icon-search' size="medium"
                 plain
                 @click="onSubmit"
               >搜索</el-button>
             </el-form-item>
             <el-form-item>
               <el-button
-                type="primary"
+                type="primary" icon="el-icon-tickets" size="medium"
                 plain
                 @click="getAll"
                 class="search-all"
@@ -75,26 +75,22 @@
           style="text-align: right;"
         >
           <el-button
-            type="success"
+            type="success" icon="el-icon-folder-add" size="medium"
             plain
             class="el-icon-plus"
             @click="toEdit('新增')"
           > 新增</el-button>
           <el-button
-            type="danger"
-            plain
-            class="el-icon-delete"
+            type="danger" plain icon="el-icon-delete" size="medium"
             @click="deleteMsg"
           > 删除</el-button>
           <el-button
-            type="warning"
-            plain
+            type="warning" plain icon="el-icon-document-copy" size="medium"
             class="el-icon-edit"
             @click="toEdit('编辑')"
           > 编辑</el-button>
           <el-button
-            type="primary"
-            plain
+            type="info" plain icon="el-icon-view"  size="medium"
             class="el-icon-view"
             @click="toEdit('查看')"
           > 查看</el-button>
@@ -208,12 +204,13 @@
                 placeholder="请选择组长"
                 size="small"
                 autocomplete="off"
+                readonly
               ></el-input>
               <img
                 class="icon-search"
                 v-show="!isLook"
                 src="../../assets/img/search.svg"
-                @click="addFteamleader('1','用户查询',)"
+                @click="addFteamleader('1','人员查询',)"
               />
             </el-form-item>
             <el-form-item
@@ -228,12 +225,13 @@
                 size="small"
                 placeholder="请选择组员"
                 v-model="form.staffRelUsersNames"
+                readonly
               ></el-input>
               <img
                 class="icon-search"
                 v-show=" !isLook"
                 src="../../assets/img/search.svg"
-                @click="addFteamleader('4','用户查询',)"
+                @click="addFteamleader('4','人员查询',)"
               />
             </el-form-item>
           </el-col>
@@ -262,11 +260,11 @@
         slot="footer"
         class="dialog-footer"
       >
-        <el-button @click="dialogFormVisible = false">取 消</el-button>
         <el-button :disabled="saveBtnFlag"
-          type="primary"
+          type="success" icon='el-icon-copy-document' size="medium"
           @click="addSubmit('form')"
-        >保 存</el-button>
+        >保存</el-button>
+        <el-button type='warning' icon='el-icon-close' size="medium" @click="dialogFormVisible = false">取消</el-button>
       </div>
     </el-dialog>
 
@@ -778,18 +776,7 @@ export default {
     toEdit(Str) {
       switch (Str) {
         case "新增":
-          this.form = {
-            fcompanyName:'',
-            fcompanyoid:'',
-            fteamleaderName:'',
-            fteamleader: "",
-            fteamname: "",
-            fteamid: "",
-            fremark: "",
-            transStaffRelUser: {},
-            staffRelUsers:{},
-            staffRelUsersNames:[]
-          };
+          // this.form = {};
           // this.transStaffRelUser = Object.values({});
           // this.staffRelUsers =Object.values({});
           this.saveBtnFlag = false;

@@ -30,7 +30,7 @@
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="4">
-                                    <el-button type="primary" plain  size="small" @click="searchKey">查询</el-button>
+                                    <el-button type="primary" icon='el-icon-search' size="medium"  plain @click="searchKey">查询</el-button>
                                 </el-col>
                             </el-row>
                             <!-- 表格 -->
@@ -95,7 +95,7 @@
                 </el-card>
             </el-form>
             <span slot="footer" class="dialog-footer">
-                <el-button  type="primary" @click="saveConfig">确定</el-button>
+                <el-button  icon='el-icon-check' type="success" size="medium" @click="saveConfig">确定</el-button>
             </span>
         </el-dialog>
     </div>

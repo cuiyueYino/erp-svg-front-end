@@ -48,7 +48,7 @@
 				<el-table-column prop="code" label="主表编码" align="center"></el-table-column>
 				<el-table-column prop="name" label="主表名称" align="center"></el-table-column>
 				<el-table-column prop="workItemTypeName" label="主表分类" align="center"></el-table-column>
-				<el-table-column prop="remark" label="描述" align="center"></el-table-column>
+				<el-table-column :formatter="textLength" prop="remark" label="描述" align="center"></el-table-column>
 			</el-table>
 			<pageNation :total="currentTotal" v-if="currentTotal != 0" ref="pageNation" @pageChange="pageChange"></pageNation>
 		</el-card>
@@ -187,6 +187,14 @@
 						break;
 				}
 			},
+            //描述显示
+            textLength(row){
+                if(row.remark!=null&&row.remark.length>50) {
+                    return row.remark.substring(0,50)+"...";
+                }else {
+                    return row.remark;
+                }
+            },
 			//修改
 			toUpd() {
 				if(this.getRowClickId()) {

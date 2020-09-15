@@ -83,8 +83,8 @@
                         </el-form-item>
                     </el-col> 
                     <el-col :span="8" >
-                        <el-button type="primary" size="small" plain @click="reWorkSearchTable('formData')">重置</el-button>
-                        <el-button type="primary" size="small" plain @click="workSearchTable">搜索</el-button>
+                        <el-button type="primary" size="medium" icon='el-icon-refresh' plain @click="reWorkSearchTable('formData')">重置</el-button>
+                        <el-button type="primary" size="medium" icon='el-icon-search' plain @click="workSearchTable">搜索</el-button>
                     </el-col>
                 </el-row>
                 
@@ -107,7 +107,7 @@
                 
                 <!-- footer -->
                 <footer>
-                    <el-button   size="small"   @click="gridDataAdd">确定</el-button>
+                    <el-button   type='success' icon='el-icon-check' size="medium"   @click="gridDataAdd">确定</el-button>
                     <!-- <el-button  type="primary" size="small" plain @click="dialogTableVisible = false">关闭</el-button> -->
                 </footer>
                 <!-- footer END-->
@@ -115,10 +115,10 @@
         </el-form>
         <el-row :gutter="20">
             <el-col :span="12" style="text-align: right;">
-                <el-button size="small" @click="saveConfig">保存</el-button>
+                <el-button icon='el-icon-copy-document' size="medium" type='success' @click="saveConfig">保存</el-button>
             </el-col>
             <el-col :span="12">
-                <el-button size="small" @click="cancelConfig">取消</el-button>
+                <el-button icon='el-icon-close' size="medium" type='warning' @click="cancelConfig">取消</el-button>
             </el-col>
         </el-row>
     </div>
@@ -255,19 +255,22 @@ export default {
                         this.formData.fremark = this.editData.lineremark;
                         this.formData.name = this.editData.displayName;
                         //条件判断
-                        if(this.editData.lineexpression){
+                        if(this.editData.lineexpression && !this.editData.service){
                             this.baseActiveName ='2';
+                            this.formData.conditional = this.editData.lineexpression?this.editData.lineexpression:'';
                         }else if(this.editData.lineotherwise =="1"){
                             this.baseActiveName ='3';
+                            this.formData.conditional = '';
                         }else if(this.editData.service && this.editData.service.name){
                             this.baseActiveName ='4';
+                            this.formData.conditional = '';
                         }else{
                             this.baseActiveName ='1';
+                            this.formData.conditional = '';
                         }
-                        this.formData.conditional = this.editData.lineexpression?this.editData.lineexpression:'';
                         this.formData.otherwise = this.editData.lineotherwise?this.editData.lineotherwise:'';
                         this.formData.baseInputServe = this.editData.service?this.editData.service.name:'';
-                        this.formData.baseTextarea = this.editData.service?this.editData.service.expression:'';
+                        this.formData.baseTextarea = this.editData.service?this.editData.lineexpression:'';
                         this.formData.serviceOid = this.editData.service?this.editData.service.oid:'';
                         this.formData.serviceCode = this.editData.service?this.editData.service.code:'';
                         switch (this.editData.decisionType) {

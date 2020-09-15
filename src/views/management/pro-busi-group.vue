@@ -19,18 +19,18 @@
                     </el-form-item>
                     
                     <el-form-item>
-                        <el-button type="primary" plain @click="onSubmit">搜索</el-button>
+                        <el-button type="primary" icon='el-icon-search' size="medium" plain @click="onSubmit">搜索</el-button>
                     </el-form-item>
                     <el-form-item>
-                        <el-button type="primary" plain @click="getAll" class="search-all">显示全部信息</el-button>
+                        <el-button type="primary" icon="el-icon-tickets" size="medium" plain @click="getAll" class="search-all">显示全部信息</el-button>
                     </el-form-item>
                     </el-form>
                 </el-col>
                  <el-col :span="8" style="text-align: right;">
-                     <el-button type="success" plain class="el-icon-plus" @click="toEdit('新增')"> 新增</el-button>
-                     <el-button type="danger" plain class="el-icon-delete" @click="deleteMsg"> 删除</el-button>
-                     <el-button type="warning" plain class="el-icon-edit"  @click="toEdit('编辑')"> 编辑</el-button>
-                     <el-button type="primary" plain class="el-icon-view" @click="toEdit('查看')"> 查看</el-button>
+                     <el-button type="success" icon="el-icon-folder-add" size="medium" @click="toEdit('新增')"> 新增</el-button>
+                     <el-button type="danger" plain icon="el-icon-delete" size="medium" @click="deleteMsg"> 删除</el-button>
+                     <el-button type="warning" plain icon="el-icon-document-copy" size="medium" @click="toEdit('编辑')"> 编辑</el-button>
+                     <el-button type="info" plain icon="el-icon-view"  size="medium" @click="toEdit('查看')"> 查看</el-button>
                  </el-col>
             </el-row>
 
@@ -107,15 +107,15 @@
                 ></dynamic-table>
               </el-col>
               <el-col :span="5">
-                 <el-button size="small" :disabled="isLook"  v-show="!isEdit" type="success" plain @click="baseInputTable('新增')">新增</el-button>
-                 <el-button size="small" v-show="isEdit" type="warning" plain @click="baseInputTable('编辑')">编辑</el-button>
-                 <el-button size="small" :disabled="isLook" type="danger" plain @click="deleteRow()">删除</el-button>
+                 <el-button type="success" icon="el-icon-folder-add" size="medium" plain :disabled="isLook"  v-show="!isEdit" @click="baseInputTable('新增')">新增</el-button>
+                 <el-button type="warning" plain icon="el-icon-document-copy" size="medium" v-show="isEdit" @click="baseInputTable('编辑')">编辑</el-button>
+                 <el-button type="danger" plain icon="el-icon-delete" size="medium" :disabled="isLook" @click="deleteRow()">删除</el-button>
               </el-col>
             </el-row>
         
       <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="addSubmit('form')" :disabled="isLook">保 存</el-button>
+        <el-button type="success" icon='el-icon-copy-document' size="medium" @click="addSubmit('form')" :disabled="isLook">保存</el-button>
+        <el-button type='warning' icon='el-icon-close' size="medium" @click="dialogFormVisible = false">取消</el-button>
       </div>
     </el-dialog>
     <!-- 部门/职位弹窗 -->
@@ -142,7 +142,7 @@
                       </el-form-item>
                       
                       <el-form-item>
-                          <el-button type="primary" plain @click="onSubmit">搜索</el-button>
+                          <el-button type="primary" icon='el-icon-search' size="medium" plain @click="onSubmit">搜索</el-button>
                       </el-form-item>
                     </el-form>
                     <el-divider></el-divider>
@@ -187,8 +187,8 @@
             </el-col>
           </el-row>
          <div slot="footer" class="dialog-footer">
-            <el-button @click="userVisible = false">取 消</el-button>
-            <el-button type="primary" @click="addPeople()">确 定</el-button>
+            <el-button type='success' size="medium" icon='el-icon-check' @click="addPeople()">确定</el-button>
+            <el-button type='warning' icon='el-icon-close' size="medium" @click="userVisible = false">取消</el-button>
         </div>
       </el-dialog>
       

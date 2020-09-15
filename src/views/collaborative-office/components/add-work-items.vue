@@ -79,16 +79,17 @@
 		},
 		created() {
 			//最上端公司选择
-			this.CompanyData.forEach(item => {
+			/*this.CompanyData.forEach(item => {
 				if(item.name == "福佳集团") {
 					this.company = item
 				}
-			})
+			})*/
+            this.company = this.CompanyData[0]
 			this.$api.collaborativeOffice.findList({}).then(data => {
 				this.selectList = data.data.data
 			})
 		},
-		
+
 		methods: {
 			//选择模板
 			selectMainTable(){
@@ -164,7 +165,7 @@
 							con[key] = undefined
 						}
 					}
-					//后台需要json格式的数据 
+					//后台需要json格式的数据
 					backData.jsonStr = JSON.stringify(con)
 					this.$api.collaborativeOffice.apiUrl("workItem/insertWorkItem", backData).then(data => {
 						if(this.dataBack(data, "新增成功")) {
@@ -194,7 +195,7 @@
 					this.activityId = data.data.data.workItemTemp.activityId
 					//主表Name
 					this.tableName = data.data.data.workItemTemp.tableName
-					//整理传入子组件的数据主表top  子表bottom 
+					//整理传入子组件的数据主表top  子表bottom
 					this.conData.top = data.data.data.workItemTemp
 					this.conData.bottom = data.data.data.workItemTempSub
 					//整理主表数据（主表1，子表2）
@@ -350,7 +351,7 @@
 								obj.children=obj.childrenList;
 								delete obj.childrenList;
 								parent[i]=obj;
-								children(parent[i].children,type);	
+								children(parent[i].children,type);
 							}else{
 								parent[i].children=[];
 							}
@@ -459,23 +460,23 @@
 		color: red;
 		font-size: 20px;
 	}
-	
+
 	>>>.el-card {
 		margin-bottom: 10px;
 	}
-	
+
 	>>>.el-card__body {
 		padding: 10px;
 	}
-	
+
 	>>>.el-input.is-disabled .el-input__inner {
 		color: #000000 !important;
 	}
-	
+
 	>>>.el-textarea.is-disabled .el-textarea__inner {
 		color: #000000 !important;
 	}
-	
+
 	>>>.el-checkbox__input.is-disabled.is-checked .el-checkbox__inner::after {
 		border-color: #000000!important;
 	}

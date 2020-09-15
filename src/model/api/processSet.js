@@ -52,8 +52,8 @@ const processSet = {
     SVG图标节点信息-手工活动
     */
 
-    // 业务工作-获取表格列表数据 
-    
+    // 业务工作-获取表格列表数据
+
     workSearchData(params){
         return httpReqest.post('/api/wfInterfaces/workFlow/getProcessActivity', params);
     },
@@ -90,7 +90,7 @@ const processSet = {
     getunhandledTask(params){
         return httpReqest.post('/api/wfInterfaces/workFlow/unhandledTask', params);
     },
-    // 获取工作事项请求参数接口   
+    // 获取工作事项请求参数接口
     getWorkItemsParams(params){
         var valueS='?';
         for(var item in params){
@@ -180,7 +180,7 @@ const processSet = {
         if(valueS.slice(valueS.length-1,valueS.length) ==="&"){
             valueS=valueS.slice(0,valueS.length-1);
         }
-        return httpReqest.post('/api/scha/taskEvaluate/findTaskEvaluateAndAdjustById'+valueS); 
+        return httpReqest.post('/api/scha/taskEvaluate/findTaskEvaluateAndAdjustById'+valueS);
     },
     //任务自评修改申请詳情
     getPersonalTableModifyDetail(params){
@@ -191,7 +191,7 @@ const processSet = {
         if(valueS.slice(valueS.length-1,valueS.length) ==="&"){
             valueS=valueS.slice(0,valueS.length-1);
         }
-        return httpReqest.post('/api/scha/taskUpdateApply/findTaskEvaluateUpdateApplyById'+valueS); 
+        return httpReqest.post('/api/scha/taskUpdateApply/findTaskEvaluateUpdateApplyById'+valueS);
     },
      //获取处理表单详情数据
      getunhandledTaskFormDetail(params){
@@ -353,10 +353,6 @@ const processSet = {
     //查询状态信息
     getStatus(params){
         return httpReqest.post('/api/wfInterfaces/workFlow/getStatus', params);
-    },
-    //查询公司
-    getCompanyData(params){
-        return httpReqest.post('/api/wfInterfaces/workFlow/getCompanyData', params);
     },
     //根据用户查找公司
     getUserCompany(params){

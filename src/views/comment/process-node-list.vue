@@ -17,7 +17,7 @@
             <el-table-column label="耗时" prop="takeTime"></el-table-column>
             <el-table-column label="回复" >
                 <template slot-scope="scope" >
-                    <el-button size="mini" type="primary" @click="onRowbuttonClick(scope.row)">回复</el-button>
+                    <el-button size="medium" type="primary" @click="onRowbuttonClick(scope.row)">回复</el-button>
                 </template>
             </el-table-column>
             <el-table-column type="expand" >
@@ -40,7 +40,7 @@
             >
             </el-pagination>
         </div>-->
-        <div><el-button @click="EditFileVisible()">查看流程图</el-button></div>
+        <div><el-button @click="EditFileVisible()" size='medium'>查看流程图</el-button></div>
         <flowchart  :rowFCDDataObj="rowFCDDataObj" :rowFCDtype="rowFCDtype" @changeShow="closeflowchart"/>
         <replypage  :rowRMPDataObj="rowRMPDataObj" :rowRMPtype="rowRMPtype" @changeShow="closeReplyPage"/>
     </div>

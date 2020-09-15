@@ -116,9 +116,9 @@
                 </el-card>
             </el-form>
             <span slot="footer" class="dialog-footer">
-                <el-button v-if="isShow" @click="handleClose">取 消</el-button>
-                <el-button v-if="isShow" @click="submitForm('formdata',0)">暂 存</el-button>
-                <el-button v-if="isShow" @click="submitForm('formdata',1)">提 交</el-button>
+                <el-button type="success" icon="el-icon-copy-document" size="medium" v-if="isShow" @click="submitForm('formdata',1)">提交</el-button>
+                <el-button type="success" icon="el-icon-folder-remove" size="medium" v-if="isShow" @click="submitForm('formdata',0)">暂存</el-button>
+                <el-button type='warning' icon='el-icon-close' size="medium" v-if="isShow" @click="handleClose">取消</el-button>
             </span>
         </el-dialog>
     </div>

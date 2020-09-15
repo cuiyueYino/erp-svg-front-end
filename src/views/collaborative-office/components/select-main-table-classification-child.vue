@@ -57,7 +57,7 @@
 				<el-table-column prop="code" label="子表分类编码" width="180" align="center"></el-table-column>
 				<el-table-column prop="name" label="子表分类名称" width="180" align="center"></el-table-column>
 				<el-table-column prop="tableName" label="数据库表名" width="180" align="center"></el-table-column>
-				<el-table-column prop="remark" label="描述" align="center"></el-table-column>
+				<el-table-column :formatter="textLength" prop="remark" label="描述" align="center"></el-table-column>
 			</el-table>
 			<pageNation :total="currentTotal"  ref="pageNation" @pageChange="pageChange"></pageNation>
 		</el-card>
@@ -177,6 +177,14 @@
 						break;
 				}
 			},
+            //描述显示
+            textLength(row){
+                if(row.remark!=null&&row.remark.length>50) {
+                    return row.remark.substring(0,50)+"...";
+                }else {
+                    return row.remark;
+                }
+            },
 			//修改
 			toUpd() {
 				if(this.getRowClickId()) {

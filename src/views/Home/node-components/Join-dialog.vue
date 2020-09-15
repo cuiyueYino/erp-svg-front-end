@@ -42,7 +42,7 @@
          
           <el-row :gutter="20">
             <el-col :span="13" style="text-align: right;margin-top: 18px;">
-                <el-button  size="small" @click="saveConfig('workflowConfigForm')">确定</el-button>
+                <el-button  type='success' icon='el-icon-check' size="medium" @click="saveConfig('workflowConfigForm')">确定</el-button>
             </el-col>
             
         </el-row>

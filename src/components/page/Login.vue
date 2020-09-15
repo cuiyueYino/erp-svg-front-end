@@ -110,7 +110,9 @@
 							localStorage.setItem('ms_tokenId', val.data.access_token);
 							//跳转门户
 							sessionStorage.setItem("oaMenu", true);
-						})
+						}).catch(()=>{
+                            this.$message.error("账号或密码错误!");
+                        })
 
 					} else {
 						this.$message.error("请输入用户名和密码!");
@@ -126,7 +128,7 @@
 			getContext() {
 				//最上端公司选择
 				this.$api.collaborativeOffice.getCompanyData().then(data => {
-					localStorage.setItem('CompanyData', JSON.stringify(data.data.data.rows));
+					localStorage.setItem('CompanyData', JSON.stringify(data.data));
 				})
 				//全部服务
 				this.$api.collaborativeOffice.findTServiceByParams({}).then(data => {

@@ -12,22 +12,22 @@
                 <el-card>
                     <el-row :gutter="24">
                         <el-col :span="10" :offset="14" v-if="rowFstatus == 4?true:false">
-                            <el-button type="success" icon="el-icon-share" plain @click="baseInputTable('转发')">转发</el-button>
-                            <el-button type="danger" icon="el-icon-view" plain @click="basefollow()">关注</el-button>
-                            <el-button type="success" icon="el-icon-success" plain @click="removeBizMail">已阅</el-button>
+                            <el-button type="success" icon="el-icon-position" size="medium" plain @click="baseInputTable('转发')">转发</el-button>
+                            <el-button type="success" icon="el-icon-star-off" size="medium" plain @click="basefollow()">关注</el-button>
+                            <el-button type="primary" icon="el-icon-postcard" size="medium" plain @click="removeBizMail">已阅</el-button>
                         </el-col>
                         <el-col :span="12" :offset="12" v-else-if="rowFstatus == 1?true:false">
-                            <el-button type="danger" icon="el-icon-circle-plus-outline" plain @click="baseInputTable('加签')">加签</el-button>
-                            <el-button type="success" icon="el-icon-share" plain @click="baseInputTable('转发')">转发</el-button>
-                            <el-button type="danger" icon="el-icon-s-order" plain @click="baseInputTable('委托')">委托</el-button>
-                            <el-button type="danger" icon="el-icon-view" plain @click="basefollow()">关注</el-button>
-                            <el-button type="success" icon="el-icon-success" plain @click="effectOrDisableMsg">提交</el-button>
+                            <el-button type="success" icon="el-icon-circle-plus-outline" size="medium" plain @click="baseInputTable('加签')">加签</el-button>
+                            <el-button type="success" icon="el-icon-position" size="medium" plain @click="baseInputTable('转发')">转发</el-button>
+                            <el-button type="success" icon="el-icon-circle-check" size="medium" plain @click="baseInputTable('委托')">委托</el-button>
+                            <el-button type="success" icon="el-icon-star-off" size="medium" plain @click="basefollow()">关注</el-button>
+                            <el-button type="success" icon="el-icon-copy-document" size="medium" plain @click="effectOrDisableMsg">提交</el-button>
                         </el-col>
                         <el-col :span="12" :offset="12" v-else>
-                            <el-button type="danger" icon="el-icon-circle-plus-outline" plain @click="baseInputTable('加签')">加签</el-button>
-                            <el-button type="success" icon="el-icon-share" plain @click="baseInputTable('转发')">转发</el-button>
-                            <el-button type="danger" icon="el-icon-s-order" plain @click="baseInputTable('委托')">委托</el-button>
-                            <el-button type="danger" icon="el-icon-view" plain @click="basefollow()">关注</el-button>
+                            <el-button type="success" icon="el-icon-circle-plus-outline" size="medium" plain @click="baseInputTable('加签')">加签</el-button>
+                            <el-button type="success" icon="el-icon-position" size="medium" plain @click="baseInputTable('转发')">转发</el-button>
+                            <el-button type="success" icon="el-icon-circle-check" size="medium"  plain @click="baseInputTable('委托')">委托</el-button>
+                            <el-button type="success" icon="el-icon-star-off" size="medium" plain @click="basefollow()">关注</el-button>
                         </el-col>
                     </el-row>
                     <el-row :gutter="24">
@@ -347,7 +347,7 @@ export default {
             } else {
                 currentDatd = dataContent.selectData[0].fsrcoId;
             }
-            if(dataContent.selectData[0].fsubject.substring(0,3) == '退回：' & dataContent.selectData[0].fcreator1 == localStorage.getItem("ms_userId")) {
+            if(dataContent.selectData[0].fsubject.substring(0,3) == '退回：' & dataContent.selectData[0].fcreator == localStorage.getItem("ms_userId")) {
                 this.showSeeOrUpd = "3";
             } else {
                 this.showSeeOrUpd = "1";

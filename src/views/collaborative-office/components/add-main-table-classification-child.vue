@@ -253,13 +253,14 @@
 				this.showFigAll = true
 				this.ruleForm = this.context
 			}else{
-				this.CompanyData.forEach(item => {
+				/*this.CompanyData.forEach(item => {
 					if(item.name == "福佳集团") {
 						this.ruleForm.company = item.id
 					}
-				})
+				})*/
+                this.ruleForm.company = this.CompanyData[0].id
 			}
-			
+
 		},
 		methods: {
 			//状态改变
@@ -276,7 +277,7 @@
 			toDelTable(index) {
 				this.ruleForm.lines.splice(index, 1)
 			},
-			//提交			
+			//提交
 			submitForm(formName) {
 				this.$refs.ruleForm.validate((valid) => {
 					if(valid) {
@@ -337,19 +338,19 @@
 		color: red;
 		font-size: 20px;
 	}
-	
+
 	>>>.el-card {
 		/*margin-bottom: 10px;*/
 	}
-	
+
 	>>>.el-card__body {
 		padding: 10px;
 	}
-	
+
 	>>>.el-input.is-disabled .el-input__inner {
 		color: #000000 !important;
 	}
-	
+
 	>>>.el-textarea.is-disabled .el-textarea__inner {
 		color: #000000 !important;
 	}

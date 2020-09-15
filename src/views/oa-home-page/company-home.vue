@@ -54,7 +54,7 @@
     >
       <span v-html="detailMsg.fcontent"></span>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="closeDialog">关 闭</el-button>
+        <el-button type='warning' icon='el-icon-close' size="medium" @click="closeDialog">关闭</el-button>
       </span>
     </el-dialog>
   </el-container>
