@@ -125,7 +125,7 @@
       :visible.sync="dialogFormVisible"
       :close-on-click-modal="false"
     >
-      <el-form 
+      <el-form
         :model="form"
         :rules="rules"
         ref="form"
@@ -219,7 +219,7 @@
             <el-form-item
               label="组员："
               :label-width="formLabelWidth"
-              prop="staffRelUsersNames" 
+              prop="staffRelUsersNames"
             >
               <el-input
                 type="textarea"
@@ -227,7 +227,7 @@
                 :disabled="isLook"
                 size="small"
                 placeholder="请选择组员"
-                v-model="form.staffRelUsersNames" 
+                v-model="form.staffRelUsersNames"
               ></el-input>
               <img
                 class="icon-search"
@@ -459,7 +459,7 @@ export default {
       this.form.fcompanyoid = value;
     },
     // 工作业务组（查看、编辑）
-    getWorkGroupDetail(data) {  
+    getWorkGroupDetail(data) {
       this.$api.processSet.getWorkGroupDetail({
           foid: data,
       }).then((res) => {
@@ -716,7 +716,7 @@ export default {
             console.log(error);
           }
           );
-        } 
+        }
       });
     },
     //删除
@@ -778,7 +778,18 @@ export default {
     toEdit(Str) {
       switch (Str) {
         case "新增":
-          // this.form = {};
+          this.form = {
+            fcompanyName:'',
+            fcompanyoid:'',
+            fteamleaderName:'',
+            fteamleader: "",
+            fteamname: "",
+            fteamid: "",
+            fremark: "",
+            transStaffRelUser: {},
+            staffRelUsers:{},
+            staffRelUsersNames:[]
+          };
           // this.transStaffRelUser = Object.values({});
           // this.staffRelUsers =Object.values({});
           this.saveBtnFlag = false;
