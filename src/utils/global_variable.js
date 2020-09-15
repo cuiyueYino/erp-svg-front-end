@@ -2,10 +2,10 @@
  * 公工参数 -- 孟鹏飞
 	2020-07-30
 
-	调用方式 : 
+	调用方式 :
   this.$GLOBAL.XXXX
-  
-  * 
+
+  *
   * */
 const editorOption = {
 	placeholder: '请输入内容',
@@ -90,7 +90,7 @@ const fieldTypeList = [{
 	label: '复选框'
 }]
 const tableHeight = 550
-const htmlUrl = 'http://192.168.85.96:6013/'
+const htmlUrl = 'http://localhost:6013/'
 export default {
 	//富文本
 	editorOption,
