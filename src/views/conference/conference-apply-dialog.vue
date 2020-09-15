@@ -255,8 +255,8 @@
       </el-form>
       <!-- todo -->
       <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="submitConfApply('searchForm')">提 交</el-button>
-        <el-button v-if="title == '新建会议申请' || title == '修改会议申请'" @click="stagingConfApply('searchForm')">暂 存</el-button>
+        <el-button type="success" icon="el-icon-copy-document" size="medium" @click="submitConfApply('searchForm')">提交</el-button>
+        <el-button type="success" icon="el-icon-folder-remove" size="medium" v-if="title == '新建会议申请' || title == '修改会议申请'" @click="stagingConfApply('searchForm')">暂存</el-button>
       </div>
     </el-dialog>
     <!-- 查看模态框 -->
