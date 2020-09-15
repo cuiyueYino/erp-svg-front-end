@@ -255,7 +255,7 @@ export default {
                         this.formData.fremark = this.editData.lineremark;
                         this.formData.name = this.editData.displayName;
                         //条件判断
-                        if(this.editData.lineexpression && this.editData.service.name ==''){
+                        if(this.editData.lineexpression && !this.editData.service){
                             this.baseActiveName ='2';
                             this.formData.conditional = this.editData.lineexpression?this.editData.lineexpression:'';
                         }else if(this.editData.lineotherwise =="1"){
