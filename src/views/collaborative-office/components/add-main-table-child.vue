@@ -16,7 +16,7 @@
 					<el-button @click="submitForm(2)" type="success" size="medium" icon="el-icon-copy-document">提交</el-button>
 					<el-button @click="submitForm(1)" type="success" size="medium" icon="el-icon-folder-remove">暂存</el-button>
 					<el-button @click="preview()" type="primary" plain size="medium" icon="el-icon-view">预览</el-button>
-					<el-button type="danger" @click="$parent.toSelect()" size="medium" icon="el-icon-close">返回</el-button>
+					<el-button type="danger" size="medium" icon="el-icon-close" @click="$parent.toSelect()">返回</el-button>
 				</el-col>
 			</el-row>
 			<el-card style="margin-top: 10px;">
@@ -106,7 +106,7 @@
 						</el-table-column>
 						<el-table-column prop="lengthType" label="字段长度类型" align="center" width="180">
 							<template slot-scope="scope">
-								<el-form-item :prop="'lines[' + scope.$index + '].lengthType'" :rules="rulesTable.lengthType">
+								<el-form-item :prop="'lines[' + scope.$index + '].lengthType'" :rules="rulesShow(scope.row,'lengthType')">
 									<el-select :disabled="showType" style="width: 100%;" v-model="scope.row.lengthType" placeholder="字段长度类型">
 										<el-option v-for="item in lengthTypeList" :key="item.id" :label="item.name" :value="item.id"></el-option>
 									</el-select>
@@ -129,14 +129,14 @@
 						</el-table-column>
 						<el-table-column prop="orderNum" label="显示顺序" align="center">
 							<template slot-scope="scope">
-								<el-form-item :prop="'lines[' + scope.$index + '].orderNum'" :rules="rulesTable.orderNum">
+								<el-form-item :prop="'lines[' + scope.$index + '].orderNum'" :rules="rulesShow(scope.row,'orderNum')">
 									<el-input v-model="scope.row.orderNum" placeholder=""></el-input>
 								</el-form-item>
 							</template>
 						</el-table-column>
 						<el-table-column prop="showNum" label="显示行数" align="center">
 							<template slot-scope="scope">
-								<el-form-item :prop="'lines[' + scope.$index + '].showNum'" :rules="rulesTable.showNum">
+								<el-form-item :prop="'lines[' + scope.$index + '].showNum'" :rules="rulesShow(scope.row,'showNum')">
 									<el-input :disabled="showType" v-model="scope.row.showNum" placeholder=""></el-input>
 								</el-form-item>
 							</template>
@@ -441,16 +441,25 @@
 		},
 		created() {
 			//最上端公司选择
-			this.CompanyData.forEach(item => {
+			/*this.CompanyData.forEach(item => {
 				if(item.name == "福佳集团") {
 					this.ruleForm.company = item.id
 				}
-			})
+			})*/
+            this.ruleForm.company = this.CompanyData[0].id
 			this.$api.collaborativeOffice.findList({}).then(data => {
 				this.selectList = data.data.data
 			})
 		},
 		methods: {
+			//不是显示状态时,不加check
+			rulesShow(row,con) {
+				if(row.show) {
+					return this.rulesTable[con];
+				}else {
+					return ;
+				}
+			},
 			//公司select选择的时候
 			selectChanged(val) {
 				this.ruleForm.workItemTypeSubName = '';
@@ -721,7 +730,7 @@
 								obj.children=obj.childrenList;
 								delete obj.childrenList;
 								parent[i]=obj;
-								children(parent[i].children,type);	
+								children(parent[i].children,type);
 							}else{
 								parent[i].children=[];
 							}

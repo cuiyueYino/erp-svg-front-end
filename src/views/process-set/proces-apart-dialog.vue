@@ -74,8 +74,8 @@
                
                
                 <el-col :span="6" >
-                    <el-button type="primary" size="small" plain @click="reWorkSearchTable">重置</el-button>
-                    <el-button type="primary" size="small" plain @click="workSearchTable">搜索</el-button>
+                    <el-button type="success" size="medium" icon='el-icon-search' plain @click="workSearchTable">搜索</el-button>
+                    <el-button type="primary" size="medium" icon='el-icon-refresh' plain @click="reWorkSearchTable">重置</el-button>
                 </el-col>
              </el-row>
                
@@ -83,7 +83,7 @@
               
           <el-row :gutter="20">
             <el-col :span="13" style="text-align: right;margin-top: 18px;">
-                <el-button  size="small" @click="saveConfig">确定</el-button>
+                <el-button  type='success' size="medium" icon='el-icon-check' @click="saveConfig">确定</el-button>
             </el-col>
             
         </el-row>

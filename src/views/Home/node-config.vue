@@ -352,7 +352,7 @@ export default {
                     "oid": e.serviceOid?e.serviceOid:e.oid,
                     "code":e.serviceCode,
                     "name":e.baseInputServe,
-                    "expression":e.baseTextarea
+                    "expression":e.baseTextarea?e.baseTextarea:e.conditional
                 }
                 this.data.isSaveFlag=true;
                 this.dialogVisible = false;

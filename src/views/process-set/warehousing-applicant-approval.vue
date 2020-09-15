@@ -12,22 +12,22 @@
                 <el-card>
                     <el-row :gutter="24">
                         <el-col :span="10" :offset="14" v-if="rowFstatus == 4?true:false">
-                            <el-button type="success" icon="el-icon-share" plain @click="baseInputTable('转发')">转发</el-button>
-                            <el-button type="danger" icon="el-icon-view" plain @click="basefollow()">关注</el-button>
-                            <el-button type="success" icon="el-icon-success" plain @click="removeBizMail">已阅</el-button>
+                            <el-button type="success" icon="el-icon-position" size="medium" plain @click="baseInputTable('转发')">转发</el-button>
+                            <el-button type="success" icon="el-icon-star-off" size="medium" plain @click="basefollow()">关注</el-button>
+                            <el-button type="primary" icon="el-icon-postcard" size="medium" plain @click="removeBizMail">已阅</el-button>
                         </el-col>
                         <el-col :span="12" :offset="12" v-else-if="rowFstatus == 1?true:false">
-                            <el-button type="danger" icon="el-icon-circle-plus-outline" plain @click="baseInputTable('加签')">加签</el-button>
-                            <el-button type="success" icon="el-icon-share" plain @click="baseInputTable('转发')">转发</el-button>
-                            <el-button type="danger" icon="el-icon-s-order" plain @click="baseInputTable('委托')">委托</el-button>
-                            <el-button type="danger" icon="el-icon-view" plain @click="basefollow()">关注</el-button>
-                            <el-button type="success" icon="el-icon-success" plain @click="effectOrDisableMsg">提交</el-button>
+                            <el-button type="success" icon="el-icon-circle-plus-outline" size="medium" plain @click="baseInputTable('加签')">加签</el-button>
+                            <el-button type="success" icon="el-icon-position" size="medium" plain @click="baseInputTable('转发')">转发</el-button>
+                            <el-button type="success" icon="el-icon-circle-check" size="medium" plain @click="baseInputTable('委托')">委托</el-button>
+                            <el-button type="success" icon="el-icon-star-off" size="medium" plain @click="basefollow()">关注</el-button>
+                            <el-button type="success" icon="el-icon-copy-document" size="medium" plain @click="effectOrDisableMsg">提交</el-button>
                         </el-col>
                         <el-col :span="12" :offset="12" v-else>
-                            <el-button type="danger" icon="el-icon-circle-plus-outline" plain @click="baseInputTable('加签')">加签</el-button>
-                            <el-button type="success" icon="el-icon-share" plain @click="baseInputTable('转发')">转发</el-button>
-                            <el-button type="danger" icon="el-icon-s-order" plain @click="baseInputTable('委托')">委托</el-button>
-                            <el-button type="danger" icon="el-icon-view" plain @click="basefollow()">关注</el-button>
+                            <el-button type="success" icon="el-icon-circle-plus-outline" size="medium" plain @click="baseInputTable('加签')">加签</el-button>
+                            <el-button type="success" icon="el-icon-position" size="medium" plain @click="baseInputTable('转发')">转发</el-button>
+                            <el-button type="success" icon="el-icon-circle-check" size="medium"  plain @click="baseInputTable('委托')">委托</el-button>
+                            <el-button type="success" icon="el-icon-star-off" size="medium" plain @click="basefollow()">关注</el-button>
                         </el-col>
                     </el-row>
                     <el-row :gutter="24">
@@ -64,10 +64,10 @@
                                     <!-- prop="code" -->
                                     <el-form-item label="决策类型" >
                                         <el-radio-group v-model="formdata.fresult">
-                                            <el-radio label="1" v-if="fresultArray.indexOf('1') !=-1">同意</el-radio>
-                                            <el-radio label="2" v-if="fresultArray.indexOf('2') !=-1">不同意</el-radio>
-                                            <el-radio label="3" v-if="fresultArray.indexOf('3') !=-1">待处理</el-radio>
-                                            <el-radio label="4" v-if="fresultArray.indexOf('4') !=-1">其他</el-radio> 
+                                            <el-radio :label="1" v-if="fresultArray.indexOf('1') !=-1">{{fresultObject['1']}}</el-radio>
+                                            <el-radio :label="2" v-if="fresultArray.indexOf('2') !=-1">{{fresultObject['2']}}</el-radio>
+                                            <el-radio :label="3" v-if="fresultArray.indexOf('3') !=-1">{{fresultObject['3']}}</el-radio>
+                                            <el-radio :label="4" v-if="fresultArray.indexOf('4') !=-1">{{fresultObject['4']}}</el-radio> 
                                         </el-radio-group>
                                     </el-form-item>
                                 </el-col>
@@ -164,6 +164,7 @@ export default {
     inject: ['reload'],
     data: function() {
         return {
+            fresultObject:{},
             fresultArray:[],
             itemsFlag:false,
             todoFlag:true,
@@ -570,8 +571,7 @@ export default {
                 if(res.data.code == 0){
                     let SetelData=res.data.data;
                     this.fresultArray = Object.keys(SetelData);
-                    // debugger
-                    // console.log(this.fresultArray.indexOf('4'));
+                    this.fresultObject = res.data.data;
                 }
             },error=>{
                 console.log(error)

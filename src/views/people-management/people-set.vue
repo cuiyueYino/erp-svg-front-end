@@ -24,17 +24,17 @@
 						</el-form-item>
 
 						<el-form-item>
-							<el-button type="primary" plain @click="showFig = false;onSubmit()">搜索</el-button>
+							<el-button type="primary" icon='el-icon-search' size="medium" plain @click="showFig = false;onSubmit()">搜索</el-button>
 						</el-form-item>
 						<el-form-item>
-							<el-button type="primary" plain @click="showFig = false;resetForm('form')" class="search-all">显示全部信息</el-button>
+							<el-button type="primary" icon="el-icon-tickets" size="medium" plain @click="showFig = false;resetForm('form')" class="search-all">显示全部信息</el-button>
 						</el-form-item>
 					</el-form>
 				</el-col>
 				<el-col :span="6" style="text-align: right;">
-					<el-button type="success" plain class="el-icon-plus" @click="add()">新增</el-button>
-					<el-button type="danger" plain class="el-icon-delete" @click="deleteMsg">删除</el-button>
-					<el-button type="warning" plain class="el-icon-edit" @click="toEdit('编辑')">编辑</el-button>
+					<el-button type="success" icon="el-icon-folder-add" size="medium" plain @click="add()">新增</el-button>
+					<el-button type="danger" plain icon="el-icon-delete" size="medium" @click="deleteMsg">删除</el-button>
+					<el-button type="warning" plain icon="el-icon-document-copy" size="medium" @click="toEdit('编辑')">编辑</el-button>
 				</el-col>
 			</el-row>
 		</el-card>
@@ -133,17 +133,18 @@
 					</el-table-column>
 					<el-table-column align="right" width="100">
 						<template slot="header" slot-scope="scope">
-							<el-button size="mini" @click="addRow()">新增</el-button>
+							<el-button type="success" icon="el-icon-folder-add" size="medium" plain @click="addRow()">新增</el-button>
 						</template>
 						<template slot-scope="scope">
-							<el-button size="mini" type="danger" @click="peopleForm.tableData3.splice(scope.$index, 1)">删除</el-button>
+							<el-button type="danger" plain icon="el-icon-delete" size="medium" @click="peopleForm.tableData3.splice(scope.$index, 1)">删除</el-button>
 						</template>
 					</el-table-column>
 				</el-table>
 			</el-form>
 			<div slot="footer">
-				<el-button @click="dialogFormVisible = false">取 消</el-button>
-				<el-button type="primary" @click="addSubmit('peopleForm')">保 存</el-button>
+				<el-button type="success" icon='el-icon-copy-document' size="medium" @click="addSubmit('peopleForm')">保存</el-button>
+				<el-button type='warning' icon='el-icon-close' size="medium" @click="dialogFormVisible = false">取消</el-button>
+				
 			</div>
 		</erpDialog>
 		<!-- 部门/职位弹窗 -->
@@ -151,8 +152,8 @@
 			<!-- 树状图 -->
 			<el-tree class="filter-tree" :data="treeData" :props="defaultProps" default-expand-all :filter-node-method="filterNode" ref="tree" @node-click="handleNodeClick"></el-tree>
 			<div slot="footer">
-				<el-button @click="userVisible = false">取 消</el-button>
-				<el-button type="primary" @click="addDepart()">确 定</el-button>
+				<el-button type='success' size="medium" icon='el-icon-check' @click="addDepart()">确定</el-button>
+				<el-button type='warning' icon='el-icon-close' size="medium" @click="userVisible = false">取消</el-button>
 			</div>
 		</erpDialog>
 	</div>
@@ -187,6 +188,7 @@
 				dialogFormVisible: false,
 				userVisible: false,
 				isEdit: false,
+				searchflag: false,
 				treeData: [],
 				defaultProps: {
 					children: "children",
@@ -458,6 +460,7 @@
 			},
 			resetForm(formName) {
 				this.$refs[formName].resetFields();
+				this.searchflag=false;
 				this.pageNum = 1;
 				this.getTableData("");
 			},
@@ -506,7 +509,12 @@
 			//分页、下一页
 			onCurrentChange(val) {
 				this.pageNum = val;
-				this.getTableData(this.reqSelect);
+				this.reqSelect = this.form.select
+				if(this.searchflag){
+					this.getTableData(this.reqSelect);
+				}else{
+					this.getTableData("");
+				}
 			},
 			getCompany() {
 				this.$api.jobUserManagement.getCompanyData().then(res => {
@@ -519,6 +527,7 @@
 			},
 			// 搜索
 			onSubmit() {
+				this.searchflag=true;
 				this.pageNum = 1;
 				this.reqSelect = this.form.select
 				this.getTableData(this.reqSelect);

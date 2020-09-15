@@ -67,17 +67,32 @@
                             <el-card class="box-card" >
                                 <el-row :gutter="24"  class="el-row">
                                     <el-col :span="24">
-                                        <dynamic-table
-                                            :columns="columns"
-                                            :table-data="formdata1"
-                                            :total="total"
-                                            :page-num="pageNum"
-                                            :page-size="pageSize"
-                                            @current-change="onCurrentChange"
-                                            :tableRowClassName="tableRowClassName"
-                                            v-loading="false"
-                                            element-loading-text="加载中"
-                                            ></dynamic-table>
+                                      <el-table :data="formdata1" style="width: 100%" size="small">
+                                        <el-table-column
+                                          prop="fstaffName"
+                                          label="用户">
+                                        </el-table-column>
+                                        <el-table-column
+                                          prop="foperatetype"
+                                          label="操作类型">
+                                        </el-table-column>
+                                        <el-table-column
+                                          prop="foperatetime"
+                                          label="操作时间">
+                                        </el-table-column>
+                                      </el-table>
+                                      <pageNation :total="total" v-if="total != 0" ref="pageNation" @pageChange="pageChange"></pageNation>
+<!--                                        <dynamic-table-->
+<!--                                            :columns="columns"-->
+<!--                                            :table-data="formdata1"-->
+<!--                                            :total="total"-->
+<!--                                            :page-num="pageNum"-->
+<!--                                            :page-size="pageSize"-->
+<!--                                            @current-change="onCurrentChange"-->
+<!--                                            :tableRowClassName="tableRowClassName"-->
+<!--                                            v-loading="false"-->
+<!--                                            element-loading-text="加载中"-->
+<!--                                            ></dynamic-table>-->
                                     </el-col>
                                 </el-row>
                               </el-card>
@@ -101,9 +116,9 @@
                 </el-card>
             </el-form>
             <span slot="footer" class="dialog-footer">
-                <el-button v-if="isShow" @click="handleClose">取 消</el-button>
-                <el-button v-if="isShow" @click="submitForm('formdata',0)">暂 存</el-button>
-                <el-button v-if="isShow" @click="submitForm('formdata',1)">提 交</el-button>
+                <el-button type="success" icon="el-icon-copy-document" size="medium" v-if="isShow" @click="submitForm('formdata',1)">提交</el-button>
+                <el-button type="success" icon="el-icon-folder-remove" size="medium" v-if="isShow" @click="submitForm('formdata',0)">暂存</el-button>
+                <el-button type='warning' icon='el-icon-close' size="medium" v-if="isShow" @click="handleClose">取消</el-button>
             </span>
         </el-dialog>
     </div>
@@ -114,8 +129,7 @@ import DynamicTable from '../../../components/common/dytable/dytable.vue';
 import enclosurefile from './enclosure-file.vue';
 import { quillEditor } from 'vue-quill-editor'; //调用编辑器
 import 'quill/dist/quill.snow.css';
-import * as Quill from 'quill';
-import axios from 'axios';
+import pageNation from '../../collaborative-office/components/pageNation';
 
 export default {
     props: {
@@ -125,7 +139,8 @@ export default {
     components: {
         enclosurefile,
         DynamicTable,
-        quillEditor
+        quillEditor,
+        pageNation
     },
     data(){
         return{
@@ -225,6 +240,17 @@ export default {
         // this.formdata.fcreatetime = new Date();
     },
     methods: {
+      //分页改变
+      pageChange(pageIndex) {
+        debugger;
+        this.pageNum = pageIndex;
+        // this.toSelect();
+        let formDataA ={};
+        formDataA.page=pageIndex;
+        formDataA.size=this.pageSize;
+        formDataA.foid = this.formdata.foid;
+        this.searchMenutable(formDataA);
+      },
         enclosureFile:function(event){
             //子组件传来的event中，fileFoid存在，代表要删除该文件。否则，为上传该文件
             if(event.fileFoid){
@@ -617,8 +643,10 @@ export default {
     background-color: skyblue;
 }
 </style>
-<style lang='scss'>
+<style scoped>
 .ql-editor{
     height:500px;
 }
+
+
 </style>

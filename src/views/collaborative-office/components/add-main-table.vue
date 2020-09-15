@@ -347,11 +347,7 @@
 			}
 		},
 		created() {
-			this.CompanyData.forEach(item => {
-				if(item.name == "福佳集团") {
-					this.ruleForm.company = item.id
-				}
-			})
+            this.ruleForm.company = this.CompanyData[0].id
 			this.$api.collaborativeOffice.findList({}).then(data => {
 				this.selectList = data.data.data
 			})
@@ -416,7 +412,7 @@
 								obj.children=obj.childrenList;
 								delete obj.childrenList;
 								parent[i]=obj;
-								children(parent[i].children,type);	
+								children(parent[i].children,type);
 							}else{
 								parent[i].children=[];
 							}
@@ -707,23 +703,23 @@
 		color: red;
 		font-size: 20px;
 	}
-	
+
 	>>>.el-card {
 		margin-bottom: 10px;
 	}
-	
+
 	>>>.el-card__body {
 		padding: 10px;
 	}
-	
+
 	>>>.el-input.is-disabled .el-input__inner {
 		color: #000000 !important;
 	}
-	
+
 	>>>.el-textarea.is-disabled .el-textarea__inner {
 		color: #000000 !important;
 	}
-	
+
 	>>>.el-checkbox__input.is-disabled.is-checked .el-checkbox__inner::after {
 		border-color: #000000!important;
 	}

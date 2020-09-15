@@ -5,7 +5,7 @@
 				<el-col :span="14">
 					<el-form label-width="10px" ref="formInline" :model="formInline" class="demo-form-inline">
 						<el-row>
-							<el-col :span="4">
+							<el-col :span="3">
 								<el-form-item prop="status">
 									<el-select clearable v-model="formInline.status" placeholder="状态">
 										<el-option v-for="item in statusList" :key="item.id" :label="item.value" :value="item.id">
@@ -13,17 +13,17 @@
 									</el-select>
 								</el-form-item>
 							</el-col>
-							<el-col :span="4">
+							<el-col :span="3">
 								<el-form-item prop="code">
 									<el-input clearable v-model="formInline.code" placeholder="主表分类编码"></el-input>
 								</el-form-item>
 							</el-col>
-							<el-col :span="4">
+							<el-col :span="3">
 								<el-form-item prop="name">
 									<el-input clearable v-model="formInline.name" placeholder="主表分类名称"></el-input>
 								</el-form-item>
 							</el-col>
-							<el-col :span="4">
+							<el-col :span="3">
 								<el-form-item prop="tableName">
 									<el-input clearable v-model="formInline.tableName" placeholder="数据库表名"></el-input>
 								</el-form-item>
@@ -33,7 +33,7 @@
 									<el-input clearable v-model="formInline.remark" placeholder="描述"></el-input>
 								</el-form-item>
 							</el-col>
-							<el-col :span="5">
+							<el-col :span="8">
 								<el-form-item>
 									<el-button type="primary" icon='el-icon-search' size="medium" @click="$refs.pageNation.toBegin()">搜索</el-button>
 									<el-button type="primary" icon='el-icon-refresh' size="medium" @click="$refs.formInline.resetFields();toSelect()">重置</el-button>
@@ -81,13 +81,15 @@
 				}, {
 					id: "2",
 					value: "提交"
-				}, */{
+				}, */
+				{
 					id: "3",
 					value: "有效"
 				}, /*{
 					id: "4",
 					value: "回收"
-				}, */{
+				}, */
+				{
 					id: "7",
 					value: "禁用"
 				}, /*{

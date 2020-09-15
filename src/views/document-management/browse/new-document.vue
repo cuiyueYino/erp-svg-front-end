@@ -4,7 +4,7 @@
             <el-card>
                 <el-row>
                     <el-col v-show="this.printFlg == '2'" :span="2" :offset="22">
-                        <el-button size="small" v-print="printObj" @click="printMethod">打印</el-button>
+                        <el-button type='info' size="medium" icon='el-icon-printer' v-print="printObj" @click="printMethod">打印</el-button>
                     </el-col>
                 </el-row>
             </el-card>

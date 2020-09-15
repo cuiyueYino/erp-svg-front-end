@@ -3,7 +3,7 @@
 		<el-row>
 			<el-col style="text-align: right;">
 				<el-dropdown trigger="click" @command="showForm = true;showSave = true;disabledUpd = false">
-					<el-button :disabled="showFigButton" type="success" plain size="medium"><i class="el-icon-plus"></i>新建</el-button>
+					<el-button :disabled="showFigButton" type="success" plain size="medium"><i class="el-icon-plus"></i>新增</el-button>
 					<el-dropdown-menu slot="dropdown">
 						<el-dropdown-item :disabled="showFig" @click.native="create">类别</el-dropdown-item>
 						<el-dropdown-item :disabled="!showFig" @click.native="create">内容</el-dropdown-item>

@@ -52,8 +52,8 @@
                 </el-card>
             </el-form>
             <span slot="footer" class="dialog-footer">
-                <el-button v-if="isShow" @click="handleClose">取 消</el-button>
-                <el-button v-if="isShow" @click="onHandleSave">保 存</el-button>
+                <el-button type='success' icon='el-icon-copy-document' size="medium" v-if="isShow" @click="onHandleSave">保存</el-button>
+                <el-button type="warning" plain icon="el-icon-close" size="medium" v-if="isShow" @click="handleClose">取消</el-button>
             </span>
         </el-dialog>
     </div>

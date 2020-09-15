@@ -1,5 +1,5 @@
 <template>
-	
+
 	<el-card>
 		<el-row>
 			<el-col style="text-align: center;" :span="24">工作事项模板主表分类</el-col>
@@ -244,7 +244,7 @@
 			}
 		},
 
-		
+
 		created() {
 			if(this.showFigNum == "2") {
 				this.showFig = true
@@ -256,13 +256,14 @@
 				this.showFigAll = true
 				this.ruleForm = this.context
 			}else{
-				this.CompanyData.forEach(item => {
+				/*this.CompanyData.forEach(item => {
 					if(item.name == "福佳集团") {
 					this.ruleForm.company = item.id
 					}
-				})
+				})*/
+                this.ruleForm.company = this.CompanyData[0].id
 			}
-			
+
 		},
 		methods: {
 		  	//字段类型改变

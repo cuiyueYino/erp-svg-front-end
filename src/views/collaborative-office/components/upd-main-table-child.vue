@@ -466,7 +466,7 @@
 			//不是显示状态时,不加check
 			rulesShow(row,con) {
 				if(row.show) {
-					if(this.showType) {
+					if(!this.showType) {
 						return this.rulesTable[con];
 					}else {
 						return ;

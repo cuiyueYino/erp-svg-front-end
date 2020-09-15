@@ -24,10 +24,10 @@
                 ></el-input>
               </el-form-item>
               <el-form-item>
-                <el-button type="primary" size="mini" plain @click="searchKey">搜索</el-button>
+                <el-button type="primary" icon='el-icon-search' size="medium" plain @click="searchKey">搜索</el-button>
               </el-form-item>
               <el-form-item>
-                <el-button size="small" @click="saveConfig">确 定</el-button>
+                <el-button type="success" icon='el-icon-check' size="medium" @click="saveConfig">确定</el-button>
               </el-form-item>
             </el-form>
           </el-col>
@@ -44,13 +44,14 @@
             show-checkbox
             check-on-click-node
             @check-change="handleNodeClick"
+            :default-checked-keys="defautChecked"
             :default-expanded-keys="treeDataObject"
           ></el-tree>
         </div>
         <el-row :gutter="20"></el-row>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button size="small" @click="saveConfig" v-if="strictly">确 定</el-button>
+        <el-button type="success" icon='el-icon-check' size="medium" @click="saveConfig" v-if="strictly">确定</el-button>
       </div>
     </el-dialog>
   </div>
@@ -84,6 +85,7 @@
     },
     data() {
       return {
+        defautChecked:[],
         treeDataObject:[],
         // 表单属性
         form: {
@@ -119,6 +121,7 @@
           this.form.selectVal = "";
           this.strictly = false;
           let resDataArr = null;
+          debugger;
           let staffTree = JSON.parse(localStorage.getItem('conf_staffTree'));
           if (staffTree == null) {
             this.$api.confMangement.getStaffTreeList(this.fromData).then(
