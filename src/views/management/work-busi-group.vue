@@ -504,6 +504,8 @@ export default {
       this.getTableDataGroup();
     },
     getAll() {
+        this.form.region=undefined
+        this.formCode = ''
         this.reqData = {}
       this.getTableDataGroup();
     },
@@ -514,7 +516,7 @@ export default {
         size : this.pageSize,
         fcreator : localStorage.getItem("ms_userId"),
       };
-
+        Object.assign(data,this.reqData);
       this.$api.processSet.getTableDataGroup(data).then(
         (res) => {
           this.tableData = res.data.data.rows;
@@ -652,7 +654,6 @@ export default {
           this.isAdd = true;
           this.isEdit = false;
           this.isLook = false;
-          this.getCompany();
           this.dialogFormVisible = true;
           break;
         case "查看":
