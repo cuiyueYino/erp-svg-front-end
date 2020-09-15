@@ -83,14 +83,14 @@
                             </el-select>
                         </el-col>
                     </el-row>
-                    <el-row class="elrowStyle" size="mini">
+                    <el-row class="elrowStyle" size="mini" >
                         <el-col :span="6" class="elColCenter">业务工作</el-col>
                         <el-col :span="6"  class="elColCenter">左右匹配</el-col>
                         <el-col :span="6">
                         <el-input v-model="DataForm.factivityName" size="mini"></el-input>
                         </el-col>
                     </el-row>
-                    <el-row class="elrowStyle" size="mini">
+                    <el-row class="elrowStyle" size="mini" >
                         <el-col :span="6" class="elColCenter">主题</el-col>
                         <el-col :span="6"  class="elColCenter">左右匹配</el-col>
                         <el-col :span="6">
@@ -123,7 +123,7 @@
                             </el-date-picker>
                         </el-col>
                     </el-row>
-                    <el-row class="elrowStyle" size="mini">
+                    <el-row class="elrowStyle" size="mini" >
                         <el-col :span="6" class="elColCenter">发起人</el-col>
                         <el-col :span="6"  class="elColCenter">等于</el-col>
                         <el-col :span="5">
@@ -159,7 +159,7 @@
                             </el-date-picker>
                         </el-col>
                     </el-row>
-                    <el-row class="elrowStyle" size="mini">
+                    <el-row class="elrowStyle" size="mini" >
                         <el-col :span="6" class="elColCenter">超时</el-col>
                         <el-col :span="6"  class="elColCenter">等于</el-col>
                         <el-col :span="6">
@@ -360,6 +360,10 @@ export default {
         },
         //刷新
         refresh(){
+             for(let key in this.DataForm){
+                this.DataForm[key]  = '';
+             }
+             this.pageNum = 0;
              this.getTableData('')
         },
         //查看
@@ -495,6 +499,7 @@ export default {
                 page:this.pageNum,
                 size:this.pageSize
             };
+            console.log(data)
             this.$api.processSet.getMailInfo(data).then(res=>{
                 this.total = res.data.data.total;
                 this.tableData = res.data.data.rows;

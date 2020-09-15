@@ -336,6 +336,7 @@ export default {
                     this.setAddTag(ParentSelectData[0].foid,participator);
                 }else{
                     this.$emit('changeShow',this.teldata);
+                    this.ShowFinancVisible=false;
                 }
             }else{
                 this.$message.error("请选择人员!");
