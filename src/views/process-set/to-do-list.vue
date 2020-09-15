@@ -579,12 +579,16 @@ export default {
     },
     //查找业务数据
     getmetaClass(data) {
-      let fromdata = data;
+      let fromdata = {
+          page:1,
+          size:99999
+      };
       this.$api.processSet.getProcessClass(fromdata).then((response) => {
+          console.log(response.data.data.rows)
         let responsevalue = response;
         if (responsevalue.data) {
           let returndata = responsevalue.data;
-          this.WFMtypeoptions = returndata.data.rows;
+          this.WFMtypeoptions = response.data.data.rows;
         } else {
           this.$message.success("数据库没有业务数据!");
         }
