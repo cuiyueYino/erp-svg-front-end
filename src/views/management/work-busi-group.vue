@@ -675,6 +675,18 @@ export default {
       switch (Str) {
         case "新增":
           // this.form = {};
+          this.form = {
+            fcompanyName:'',
+            fcompanyoid:'',
+            fteamleaderName:'',
+            fteamleader: "",
+            fteamname: "",
+            fteamid: "",
+            fremark: "",
+            transStaffRelUser: {},
+            staffRelUsers:{},
+            staffRelUsersNames:[]
+          };
           // this.transStaffRelUser = Object.values({});
           // this.staffRelUsers =Object.values({});
           this.saveBtnFlag = false;
