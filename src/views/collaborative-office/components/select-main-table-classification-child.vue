@@ -179,8 +179,10 @@
 			},
             //描述显示
             textLength(row){
-			    if(row.remark.length>50){
-			        return "...";
+                if(row.remark!=null&&row.remark.length>50) {
+                    return row.remark.substring(0,50)+"...";
+                }else {
+                    return row.remark;
                 }
             },
 			//修改
