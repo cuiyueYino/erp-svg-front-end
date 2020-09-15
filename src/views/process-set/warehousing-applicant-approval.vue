@@ -64,10 +64,10 @@
                                     <!-- prop="code" -->
                                     <el-form-item label="决策类型" >
                                         <el-radio-group v-model="formdata.fresult">
-                                            <el-radio label="1" v-if="fresultArray.indexOf('1') !=-1">同意</el-radio>
-                                            <el-radio label="2" v-if="fresultArray.indexOf('2') !=-1">不同意</el-radio>
-                                            <el-radio label="3" v-if="fresultArray.indexOf('3') !=-1">待处理</el-radio>
-                                            <el-radio label="4" v-if="fresultArray.indexOf('4') !=-1">其他</el-radio> 
+                                            <el-radio label="1" v-if="fresultArray.indexOf('1') !=-1">{{fresultObject['1']}}</el-radio>
+                                            <el-radio label="2" v-if="fresultArray.indexOf('2') !=-1">{{fresultObject['2']}}</el-radio>
+                                            <el-radio label="3" v-if="fresultArray.indexOf('3') !=-1">{{fresultObject['3']}}</el-radio>
+                                            <el-radio label="4" v-if="fresultArray.indexOf('4') !=-1">{{fresultObject['4']}}</el-radio> 
                                         </el-radio-group>
                                     </el-form-item>
                                 </el-col>
@@ -164,6 +164,7 @@ export default {
     inject: ['reload'],
     data: function() {
         return {
+            fresultObject:{},
             fresultArray:[],
             itemsFlag:false,
             todoFlag:true,
@@ -174,7 +175,7 @@ export default {
             disabled:false,
             objectoptions:new proData().project,
             formdata: {
-                fresult:1,
+                fresult:0,
                 remark:''
             },
             rowFstatus:0,
@@ -568,10 +569,10 @@ export default {
             DataF.mailId = data;
             return this.$api.processSet.getWfDecisionTypeConByCurNode(DataF).then(res=>{
                 if(res.data.code == 0){
+                    debugger;
                     let SetelData=res.data.data;
                     this.fresultArray = Object.keys(SetelData);
-                    // debugger
-                    // console.log(this.fresultArray.indexOf('4'));
+                    this.fresultObject = res.data.data;
                 }
             },error=>{
                 console.log(error)

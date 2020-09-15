@@ -55,14 +55,14 @@
 
             <el-form-item>
               <el-button
-               type="primary" icon='el-icon-search' size="medium"
+                type="primary"
                 plain
                 @click="onSubmit"
               >搜索</el-button>
             </el-form-item>
             <el-form-item>
               <el-button
-                type="primary" icon="el-icon-tickets" size="medium"
+                type="primary"
                 plain
                 @click="getAll"
                 class="search-all"
@@ -121,139 +121,40 @@
       :visible.sync="dialogFormVisible"
       :close-on-click-modal="false"
     >
-      <el-form
-        :model="form"
-        :rules="rules"
-        ref="form"
-      >
+      <el-form :model="form" :rules="rules" ref="form">
         <el-row :gutter="22">
           <el-col :span="11">
-            <el-form-item
-              label="公司："
-              :label-width="formLabelWidth"
-              class="pop-select"
-              prop="fcompanyoid"
-            >
-              <el-select
-                size="small"
-                :disabled="isLook"
-                clearable
-                placeholder="请选择"
-                value-key="id"
-                v-model="form.fcompanyName"
-                @change="selectCompanyChanged"
-              >
-                <el-option
-                  v-for="item in options"
-                  :key="item.id"
-                  :label="item.name"
-                  :value="item.id"
-                ></el-option>
+            <el-form-item label="公司：" :label-width="formLabelWidth" class="pop-select" prop="fcompanyoid">
+              <el-select size="small" :disabled="isLook" placeholder="请选择" value-key="id" v-model="form.fcompanyName" @change="selectCompanyChanged">
+                <el-option v-for="item in options" :key="item.id" :label="item.name" :value="item.id"></el-option>
               </el-select>
             </el-form-item>
-            <el-form-item
-              label="组名："
-              :label-width="formLabelWidth"
-            >
-              <el-input
-                v-model="form.fteamname"
-                :disabled="isLook"
-                size="small"
-                maxlength="50"
-                autocomplete="off"
-              ></el-input>
+            <el-form-item label="组名：" :label-width="formLabelWidth">
+              <el-input v-model="form.fteamname" :disabled="isLook" size="small" maxlength="50" autocomplete="off"></el-input>
             </el-form-item>
-            <el-form-item
-              label="离职、调转人员："
-              label-width="134px"
-              prop="transStaffRelUser"
-            >
-              <el-input
-                :disabled="true"
-                type="textarea"
-                autosize
-                size="small"
-                placeholder=""
-                :value="getTransStaffRelUser()"
-              >
-              </el-input>
+            <el-form-item label="离职、调转人员：" label-width="134px" prop="transStaffRelUser">
+              <el-input :disabled="true" type="textarea" autosize size="small" placeholder="" :value="getTransStaffRelUser()"></el-input>
             </el-form-item>
-
           </el-col>
           <el-col :span="11">
-            <el-form-item
-              label="编码："
-              :label-width="formLabelWidth"
-              prop="fteamid"
-            >
-              <el-input
-                v-model="form.fteamid"
-                :disabled="isLook"
-                size="small"
-                autocomplete="off"
-              ></el-input>
+            <el-form-item label="编码：" :label-width="formLabelWidth" prop="fteamid">
+              <el-input v-model="form.fteamid" :disabled="isLook" size="small" autocomplete="off"></el-input>
             </el-form-item>
-            <el-form-item
-              label="组长："
-              :label-width="formLabelWidth"
-              prop="fteamleaderName"
-            >
-              <el-input
-                v-model="form.fteamleaderName"
-                :disabled="isLook"
-                placeholder="请选择组长"
-                size="small"
-                autocomplete="off"
-                readonly
-              ></el-input>
-              <img
-                class="icon-search"
-                v-show="!isLook"
-                src="../../assets/img/search.svg"
-                @click="addFteamleader('1','人员查询',)"
-              />
+            <el-form-item label="组长：" :label-width="formLabelWidth" prop="fteamleaderName">
+              <el-input v-model="form.fteamleaderName" :disabled="isLook" placeholder="请选择组长" size="small" autocomplete="off" readonly></el-input>
+              <img class="icon-search" v-show="!isLook" src="../../assets/img/search.svg" @click="addFteamleader('1','用户查询',)"/>
             </el-form-item>
-            <el-form-item
-              label="组员："
-              :label-width="formLabelWidth"
-              prop="staffRelUsersNames"
-            >
-              <el-input
-                type="textarea"
-                autosize
-                :disabled="isLook"
-                size="small"
-                placeholder="请选择组员"
-                v-model="form.staffRelUsersNames"
-                readonly
-              ></el-input>
-              <img
-                class="icon-search"
-                v-show=" !isLook"
-                src="../../assets/img/search.svg"
-                @click="addFteamleader('4','人员查询',)"
-              />
+            <el-form-item label="组员：" :label-width="formLabelWidth" prop="staffRelUsersNames">
+               <el-input type="textarea" autosize :disabled="isLook" size="small" placeholder="请选择组员" v-model="form.staffRelUsersNames" readonly></el-input>
+               <img class="icon-search" v-show=" !isLook" src="../../assets/img/search.svg" @click="addFteamleader('4','用户查询',)"/>
             </el-form-item>
           </el-col>
           <el-col :span="22">
-            <el-form-item
-              label="备注："
-              maxlength="3000"
-              :label-width="formLabelWidth"
-              prop="fremark"
-            >
-              <el-input
-                type="textarea"
-                autosize
-                :disabled="isLook"
-                size="small"
-                v-model="form.fremark"
-              >
-              </el-input>
+            <el-form-item label="备注：" maxlength="3000" :label-width="formLabelWidth" prop="fremark">
+              <el-input type="textarea" autosize :disabled="isLook" size="small" v-model="form.fremark"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
-
       </el-form>
 
       <div
@@ -310,15 +211,12 @@ export default {
       rowPOSStype: false,
       rowPOSSDataObj: {},
       dialogFormVisible: false,
-      userVisible: false,
       isEdit: false,
       isLook: false,
       isAdd: false,
       checkdata: ["duties03", "duties02"],
       searchName: "",
       formCode: "",
-      filterText: "",
-      treeData: [],
       defaultProps: {
         children: "children",
         label: "label",
