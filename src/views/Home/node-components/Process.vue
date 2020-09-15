@@ -38,10 +38,10 @@
         </el-form>
         <el-row :gutter="20">
             <el-col :span="12" style="text-align: right;">
-                <el-button size="small" @click="saveConfig">保存</el-button>
+                <el-button icon='el-icon-copy-document' size="medium" type='success' @click="saveConfig">保存</el-button>
             </el-col>
             <el-col :span="12">
-                <el-button size="small" @click="cancelConfig">取消</el-button>
+                <el-button icon='el-icon-close' size="medium" type='warning' @click="cancelConfig">取消</el-button>
             </el-col>
         </el-row>
     </div>

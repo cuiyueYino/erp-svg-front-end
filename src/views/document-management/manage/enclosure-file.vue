@@ -1,8 +1,8 @@
 <template>
     <div>
         <div style="width:200px;height:40px;float:right;">
-            <el-button size="small" style="margin-left:50px;magin-right:5px;" @click.prevent="addfileRow()" v-show="isShowButton">新增</el-button>
-            <el-button size="small" @click.prevent="delfileData()" v-show="isShowButton">删除</el-button>
+            <el-button type="success" icon="el-icon-folder-add" size="medium" style="margin-left:50px;magin-right:5px;" @click.prevent="addfileRow()" v-show="isShowButton">新增</el-button>
+            <el-button type="danger" size="medium" icon='el-icon-delete' @click.prevent="delfileData()" v-show="isShowButton">删除</el-button>
         </div>
         <div>
             <el-table

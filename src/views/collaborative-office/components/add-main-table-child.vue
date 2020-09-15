@@ -16,7 +16,7 @@
 					<el-button @click="submitForm(2)" type="success" size="medium" icon="el-icon-copy-document">提交</el-button>
 					<el-button @click="submitForm(1)" type="success" size="medium" icon="el-icon-folder-remove">暂存</el-button>
 					<el-button @click="preview()" type="primary" plain size="medium" icon="el-icon-view">预览</el-button>
-					<el-button type="danger" @click="$parent.toSelect()" size="medium" icon="el-icon-close">返回</el-button>
+					<el-button type="danger" size="medium" icon="el-icon-close" @click="$parent.toSelect()">返回</el-button>
 				</el-col>
 			</el-row>
 			<el-card style="margin-top: 10px;">
