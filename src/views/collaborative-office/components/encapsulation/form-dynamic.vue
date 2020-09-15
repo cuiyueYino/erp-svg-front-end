@@ -70,8 +70,8 @@
 			<erpDialog :title="titleShow" erpDialogwidth="false" :dialogShow="dialogVisible">
 				<formIconComponents ref="child" :showFig="showCon" :dataCon="dataCon"></formIconComponents>
 				<div slot="footer">
-					<el-button @click="dialogVisible = false">取 消</el-button>
-					<el-button type="primary" @click="getDialogVisible">确 定</el-button>
+					<el-button type="success" icon='el-icon-check' size="medium" @click="getDialogVisible">确定</el-button>
+					<el-button type="warning" icon='el-icon-close' size="medium" @click="dialogVisible = false">取消</el-button>
 				</div>
 			</erpDialog>
 		</div>

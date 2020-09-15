@@ -8,8 +8,8 @@
 	<el-dialog :title="title?title:'工作事项模板主表'" top="1vh" :destroy-on-close="true" center :visible.sync="dialogVisible" width="80%">
 		<selectWorkItems show="1" :status="status" ref="childMain"></selectWorkItems>
 		<div slot="footer" class="dialog-footer">
-			<el-button @click="dialogVisible = false">取 消</el-button>
-			<el-button type="primary" @click="getDialogVisible">确 定</el-button>
+			<el-button type="success" icon='el-icon-check' size="medium" @click="getDialogVisible">确定</el-button>
+			<el-button type="warning" icon='el-icon-close' size="medium" @click="dialogVisible = false">取消</el-button>
 		</div>
 	</el-dialog>
 </template>
