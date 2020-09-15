@@ -35,18 +35,18 @@
           </el-date-picker>
         </el-col >
         <el-col :span="4">
-          <el-button el-button type="primary" @click="search" icon="el-icon-search" size="mini">搜索</el-button>
-          <el-button type="primary" plain class="el-icon-paperclip" @click="showAll" size="mini">显示全部</el-button>
+          <el-button el-button type="primary" icon="el-icon-search" size="medium" @click="search">搜索</el-button>
+          <el-button type="primary" icon="el-icon-tickets" size="medium" plain @click="showAll">显示全部</el-button>
         </el-col>
         <el-col :span="13" style="text-align: right;">
-          <el-button type="primary" plain class="el-icon-paperclip" @click="getUnRead" size="mini">未读邮件({{unReadCount}})</el-button>
-          <el-button type="primary" plain class="el-icon-check" @click="setRead" size="mini">已读</el-button>
-          <el-button type="primary" plain class="el-icon-check" @click="setReadAll" size="mini">全部已读</el-button>
-          <el-button type="primary" plain class="el-icon-s-promotion" @click="reply" size="mini">回复</el-button>
-          <el-button type="primary" plain class="el-icon-s-promotion" @click="replyAll" size="mini">回复全部</el-button>
-          <el-button type="primary" plain class="el-icon-share" @click="relay" size="mini">转发</el-button>
-          <el-button type="info" plain class="el-icon-reading" @click="read" size="mini">查看</el-button>
-          <el-button type="danger" plain class="el-icon-delete" @click="deleteMsg" size="mini">删除</el-button>
+          <el-button type="primary" icon='el-icon-message' size="medium" plain @click="getUnRead">未读邮件({{unReadCount}})</el-button>
+          <el-button type="primary" plain icon="el-icon-postcard" size="medium" @click="setRead">已读</el-button>
+          <el-button type="primary" plain icon="el-icon-finished" size="medium" @click="setReadAll">全部已读</el-button>
+          <el-button type="primary" plain icon="el-icon-chat-line-round" size="medium"  @click="reply">回复</el-button>
+          <el-button type="primary" plain class="el-icon-document-checked" size="medium" @click="replyAll">回复全部</el-button>
+          <el-button type="success" plain icon="el-icon-position" size="medium" @click="relay">转发</el-button>
+          <el-button type="info" plain icon="el-icon-view"  size="medium" @click="read">查看</el-button>
+          <el-button type="danger" plain icon="el-icon-delete" size="medium" @click="deleteMsg">删除</el-button>
         </el-col>
       </el-row>
     </el-card>

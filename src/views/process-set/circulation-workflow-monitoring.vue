@@ -106,8 +106,8 @@
                 </el-card>
             </el-form>
             <span slot="footer" v-if="LookOrupdate" class="dialog-footer">
-                <el-button type="primary" @click="ShowFinancVisible=false">取消</el-button>
-                <el-button @click="saveNewAndEdit()">提交</el-button>
+                <el-button type='warning' icon='el-icon-close' size="medium" @click="ShowFinancVisible=false">取消</el-button>
+                <el-button type='success' icon='el-icon-copy-document' size="medium" @click="saveNewAndEdit()">提交</el-button>
             </span>
         </el-dialog>
         <UserTree  :rowUTSDataObj="rowUTSDataObj" :rowUTStype="rowUTStype" @changeShow="closeBaseInfo"/>

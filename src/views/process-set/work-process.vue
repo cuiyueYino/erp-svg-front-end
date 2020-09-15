@@ -10,19 +10,19 @@
                     </el-form-item>
 
                     <el-form-item>
-                        <el-button type="primary" plain @click="onSubmit">搜索</el-button>
+                        <el-button type="primary" icon='el-icon-search' size="medium" plain @click="onSubmit">搜索</el-button>
                     </el-form-item>
                     <el-form-item>
-                        <el-button type="primary" plain @click="getAll" class="search-all">显示全部信息</el-button>
+                        <el-button type="primary" icon='el-icon-tickets' size="medium" plain @click="getAll" class="search-all">显示全部信息</el-button>
                     </el-form-item>
                     </el-form>
                 </el-col>
                  <el-col :span="10">
-                     <el-button type="success" plain @click="add">新增</el-button>
-                     <el-button type="danger" plain @click="deleteMsg">删除</el-button>
-                     <el-button type="warning" plain @click="toEdit">编辑</el-button>
-                     <el-button type="success" plain @click="effectOrDisableMsg('生效')">生效</el-button>
-                     <el-button type="danger" plain @click="effectOrDisableMsg('禁用')">禁用</el-button>
+                     <el-button type="success" icon='el-icon-folder-add' size="medium" plain @click="add">新增</el-button>
+                     <el-button type="danger" icon='el-icon-delete' size="medium" plain @click="deleteMsg">删除</el-button>
+                     <el-button type="warning" icon='el-icon-document-copy' size="medium" plain @click="toEdit">编辑</el-button>
+                     <el-button type="success" icon='el-icon-magic-stick'  size="medium" plain @click="effectOrDisableMsg('生效')">生效</el-button>
+                     <el-button type="danger" icon='el-icon-circle-close' size="medium" plain @click="effectOrDisableMsg('禁用')">禁用</el-button>
                  </el-col>
             </el-row>
         </el-card>
@@ -85,8 +85,8 @@
 
             </el-form>
             <div slot="footer" class="dialog-footer">
-                <el-button @click="closeDialog('form')">取 消</el-button>
-                <el-button type="primary" @click="addSubmit('form')">确 定</el-button>
+                <el-button type="success" icon='el-icon-check' size="medium" @click="addSubmit('form')">确定</el-button>
+                <el-button type="warning" icon='el-icon-close' size="medium" @click="closeDialog('form')">取消</el-button>
             </div>
         </el-dialog>
          <el-form :model="formProcess"  ref="formProcess">

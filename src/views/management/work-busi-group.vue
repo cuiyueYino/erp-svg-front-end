@@ -4,22 +4,53 @@
     <el-card class="box-card">
       <el-row :gutter="24">
         <el-col :span="16">
-          <el-form :inline="true" class="demo-form-inline">
+          <el-form
+            :inline="true"
+            class="demo-form-inline"
+          >
             <el-col :span="3">
               <el-form-item>
-                <el-select v-model="form.region" placeholder="请选择">
-                    <el-option label="公司名称" value="fcompanyoid"></el-option>
-                    <el-option label="编码" value="fteamid"></el-option>
-                    <el-option label="组名" value="fteamname"></el-option>
-                    <el-option label="组长名称" value="fteamleader"></el-option>
-                    <el-option label="组员" value="staffNames"></el-option>
-                    <el-option label="离职、调转人员" value="transStaffNames"></el-option>
-                    <el-option label="备注" value="fremark"></el-option>
+                <el-select
+                  v-model="form.region"
+                  placeholder="请选择"
+                >
+                  <el-option
+                    label="公司名称"
+                    value="shanghai"
+                  ></el-option>
+                  <el-option
+                    label="编码"
+                    value="beijing"
+                  ></el-option>
+                  <el-option
+                    label="组名"
+                    value="miaoshu"
+                  ></el-option>
+                  <el-option
+                    label="组长名称"
+                    value="gongsi"
+                  ></el-option>
+                  <el-option
+                    label="组员"
+                    value="bumen"
+                  ></el-option>
+                  <el-option
+                    label="离职、调转人员"
+                    value="renzhizhuangtai"
+                  ></el-option>
+                  <el-option
+                    label="备注"
+                    value="bumen"
+                  ></el-option>
                 </el-select>
               </el-form-item>
             </el-col>
             <el-form-item>
-                <el-input clearable v-model="formCode" placeholder="请输入任意查询内容"></el-input>
+              <el-input
+                clearable
+                v-model="formCode"
+                placeholder="请输入任意查询内容"
+              ></el-input>
             </el-form-item>
 
             <el-form-item>
@@ -39,11 +70,30 @@
             </el-form-item>
           </el-form>
         </el-col>
-        <el-col :span="8" style="text-align: right;">
-            <el-button type="success" plain class="el-icon-plus" @click="toEdit('新增')"> 新增</el-button>
-            <el-button type="danger" plain class="el-icon-delete" @click="deleteMsg"> 删除</el-button>
-            <el-button type="warning" plain class="el-icon-edit" @click="toEdit('编辑')"> 编辑</el-button>
-            <el-button type="primary" plain class="el-icon-view" @click="toEdit('查看')"> 查看</el-button>
+        <el-col
+          :span="8"
+          style="text-align: right;"
+        >
+          <el-button
+            type="success" icon="el-icon-folder-add" size="medium"
+            plain
+            class="el-icon-plus"
+            @click="toEdit('新增')"
+          > 新增</el-button>
+          <el-button
+            type="danger" plain icon="el-icon-delete" size="medium"
+            @click="deleteMsg"
+          > 删除</el-button>
+          <el-button
+            type="warning" plain icon="el-icon-document-copy" size="medium"
+            class="el-icon-edit"
+            @click="toEdit('编辑')"
+          > 编辑</el-button>
+          <el-button
+            type="info" plain icon="el-icon-view"  size="medium"
+            class="el-icon-view"
+            @click="toEdit('查看')"
+          > 查看</el-button>
         </el-col>
       </el-row>
 
@@ -69,7 +119,6 @@
       center
       width="50%"
       :visible.sync="dialogFormVisible"
-      v-if="dialogFormVisible"
       :close-on-click-modal="false"
     >
       <el-form :model="form" :rules="rules" ref="form">
@@ -108,9 +157,15 @@
         </el-row>
       </el-form>
 
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button :disabled="saveBtnFlag" type="primary" @click="addSubmit('form')">保 存</el-button>
+      <div
+        slot="footer"
+        class="dialog-footer"
+      >
+        <el-button :disabled="saveBtnFlag"
+          type="success" icon='el-icon-copy-document' size="medium"
+          @click="addSubmit('form')"
+        >保存</el-button>
+        <el-button type='warning' icon='el-icon-close' size="medium" @click="dialogFormVisible = false">取消</el-button>
       </div>
     </el-dialog>
 
@@ -252,17 +307,11 @@ export default {
       },
       searchForm: {},
       userForm: {},
-      options:JSON.parse(localStorage.getItem('CompanyData')),
+      options: [],
       choseDepart: "",
       formLabelWidth: "120px",
       rules: {
-        fteamid: [
-            { required: true, message: "请输入编码", trigger: "blur" },
-            {
-                pattern: /^[a-z_A-Z0-9-\.!@#\$%\\\^&\*\)\(\+=\{\}\[\]\/",'<>~\·`\?:;|]+$/,
-                message: '请输入正确的编码'
-            }
-         ],
+        fteamid: [{ required: true, message: "请输入编码", trigger: "blur" }],
         fteamleaderName: [
           { required: true, message: "请选择组长名称", trigger: "blur" },
         ],
@@ -270,8 +319,6 @@ export default {
           { required: true, message: "请选择组员名称", trigger: "blur" },
         ],
       },
-
-      reqData: {}
     };
   },
   components: {
@@ -279,8 +326,11 @@ export default {
     staffTreeSearch
   },
   created() {
-    this.form.fcompanyName = this.options[0].id
-    this.getTableDataGroup();
+    let fromdata={};
+    fromdata.page=this.pageNum;
+    fromdata.size=this.pageSize;
+    fromdata.fcreator=localStorage.getItem("ms_userId")
+    this.getTableDataGroup(fromdata);
   },
   computed: {},
   watch: {
@@ -495,35 +545,22 @@ export default {
     },
     //分页、下一页
     onCurrentChange(val) {
-        this.pageNum = val;
-        this.getTableDataGroup();
+      this.pageNum = val;
+      this.getTableDataGroup("");
     },
     // 搜索
     onSubmit() {
-        this.pageNum = 1;
-        if(this.form.region!=undefined){
-            this.reqData = {
-                [this.form.region] : this.formCode
-            }
-        }
-      this.getTableDataGroup();
+      this.getTableDataGroup(this.formCode);
     },
     getAll() {
-      this.reqData = {}
-      this.getTableDataGroup();
+      this.getTableDataGroup("");
     },
     // 获取表格数据
-    getTableDataGroup() {
-      let data ={
-            page:this.pageNum,
-            size:this.pageSize,
-            fcreator:localStorage.getItem("ms_userId"),
-      };
-      Object.assign(data,this.reqData);
+    getTableDataGroup(params) {
+      let data=params;
       this.$api.processSet.getTableDataGroup(data).then(
         (res) => {
           this.tableData = res.data.data.rows;
-          this.total = res.data.data.total;
           for (let i in this.tableData) {
             switch (this.tableData[i].fstatus) {
               case 3:
@@ -585,27 +622,18 @@ export default {
         this.$message.error("只能选择一个删除");
         return;
       }
-        this.$confirm('此操作将永久删除, 是否继续?', '提示', {
-            confirmButtonText: '确定',
-            cancelButtonText: '取消',
-            type: 'warning'
-        }).then(() => {
-            this.$api.processSet.delWorkGroupList(this.multipleSelection[0].foid).then((res) => {
-                if ((res.data.data.msg = "success")) {
-                    this.$message.success("删除成功");
-                    //刷新表格
-                    this.reload();
-                }
-            }),(error) => {
-                console.log(error);
-            };
-        }).catch(() => {
-            this.$message({
-                type: 'info',
-                message: '已取消删除'
-            });
-        });
-
+      this.$api.processSet
+        .delWorkGroupList(this.multipleSelection[0].foid)
+        .then((res) => {
+          if ((res.data.data.msg = "success")) {
+            this.$message.success("删除成功");
+            //刷新表格
+            this.reload();
+          }
+        }),
+        (error) => {
+          console.log(error);
+        };
     },
     //生效/禁用
     effectOrDisableMsg() {
@@ -646,15 +674,6 @@ export default {
     toEdit(Str) {
       switch (Str) {
         case "新增":
-            this.form.fcompanyName = this.options[0].id;
-            this.form.fteamleaderName = '';
-            this.form.fteamleader = '';
-            this.form.fteamname = '';
-            this.form.fteamid = '';
-            this.form.fremark = '';
-            this.form.transStaffRelUser = [];
-            this.form.staffRelUsers = [];
-            this.form.staffRelUsersNames = '';
           // this.form = {};
           // this.transStaffRelUser = Object.values({});
           // this.staffRelUsers =Object.values({});
@@ -662,6 +681,7 @@ export default {
           this.isAdd = true;
           this.isEdit = false;
           this.isLook = false;
+          this.getCompany();
           this.dialogFormVisible = true;
           break;
         case "查看":

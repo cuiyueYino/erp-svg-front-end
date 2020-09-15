@@ -77,8 +77,8 @@
                 </el-card>
             </el-form>
             <span slot="footer" class="dialog-footer">
-                <el-button @click="handleClose">取 消</el-button>
-                <el-button type="primary" @click="onHandleSave">确认</el-button>
+                <el-button type="success" icon='el-icon-check' size="medium" @click="onHandleSave">确认</el-button>
+                <el-button type="warning" icon='el-icon-close' size="medium" @click="handleClose">取消</el-button>
             </span>
         </el-dialog>
         <RMDmaintenpage  :rowRMDtype="rowRMDtype" :rowRMDDataObj="rowRMDDataObj" @changeShow="showMoreRMD"/>

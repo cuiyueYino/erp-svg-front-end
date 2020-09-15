@@ -29,10 +29,10 @@
 							</el-radio-group>
 						</el-form-item>
 						<el-form-item style="margin-left:0px;float:right;">
-							<el-button type="primary" plain @click="onSubmit">搜索</el-button>
-							<el-button type="primary" plain @click="resetForm('searchForm')">重置</el-button>
-							<el-button type="success" plain @click="add"> 新 增</el-button>
-							<el-button type="warning" plain @click="toEdit('编辑')"> 编 辑</el-button>
+							<el-button type="primary" icon='el-icon-search' size="medium" plain @click="onSubmit">搜索</el-button>
+							<el-button type="primary" icon='el-icon-refresh' size="medium" plain @click="resetForm('searchForm')">重置</el-button>
+							<el-button type="success" icon='el-icon-folder-add' size="medium" plain @click="add">新增</el-button>
+							<el-button type="warning" icon='el-icon-document-copy' size="medium" plain @click="toEdit('编辑')">编辑</el-button>
 						</el-form-item>
 					</el-col>
 				</el-row>
@@ -95,8 +95,8 @@
 			<el-divider></el-divider>
 			<dynamic-table :columns="columns2" :table-data="tableData2" :isShowPager="false" :total="total" :height="200" :page-num="pageNum" :page-size="pageSize" @current-change="onCurrentChange" @selection-change="onSelectionChange" v-loading="false" element-loading-text="加载中"></dynamic-table>
 			<div slot="footer" class="dialog-footer">
-				<el-button @click="closeDialog('form')">取 消</el-button>
-				<el-button @click="addSubmit('form')">保 存</el-button>
+				<el-button type="success" icon='el-icon-copy-document' size="medium"  @click="addSubmit('form')">保存</el-button>
+				<el-button type="warning" icon='el-icon-close' size="medium" @click="closeDialog('form')">取消</el-button>
 			</div>
 		</el-dialog>
 		<!-- 使用者弹窗 -->
@@ -106,8 +106,8 @@
 					<el-input placeholder="输入用户名" size="mini" v-model="filterText"></el-input>
 				</el-col>
 				<el-col :span="6" :offset="6">
-					<el-button type="primary" size="mini" @click="searchDepart">查询</el-button>
-					<el-button size="mini" @click="ALLUsertree">重置</el-button>
+					<el-button type="primary" icon='el-icon-search' size="medium" @click="searchDepart">查询</el-button>
+					<el-button  type='primary' size="medium" icon='el-icon-refresh' @click="ALLUsertree">重置</el-button>
 				</el-col>
 			</el-row>
 			<!-- <el-input placeholder="输入关键字进行过滤" v-model="filterText"></el-input>-->
@@ -115,8 +115,8 @@
 			<el-tree class="filter-tree" :data="treeData" v-loading="loading" element-loading-text="拼命加载中" :props="defaultProps" :default-expand-all="false" accordion :filter-node-method="filterNode" ref="tree" @node-click="handleNodeClick">
 			</el-tree>
 			<div slot="footer" class="dialog-footer">
-				<el-button @click="closUserVisible">取 消</el-button>
-				<el-button type="primary" @click="sureDepart">确 定</el-button>
+				<el-button type="success" icon='el-icon-check' size="medium" @click="sureDepart">确定</el-button>
+				<el-button type="warning" icon='el-icon-close' size="medium" @click="closUserVisible">取消</el-button>
 			</div>
 		</el-dialog>
 		<!-- 禁用操作弹窗 -->
@@ -133,8 +133,8 @@
 				</el-form-item>
 			</el-form>
 			<div slot="footer" class="dialog-footer">
-				<el-button @click="userForbidenVisible = false">取 消</el-button>
-				<el-button type="primary" @click="addTableData">确 定</el-button>
+				<el-button type="success" icon='el-icon-check' size="medium" @click="addTableData">确定</el-button>
+				<el-button type="warning" icon='el-icon-close' size="medium" @click="userForbidenVisible = false">取消</el-button>
 			</div>
 		</el-dialog>
 	</div>
@@ -155,6 +155,7 @@
 				userVisible: false,
 				isEdit: false,
 				resetCheck: false,
+				searchflag: false,
 				formCtionTypeCon: '',
 				formForbidenRes: '',
 				searchName: '',
@@ -474,14 +475,22 @@
 			},
 			// 搜索
 			onSubmit() {
+				this.searchflag=true;
 				this.pageNum = 1;
 				this.getTableData(this.formCode);
 			},
 			// 获取表格数据
 			getTableData() {
-				this.searchForm.page = this.pageNum;
-				this.searchForm.size = this.pageSize;
-				this.$api.jobUserManagement.getUserTableData(this.searchForm).then(
+				let formData={};
+				if(this.searchflag){
+					this.searchForm.page = this.pageNum;
+					this.searchForm.size = this.pageSize;
+					formData=this.searchForm;
+				}else{
+					formData.page = this.pageNum;
+					formData.size = this.pageSize;	
+				}
+				this.$api.jobUserManagement.getUserTableData(formData).then(
 					res => {
 						this.tableData = res.data.data.rows;
 						this.total = res.data.data.total;
@@ -514,6 +523,7 @@
 				);
 			},
 			resetForm(formName) {
+				this.searchflag=false;
 				this.$refs[formName].resetFields();
 				this.pageNum = 1;
 				this.getTableData();
