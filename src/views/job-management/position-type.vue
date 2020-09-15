@@ -18,18 +18,18 @@
               <el-input clearable v-model="form.selectVal" placeholder="请输入任意查询内容"></el-input>
             </el-form-item>
             <el-form-item>
-              <el-button type="primary" plain @click="onSubmit">搜索</el-button>
+              <el-button type="primary" icon='el-icon-search' size="medium" plain @click="onSubmit">搜索</el-button>
             </el-form-item>
             <el-form-item>
-              <el-button type="primary" plain @click="resetForm('form')" class="search-all">显示全部信息</el-button>
+              <el-button type="primary" icon="el-icon-tickets" size="medium" plain @click="resetForm('form')" class="search-all">显示全部信息</el-button>
             </el-form-item>
           </el-form>
         </el-col>
         <el-col :span="6" style="text-align: right;">
-          <el-button type="success" plain class="el-icon-plus" @click="add">新增</el-button>
-          <el-button type="warning" plain class="el-icon-edit" @click="toEdit">修改</el-button>
-          <el-button type="danger" plain class="el-icon-delete" @click="deleteMsg">删除</el-button>
-          <el-button type="primary" plain class="el-icon-search" @click="queryMsg">查看</el-button>
+          <el-button type="success" plain icon="el-icon-folder-add" size="medium" @click="add">新增</el-button>
+          <el-button type="warning" plain icon="el-icon-edit-outline" size="medium" @click="toEdit">修改</el-button>
+          <el-button type="danger" plain icon="el-icon-delete" size="medium" @click="deleteMsg">删除</el-button>
+          <el-button type="info" plain icon="el-icon-view"  size="medium" @click="queryMsg">查看</el-button>
         </el-col>
       </el-row>
     </el-card>
@@ -83,8 +83,8 @@
       </el-form>
 
       <div slot="footer" class="dialog-footer">
-        <el-button @click="addFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="addSubmit('searchForm')">保 存</el-button>
+        <el-button type="success" icon='el-icon-copy-document' size="medium" @click="addSubmit('searchForm')">保存</el-button>
+        <el-button type='warning' icon='el-icon-close' size="medium" @click="addFormVisible = false">取消</el-button>
       </div>
     </el-dialog>
     <!-- 编辑弹出框 -->
@@ -123,8 +123,8 @@
       </el-form>
 
       <div slot="footer" class="dialog-footer">
-        <el-button @click="editFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="addSubmit('searchForm')">保 存</el-button>
+        <el-button type="success" icon='el-icon-copy-document' size="medium" @click="addSubmit('searchForm')">保存</el-button>
+        <el-button type='warning' icon='el-icon-close' size="medium" @click="editFormVisible = false">取消</el-button>
       </div>
     </el-dialog>
     <!-- 查看弹出框 -->
