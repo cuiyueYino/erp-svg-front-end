@@ -15,7 +15,8 @@
 							<!-- 字符型 / 文本框 / 整型 / 浮点型 -->
 							<el-input @focus="fuwu(item,scope.row)" v-model="scope.row[item.field]" v-if="item.fieldTypeName=='character' || item.fieldTypeName=='textType' || item.fieldTypeName=='integers' || item.fieldTypeName=='floatingPoint' && item.show" style="width: 100%;" :disabled="!item.edit" />
 							<!--富文本-->
-							<quill-editor v-if="item.fieldTypeName=='richText' && item.show" style="width: 100%;" v-model="scope.row[item.field]" ref="myQuillEditor" :options="editorOption" @blur="onEditorBlur($event)" @focus="onEditorFocus($event)" @change="onEditorChange($event)"></quill-editor>
+							<!--<quill-editor v-if="item.fieldTypeName=='richText' && item.show" style="width: 100%;" v-model="scope.row[item.field]" ref="myQuillEditor" :options="editorOption" @blur="onEditorBlur($event)" @focus="onEditorFocus($event)" @change="onEditorChange($event)"></quill-editor>-->
+							<editor v-if="item.fieldTypeName == 'richText' && item.show" v-model="ruleForm[item.field]"></editor>
 							<!-- 日期选择器 -->
 							<el-date-picker v-if="item.fieldTypeName=='dateControl' && item.show" @change="getDate(item)" style="width: 100%;" :disabled="!item.edit" v-model="scope.row[item.field]" type="date" value-format="yyyy-MM-dd" placeholder="选择日期" />
 							<!--时间控件-->
@@ -58,6 +59,7 @@
 	//所有弹出框
 	import formIconComponents from '../../../../views/collaborative-office/components/encapsulation/sub-components/form-icon-components';
 	import workflowDialog from '../../../../views/collaborative-office/components/encapsulation/sub-components/workflow-dialog';
+	import editor from './test';
 	//富文本
 	import { quillEditor } from 'vue-quill-editor'; //调用编辑器
 	import 'quill/dist/quill.snow.css';
@@ -67,6 +69,7 @@
 		components: {
 			quillEditor,
 			formIconComponents,
+			editor,
 			workflowDialog
 		},
 		props: {

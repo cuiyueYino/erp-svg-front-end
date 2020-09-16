@@ -94,6 +94,7 @@ export default {
     inject: ['reload'],
     data(){
         return{
+            isFind:false,
             documentLevel: '',
             documentFpid:'',
             input: '',
@@ -167,11 +168,12 @@ export default {
 
         //查询按钮
         findData(){
+            this.isFind = true;
             this.pageNum = 1;
-            let field = this.formInline.document;
             let fromdata={};
             fromdata.page=this.pageNum;
             fromdata.size=this.pageSize;
+            let field = this.formInline.document;
             if("fcode" == field){
                 fromdata.fcode=this.input;
             } else if ("fname" == field){
@@ -326,12 +328,16 @@ export default {
         },
         //树结构点击事件
         handleNodeClick(data) {
+            this.isFind = false;
+            this.formInline={};
+            this.input='';
+            this.pageNum=1;
             this.documentLevel = data.flevel;
             this.documentFpid = data.foid;
             let fromdata={};
             fromdata.page=1;
             fromdata.size=10;
-            if(data.foid != 0 && data.fcode!='000'){
+            if(data.foid != '0' && data.fcode!='000'){
                 fromdata.fpid=data.foid;
             }
             this.searchMenutable(fromdata);
@@ -342,7 +348,19 @@ export default {
             let formDataA ={};
             formDataA.page=val;
             formDataA.size=this.pageSize;
-            formDataA.fpid=this.documentFpid;
+            if(this.documentFpid !='0'){
+                formDataA.fpid=this.documentFpid;
+            }
+            if(this.isFind){
+                let field = this.formInline.document;
+                if("fcode" == field){
+                    fromdata.fcode=this.input;
+                } else if ("fname" == field){
+                    fromdata.fname=this.input;
+                } else if ("fdescription" == field){
+                    fromdata.fdescription=this.input;
+                }
+            }
             this.searchMenutable(formDataA);
         },
         //table选中事件

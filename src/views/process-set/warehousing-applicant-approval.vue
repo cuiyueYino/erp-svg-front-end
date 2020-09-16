@@ -7,7 +7,7 @@
                 class="dataForm"
                 size="mini"
                 :model="formdata"
-                :label-position="labelPosition" 
+                :label-position="labelPosition"
                 :rules="rules"
                 ref="ruleForm"
             >
@@ -69,7 +69,7 @@
                                             <el-radio :label="1" v-if="fresultArray.indexOf('1') !=-1">{{fresultObject['1']}}</el-radio>
                                             <el-radio :label="2" v-if="fresultArray.indexOf('2') !=-1">{{fresultObject['2']}}</el-radio>
                                             <el-radio :label="3" v-if="fresultArray.indexOf('3') !=-1">{{fresultObject['3']}}</el-radio>
-                                            <el-radio :label="4" v-if="fresultArray.indexOf('4') !=-1">{{fresultObject['4']}}</el-radio> 
+                                            <el-radio :label="4" v-if="fresultArray.indexOf('4') !=-1">{{fresultObject['4']}}</el-radio>
                                         </el-radio-group>
                                     </el-form-item>
                                 </el-col>
@@ -164,7 +164,7 @@ export default {
         EachPerEachTableModifyPage
     },
     inject: ['reload'],
-    data: function() {  
+    data: function() {
             var validateRemark = (rule, value, callback) => {
                 if (value === '') {
                     callback(new Error('请输入审批意见'));
@@ -331,9 +331,15 @@ export default {
             } else {
                 this.submitMethod();
             }
-            
+
         },
          submitMethod() {
+             const loading = this.$loading({
+                 lock: true,
+                 text: 'Loading',
+                 spinner: 'el-icon-loading',
+                 background: 'rgba(0, 0, 0, 0.7)'
+             });
             let paramsData = {};
             let twfbizmailReqVoObj = {};
             if(this.isOa) {
@@ -356,15 +362,19 @@ export default {
             paramsData["twfaudit"] = twfauditObj;
             this.$api.processSet.addWfsubmit(paramsData).then(res=>{
                 if( res.data.code == 0 ){
+
                     this.$message.success('保存成功');
+                    loading.close();
                     this.ShowFinancVisible = false;
                     this.$emit('changeShow',false);
                     this.reload();
                 }else{
+                    loading.close();
                     this.$message.error("保存失败,请填写完整信息");
                 }
 
             },error=>{
+                loading.close();
                 console.log(error)
             });
          },
@@ -412,7 +422,7 @@ export default {
                                         this.context = JSON.parse(data.data.data);
                                         this.context.tempId = res.data.data.tempId;
                                         this.context.files = val.data.data;
-                                        
+
                                     })
                                 }
                             })
@@ -589,7 +599,7 @@ export default {
                 }
             },error=>{
                 console.log(error)
-            })  
+            })
         },
         //获取决策类型数据
         getDecisionType(data){
@@ -603,7 +613,7 @@ export default {
                 }
             },error=>{
                 console.log(error)
-            })  
+            })
         },
         //异步变同步
         async asyncCall(type,data,foid) {
@@ -612,7 +622,7 @@ export default {
             await this.getDecisionType(foid);
             await this.DisplayOrHide(this.functionType,this.rowWAADataObj);
             return;
-        }
+        },
     },
     mounted() {
 

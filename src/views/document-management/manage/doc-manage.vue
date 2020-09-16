@@ -203,7 +203,6 @@ export default {
     methods:{
         //查询按钮
         findData(){
-          debugger;
             this.isFind = true;
             this.pageNum = 1;
             let field = this.formInline.document;
@@ -482,12 +481,23 @@ export default {
         },
         //树结构点击事件
         handleNodeClick(data) {
+            this.isFind = false;
+            this.isInput = true;
+            this.isDate = false;
+            this.formInline.document='';
+            this.input='';
+            this.beginDate='';
+            this.endDate='';
+            this.emptyParam();
             this.documentLevel = data.flevel;
             this.documentFpid = data.foid;
+            this.pageNum=1;
             let fromdata={};
             fromdata.page=this.pageNum;
             fromdata.size=this.pageSize;
-            fromdata.fpid=data.foid;
+            if(data.foid != '0' && data.fcode!='000'){
+                fromdata.fpid=data.foid;
+            }
             this.searchMenutable(fromdata);
         },
         //分页，下一页
@@ -511,7 +521,9 @@ export default {
             // }
             formDataA.page=val;
             formDataA.size=this.pageSize;
-            formDataA.fpid=this.documentFpid;
+            if(this.documentFpid !='0'){
+                formDataA.fpid=this.documentFpid;
+            }
             this.searchMenutable(formDataA);
         },
         //table选中事件
@@ -546,8 +558,8 @@ export default {
         },
         //分页查询菜单
         searchMenutable(data){
-          let fromdata=data;
-          if(this.isFind){
+            let fromdata=data;
+            if(this.isFind){
               //拼入其他条件参数
               Object.assign(fromdata,this.params);
             }
