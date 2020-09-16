@@ -56,12 +56,12 @@
                                       ></el-date-picker>
                                     </el-col>
                                     <el-col :span="1" >
-                                        <el-button type="primary" size="medium" icon="el-icon-search" plain @click="findData">查询</el-button>
+                                        <el-button type="primary" size="small" icon="el-icon-search" plain @click="findData">查询</el-button>
                                     </el-col>
                                 </el-form>
                             </el-col>
                             <el-col :span="2" >
-                                <el-button type="info" plain icon="el-icon-view" size="medium" @click="showDocumentCategory" >查看</el-button>
+                                <el-button type="info" plain icon="el-icon-view" size="small" @click="showDocumentCategory" >查看</el-button>
                             </el-col>
                         </el-row>
                     </el-card>

@@ -24,10 +24,10 @@
                 ></el-input>
               </el-form-item>
               <el-form-item>
-                <el-button type="primary" icon='el-icon-search' size="medium" plain @click="searchKey">搜索</el-button>
+                <el-button type="primary" icon='el-icon-search' size="small" plain @click="searchKey">搜索</el-button>
               </el-form-item>
               <el-form-item>
-                <el-button type="success" icon='el-icon-check' size="medium" @click="saveConfig">确定</el-button>
+                <el-button type="success" icon='el-icon-check' size="small" @click="saveConfig">确定</el-button>
               </el-form-item>
             </el-form>
           </el-col>
@@ -51,7 +51,7 @@
         <el-row :gutter="20"></el-row>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button type="success" icon='el-icon-check' size="medium" @click="saveConfig" v-if="strictly">确定</el-button>
+        <el-button type="success" icon='el-icon-check' size="small" @click="saveConfig" v-if="strictly">确定</el-button>
       </div>
     </el-dialog>
   </div>

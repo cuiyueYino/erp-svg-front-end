@@ -19,10 +19,10 @@
                     </el-form>
                 </el-col>
                  <el-col :span="10" :offset="2">
-                    <el-button type="success" icon='el-icon-folder-add' size="medium" plain @click="createRoleMainte">新增</el-button> 
-                    <el-button type="warning" icon="el-icon-edit-outline" size="medium" plain @click="modifyRoleMainte">修改</el-button>
-                    <el-button type="info" icon="el-icon-view" size="medium" plain @click="lookRoleMainte">查看</el-button>
-                    <el-button type="danger" icon='el-icon-delete' size="medium" plain @click="removeRoleMainte">删除</el-button>
+                    <el-button type="success" icon='el-icon-folder-add' size="small" plain @click="createRoleMainte">新增</el-button> 
+                    <el-button type="warning" icon="el-icon-edit-outline" size="small" plain @click="modifyRoleMainte">修改</el-button>
+                    <el-button type="info" icon="el-icon-view" size="small" plain @click="lookRoleMainte">查看</el-button>
+                    <el-button type="danger" icon='el-icon-delete' size="small" plain @click="removeRoleMainte">删除</el-button>
                  </el-col>
             </el-row>
         </el-card>
@@ -110,8 +110,8 @@
                 </el-card>
             </el-form>
             <span slot="footer" class="dialog-footer">
-                <el-button type="success" icon='el-icon-copy-document' size="medium" @click="onHandleSave(formdata)">保存</el-button>
-                <el-button type="warning" icon='el-icon-close' size="medium" @click="ShowFinancVisible = false">取消</el-button>
+                <el-button type="success" icon='el-icon-copy-document' size="small" @click="onHandleSave(formdata)">保存</el-button>
+                <el-button type="warning" icon='el-icon-close' size="small" @click="ShowFinancVisible = false">取消</el-button>
             </span>
         </el-dialog>
     </div>

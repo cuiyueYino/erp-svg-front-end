@@ -34,13 +34,13 @@
                     </el-date-picker>
                 </el-col >
                 <el-col :span="4">
-                    <el-button el-button type="primary" icon="el-icon-search" size="medium" @click="search">搜索</el-button>
-                    <el-button type="primary" icon="el-icon-tickets" size="medium" plain @click="showAll">显示全部</el-button>
+                    <el-button el-button type="primary" icon="el-icon-search" size="small" @click="search">搜索</el-button>
+                    <el-button type="primary" icon="el-icon-tickets" size="small" plain @click="showAll">显示全部</el-button>
                 </el-col>
                 <el-col :span="13" style="text-align: right;">
-                    <el-button type="primary" icon="el-icon-document-copy" size="medium" plain @click="edit">编辑</el-button>
-                    <el-button type="info" plain icon="el-icon-view"  size="medium" @click="read">查看</el-button>
-                    <el-button type="danger" plain icon="el-icon-delete" size="medium" @click="deleteMsg">删除</el-button>
+                    <el-button type="primary" icon="el-icon-document-copy" size="small" plain @click="edit">编辑</el-button>
+                    <el-button type="info" plain icon="el-icon-view"  size="small" @click="read">查看</el-button>
+                    <el-button type="danger" plain icon="el-icon-delete" size="small" @click="deleteMsg">删除</el-button>
                 </el-col>
             </el-row>
         </el-card>

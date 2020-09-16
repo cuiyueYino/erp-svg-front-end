@@ -3,13 +3,13 @@
 		<el-row>
 			<el-col style="text-align: right;">
 				<el-dropdown trigger="click" @command="showForm = true;showSave = true;disabledUpd = false">
-					<el-button :disabled="showFigButton" type="success" plain size="medium"><i class="el-icon-plus"></i>新增</el-button>
+					<el-button :disabled="showFigButton" type="success" plain size="small"><i class="el-icon-plus"></i>新增</el-button>
 					<el-dropdown-menu slot="dropdown">
 						<el-dropdown-item :disabled="showFig" @click.native="create">类别</el-dropdown-item>
 						<el-dropdown-item :disabled="!showFig" @click.native="create">内容</el-dropdown-item>
 					</el-dropdown-menu>
 				</el-dropdown>
-				<el-button :disabled="showFigUpd" @click="toUpd()" size="medium" type="danger" plain><i class="el-icon-edit"></i>修改</el-button>
+				<el-button :disabled="showFigUpd" @click="toUpd()" size="small" type="danger" plain><i class="el-icon-edit"></i>修改</el-button>
 			</el-col>
 		</el-row>
 		<el-row :gutter="10">
@@ -34,7 +34,7 @@
 							<el-input clearable :disabled="disabledShow" v-model="ruleForm.name" maxlength="100" placeholder="名称"></el-input>
 						</el-form-item>
 						<el-form-item style="text-align: center;" v-if="showSubmit">
-							<el-button @click="toSave" type="success" plain size="medium"><i class="el-icon-edit"></i>提交</el-button>
+							<el-button @click="toSave" type="success" plain size="small"><i class="el-icon-edit"></i>提交</el-button>
 						</el-form-item>
 					</el-form>
 				</el-card>

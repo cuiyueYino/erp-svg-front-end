@@ -29,8 +29,8 @@
         </el-card>
       </el-form>
       <span slot="footer" class="dialog-footer">
-        <el-button type='success' size="medium" icon='el-icon-check' @click="onHandleMoreSave">确定</el-button>
-        <el-button type='warning' icon='el-icon-close' size="medium" @click="handleClose">取消</el-button>
+        <el-button type='success' size="small" icon='el-icon-check' @click="onHandleMoreSave">确定</el-button>
+        <el-button type='warning' icon='el-icon-close' size="small" @click="handleClose">取消</el-button>
       </span>
     </el-dialog>
   </div>

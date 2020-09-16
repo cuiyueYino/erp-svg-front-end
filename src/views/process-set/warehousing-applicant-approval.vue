@@ -14,22 +14,22 @@
                 <el-card>
                     <el-row :gutter="24">
                         <el-col :span="10" :offset="14" v-if="rowFstatus == 4?true:false">
-                            <el-button type="success" icon="el-icon-position" size="medium" plain @click="baseInputTable('转发')">转发</el-button>
-                            <el-button type="success" icon="el-icon-star-off" size="medium" plain @click="basefollow()">关注</el-button>
-                            <el-button type="primary" icon="el-icon-postcard" size="medium" plain @click="removeBizMail">已阅</el-button>
+                            <el-button type="success" icon="el-icon-position" size="small" plain @click="baseInputTable('转发')">转发</el-button>
+                            <el-button type="success" icon="el-icon-star-off" size="small" plain @click="basefollow()">关注</el-button>
+                            <el-button type="primary" icon="el-icon-postcard" size="small" plain @click="removeBizMail">已阅</el-button>
                         </el-col>
                         <el-col :span="12" :offset="12" v-else-if="rowFstatus == 1?true:false">
-                            <el-button type="success" icon="el-icon-circle-plus-outline" size="medium" plain @click="baseInputTable('加签')">加签</el-button>
-                            <el-button type="success" icon="el-icon-position" size="medium" plain @click="baseInputTable('转发')">转发</el-button>
-                            <el-button type="success" icon="el-icon-circle-check" size="medium" plain @click="baseInputTable('委托')">委托</el-button>
-                            <el-button type="success" icon="el-icon-star-off" size="medium" plain @click="basefollow()">关注</el-button>
-                            <el-button type="success" icon="el-icon-copy-document" size="medium" plain @click="effectOrDisableMsg('ruleForm')">提交</el-button>
+                            <el-button type="success" icon="el-icon-circle-plus-outline" size="small" plain @click="baseInputTable('加签')">加签</el-button>
+                            <el-button type="success" icon="el-icon-position" size="small" plain @click="baseInputTable('转发')">转发</el-button>
+                            <el-button type="success" icon="el-icon-circle-check" size="small" plain @click="baseInputTable('委托')">委托</el-button>
+                            <el-button type="success" icon="el-icon-star-off" size="small" plain @click="basefollow()">关注</el-button>
+                            <el-button type="success" icon="el-icon-copy-document" size="small" plain @click="effectOrDisableMsg('ruleForm')">提交</el-button>
                         </el-col>
                         <el-col :span="12" :offset="12" v-else>
-                            <el-button type="success" icon="el-icon-circle-plus-outline" size="medium" plain @click="baseInputTable('加签')">加签</el-button>
-                            <el-button type="success" icon="el-icon-position" size="medium" plain @click="baseInputTable('转发')">转发</el-button>
-                            <el-button type="success" icon="el-icon-circle-check" size="medium"  plain @click="baseInputTable('委托')">委托</el-button>
-                            <el-button type="success" icon="el-icon-star-off" size="medium" plain @click="basefollow()">关注</el-button>
+                            <el-button type="success" icon="el-icon-circle-plus-outline" size="small" plain @click="baseInputTable('加签')">加签</el-button>
+                            <el-button type="success" icon="el-icon-position" size="small" plain @click="baseInputTable('转发')">转发</el-button>
+                            <el-button type="success" icon="el-icon-circle-check" size="small"  plain @click="baseInputTable('委托')">委托</el-button>
+                            <el-button type="success" icon="el-icon-star-off" size="small" plain @click="basefollow()">关注</el-button>
                         </el-col>
                     </el-row>
                     <el-row :gutter="24">
