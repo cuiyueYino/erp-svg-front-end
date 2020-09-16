@@ -17,7 +17,7 @@
             <el-table-column label="耗时" prop="takeTime"></el-table-column>
             <el-table-column label="回复" >
                 <template slot-scope="scope" >
-                    <el-button size="medium" type="primary" @click="onRowbuttonClick(scope.row)">回复</el-button>
+                    <el-button size="small" type="primary" @click="onRowbuttonClick(scope.row)">回复</el-button>
                 </template>
             </el-table-column>
             <el-table-column type="expand" >

@@ -25,18 +25,18 @@
 							</el-col>
 							<el-col :span="6">
 								<el-form-item>
-									<el-button type="primary" icon='el-icon-search' size="medium" @click="toSelect">搜索</el-button>
-									<el-button type="primary" icon='el-icon-refresh'  size="medium" @click="toClear">重置</el-button>
+									<el-button type="primary" icon='el-icon-search' size="small" @click="toSelect">搜索</el-button>
+									<el-button type="primary" icon='el-icon-refresh'  size="small" @click="toClear">重置</el-button>
 								</el-form-item>
 							</el-col>
 						</el-row>
 					</el-form>
 				</el-col>
 				<el-col v-show="show != '1'" style="text-align: right;" :span="10">
-					<el-button @click="$parent.toAdd('1')" icon="el-icon-folder-add" type="success" size="medium">新增</el-button>
-					<el-button @click="toUpd()" icon="el-icon-edit-outline" type="warning" size="medium">修改</el-button>
-					<el-button @click="del()" icon="el-icon-delete" type="danger" size="medium">删除</el-button>
-					<el-button @click="toSee()" icon="el-icon-view" type="info" plain size="medium">查看</el-button>
+					<el-button @click="$parent.toAdd('1')" icon="el-icon-folder-add" type="success" size="small">新增</el-button>
+					<el-button @click="toUpd()" icon="el-icon-edit-outline" type="warning" size="small">修改</el-button>
+					<el-button @click="del()" icon="el-icon-delete" type="danger" size="small">删除</el-button>
+					<el-button @click="toSee()" icon="el-icon-view" type="info" plain size="small">查看</el-button>
 				</el-col>
 			</el-row>
 		</el-card>

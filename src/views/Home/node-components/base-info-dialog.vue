@@ -50,8 +50,8 @@
                     </el-form-item>
                   </el-col> 
                 <el-col :span="6" :offset="2" v-show="type ==='服务'">
-                    <el-button type="primary" size="medium" icon='el-icon-refresh' plain @click="reWorkSearchTable('workflowConfigForm')">重置</el-button>
-                    <el-button type="primary" size="medium" icon='el-icon-search' plain @click="workSearchTableBtn">搜索</el-button>
+                    <el-button type="primary" size="small" icon='el-icon-refresh' plain @click="reWorkSearchTable('workflowConfigForm')">重置</el-button>
+                    <el-button type="primary" size="small" icon='el-icon-search' plain @click="workSearchTableBtn">搜索</el-button>
                 </el-col>
              </el-row>
              <el-row :gutter="24" >
@@ -101,8 +101,8 @@
                   </el-col>  -->
                   </span>
                 <el-col :span="6" :offset="type=='角色'?6:type =='职务'?18:0" v-show="type !=='服务'" >
-                    <el-button type="primary" size="medium" icon='el-icon-refresh' plain @click="reWorkSearchTable('workflowConfigForm')">重置</el-button>
-                    <el-button type="primary" size="medium" icon='el-icon-search' plain @click="workSearchTableBtn">搜索</el-button>
+                    <el-button type="primary" size="small" icon='el-icon-refresh' plain @click="reWorkSearchTable('workflowConfigForm')">重置</el-button>
+                    <el-button type="primary" size="small" icon='el-icon-search' plain @click="workSearchTableBtn">搜索</el-button>
                 </el-col>
              </el-row>
                
@@ -126,7 +126,7 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="4">
-                        <el-button type="primary" icon='el-icon-search'  size="medium" plain @click="searchKey">查询</el-button>
+                        <el-button type="primary" icon='el-icon-search'  size="small" plain @click="searchKey">查询</el-button>
                     </el-col>
                </el-row>
                  
@@ -150,7 +150,7 @@
         </el-row>
           <el-row :gutter="20">
             <el-col :span="13" style="text-align: right;">
-                <el-button  type='success' icon='el-icon-check' size="medium" @click="saveConfig">确定</el-button>
+                <el-button  type='success' icon='el-icon-check' size="small" @click="saveConfig">确定</el-button>
             </el-col>
         </el-row>
     </el-dialog>

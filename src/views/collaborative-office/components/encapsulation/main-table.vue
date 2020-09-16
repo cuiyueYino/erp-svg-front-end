@@ -10,16 +10,16 @@
 					</el-col>
 					<el-col :span="10">
 						<el-form-item>
-							<el-button type="primary" icon='el-icon-search' size="medium" @click="toSelect()">搜索</el-button>
-							<el-button type="primary" icon='el-icon-refresh' size="medium" plain @click="$refs.formInline.resetFields();showFig == 2 ? clear2() : clear();">重置</el-button>
-							<el-button v-if="showFig == 2" type="primary" icon='el-icon-menu' size="medium" plain @click="getAll('formInline')">全部</el-button>
-							<el-button v-if="showFig == 2" type="success" icon='el-icon-circle-check' size="medium" plain @click="getConList()">已选中</el-button>
+							<el-button type="primary" icon='el-icon-search' size="small" @click="toSelect()">搜索</el-button>
+							<el-button type="primary" icon='el-icon-refresh' size="small" plain @click="$refs.formInline.resetFields();showFig == 2 ? clear2() : clear();">重置</el-button>
+							<el-button v-if="showFig == 2" type="primary" icon='el-icon-menu' size="small" plain @click="getAll('formInline')">全部</el-button>
+							<el-button v-if="showFig == 2" type="success" icon='el-icon-circle-check' size="small" plain @click="getConList()">已选中</el-button>
 						</el-form-item>
 					</el-col>
 					<el-col v-if="showFig == 2" :span="8" style="text-align: right;">
 						<el-form-item>
-							<el-button type="warning" icon="el-icon-sort"  size="medium" @click="switchChild()">切换维度</el-button>
-							<el-button type="success" icon='el-icon-check' size="medium" @click="roleAuthWorkItem()">确定</el-button>
+							<el-button type="warning" icon="el-icon-sort"  size="small" @click="switchChild()">切换维度</el-button>
+							<el-button type="success" icon='el-icon-check' size="small" @click="roleAuthWorkItem()">确定</el-button>
 						</el-form-item>
 					</el-col>
 				</el-row>

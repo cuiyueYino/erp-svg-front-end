@@ -22,7 +22,7 @@
                         </div>
                         <div class="search-right">
                             <div class="fr">
-                                <el-button class="sky" type="primary" icon='el-icon-search' size="medium" @click="MoreSearchVisible = true" round>高级查询</el-button>
+                                <el-button class="sky" type="primary" icon='el-icon-search' size="small" @click="MoreSearchVisible = true" round>高级查询</el-button>
                             </div>
                         </div>
                     </div>
@@ -41,8 +41,8 @@
                 </el-card>
             </el-form>
             <span slot="footer" class="dialog-footer">
-                <el-button icon='el-icon-copy-document' type="success" size="medium" @click="savefinanceValue">提交</el-button>
-                <el-button type="warning" icon='el-icon-close' size="medium" @click="handleClose">取消</el-button>
+                <el-button icon='el-icon-copy-document' type="success" size="small" @click="savefinanceValue">提交</el-button>
+                <el-button type="warning" icon='el-icon-close' size="small" @click="handleClose">取消</el-button>
             </span>
         </el-dialog>
         <el-dialog :title="title" :visible.sync="MoreSearchVisible" :append-to-body="true" v-if="MoreSearchVisible" :close-on-click-modal="false" width="30%">
@@ -75,8 +75,8 @@
                 </el-card>
             </el-form>
             <span slot="footer" class="dialog-footer">
-                <el-button type="primary" icon='el-icon-search' size="medium" @click="onHandleMoreSearch">查询</el-button>
-                <el-button type="warning" icon='el-icon-close' size="medium" @click="MoreSearchVisible = false">取消</el-button>
+                <el-button type="primary" icon='el-icon-search' size="small" @click="onHandleMoreSearch">查询</el-button>
+                <el-button type="warning" icon='el-icon-close' size="small" @click="MoreSearchVisible = false">取消</el-button>
             </span>
         </el-dialog>
     </div>

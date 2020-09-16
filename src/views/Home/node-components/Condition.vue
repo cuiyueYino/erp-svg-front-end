@@ -74,8 +74,8 @@
               ></dynamic-table>
             </el-col>
             <el-col :span="3" class="joinBtnBox">
-              <el-button type="success" icon="el-icon-folder-add" size="medium" plain @click="joinSearch('新增参与者')">新增</el-button>
-              <el-button type="danger" size="medium" icon='el-icon-delete' plain @click="deleteMsg('新增参与者')">删除</el-button>
+              <el-button type="success" icon="el-icon-folder-add" size="small" plain @click="joinSearch('新增参与者')">新增</el-button>
+              <el-button type="danger" size="small" icon='el-icon-delete' plain @click="deleteMsg('新增参与者')">删除</el-button>
             </el-col>
           </el-row>
           <!-- Condition END-->
@@ -95,8 +95,8 @@
               ></dynamic-table>
             </el-col>
             <el-col :span="3" class="joinBtnBox">
-              <el-button type="success" icon="el-icon-folder-add" size="medium" plain @click="joinSearch('新增抄送')">新增</el-button>
-              <el-button type="danger" size="medium" icon='el-icon-delete' plain @click="deleteMsg('新增抄送')">删除</el-button>
+              <el-button type="success" icon="el-icon-folder-add" size="small" plain @click="joinSearch('新增抄送')">新增</el-button>
+              <el-button type="danger" size="small" icon='el-icon-delete' plain @click="deleteMsg('新增抄送')">删除</el-button>
             </el-col>
           </el-row>
           <!-- Condition END-->
@@ -235,8 +235,8 @@
           </el-row>
           <el-row :gutter="24">
             <el-col :span="6" :offset="18">
-              <el-button type="primary" size="medium" icon='el-icon-refresh' plain @click="reWorkSearchTable('formData')">重置</el-button>
-              <el-button type="primary" size="medium" icon='el-icon-search' plain @click="workSearchTableBtn">搜索</el-button>
+              <el-button type="primary" size="small" icon='el-icon-refresh' plain @click="reWorkSearchTable('formData')">重置</el-button>
+              <el-button type="primary" size="small" icon='el-icon-search' plain @click="workSearchTableBtn">搜索</el-button>
             </el-col>
           </el-row>
           <!-- 表格 -->
@@ -258,7 +258,7 @@
 
         <!-- footer -->
         <footer>
-          <el-button type='success' icon='el-icon-check' size="medium" @click="gridDataAdd">确定</el-button>
+          <el-button type='success' icon='el-icon-check' size="small" @click="gridDataAdd">确定</el-button>
           <!-- <el-button  type="primary" size="small" plain @click="dialogTableVisible = false">关闭</el-button> -->
         </footer>
         <!-- footer END-->
@@ -274,10 +274,10 @@
     </el-form>
     <el-row :gutter="20">
       <el-col :span="12" style="text-align: right;">
-        <el-button icon='el-icon-copy-document' size="medium" type='success' @click="saveConfig">保存</el-button>
+        <el-button icon='el-icon-copy-document' size="small" type='success' @click="saveConfig">保存</el-button>
       </el-col>
       <el-col :span="12">
-        <el-button icon='el-icon-close' size="medium" type='warning' @click="cancelConfig">取消</el-button>
+        <el-button icon='el-icon-close' size="small" type='warning' @click="cancelConfig">取消</el-button>
       </el-col>
     </el-row>
   </div>

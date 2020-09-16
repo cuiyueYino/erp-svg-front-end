@@ -83,8 +83,8 @@
                         </el-form-item>
                     </el-col> 
                     <el-col :span="8" >
-                        <el-button type="primary" size="medium" icon='el-icon-refresh' plain @click="reWorkSearchTable('formData')">重置</el-button>
-                        <el-button type="primary" size="medium" icon='el-icon-search' plain @click="workSearchTable">搜索</el-button>
+                        <el-button type="primary" size="small" icon='el-icon-refresh' plain @click="reWorkSearchTable('formData')">重置</el-button>
+                        <el-button type="primary" size="small" icon='el-icon-search' plain @click="workSearchTable">搜索</el-button>
                     </el-col>
                 </el-row>
                 
@@ -107,7 +107,7 @@
                 
                 <!-- footer -->
                 <footer>
-                    <el-button   type='success' icon='el-icon-check' size="medium"   @click="gridDataAdd">确定</el-button>
+                    <el-button   type='success' icon='el-icon-check' size="small"   @click="gridDataAdd">确定</el-button>
                     <!-- <el-button  type="primary" size="small" plain @click="dialogTableVisible = false">关闭</el-button> -->
                 </footer>
                 <!-- footer END-->
@@ -115,10 +115,10 @@
         </el-form>
         <el-row :gutter="20">
             <el-col :span="12" style="text-align: right;">
-                <el-button icon='el-icon-copy-document' size="medium" type='success' @click="saveConfig">保存</el-button>
+                <el-button icon='el-icon-copy-document' size="small" type='success' @click="saveConfig">保存</el-button>
             </el-col>
             <el-col :span="12">
-                <el-button icon='el-icon-close' size="medium" type='warning' @click="cancelConfig">取消</el-button>
+                <el-button icon='el-icon-close' size="small" type='warning' @click="cancelConfig">取消</el-button>
             </el-col>
         </el-row>
     </div>

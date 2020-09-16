@@ -26,19 +26,19 @@
                             </el-col>
 							<el-col :span="6">
 								<el-form-item>
-									<el-button icon='el-icon-search' type="primary" size="medium" @click="$refs.pageNation.toBegin()">搜索</el-button>
-									<el-button icon='el-icon-refresh' type="primary" size="medium" @click="toClear()">重置</el-button>
+									<el-button icon='el-icon-search' type="primary" size="small" @click="$refs.pageNation.toBegin()">搜索</el-button>
+									<el-button icon='el-icon-refresh' type="primary" size="small" @click="toClear()">重置</el-button>
 								</el-form-item>
 							</el-col>
 						</el-row>
 					</el-form>
 				</el-col>
 				<el-col v-show="show != '1'" style="text-align: right;" :span="10">
-					<el-button @click="$parent.toAdd()" icon="el-icon-folder-add" type="success" size="medium">新增</el-button>
-					<el-button @click="toUpd()" icon="el-icon-edit-outline" type="warning" size="medium">修改</el-button>
-					<el-button @click="updateStatus(3)" icon="el-icon-magic-stick" type="success" size="medium">生效</el-button>
-					<el-button @click="updateStatus(7)" icon="el-icon-circle-close" type="danger" size="medium">禁用</el-button>
-					<el-button @click="toSee()" icon="el-icon-view" type="info" plain size="medium">查看</el-button>
+					<el-button @click="$parent.toAdd()" icon="el-icon-folder-add" type="success" size="small">新增</el-button>
+					<el-button @click="toUpd()" icon="el-icon-edit-outline" type="warning" size="small">修改</el-button>
+					<el-button @click="updateStatus(3)" icon="el-icon-magic-stick" type="success" size="small">生效</el-button>
+					<el-button @click="updateStatus(7)" icon="el-icon-circle-close" type="danger" size="small">禁用</el-button>
+					<el-button @click="toSee()" icon="el-icon-view" type="info" plain size="small">查看</el-button>
 				</el-col>
 			</el-row>
 		</el-card>

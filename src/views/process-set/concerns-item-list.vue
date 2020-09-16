@@ -4,12 +4,12 @@
         <el-card class="box-card">
            <el-row :gutter="24">
                  <el-col :span="10" :offset="14">
-                     <el-button type="primary" icon="el-icon-refresh-right" size="medium" plain @click="refresh">刷新</el-button>
-                     <el-button type="primary" icon="el-icon-search" size="medium" plain @click="search">查询</el-button>
-                     <el-button type="info" icon="el-icon-view" size="medium" plain @click="Tolook">查看</el-button>
-                     <el-button type="success" icon="el-icon-position" size="medium" plain @click="baseInputTable('转发')">转发</el-button>
-                     <el-button type="warning" icon="el-icon-plus" size="medium" plain @click="AddRow">添加</el-button>
-                     <el-button type="warning" icon="el-icon-close" size="medium" plain @click="DisableRow">取消</el-button>
+                     <el-button type="primary" icon="el-icon-refresh-right" size="small" plain @click="refresh">刷新</el-button>
+                     <el-button type="primary" icon="el-icon-search" size="small" plain @click="search">查询</el-button>
+                     <el-button type="info" icon="el-icon-view" size="small" plain @click="Tolook">查看</el-button>
+                     <el-button type="success" icon="el-icon-position" size="small" plain @click="baseInputTable('转发')">转发</el-button>
+                     <el-button type="warning" icon="el-icon-plus" size="small" plain @click="AddRow">添加</el-button>
+                     <el-button type="warning" icon="el-icon-close" size="small" plain @click="DisableRow">取消</el-button>
                  </el-col>
             </el-row>
         </el-card>
@@ -157,9 +157,9 @@
                 </el-card>
             </el-form>
             <div slot="footer" class="dialog-footer">
-                <el-button type='success' size="medium" icon='el-icon-check' @click="onHandleMoreSearch()">确定</el-button>
-                <el-button type='primary' icon='el-icon-refresh' size="medium" @click="reset()">重置</el-button>
-                <el-button type='warning' icon='el-icon-close' size="medium" @click="dialogWFMVisible = false">取消</el-button>
+                <el-button type='success' size="small" icon='el-icon-check' @click="onHandleMoreSearch()">确定</el-button>
+                <el-button type='primary' icon='el-icon-refresh' size="small" @click="reset()">重置</el-button>
+                <el-button type='warning' icon='el-icon-close' size="small" @click="dialogWFMVisible = false">取消</el-button>
             </div>
         </el-dialog>
         <PSpage  :rowPSDataObj="rowPSDataObj" :rowPStype="rowPStype" @changeShow="showORhideForPS"/>

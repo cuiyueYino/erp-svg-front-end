@@ -4,7 +4,7 @@
             <el-card>
                 <el-row>
                     <el-col v-show="this.printFlg == '2'" :span="2" :offset="22">
-                        <el-button type='info' size="medium" icon='el-icon-printer' v-print="printObj" @click="printMethod">打印</el-button>
+                        <el-button type='info' size="small" icon='el-icon-printer' v-print="printObj" @click="printMethod">打印</el-button>
                     </el-col>
                 </el-row>
             </el-card>
@@ -268,6 +268,7 @@ export default {
     },
     watch:{
         rowNMMtype(oldVal,newVal){
+          debugger;
             this.atctiveName = 'first';
             this.isShow = true;
             this.isEdit = false;
@@ -282,7 +283,10 @@ export default {
                 fromdataA.from= '2';
                 fromdataA.fuserid = localStorage.getItem('ms_userId'),
                 fromdataA.foid=this.rowNMMDataObj.foid;
-                this.findDocManageById(fromdataA);
+                if(oldVal){
+                  this.findDocManageById(fromdataA);
+                }
+
             }
         }
     }

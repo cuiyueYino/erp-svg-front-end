@@ -31,10 +31,10 @@
 				</el-table-column>
 				<el-table-column v-if="dis != '1'" align="right" width="100">
 					<template slot="header" slot-scope="scope">
-						<el-button type="success" size="medium" icon='el-icon-folder-add' @click="addRow()">新建</el-button>
+						<el-button type="success" size="small" icon='el-icon-folder-add' @click="addRow()">新建</el-button>
 					</template>
 					<template slot-scope="scope">
-						<el-button type="danger" size="medium" icon='el-icon-delete' @click="delRow(scope.$index,scope.row)">删除</el-button>
+						<el-button type="danger" size="small" icon='el-icon-delete' @click="delRow(scope.$index,scope.row)">删除</el-button>
 					</template>
 				</el-table-column>
 			</el-table>
@@ -44,8 +44,8 @@
 			<el-dialog :title="titleShow" top="1vh" destroy-on-close center :visible.sync="dialogVisible" width="80%">
 				<formIconComponents ref="child" :showFig="showCon" :dataCon="dataCon"></formIconComponents>
 				<div slot="footer" class="dialog-footer">
-					<el-button type="success" icon='el-icon-check' size="medium" @click="getDialogVisible">确定</el-button>
-					<el-button type="warning" icon='el-icon-close' size="medium" @click="dialogVisible = false">取消</el-button>
+					<el-button type="success" icon='el-icon-check' size="small" @click="getDialogVisible">确定</el-button>
+					<el-button type="warning" icon='el-icon-close' size="small" @click="dialogVisible = false">取消</el-button>
 				</div>
 			</el-dialog>
 		</div>

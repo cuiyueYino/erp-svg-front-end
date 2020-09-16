@@ -40,7 +40,7 @@
 			:append-to-body="true" 
 			v-if="dialogVisible" 
 			:close-on-click-modal="false" 
-			width="60%">
+			width="40%">
 			<el-form
 				v-model="formdata"
 				class="dataForm"
@@ -59,19 +59,19 @@
 							</el-col>
 							<el-col :span="6" :offset="6">
 								<el-form-item label="旧密码" prop="oldPassword">
-									<el-input type="password" v-model="formdata.oldPassword" ></el-input>
+									<el-input type="password" :maxlength="32" v-model="formdata.oldPassword" ></el-input>
 								</el-form-item>
 							</el-col>
                     	</el-row>
 						<el-row>
 							<el-col :span="6">
 								<el-form-item label="新密码" prop="newPassword">
-									<el-input type="password" v-model="formdata.newPassword" ></el-input>
+									<el-input type="password" :maxlength="32" v-model="formdata.newPassword" ></el-input>
 								</el-form-item>
 							</el-col>
 							<el-col :span="6" :offset="6">
 								<el-form-item label="确认密码" prop="conPassword">
-									<el-input type="password" v-model="formdata.conPassword"></el-input>
+									<el-input type="password" :maxlength="32" v-model="formdata.conPassword"></el-input>
 								</el-form-item>
 							</el-col>
                     	</el-row>

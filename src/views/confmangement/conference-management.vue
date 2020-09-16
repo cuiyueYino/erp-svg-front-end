@@ -4,7 +4,7 @@
     <el-card class="box-card">
       <el-row :gutter="24">
         <el-col :span="6">
-          <el-button size="medium" plain class="header-button">公司</el-button>
+          <el-button size="small" plain class="header-button">公司</el-button>
           <el-select size="small" v-model="value" placeholder="福佳集团" class="comSelect" @change="search(value)">
             <el-option
               v-for="item in options"
@@ -117,8 +117,8 @@
         ></el-time-picker>
       </el-col>
       <div slot="footer" class="dialog-footer">
-        <el-button type="success" icon='el-icon-check' size="medium" @click="confirm('fouttime')">确定</el-button>
-        <el-button type="warning" plain icon="el-icon-close" size="medium" @click="cancel()">取消</el-button>
+        <el-button type="success" icon='el-icon-check' size="small" @click="confirm('fouttime')">确定</el-button>
+        <el-button type="warning" plain icon="el-icon-close" size="small" @click="cancel()">取消</el-button>
       </div>
     </div>
     <!-- 会议模态框 -->
