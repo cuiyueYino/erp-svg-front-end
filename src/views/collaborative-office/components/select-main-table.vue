@@ -155,6 +155,17 @@
                         this.$message.error("状态不可修改");
 				        return;
                     }
+					if(status == 7) {
+						this.$api.collaborativeOffice.updateStatusTemp({
+						id: this.rowClickId,
+						status: status,
+						tableName:this.rowClick.tableName
+						}).then(data => {
+							if(this.dataBack(data, "修改状态成功")) {
+								this.toSelect()
+							}
+						})
+					} else {
 					this.$api.collaborativeOffice.updateStatusTemp({
 						id: this.rowClickId,
 						status: status,
@@ -163,6 +174,8 @@
 							this.toSelect()
 						}
 					})
+					}
+					
 				}
 			}, //状态展示
 			statusShow(row) {
