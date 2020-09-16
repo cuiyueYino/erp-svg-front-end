@@ -22,10 +22,10 @@
                 <el-input clearable v-model="formCode" placeholder="请输入任意查询内容"></el-input>
             </el-form-item>
             <el-form-item>
-                <el-button type="primary" plain @click="onSubmit">搜索</el-button>
+                <el-button type="primary" icon='el-icon-search' size="medium" plain @click="onSubmit">搜索</el-button>
             </el-form-item>
             <el-form-item>
-                <el-button type="primary" plain @click="getAll" class="search-all">显示全部信息</el-button>
+                <el-button type="primary" icon='el-icon-tickets' size="medium" plain @click="getAll" class="search-all">显示全部信息</el-button>
             </el-form-item>
         </el-form>
        </el-col>

@@ -151,8 +151,8 @@ export default {
             var index = row.fileName.lastIndexOf(".");
             //获取后缀
             var ext = row.fileName.substr(index+1);
-            if(this.isAssetTypeAnImage(ext)){
-              this.$message.error("暂不支持图片预览!");
+            if(!this.isAssetTypeAnImage(ext)){
+              this.$message.error("暂不支持该类型文件预览!");
               return;
             }
             this.$api.documentManagement.getHtmlPreviewAttachmentById(row.fileFoid).then(response => {
@@ -172,7 +172,7 @@ export default {
         //是否是文件
         isAssetTypeAnImage(ext) {
           return [
-            'png', 'jpg', 'jpeg', 'bmp', 'gif', 'webp', 'psd', 'svg', 'tiff'].
+            'xlsx', 'xls', 'doc', 'docx', 'pdf'].
           indexOf(ext.toLowerCase()) !== -1;
         },
         //是否展示dialog弹窗

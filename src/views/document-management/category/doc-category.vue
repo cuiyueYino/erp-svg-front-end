@@ -97,7 +97,7 @@ export default {
             documentLevel: '',
             documentFpid:'',
             input: '',
-            documentData: new documentData().document,
+            documentData: new documentData().docCategory,
             formInline: {},
             rowNMMtype:false,
             rowNMMDataObj:{},

@@ -100,6 +100,9 @@ const management = {
         }
         return httpReqest.get('/api/interfaces/userManage/getUserByIds'+valueS);
     },
+    changePassword(params){
+        return httpReqest.post('/api/interfaces/userManage/changePassword', params);
+    },
     //通过角色查询用户
     findUserByRoleId(params){
         var valueS='?';

@@ -650,7 +650,7 @@ export default {
         this.$message.error("请选择一项");
       } else {
         let selectData = this.multipleSelection;
-        if(selectData[0].repeat !=''){
+        if(selectData[0].repeat && selectData[0].repeat!=''){
           if(data =='委托' || data =='加签'){
             this.$message.error("被转发邮件不能"+data+"!");
             return;

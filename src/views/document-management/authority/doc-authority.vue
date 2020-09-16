@@ -27,7 +27,7 @@
                             show-checkbox
                             @check="checkboxClick"
                             accordion
-                            @node-click="handleNodeClick">
+                            >
                               <div slot-scope="{node,data}" class="customize-tree-p">
                                 <el-tooltip class="item" effect="dark" :content="data.fname" placement="top-start">
                                   <span>{{data.fname|labelShow}}</span>
@@ -203,7 +203,7 @@ export default {
             let docmanageidSet = [];
             for(var i=0; i<nodes.length; i++){
                 let node = nodes[i];
-                if( node.flevel == 2) {
+                if( node.flevel == 3) {
                     docmanageidSet.push(node.foid);
                     docmanageids = docmanageids + '\'' + node.foid +'\',';
                 }
@@ -302,7 +302,6 @@ export default {
         },
         //树的多选框点击事件
         checkboxClick(data, checkedParm){
-        //   debugger;
             this.documentLevel = data.flevel;
             this.documentFpid = data.foid;
             let fromdata={};
@@ -372,7 +371,7 @@ export default {
                         this.$refs.roleTable.clearSelection();
                         if(this.tableData){
                             this.tableData.forEach(row => {
-                            if (row.fauth == "1") {
+                              if (row.fauth == "1") {
                                 this.$refs.roleTable.toggleRowSelection(row,true);
                             }
                         });
