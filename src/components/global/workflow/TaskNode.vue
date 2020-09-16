@@ -62,8 +62,8 @@
         >
             <h4>您确定删除[{{taskData.data.displayName.substring(0,10)}}]吗？</h4>
             <div style="text-align: center;">
-                <el-button size="medium" type="success" @click="$emit('delete');taskData.visible = false" icon="el-icon-check">确定</el-button>
-                <el-button size="medium" type="warning" @click="taskData.visible = false" icon="el-icon-close">取消</el-button>
+                <el-button size="small" type="success" @click="$emit('delete');taskData.visible = false" icon="el-icon-check">确定</el-button>
+                <el-button size="small" type="warning" @click="taskData.visible = false" icon="el-icon-close">取消</el-button>
             </div>
             <el-button
                 :class="{'delete-btn': true}"
