@@ -7,7 +7,9 @@
                 class="dataForm"
                 size="mini"
                 :model="formdata"
-                :label-position="labelPosition"
+                :label-position="labelPosition" 
+                :rules="rules"
+                ref="ruleForm"
             >
                 <el-card>
                     <el-row :gutter="24">
@@ -21,7 +23,7 @@
                             <el-button type="success" icon="el-icon-position" size="medium" plain @click="baseInputTable('转发')">转发</el-button>
                             <el-button type="success" icon="el-icon-circle-check" size="medium" plain @click="baseInputTable('委托')">委托</el-button>
                             <el-button type="success" icon="el-icon-star-off" size="medium" plain @click="basefollow()">关注</el-button>
-                            <el-button type="success" icon="el-icon-copy-document" size="medium" plain @click="effectOrDisableMsg">提交</el-button>
+                            <el-button type="success" icon="el-icon-copy-document" size="medium" plain @click="effectOrDisableMsg('ruleForm')">提交</el-button>
                         </el-col>
                         <el-col :span="12" :offset="12" v-else>
                             <el-button type="success" icon="el-icon-circle-plus-outline" size="medium" plain @click="baseInputTable('加签')">加签</el-button>
@@ -74,7 +76,7 @@
                             </el-row>
                             <el-row>
                                 <el-col :span="23">
-                                    <el-form-item label="审批意见">
+                                    <el-form-item label="审批意见" prop="remark">
                                         <el-input type="textarea" v-model="formdata.remark" :rows="5"></el-input>
                                     </el-form-item>
                                 </el-col>
@@ -162,7 +164,14 @@ export default {
         EachPerEachTableModifyPage
     },
     inject: ['reload'],
-    data: function() {
+    data: function() {  
+            var validateRemark = (rule, value, callback) => {
+                if (value === '') {
+                    callback(new Error('请输入审批意见'));
+                } else {
+                    callback();
+                }
+        };
         return {
             fresultObject:{},
             fresultArray:[],
@@ -177,6 +186,11 @@ export default {
             formdata: {
                 fresult:1,
                 remark:''
+            },
+            rules: {
+                remark: [
+                    { validator: validateRemark, trigger: 'blur' }
+                ],
             },
             rowFstatus:0,
             rowUTStype:false,
@@ -303,7 +317,23 @@ export default {
             }
         },
         //提交按钮点击事件
-        effectOrDisableMsg(){
+        effectOrDisableMsg(formName){
+            // alert("提交。。。。。");
+            if(this.formdata.fresult == 2) {
+            this.$refs[formName].validate((valid) => {
+                console.log("sly787878");
+                console.log(valid);
+                if (valid) {
+                    this.submitMethod();
+                } else {}
+                    return false;
+            })
+            } else {
+                this.submitMethod();
+            }
+            
+        },
+         submitMethod() {
             let paramsData = {};
             let twfbizmailReqVoObj = {};
             if(this.isOa) {
@@ -330,7 +360,6 @@ export default {
                     this.ShowFinancVisible = false;
                     this.$emit('changeShow',false);
                     this.reload();
-                    //sessionStorage.setItem("eidtMsg",null);
                 }else{
                     this.$message.error("保存失败,请填写完整信息");
                 }
@@ -338,7 +367,7 @@ export default {
             },error=>{
                 console.log(error)
             });
-        },
+         },
         showprocessData(){},
         //判断
         DisplayOrHide(dataType,dataContent){
@@ -364,7 +393,6 @@ export default {
                 })
                 .then((res) => {
                         if(res.data.code == 0){
-                            // debugger;
                             this.contextObj['srcId'] = res.data.data.srcId;
                             this.contextObj['status'] = res.data.data.status;
                             this.contextObj['tableName'] = res.data.data.tableName;
