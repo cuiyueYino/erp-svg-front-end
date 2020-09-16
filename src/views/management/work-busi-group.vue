@@ -309,6 +309,7 @@ export default {
           foid: data,
       }).then((res) => {
         if (res.data.code == 0) {
+            this.form.foid = res.data.data.foid;
             this.form.fcompanyName = res.data.data.fcompanyName;
             this.form.fcompanyoid = res.data.data.fcompanyoid;
             this.form.fteamleaderName = res.data.data.fteamleaderName;
@@ -565,7 +566,12 @@ export default {
           this.$api.processSet.addWorkGroup(this.form).then((res) => {
             if (res.data.code == 0) {
               this.dialogFormVisible = false;
-              this.$message.success("新增成功");
+              if(this.isAdd){
+                  this.$message.success("新增成功");
+              }else {
+                  this.$message.success("编辑成功");
+              }
+
               //刷新表格
               this.reload();
             } else {
