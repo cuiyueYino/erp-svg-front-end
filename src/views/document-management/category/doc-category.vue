@@ -11,7 +11,7 @@
                         accordion
                         @node-click="handleNodeClick"
                         >
-                        <div slot-scope="{node,data}" class="customize-tree-p">
+                        <div slot-scope="{data}" class="customize-tree-p">
                             <el-tooltip class="item" effect="dark" :content="data.fname" placement="top-start">
                              <span>{{data.fname|labelShow}}</span>
                             </el-tooltip>
@@ -37,15 +37,15 @@
                                         <el-input v-model="input" placeholder="请输入内容"></el-input>
                                     </el-col>
                                     <el-col :span="8">
-                                        <el-button type="primary" size="medium" icon="el-icon-search" plain @click="findData">查询</el-button>
+                                        <el-button type="primary" size="small" icon="el-icon-search" plain @click="findData">查询</el-button>
                                     </el-col>
                                 </el-form>
                             </el-col>
                             <el-col :span="9" :offset="3">
-                                <el-button type="success" plain icon="el-icon-folder-add" size="medium" @click="createDocumentCategory">新增</el-button>
-                                <el-button type="warning" plain icon="el-icon-edit-outline" size="medium" @click="editDocumentCategory">修改</el-button>
-                                <el-button type="danger" icon="el-icon-delete" size="medium" plain @click="removeDocumentCategory">删除</el-button>
-                                <el-button type="info" plain icon="el-icon-view" size="medium" @click="showDocumentCategory">查看</el-button>
+                                <el-button type="success" plain icon="el-icon-folder-add" size="small" @click="createDocumentCategory">新增</el-button>
+                                <el-button type="warning" plain icon="el-icon-edit-outline" size="small" @click="editDocumentCategory">修改</el-button>
+                                <el-button type="danger" icon="el-icon-delete" size="small" plain @click="removeDocumentCategory">删除</el-button>
+                                <el-button type="info" plain icon="el-icon-view" size="small" @click="showDocumentCategory">查看</el-button>
                             </el-col>
                         </el-row>
                     </el-card>
@@ -97,7 +97,7 @@ export default {
             documentLevel: '',
             documentFpid:'',
             input: '',
-            documentData: new documentData().document,
+            documentData: new documentData().docCategory,
             formInline: {},
             rowNMMtype:false,
             rowNMMDataObj:{},
@@ -206,6 +206,13 @@ export default {
                             if (responsevalue) {
                                 let returndata = responsevalue.data;
                                 let tableArr=returndata.data.rows;
+                                for (let i = 0; i < tableArr.length; i++) {
+                                    if(1 == tableArr[i].flevel){
+                                        tableArr[i].flevel = '一级';
+                                    } else if(2 == tableArr[i].flevel){
+                                        tableArr[i].flevel = '二级';
+                                    }
+                                }
                                 this.tableData=tableArr;
                                 if(tableArr.length > 1){
                                     this.$message.error("该文档类别已被引用，不可以删除!");
@@ -233,7 +240,7 @@ export default {
                     this.$message.error("请选择一行数据!");
                 }
             }
-            maketree();
+            //this.maketree();
         },
         //查看文档类别维护
         showDocumentCategory(){
@@ -324,7 +331,9 @@ export default {
             let fromdata={};
             fromdata.page=1;
             fromdata.size=10;
-            fromdata.fpid=data.foid;
+            if(data.foid != 0 && data.fcode!='000'){
+                fromdata.fpid=data.foid;
+            }
             this.searchMenutable(fromdata);
         },
         //分页，下一页
@@ -374,7 +383,6 @@ export default {
                 if (responsevalue) {
                     let returndata = responsevalue.data;
                     let tableArr=returndata.data.rows;
-                    this.tableData=tableArr;
                     for (let i = 0; i < tableArr.length; i++) {
                         if(1 == tableArr[i].flevel){
                             tableArr[i].flevel = '一级';
@@ -382,6 +390,7 @@ export default {
                             tableArr[i].flevel = '二级';
                         }
                     }
+                    this.tableData=tableArr;
                     this.total=returndata.data.total;
                 } else {
                     this.$message.success('数据库没有该条数据!');

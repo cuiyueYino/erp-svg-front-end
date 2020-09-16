@@ -64,7 +64,7 @@
             <br/>
             <el-row>
                 <el-col :span="14">
-                    <el-button type="danger" size="medium" icon="el-icon-close"  @click="$parent.$parent.goBack()">返回</el-button>
+                    <el-button type="danger" size="small" icon="el-icon-close"  @click="$parent.$parent.goBack()">返回</el-button>
                 </el-col>
             </el-row>
         </el-form>

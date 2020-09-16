@@ -71,6 +71,20 @@ class documentData {
             value: 'fdescription',
             label: '描述'
           }
+        ],
+        this.docCategory = [
+            {
+                value: 'fcode',
+                label: '编码'
+            },
+            {
+                value: 'fname',
+                label: '名称'
+            },
+            {
+                value: 'fdescription',
+                label: '描述'
+            },
         ]
     }
 }

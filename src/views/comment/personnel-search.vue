@@ -22,7 +22,7 @@
                         </div>
                         <div class="search-right">
                             <div class="fr">
-                                <el-button class="sky" size="medium" @click="MoreSearchVisible = true" round>高级查询</el-button>
+                                <el-button class="sky" size="small" @click="seniorSearch" round>高级查询</el-button>
                             </div>
                         </div>
                     </div>
@@ -42,8 +42,9 @@
                 </el-card>
             </el-form>
             <span slot="footer" class="dialog-footer">
-                <el-button type="success" icon='el-icon-copy-document' size="medium" @click="savefinanceValue">提交</el-button>
-                <el-button type="warning" icon='el-icon-close' size="medium" @click="handleClose">取消</el-button>
+                <el-button type="success" icon='el-icon-copy-document' size="small" @click="savefinanceValue">提交</el-button>
+                <el-button type="success" icon='el-icon-refresh' size="small" @click="refresh">刷新</el-button>
+                <el-button type="warning" icon='el-icon-close' size="small" @click="handleClose">取消</el-button>
             </span>
         </el-dialog>
         <el-dialog :title="title" :visible.sync="MoreSearchVisible" :append-to-body="true" v-if="MoreSearchVisible" :close-on-click-modal="false" width="40%">
@@ -89,13 +90,13 @@
                 </el-row>
                 <el-row class="elrowStyle">
                     <el-col :span="6" class="elColCenter">部门</el-col>
-                    <el-col :span="6"  class="elColCenter">等于</el-col>
-                    <el-col :span="5">
+                    <el-col :span="6"  class="elColCenter">左右匹配</el-col>
+                    <el-col :span="6">
                        <el-input v-model="dialog.departmentName" size="mini"></el-input>
                     </el-col>
-                    <el-col :span="1">
+                    <!-- <el-col :span="1">
                         <el-button type="primary" size="mini" icon="el-icon-search" @click="MoreSearchDS(dialog)"></el-button>
-                    </el-col>
+                    </el-col> -->
                 </el-row>
                 <el-row class="elrowStyle">
                     <el-col :span="6" class="elColCenter">在职状态</el-col>
@@ -114,8 +115,8 @@
             </el-card>
             </el-form>
             <span slot="footer" class="dialog-footer">
-                <el-button type="primary" icon='el-icon-search' size="medium" @click="onHandleMoreSearch">查询</el-button>
-                <el-button type="warning" icon='el-icon-close' size="medium" @click="MoreSearchVisible = false">取消</el-button>
+                <el-button type="primary" icon='el-icon-search' size="small" @click="onHandleMoreSearch">查询</el-button>
+                <el-button type="warning" icon='el-icon-close' size="small" @click="MoreSearchVisible = false">取消</el-button>
             </span>
         </el-dialog>
         <DSpage  :rowDStype="rowDStype" :rowDSDataObj="rowDSDataObj" @changeShow="showORhideForDS"/>
@@ -242,30 +243,8 @@ export default {
         //获取发起人详细信息
         GetUSerData(data){
             let fromdata=data;
-            this.$api.processSet.getaddresserSearch(fromdata).then(response => {
-                let responsevalue = response;
-                if (responsevalue) {
-                    let returndata = responsevalue.data;
-                    let tableDataArr=returndata.data.rows;
-                    this.tableData = tableDataArr;
-                    this.total = returndata.data.total;
-                } else {
-                    this.$message.success('没有查到数据!');
-                }
-            });
-        },
-        //下一页
-        onCurrentChange(val) {
-            let fromdata={};
-            fromdata.page=val;
-            fromdata.size=this.pageSize;
-            this.GetUSerData(fromdata);
-        },
-        //获得查询结果
-        onHandleMoreSearch() {
-            let fromdata={};
-            fromdata.page=this.pageNum;
-            fromdata.size=this.pageSize;
+
+            //设置筛选条件
             let namevalueS=this.dialog.name;
             if(namevalueS && namevalueS!=''){
                 fromdata.name=this.dialog.name;
@@ -280,12 +259,56 @@ export default {
             }
             let departS=this.dialog.departmentName;
             if(departS && departS!=''){
-                fromdata.departmentId=this.dialog.departmentid;
+                fromdata.department=this.dialog.departmentName;
             }
             let usertypeS=this.dialog.usertype;
             if(usertypeS && usertypeS!='-1'){
-                //fromdata.usertype=this.dialog.usertype;
+                fromdata.quit=this.dialog.usertype;
             }
+            this.$api.processSet.getaddresserSearch(fromdata).then(response => {
+                let responsevalue = response;
+                if (responsevalue) {
+                    let returndata = responsevalue.data;
+                    let tableDataArr=returndata.data.rows;
+                    this.tableData = tableDataArr;
+                    this.total = returndata.data.total;
+                } else {
+                    this.$message.success('没有查到数据!');
+                }
+
+                this.MoreSearchVisible = false; //关闭筛选条件窗口
+            });
+        },
+        //下一页
+        onCurrentChange(val) {
+            let fromdata={};
+            fromdata.page=val;
+            fromdata.size=this.pageSize;
+            this.GetUSerData(fromdata);
+        },
+        //高级查询
+        seniorSearch(){
+            this.MoreSearchVisible = true;
+        },
+        //刷新
+        refresh() {
+            //清空筛选条件
+            for(let key in this.dialog){
+                this.dialog[key]  = '';
+            }
+
+            let fromdata={};
+            fromdata.page=1;
+            fromdata.size=10;
+            this.GetUSerData(fromdata);
+        },
+        //获得查询结果
+        onHandleMoreSearch() {
+            let fromdata={};
+            fromdata.page=this.pageNum;
+            fromdata.size=this.pageSize;
+            this.GetUSerData(fromdata);
+            
             this.$api.processSet.getaddresserSearch(fromdata).then(response => {
                 let responsevalue = response;
                 if (responsevalue) {
@@ -299,6 +322,7 @@ export default {
                 }
             });
         },
+
         selectCom(){
             this.$api.jobUserManagement.getCompanyData().then((res) => {
                 if (res.status == "200") {
@@ -332,6 +356,7 @@ export default {
     watch:{
         rowPStype(oldVal,newVal){
             if(this.rowPStype){
+            this.multipleSelection.length = 0;  //清空选择列表
             this.ShowFinancVisible=this.rowPStype;
             let rowDataObj=this.rowPSDataObj;
             this.title=rowDataObj.nametitle;

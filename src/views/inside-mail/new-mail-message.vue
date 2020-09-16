@@ -3,8 +3,8 @@
         <!-- 搜索框 -->
         <el-row :gutter="24">
                 <el-col :span="6" :offset="18">
-                    <el-button type="primary" icon="el-icon-s-promotion" size="medium" plain @click="editCDD">发送</el-button>
-                    <el-button type="success" icon="el-icon-folder-remove" size="medium" plain @click="saveCDD">暂存</el-button>
+                    <el-button type="primary" icon="el-icon-s-promotion" size="small" plain @click="editCDD">发送</el-button>
+                    <el-button type="success" icon="el-icon-folder-remove" size="small" plain @click="saveCDD">暂存</el-button>
                 </el-col>
         </el-row>
         <el-form
@@ -21,8 +21,8 @@
                     </el-form-item>
                 </el-col>
                 <el-col :span="6">
-                    <el-button type="warning" size="medium" @click="AddToUser('addressee',false,'2')"><i class="el-icon-plus"></i>添加</el-button>
-                    <el-button type="el-icon-error" size="medium" @click="clearAddToUser('addressee')"><i class="el-icon-delete"></i>清空</el-button>
+                    <el-button type="warning" size="small" @click="AddToUser('addressee',false,'2')"><i class="el-icon-plus"></i>添加</el-button>
+                    <el-button type="el-icon-error" size="small" @click="clearAddToUser('addressee')"><i class="el-icon-delete"></i>清空</el-button>
                     <!--<el-button type="text" @click="ShoWAddCCUser"><i class="el-icon-edit-outline"></i>{{ShoWAddCC==true?'隐藏抄送':'添加抄送'}}</el-button>-->
                 </el-col>
             </el-row>
@@ -34,8 +34,8 @@
                     </el-form-item>
                 </el-col>
                 <el-col :span="6">
-                    <el-button type="warning" size="medium" @click="AddToUser('duplicate',false,'2')"><i class="el-icon-plus"></i>添加</el-button>
-                    <el-button type="el-icon-error" size="medium" @click="clearAddToUser('duplicate')"><i class="el-icon-delete"></i>清空</el-button>
+                    <el-button type="warning" size="small" @click="AddToUser('duplicate',false,'2')"><i class="el-icon-plus"></i>添加</el-button>
+                    <el-button type="el-icon-error" size="small" @click="clearAddToUser('duplicate')"><i class="el-icon-delete"></i>清空</el-button>
                 </el-col>
             </el-row>
             <el-row>
@@ -74,11 +74,11 @@
                             <el-input v-model="treeSearchVal" placeholder="根据姓名搜索"  prefix-icon="el-icon-search" clearable size="mini"/>
                         </el-col >
                         <el-col :span="3">
-                            <el-button el-button type="primary" icon='el-icon-search' size="medium" @click="treeSearch">搜索</el-button>
+                            <el-button el-button type="primary" icon='el-icon-search' size="small" @click="treeSearch">搜索</el-button>
                         </el-col>
                         <el-col :span="16" style="text-align: right;">
-                            <el-button type='success' size="medium" icon='el-icon-check' @click="choiceTree">确定</el-button>
-                            <el-button type='warning' icon='el-icon-close' size="medium" @click="dialogTree=false">取消</el-button>
+                            <el-button type='success' size="small" icon='el-icon-check' @click="choiceTree">确定</el-button>
+                            <el-button type='warning' icon='el-icon-close' size="small" @click="dialogTree=false">取消</el-button>
                         </el-col>
                     </el-row>
                 </el-card>

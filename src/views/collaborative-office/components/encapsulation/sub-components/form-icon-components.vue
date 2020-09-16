@@ -19,8 +19,8 @@
 					<el-input clearable v-model="formInlineTName.tname" placeholder="名称"></el-input>
 				</el-form-item>
 				<el-form-item>
-					<el-button type="primary" icon='el-icon-search' size="medium" @click="toSelect">搜索</el-button>
-					<el-button type="primary" icon='el-icon-refresh' size="medium" plain @click="resetForm('formInlineTName')" class="search-all">重置</el-button>
+					<el-button type="primary" icon='el-icon-search' size="small" @click="toSelect">搜索</el-button>
+					<el-button type="primary" icon='el-icon-refresh' size="small" plain @click="resetForm('formInlineTName')" class="search-all">重置</el-button>
 				</el-form-item>
 			</el-form>
 			<vxe-table border :loading="loading" ref="multipleTable" align="center" size="small" highlight-current-row  height="330" :data="dataCon.context">
@@ -40,8 +40,8 @@
 					<el-input clearable v-model="formInlineTNameUser.departmentname" placeholder="部门"></el-input>
 				</el-form-item>
 				<el-form-item>
-					<el-button type="primary" icon='el-icon-search' size="medium" @click="toSelect">搜索</el-button>
-					<el-button type="primary" icon='el-icon-refresh' size="medium" plain @click="resetForm('formInlineTNameUser')" class="search-all">重置</el-button>
+					<el-button type="primary" icon='el-icon-search' size="small" @click="toSelect">搜索</el-button>
+					<el-button type="primary" icon='el-icon-refresh' size="small" plain @click="resetForm('formInlineTNameUser')" class="search-all">重置</el-button>
 				</el-form-item>
 			</el-form>
 			<vxe-table border :loading="loading" ref="multipleTable" align="center" size="small" highlight-current-row height="330" :data="dataCon.context">
@@ -62,8 +62,8 @@
 					<el-input clearable v-model="formInlineTNameJob.fname" placeholder="名称"></el-input>
 				</el-form-item>
 				<el-form-item>
-					<el-button type="primary" icon='el-icon-search' size="medium" @click="toSelect">搜索</el-button>
-					<el-button type="primary" icon='el-icon-refresh' size="medium" plain @click="resetForm('formInlineTNameJob')" class="search-all">重置</el-button>
+					<el-button type="primary" icon='el-icon-search' size="small" @click="toSelect">搜索</el-button>
+					<el-button type="primary" icon='el-icon-refresh' size="small" plain @click="resetForm('formInlineTNameJob')" class="search-all">重置</el-button>
 				</el-form-item>
 			</el-form>
 			<vxe-table border :loading="loading" ref="multipleTable" align="center" size="small" highlight-current-row height="330" :data="dataCon.context">

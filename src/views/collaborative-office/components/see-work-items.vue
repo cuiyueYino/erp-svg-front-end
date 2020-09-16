@@ -13,13 +13,13 @@
 					</el-select>
 				</el-col>
 				<el-col style="text-align: right;" v-if="showSeeOrUpd == 3" :span="18">
-					<el-button @click="submitForm(2)" type="success" size="medium" icon="el-icon-copy-document">提交</el-button>
-					<el-button @click="submitForm(1)" type="success" size="medium" icon="el-icon-folder-remove">暂存</el-button>
-					<el-button @click="selectMainTable" type="success" size="medium" icon="el-icon-s-promotion">选择模板</el-button>
-					<el-button type="danger" @click="$parent.toSelect()" size="medium" icon="el-icon-close">返回</el-button>
+					<el-button @click="submitForm(2)" type="success" size="small" icon="el-icon-copy-document">提交</el-button>
+					<el-button @click="submitForm(1)" type="success" size="small" icon="el-icon-folder-remove">暂存</el-button>
+					<el-button @click="selectMainTable" type="success" size="small" icon="el-icon-s-promotion">选择模板</el-button>
+					<el-button type="danger" @click="$parent.toSelect()" size="small" icon="el-icon-close">返回</el-button>
 				</el-col>
 				<el-col style="text-align: right;" v-if="!todoFlag && showSeeOrUpd != 3" :span="6">
-					<el-button type="danger" @click="$parent.toSelect()" size="medium" icon="el-icon-close">返回</el-button>
+					<el-button type="danger" @click="$parent.toSelect()" size="small" icon="el-icon-close">返回</el-button>
 				</el-col>
 			</el-row>
 			<formAndTable :files="context.files" :dis="showSeeOrUpd" showAdd="2" ref="child" :form-data="conData"></formAndTable>
@@ -28,8 +28,8 @@
 		<el-dialog title="工作事项模板主表" top="1vh" :destroy-on-close="true" v-if="dialogVisible" center :visible.sync="dialogVisible" width="80%">
 			<selectMainTable show="1" status="3" :userId="UserId" :company="companyID" ref="childMain"></selectMainTable>
 			<div slot="footer" class="dialog-footer">
-				<el-button type="success"  icon="el-icon-check" size="medium" @click="getDialogVisible">确定</el-button>
-				<el-button type="warning"  icon="el-icon-close" size="medium" @click="dialogVisible = false">取消</el-button>
+				<el-button type="success"  icon="el-icon-check" size="small" @click="getDialogVisible">确定</el-button>
+				<el-button type="warning"  icon="el-icon-close" size="small" @click="dialogVisible = false">取消</el-button>
 			</div>
 		</el-dialog>
 	</div>

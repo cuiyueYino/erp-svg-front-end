@@ -13,63 +13,63 @@
             icon="el-icon-error"
             plain
             @click="remove"
-            size="medium"
+            size="small"
           >移除</el-button>
           <el-button
             type="success"
             icon="el-icon-refresh-right"
             plain
             @click="refresh"
-            size="medium"
+            size="small"
           >刷新</el-button>
           <el-button
             type="primary"
             icon="el-icon-search"
             plain
             @click="search"
-            size="medium"
+            size="small"
           >查询</el-button>
           <el-button
             type="danger"
             icon="el-icon-picture-outline"
             plain
             @click="flowChart()"
-            size="medium"
+            size="small"
           >流程图</el-button>
           <el-button
             type="success"
             icon="el-icon-folder-checked"
             plain
             @click="handle()"
-            size="medium"
+            size="small"
           >处理</el-button>
           <el-button
             type="success"
             icon="el-icon-position"
             plain
             @click="baseInputTable('转发')"
-            size="medium"
+            size="small"
           >转发</el-button>
           <el-button
             type="success"
             icon="el-icon-circle-check"
             plain
             @click="baseInputTable('委托')"
-            size="medium"
+            size="small"
           >委托</el-button>
           <el-button
             type="success"
             icon="el-icon-star-off"
             plain
             @click="basefollow()"
-            size="medium"
+            size="small"
           >关注</el-button>
           <el-button
             type="success"
             icon="el-icon-circle-plus-outline"
             plain
             @click="baseInputTable('加签')"
-            size="medium"
+            size="small"
           >加签</el-button>
         </el-col>
       </el-row>
@@ -366,12 +366,12 @@
       >
         <el-button
           type="success"
-          size="medium"
+          size="small"
           @click="onHandleMoreSearch()"
           icon="el-icon-check"
         >确 定</el-button>
-        <el-button @click="reset()" icon="el-icon-refresh" type="primary" size="medium">重 置</el-button>
-        <el-button @click="dialogWFMVisible = false" icon="el-icon-close" type="warning" size="medium">取 消</el-button>
+        <el-button @click="reset()" icon="el-icon-refresh" type="primary" size="small">重 置</el-button>
+        <el-button @click="dialogWFMVisible = false" icon="el-icon-close" type="warning" size="small">取 消</el-button>
       </div>
     </el-dialog>
     <PSpage
@@ -650,7 +650,7 @@ export default {
         this.$message.error("请选择一项");
       } else {
         let selectData = this.multipleSelection;
-        if(selectData[0].repeat !=''){
+        if(selectData[0].repeat && selectData[0].repeat!=''){
           if(data =='委托' || data =='加签'){
             this.$message.error("被转发邮件不能"+data+"!");
             return;
