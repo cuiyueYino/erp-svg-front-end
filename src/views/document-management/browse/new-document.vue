@@ -281,6 +281,7 @@ export default {
                 this.isEdit = true;
                 let fromdataA={};
                 fromdataA.from= '2';
+                fromdataA.foperate = '1'; //只有文档浏览查看的时候，才改变阅读量
                 fromdataA.fuserid = localStorage.getItem('ms_userId'),
                 fromdataA.foid=this.rowNMMDataObj.foid;
                 if(oldVal){

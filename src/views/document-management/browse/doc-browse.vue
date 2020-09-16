@@ -239,7 +239,6 @@ export default {
                     finandata.fdocmanageoid = SelectData[0].foid;
                     finandata.froleid = localStorage.getItem('ms_roles');
                     finandata.fauth = '2';
-                    finandata.foperate = '1'; //只有文档浏览查看的时候，才改变阅读量
                     this.$api.documentManagement.isHaveDocAuthority(finandata).then(response => {
                         let responsevalue = response;
                         if (responsevalue.data.data >= 1) {

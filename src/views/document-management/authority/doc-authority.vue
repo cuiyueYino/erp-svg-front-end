@@ -220,6 +220,8 @@ export default {
         },
         //下拉框改变
         selectDocAuthorityChange(data){
+          this.input = '';
+          this.formInline.auth = '';
             this.formInSelect.select=data;
             this.findData(1);
             this.$refs.tree.setCheckedKeys([]);
