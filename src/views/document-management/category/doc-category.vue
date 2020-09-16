@@ -94,6 +94,7 @@ export default {
     inject: ['reload'],
     data(){
         return{
+            isFind:false,
             documentLevel: '',
             documentFpid:'',
             input: '',
@@ -167,11 +168,12 @@ export default {
 
         //查询按钮
         findData(){
+            this.isFind = true;
             this.pageNum = 1;
-            let field = this.formInline.document;
             let fromdata={};
             fromdata.page=this.pageNum;
             fromdata.size=this.pageSize;
+            let field = this.formInline.document;
             if("fcode" == field){
                 fromdata.fcode=this.input;
             } else if ("fname" == field){
@@ -326,6 +328,9 @@ export default {
         },
         //树结构点击事件
         handleNodeClick(data) {
+            this.isFind = false;
+            this.formInline.document='';
+            this.input='';
             this.pageNum=1;
             this.documentLevel = data.flevel;
             this.documentFpid = data.foid;
@@ -345,6 +350,16 @@ export default {
             formDataA.size=this.pageSize;
             if(this.documentFpid !='0'){
                 formDataA.fpid=this.documentFpid;
+            }
+            if(this.isFind){
+                let field = this.formInline.document;
+                if("fcode" == field){
+                    fromdata.fcode=this.input;
+                } else if ("fname" == field){
+                    fromdata.fname=this.input;
+                } else if ("fdescription" == field){
+                    fromdata.fdescription=this.input;
+                }
             }
             this.searchMenutable(formDataA);
         },
