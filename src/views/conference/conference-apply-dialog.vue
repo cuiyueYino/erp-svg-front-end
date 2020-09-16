@@ -535,6 +535,8 @@
         :title="baseInputTitle"
         :fcompanyid="fcompanyid"
         @closeDialog="closeBaseInfo"
+        :fteamleaderId='fteamleaderId'
+        :transStaffRelUserIds='transStaffRelUserIds'
       ></staff-tree-search>
     </el-form>
 
@@ -602,6 +604,10 @@
               if (res.data.data.rows.length > 0) {
                 let resData = res.data.data.rows[0];
                 let internalMans = resData.internalmans;
+                 for(var i= 0;i<res.data.data.rows[0].internalmans.length;i++) {
+                   this.transStaffRelUserIds.push(res.data.data.rows[0].internalmans[i].foid);
+                   this.fteamleaderId.push(res.data.data.rows[0].internalmans[i].foid);
+                 }
                 let internalMansName = "";
                 for (let i in internalMans) {
                   if (i < internalMans.length - 1) {
@@ -623,7 +629,7 @@
                 this.searchForm = resData;
                 this.searchForm.internalMansName = internalMansName;
                 this.searchForm.internalMans = internalMans;
-                console.log(this.searchForm);
+                
               } else {
                 this.$message.error("数据获取失败");
               }
@@ -646,6 +652,8 @@
         }
       };
       return {
+        transStaffRelUserIds:[],
+        fteamleaderId:[],
         options: [],
         pageNum: 1,
         pageSize: 10,
@@ -904,13 +912,19 @@
               };
               internalmans.push(staff);
             }
-            this.searchForm.internalmans = this.searchForm.internalmans.concat(internalmans);
-            console.log(this.searchForm.internalmans);
-            if(this.searchForm.internalMansName == ""){
-              this.searchForm.internalMansName += internalMansName;
-            }else{
-              this.searchForm.internalMansName += ',' + internalMansName;
+            this.transStaffRelUserIds =[];
+            this.fteamleaderId = [];
+            for(var i=0;i<internalmans.length;i++) {
+                this.transStaffRelUserIds.push(internalmans[i].foid);
+                this.fteamleaderId.push(internalmans[i].foid);
             }
+            this.searchForm.internalmans = internalmans;
+            this.searchForm.internalMansName = internalMansName;
+            // if(this.searchForm.internalMansName == ""){
+            //   this.searchForm.internalMansName += internalMansName;
+            // }else{
+            //   this.searchForm.internalMansName += ',' + internalMansName;
+            // }
           }
           this.staffTableVisible = false;
         }

@@ -93,6 +93,8 @@
     },
     data() {
       return {
+        transStaffRelUserIds:[],
+        fteamleaderId:[],
         options: [],
         isCompany: false,
         isDate: false,
