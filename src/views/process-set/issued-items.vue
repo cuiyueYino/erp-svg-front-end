@@ -308,7 +308,10 @@ export default {
         },
         //查找业务数据
         getmetaClass(data){
-            let fromdata=data;
+            let fromdata={
+                page:1,
+                size:9999
+            };
             this.$api.processSet.getProcessClass(fromdata).then(response => {
                 let responsevalue = response;
                 if (responsevalue) {
