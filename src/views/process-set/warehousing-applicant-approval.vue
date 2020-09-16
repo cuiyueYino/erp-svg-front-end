@@ -480,10 +480,10 @@ export default {
         },
         //转发按钮点击事件
         baseInputTable(data){
+            let selectData=[];
             if(!this.isOa){
-                let selectData = this.rowWAADataObj.selectData;
+                selectData = this.rowWAADataObj.selectData;
             }else{
-                let selectData=[];
                 selectData.push(this.rowWAADataObj);
             }
             if(selectData[0].repeat && selectData[0].repeat!=''){
