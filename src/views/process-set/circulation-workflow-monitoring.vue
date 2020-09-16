@@ -258,9 +258,12 @@ export default {
                     this.showDetail()
                 }
                 this.ShowFinancVisible=this.rowCWMtype;
-                let finandata=this.rowCWMDataObj.finanrowId;
-                let formDataA ={};
-                formDataA.id=finandata;
+                let finandata=this.rowCWMDataObj.selectOption;
+                let rowData= {};
+                rowData.finanrowname = finandata[0].activityName;
+                rowData.finanrowId = finandata[0].foid;
+                rowData.nametitle = finandata[0].subject;
+                this.rowDataprocessOid=rowData;
                 let lookOrUpdate=this.rowCWMDataObj.lookflag;
                 if(lookOrUpdate ==='look'){
                     this.LookOrupdate = false;

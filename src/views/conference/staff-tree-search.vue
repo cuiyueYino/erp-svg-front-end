@@ -44,6 +44,7 @@
             show-checkbox
             check-on-click-node
             @check-change="handleNodeClick"
+            :default-checked-keys="defautChecked"
             :default-expanded-keys="treeDataObject"
           ></el-tree>
         </div>
@@ -61,6 +62,9 @@
     name: "staffTreeSearch",
     components: {},
     props: {
+      //搜索框的id的集合
+      fteamleaderId:Array,
+      transStaffRelUserIds:Array,
       // 当前配置查询类型
       type: {
         type: String,
@@ -84,6 +88,7 @@
     },
     data() {
       return {
+        defautChecked:[],
         treeDataObject:[],
         // 表单属性
         form: {
@@ -110,19 +115,31 @@
       };
     },
     computed: {},
+    created(){
+        // this.defautChecked = this.fteamleaderId;
+    },
     watch: {
       // 对话框显示 自动聚焦name输入框
       visible(bool) {
+        if(this.type == 1) {
+            this.defautChecked = this.fteamleaderId;
+            this.treeDataObject = this.fteamleaderId;
+        } else {
+            this.defautChecked = this.transStaffRelUserIds;
+            this.treeDataObject = this.transStaffRelUserIds;
+        }
         this.dialogVisible = bool;
         this.treeData = [];
         if (this.title == "用户查询") {
           this.form.selectVal = "";
           this.strictly = false;
           let resDataArr = null;
+          
           let staffTree = JSON.parse(localStorage.getItem('conf_staffTree'));
           if (staffTree == null) {
             this.$api.confMangement.getStaffTreeList(this.fromData).then(
               (res) => {
+                
                 let resData = res.data.data;
                 staffTree = eval("(" + resData + ")");
               },

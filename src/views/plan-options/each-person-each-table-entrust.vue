@@ -145,17 +145,7 @@
                 </el-col>
                 <el-col :span="6" :offset="2">
                     <el-form-item label="委托时间：">
-                        <el-date-picker
-                            clearable
-                            v-model="formdata.entrustDate"
-                            format="yyyy-MM-dd HH:mm"
-                            value-format="yyyy-MM-dd HH:mm"
-                            type="datetime"
-                            size="small"
-                            placeholder="选择日期"
-                            style="width: 100%;"
-                            :disabled="true"
-                        ></el-date-picker>
+                        <el-input v-model="formdata.entrustDate" :disabled="true"></el-input>
                     </el-form-item>
                 </el-col>
                  <el-col :span="6" :offset="2">

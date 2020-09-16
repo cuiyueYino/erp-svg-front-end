@@ -290,9 +290,13 @@ export default {
                 this.showDetail()
             }
             this.ShowFinancVisible=this.rowLWMtype;
-            let finandata=this.rowLWMDataObj.finanrowId;
-            let formDataA ={};
-            formDataA.id=finandata;
+            let finandata=this.rowLWMDataObj.selectOption;
+            console.log(finandata)
+            let rowData= {};
+            rowData.finanrowname = finandata[0].activityName;
+            rowData.finanrowId = finandata[0].foid;
+            rowData.nametitle = finandata[0].subject;
+            this.rowDataprocessOid=rowData;
             let lookOrUpdate=this.rowLWMDataObj.lookflag;
             if(lookOrUpdate ==='look'){
                 this.LookOrupdate = false;

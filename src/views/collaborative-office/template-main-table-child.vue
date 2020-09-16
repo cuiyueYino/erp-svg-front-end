@@ -26,8 +26,6 @@
 				this.tabViews = "addMainTableChild"
 			},
 			toUpd(context,showFigNum) {
-				console.log(context)
-				console.log(showFigNum)
 				this.tabViews = "updMainTableChild"
 				this.showFigNum = showFigNum
 				this.context = context
