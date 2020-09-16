@@ -332,7 +332,7 @@ export default {
             let fromdata={};
             fromdata.page=1;
             fromdata.size=10;
-            if(data.foid != 0 && data.fcode!='000'){
+            if(data.foid != '0' && data.fcode!='000'){
                 fromdata.fpid=data.foid;
             }
             this.searchMenutable(fromdata);
@@ -343,7 +343,9 @@ export default {
             let formDataA ={};
             formDataA.page=val;
             formDataA.size=this.pageSize;
-            formDataA.fpid=this.documentFpid;
+            if(this.documentFpid !='0'){
+                formDataA.fpid=this.documentFpid;
+            }
             this.searchMenutable(formDataA);
         },
         //table选中事件
