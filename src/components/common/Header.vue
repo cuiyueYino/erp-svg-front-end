@@ -41,15 +41,15 @@
 			v-if="dialogVisible" 
 			:close-on-click-modal="false" 
 			width="60%">
-				<el-form
-                v-model="formdata"
-                class="dataForm"
-                size="mini"
+			<el-form
+				v-model="formdata"
+				class="dataForm"
+				size="mini"
 				:rules="rules"
 				ref="ruleFormTable"
-                :model="formdata"
-                :label-position="labelPosition"
-            	>
+				:model="formdata"
+				:label-position="labelPosition"
+				>
 					<el-card>
                     	<el-row>
 							<el-col :span="6">
