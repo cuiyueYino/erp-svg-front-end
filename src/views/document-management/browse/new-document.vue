@@ -268,6 +268,7 @@ export default {
     },
     watch:{
         rowNMMtype(oldVal,newVal){
+          debugger;
             this.atctiveName = 'first';
             this.isShow = true;
             this.isEdit = false;
@@ -282,7 +283,10 @@ export default {
                 fromdataA.from= '2';
                 fromdataA.fuserid = localStorage.getItem('ms_userId'),
                 fromdataA.foid=this.rowNMMDataObj.foid;
-                this.findDocManageById(fromdataA);
+                if(oldVal){
+                  this.findDocManageById(fromdataA);
+                }
+
             }
         }
     }
