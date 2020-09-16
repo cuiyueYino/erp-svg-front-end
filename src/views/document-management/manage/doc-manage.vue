@@ -31,7 +31,7 @@
                                 </el-select>
                             </el-col>
                             <el-col :span="5">
-                              <el-input v-model="input" placeholder="请输入内容" v-if="isInput"></el-input>
+                              <el-input v-model="input" placeholder="请输入内容" v-if="isInput" clearable></el-input>
                             </el-col>
                             <el-col :span="5">
                                 <el-date-picker
