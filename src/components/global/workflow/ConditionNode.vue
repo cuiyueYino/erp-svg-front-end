@@ -45,8 +45,8 @@
         >
             <p>您确定删除[{{conditionData.data.displayName.substring(0,10)}}]吗？</p>
             <div style="text-align: center;">
-                <el-button size="medium" type="success" @click="$emit('delete');conditionData.visible = false" icon="el-icon-check">确定</el-button>
-                <el-button size="medium" type="warning" @click="conditionData.visible = false" icon='el-icon-close'>取消</el-button>
+                <el-button size="small" type="success" @click="$emit('delete');conditionData.visible = false" icon="el-icon-check">确定</el-button>
+                <el-button size="small" type="warning" @click="conditionData.visible = false" icon='el-icon-close'>取消</el-button>
             </div>
             <el-button
                 :class="{'delete-btn': true}"

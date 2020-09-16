@@ -22,18 +22,18 @@
                 <el-input clearable v-model="formCode" placeholder="请输入任意查询内容"></el-input>
             </el-form-item>
             <el-form-item>
-                <el-button type="primary" icon='el-icon-search' size="medium" plain @click="onSubmit">搜索</el-button>
+                <el-button type="primary" icon='el-icon-search' size="small" plain @click="onSubmit">搜索</el-button>
             </el-form-item>
             <el-form-item>
-                <el-button type="primary" icon='el-icon-tickets' size="medium" plain @click="getAll" class="search-all">显示全部信息</el-button>
+                <el-button type="primary" icon='el-icon-tickets' size="small" plain @click="getAll" class="search-all">显示全部信息</el-button>
             </el-form-item>
         </el-form>
        </el-col>
         <el-col :span="8" style="text-align: right;">
-            <el-button type="success" icon="el-icon-folder-add" size="medium" plain @click="toEdit('新增')"> 新增</el-button>
-            <el-button type="danger" plain icon="el-icon-delete" size="medium" @click="deleteMsg"> 删除</el-button>
-            <el-button type="warning" plain icon="el-icon-document-copy" size="medium" @click="toEdit('编辑')"> 编辑</el-button>
-            <el-button type="info" plain icon="el-icon-view"  size="medium" @click="toEdit('查看')"> 查看</el-button>
+            <el-button type="success" icon="el-icon-folder-add" size="small" plain @click="toEdit('新增')"> 新增</el-button>
+            <el-button type="danger" plain icon="el-icon-delete" size="small" @click="deleteMsg"> 删除</el-button>
+            <el-button type="warning" plain icon="el-icon-document-copy" size="small" @click="toEdit('编辑')"> 编辑</el-button>
+            <el-button type="info" plain icon="el-icon-view"  size="small" @click="toEdit('查看')"> 查看</el-button>
         </el-col>
     </el-row>
 
@@ -102,10 +102,10 @@
         class="dialog-footer"
       >
         <el-button :disabled="saveBtnFlag"
-          type="success" icon='el-icon-copy-document' size="medium"
+          type="success" icon='el-icon-copy-document' size="small"
           @click="addSubmit('form')"
         >保存</el-button>
-        <el-button type='warning' icon='el-icon-close' size="medium" @click="dialogFormVisible = false">取消</el-button>
+        <el-button type='warning' icon='el-icon-close' size="small" @click="dialogFormVisible = false">取消</el-button>
       </div>
     </el-dialog>
 
@@ -309,6 +309,7 @@ export default {
           foid: data,
       }).then((res) => {
         if (res.data.code == 0) {
+            this.form.foid = res.data.data.foid;
             this.form.fcompanyName = res.data.data.fcompanyName;
             this.form.fcompanyoid = res.data.data.fcompanyoid;
             this.form.fteamleaderName = res.data.data.fteamleaderName;
@@ -565,7 +566,12 @@ export default {
           this.$api.processSet.addWorkGroup(this.form).then((res) => {
             if (res.data.code == 0) {
               this.dialogFormVisible = false;
-              this.$message.success("新增成功");
+              if(this.isAdd){
+                  this.$message.success("新增成功");
+              }else {
+                  this.$message.success("编辑成功");
+              }
+
               //刷新表格
               this.reload();
             } else {

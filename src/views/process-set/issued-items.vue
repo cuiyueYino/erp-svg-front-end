@@ -4,16 +4,16 @@
         <el-card class="box-table">
            <el-row :gutter="24">
                <el-col :span="14">
-                    <el-button type="primary" size="medium" plain @click="onSerchSubmit('day')">当日</el-button>
-                    <el-button type="primary" size="medium" plain @click="onSerchSubmit('week')">本周</el-button>
-                    <el-button type="primary" size="medium" plain @click="onSerchSubmit('month')" >本月</el-button>
+                    <el-button type="primary" size="small" plain @click="onSerchSubmit('day')">当日</el-button>
+                    <el-button type="primary" size="small" plain @click="onSerchSubmit('week')">本周</el-button>
+                    <el-button type="primary" size="small" plain @click="onSerchSubmit('month')" >本月</el-button>
                 </el-col>
                  <el-col :span="10">
-                     <el-button type="primary" icon="el-icon-refresh-right" size="medium" plain @click="Basecarsh">刷新</el-button>
-                     <el-button type="primary" icon="el-icon-search" size="medium" plain @click="search">查询</el-button>
-                     <el-button type="info" icon="el-icon-view" size="medium"  plain @click="Tolook">查看</el-button>
-                     <el-button type="success" icon="el-icon-position" size="medium" plain @click="baseInputTable('转发')">转发</el-button>
-                     <el-button type="success" icon="el-icon-star-off" size="medium" plain @click="basefollow">关注</el-button>
+                     <el-button type="primary" icon="el-icon-refresh-right" size="small" plain @click="Basecarsh">刷新</el-button>
+                     <el-button type="primary" icon="el-icon-search" size="small" plain @click="search">查询</el-button>
+                     <el-button type="info" icon="el-icon-view" size="small"  plain @click="Tolook">查看</el-button>
+                     <el-button type="success" icon="el-icon-position" size="small" plain @click="baseInputTable('转发')">转发</el-button>
+                     <el-button type="success" icon="el-icon-star-off" size="small" plain @click="basefollow">关注</el-button>
                  </el-col>
             </el-row>
         </el-card>
@@ -119,9 +119,9 @@
                  </el-row>
             </el-form>
             <div slot="footer" class="dialog-footer">
-                <el-button type='success' size="medium" icon='el-icon-check' @click="addSubmit('form')">确定</el-button>
-                <el-button type='primary' icon='el-icon-refresh' size="medium" @click="reset()">重置</el-button>
-                <el-button type='warning' icon='el-icon-close' size="medium" @click="dialogWFMVisible = false">取消</el-button>
+                <el-button type='success' size="small" icon='el-icon-check' @click="addSubmit('form')">确定</el-button>
+                <el-button type='primary' icon='el-icon-refresh' size="small" @click="reset()">重置</el-button>
+                <el-button type='warning' icon='el-icon-close' size="small" @click="dialogWFMVisible = false">取消</el-button>
             </div>
         </el-dialog>
         <PSpage  :rowPSDataObj="rowPSDataObj" :rowPStype="rowPStype" @changeShow="showORhideForPS"/>

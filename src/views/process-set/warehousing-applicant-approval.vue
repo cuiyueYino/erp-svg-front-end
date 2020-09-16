@@ -7,29 +7,29 @@
                 class="dataForm"
                 size="mini"
                 :model="formdata"
-                :label-position="labelPosition" 
+                :label-position="labelPosition"
                 :rules="rules"
                 ref="ruleForm"
             >
                 <el-card>
                     <el-row :gutter="24">
                         <el-col :span="10" :offset="14" v-if="rowFstatus == 4?true:false">
-                            <el-button type="success" icon="el-icon-position" size="medium" plain @click="baseInputTable('转发')">转发</el-button>
-                            <el-button type="success" icon="el-icon-star-off" size="medium" plain @click="basefollow()">关注</el-button>
-                            <el-button type="primary" icon="el-icon-postcard" size="medium" plain @click="removeBizMail">已阅</el-button>
+                            <el-button type="success" icon="el-icon-position" size="small" plain @click="baseInputTable('转发')">转发</el-button>
+                            <el-button type="success" icon="el-icon-star-off" size="small" plain @click="basefollow()">关注</el-button>
+                            <el-button type="primary" icon="el-icon-postcard" size="small" plain @click="removeBizMail">已阅</el-button>
                         </el-col>
                         <el-col :span="12" :offset="12" v-else-if="rowFstatus == 1?true:false">
-                            <el-button type="success" icon="el-icon-circle-plus-outline" size="medium" plain @click="baseInputTable('加签')">加签</el-button>
-                            <el-button type="success" icon="el-icon-position" size="medium" plain @click="baseInputTable('转发')">转发</el-button>
-                            <el-button type="success" icon="el-icon-circle-check" size="medium" plain @click="baseInputTable('委托')">委托</el-button>
-                            <el-button type="success" icon="el-icon-star-off" size="medium" plain @click="basefollow()">关注</el-button>
-                            <el-button type="success" icon="el-icon-copy-document" size="medium" plain @click="effectOrDisableMsg('ruleForm')">提交</el-button>
+                            <el-button type="success" icon="el-icon-circle-plus-outline" size="small" plain @click="baseInputTable('加签')">加签</el-button>
+                            <el-button type="success" icon="el-icon-position" size="small" plain @click="baseInputTable('转发')">转发</el-button>
+                            <el-button type="success" icon="el-icon-circle-check" size="small" plain @click="baseInputTable('委托')">委托</el-button>
+                            <el-button type="success" icon="el-icon-star-off" size="small" plain @click="basefollow()">关注</el-button>
+                            <el-button type="success" icon="el-icon-copy-document" size="small" plain @click="effectOrDisableMsg('ruleForm')">提交</el-button>
                         </el-col>
                         <el-col :span="12" :offset="12" v-else>
-                            <el-button type="success" icon="el-icon-circle-plus-outline" size="medium" plain @click="baseInputTable('加签')">加签</el-button>
-                            <el-button type="success" icon="el-icon-position" size="medium" plain @click="baseInputTable('转发')">转发</el-button>
-                            <el-button type="success" icon="el-icon-circle-check" size="medium"  plain @click="baseInputTable('委托')">委托</el-button>
-                            <el-button type="success" icon="el-icon-star-off" size="medium" plain @click="basefollow()">关注</el-button>
+                            <el-button type="success" icon="el-icon-circle-plus-outline" size="small" plain @click="baseInputTable('加签')">加签</el-button>
+                            <el-button type="success" icon="el-icon-position" size="small" plain @click="baseInputTable('转发')">转发</el-button>
+                            <el-button type="success" icon="el-icon-circle-check" size="small"  plain @click="baseInputTable('委托')">委托</el-button>
+                            <el-button type="success" icon="el-icon-star-off" size="small" plain @click="basefollow()">关注</el-button>
                         </el-col>
                     </el-row>
                     <el-row :gutter="24">
@@ -69,7 +69,7 @@
                                             <el-radio :label="1" v-if="fresultArray.indexOf('1') !=-1">{{fresultObject['1']}}</el-radio>
                                             <el-radio :label="2" v-if="fresultArray.indexOf('2') !=-1">{{fresultObject['2']}}</el-radio>
                                             <el-radio :label="3" v-if="fresultArray.indexOf('3') !=-1">{{fresultObject['3']}}</el-radio>
-                                            <el-radio :label="4" v-if="fresultArray.indexOf('4') !=-1">{{fresultObject['4']}}</el-radio> 
+                                            <el-radio :label="4" v-if="fresultArray.indexOf('4') !=-1">{{fresultObject['4']}}</el-radio>
                                         </el-radio-group>
                                     </el-form-item>
                                 </el-col>
@@ -164,7 +164,7 @@ export default {
         EachPerEachTableModifyPage
     },
     inject: ['reload'],
-    data: function() {  
+    data: function() {
             var validateRemark = (rule, value, callback) => {
                 if (value === '') {
                     callback(new Error('请输入审批意见'));
@@ -331,9 +331,15 @@ export default {
             } else {
                 this.submitMethod();
             }
-            
+
         },
          submitMethod() {
+             const loading = this.$loading({
+                 lock: true,
+                 text: 'Loading',
+                 spinner: 'el-icon-loading',
+                 background: 'rgba(0, 0, 0, 0.7)'
+             });
             let paramsData = {};
             let twfbizmailReqVoObj = {};
             if(this.isOa) {
@@ -356,15 +362,19 @@ export default {
             paramsData["twfaudit"] = twfauditObj;
             this.$api.processSet.addWfsubmit(paramsData).then(res=>{
                 if( res.data.code == 0 ){
+
                     this.$message.success('保存成功');
+                    loading.close();
                     this.ShowFinancVisible = false;
                     this.$emit('changeShow',false);
                     this.reload();
                 }else{
+                    loading.close();
                     this.$message.error("保存失败,请填写完整信息");
                 }
 
             },error=>{
+                loading.close();
                 console.log(error)
             });
          },
@@ -412,7 +422,7 @@ export default {
                                         this.context = JSON.parse(data.data.data);
                                         this.context.tempId = res.data.data.tempId;
                                         this.context.files = val.data.data;
-                                        
+
                                     })
                                 }
                             })
@@ -480,10 +490,10 @@ export default {
         },
         //转发按钮点击事件
         baseInputTable(data){
+            let selectData=[];
             if(!this.isOa){
-                let selectData = this.rowWAADataObj.selectData;
+                selectData = this.rowWAADataObj.selectData;
             }else{
-                let selectData=[];
                 selectData.push(this.rowWAADataObj);
             }
             if(selectData[0].repeat && selectData[0].repeat!=''){
@@ -589,7 +599,7 @@ export default {
                 }
             },error=>{
                 console.log(error)
-            })  
+            })
         },
         //获取决策类型数据
         getDecisionType(data){
@@ -603,7 +613,7 @@ export default {
                 }
             },error=>{
                 console.log(error)
-            })  
+            })
         },
         //异步变同步
         async asyncCall(type,data,foid) {
@@ -612,7 +622,7 @@ export default {
             await this.getDecisionType(foid);
             await this.DisplayOrHide(this.functionType,this.rowWAADataObj);
             return;
-        }
+        },
     },
     mounted() {
 

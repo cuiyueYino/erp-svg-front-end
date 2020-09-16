@@ -12,8 +12,8 @@
 				</el-select>
 			</el-col>
 			<el-col style="text-align: right;" :span="6">
-				<el-button @click="submitForm('ruleForm','ruleFormTable')" v-show="!showFigAll" type="success" size="medium" icon="el-icon-copy-document">提交</el-button>
-				<el-button type="danger" @click="$parent.toSelect()" size="medium" icon="el-icon-close">返回</el-button>
+				<el-button @click="submitForm('ruleForm','ruleFormTable')" v-show="!showFigAll" type="success" size="small" icon="el-icon-copy-document">提交</el-button>
+				<el-button type="danger" @click="$parent.toSelect()" size="small" icon="el-icon-close">返回</el-button>
 			</el-col>
 		</el-row>
 		<el-card style="margin-top: 10px;">
@@ -90,11 +90,11 @@
 					</el-table-column>
 					<el-table-column v-if="!showFigAll" prop="date" label="操作" width="120" align="center">
 						<template slot="header" slot-scope="scope">
-							<el-button @click="toAddTable" type="success" icon="el-icon-folder-add" size="medium">新增</el-button>
+							<el-button @click="toAddTable" type="success" icon="el-icon-folder-add" size="small">新增</el-button>
 						</template>
 						<template slot-scope="scope">
 							<el-form-item v-if="!scope.row.showFig">
-								<el-button @click="toDelTable(scope.$index)" type="danger" icon='el-icon-delete' size="medium">删除</el-button>
+								<el-button @click="toDelTable(scope.$index)" type="danger" icon='el-icon-delete' size="small">删除</el-button>
 							</el-form-item>
 						</template>
 					</el-table-column>
@@ -108,8 +108,8 @@
 				<el-table-column prop="name" label="名称"></el-table-column>
 			</el-table>
 			<div slot="footer" class="dialog-footer">
-				<el-button @click="fieldContentSave" type="success" icon='el-icon-check' size="medium">确定</el-button>
-				<el-button @click="dialogVisible = false" type='warning' icon='el-icon-close' size="medium">取消</el-button>
+				<el-button @click="fieldContentSave" type="success" icon='el-icon-check' size="small">确定</el-button>
+				<el-button @click="dialogVisible = false" type='warning' icon='el-icon-close' size="small">取消</el-button>
 			</div>
 		</el-dialog>
 	</el-card>

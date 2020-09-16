@@ -31,7 +31,7 @@
                                 </el-select>
                             </el-col>
                             <el-col :span="5">
-                              <el-input v-model="input" placeholder="请输入内容" v-if="isInput"></el-input>
+                              <el-input v-model="input" placeholder="请输入内容" v-if="isInput" clearable></el-input>
                             </el-col>
                             <el-col :span="5">
                                 <el-date-picker
@@ -54,19 +54,19 @@
                               ></el-date-picker>
                             </el-col>
                             <el-col :span="1">
-                                <el-button type="primary" size="medium" icon="el-icon-search" plain @click="findData">查询</el-button>
+                                <el-button type="primary" size="small" icon="el-icon-search" plain @click="findData">查询</el-button>
                             </el-col>
                         </el-row>
 
                         <el-row :gutter="14">
                             <el-col :span="16" style="margin-top: 20px;">
-                              <el-button type="success" plain icon="el-icon-folder-add" size="medium" @click="createDocumentCategory">新增</el-button>
-                              <el-button type="warning" plain icon="el-icon-edit-outline" size="medium" @click="editDocumentCategory()" >修改</el-button>
-                              <el-button type="success" icon="el-icon-upload2" size="medium" plain @click="operateDocumentCategory(1)">置顶</el-button>
-                              <el-button type="warning" icon="el-icon-download" size="medium"  plain @click="operateDocumentCategory(2)">取消置顶</el-button>
-                              <el-button type="success" icon="el-icon-plus" size="medium" plain @click="operateDocumentCategory(3)">发布</el-button>
-                              <el-button type="warning" icon="el-icon-folder-delete" size="medium" plain @click="operateDocumentCategory(4)">取消发布</el-button>
-                              <el-button type="info" plain icon="el-icon-view" size="medium" @click="showDocumentCategory">查看</el-button>
+                              <el-button type="success" plain icon="el-icon-folder-add" size="small" @click="createDocumentCategory">新增</el-button>
+                              <el-button type="warning" plain icon="el-icon-edit-outline" size="small" @click="editDocumentCategory()" >修改</el-button>
+                              <el-button type="success" icon="el-icon-upload2" size="small" plain @click="operateDocumentCategory(1)">置顶</el-button>
+                              <el-button type="warning" icon="el-icon-download" size="small"  plain @click="operateDocumentCategory(2)">取消置顶</el-button>
+                              <el-button type="success" icon="el-icon-plus" size="small" plain @click="operateDocumentCategory(3)">发布</el-button>
+                              <el-button type="warning" icon="el-icon-folder-delete" size="small" plain @click="operateDocumentCategory(4)">取消发布</el-button>
+                              <el-button type="info" plain icon="el-icon-view" size="small" @click="showDocumentCategory">查看</el-button>
                             </el-col>
                         </el-row>
                     </el-card>
@@ -114,6 +114,7 @@ export default {
     inject: ['reload'],
     data(){
         return{
+            isFind : false,
             isInput: true,
             isDate:false,
             beginDate:'',
@@ -184,6 +185,8 @@ export default {
                 children: 'children',
                 label: 'fname'
             },
+            // 共享参数列表（用于分页时带着条件）
+            params: {},
         };
     },
     created(){
@@ -200,24 +203,46 @@ export default {
     methods:{
         //查询按钮
         findData(){
+            this.isFind = true;
             this.pageNum = 1;
             let field = this.formInline.document;
-            let fromdata={};
-            fromdata.page= 1;
-            fromdata.size=this.pageSize;
+            let fromdata={
+              page : 1,
+              size : this.pageSize,
+            };
+
             if("fcode" == field){
-                fromdata.fcode=this.input;
+                this.params={
+                  fcode:this.input,
+                };
+                // fromdata.fcode=this.input;
             } else if ("fname" == field){
-                fromdata.fname=this.input;
+              this.params={
+                fname:this.input,
+              };
+                // fromdata.fname=this.input;
             } else if ("fcreatetime" == field){
-                fromdata.fbegintime = this.beginDate;
-                fromdata.fendtime=this.endDate;
+              this.params={
+                fbegintime : this.beginDate,
+                fendtime : this.endDate,
+              };
+                // fromdata.fbegintime = this.beginDate;
+                // fromdata.fendtime=this.endDate;
             } else if ("fdescription" == field){
-                fromdata.fdescription=this.input;
+                this.params={
+                  fdescription : this.input,
+                };
+                // fromdata.fdescription=this.input;
             } else if ("fdocstatus" == field){
-                fromdata.fdocstatus=this.input;
+                this.params={
+                  fdocstatus : this.input,
+                };
+                // fromdata.fdocstatus=this.input;
             } else if ("fcreator" == field){
-              fromdata.fcreator=this.input;
+                this.params={
+                  fcreator : this.input,
+                };
+                // fromdata.fcreator=this.input;
             }
             this.searchMenutable(fromdata);
         },
@@ -456,36 +481,48 @@ export default {
         },
         //树结构点击事件
         handleNodeClick(data) {
+            this.isInput = true;
+            this.isDate = false;
+            this.formInline.document='';
+            this.input='';
+            this.beginDate='';
+            this.endDate='';
+            this.emptyParam();
             this.documentLevel = data.flevel;
             this.documentFpid = data.foid;
+            this.pageNum=1;
             let fromdata={};
             fromdata.page=this.pageNum;
             fromdata.size=this.pageSize;
-            fromdata.fpid=data.foid;
+            if(data.foid != '0' && data.fcode!='000'){
+                fromdata.fpid=data.foid;
+            }
             this.searchMenutable(fromdata);
         },
         //分页，下一页
         onCurrentChange(val){
             this.pageNum = val;
-            let field = this.formInline.document;
+            // let field = this.formInline.document;
             let formDataA ={};
-            if("fcode" == field){
-              formDataA.fcode=this.input;
-            } else if ("fname" == field){
-              formDataA.fname=this.input;
-            } else if ("fcreatetime" == field){
-              formDataA.fbegintime = this.beginDate;
-              formDataA.fendtime=this.endDate;
-            } else if ("fdescription" == field){
-              formDataA.fdescription=this.input;
-            } else if ("fdocstatus" == field){
-              formDataA.fdocstatus=this.input;
-            } else if ("fcreator" == field){
-              formDataA.fcreator=this.input;
-            }
+            // if("fcode" == field){
+            //   formDataA.fcode=this.input;
+            // } else if ("fname" == field){
+            //   formDataA.fname=this.input;
+            // } else if ("fcreatetime" == field){
+            //   formDataA.fbegintime = this.beginDate;
+            //   formDataA.fendtime=this.endDate;
+            // } else if ("fdescription" == field){
+            //   formDataA.fdescription=this.input;
+            // } else if ("fdocstatus" == field){
+            //   formDataA.fdocstatus=this.input;
+            // } else if ("fcreator" == field){
+            //   formDataA.fcreator=this.input;
+            // }
             formDataA.page=val;
             formDataA.size=this.pageSize;
-            formDataA.fpid=this.documentFpid;
+            if(this.documentFpid !='0'){
+                formDataA.fpid=this.documentFpid;
+            }
             this.searchMenutable(formDataA);
         },
         //table选中事件
@@ -521,6 +558,10 @@ export default {
         //分页查询菜单
         searchMenutable(data){
             let fromdata=data;
+            if(this.isFind){
+              //拼入其他条件参数
+              Object.assign(fromdata,this.params);
+            }
             fromdata.fuserid = localStorage.getItem('ms_userId');
             this.$api.documentManagement.findDocumentManageByPage(fromdata).then(response => {
                 let responsevalue = response;
@@ -542,6 +583,14 @@ export default {
                     this.$message.success('数据库没有该条数据!');
                 }
             });
+        },
+        /**
+         * 清空共享参数列表
+         */
+        emptyParam(){
+          for(let key of Object.keys(this.params)){
+            delete this.params[key];
+          }
         },
         //格式化日期
         formateDate(date){

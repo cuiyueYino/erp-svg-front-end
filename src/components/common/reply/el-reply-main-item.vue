@@ -16,7 +16,7 @@
                     {{ ReplyItemData.replycontent }}
                     </el-col>
                     <el-col :span="2" :offset="1">
-                        <el-button @click="onRowbuttonClick(ReplyItemData)" type="primary"  icon="el-icon-chat-line-round" size="medium">回复</el-button>
+                        <el-button @click="onRowbuttonClick(ReplyItemData)" type="primary"  icon="el-icon-chat-line-round" size="small">回复</el-button>
                     </el-col>   
                 </el-row>
             </template>
@@ -42,7 +42,7 @@
                     {{ ReplyItemData.title }}
                     </el-col>
                     <el-col :span="2" :offset="1">
-                        <el-button @click="onRowbuttonClick(ReplyItemData)" type="primary"  icon="el-icon-chat-line-round" size="medium">回复</el-button>
+                        <el-button @click="onRowbuttonClick(ReplyItemData)" type="primary"  icon="el-icon-chat-line-round" size="small">回复</el-button>
                     </el-col>   
                 </el-row>
             </template>

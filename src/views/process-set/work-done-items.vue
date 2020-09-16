@@ -4,13 +4,13 @@
         <el-card class="box-table">
            <el-row :gutter="24">
                 <el-col :span="11" :offset="13">
-                    <el-button type="success" icon="el-icon-refresh-right" size="medium" plain @click="refresh">刷新</el-button>
-                    <el-button type="primary" icon="el-icon-search" size="medium" plain @click="search">查询</el-button>
-                    <el-button type="info" icon="el-icon-view" size="medium" plain @click="Tolook">查看</el-button>
-                    <el-button type="success" icon="el-icon-position" size="medium" plain @click="baseInputTable('转发')">转发</el-button>
-                    <el-button type="success" icon="el-icon-circle-plus-outline" size="medium" plain @click="AdditionalApp()">加批</el-button>
-                    <el-button type="success" icon="el-icon-star-off" size="medium" plain @click="basefollow()">关注</el-button>
-                    <el-button type="info" icon="el-icon-printer" size="medium" plain @click="basePrinting()">打印</el-button>
+                    <el-button type="success" icon="el-icon-refresh-right" size="small" plain @click="refresh">刷新</el-button>
+                    <el-button type="primary" icon="el-icon-search" size="small" plain @click="search">查询</el-button>
+                    <el-button type="info" icon="el-icon-view" size="small" plain @click="Tolook">查看</el-button>
+                    <el-button type="success" icon="el-icon-position" size="small" plain @click="baseInputTable('转发')">转发</el-button>
+                    <el-button type="success" icon="el-icon-circle-plus-outline" size="small" plain @click="AdditionalApp()">加批</el-button>
+                    <el-button type="success" icon="el-icon-star-off" size="small" plain @click="basefollow()">关注</el-button>
+                    <el-button type="info" icon="el-icon-printer" size="small" plain @click="basePrinting()">打印</el-button>
                 </el-col>
             </el-row>
         </el-card>
@@ -117,9 +117,9 @@
             </el-form>
             <div slot=
             "footer" class="dialog-footer">
-                <el-button type="success" icon='el-icon-check' size="medium" @click="addSubmit()">确定</el-button>
-                <el-button type="primary" icon='el-icon-refresh' size="medium" @click="reset()">重置</el-button>
-                <el-button type="warning" icon='el-icon-close' size="medium" @click="dialogWFMVisible = false">取消</el-button>
+                <el-button type="success" icon='el-icon-check' size="small" @click="addSubmit()">确定</el-button>
+                <el-button type="primary" icon='el-icon-refresh' size="small" @click="reset()">重置</el-button>
+                <el-button type="warning" icon='el-icon-close' size="small" @click="dialogWFMVisible = false">取消</el-button>
             </div>
         </el-dialog>
         <el-dialog title="已办事项" :visible.sync="dialogAddVisible" :close-on-click-modal="false" width="30%">
@@ -140,8 +140,8 @@
                     </el-row>
             </el-form>
             <div slot="footer" class="dialog-footer">
-                <el-button type="success" icon='el-icon-check' size="medium" @click="AdditionalSubmit()">确定</el-button>
-                <el-button type="warning" icon='el-icon-close' size="medium" @click="dialogAddVisible = false">取消</el-button>
+                <el-button type="success" icon='el-icon-check' size="small" @click="AdditionalSubmit()">确定</el-button>
+                <el-button type="warning" icon='el-icon-close' size="small" @click="dialogAddVisible = false">取消</el-button>
             </div>
         </el-dialog>
         <PSpage  :rowPSDataObj="rowPSDataObj" :rowPStype="rowPStype" @changeShow="showORhideForPS"/>

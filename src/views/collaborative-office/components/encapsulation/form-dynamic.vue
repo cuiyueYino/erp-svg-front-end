@@ -49,7 +49,8 @@
 							<!-- 字符型 / 文本框 / 整型 / 浮点型 -->
 							<el-input @focus="fuwu(item)" v-if="item.fieldTypeName=='character' || item.fieldTypeName=='textType' || item.fieldTypeName=='integers' || item.fieldTypeName=='floatingPoint' && item.show" style="width: 100%;" v-model="ruleForm[item.field]" :disabled="!item.edit" />
 							<!--富文本-->
-							<quill-editor v-if="item.fieldTypeName == 'richText' && item.show" style="width: 100%;" v-model="ruleForm[item.field]" ref="myQuillEditor" :options="editorOption" @blur="onEditorBlur($event)" @focus="onEditorFocus($event,item.edit)" @change="onEditorChange($event)"></quill-editor>
+							<!--<quill-editor v-if="item.fieldTypeName == 'richText' && item.show" style="width: 100%;" v-model="ruleForm[item.field]" ref="myQuillEditor" :options="editorOption" @blur="onEditorBlur($event)" @focus="onEditorFocus($event,item.edit)" @change="onEditorChange($event)"></quill-editor>-->
+							<editor v-if="item.fieldTypeName == 'richText' && item.show" v-model="ruleForm[item.field]"></editor>
 							<!-- 日期选择器 -->
 							<el-date-picker v-if="item.fieldTypeName == 'dateControl' && item.show" @change="getDate(item)" style="width: 100%;" :disabled="!item.edit" v-model="ruleForm[item.field]" type="date" value-format="yyyy-MM-dd" placeholder="选择日期" />
 							<!--时间控件-->
@@ -70,8 +71,8 @@
 			<erpDialog :title="titleShow" erpDialogwidth="false" :dialogShow="dialogVisible">
 				<formIconComponents ref="child" :showFig="showCon" :dataCon="dataCon"></formIconComponents>
 				<div slot="footer">
-					<el-button type="success" icon='el-icon-check' size="medium" @click="getDialogVisible">确定</el-button>
-					<el-button type="warning" icon='el-icon-close' size="medium" @click="dialogVisible = false">取消</el-button>
+					<el-button type="success" icon='el-icon-check' size="small" @click="getDialogVisible">确定</el-button>
+					<el-button type="warning" icon='el-icon-close' size="small" @click="dialogVisible = false">取消</el-button>
 				</div>
 			</erpDialog>
 		</div>
@@ -84,6 +85,7 @@
 	//所有弹出框
 	import formIconComponents from '../../../../views/collaborative-office/components/encapsulation/sub-components/form-icon-components';
 	import workflowDialog from '../../../../views/collaborative-office/components/encapsulation/sub-components/workflow-dialog';
+	import editor from './test';
 	//富文本
 	import { quillEditor } from 'vue-quill-editor'; //调用编辑器
 	import 'quill/dist/quill.snow.css';
@@ -93,6 +95,7 @@
 		components: {
 			quillEditor,
 			formIconComponents,
+			editor,
 			workflowDialog
 		},
 		props: {
@@ -151,7 +154,94 @@
 				//中间变量
 				dialogVisibleCon: {},
 				//富文本基础数据
-				editorOption: this.$GLOBAL.editorOption,
+				editorOption: {
+					theme: 'snow',
+					modules: {
+						toolbar: {
+							container: [
+								['bold', 'italic', 'underline', 'strike'],
+								['blockquote', 'code-block'],
+								[{
+									'header': 1
+								}, {
+									'header': 2
+								}],
+								[{
+									'list': 'ordered'
+								}, {
+									'list': 'bullet'
+								}],
+								[{
+									'script': 'sub'
+								}, {
+									'script': 'super'
+								}],
+								[{
+									'indent': '-1'
+								}, {
+									'indent': '+1'
+								}],
+								[{
+									'direction': 'rtl'
+								}],
+								[{
+									'size': ['small', false, 'large', 'huge']
+								}],
+								[{
+									'header': [1, 2, 3, 4, 5, 6, false]
+								}],
+								[{
+									'color': []
+								}, {
+									'background': []
+								}],
+								[{
+									'font': []
+								}],
+								[{
+									'align': []
+								}],
+								['clean'],
+								['link', 'image', 'video'],
+								[{
+										'table': 'TD'
+									},
+									{
+										'table-insert-row': 'TIR'
+									},
+									{
+										'table-insert-column': 'TIC'
+									},
+									{
+										'table-delete-row': 'TDR'
+									},
+									{
+										'table-delete-column': 'TDC'
+									}
+								]
+							],
+							handlers: {
+								'table': function(val) {
+									this.quill.getModule('table').insertTable(2, 3)
+								},
+								'table-insert-row': function() {
+									this.quill.getModule('table').insertRowBelow()
+								},
+								'table-insert-column': function() {
+									this.quill.getModule('table').insertColumnRight()
+								},
+								'table-delete-row': function() {
+									this.quill.getModule('table').deleteRow()
+								},
+								'table-delete-column': function() {
+									this.quill.getModule('table').deleteColumn()
+								}
+							},
+						},
+						table: true,
+					},
+					placeholder: '点击输入 ...'
+				},
 				timer: "",
 				allOrganizationInfo: JSON.parse(localStorage.getItem('allOrganizationInfo')),
 				//人员
@@ -241,6 +331,9 @@
 			}
 		},
 		methods: {
+			change(){
+				
+			},
 			//工作流打开新页面
 			toNew(id) {
 				this.$api.collaborativeOffice.findDataByVoucherId({

@@ -19,12 +19,12 @@
                         <el-table-column prop="date" width="180"></el-table-column>
                         <el-table-column width="120">
                             <template slot-scope="scope">
-                                <el-button size="medium" @click="handleRead(scope.$index)">标为已读</el-button>
+                                <el-button size="small" @click="handleRead(scope.$index)">标为已读</el-button>
                             </template>
                         </el-table-column>
                     </el-table>
                     <div class="handle-row">
-                        <el-button type="primary" size="medium">全部标为已读</el-button>
+                        <el-button type="primary" size="small">全部标为已读</el-button>
                     </div>
                 </el-tab-pane>
                 <el-tab-pane :label="`已读消息(${read.length})`" name="second">
@@ -38,12 +38,12 @@
                             <el-table-column prop="date" width="150"></el-table-column>
                             <el-table-column width="120">
                                 <template slot-scope="scope">
-                                    <el-button @click="handleDel(scope.$index)" type="danger"  icon="el-icon-delete" size="medium">删除</el-button>
+                                    <el-button @click="handleDel(scope.$index)" type="danger"  icon="el-icon-delete" size="small">删除</el-button>
                                 </template>
                             </el-table-column>
                         </el-table>
                         <div class="handle-row">
-                            <el-button type="danger" size="medium">删除全部</el-button>
+                            <el-button type="danger" size="small">删除全部</el-button>
                         </div>
                     </template>
                 </el-tab-pane>
@@ -58,12 +58,12 @@
                             <el-table-column prop="date" width="150"></el-table-column>
                             <el-table-column width="120">
                                 <template slot-scope="scope">
-                                    <el-button @click="handleRestore(scope.$index)" type="warning"  icon="el-icon-bangzhu" size="medium">还原</el-button>
+                                    <el-button @click="handleRestore(scope.$index)" type="warning"  icon="el-icon-bangzhu" size="small">还原</el-button>
                                 </template>
                             </el-table-column>
                         </el-table>
                         <div class="handle-row">
-                            <el-button type="danger" size="medium">清空回收站</el-button>
+                            <el-button type="danger" size="small">清空回收站</el-button>
                         </div>
                     </template>
                 </el-tab-pane>

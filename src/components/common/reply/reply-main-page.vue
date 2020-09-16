@@ -61,8 +61,8 @@
                 </el-card>
             </el-form>
             <span slot="footer"  class="dialog-footer">
-                <el-button  @click="ShowFinancVisible=false" type="warning"  icon="el-icon-close" size="medium">取消</el-button>
-                <el-button @click="saveNewAndEdit()" type="success" icon="el-icon-copy-document" size="medium">提交</el-button>
+                <el-button  @click="ShowFinancVisible=false" type="warning"  icon="el-icon-close" size="small">取消</el-button>
+                <el-button @click="saveNewAndEdit()" type="success" icon="el-icon-copy-document" size="small">提交</el-button>
             </span>
         </el-dialog>
     </div>

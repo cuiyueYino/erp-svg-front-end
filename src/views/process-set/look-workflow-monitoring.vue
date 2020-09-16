@@ -104,8 +104,8 @@
                 </el-card>
             </el-form>
             <span slot="footer" v-if="LookOrupdate" class="dialog-footer">
-                <el-button type='success' icon='el-icon-copy-document' size="medium" @click="saveNewAndEdit()">提交</el-button>
-                <el-button type='warning' icon='el-icon-close' size="medium" @click="handleClose()">取消</el-button>
+                <el-button type='success' icon='el-icon-copy-document' size="small" @click="saveNewAndEdit()">提交</el-button>
+                <el-button type='warning' icon='el-icon-close' size="small" @click="handleClose()">取消</el-button>
             </span>
         </el-dialog>
         <UserTree  :rowUTSDataObj="rowUTSDataObj" :rowUTStype="rowUTStype" @changeShow="closeBaseInfo"/>

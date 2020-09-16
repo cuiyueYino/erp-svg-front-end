@@ -4,12 +4,12 @@
         <el-card class="box-card">
            <el-row :gutter="24">
                  <el-col :span="10" :offset="14">
-                     <el-button type="success" icon="el-icon-refresh-right" size="medium" plain @click="refresh">刷新</el-button>
-                     <el-button type="primary" icon="el-icon-search" size="medium" plain @click="search">查询</el-button>
-                     <el-button type="danger" icon="el-icon-help" size="medium" plain @click="circulation">流转</el-button>
-                     <el-button type="warning" icon="el-icon-edit-outline" size="medium" plain @click="toEdit">修改</el-button>
-                     <el-button type="danger" icon='el-icon-delete' size="medium" plain @click="deleteMsg">删除</el-button>
-                     <el-button type="info" icon="el-icon-view" size="medium" plain @click="Tolook">查看</el-button>
+                     <el-button type="success" icon="el-icon-refresh-right" size="small" plain @click="refresh">刷新</el-button>
+                     <el-button type="primary" icon="el-icon-search" size="small" plain @click="search">查询</el-button>
+                     <el-button type="danger" icon="el-icon-help" size="small" plain @click="circulation">流转</el-button>
+                     <el-button type="warning" icon="el-icon-edit-outline" size="small" plain @click="toEdit">修改</el-button>
+                     <el-button type="danger" icon='el-icon-delete' size="small" plain @click="deleteMsg">删除</el-button>
+                     <el-button type="info" icon="el-icon-view" size="small" plain @click="Tolook">查看</el-button>
                  </el-col>
             </el-row>
         </el-card>
@@ -170,8 +170,8 @@
                 </el-card>
             </el-form>
             <div slot="footer" class="dialog-footer">
-                <el-button type="success" icon='el-icon-check' size="medium" @click="onSubmit('form')">确定</el-button>
-                <el-button type="warning" icon='el-icon-close' size="medium" @click="dialogWFMVisible = false">取消</el-button>
+                <el-button type="success" icon='el-icon-check' size="small" @click="onSubmit('form')">确定</el-button>
+                <el-button type="warning" icon='el-icon-close' size="small" @click="dialogWFMVisible = false">取消</el-button>
             </div>
         </el-dialog>
         <el-dialog title="删除邮件" :visible.sync="dialogFormVisible">
@@ -184,8 +184,8 @@
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
-                <el-button type="success" icon='el-icon-check' size="medium" @click="deleteConfirm">确定</el-button>
-                <el-button type="warning" icon='el-icon-close' size="medium" @click="dialogFormVisible = false">取消</el-button>
+                <el-button type="success" icon='el-icon-check' size="small" @click="deleteConfirm">确定</el-button>
+                <el-button type="warning" icon='el-icon-close' size="small" @click="dialogFormVisible = false">取消</el-button>
             </div>
         </el-dialog>
         <PSpage  :rowPSDataObj="rowPSDataObj" :rowPStype="rowPStype" @changeShow="showORhideForPS"/>

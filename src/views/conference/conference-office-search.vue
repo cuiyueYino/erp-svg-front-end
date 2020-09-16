@@ -28,10 +28,10 @@
                 <el-input class="selectVal" size="mini" clearable v-model="form.selectVal"></el-input>
               </el-form-item>
               <el-form-item>
-                <el-button type="primary" icon='el-icon-search' size="medium" plain @click="searchKey">搜索</el-button>
+                <el-button type="primary" icon='el-icon-search' size="small" plain @click="searchKey">搜索</el-button>
               </el-form-item>
               <el-form-item>
-                <el-button type="success" icon='el-icon-check' size="medium" @click="saveConfig">确定</el-button>
+                <el-button type="success" icon='el-icon-check' size="small" @click="saveConfig">确定</el-button>
               </el-form-item>
             </el-form>
           </el-col>

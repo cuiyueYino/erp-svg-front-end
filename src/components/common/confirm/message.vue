@@ -12,8 +12,8 @@
           {{content}}
         </div>
         <span slot="footer" class="dialog-footer">
-            <el-button type="success" icon="el-icon-check" size="medium" @click="handleAction('Yes')">确定</el-button>
-            <el-button type="warning" icon="el-icon-close" size="medium" @click="handleAction('No')">取消</el-button> 
+            <el-button type="success" icon="el-icon-check" size="small" @click="handleAction('Yes')">确定</el-button>
+            <el-button type="warning" icon="el-icon-close" size="small" @click="handleAction('No')">取消</el-button> 
         </span>
         </el-dialog>
     </div>

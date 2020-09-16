@@ -12,8 +12,8 @@
 					</el-form>
 				</el-col>-->
 				<el-col :span="6" :offset="18">
-					<el-button type="warning" size="medium" icon="el-icon-sort" plain @click="Changedimension">切换维度</el-button>
-					<el-button type='success' size="medium" icon='el-icon-check' plain @click="determineSave">确定</el-button>
+					<el-button type="warning" size="small" icon="el-icon-sort" plain @click="Changedimension">切换维度</el-button>
+					<el-button type='success' size="small" icon='el-icon-check' plain @click="determineSave">确定</el-button>
 				</el-col>
 			</el-row>
 		</el-card>
@@ -30,10 +30,10 @@
 							<el-input v-model="formInline.searchValueleft"></el-input>
 						</el-col>
 						<el-col :span="2" :offset="1">
-							<el-button type="primary" size="medium" icon="el-icon-help" plain @click="filterLeft">过滤</el-button>
+							<el-button type="primary" size="small" icon="el-icon-help" plain @click="filterLeft">过滤</el-button>
 						</el-col>
 						<el-col :span="2" :offset="1">
-							<el-button type="primary" size="medium" icon="el-icon-menu" plain @click="getALLLeft">全部</el-button>
+							<el-button type="primary" size="small" icon="el-icon-menu" plain @click="getALLLeft">全部</el-button>
 						</el-col>
 					</el-row>
 				</el-col>
@@ -48,13 +48,13 @@
 							<el-input v-model="formInline.searchValueright"></el-input>
 						</el-col>
 						<el-col :span="2" :offset="1">
-							<el-button type="primary" size="medium" icon="el-icon-help" plain @click="filterRight">过滤</el-button>
+							<el-button type="primary" size="small" icon="el-icon-help" plain @click="filterRight">过滤</el-button>
 						</el-col>
 						<el-col :span="2" :offset="1">
-							<el-button type="primary" size="medium" icon="el-icon-menu" plain @click="getALLRight">全部</el-button>
+							<el-button type="primary" size="small" icon="el-icon-menu" plain @click="getALLRight">全部</el-button>
 						</el-col>
 						<el-col :span="2" :offset="1">
-							<el-button type="success" size="medium" icon="el-icon-circle-check" plain @click="RightSelecT">已选中</el-button>
+							<el-button type="success" size="small" icon="el-icon-circle-check" plain @click="RightSelecT">已选中</el-button>
 						</el-col>
 					</el-row>
 				</el-col>

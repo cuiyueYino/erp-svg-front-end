@@ -10,7 +10,7 @@
                         node-key="foid"
                         accordion
                         @node-click="handleNodeClick">
-                        <div slot-scope="{node,data}" class="customize-tree-p">
+                        <div slot-scope="{data}" class="customize-tree-p">
                           <el-tooltip class="item" effect="dark" :content="data.fname" placement="top-start">
                             <span>{{data.fname|labelShow}}</span>
                           </el-tooltip>
@@ -56,12 +56,12 @@
                                       ></el-date-picker>
                                     </el-col>
                                     <el-col :span="1" >
-                                        <el-button type="primary" size="medium" icon="el-icon-search" plain @click="findData">查询</el-button>
+                                        <el-button type="primary" size="small" icon="el-icon-search" plain @click="findData">查询</el-button>
                                     </el-col>
                                 </el-form>
                             </el-col>
                             <el-col :span="2" >
-                                <el-button type="info" plain icon="el-icon-view" size="medium" @click="showDocumentCategory" >查看</el-button>
+                                <el-button type="info" plain icon="el-icon-view" size="small" @click="showDocumentCategory" >查看</el-button>
                             </el-col>
                         </el-row>
                     </el-card>
@@ -238,8 +238,8 @@ export default {
                     let finandata={};
                     finandata.fdocmanageoid = SelectData[0].foid;
                     finandata.froleid = localStorage.getItem('ms_roles');
-
                     finandata.fauth = '2';
+                    finandata.foperate = '1'; //只有文档浏览查看的时候，才改变阅读量
                     this.$api.documentManagement.isHaveDocAuthority(finandata).then(response => {
                         let responsevalue = response;
                         if (responsevalue.data.data >= 1) {
@@ -302,17 +302,24 @@ export default {
         },
         //树结构点击事件
         handleNodeClick(data) {
-            this.documentLevel = data.flevel;
-            this.documentFpid = data.foid;
+            this.pageNum=1;
             let fromdata={};
-            fromdata.page=this.pageNum;
-            fromdata.size=this.pageSize;
-            fromdata.fpid=data.foid;
+            fromdata.page=1;
+            fromdata.size=10;
+            if(data.foid != '0' && data.fcode!='000'){
+                fromdata.fpid=data.foid;
+                this.documentLevel = data.flevel;
+                this.documentFpid = data.foid;
+            }else{
+                this.documentLevel = '';
+                this.documentFpid = '';
+            }
             this.searchMenutable(fromdata);
         },
         //分页，下一页
         onCurrentChange(val){
             this.pageNum = val;
+            let field = this.formInline.document;
             let formDataA ={};
             if("fcode" == field){
               formDataA.fcode=this.input;
@@ -328,7 +335,9 @@ export default {
             }
             formDataA.page=val;
             formDataA.size=this.pageSize;
-            formDataA.fpid=this.documentFpid
+            if(this.documentFpid !=''){
+                formDataA.fpid=this.documentFpid
+            }
             this.searchMenutable(formDataA);
         },
         //table选中事件
