@@ -45,35 +45,39 @@
 		<!-- 弹出框 -->
 		<el-dialog :title="isEdit?'编辑用户':'新建用户'" class="add-user" center top="20px" v-if="dialogFormVisible" :visible.sync="dialogFormVisible" :close-on-click-modal="false">
 			<el-form :model="form" :rules="rules" ref="form">
-				<el-row :gutter="24">
+				<el-row>
 					<el-col :span="12">
 						<el-form-item label="公司：" :label-width="formLabelWidth" class="pop-select" prop="fcompanyoid">
 							<el-select disabled v-model="form.fcompanyoid" size="small" clearable placeholder="请选择">
 								<el-option label="福佳集团" value="_DefaultCompanyOId"></el-option>
 							</el-select>
 						</el-form-item>
+					</el-col>
+				</el-row>
+				<el-row :gutter="24">
+					<el-col :span="12">
 						<el-form-item label="登录账号：" :label-width="formLabelWidth" prop="fcodeStr">
-							<el-input v-model="form.fcodeStr" @input="change($event)" size="small" autocomplete="off"></el-input>
+							<el-input v-model="form.fcodeStr" :disabled="isEdit" size="small" @input="change($event)" autocomplete="off"></el-input>
 						</el-form-item>
 						<el-form-item label="密码：" :label-width="formLabelWidth" prop="fpasswordStr">
-							<el-input v-model="form.fpasswordStr" @input="change($event)" type="password" size="small"></el-input>
+							<el-input v-model="form.fpasswordStr" :disabled="isEdit && !isReset" type="password" @input="change($event)"  size="small"></el-input>
 						</el-form-item>
 						<el-form-item label="使用者：" :label-width="formLabelWidth" prop="fstaff">
 							<el-input v-model="form.fstaff" :disabled="isEdit && !isReset" size="small" autocomplete="off"></el-input>
 							<el-button type="primary" v-show="!isEdit || isReset" size="mini" icon="el-icon-search" @click="addDepart();loading = true"></el-button>
 							<!--<img class="icon-search" v-show="!isEdit || isReset" src="../../assets/img/search.svg" @click="addDepart();loading = true" />-->
 						</el-form-item>
-						<el-form-item v-show="isEdit" label="重置密码：" :label-width="formLabelWidth">
+						<el-form-item v-show="isEdit" label="重置：" :label-width="formLabelWidth">
 							<el-checkbox v-model="resetCheck" size="small"></el-checkbox>
 						</el-form-item>
 					</el-col>
 					<el-col :span="12">
 						<el-form-item label="名称：" :label-width="formLabelWidth" prop="fname">
-							<el-input v-model="form.fname" size="small" autocomplete="off"></el-input>
+							<el-input v-model="form.fname" size="small" autocomplete="off" @input="change($event)"></el-input>
 						</el-form-item>
 
 						<el-form-item label="确认密码：" :label-width="formLabelWidth" prop="fpasswordSure">
-							<el-input v-model="form.fpasswordSure" @input="change($event)" type="password" size="small"></el-input>
+							<el-input v-model="form.fpasswordSure" :disabled="isEdit && !isReset" type="password" @input="change($event)" size="small"></el-input>
 						</el-form-item>
 						<el-form-item label="所在部门：" :label-width="formLabelWidth" prop="departmentname">
 							<el-input v-model="form.departmentname" disabled size="small" autocomplete="off"></el-input>
@@ -105,8 +109,10 @@
 				<el-col :span="12">
 					<el-input placeholder="输入用户名" size="mini" v-model="filterText"></el-input>
 				</el-col>
-				<el-col :span="6" :offset="6">
+				<el-col :span="3">
 					<el-button type="primary" icon='el-icon-search' size="medium" @click="searchDepart">查询</el-button>
+				</el-col>
+				<el-col :span="3">
 					<el-button  type='primary' size="medium" icon='el-icon-refresh' @click="ALLUsertree">重置</el-button>
 				</el-col>
 			</el-row>
@@ -148,6 +154,28 @@
 			const {
 				contantSelect
 			} = this;
+			var validatePass = (rule, value, callback) => {
+				if (value === '') {
+				callback(new Error('请输入密码'));
+				} else {
+				if (this.form.fpasswordStr !== '') {
+					this.$refs.form.validateField('checkPass');
+				}
+				callback();
+				}
+			};
+			var validatePass2 = (rule, value, callback) => {
+				if (value === '') {
+				callback(new Error('请再次输入密码'));
+				} else if (value !== this.form.fpasswordStr) {
+					console.log(rule)
+					console.log(value)
+					console.log(this.form.fpasswordStr)
+				callback(new Error('两次输入密码不一致!'));
+				} else {
+				callback();
+				}
+			};
 			return {
 				loading: false,
 				dialogFormVisible: false,
@@ -266,32 +294,20 @@
 						},
 						{
 							min: 1,
-							max: 100,
-							message: "长度在 1 到 50 个字符",
+							max: 32,
+							message: "长度在 1 到 32 个字符",
 							trigger: "blur"
 						}
 					],
 					fpasswordStr: [{
+							validator: validatePass,
 							required: true,
-							message: "请输入密码",
-							trigger: "blur"
-						},
-						{
-							min: 1,
-							max: 100,
-							message: "长度在 1 到 50 个字符",
 							trigger: "blur"
 						}
 					],
 					fpasswordSure: [{
+							validator: validatePass2,
 							required: true,
-							message: "请输入密码",
-							trigger: "blur"
-						},
-						{
-							min: 1,
-							max: 100,
-							message: "长度在 1 到 50 个字符",
 							trigger: "blur"
 						}
 					],
@@ -306,7 +322,8 @@
 							message: "长度在 1 到 100 个字符",
 							trigger: "blur"
 						}
-					]
+					],
+					fstaff: [{required: true, message: '请选使用者！', trigger: 'change'}]
 				}
 			};
 		},
@@ -674,6 +691,11 @@
 							}
 							}
 							
+							if(this.form.fpassword != this.form.fpasswordStr && this.form.fpasswordStr.length > 6){
+								this.$message.error("密码长度不能超过6个字符！");
+								return;
+							}
+
 							this.form.fcode=this.form.fcodeStr;
 							this.form.fpassword=this.form.fpasswordStr;
 							this.form.fstaff = this.form.fstaffId;
@@ -695,6 +717,10 @@
 							console.log(this.form);
 							this.form.fcode=this.form.fcodeStr;
 							this.form.fpassword=this.form.fpasswordStr;
+							if(this.form.fpasswordStr.length > 6){
+								this.$message.error("密码长度不能超过6个字符！");
+								return;
+							}
 							this.$api.jobUserManagement.addUserTableData(this.form).then(res => {
 									this.newIndex = null
 									if(res.data.code == 0) {
@@ -863,7 +889,7 @@
 				}
 			},
 			change(e){
-            	this.$forceUpdate()
+            	this.$forceUpdate();
         	},
 			timeFormat() {
 				var date = new Date();
