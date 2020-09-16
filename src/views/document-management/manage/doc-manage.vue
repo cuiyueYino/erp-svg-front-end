@@ -481,6 +481,7 @@ export default {
         },
         //树结构点击事件
         handleNodeClick(data) {
+            this.isFind = false;
             this.isInput = true;
             this.isDate = false;
             this.formInline.document='';

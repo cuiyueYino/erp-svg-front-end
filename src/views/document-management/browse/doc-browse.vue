@@ -110,6 +110,7 @@ export default {
     inject: ['reload'],
     data(){
         return{
+            isFind : false,
             isInput: true,
             isDate:false,
             beginDate:'',
@@ -196,6 +197,7 @@ export default {
     methods:{
         //查询按钮
         findData(){
+            this.isFind = true;
             this.pageNum = 1;
             let field = this.formInline.document;
             let fromdata={};
@@ -302,6 +304,13 @@ export default {
         },
         //树结构点击事件
         handleNodeClick(data) {
+            this.isFind = false;
+            this.isInput = true;
+            this.isDate = false;
+            this.formInline.document='';
+            this.input='';
+            this.beginDate='';
+            this.endDate='';
             this.pageNum=1;
             let fromdata={};
             fromdata.page=1;
@@ -319,19 +328,21 @@ export default {
         //分页，下一页
         onCurrentChange(val){
             this.pageNum = val;
-            let field = this.formInline.document;
             let formDataA ={};
-            if("fcode" == field){
-              formDataA.fcode=this.input;
-            } else if ("fname" == field){
-              formDataA.fname=this.input;
-            }else if ("fcreatetime" == field){
-              formDataA.fbegintime = this.beginDate;
-              formDataA.fendtime=this.endDate;
-            }else if ("fcreator" == field){
-              formDataA.fcreator=this.input;
-            }else if ("fdescription" == field){
-              formDataA.fdescription=this.input;
+            if(this.isFind){
+                let field = this.formInline.document;
+                if("fcode" == field){
+                formDataA.fcode=this.input;
+                } else if ("fname" == field){
+                formDataA.fname=this.input;
+                }else if ("fcreatetime" == field){
+                formDataA.fbegintime = this.beginDate;
+                formDataA.fendtime=this.endDate;
+                }else if ("fcreator" == field){
+                formDataA.fcreator=this.input;
+                }else if ("fdescription" == field){
+                formDataA.fdescription=this.input;
+                }
             }
             formDataA.page=val;
             formDataA.size=this.pageSize;
