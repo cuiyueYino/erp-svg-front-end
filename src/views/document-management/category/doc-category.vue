@@ -326,6 +326,7 @@ export default {
         },
         //树结构点击事件
         handleNodeClick(data) {
+            this.pageNum=1;
             this.documentLevel = data.flevel;
             this.documentFpid = data.foid;
             let fromdata={};
