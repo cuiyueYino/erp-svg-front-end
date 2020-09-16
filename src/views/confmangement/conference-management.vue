@@ -306,7 +306,6 @@
                 resRows[i].fconfshow.confDatePeriod = startDate + "-" + endDate;
               }
             }
-            debugger;
             this.tableData = resRows;
             console.log(this.tableData);
             this.total = res.data.data.total;
