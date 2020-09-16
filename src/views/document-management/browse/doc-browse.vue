@@ -307,7 +307,7 @@ export default {
             this.isFind = false;
             this.isInput = true;
             this.isDate = false;
-            this.formInline.document='';
+            this.formInline={};
             this.input='';
             this.beginDate='';
             this.endDate='';

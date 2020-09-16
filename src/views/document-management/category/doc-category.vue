@@ -329,7 +329,7 @@ export default {
         //树结构点击事件
         handleNodeClick(data) {
             this.isFind = false;
-            this.formInline.document='';
+            this.formInline={};
             this.input='';
             this.pageNum=1;
             this.documentLevel = data.flevel;
