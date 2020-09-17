@@ -83,7 +83,7 @@
                             </el-row>
                         </el-tab-pane>
                         <el-tab-pane label="附件" name="second">
-                            <creditEnclFilelist :rowEFListDataObj="rowEFListDataObj" :financingEFListtype="financingEFListtype" />
+                            <creditEnclFilelist :rowEFListDataObj="rowEFListDataObj" :financingEFListtype="financingEFListtype" :fileFlag='rowFstatus' />
                         </el-tab-pane>
                     </el-tabs>
                 </el-card>
