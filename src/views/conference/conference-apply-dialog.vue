@@ -200,7 +200,7 @@
           </el-col>
         </el-row>
         <el-row :gutter="24">
-          <el-col :span="23">
+          <el-col :span="22">
             <el-form-item label="内部参与人：" :label-width="formLabelWidth">
               <el-input
                 maxlength="3000"
@@ -214,13 +214,20 @@
               ></el-input>
             </el-form-item>
           </el-col>
-          <el-col :span="1" class="el-internalMansName_" style="padding: 10px 0px 0px 0px !important;">
+          <el-col :span="2" class="el-internalMansName_" style="padding: 10px 0px 0px 0px !important;">
             <el-button
               type="primary"
               size="mini"
               icon="el-icon-search"
               style="padding:7px 8px"
               @click="baseInputTable('4','用户查询')"
+            ></el-button>
+	    <el-button
+              type="primary"
+              size="mini"
+              icon="el-icon-close"
+              style="padding:7px 8px"
+              @click="closePerson"
             ></el-button>
           </el-col>
         </el-row>
@@ -535,8 +542,6 @@
         :title="baseInputTitle"
         :fcompanyid="fcompanyid"
         @closeDialog="closeBaseInfo"
-        :fteamleaderId='fteamleaderId'
-        :transStaffRelUserIds='transStaffRelUserIds'
       ></staff-tree-search>
     </el-form>
 
@@ -553,6 +558,7 @@
         @closeDialog="closeConfOffice"
       ></conference-office-search>
     </el-form>
+    <input v-model="formFlag" style="display:none;">
   </div>
 </template>
 
@@ -604,10 +610,7 @@
               if (res.data.data.rows.length > 0) {
                 let resData = res.data.data.rows[0];
                 let internalMans = resData.internalmans;
-                 for(var i= 0;i<res.data.data.rows[0].internalmans.length;i++) {
-                   this.transStaffRelUserIds.push(res.data.data.rows[0].internalmans[i].foid);
-                   this.fteamleaderId.push(res.data.data.rows[0].internalmans[i].foid);
-                 }
+                 
                 let internalMansName = "";
                 for (let i in internalMans) {
                   if (i < internalMans.length - 1) {
@@ -653,8 +656,7 @@
         }
       };
       return {
-        transStaffRelUserIds:[],
-        fteamleaderId:[],
+        formFlag:1,
         options: JSON.parse(localStorage.getItem('CompanyData')),
         pageNum: 1,
         pageSize: 10,
@@ -766,6 +768,11 @@
       }
     },
     methods: {
+      closePerson(){
+        this.formFlag++;
+        this.searchForm.internalmans = [];
+        this.searchForm.internalMansName = '';
+      },
       // 参会人数变化，清空会议室
       fcpmcountMethod(){
         this.searchForm.fconfname = '';
@@ -913,19 +920,13 @@
               };
               internalmans.push(staff);
             }
-            this.transStaffRelUserIds =[];
-            this.fteamleaderId = [];
-            for(var i=0;i<internalmans.length;i++) {
-                this.transStaffRelUserIds.push(internalmans[i].foid);
-                this.fteamleaderId.push(internalmans[i].foid);
+            this.searchForm.internalmans = this.searchForm.internalmans.concat(internalmans);
+            console.log(this.searchForm.internalmans);
+            if(this.searchForm.internalMansName == ""){
+              this.searchForm.internalMansName += internalMansName;
+            }else{
+              this.searchForm.internalMansName += ',' + internalMansName;
             }
-            this.searchForm.internalmans = internalmans;
-            this.searchForm.internalMansName = internalMansName;
-            // if(this.searchForm.internalMansName == ""){
-            //   this.searchForm.internalMansName += internalMansName;
-            // }else{
-            //   this.searchForm.internalMansName += ',' + internalMansName;
-            // }
           }
           this.staffTableVisible = false;
         }

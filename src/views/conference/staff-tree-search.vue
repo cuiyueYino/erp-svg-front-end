@@ -54,6 +54,8 @@
         <el-button type="success" icon='el-icon-check' size="small" @click="saveConfig" v-if="strictly">确定</el-button>
       </div>
     </el-dialog>
+    
+    
   </div>
 </template>
 
@@ -121,7 +123,10 @@
     watch: {
       // 对话框显示 自动聚焦name输入框
       visible(bool) {
-        if(this.type == 1) {
+        if(this.fteamleaderId == undefined || this.fteamleaderId == undefined ) {
+            this.defautChecked = [];
+            this.treeDataObject = [];
+        } else if (this.type == 1) {
             this.defautChecked = this.fteamleaderId;
             this.treeDataObject = this.fteamleaderId;
         } else {
@@ -190,7 +195,7 @@
                                   if(searchArray[i].children[j].children[m].children != undefined) {
                                       this.treeDataObject.push(searchArray[i].children[j].children[m].foid);
                                   } else {
-                                      // this.treeDataObject.push(searchArray[i].children[j].children[m].foid);
+                                      this.treeDataObject.push(searchArray[i].children[j].children[m].foid);
                                   }
                               }
                           } else {
