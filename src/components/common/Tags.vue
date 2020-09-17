@@ -12,7 +12,7 @@
                 </span>
 			</li>
 		</ul>
-		<div class="tags-close-box">
+		<!-- <div class="tags-close-box">
 			<el-dropdown @command="handleTags">
 				<el-button size="mini" class="btn" style="backfground:skyblue">
 					标签选项
@@ -23,7 +23,7 @@
 					<el-dropdown-item command="all">关闭所有</el-dropdown-item>
 				</el-dropdown-menu>
 			</el-dropdown>
-		</div>
+		</div> -->
 	</div>
 </template>
 
@@ -70,9 +70,9 @@
 					return item.path === route.fullPath;
 				});
 				if(!isExist) {
-					if(this.tagsList.length >= 8) {
-						this.tagsList.er();
-					}
+					// if(this.tagsList.length >= 8) {
+					// 	this.tagsList.er();
+					// }
 					this.tagsList.push({
 						title: route.meta.title,
 						path: route.fullPath,
@@ -125,21 +125,23 @@
 <style lang='scss'>
 	.tags {
 		position: relative;
-		height: 30px;
-		overflow: hidden;
+		height: 56px;
+		// overflow: hidden;
 		background: #fff;
-		padding-right: 120px;
+		// padding-right: 120px;
 		box-shadow: 0 5px 10px #ddd;
 	}
 	
 	.tags ul {
 		box-sizing: border-box;
 		width: 100%;
-		height: 100%;
+		overflow-x: scroll;
+		white-space:nowrap;
+		display: inline-block;
 	}
 	
 	.tags-li {
-		float: left;
+		display:inline-block;
 		margin: 3px 5px 2px 3px;
 		border-radius: 3px;
 		font-size: 12px;

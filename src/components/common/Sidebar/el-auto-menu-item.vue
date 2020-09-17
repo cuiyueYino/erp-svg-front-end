@@ -16,6 +16,7 @@
 		 <el-menu-item  :index="menuItemData.index">
 			<!-- <i :class="menuItemData.icon"></i> -->
 			<span slot="title">{{ menuItemData.title }}</span>
+			<span>1212</span>
 		</el-menu-item>
 	</div>
 </template>
