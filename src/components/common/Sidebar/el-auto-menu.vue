@@ -18,7 +18,7 @@
 			return {
 				isOa: false,
 				innerData: [],
-				nowUrl: "",
+				nowUrl: "oaCompanyHome",
 				urlShow: ['A_Menu']
 			};
 		},
