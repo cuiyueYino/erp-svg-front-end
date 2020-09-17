@@ -10,7 +10,7 @@
                     <el-tabs v-model="activeName" @tab-click="handleClick">
                         <el-tab-pane label="待办事项" name="1">
                             <template v-for="item in getunhandledTaskList" class="li-box">
-                                <ul class="ul-middle" @click="toLookItems(item)" :key="item.foid">
+                                <ul :class="{'ul-middle':true ,'subjectStyle':item.fisread=='0' }" @click="toLookItems(item,'1')" :key="item.foid">
                                     <li>{{item.fsubject}}<span class="li-after" v-show="item.fisread=='0'"></span></li>
                                 </ul>
                                 <ul class="ul-middle" :key="item.foid">
@@ -19,14 +19,14 @@
                                 <ul class="ul-middle" :key="item.foid">
                                     <li>{{item.faddresser}}</li>
                                 </ul>
-                                <ul class="ul-middle" @click="toLookItems(item)" :key="item.foid">
+                                <ul class="ul-middle" @click="toLookItems(item,'1')" :key="item.foid">
                                     <li>{{item.freceiveTime}}</li>
                                 </ul>
                             </template>
                         </el-tab-pane>
                         <el-tab-pane label="关注事项" name="2">
                             <template v-for="item in getAttentionTaskList" class="li-box">
-                                <ul class="ul-middle" @click="toLookItems(item)" :key="item.foid">
+                                <ul :class="{'ul-middle':true ,'subjectStyle':item.fisread=='0' }" @click="toLookItems(item,'2')" :key="item.foid">
                                     <li>{{item.fsubject}}<span class="li-after" v-show="item.fisread=='0'"></span></li>
                                 </ul>
                                 <ul class="ul-middle" :key="item.foid">
@@ -35,14 +35,14 @@
                                 <ul class="ul-middle" :key="item.foid">
                                     <li>{{item.faddresser}}</li>
                                 </ul>
-                                <ul class="ul-middle" @click="toLookItems(item)" :key="item.foid">
+                                <ul class="ul-middle" @click="toLookItems(item,'2')" :key="item.foid">
                                     <li>{{item.freceiveTime}}</li>
                                 </ul>
                             </template>
                         </el-tab-pane>
                         <el-tab-pane label="已办事项" name="3">
                             <template v-for="item in getHunTableDataList" class="li-box">
-                                <ul class="ul-middle" @click="toLookItems(item)" :key="item.foid">
+                                <ul :class="{'ul-middle':true ,'subjectStyle':item.fisread=='0' }" @click="toLookItems(item,'3')" :key="item.foid">
                                     <li>{{item.fsubject}}<span class="li-after" v-show="item.fisread=='0'"></span></li>
                                 </ul>
                                 <ul class="ul-middle" :key="item.foid">
@@ -51,14 +51,14 @@
                                 <ul class="ul-middle" :key="item.foid">
                                     <li>{{item.faddresser}}</li>
                                 </ul>
-                                <ul class="ul-middle" @click="toLookItems(item)" :key="item.foid">
+                                <ul class="ul-middle" @click="toLookItems(item,'3')" :key="item.foid">
                                     <li>{{item.freceiveTime}}</li>
                                 </ul>
                             </template>
                         </el-tab-pane>
                         <el-tab-pane label="已发事项" name="4">
                             <template v-for="item in getIssuedItemsList" class="li-box">
-                                <ul class="ul-middle" @click="toLookItems(item)" :key="item.foid">
+                                <ul :class="{'ul-middle':true ,'subjectStyle':item.fisread=='0' }" @click="toLookItems(item,'4')" :key="item.foid">
                                     <li>{{item.fsubject}}<span class="li-after" v-show="item.fisread=='0'"></span></li>
                                 </ul>
                                 <ul class="ul-middle" :key="item.foid">
@@ -67,14 +67,14 @@
                                 <ul class="ul-middle" :key="item.foid">
                                     <li>{{item.entityoName}}</li>
                                 </ul>
-                                <ul class="ul-middle" @click="toLookItems(item)" :key="item.foid">
+                                <ul class="ul-middle" @click="toLookItems(item,'4')" :key="item.foid">
                                     <li>{{item.freceiveTime}}</li>
                                 </ul>
                             </template>
                         </el-tab-pane>
                         <el-tab-pane label="回收站" name="5">
                             <template v-for="item in getRecycleBinList" class="li-box">
-                                <ul class="ul-middle" @click="toLookItems(item)" :key="item.foid">
+                                <ul :class="{'ul-middle':true ,'subjectStyle':item.fisread=='0' }" @click="toLookItems(item,'5')" :key="item.foid">
                                     <li>{{item.fsubject}}<span class="li-after" v-show="item.fisread=='0'"></span></li>
                                 </ul>
                                 <ul class="ul-middle" :key="item.foid">
@@ -83,11 +83,11 @@
                                 <ul class="ul-middle" :key="item.foid">
                                     <li>{{item.faddresser}}</li>
                                 </ul>
-                                <ul class="ul-middle" @click="toLookItems(item)" :key="item.foid">
+                                <ul class="ul-middle" @click="toLookItems(item,'5')" :key="item.foid">
                                     <li>{{item.freceiveTime}}</li>
                                 </ul>
                             </template>
-                        </el-tab-pane>   
+                        </el-tab-pane>
                     </el-tabs>
                 </el-card>
                 <el-card class="box-card">
@@ -98,40 +98,40 @@
                     <el-tabs v-model="activeNameMail" @tab-click="handleClickMail">
                         <el-tab-pane label="收件箱" name="1">
                             <template v-for="item in getReceiveMailList" class="li-box">
-                                <ul class="ul-left" @click="toLookMail(item)" :key="item.foid">
+                                <ul :class="{'ul-left':true ,'subjectStyle':item.isRead==0 }" @click="toLookMail(item,'1')" :key="item.foid">
                                     <li>{{item.subject}}<span class="li-after" v-show="item.isRead== 0"></span></li>
                                 </ul>
-                                <ul class="ul-right" @click="toLookMail(item)" :key="item.foid">
+                                <ul class="ul-right" @click="toLookMail(item,'1')" :key="item.foid">
                                     <li>{{item.createTime}}</li>
                                 </ul>
                             </template>
                         </el-tab-pane>
                         <el-tab-pane label="草稿箱" name="2">
                             <template v-for="item in getDraftMailList" class="li-box">
-                                <ul class="ul-left" @click="toLookMail(item)" :key="item.foid">
+                                <ul class="ul-left" @click="toLookMail(item,'')" :key="item.foid">
                                     <li>{{item.subject}}<span class="li-after" v-show="item.isRead== 0"></span></li>
                                 </ul>
-                                <ul class="ul-right" @click="toLookMail(item)" :key="item.foid">
+                                <ul class="ul-right" @click="toLookMail(item,'')" :key="item.foid">
                                     <li>{{item.createTime}}</li>
                                 </ul>
                             </template>
                         </el-tab-pane>
                         <el-tab-pane label="发件箱" name="3">
                             <template v-for="item in getSendMailList" class="li-box">
-                                <ul class="ul-left" @click="toLookMail(item)" :key="item.foid">
+                                <ul class="ul-left" @click="toLookMail(item,'')" :key="item.foid">
                                     <li>{{item.subject}}<span class="li-after" v-show="item.isRead== 0"></span></li>
                                 </ul>
-                                <ul class="ul-right" @click="toLookMail(item)" :key="item.foid">
+                                <ul class="ul-right" @click="toLookMail(item,'')" :key="item.foid">
                                     <li>{{item.createTime}}</li>
                                 </ul>
                             </template>
                         </el-tab-pane>
                         <el-tab-pane label="回收站" name="4">
                             <template v-for="item in getRecycleMailList" class="li-box">
-                                <ul class="ul-left" @click="toLookMail(item)" :key="item.foid">
+                                <ul class="ul-left" @click="toLookMail(item,'')" :key="item.foid">
                                     <li>{{item.subject}}<span class="li-after" v-show="item.isRead== 0"></span></li>
                                 </ul>
-                                <ul class="ul-right" @click="toLookMail(item)" :key="item.foid">
+                                <ul class="ul-right" @click="toLookMail(item,'')" :key="item.foid">
                                     <li>{{item.createTime}}</li>
                                 </ul>
                             </template>
@@ -294,7 +294,7 @@ export default {
         })
     },
     computed:{
-        
+
     },
     methods:{
         toOaSER(ValStr) {
@@ -308,7 +308,7 @@ export default {
                 sessionStorage.setItem("menuList", JSON.stringify(data2.data.data));
                 //获取员工树信息
                 this.getStaffTreeList(ValStr)
-            }) 
+            })
         },
         //登录时获取员工树信息
         getStaffTreeList(ValStr) {
@@ -320,7 +320,7 @@ export default {
                 if(ValStr=='Workflow'){
                     this.$router.push({
                         name: "todolist"
-                    }); 
+                    });
                 }else{
                     this.$router.push({
                         name: "insideMailCommon"
@@ -348,7 +348,7 @@ export default {
                 this.rowWAAtype = true
             }
         },
-        toLookItems(val){
+        toLookItems(val,activeName){
             let finandata = val;
             finandata.selectData = val;
             finandata.finanrowname="人员缺省查询方案";
@@ -378,8 +378,28 @@ export default {
                 this.rowWAAtype=true;
                 this.isOa = true;
             })*/
+            // 点击后刷新
+            switch (activeName) {
+                case '1':
+                    this.getunhandledTask();
+                    break;
+                case '2':
+                    this.getAttentionTask();
+                    break;
+                case '3':
+                    this.getHunTableData();
+                    break;
+                case '4':
+                    this.getIssuedItems();
+                    break;
+                case '5':
+                    this.getRecycleBinItems();
+                    break;
+                default:
+                    break;
+            }
         },
-        toLookMail(val){
+        toLookMail(val,activeNameMail){
             let data={
                 id:val.id
             }
@@ -390,6 +410,12 @@ export default {
                 this.enclosureConfig.voucherId = this.formData.mailCode;
                 this.dialogVisible = true;
             })
+            // 点击后刷新
+            switch (activeNameMail) {
+                case '1':
+                    this.getReceiveMail();
+                    break;
+            }
         },
         handleClick() {
             switch (this.activeName) {
@@ -421,7 +447,7 @@ export default {
             }
             this.$api.processSet.getunhandledTask(data).then(res=>{
                 let unhandledTaskList=[];
-                unhandledTaskList = res.data.data.rows; 
+                unhandledTaskList = res.data.data.rows;
                 //去未读红点
                 unhandledTaskList.forEach((item, index) => {
                     let localKey = localStorage.getItem('ms_userId') + "_" + item.foid;
@@ -611,7 +637,7 @@ export default {
     overflow: unset;
     width: 100%;
   }
-  
+
   .el-main {
     padding: 0;
     margin-right: 20px;
@@ -719,7 +745,7 @@ export default {
     }
     .box-card-right{
         display: flex;
-         max-width: 520px;  
+         max-width: 520px;
          text-align: left;
          height: 396px;
          line-height: 16px;
@@ -755,5 +781,8 @@ export default {
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
+}
+.subjectStyle {
+    color: red !important;
 }
 </style>
