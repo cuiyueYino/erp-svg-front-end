@@ -629,6 +629,7 @@ export default {
     },
     watch:{
         rowWAAtype(oldVal,newVal){
+            this.formdata.remark = "";
             if(this.rowWAAtype){
                 let formDataA ={};
                 if(!this.isOa){
