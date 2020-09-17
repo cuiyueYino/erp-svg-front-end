@@ -610,7 +610,7 @@
               if (res.data.data.rows.length > 0) {
                 let resData = res.data.data.rows[0];
                 let internalMans = resData.internalmans;
-                 
+
                 let internalMansName = "";
                 for (let i in internalMans) {
                   if (i < internalMans.length - 1) {
@@ -645,7 +645,7 @@
       }
     },
     created() {
-        this.searchForm.fcompany = this.options[0].id
+        // this.searchForm.fcompany = JSON.parse(localStorage.getItem('CompanyData'))[0].id
     },
     data() {
       let checkInt = (rule, value, callback) => {
@@ -764,6 +764,14 @@
               trigger: "change",
             },
           ],
+          fcompany:[
+            {
+                type: "string",
+                required: true,
+                message: "请选择公司",
+                trigger: "change",
+            },
+           ],
         },
       }
     },
