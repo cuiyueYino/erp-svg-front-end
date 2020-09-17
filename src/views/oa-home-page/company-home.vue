@@ -46,7 +46,8 @@
         <el-calendar v-model="value"></el-calendar>
       </el-card>
     </el-aside>
-    <el-dialog
+      <NewDocument  :rowNMMtype="rowNMMtype" :rowNMMDataObj="rowNMMDataObj" @changeShow="showAddMenu"/>
+   <!-- <el-dialog
       :title="detailMsg.fname"
       :visible.sync="dialogVisible"
       center
@@ -56,11 +57,12 @@
       <span slot="footer" class="dialog-footer">
         <el-button type='warning' icon='el-icon-close' size="small" @click="closeDialog">关闭</el-button>
       </span>
-    </el-dialog>
+    </el-dialog>-->
   </el-container>
 </template>
 
 <script>
+import NewDocument from "./../document-management/browse/new-document";
 export default {
   name: "oaCompanyHome",
   data() {
@@ -70,10 +72,14 @@ export default {
       value: new Date(),
       menuList: [],
       childList: [],
-      detailMsg:[]
+      detailMsg:[],
+      rowNMMDataObj:{},
+     rowNMMtype:false,
     };
   },
-  components: {},
+  components: {
+      NewDocument,
+  },
   created() {
     this.$nextTick(() => {});
   },
@@ -186,9 +192,24 @@ export default {
     toTel() {
       window.open("http://192.168.85.96:8092/file/txl.htm");
     },
+      //是否展示dialog弹窗
+      showAddMenu(type){
+          if(type === false){
+              this.rowNMMtype = false;
+          }else{
+              this.rowNMMtype = true;
+          }
+      },
     //查看页面详情
-    toLook(val) {console.log(val)
-    let data ={
+    toLook(val) {
+        this.rowNMMtype = true;
+        let finandata={};
+        finandata.nametitle="文档管理查看";
+        finandata.NewOrEditFlag="SHOW";
+        finandata.foid=val.foid;
+        finandata.flag = 1;
+        this.rowNMMDataObj=finandata;
+    /*let data ={
         "from": "1",
         "foid": val.foid,
         "fuserid": localStorage.getItem('ms_userId'),
@@ -201,7 +222,7 @@ export default {
         } else {
             this.$message.error('查询失败!');
         }
-      })
+      })*/
     },
   },
 };
