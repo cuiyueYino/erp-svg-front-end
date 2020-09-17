@@ -19,7 +19,7 @@
                     </el-form>
                 </el-col>
                  <el-col :span="10" :offset="2">
-                    <el-button type="success" icon='el-icon-folder-add' size="small" plain @click="createRoleMainte">新增</el-button> 
+                    <el-button type="success" icon='el-icon-folder-add' size="small" plain @click="createRoleMainte">新增</el-button>
                     <el-button type="warning" icon="el-icon-edit-outline" size="small" plain @click="modifyRoleMainte">修改</el-button>
                     <el-button type="info" icon="el-icon-view" size="small" plain @click="lookRoleMainte">查看</el-button>
                     <el-button type="danger" icon='el-icon-delete' size="small" plain @click="removeRoleMainte">删除</el-button>
@@ -57,12 +57,12 @@
                 </el-col>
             </el-row>
         </el-card>
-        <el-dialog title="角色类别维护" 
-            @close="handleClose" 
-            :visible.sync="ShowFinancVisible" 
+        <el-dialog title="角色类别维护"
+            @close="handleClose"
+            :visible.sync="ShowFinancVisible"
             :append-to-body="true"
-            v-if="ShowFinancVisible" 
-            :close-on-click-modal="false" 
+            v-if="ShowFinancVisible"
+            :close-on-click-modal="false"
             width="40%">
             <el-form
                 label-width="110px"
@@ -311,7 +311,7 @@ export default {
                 }else{
                     this.$message.error("请选择一行数据!");
                 }
-                
+
             }
         },
         //删除角色类别
@@ -321,24 +321,34 @@ export default {
                 this.$message.error("只能选择一个!");
             }else{
                 if(SelectData[0]){
-                    let fromdata={};
-                    fromdata.id=SelectData[0].id;
-                    this.$api.RoleManagement.deleteRoleTypeModel(fromdata).then(response => {
-                        let responsevalue = response;
-                        if (responsevalue.data.data=="success") {
-                            this.$message.success('删除成功!');
-                            this.reload();
-                        } else {
-                            this.$message.error(responsevalue.data.msg);
-                        }
+                    this.$confirm('此操作将永久删除, 是否继续?', '提示', {
+                        confirmButtonText: '确定',
+                        cancelButtonText: '取消',
+                        type: 'warning'
+                    }).then(() => {
+                        let fromdata={};
+                        fromdata.id=SelectData[0].id;
+                        this.$api.RoleManagement.deleteRoleTypeModel(fromdata).then(response => {
+                            let responsevalue = response;
+                            if (responsevalue.data.data=="success") {
+                                this.$message.success('删除成功!');
+                                this.reload();
+                            } else {
+                                this.$message.error(responsevalue.data.msg);
+                            }
+                        });
+                        this.getRoleMainte(SelectData[0]);
+                    }).catch(() => {
+                        this.$message({
+                            type: 'info',
+                            message: '已取消删除'
+                        });
                     });
-                    
-                    this.getRoleMainte(SelectData[0]);
                 }else{
                     this.$message.error("请选择一行数据!");
                 }
-                
-            }    
+
+            }
         },
         //查看角色类别
         lookRoleMainte(){
@@ -484,7 +494,7 @@ export default {
                         </span>
                     )
                 }
-            }  
+            }
         },
         //树结构点击事件
         handleNodeClick(data) {
@@ -502,13 +512,13 @@ export default {
                     let dataA=[];
                     dataA.push(data);
                     this.tableData =dataA;
-                    this.total=1;   
+                    this.total=1;
                 }
             }else{
                 let dataA=[];
                 dataA.push(data);
                 this.tableData =dataA;
-                this.total=1; 
+                this.total=1;
             }
         },
         //分页、下一页
@@ -523,7 +533,7 @@ export default {
         tableRowClassName(){
 
         },
-        
+
     }
 }
 </script>

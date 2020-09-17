@@ -1,5 +1,5 @@
 <template>
-    <div>     
+    <div>
     <!-- 搜索框 -->
         <el-card class="box-card">
            <el-row :gutter="24">
@@ -52,7 +52,7 @@
                         <el-select
                             v-model="form.fcompanyoid"
                             size="small"
-                            :disabled="homeTitle == '查看业务'?true:false" 
+                            :disabled="homeTitle == '查看业务'?true:false"
                             clearable
                         >
                             <el-option
@@ -68,21 +68,21 @@
                 <el-row>
                     <el-col :span="22">
                         <el-form-item label="部门" :label-width="formLabelWidth" prop="departMentName">
-                            <el-input 
+                            <el-input
                             v-model="form.departMentName"
                             class="Carfiles"
-                            :disabled="homeTitle == '查看业务'?true:false" 
+                            :disabled="homeTitle == '查看业务'?true:false"
                             autocomplete="off"
                             placeholder="请选择部门"
                             ></el-input>
-                            <img class="icon-search"  
+                            <img class="icon-search"
                             v-show="homeTitle !== '查看业务'"
                             @click="workSearch"
                             src="../../assets/img/search.svg">
                         </el-form-item>
                     </el-col>
                 </el-row>
-                
+
             </el-form>
              <el-row :gutter="24" class="joinTableBox">
                     <el-col :span="20">
@@ -151,7 +151,7 @@ export default {
                 {
                     key: 'froleName',
                     title: '角色'
-                }, 
+                },
             ],
             columns1: [
                 {
@@ -169,7 +169,7 @@ export default {
                     key: 'companyName',
                     title: '公司'
                 },
-            
+
             ],
             tableData:[],
             tableUBData:[],
@@ -184,10 +184,10 @@ export default {
             rules: {
                 fcompanyoid:[{ required: true, message: '请选择公司', trigger: 'blur' }],
             }
-            
+
         };
     },
-    
+
     created(){
         let fromdata={};
         fromdata.page=this.pageNum;
@@ -205,7 +205,7 @@ export default {
         };
     },
     computed:{
-        
+
     },
     methods:{
         //流程业务组查询
@@ -284,18 +284,30 @@ export default {
             }else if(this.multipleSelection.length == 0){
                 this.$message.error('请选择一项');
             }else{
-                let fromdata={};
-                fromdata.foids=this.multipleSelection[0].foid;
-                this.$api.processSet.delProBusData(fromdata).then(response => {
-                    let responsevalue = response;
-                    if(responsevalue){
-                        this.$message.success('删除成功!');
-                        this.dialogFormVisible=false;
-                        this.reload();
-                    }else{
-                        this.$message.error('删除失败!');    
-                    }
+                this.$confirm('此操作将永久删除, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    let fromdata={};
+                    fromdata.foids=this.multipleSelection[0].foid;
+                    this.$api.processSet.delProBusData(fromdata).then(response => {
+                        let responsevalue = response;
+                        if(responsevalue){
+                            this.$message.success('删除成功!');
+                            this.dialogFormVisible=false;
+                            this.reload();
+                        }else{
+                            this.$message.error('删除失败!');
+                        }
+                    });
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '已取消删除'
+                    });
                 });
+
             }
         },
         //删除用户/角色
@@ -352,7 +364,7 @@ export default {
                         formData.fcompanyid= this.form.fcompanyoid;
                         formData.fhandler=localStorage.getItem('ms_userId');
                         formData.fcreator=localStorage.getItem('ms_userId');
-                    
+
                         if(SaveFlag){
                             this.saveLCData(formData);
                         }
@@ -395,7 +407,7 @@ export default {
                     this.$message.error('请选择公司和部门!');
                     return false;
                 }
-                
+
             });
         },
         //新建流程业务
@@ -409,7 +421,7 @@ export default {
                     //刷新表格
                      this.reload();
                 }else{
-                    this.$message.error(res.data.msg);   
+                    this.$message.error(res.data.msg);
                 }
             },
             (error) => {
@@ -427,7 +439,7 @@ export default {
                     this.dialogFormVisible=false;
                     this.reload();
                 }else{
-                    this.$message.error('更新失败!');    
+                    this.$message.error('更新失败!');
                 }
             });
         },
@@ -446,7 +458,7 @@ export default {
                     let userList=responsevalue.data.data.userVoList;
                     if(roleList != undefined && userList != undefined){
                         if(roleList && userList){
-                            for(let i=0;i<roleList.length;i++){ 
+                            for(let i=0;i<roleList.length;i++){
                                 let DataObj={};
                                 DataObj.froleId=roleList[i][0].oid;
                                 DataObj.froleName=roleList[i][0].name;
@@ -472,7 +484,7 @@ export default {
                         this.tableUBData=[];
                     }
                 }else{
-                    this.$message.error('查询失败!');    
+                    this.$message.error('查询失败!');
                 }
             });
         },
@@ -484,7 +496,7 @@ export default {
                 this.userType = '部门'
                 this.curCompanyId = this.form.fcompanyoid;
             } else {
-                this.$message.error('请选择公司!');  
+                this.$message.error('请选择公司!');
             }
         },
         //新建用户角色
@@ -519,7 +531,7 @@ export default {
                                 userName+=UserData[i].fname+',';
                                 userID+=UserData[i].foid+',';
                             }
-                        } 
+                        }
                     }
                     userName=userName.slice(0,userName.length -1);
                     userID=userID.slice(0,userID.length -1);
@@ -576,7 +588,7 @@ export default {
          margin-bottom: 10px;
      }
      /deep/ .el-button .el-button{
-         margin-left: 0; 
+         margin-left: 0;
      }
  }
 

@@ -149,17 +149,29 @@ export default {
                 this.$message.error("只能选择一个!");
             }else{
                 if(SelectData[0]){
-                    let fromdata={};
-                    fromdata.id=SelectData[0].id;
-                    this.$api.SystemSet.deleteMenuModel(fromdata).then(response => {
-                        let responsevalue = response;
-                        if (responsevalue.data.data=="success") {
-                            this.$message.success('删除成功!');
-                            this.reload();
-                        } else {
-                            this.$message.error(responsevalue.data.msg);
-                        }
+                    this.$confirm('此操作将永久删除该邮件, 是否继续?', '提示', {
+                        confirmButtonText: '确定',
+                        cancelButtonText: '取消',
+                        type: 'warning'
+                    }).then(() => {
+                        let fromdata={};
+                        fromdata.id=SelectData[0].id;
+                        this.$api.SystemSet.deleteMenuModel(fromdata).then(response => {
+                            let responsevalue = response;
+                            if (responsevalue.data.data=="success") {
+                                this.$message.success('删除成功!');
+                                this.reload();
+                            } else {
+                                this.$message.error(responsevalue.data.msg);
+                            }
+                        });
+                    }).catch(() => {
+                        this.$message({
+                            type: 'info',
+                            message: '已取消删除'
+                        });
                     });
+
                 }else{
                     this.$message.error("请选择一行数据!");
                 }

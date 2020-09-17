@@ -203,39 +203,51 @@ export default {
                         fromdata.page=1;
                         fromdata.size=10;
                         fromdata.fpid=SelectData[0].foid;
-                        this.$api.documentManagement.findDocumentCategoryByPage(fromdata).then(response => {
-                            let responsevalue = response;
-                            if (responsevalue) {
-                                let returndata = responsevalue.data;
-                                let tableArr=returndata.data.rows;
-                                for (let i = 0; i < tableArr.length; i++) {
-                                    if(1 == tableArr[i].flevel){
-                                        tableArr[i].flevel = '一级';
-                                    } else if(2 == tableArr[i].flevel){
-                                        tableArr[i].flevel = '二级';
-                                    }
-                                }
-                                this.tableData=tableArr;
-                                if(tableArr.length > 1){
-                                    this.$message.error("该文档类别已被引用，不可以删除!");
-                                } else {
-                                    //删除操作
-                                    let fromdata={};
-                                    fromdata.id=SelectData[0].foid;
-                                    this.$api.documentManagement.deleteDocumentCategory(fromdata).then(response => {
-                                        let responsevalue = response;
-                                        if (responsevalue.data.code == 0 ) {
-                                            this.$message.success('删除成功!');
-                                            this.reload();
-                                        } else {
-                                            this.$message.error(responsevalue.data.msg);
+                        this.$confirm('此操作将永久删除, 是否继续?', '提示', {
+                            confirmButtonText: '确定',
+                            cancelButtonText: '取消',
+                            type: 'warning'
+                        }).then(() => {
+                            this.$api.documentManagement.findDocumentCategoryByPage(fromdata).then(response => {
+                                let responsevalue = response;
+                                if (responsevalue) {
+                                    let returndata = responsevalue.data;
+                                    let tableArr=returndata.data.rows;
+                                    for (let i = 0; i < tableArr.length; i++) {
+                                        if(1 == tableArr[i].flevel){
+                                            tableArr[i].flevel = '一级';
+                                        } else if(2 == tableArr[i].flevel){
+                                            tableArr[i].flevel = '二级';
                                         }
-                                    });
+                                    }
+                                    this.tableData=tableArr;
+                                    if(tableArr.length > 1){
+                                        this.$message.error("该文档类别已被引用，不可以删除!");
+                                    } else {
+                                        //删除操作
+                                        let fromdata={};
+                                        fromdata.id=SelectData[0].foid;
+                                        this.$api.documentManagement.deleteDocumentCategory(fromdata).then(response => {
+                                            let responsevalue = response;
+                                            if (responsevalue.data.code == 0 ) {
+                                                this.$message.success('删除成功!');
+                                                this.reload();
+                                            } else {
+                                                this.$message.error(responsevalue.data.msg);
+                                            }
+                                        });
+                                    }
+                                } else {
+                                    this.$message.success('数据库没有该条数据!');
                                 }
-                            } else {
-                                this.$message.success('数据库没有该条数据!');
-                            }
+                            });
+                        }).catch(() => {
+                            this.$message({
+                                type: 'info',
+                                message: '已取消删除'
+                            });
                         });
+
                     }
 
                 }else{

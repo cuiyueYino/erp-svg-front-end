@@ -17,7 +17,7 @@
                         <el-form-item >
                             <el-input clearable v-model="formCode" placeholder="请输入任意查询内容"></el-input>
                         </el-form-item>
-                    
+
                         <el-form-item>
                             <el-button type="primary" icon='el-icon-search' size="small" plain @click="onSubmit">搜索</el-button>
                         </el-form-item>
@@ -27,7 +27,7 @@
                     </el-form>
                 </el-col>
                  <el-col :span="10" :offset="2">
-                    <el-button type="success" icon='el-icon-folder-add' size="small" plain @click="createRoleMainte">新增</el-button> 
+                    <el-button type="success" icon='el-icon-folder-add' size="small" plain @click="createRoleMainte">新增</el-button>
                     <el-button type="warning" icon="el-icon-edit-outline" size="small" plain @click="modifyRoleMainte">修改</el-button>
                     <el-button type="danger" icon='el-icon-delete' size="small" plain @click="removeRoleMainte">删除</el-button>
                  </el-col>
@@ -129,7 +129,7 @@ export default {
         this.searchRole(fromdata);
     },
     computed:{
-        
+
     },
     mounted() {
     },
@@ -217,17 +217,29 @@ export default {
                 this.$message.error("只能选择一个!");
             }else{
                 if(SelectData[0]){
-                    let fromdata={};
-                    fromdata.id=SelectData[0].id;
-                    this.$api.RoleManagement.deleteRoleModel(fromdata).then(response => {
-                        let responsevalue = response;
-                        if (responsevalue.data.data=="success") {
-                            this.$message.success('删除成功!');
-                            this.reload();
-                        } else {
-                            this.$message.error(responsevalue.data.msg);
-                        }
+                    this.$confirm('此操作将永久删除, 是否继续?', '提示', {
+                        confirmButtonText: '确定',
+                        cancelButtonText: '取消',
+                        type: 'warning'
+                    }).then(() => {
+                        let fromdata={};
+                        fromdata.id=SelectData[0].id;
+                        this.$api.RoleManagement.deleteRoleModel(fromdata).then(response => {
+                            let responsevalue = response;
+                            if (responsevalue.data.data=="success") {
+                                this.$message.success('删除成功!');
+                                this.reload();
+                            } else {
+                                this.$message.error(responsevalue.data.msg);
+                            }
+                        });
+                    }).catch(() => {
+                        this.$message({
+                            type: 'info',
+                            message: '已取消删除'
+                        });
                     });
+
                 }else{
                     this.$message.error("请选择一行数据!");
                 }
@@ -289,7 +301,7 @@ export default {
                         </span>
                     )
                 }
-            }  
+            }
         },
         //树结构点击事件
         handleNodeClick(data) {
