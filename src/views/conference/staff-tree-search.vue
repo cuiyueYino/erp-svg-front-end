@@ -139,9 +139,9 @@
           if (staffTree == null) {
             this.$api.confMangement.getStaffTreeList(this.fromData).then(
               (res) => {
-                
                 let resData = res.data.data;
                 staffTree = eval("(" + resData + ")");
+                this.treeData =  staffTree;
               },
               (error) => {
                 console.log(error);
@@ -190,7 +190,7 @@
                                   if(searchArray[i].children[j].children[m].children != undefined) {
                                       this.treeDataObject.push(searchArray[i].children[j].children[m].foid);
                                   } else {
-                                      this.treeDataObject.push(searchArray[i].children[j].children[m].foid);
+                                      // this.treeDataObject.push(searchArray[i].children[j].children[m].foid);
                                   }
                               }
                           } else {
@@ -248,6 +248,7 @@
           }
         }
         this.treeData = staffTree;
+        
       },
       // 保存
       saveConfig() {
