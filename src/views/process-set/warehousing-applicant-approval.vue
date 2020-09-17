@@ -15,7 +15,7 @@
                     <el-row :gutter="24">
                         <el-col :span="10" :offset="14" v-if="rowFstatus == 4?true:false">
                             <el-button type="success" icon="el-icon-position" size="small" plain @click="baseInputTable('转发')">转发</el-button>
-                            <el-button type="success" icon="el-icon-star-off" size="small" plain @click="basefollow()">关注</el-button>
+                            <!-- <el-button type="success" icon="el-icon-star-off" size="small" plain @click="basefollow()">关注</el-button> -->
                             <el-button type="primary" icon="el-icon-postcard" size="small" plain @click="removeBizMail">已阅</el-button>
                         </el-col>
                         <el-col :span="12" :offset="12" v-else-if="rowFstatus == 1?true:false">
