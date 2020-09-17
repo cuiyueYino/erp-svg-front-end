@@ -119,9 +119,13 @@ const documentManagement = {
     downloadFile(params){
         return httpReqest.post(baseURI + 'attachment/downloadFile?attachmentId='+ params);
     },
-    //文件下载
+    //文件下载：html方式
     getHtmlPreviewAttachmentById(params){
         return httpReqest.get(baseURI + 'attachment/getHtmlPreviewAttachmentById?id='+ params);
+    },
+    //文件下载:pdf方式
+    getPdfPreviewAttachmentById(params){
+        return httpReqest.get(baseURI + 'attachment/getPdfPreviewAttachmentById?id='+ params);
     },
     //---------------------------------附件-end-----------------------------------------------------------
 

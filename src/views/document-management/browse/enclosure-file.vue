@@ -155,7 +155,10 @@ export default {
               this.$message.error("暂不支持该类型文件预览!");
               return;
             }
+            //html方式
             this.$api.documentManagement.getHtmlPreviewAttachmentById(row.fileFoid).then(response => {
+            //pdf方式
+            // this.$api.documentManagement.getPdfPreviewAttachmentById(row.fileFoid).then(response => {
                 let responsevalue = response;
                 let value =response.data.data;
                 if (value) {

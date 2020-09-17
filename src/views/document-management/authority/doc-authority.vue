@@ -220,11 +220,17 @@ export default {
         },
         //下拉框改变
         selectDocAuthorityChange(data){
+          this.formInSelect.select=data;
           this.input = '';
-          this.formInline.auth = '';
-            this.formInSelect.select=data;
-            this.findData(1);
-            this.$refs.tree.setCheckedKeys([]);
+          this.$refs.tree.setCheckedKeys([]);
+          this.findData(2);
+          //清空table中所有选中得行复选框
+          this.$nextTick(() => {
+            //清空复选框
+            this.$refs.roleTable.clearSelection();
+            //清空筛选选择框
+            this.selectChange("");
+          });
         },
 
         //提交文档授权
