@@ -15,7 +15,7 @@
         <el-row :gutter="24">
           <el-col :span="11">
             <el-form-item label="公司：" :label-width="formLabelWidth" class="pop-select" prop="fcompany">
-              <el-select v-model="searchForm.fcompany" size="small" clearable placeholder="请选择">
+              <el-select v-model="searchForm.fcompany" size="small" clearable placeholder="请选择" @change="setCompany">
                 <el-option v-for="item in options" :key="item.id" :label="item.name" :value="item.id"></el-option>
               </el-select>
             </el-form-item>
@@ -565,6 +565,7 @@
 <script>
   import staffTreeSearch from "../conference/staff-tree-search";
   import conferenceOfficeSearch from "../conference/conference-office-search";
+  import message from "../../components/common/message";
 
   export default {
     name: "ConfApplyDialog",
@@ -632,6 +633,7 @@
                 this.searchForm = resData;
                 this.searchForm.internalMansName = internalMansName;
                 this.searchForm.internalMans = internalMans;
+                this.searchForm.fcompany = resData.fcompanyid;
 
               } else {
                 this.$message.error("数据获取失败");
@@ -678,8 +680,8 @@
           fexternal: 0,
           internalmans:[],
           internalMansName:"",
-          fcompanyid: "_DefaultCompanyOId",
-          fcompanyname: "福佳集团",
+          // fcompanyid: "_DefaultCompanyOId",
+          // fcompanyname: "福佳集团",
           fcreator: localStorage.getItem('ms_userId'),
         },
         isDate: false,
@@ -766,12 +768,12 @@
           ],
           fcompany:[
             {
-                type: "string",
-                required: true,
-                message: "请选择公司",
-                trigger: "change",
+               type: "string",
+               required: true,
+               message: "请选择公司",
+               trigger: "change",
             },
-           ],
+          ],
         },
       }
     },
@@ -816,6 +818,16 @@
             console.log(error);
           };
       },
+       setCompany(){
+
+           this.searchForm.fcompanyid = this.searchForm.fcompany;
+           this.options.forEach(item => {
+               if(item.id == this.searchForm.fcompany) {
+                   this.searchForm.fcompanyname = item.name
+               }
+           })
+           console.log( this.searchForm)
+       },
       //公司
       getCompany() {
         this.$api.jobUserManagement.getCompanyData().then(res => {
@@ -954,6 +966,10 @@
           this.$message.error("会议参与人数不可为空");
           return;
         }
+        if(!this.searchForm.fcompany){
+            this.$message.error("请选择公司");
+            return;
+        }
         this.type = type;
         this.fcompanyid = this.searchForm.fcompany;
         this.fstartdate = this.searchForm.fstartdate;
@@ -974,8 +990,8 @@
         this.searchForm = {
           fovert: 0,
           fexternal: 0,
-          fcompanyid: "_DefaultCompanyOId",
-          fcompanyname: "福佳集团",
+          // fcompanyid: "_DefaultCompanyOId",
+          // fcompanyname: "福佳集团",
           fcreator: localStorage.getItem('ms_userId'),
         };
         let serchData = [];
