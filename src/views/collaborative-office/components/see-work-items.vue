@@ -18,7 +18,7 @@
 					<el-button @click="selectMainTable" type="success" size="small" icon="el-icon-s-promotion">选择模板</el-button>
 					<el-button type="danger" @click="$parent.toSelect()" size="small" icon="el-icon-close">返回</el-button>
 				</el-col>
-				<el-col style="text-align: right;" v-if="!todoFlag && showSeeOrUpd != 3" :span="6">
+				<el-col style="text-align: right;" v-if="!todoFlag && showSeeOrUpd != 3" :span="18">
 					<el-button type="danger" @click="$parent.toSelect()" size="small" icon="el-icon-close">返回</el-button>
 				</el-col>
 			</el-row>

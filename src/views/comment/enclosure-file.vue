@@ -1,7 +1,7 @@
 <template>
     <div>
         <div style="width:200px;height:40px;float:right;">
-            <el-button type="success" icon='el-icon-folder-add' size="small" style="margin-left:50px;magin-right:5px;" @click.prevent="addfileRow()">新增</el-button>
+            <el-button type="success" icon='el-icon-folder-add' size="small" style="magin-right:5px;" @click.prevent="addfileRow()">新增</el-button>
             <el-button type="danger" icon='el-icon-delete' size="small" @click.prevent="delfileData()">删除</el-button>
         </div>
         <div>

@@ -62,8 +62,8 @@
 						<el-form-item label="密码：" :label-width="formLabelWidth" prop="fpasswordStr">
 							<el-input v-model="form.fpasswordStr" :disabled="isEdit && !isReset" type="password" @input="change($event)"  size="small"></el-input>
 						</el-form-item>
-						<el-form-item label="使用者：" :label-width="formLabelWidth" prop="fstaff">
-							<el-input v-model="form.fstaff" :disabled="isEdit && !isReset" size="small" autocomplete="off"></el-input>
+						<el-form-item label="使用者：" :label-width="formLabelWidth" prop="fstaffName">
+							<el-input v-model="form.fstaffName" :disabled="isEdit && !isReset" size="small" autocomplete="off"></el-input>
 							<el-button type="primary" v-show="!isEdit || isReset" size="mini" icon="el-icon-search" @click="addDepart();loading = true"></el-button>
 							<!--<img class="icon-search" v-show="!isEdit || isReset" src="../../assets/img/search.svg" @click="addDepart();loading = true" />-->
 						</el-form-item>
@@ -141,6 +141,7 @@
 				<el-button type="warning" icon='el-icon-close' size="small" @click="userForbidenVisible = false">取消</el-button>
 			</div>
 		</el-dialog>
+		<input style="display:none" v-model="inoutShowState" />
 	</div>
 </template>
 
@@ -152,8 +153,28 @@
 			const {
 				contantSelect
 			} = this;
+			var validateFcodeStr = (rule, value, callback) => {
+				if (this.form.fcodeStr === '') {
+				callback(new Error('请输入账号'));
+				} else {
+				if (this.form.fcodeStr !== '') {
+					this.$refs.form.validateField('checkPass');
+				}
+				callback();
+				}
+			};
+			var validateFname = (rule, value, callback) => {
+				if (this.form.fname === '') {
+				callback(new Error('请输入用户名称'));
+				} else {
+				if (this.form.fname !== '') {
+					this.$refs.form.validateField('checkPass');
+				}
+				callback();
+				}
+			};
 			var validatePass = (rule, value, callback) => {
-				if (value === '') {
+				if (this.form.fpasswordStr === '') {
 				callback(new Error('请输入密码'));
 				} else {
 				if (this.form.fpasswordStr !== '') {
@@ -163,18 +184,26 @@
 				}
 			};
 			var validatePass2 = (rule, value, callback) => {
-				if (value === '') {
+				if (this.form.fpasswordSure === '') {
 				callback(new Error('请再次输入密码'));
-				} else if (value !== this.form.fpasswordStr) {
-					console.log(rule)
-					console.log(value)
-					console.log(this.form.fpasswordStr)
+				} else if (this.form.fpasswordSure !== this.form.fpasswordStr) {
 				callback(new Error('两次输入密码不一致!'));
 				} else {
 				callback();
 				}
 			};
+			var validateStaff = (rule, value, callback) => {
+				if (this.form.fstaffName === '') {
+				callback(new Error('请选择人员'));
+				} else {
+				if (this.form.fstaffName !== '') {
+					this.$refs.form.validateField('checkPass');
+				}
+				callback();
+				}
+			};
 			return {
+				inoutShowState : 0,
 				loading: false,
 				dialogFormVisible: false,
 				userForbidenVisible: false,
@@ -263,7 +292,7 @@
 					fpassword: "",
 					fpasswordStr: "",
 					fpasswordSure: '',
-					fstaff: "",
+					fstaffName: "",
 					fremark: ""
 				},
 				searchForm: {
@@ -286,8 +315,8 @@
 				formLabelWidth: "120px",
 				rules: {
 					fcodeStr: [{
+							validator: validateFcodeStr,
 							required: true,
-							message: "请输入帐号",
 							trigger: "blur"
 						},
 						{
@@ -310,8 +339,8 @@
 						}
 					],
 					fname: [{
+							validator: validateFname,
 							required: true,
-							message: "请输入名称",
 							trigger: "blur"
 						},
 						{
@@ -321,7 +350,7 @@
 							trigger: "blur"
 						}
 					],
-					fstaff: [{required: true, message: '请选使用者！', trigger: 'change'}]
+					fstaffName: [{validator: validateStaff, required: true, trigger: 'change'}]
 				}
 			};
 		},
@@ -353,13 +382,13 @@
 				switch(val) {
 					case true:
 						this.isReset = val;
-						this.form.fpasswordStr = '111111';
-						this.form.fpasswordSure = '111111';
+						// this.form.fpasswordStr = '111111';
+						// this.form.fpasswordSure = '111111';
 						break;
 					case false:
 						this.isReset = val;
-						this.form.fpasswordStr = '';
-						this.form.fpasswordSure = '';
+						// this.form.fpasswordStr = '';
+						// this.form.fpasswordSure = '';
 						break;
 
 					default:
@@ -470,8 +499,10 @@
 				}
 			},
 			handleNodeClick(data) {
-				this.form.fstaff = data.fname;
-				this.form.fname = data.fname;
+				this.form.fstaffName = data.fname;
+				if(this.form.fname === ""){	//没有填写名称时，可以自动带出
+					this.form.fname = data.fname;
+				}
 				this.form.departmentname = data.fdepartmentName;
 				this.form.fstaffId = data.foid;
 			},
@@ -554,11 +585,13 @@
 			},
 			addPeopleData(data) {
 				this.$api.jobUserManagement.addPeopleData(data).then(res => {
+					console.log(res.data)
 					if(res.data.code == 0) {
 						if(res.data.data != null) {
 							this.form.staffId = res.data.data.toid;
-							this.form.fstaff = res.data.data.tname;
+							this.form.fstaffName = res.data.data.tname;
 							this.form.departmentname = res.data.data.tdepartmentname;
+							this.inoutShowState++;
 						}
 
 					} else {
@@ -634,7 +667,7 @@
 						this.form.fcreator =localStorage.getItem("ms_userId");
 						this.form.fforbid = this.checked ? '1' : '0';
 						this.form.fstatus = this.checked ? '7' : '3';
-						this.form.fstaff = this.isEdit ? this.form.fstaff : this.form.fstaffId;
+						// this.form.fstaff = this.isEdit ? this.form.fstaff : this.form.fstaffId;
 						//修改操作表格
 						if(this.newIndex - 1 !== null) {
 							this.tableData2.forEach((item, i) => {
@@ -843,10 +876,10 @@
 						foid: this.multipleSelection[0].foid
 					}
 					this.$api.jobUserManagement.addUserData(data).then(res => {
+						console.log(res.data)
 							if(res.data.code == 0) {
-								
 								this.tableData2 = []
-								this.form = res.data.data;
+								this.form = res.data.data;								
 								this.form.fcodeStr=this.form.fcode;
 								this.form.fpasswordStr=this.form.fpassword;
 								this.form.fpasswordSure = this.form.fpassword
@@ -885,6 +918,7 @@
 						}
 				}
 				}
+				this.inoutShowState++;
 			},
 			change(e){
             	this.$forceUpdate();

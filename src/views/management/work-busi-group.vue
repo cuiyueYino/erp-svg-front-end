@@ -370,24 +370,14 @@ export default {
               } else {
                 internalMansName += data[i].fname;
               }
-
-              // let staff ={};
               internalmans[data[i].foid] = data[i].fname;
-              // staff[data[i].fname] = data[i].fname;
-              // let staff = {
-              //   id : data[i].foid,
-              //   fname: data[i].fname,
-              // };
-              // internalmans.push(staff);
             }
-
-            this.form.staffRelUsers = internalmans;
-            console.log("2222222222");
-            console.log(internalmans);
-            this.form.staffRelUsersNames = internalMansName;
-            this.transStaffRelUser = {};
-            // this.searchForm.internalmans = internalmans;
-            // this.searchForm.internalMansName = internalMansName;
+            Object.assign(this.form.staffRelUsers,internalmans);
+            if(this.form.staffRelUsersNames == ""){
+              this.form.staffRelUsersNames+= internalMansName;
+            }else{
+              this.form.staffRelUsersNames+= ',' +internalMansName;
+            }
           }
         }
         this.staffTableVisible = false;
