@@ -633,7 +633,7 @@
                 this.searchForm = resData;
                 this.searchForm.internalMansName = internalMansName;
                 this.searchForm.internalMans = internalMans;
-                this.searchForm.fcompany = resData.fcompanyid;
+                this.$set(this.searchForm,"fcompany",resData.fcompanyid)
 
               } else {
                 this.$message.error("数据获取失败");

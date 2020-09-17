@@ -1,5 +1,5 @@
 <template>
-    <div>     
+    <div>
         <!-- 搜索框 -->
         <el-card class="box-card">
            <el-row :gutter="24">
@@ -47,8 +47,8 @@
                 </el-col>
                 <el-col :span="12" :offset="3">
                     <div v-if="Companyflag==true">
-                        <el-form 
-                            :model="ConformData" 
+                        <el-form
+                            :model="ConformData"
                             label-width="100px"
                             class="dataForm"
                             :rules="rules"
@@ -76,8 +76,8 @@
                         </el-form>
                     </div>
                     <div v-if="Departmentflag==true">
-                        <el-form 
-                            :model="DepformData" 
+                        <el-form
+                            :model="DepformData"
                             label-width="100px"
                             class="dataForm"
                             :rules="rules"
@@ -127,8 +127,8 @@
                         </el-form>
                     </div>
                     <div v-if="Dutiesflag==true">
-                        <el-form 
-                            :model="DutformData" 
+                        <el-form
+                            :model="DutformData"
                             label-width="100px"
                             class="dataForm"
                             :rules="rules"
@@ -260,7 +260,7 @@ export default {
         };
     },
     created(){
-      
+
     },
     mounted() {
         this.treeloading = true;
@@ -271,10 +271,10 @@ export default {
                 this.treeData=tabledata;
             }
             this.treeloading = false;
-        }); 
+        });
     },
     computed:{
-        
+
     },
     methods:{
         // 查询行政上级，业务上级的返回值处理
@@ -337,7 +337,7 @@ export default {
                         </span>
                     );
                 }
-            }  
+            }
         },
         //查询发起人员
         MoreSearchPS(data,type){
@@ -388,26 +388,30 @@ export default {
         },
         //删除
         remove(){
-            this.$confirm('确定要删除这条信息吗?', '提示', {
-                confirmButtonText: '确定',
-                cancelButtonText: '取消',
-                type: 'warning'
-                }).then(() => {
-                    let selectData=this.NodeClickData;
-                    if(selectData.fstruid){
-                        let fromdata={};
-                        fromdata.fstruid=selectData.fstruid;
-                        this.$api.management.deleteOrganizationInfo(fromdata).then(response => {
-                            let responsevalue = response;
-                            if(responsevalue.data.code==0){
-                                this.$message.success('删除成功!');
-                                this.reload();
-                            }else{
-                                this.$message.error(responsevalue.data.msg);
-                            }
-                        });
-                    } 
-                });
+            let selectData=this.NodeClickData;
+            if(selectData.fstruid){
+                this.$confirm('确定要删除这条信息吗?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                    }).then(() => {
+
+                            let fromdata={};
+                            fromdata.fstruid=selectData.fstruid;
+                            this.$api.management.deleteOrganizationInfo(fromdata).then(response => {
+                                let responsevalue = response;
+                                if(responsevalue.data.code==0){
+                                    this.$message.success('删除成功!');
+                                    this.reload();
+                                }else{
+                                    this.$message.error(responsevalue.data.msg);
+                                }
+                            });
+
+                    });
+            }else {
+                this.$message.error("请选择一条数据");
+            }
         },
         //作废
         tovoid(){
@@ -424,7 +428,7 @@ export default {
                         this.$message.error(responsevalue.data.msg);
                     }
                 });
-            } 
+            }
         },
         //反作废
         toNotvoid(){
@@ -441,7 +445,7 @@ export default {
                         this.$message.error(responsevalue.data.msg);
                     }
                 });
-            } 
+            }
         },
         //树结构点击事件
         handleNodeClick(data) {
@@ -548,7 +552,7 @@ export default {
                        this.$message.error('职务下不能直接创建部门!');
                     }
                 }
-            } 
+            }
         },
         //创建职务
         createDuties(){
@@ -568,7 +572,7 @@ export default {
                        this.$message.error('职务下不能直接创建职务!');
                     }
                 }
-            } 
+            }
         },
         //修改公司、部门，职务
         editCDD(){
@@ -741,17 +745,17 @@ export default {
                     if(this.DutformData.businessLeaderName){
                         fromdataZW.businessLeaderId=this.DutformData.businessLeaderId;
                     }else{
-                        fromdataZW.businessLeaderId= '';  
+                        fromdataZW.businessLeaderId= '';
                     }
                     if(this.DutformData.directLeaderName){
                         fromdataZW.directLeaderId=this.DutformData.directLeaderId;
                     }else{
-                        fromdataZW.directLeaderId= '';  
+                        fromdataZW.directLeaderId= '';
                     }
                     if(this.DutformData.responsibility){
                         fromdataZW.responsibility=this.DutformData.responsibility;
                     }else{
-                        fromdataZW.responsibility= '';  
+                        fromdataZW.responsibility= '';
                     }
                     //长度检查
                     if (this.checkData(this.DutformData)){
@@ -781,7 +785,7 @@ export default {
                     }
                 }
             }
-            
+
         }
     },
 };

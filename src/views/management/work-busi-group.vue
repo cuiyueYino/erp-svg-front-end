@@ -577,6 +577,10 @@ export default {
     },
     //删除
     deleteMsg() {
+      if (this.multipleSelection.length ==0) {
+          this.$message.error("请选择一条数据");
+          return;
+      }
       if (this.multipleSelection.length > 1) {
         this.$message.error("只能选择一个删除");
         return;
