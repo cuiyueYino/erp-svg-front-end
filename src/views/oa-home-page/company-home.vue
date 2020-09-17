@@ -191,7 +191,8 @@ export default {
     let data ={
         "from": "1",
         "foid": val.foid,
-        "fuserid": localStorage.getItem('ms_userId')
+        "fuserid": localStorage.getItem('ms_userId'),
+        "foperate":'1'
         }
       this.$api.documentManagement.findDocumentManageById(data).then(res => {
         if (res.data.data) {
