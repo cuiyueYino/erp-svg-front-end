@@ -215,7 +215,6 @@ export default {
                 //this.data =this.editConData;
                 return;
             }else{
-                this.formData = e;
                 this.data.oid = e.oid;
                 this.data.mactivity = {
                     "code": e.workCode,

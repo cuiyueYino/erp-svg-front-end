@@ -789,13 +789,11 @@ export default {
             if(val){
                 this.formData.autoHurry = false
             }
-            console.log(val)
         },
         changeAutoHurry(val){
             if(val){
                 this.formData.autoSubmit = false
             }
-            console.log(val)
         },
         checkboxChange(e){
             switch (e[e.length-1]) {
@@ -860,26 +858,33 @@ export default {
                 return;
             }
             let ChecTS=this.checkedCities;
-            if(ChecTS.join(',').indexOf('可略过') != -1){
-            }else{
-                if(this.formData.wfAuditType=='并行会签' || this.formData.wfAuditType=='串行会签'){
-                    if(!this.joinusertableData){
-                        this.$message.error("保存失败!选中并行会签或串行会签,参与者必选!");
-                        return;
-                    }else if(this.joinusertableData.length < 2){
-                        let TErData=this.joinusertableData;
-                        if(TErData.length ==1){
-                            if(TErData[0].fUsercode==='用户'){
-                                this.$message.error("保存失败!选中并行会签或串行会签,参与者用户必须多人!");
-                                return;
-                            }
-                        }else{
-                            this.$message.error("保存失败!选中并行会签或串行会签,参与者必选!");
-                            return; 
+            //if(ChecTS.join(',').indexOf('可略过') != -1){
+            //}else{
+            if(this.formData.wfAuditType=='并行会签' || this.formData.wfAuditType=='串行会签'){
+                if(!this.joinusertableData){
+                    this.$message.error("保存失败!选中并行会签或串行会签,参与者必选!");
+                    return;
+                }else if(this.joinusertableData.length < 2){
+                    let TErData=this.joinusertableData;
+                    if(TErData.length ==1){
+                        if(TErData[0].fUsercode==='用户'){
+                            this.$message.error("保存失败!选中并行会签或串行会签,参与者用户必须多人!");
+                            return;
                         }
+                    }else{
+                        this.$message.error("保存失败!选中并行会签或串行会签,参与者必选!");
+                        return; 
+                    }
+                }
+                if(this.formData.wfAuditType=='并行会签'){
+                    if(ChecTS.join(',').indexOf('多封邮件') != -1){
+                    }else{
+                        this.$message.error("保存失败!选中并行会签,参与者-多封邮件必选!");
+                        return;
                     }
                 }
             }
+            //}
             this.formData.checkedCities = this.checkedCities;
             let tableData3Chose = this.decisionSelection
             this.$emit(
@@ -910,34 +915,19 @@ export default {
             if(this.activeName == '5'){//
                 this.tableData2 =[]
                 let allData = JSON.parse(sessionStorage.getItem('allData'));
+                let nodekey = sessionStorage.getItem('nodeKey');
                 if(allData.length>0){
                     allData.forEach(item=>{
                         if(item.data){
-                            if(item.type == 'Join' && (item.data.displayName !== this.formData.name) && (item.data.displayName !== "审核活动")){
+                            if(item.type == 'Join' && item.key != nodekey){
                                 this.tableData2.push({
                                     fname:item.data.displayName,
                                     ftype:item.data.name,
                                     wfProcessor: item.oid?item.oid:item.key
                                 })
                             }
-                            // item.wfViewOtherComments.wfViewOtherComment.forEach(vOcItime=>{
-                            //     vOcItime.push({
-                            //         fname:item.data.displayName,
-                            //         ftype:item.data.name,
-                            //         wfProcessor:vOcItime.wfProcessor
-                            //     })
-                            // })
                         }
                     })
-                    /*this.$nextTick(()=>{
-                    this.tableData2.forEach((item)=>{
-                    this.editData.wfViewOtherComments.wfViewOtherComment.forEach(row2 => {
-                    if (row2.fname === item.fname) {
-                    this.$refs.joinTable.toggleRowSelection(item,true);
-                    }
-                    });
-                    })
-                    })*/
                 }
             }else if(this.activeName == '6'){
                 if(this.decisionSelData.length >0){

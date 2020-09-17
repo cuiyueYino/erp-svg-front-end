@@ -173,7 +173,7 @@ export default {
         this.getSubprocessList();
     },
     methods: {
-          change(e){
+        change(e){
             this.$forceUpdate()
         },
         // 获取子流程列表

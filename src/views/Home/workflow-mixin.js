@@ -475,7 +475,7 @@ export default {
             }
         },
         // 节点连接线按下事件
-        handleMousedown (target, point, node) {console.log(node)
+        handleMousedown (target, point, node) {
             //
             this.endObj = {};
             //
@@ -611,15 +611,6 @@ export default {
                         this.$message.error("保存失败,请填写完整信息");
                     }   
                 }
-                /*console.log(res)
-                debugger
-                if( res.data.data.msg == 'success' ){
-                    this.$message.success('保存成功');
-                    //sessionStorage.setItem("eidtMsg",null);
-                }else{
-                    this.$message.error("保存失败,请填写完整信息");
-                }*/
-             
             },error=>{
                 console.log(error)
             })
@@ -694,14 +685,6 @@ export default {
                         this.$message.error("保存失败,请填写完整信息");
                     }
                 }
-                /*console.log(res)
-                debugger
-                if( res.data.data.msg == 'success' ){
-                    this.$message.success('保存成功');
-                    //sessionStorage.setItem("eidtMsg",null);
-                }else{
-                    this.$message.error("保存失败,请填写完整信息");
-                }*/
             },error=>{
                 console.log(error)
             })
