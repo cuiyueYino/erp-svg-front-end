@@ -193,13 +193,13 @@
                           if(searchArray[i].children[j].children != undefined) {
                               for(var m= 0;m<searchArray[i].children[j].children.length;m++){
                                   if(searchArray[i].children[j].children[m].children != undefined) {
-                                      this.treeDataObject.push(searchArray[i].children[j].children[m].foid);
+                                      this.treeDataObject.push(searchArray[i].children[j].foid);
                                   } else {
-                                      this.treeDataObject.push(searchArray[i].children[j].children[m].foid);
+                                      this.treeDataObject.push(searchArray[i].children[j].foid);
                                   }
                               }
                           } else {
-                              this.treeDataObject.push(searchArray[i].children[j].foid);
+                              this.treeDataObject.push(searchArray[i].foid);
                           }
                       }
                   } else {
