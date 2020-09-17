@@ -12,7 +12,7 @@
             :name="index.toString()"
           >
             <span v-for="(childListItems,indx) in childList[idx]" class="li-box">
-              <ul class="ul-left" @click="toLook(childListItems)">
+              <ul :class="{'ul-left':true ,'subjectStyle':childListItems.fisread=='0' }" @click="toLook(childListItems)">
                 <li>
                   {{childListItems.fname}}
                   <span class="li-after" v-show="childListItems.fisread=='0'"></span>
@@ -78,7 +78,7 @@ export default {
     this.$nextTick(() => {});
   },
   watch:{
-      
+
   },
   computed: {},
   created() {
@@ -94,7 +94,7 @@ export default {
         .getDocumentCategoryOrgArch('1')
         .then((res) => {
           this.menuList = eval("(" + res.data.data + ")"); //console.log(this.menuList )
-          if (this.menuList) { 
+          if (this.menuList) {
             this.menuList.forEach((item, index) => {
               if(item.children){
                   getItems.push( this.firstGetItem(item.children.foid) )
@@ -102,7 +102,7 @@ export default {
              Promise.all(getItems).then(res=>{
                   this.childList = res
              });
-            })     
+            })
           }
         })
     },
@@ -147,15 +147,15 @@ export default {
       };
        return new Promise((resolve,reject)=>{
           this.$api.documentManagement.findDocumentManageByPage(data)
-          .then((res) => { 
+          .then((res) => {
                resolve(res.data.data.rows)
           })
           .catch((err) => {
             console.log(err);
           });
-         
+
           })
-      
+
     },
     //   获取菜单list
     getMenuList() {
@@ -256,6 +256,9 @@ export default {
     height: 6px;
     background-color: red;
     border-radius: 4px;
+  }
+  .subjectStyle {
+    color: red !important;
   }
   .ul-left {
     width: 50%;
