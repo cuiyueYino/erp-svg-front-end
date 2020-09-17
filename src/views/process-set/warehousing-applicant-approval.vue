@@ -60,7 +60,7 @@
                         </el-col>
                     </el-row>
                     <el-tabs v-model="atctiveName" @tab-click="handleClick">
-                        <el-tab-pane label="审批意见" name="first">
+                        <el-tab-pane label="审批意见" name="first" v-if="rowFstatus == 4?false:true">
                             <el-row >
                                 <el-col :span="12" >
                                     <!-- prop="code" -->
