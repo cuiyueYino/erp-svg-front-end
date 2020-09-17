@@ -657,12 +657,14 @@
 									this.peopleForm.ffirmposition = this.editFormData.ffirmposition
 									this.peopleForm.tcompanyoid = this.editFormData.tcompanyoid
 									this.$api.jobUserManagement.updatePeopleData(this.peopleForm).then(res => {
-										if((res.data.data.msg = "success")) {
+										if(res.data.code == 0) {
 											this.dialogFormVisible = false;
 											this.$message.success("修改成功");
 											//刷新表格
 											this.getTableData("");
-										}
+										} else {
+												this.$message.error(res.data.msg);
+											}
 									})
 								} else {
 									this.$api.jobUserManagement.addPeopleMsg(this.peopleForm).then(res => {
