@@ -20,34 +20,27 @@
             size="small"
             @submit.native.prevent
         >
-         <el-form-item label="业务编码" prop="fcode">
-            <el-input clearable size="small" v-model="formData.fcode" placeholder="请输入"></el-input>
-        </el-form-item>
-        <el-form-item label="业务名称" prop="fname">
-            <el-input clearable size="small" v-model="formData.fname" placeholder="请输入"></el-input>
-        </el-form-item>
-         <el-form-item label="业务数据" prop="prosessData">
-            <el-input clearable size="small" v-model="formData.prosessData" placeholder="请输入"></el-input>
-            <img class="icon-search" @click="baseInputTable('审核','业务数据查询 ')" src="../../../assets/img/search.svg">
-        </el-form-item>
-        <el-form-item label="描述" >
-            <el-input maxlength="1000"  autosize show-word-limit type="textarea" v-model="formData.fremark"></el-input>
-        </el-form-item>
-           
-               
-         </el-form>
-        
-        
-        
-         
-          <el-row :gutter="20">
+            <el-form-item label="业务编码" prop="fcode">
+                <el-input clearable size="small" v-model="formData.fcode" placeholder="请输入"></el-input>
+            </el-form-item>
+            <el-form-item label="业务名称" prop="fname">
+                <el-input clearable size="small" v-model="formData.fname" placeholder="请输入"></el-input>
+            </el-form-item>
+            <el-form-item label="业务数据" prop="prosessData">
+                <el-input clearable size="small" v-model="formData.prosessData" placeholder="请输入"></el-input>
+                <img class="icon-search" @click="baseInputTable('审核','业务数据查询 ')" src="../../../assets/img/search.svg">
+            </el-form-item>
+            <el-form-item label="描述"  prop="fremark">
+                <el-input maxlength="1000"  autosize show-word-limit type="textarea" v-model="formData.fremark"></el-input>
+            </el-form-item>   
+        </el-form>
+        <el-row :gutter="20">
             <el-col :span="13" style="text-align: right;margin-top: 18px;">
                 <el-button  type='success' icon='el-icon-check' size="small" @click="saveConfig('workflowConfigForm')">确定</el-button>
             </el-col>
-            
         </el-row>
-         <!-- 第三层弹窗 -->
-            <base-info-dialog class="children-dialog" :visible="baseInputTableF" :type="baseInputType" :title="baseInputTitle" @closeDialog="closeBaseInfo"></base-info-dialog>
+        <!-- 第三层弹窗 -->
+        <base-info-dialog class="children-dialog" :visible="baseInputTableF" :type="baseInputType" :title="baseInputTitle" @closeDialog="closeBaseInfo"></base-info-dialog>
     </el-dialog>
 </template>
 
@@ -116,7 +109,7 @@ export default {
     computed: {
     },
     watch: {
-         // 对话框显示 自动聚焦name输入框
+        // 对话框显示 自动聚焦name输入框
         visible (bool) {
             this.dialogVisible = bool;
         }
@@ -126,7 +119,7 @@ export default {
             console.log(data);
         },
         closeDialog(){
-             this.$refs['workflowConfigForm'].resetFields();
+            this.$refs['workflowConfigForm'].resetFields();
             this.$emit('closeDialog')
         },
         baseInputTable(str,title){ 
@@ -143,7 +136,6 @@ export default {
                 this.formData.prosessData = '';
                 this.formData.fmclass = '';
             }
-            console.log(this.formData)
         },
         searchKey(){
             
@@ -155,22 +147,23 @@ export default {
 
         },
         saveConfig(formName){
-             this.$refs[formName].validate((valid) => {
+            this.$refs[formName].validate((valid) => {
                 if (valid) {
                     this.$api.svg.addProcessActivity(this.formData).then(res=>{
-                        if(res.data.data.msg == 'success'){
-                            this.$emit('closeDialog')
+                        if(res.data.code != 999){
+                            if(res.data.data.msg == 'success'){
+                                this.$emit('closeDialog')
+                            }
+                        }else {
+                            this.$message.error(res.data.msg+'!');
                         }
                     },error=>{
-                    console.log(error)
+                        console.log(error)
                     })
                 } else {
-                    console.log('error submit!!');
                     return false;
                 }
-                });
-           
-           
+            }); 
         },
         onCurrentChange(){
 
