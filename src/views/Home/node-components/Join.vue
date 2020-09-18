@@ -857,6 +857,14 @@ export default {
                 this.$message.error("保存失败,请选择决策类型!");
                 return;
             }
+            let time=this.formData.maxWorkTime;
+            if(time && time !=''){
+                var ret1= /^[1-9][0-9]\d*$/;
+                if(ret1.test(time)){}else{
+                    this.$message.error("保存失败,最大工作时间请填写正整数!");
+                    return; 
+                }
+            }
             let ChecTS=this.checkedCities;
             //if(ChecTS.join(',').indexOf('可略过') != -1){
             //}else{

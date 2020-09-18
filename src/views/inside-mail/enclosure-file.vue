@@ -338,7 +338,6 @@ export default {
         }*/
     },
     created(){
-        console.log("sly--------------");
         console.log(this.enclosureConfig);
     }
 }

@@ -323,6 +323,12 @@ export default {
             let ParentSelectData=this.rowUTSDataObj.SelectionData;
             let selectListData=this.teldata;
             if(selectListData.length >0){
+                if(this.saveType ==='手工指定下一节点'){
+                    if(selectListData.length >2){
+                        this.$message.error("请选择一名人员!");
+                        return;
+                    }
+                }
                 let participator='';
                 for(let j=0;j<selectListData.length;j++){
                     participator+=selectListData[j].foid+',';
@@ -334,6 +340,9 @@ export default {
                     this.transmit(ParentSelectData[0].foid,participator);
                 }else if(this.saveType ==='加签'){
                     this.setAddTag(ParentSelectData[0].foid,participator);
+                }else if(this.saveType ==='手工指定下一节点'){
+                    this.$emit('changeShow',false,this.teldata);
+                    this.ShowFinancVisible=false;
                 }else{
                     this.$emit('changeShow',this.teldata);
                     this.ShowFinancVisible=false;
