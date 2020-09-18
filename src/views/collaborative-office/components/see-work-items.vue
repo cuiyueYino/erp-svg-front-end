@@ -28,8 +28,8 @@
 		<el-dialog title="工作事项模板主表" top="1vh" :destroy-on-close="true" v-if="dialogVisible" center :visible.sync="dialogVisible" width="80%">
 			<selectMainTable show="1" status="3" :userId="UserId" :company="companyID" ref="childMain"></selectMainTable>
 			<div slot="footer" class="dialog-footer">
-				<el-button type="success"  icon="el-icon-check" size="small" @click="getDialogVisible">确定</el-button>
-				<el-button type="warning"  icon="el-icon-close" size="small" @click="dialogVisible = false">取消</el-button>
+				<el-button type="success" icon="el-icon-check" size="small" @click="getDialogVisible">确定</el-button>
+				<el-button type="warning" icon="el-icon-close" size="small" @click="dialogVisible = false">取消</el-button>
 			</div>
 		</el-dialog>
 	</div>
@@ -48,12 +48,12 @@
 			//值
 			context: Object,
 			showSeeOrUpd: String,
-			todoFlag:Boolean
+			todoFlag: Boolean
 		},
 		data() {
 			return {
 				UserId: "",
-				companyID:{},
+				companyID: {},
 				//主表弹出框
 				dialogVisible: false,
 				company: "",
@@ -92,18 +92,19 @@
 			})
 		},
 		watch: {
-			context: {
-				 handler(newVal, oldVal){
+			context: { 
+				handler(newVal, oldVal) {
 					this.getDialogVisible()
 				},
-				deep: true
+				deep:  true
 			}
-		}, 
+		},
+		 
 		methods: {
 			//选择模板
-			selectMainTable(){
-				this.companyID=this.company;
-				this.UserId=localStorage.getItem("ms_userId");
+			selectMainTable() {
+				this.companyID = this.company;
+				this.UserId = localStorage.getItem("ms_userId");
 				this.dialogVisible = true;
 			},
 			//提交/暂存
@@ -248,10 +249,12 @@
 							var right = item.parameter.substring(index + 1)
 							//两个字段都要添加属性parameterList，里面存储需要计算的字段名和需要显示的字段名child
 							if(left == itemChild.field || right == itemChild.field) {
-								itemChild.parameterList = {}
-								itemChild.parameterList.left = left
-								itemChild.parameterList.right = right
-								itemChild.parameterList.child = item.field
+								var a = {
+									left: left,
+									right: right,
+									child: item.field
+								}
+								itemChild.parameterList.push(a)
 							}
 						}
 						//发现被添加服务的字段后，绑定双方
@@ -311,51 +314,52 @@
 					this.conData.bottom[rowIndex].rowList = cur
 				}
 			},
-			maketree(data,type){
-				let parent=[];
+			maketree(data, type) {
+				let parent = [];
 				for(var i = data[0].children.length - 1; i >= 0; i--) {
-					if(type =="公司"){
-						if(data[0].children[i].ftype == 1){
+					if(type == "公司") {
+						if(data[0].children[i].ftype == 1) {
 							parent.push(data[0].children[i]);
 						}
-					}else{
-						if(data[0].children[i].ftype == 1 || data[0].children[i].ftype == 2){
+					} else {
+						if(data[0].children[i].ftype == 1 || data[0].children[i].ftype == 2) {
 							parent.push(data[0].children[i]);
 						}
 					}
 				}
-				children(parent,type);
-				function children(parent,type) {
-					if(parent){
+				children(parent, type);
+
+				function children(parent, type) {
+					if(parent) {
 						for(var i = parent.length - 1; i >= 0; i--) {
-							if(parent[i].children){
+							if(parent[i].children) {
 								let obj = parent[i];
-								obj.childrenList=[];
+								obj.childrenList = [];
 								for(var j = parent[i].children.length - 1; j >= 0; j--) {
-									if(type =="公司"){
-										if(parent[i].children[j].ftype == 1){
+									if(type == "公司") {
+										if(parent[i].children[j].ftype == 1) {
 											obj.childrenList.push(parent[i].children[j]);
 										}
-									}else{
-										if(parent[i].children[j].ftype == 1 || parent[i].children[j].ftype == 2){
+									} else {
+										if(parent[i].children[j].ftype == 1 || parent[i].children[j].ftype == 2) {
 											obj.childrenList.push(parent[i].children[j]);
 										}
 									}
 								}
-								obj.children=[];
-								obj.children=obj.childrenList;
+								obj.children = [];
+								obj.children = obj.childrenList;
 								delete obj.childrenList;
-								parent[i]=obj;
-								children(parent[i].children,type);	
-							}else{
-								parent[i].children=[];
+								parent[i] = obj;
+								children(parent[i].children, type);
+							} else {
+								parent[i].children = [];
 							}
 						}
 					}
 				}
-				let Fdata= data[0];
-				Fdata.children=parent;
-				let RetrunData=[];
+				let Fdata = data[0];
+				Fdata.children = parent;
+				let RetrunData = [];
 				RetrunData.push(Fdata);
 				return RetrunData;
 			},
@@ -394,7 +398,7 @@
 							}
 							item.browseBoxList = list[0].children
 							*/
-							let ComData=this.maketree(list,'公司');
+							let ComData = this.maketree(list, '公司');
 							item.browseBoxList = ComData[0].children;
 							//部门
 						} else if(item.toSelect.id == 2) {
@@ -408,7 +412,7 @@
 							})
 							item.browseBoxList = list[0].children
 							*/
-							let ZhiwuData=this.maketree(list,'职位');
+							let ZhiwuData = this.maketree(list, '职位');
 							item.browseBoxList = ZhiwuData[0].children
 							//职位（无需删除，保留原数据）
 						} else if(item.toSelect.id == 3) {

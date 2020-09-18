@@ -182,11 +182,11 @@
 				</el-form>
 			</el-card>
 			<!--弹出框-->
-			<el-dialog title="工作事项模板子表分类" top="1vh" :destroy-on-close="true" center :visible.sync="dialogVisibleChild" width="80%"  v-if="dialogVisibleChild">
+			<el-dialog title="工作事项模板子表分类" top="1vh" :destroy-on-close="true" center :visible.sync="dialogVisibleChild" width="80%" v-if="dialogVisibleChild">
 				<selectMainTableClassificationChild show="1" ref="child" :company="this.ruleForm.company"></selectMainTableClassificationChild>
 				<div slot="footer" class="dialog-footer">
-					<el-button @click="getSelectMainTableClassification" type="success"  icon="el-icon-check" size="small">确定</el-button>
-					<el-button @click="dialogVisibleChild = false" type="warning"  icon="el-icon-close" size="small">取消</el-button>
+					<el-button @click="getSelectMainTableClassification" type="success" icon="el-icon-check" size="small">确定</el-button>
+					<el-button @click="dialogVisibleChild = false" type="warning" icon="el-icon-close" size="small">取消</el-button>
 				</div>
 			</el-dialog>
 			<!--弹出框-->
@@ -194,7 +194,7 @@
 				<selectMainTable show="1" ref="childMain" :companyId="this.ruleForm.company"></selectMainTable>
 				<div slot="footer" class="dialog-footer">
 					<el-button type="success" icon="el-icon-check" size="small" @click="getDialogVisible">确定</el-button>
-					<el-button @click="dialogVisible = false" type="warning"  icon="el-icon-close" size="small">取消</el-button>
+					<el-button @click="dialogVisible = false" type="warning" icon="el-icon-close" size="small">取消</el-button>
 				</div>
 			</el-dialog>
 			<!--弹出框-->
@@ -207,7 +207,7 @@
 				</el-table>
 				<div slot="footer" class="dialog-footer">
 					<el-button type="success" icon="el-icon-check" size="small" @click="getTServiceByParams">确定</el-button>
-					<el-button type="warning"  icon="el-icon-close" size="small" @click="dialogVisible_TServiceByParams = false">取消</el-button>
+					<el-button type="warning" icon="el-icon-close" size="small" @click="dialogVisible_TServiceByParams = false">取消</el-button>
 				</div>
 			</el-dialog>
 		</div>
@@ -235,7 +235,7 @@
 		},
 		props: {
 			//查看
-			showFigNum:Number,
+			showFigNum: Number,
 			//值
 			context: Object
 		},
@@ -446,18 +446,18 @@
 					this.ruleForm.company = item.id
 				}
 			})*/
-            this.ruleForm.company = this.CompanyData[0].id
+			this.ruleForm.company = this.CompanyData[0].id
 			this.$api.collaborativeOffice.findList({}).then(data => {
 				this.selectList = data.data.data
 			})
 		},
 		methods: {
 			//不是显示状态时,不加check
-			rulesShow(row,con) {
+			rulesShow(row, con) {
 				if(row.show) {
 					return this.rulesTable[con];
-				}else {
-					return ;
+				} else {
+					return;
 				}
 			},
 			//公司select选择的时候
@@ -541,7 +541,7 @@
 						var list = JSON.parse(JSON.stringify(this.allOrganizationInfo))
 						//公司
 						if(item.toSelect.id == 1) {
-							let ComData=this.maketree(list,'公司');
+							let ComData = this.maketree(list, '公司');
 							//删除部门和职位信息
 							/*for(var i = list[0].children.length - 1; i >= 0; i--) {
 								if(list[0].children[i].ftype == 2) {
@@ -565,7 +565,7 @@
 							})
 							item.browseBoxList = list
 							*/
-							let ZhiwuData=this.maketree(list,'职位');
+							let ZhiwuData = this.maketree(list, '职位');
 							item.browseBoxList = ZhiwuData
 							//职位（无需删除，保留原数据）
 						} else if(item.toSelect.id == 3) {
@@ -630,10 +630,12 @@
 							var right = item.parameter.substring(index + 1)
 							//两个字段都要添加属性parameterList，里面存储需要计算的字段名和需要显示的字段名child
 							if(left == itemChild.field || right == itemChild.field) {
-								itemChild.parameterList = {}
-								itemChild.parameterList.left = left
-								itemChild.parameterList.right = right
-								itemChild.parameterList.child = item.field
+								var a = {
+									left: left,
+									right: right,
+									child: item.field
+								}
+								itemChild.parameterList.push(a)
 							}
 						}
 						//发现被添加服务的字段后，绑定双方
@@ -660,7 +662,7 @@
 				})
 				//列序按照填写排序
 				var index = 0
-				if(cur.length > 1){
+				if(cur.length > 1) {
 					cur.sort((a, b) => {
 						a.colList.sort((a1, b1) => {
 							//return a1.orderNum - b1.orderNum
@@ -676,7 +678,7 @@
 						//return a.showNum - b.showNum
 						return Number(a.showNum) - Number(b.showNum)
 					})
-				}else{
+				} else {
 					cur[0].colList.sort((a1, b1) => {
 						//return a1.orderNum - b1.orderNum
 						return Number(a1.orderNum) - Number(b1.orderNum)
@@ -695,51 +697,52 @@
 						break;
 				}
 			},
-			maketree(data,type){
-				let parent=[];
+			maketree(data, type) {
+				let parent = [];
 				for(var i = data[0].children.length - 1; i >= 0; i--) {
-					if(type =="公司"){
-						if(data[0].children[i].ftype == 1){
+					if(type == "公司") {
+						if(data[0].children[i].ftype == 1) {
 							parent.push(data[0].children[i]);
 						}
-					}else{
-						if(data[0].children[i].ftype == 1 || data[0].children[i].ftype == 2){
+					} else {
+						if(data[0].children[i].ftype == 1 || data[0].children[i].ftype == 2) {
 							parent.push(data[0].children[i]);
 						}
 					}
 				}
-				children(parent,type);
-				function children(parent,type) {
-					if(parent){
+				children(parent, type);
+
+				function children(parent, type) {
+					if(parent) {
 						for(var i = parent.length - 1; i >= 0; i--) {
-							if(parent[i].children){
+							if(parent[i].children) {
 								let obj = parent[i];
-								obj.childrenList=[];
+								obj.childrenList = [];
 								for(var j = parent[i].children.length - 1; j >= 0; j--) {
-									if(type =="公司"){
-										if(parent[i].children[j].ftype == 1){
+									if(type == "公司") {
+										if(parent[i].children[j].ftype == 1) {
 											obj.childrenList.push(parent[i].children[j]);
 										}
-									}else{
-										if(parent[i].children[j].ftype == 1 || parent[i].children[j].ftype == 2){
+									} else {
+										if(parent[i].children[j].ftype == 1 || parent[i].children[j].ftype == 2) {
 											obj.childrenList.push(parent[i].children[j]);
 										}
 									}
 								}
-								obj.children=[];
-								obj.children=obj.childrenList;
+								obj.children = [];
+								obj.children = obj.childrenList;
 								delete obj.childrenList;
-								parent[i]=obj;
-								children(parent[i].children,type);
-							}else{
-								parent[i].children=[];
+								parent[i] = obj;
+								children(parent[i].children, type);
+							} else {
+								parent[i].children = [];
 							}
 						}
 					}
 				}
-				let Fdata= data[0];
-				Fdata.children=parent;
-				let RetrunData=[];
+				let Fdata = data[0];
+				Fdata.children = parent;
+				let RetrunData = [];
 				RetrunData.push(Fdata);
 				return RetrunData;
 			},
@@ -764,7 +767,7 @@
 							}
 							item.browseBoxList = list
 							*/
-							let ComData=this.maketree(list,'公司');
+							let ComData = this.maketree(list, '公司');
 							item.browseBoxList = ComData;
 							//部门
 						} else if(item.toSelect.id == 2) {
@@ -778,7 +781,7 @@
 							})
 							item.browseBoxList = list
 							*/
-							let ZhiwuData=this.maketree(list,'职位');
+							let ZhiwuData = this.maketree(list, '职位');
 							item.browseBoxList = ZhiwuData
 							//职位（无需删除，保留原数据）
 						} else if(item.toSelect.id == 3) {
@@ -838,10 +841,12 @@
 										var right = itemChild.parameter.substring(index + 1)
 										//两个字段都要添加属性parameterList，里面存储需要计算的字段名和需要显示的字段名child
 										if(left == item.field || right == item.field) {
-											item.parameterList = {}
-											item.parameterList.left = left
-											item.parameterList.right = right
-											item.parameterList.child = itemChild.field
+											var a = {
+												left: left,
+												right: right,
+												child: item.field
+											}
+											itemChild.parameterList.push(a)
 										}
 									} else {
 										//发现被添加服务的字段后，绑定双方
@@ -922,38 +927,37 @@
 						data.data.data.lines.forEach(item => {
 							if(!item.forbid) {
 
-
-							//为每一条数据定义好字段
-							var con = JSON.parse(JSON.stringify(this.rowConNew))
-							//枚举
-							if(item.fieldType == 9) {
-								//前台显示用，查看字段内容
-								con.fieldContentName = item.fieldContentName
-								//获取枚举LIST里面和字段相同的内容，并放入数据中，为了在后面显示用
-								this.selectList.forEach(val => {
-									if(item.fieldContent == val.id) {
-										//resList 枚举的list
-										con.resList = val.resList
-										//枚举的ID
-										con.fieldContent = val.id
-									}
-								})
-							}
-							//浏览框，同上面枚举
-							if(item.fieldType == 1) {
-								con.fieldContentName = item.fieldContentName
-								this.fieldBrowseList.forEach(val => {
-									if(item.fieldContent == val.id) {
-										con.toSelect = val
-										con.fieldContent = val.id
-									}
-								})
-							}
-							//获取其他字段，放入要传走的数据中
-							con.field = item.field
-							con.fieldName = item.fieldName
-							con.fieldType = item.fieldType
-							this.ruleForm.lines.push(con)
+								//为每一条数据定义好字段
+								var con = JSON.parse(JSON.stringify(this.rowConNew))
+								//枚举
+								if(item.fieldType == 9) {
+									//前台显示用，查看字段内容
+									con.fieldContentName = item.fieldContentName
+									//获取枚举LIST里面和字段相同的内容，并放入数据中，为了在后面显示用
+									this.selectList.forEach(val => {
+										if(item.fieldContent == val.id) {
+											//resList 枚举的list
+											con.resList = val.resList
+											//枚举的ID
+											con.fieldContent = val.id
+										}
+									})
+								}
+								//浏览框，同上面枚举
+								if(item.fieldType == 1) {
+									con.fieldContentName = item.fieldContentName
+									this.fieldBrowseList.forEach(val => {
+										if(item.fieldContent == val.id) {
+											con.toSelect = val
+											con.fieldContent = val.id
+										}
+									})
+								}
+								//获取其他字段，放入要传走的数据中
+								con.field = item.field
+								con.fieldName = item.fieldName
+								con.fieldType = item.fieldType
+								this.ruleForm.lines.push(con)
 							}
 						})
 					})
@@ -1026,23 +1030,23 @@
 		color: red;
 		font-size: 20px;
 	}
-
+	
 	>>>.el-card {
 		margin-bottom: 10px;
 	}
-
+	
 	>>>.el-card__body {
 		padding: 10px;
 	}
-
+	
 	>>>.el-input.is-disabled .el-input__inner {
 		color: #000000 !important;
 	}
-
+	
 	>>>.el-textarea.is-disabled .el-textarea__inner {
 		color: #000000 !important;
 	}
-
+	
 	>>>.el-checkbox__input.is-disabled.is-checked .el-checkbox__inner::after {
 		border-color: #000000!important;
 	}

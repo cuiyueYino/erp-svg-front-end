@@ -8,7 +8,7 @@
 				<el-row>
 					<el-col :span="18">
 						公司：
-						<el-select  size='mini' disabled v-model="ruleForm.company" placeholder="公司">
+						<el-select size='mini' disabled v-model="ruleForm.company" placeholder="公司">
 							<el-option v-for="item in CompanyData" :key="item.id" :label="item.name" :value="item.id">
 							</el-option>
 						</el-select>
@@ -184,18 +184,18 @@
 		<div v-if="showFigForm">
 			<formAndTable :files="files" dis="2" showAdd="2" :form-data="conData">
 				<el-card class="box-card">
-				<el-row>
-					<el-col :span="18">
-						公司：
-						<el-select size='mini' v-model="ruleForm.company" placeholder="公司">
-							<el-option v-for="item in CompanyData" :key="item.id" :label="item.name" :value="item.id">
-							</el-option>
-						</el-select>
-					</el-col>
-					<el-col :span="6" style="text-align: right;">
-						<el-button icon="el-icon-arrow-left" size="small" type="danger" plain @click="showFigForm = false">返回</el-button>
-					</el-col>
-				</el-row>
+					<el-row>
+						<el-col :span="18">
+							公司：
+							<el-select size='mini' v-model="ruleForm.company" placeholder="公司">
+								<el-option v-for="item in CompanyData" :key="item.id" :label="item.name" :value="item.id">
+								</el-option>
+							</el-select>
+						</el-col>
+						<el-col :span="6" style="text-align: right;">
+							<el-button icon="el-icon-arrow-left" size="small" type="danger" plain @click="showFigForm = false">返回</el-button>
+						</el-col>
+					</el-row>
 				</el-card>
 			</formAndTable>
 		</div>
@@ -352,10 +352,10 @@
 				fieldBrowseList: JSON.parse(localStorage.getItem('fieldBrowseList')),
 				//公司部门职位的合集
 				allOrganizationInfo: JSON.parse(localStorage.getItem('allOrganizationInfo')),
-				clickFlg:0
+				clickFlg: 0
 			}
 		},
-		created() {			
+		created() {
 			this.ruleForm = this.context
 			/*this.CompanyData.forEach(item => {
 				if(item.name == "福佳集团") {
@@ -382,7 +382,7 @@
 		},
 		methods: {
 			//不是显示状态时,不加check
-			rulesShow(row,con) {
+			rulesShow(row, con) {
 				if(row.show) {
 					return this.rulesTable[con];
 				} else {
@@ -393,7 +393,7 @@
 				if(this.showFigNum == 1) {
 					return "工作事项模板主表-查看"
 				} else {
-					return "工作事项模板主表-修改"					
+					return "工作事项模板主表-修改"
 				}
 			},
 			//服务类型
@@ -407,51 +407,52 @@
 						break;
 				}
 			},
-			maketree(data,type){
-				let parent=[];
+			maketree(data, type) {
+				let parent = [];
 				for(var i = data[0].children.length - 1; i >= 0; i--) {
-					if(type =="公司"){
-						if(data[0].children[i].ftype == 1){
+					if(type == "公司") {
+						if(data[0].children[i].ftype == 1) {
 							parent.push(data[0].children[i]);
 						}
-					}else{
-						if(data[0].children[i].ftype == 1 || data[0].children[i].ftype == 2){
+					} else {
+						if(data[0].children[i].ftype == 1 || data[0].children[i].ftype == 2) {
 							parent.push(data[0].children[i]);
 						}
 					}
 				}
-				children(parent,type);
-				function children(parent,type) {
-					if(parent){
+				children(parent, type);
+
+				function children(parent, type) {
+					if(parent) {
 						for(var i = parent.length - 1; i >= 0; i--) {
-							if(parent[i].children){
+							if(parent[i].children) {
 								let obj = parent[i];
-								obj.childrenList=[];
+								obj.childrenList = [];
 								for(var j = parent[i].children.length - 1; j >= 0; j--) {
-									if(type =="公司"){
-										if(parent[i].children[j].ftype == 1){
+									if(type == "公司") {
+										if(parent[i].children[j].ftype == 1) {
 											obj.childrenList.push(parent[i].children[j]);
 										}
-									}else{
-										if(parent[i].children[j].ftype == 1 || parent[i].children[j].ftype == 2){
+									} else {
+										if(parent[i].children[j].ftype == 1 || parent[i].children[j].ftype == 2) {
 											obj.childrenList.push(parent[i].children[j]);
 										}
 									}
 								}
-								obj.children=[];
-								obj.children=obj.childrenList;
+								obj.children = [];
+								obj.children = obj.childrenList;
 								delete obj.childrenList;
-								parent[i]=obj;
-								children(parent[i].children,type);	
-							}else{
-								parent[i].children=[];
+								parent[i] = obj;
+								children(parent[i].children, type);
+							} else {
+								parent[i].children = [];
 							}
 						}
 					}
 				}
-				let Fdata= data[0];
-				Fdata.children=parent;
-				let RetrunData=[];
+				let Fdata = data[0];
+				Fdata.children = parent;
+				let RetrunData = [];
 				RetrunData.push(Fdata);
 				return RetrunData;
 			},
@@ -487,7 +488,7 @@
 							}
 							item.browseBoxList = list
 							*/
-							let ComData=this.maketree(list,'公司');
+							let ComData = this.maketree(list, '公司');
 							item.browseBoxList = ComData;
 							//部门
 						} else if(item.toSelect.id == 2) {
@@ -501,7 +502,7 @@
 							})
 							item.browseBoxList = list
 							*/
-							let ZhiwuData=this.maketree(list,'职位');
+							let ZhiwuData = this.maketree(list, '职位');
 							item.browseBoxList = ZhiwuData
 							//职位（无需删除，保留原数据）
 						} else if(item.toSelect.id == 3) {
@@ -559,10 +560,12 @@
 										var right = item.parameter.substring(index + 1)
 										//两个字段都要添加属性parameterList，里面存储需要计算的字段名和需要显示的字段名child
 										if(left == itemChild.field || right == itemChild.field) {
-											itemChild.parameterList = {}
-											itemChild.parameterList.left = left
-											itemChild.parameterList.right = right
-											itemChild.parameterList.child = item.field
+											var a = {
+												left: left,
+												right: right,
+												child: item.field
+											}
+											itemChild.parameterList.push(a)
 										}
 									}
 									//发现被添加服务的字段后，绑定双方
@@ -588,7 +591,7 @@
 							})
 							//列序按照填写排序
 							var index = 0
-							if(cur.length > 1){
+							if(cur.length > 1) {
 								cur.sort((a, b) => {
 									a.colList.sort((a1, b1) => {
 										return Number(a1.orderNum) - Number(b1.orderNum)
@@ -603,7 +606,7 @@
 									//return a.showNum - b.showNum
 									return Number(a.showNum) - Number(b.showNum)
 								})
-							}else{
+							} else {
 								cur[0].colList.sort((a1, b1) => {
 									//return a1.orderNum - b1.orderNum
 									return Number(a1.orderNum) - Number(b1.orderNum)
@@ -678,7 +681,7 @@
 			},
 			//服务--确定
 			getTServiceByParams() {
-				if (this.clickFlg == 0){
+				if(this.clickFlg == 0) {
 					this.tServiceByParamsCon = "";
 				}
 				//服务显示名称
