@@ -51,14 +51,15 @@
                     </el-row>
                     <el-tabs v-model="atctiveName" @tab-click="handleClick">
                         <el-tab-pane label="内容" name="first">
-                            <quill-editor
-                                v-model="formdata.fcontent"
-                                ref="myQuillEditor"
-                                :options="editorOption"
-                                @blur="onEditorBlur($event)"
-                                @focus="onEditorFocus($event)"
-                                @change="onEditorChange($event)"
-                            ></quill-editor>
+<!--                            <quill-editor-->
+<!--                                v-model="formdata.fcontent"-->
+<!--                                ref="myQuillEditor"-->
+<!--                                :options="editorOption"-->
+<!--                                @blur="onEditorBlur($event)"-->
+<!--                                @focus="onEditorFocus($event)"-->
+<!--                                @change="onEditorChange($event)"-->
+<!--                            ></quill-editor>-->
+                          <editor v-model="formdata.fcontent" style="height: 400px"></editor>
                         </el-tab-pane>
                         <el-tab-pane label="附件" name="second">
                             <enclosurefile v-on:enclosureFile="enclosureFile" :rowDataFileObj="rowDataFileObj" @changeShow="showFileData" />
@@ -130,6 +131,7 @@ import enclosurefile from './enclosure-file.vue';
 import { quillEditor } from 'vue-quill-editor'; //调用编辑器
 import 'quill/dist/quill.snow.css';
 import pageNation from '../../collaborative-office/components/pageNation';
+import editor from '../../collaborative-office/components/encapsulation/test.vue';
 
 export default {
     props: {
@@ -140,6 +142,7 @@ export default {
         enclosurefile,
         DynamicTable,
         quillEditor,
+        editor,
         pageNation
     },
     data(){
