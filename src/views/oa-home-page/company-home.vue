@@ -1,21 +1,21 @@
 <template>
   <el-container>
     <el-main>
-      <el-card class="box-card" v-for="(item,idx) in menuList" :key="item.foid">
+      <el-card class="box-card" v-for="(item,idx) in menuList" :key="item.value">
         <span class="tab-title">{{item.fname}}</span>
         <el-divider></el-divider>
-        <el-tabs :v-model="activeName[idx]" @tab-click="handleClick">
+        <el-tabs :v-model="activeName[idx]">
           <el-tab-pane
             v-for="(childrenItem,index) in item.children"
             :key="index"
             :label="childrenItem.fname"
             :name="index.toString()"
           >
-            <span v-for="(childListItems,indx) in childList[idx]" class="li-box">
-              <ul :class="{'ul-left':true ,'subjectStyle':childListItems.fisread=='0' }" @click="toLook(childListItems)">
+            <span v-for="(childListItems,indx) in childrenItem.children" class="li-box">
+              <ul :class="{'subjectStyle':(childListItems.fisread=='0')}" @click="toLook(childListItems)">
                 <li>
                   {{childListItems.fname}}
-                  <span class="li-after" v-show="childListItems.fisread=='0'"></span>
+                  <span class="li-after" v-if="childListItems.fisread=='0'"></span>
                 </li>
               </ul>
               <ul class="ul-right" @click="toLook(childListItems)">
@@ -25,7 +25,7 @@
           </el-tab-pane>
         </el-tabs>
       </el-card>
-    </el-main>
+    </el-main>  
     <el-aside width="530px">
       <div class="img1" @click="toWebsite">
         <div class="website">
@@ -46,8 +46,8 @@
         <el-calendar v-model="value"></el-calendar>
       </el-card>
     </el-aside>
-      <NewDocument  :rowNMMtype="rowNMMtype" :rowNMMDataObj="rowNMMDataObj" @changeShow="showAddMenu"/>
-   <!-- <el-dialog
+    <NewDocument  :rowNMMtype="rowNMMtype" :rowNMMDataObj="rowNMMDataObj" @changeShow="showAddMenu"/>
+    <!-- <el-dialog
       :title="detailMsg.fname"
       :visible.sync="dialogVisible"
       center
@@ -57,10 +57,9 @@
       <span slot="footer" class="dialog-footer">
         <el-button type='warning' icon='el-icon-close' size="small" @click="closeDialog">关闭</el-button>
       </span>
-    </el-dialog>-->
+    </el-dialog> -->
   </el-container>
 </template>
-
 <script>
 import NewDocument from "./../document-management/browse/new-document";
 export default {
@@ -78,7 +77,7 @@ export default {
     };
   },
   components: {
-      NewDocument,
+    NewDocument
   },
   created() {
     this.$nextTick(() => {});
@@ -88,36 +87,69 @@ export default {
   },
   computed: {},
   created() {
-    this.$nextTick(() => {
-        this.getMenuList()
-        this.firstGetMenu();
-    });
+     this.firstGetMenu();
   },
   methods: {
-    async firstGetMenu(){
-      let getItems = [];
+    firstGetMenu(){
+      var listData = [];
        this.$api.documentManagement
         .getDocumentCategoryOrgArch('1')
         .then((res) => {
-          this.menuList = eval("(" + res.data.data + ")"); //console.log(this.menuList )
-          if (this.menuList) {
-            this.menuList.forEach((item, index) => {
-              if(item.children){
-                  getItems.push( this.firstGetItem(item.children.foid) )
-              }
-             Promise.all(getItems).then(res=>{
-                  this.childList = res
-             });
-            })
-          }
+          listData = eval("(" + res.data.data + ")"); 
+          this.getMenuData(listData);
         })
+    },
+   async getMenuData(listData){
+      let getItems = [];
+      this.menuList = [];
+      var menuData = [];
+      var state = false;
+          for(var i = 0; i < listData.length; i++) {
+            var foidCommon = '';
+            //子元素的数据
+            var rows = [];
+            // debugger
+            if(listData[i].children != undefined) {
+              for(var j = 0;j < listData[i].children.length;j++) {
+                 this.$set(listData[i].children[j],'children',[]);
+                 var roles= [];
+                 var rolesStr=localStorage.getItem('ms_roles');
+                //字符串截取为数组
+                roles=rolesStr.split(",");
+                var conNow = await this.$api.documentManagement.findDocumentManageByPage({
+                  from:"1",
+                  roleIdSet:roles,
+                  fpid: listData[i].children[j].foid,
+                  page: 1,
+                  size: 10,
+                  fdocstatus: 3,
+                  fuserid : localStorage.getItem('ms_userId')
+                }).then(data => {
+                  state = true
+                  if(data.data.code == 0){
+                    rows = data.data.data.rows
+                  }
+                  return new Promise(resolve => {
+                    resolve({
+                      text: listData[i].fname,
+                      value: listData[i].foid,
+                      children: rows,
+                      listChildren: listData[i].children
+                    })
+                  });
+                })
+                 listData[i].children[j].children = conNow.children
+              }
+            } 
+            this.menuList = listData;
+        }
+        console.log(listData)
     },
     async firstGetItem(data){
       let getDetail = await this.getChildList(data);
       return getDetail;
     },
     handleClick(tab) {
-    //   console.log(tab);
       this.menuList.forEach((item, index) => {
         item.children.forEach((childrenItem, idx) => {
           if (childrenItem.fname == tab.label) {//console.log(childrenItem);
@@ -151,7 +183,7 @@ export default {
         page: 1,
         size: 10,
       };
-       return new Promise((resolve,reject)=>{
+       return new Promise((resolve,reject)=>{ 
           this.$api.documentManagement.findDocumentManageByPage(data)
           .then((res) => {
                resolve(res.data.data.rows)
@@ -192,7 +224,7 @@ export default {
     toTel() {
       window.open("http://192.168.85.96:8092/file/txl.htm");
     },
-      //是否展示dialog弹窗
+    //是否展示dialog弹窗
       showAddMenu(type){
           if(type === false){
               this.rowNMMtype = false;
@@ -201,28 +233,28 @@ export default {
           }
       },
     //查看页面详情
-    toLook(val) {
-        this.rowNMMtype = true;
+    toLook(val) {console.log(val)
+    this.rowNMMtype = true;
         let finandata={};
         finandata.nametitle="文档管理查看";
         finandata.NewOrEditFlag="SHOW";
         finandata.foid=val.foid;
         finandata.flag = 1;
         this.rowNMMDataObj=finandata;
-    /*let data ={
-        "from": "1",
-        "foid": val.foid,
-        "fuserid": localStorage.getItem('ms_userId'),
-        "foperate":'1'
-        }
-      this.$api.documentManagement.findDocumentManageById(data).then(res => {
-        if (res.data.data) {
-            this.dialogVisible = true;
-            this.detailMsg = res.data.data
-        } else {
-            this.$message.error('查询失败!');
-        }
-      })*/
+    // let data ={
+    //     "from": "1",
+    //     "foid": val.foid,
+    //     "fuserid": localStorage.getItem('ms_userId'),
+    //     "foperate":'1'
+    //     }
+    //   this.$api.documentManagement.findDocumentManageById(data).then(res => {
+    //     if (res.data.data) {
+    //         this.dialogVisible = true;
+    //         this.detailMsg = res.data.data
+    //     } else {
+    //         this.$message.error('查询失败!');
+    //     }
+    //   })
     },
   },
 };
