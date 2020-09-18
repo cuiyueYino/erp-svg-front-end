@@ -151,8 +151,8 @@
 			<erpDialog title="工作事项模板主表分类" erpDialogwidth="true" :dialogShow="dialogVisible" v-if="dialogVisible" width="80%">
 				<selectMainTableClassification show="1" ref="child" :company="this.ruleForm.company"></selectMainTableClassification>
 				<div slot="footer">
-					<el-button type="success"  icon="el-icon-check" size="small" @click="getSelectMainTableClassification">确定</el-button>
-					<el-button type="warning"  icon="el-icon-close" size="small"  @click="dialogVisible = false">取消</el-button>
+					<el-button type="success" icon="el-icon-check" size="small" @click="getSelectMainTableClassification">确定</el-button>
+					<el-button type="warning" icon="el-icon-close" size="small" @click="dialogVisible = false">取消</el-button>
 				</div>
 			</erpDialog>
 			<!--弹出框-->
@@ -164,8 +164,8 @@
 					<el-table-column prop="fdescription" label="描述"></el-table-column>
 				</el-table>
 				<div slot="footer">
-					<el-button type="success"  icon="el-icon-check" size="small" @click="getTServiceByParams">确定</el-button>
-					<el-button type="warning"  icon="el-icon-close" size="small" @click="dialogVisible_TServiceByParams = false">取消</el-button>
+					<el-button type="success" icon="el-icon-check" size="small" @click="getTServiceByParams">确定</el-button>
+					<el-button type="warning" icon="el-icon-close" size="small" @click="dialogVisible_TServiceByParams = false">取消</el-button>
 				</div>
 			</erpDialog>
 		</div>
@@ -343,18 +343,18 @@
 					c: 3,
 					d: 4
 				},
-				clickFlg:0
+				clickFlg: 0
 			}
 		},
 		created() {
-            this.ruleForm.company = this.CompanyData[0].id
+			this.ruleForm.company = this.CompanyData[0].id
 			this.$api.collaborativeOffice.findList({}).then(data => {
 				this.selectList = data.data.data
 			})
 		},
 		methods: {
 			//不是显示状态时,不加check
-			rulesShow(row,con) {
+			rulesShow(row, con) {
 				if(row.show) {
 					return this.rulesTable[con];
 				} else {
@@ -377,51 +377,52 @@
 						break;
 				}
 			},
-			maketree(data,type){
-				let parent=[];
+			maketree(data, type) {
+				let parent = [];
 				for(var i = data[0].children.length - 1; i >= 0; i--) {
-					if(type =="公司"){
-						if(data[0].children[i].ftype == 1){
+					if(type == "公司") {
+						if(data[0].children[i].ftype == 1) {
 							parent.push(data[0].children[i]);
 						}
-					}else{
-						if(data[0].children[i].ftype == 1 || data[0].children[i].ftype == 2){
+					} else {
+						if(data[0].children[i].ftype == 1 || data[0].children[i].ftype == 2) {
 							parent.push(data[0].children[i]);
 						}
 					}
 				}
-				children(parent,type);
-				function children(parent,type) {
-					if(parent){
+				children(parent, type);
+
+				function children(parent, type) {
+					if(parent) {
 						for(var i = parent.length - 1; i >= 0; i--) {
-							if(parent[i].children){
+							if(parent[i].children) {
 								let obj = parent[i];
-								obj.childrenList=[];
+								obj.childrenList = [];
 								for(var j = parent[i].children.length - 1; j >= 0; j--) {
-									if(type =="公司"){
-										if(parent[i].children[j].ftype == 1){
+									if(type == "公司") {
+										if(parent[i].children[j].ftype == 1) {
 											obj.childrenList.push(parent[i].children[j]);
 										}
-									}else{
-										if(parent[i].children[j].ftype == 1 || parent[i].children[j].ftype == 2){
+									} else {
+										if(parent[i].children[j].ftype == 1 || parent[i].children[j].ftype == 2) {
 											obj.childrenList.push(parent[i].children[j]);
 										}
 									}
 								}
-								obj.children=[];
-								obj.children=obj.childrenList;
+								obj.children = [];
+								obj.children = obj.childrenList;
 								delete obj.childrenList;
-								parent[i]=obj;
-								children(parent[i].children,type);
-							}else{
-								parent[i].children=[];
+								parent[i] = obj;
+								children(parent[i].children, type);
+							} else {
+								parent[i].children = [];
 							}
 						}
 					}
 				}
-				let Fdata= data[0];
-				Fdata.children=parent;
-				let RetrunData=[];
+				let Fdata = data[0];
+				Fdata.children = parent;
+				let RetrunData = [];
 				RetrunData.push(Fdata);
 				return RetrunData;
 			},
@@ -435,7 +436,7 @@
 						//浏览框 : 一共有7种，其中1：公司，2：部门，3：职位可以共同使用同一个接口
 						var list = JSON.parse(JSON.stringify(this.allOrganizationInfo))
 						if(item.toSelect.id == 1) {
-							let ComData=this.maketree(list,'公司');
+							let ComData = this.maketree(list, '公司');
 							//删除部门和职位信息
 							/*for(var i = list[0].children.length - 1; i >= 0; i--) {
 								if(list[0].children[i].ftype == 2) {
@@ -459,7 +460,7 @@
 							})
 							item.browseBoxList = list
 							*/
-							let ZhiwuData=this.maketree(list,'职位');
+							let ZhiwuData = this.maketree(list, '职位');
 							item.browseBoxList = ZhiwuData
 							//职位（无需删除，保留原数据）
 						} else if(item.toSelect.id == 3) {
@@ -518,10 +519,12 @@
 										var right = item.parameter.substring(index + 1)
 										//两个字段都要添加属性parameterList，里面存储需要计算的字段名和需要显示的字段名child
 										if(left == itemChild.field || right == itemChild.field) {
-											itemChild.parameterList = {}
-											itemChild.parameterList.left = left
-											itemChild.parameterList.right = right
-											itemChild.parameterList.child = item.field
+											var a = {
+												left: left,
+												right: right,
+												child: item.field
+											}
+											itemChild.parameterList.push(a)
 										}
 									}
 									//发现被添加服务的字段后，绑定双方
@@ -547,7 +550,7 @@
 							})
 							//列序按照填写排序
 							var index = 0
-							if(cur.length > 1){
+							if(cur.length > 1) {
 								cur.sort((a, b) => {
 									a.colList.sort((a1, b1) => {
 										//return a1.orderNum - b1.orderNum
@@ -563,7 +566,7 @@
 									//return a.showNum - b.showNum
 									return Number(a.showNum) - Number(b.showNum)
 								})
-							}else{
+							} else {
 								cur[0].colList.sort((a1, b1) => {
 									//return a1.orderNum - b1.orderNum
 									return Number(a1.orderNum) - Number(b1.orderNum)
@@ -596,7 +599,7 @@
 							//为每一条数据定义好字段
 							var con = JSON.parse(JSON.stringify(this.rowConNew))
 							//已禁用的除外
-							if (!item.forbid){
+							if(!item.forbid) {
 								//枚举
 								if(item.fieldType == 9) {
 									//前台显示用，查看字段内容
@@ -646,7 +649,7 @@
 			},
 			//服务--确定
 			getTServiceByParams() {
-				if (this.clickFlg == 0){
+				if(this.clickFlg == 0) {
 					this.tServiceByParamsCon = "";
 				}
 				//服务显示名称
@@ -703,23 +706,23 @@
 		color: red;
 		font-size: 20px;
 	}
-
+	
 	>>>.el-card {
 		margin-bottom: 10px;
 	}
-
+	
 	>>>.el-card__body {
 		padding: 10px;
 	}
-
+	
 	>>>.el-input.is-disabled .el-input__inner {
 		color: #000000 !important;
 	}
-
+	
 	>>>.el-textarea.is-disabled .el-textarea__inner {
 		color: #000000 !important;
 	}
-
+	
 	>>>.el-checkbox__input.is-disabled.is-checked .el-checkbox__inner::after {
 		border-color: #000000!important;
 	}
