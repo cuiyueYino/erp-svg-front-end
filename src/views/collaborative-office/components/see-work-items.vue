@@ -88,16 +88,16 @@
 			})
 			this.$api.collaborativeOffice.findList({}).then(data => {
 				this.selectList = data.data.data
+				this.getDialogVisible()
 			})
-			this.getDialogVisible()
 		},
 		watch: {
 			context: {
-		         handler(newVal, oldVal){
+				 handler(newVal, oldVal){
 					this.getDialogVisible()
-		        },
-		         deep: true
-		    }
+				},
+				deep: true
+			}
 		}, 
 		methods: {
 			//选择模板
