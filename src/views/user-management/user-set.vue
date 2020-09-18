@@ -585,7 +585,6 @@
 			},
 			addPeopleData(data) {
 				this.$api.jobUserManagement.addPeopleData(data).then(res => {
-					console.log(res.data)
 					if(res.data.code == 0) {
 						if(res.data.data != null) {
 							this.form.staffId = res.data.data.toid;
@@ -876,7 +875,6 @@
 						foid: this.multipleSelection[0].foid
 					}
 					this.$api.jobUserManagement.addUserData(data).then(res => {
-						console.log(res.data)
 							if(res.data.code == 0) {
 								this.tableData2 = []
 								this.form = res.data.data;								
