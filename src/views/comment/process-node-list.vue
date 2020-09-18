@@ -8,12 +8,12 @@
             @selection-change="onSelectionChange"
             element-loading-text="加载中"
         >
-            <el-table-column label="流程节点" prop="fname"></el-table-column>
-            <el-table-column label="审批人" prop="handler"></el-table-column>
-            <el-table-column label="审批结论" prop="fresult"></el-table-column>
+            <el-table-column label="流程节点" prop="nodName"></el-table-column>
+            <el-table-column label="审批人" prop="staffName"></el-table-column>
+            <el-table-column label="审批结论" prop="auditResult"></el-table-column>
             <el-table-column label="审批说明" prop="fopinion"></el-table-column>
-            <el-table-column label="审批时间" prop="fcreateTime"></el-table-column>
-            <el-table-column label="标准时间" prop="fmaxWorkTime"></el-table-column>
+            <el-table-column label="审批时间" prop="fcreatetime"></el-table-column>
+            <el-table-column label="标准时间" prop="ftimeunit"></el-table-column>
             <el-table-column label="耗时" prop="takeTime"></el-table-column>
             <el-table-column label="回复" >
                 <template slot-scope="scope" >
@@ -172,11 +172,12 @@ export default {
         },
         //回复按钮点击事件
         onRowbuttonClick(data){
+            console.log(data)
             let rowdata={};
             rowdata.senduser=localStorage.getItem('ms_username');
             rowdata.senduserId=localStorage.getItem('ms_userId');
-            rowdata.staffId=data.handler2;
-            rowdata.staffName=data.handler;
+            rowdata.staffId=data.staffId;
+            rowdata.staffName=data.staffName;
             rowdata.foid=data.foid;
             this.rowRMPDataObj=rowdata;
             this.rowRMPtype= true;
@@ -184,6 +185,7 @@ export default {
     },
     watch:{
             rowDataprocessObj(oldVal,newVal){
+                console.log(this.rowDataprocessObj)
                 this.processtableData = this.rowDataprocessObj
             }
         }

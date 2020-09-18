@@ -197,6 +197,7 @@ export default {
             }
             this.$api.processSet.getMailDetailInfo(data).then(res=>{
                 let detailMsg = res.data.data
+                console.log(detailMsg)
                 this.mailDetail = detailMsg.mailDetail
                 this.auditMsg = detailMsg.auditMsg
                 this.rowDataprocessObj = detailMsg.auditMsg
