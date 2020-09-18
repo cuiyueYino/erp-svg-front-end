@@ -312,28 +312,53 @@ export default {
                 }else{
                     //附件列表
                     this.financingEFListtype=true;
-
                 }
             }
         },
+        //判断当前节点是否是手工指定下一节点
+        checkMaile(){
+            let DataF={};
+            if(this.isOa) {
+                DataF.foid=this.rowWAADataObj.foid;
+            }else{
+                DataF.foid=this.rowWAADataObj.selectData[0].foid;
+            }
+            this.$api.processSet.getProcessorByMaile(DataF).then(res=>{
+                if(res.data){
+                    if(res.data.code ==0){
+                        //手工指定下一节点
+                        if(res.data.data.fmntnextjoin ===1){
+                            this.baseInputTable("手工指定下一节点");
+                        }else{
+                            //正常提交
+                            this.submitMethod('','');  
+                        }
+                    }else{
+                        this.$message.error(res.data.msg+"!");
+                    }
+                }else{
+                    this.$message.error("保存失败,请填联系管理员!");
+                }
+            },error=>{
+                console.log(error)
+            })
+        },
         //提交按钮点击事件
         effectOrDisableMsg(formName){
-            // alert("提交。。。。。");
             if(this.formdata.fresult == 2) {
-            this.$refs[formName].validate((valid) => {
-                console.log("sly787878");
-                console.log(valid);
-                if (valid) {
-                    this.submitMethod();
-                } else {}
+                this.$refs[formName].validate((valid) => {
+                    if (valid) {
+                        //this.submitMethod();
+                        this.checkMaile()
+                    } else {}
                     return false;
-            })
+                })
             } else {
-                this.submitMethod();
+                //this.submitMethod();
+                this.checkMaile()
             }
-
         },
-         submitMethod() {
+        submitMethod(name,val) {
              const loading = this.$loading({
                  lock: true,
                  text: 'Loading',
@@ -360,9 +385,11 @@ export default {
             twfauditObj["fresult"] = this.formdata.fresult;
             twfauditObj["fopinion"] = this.formdata.remark;
             paramsData["twfaudit"] = twfauditObj;
+            if(name ==='手工指定'){
+                paramsData["participator"] = "3|"+val;
+            }
             this.$api.processSet.addWfsubmit(paramsData).then(res=>{
                 if( res.data.code == 0 ){
-
                     this.$message.success('保存成功');
                     loading.close();
                     this.ShowFinancVisible = false;
@@ -511,11 +538,16 @@ export default {
             finandata.FunctionType=data;
             this.rowUTSDataObj=finandata;
         },
-        closeBaseInfo(data){
-            if(data === false){
+        closeBaseInfo(type,data){
+            if(type === false){
                 this.rowUTStype = false
             }else{
                 this.rowUTStype = true
+            }
+            if(data){
+                if(data[0].userid){
+                    this.submitMethod('手工指定',data[0].userid);
+                }
             }
         },
         //关注点击事件
