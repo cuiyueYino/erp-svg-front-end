@@ -90,7 +90,9 @@
                 ref="tree"
                 show-checkbox
                 node-key="foid"
-                :default-checked-keys="defautChecked"
+                v-loading="loading"
+                :default-checked-keys="defaultsChecked"
+                @check-change="checkChange"
 		:default-expanded-keys="treeDataObject"
                 :props="defaultProps">
                 </el-tree>
@@ -116,9 +118,9 @@ export default {
         return{
             searchFromPersonArrayNew:[],
             searchFromDuplicateArrayNew:[],
-            searchClickFlag:false,
             treeDataObject:[],
             zancunCount:'',
+            loading : true,
             //文本编辑器
             content: '',
             editorOption: {
@@ -168,7 +170,7 @@ export default {
                 children: 'children',
                 label: 'fname'
             },
-            defautChecked:[],
+            defaultsChecked:[],
 
             // 附件
             enclosureConfig:{
@@ -283,6 +285,7 @@ export default {
          * 添加 主送/抄送用户点击事件
          */
         AddToUser(data,flag,searchFlag){
+            this.loading = true;
              if(!flag){
                 this.treeSearchVal='';
             }
@@ -297,46 +300,44 @@ export default {
                     this.treeData = reqData;
                     this.operateUserTree(this.treeData);
                     let searchArray = reqData;
-                    // var searchCheckedArray = [];
                     if(searchFlag == 'searchFlag') {
                         for(var i=0;i<searchArray.length;i++){
-                            if(searchArray[i].children != undefined) {
-                                for(var j= 0;j<searchArray[i].children.length;j++) {
-                                    if(searchArray[i].children[j].children != undefined) {
-                                        for(var m= 0;m<searchArray[i].children[j].children.length;m++){
-                                            if(searchArray[i].children[j].children[m].children != undefined) {
-                                                this.treeDataObject.push(searchArray[i].children[j].children[m].foid);
-                                            } else {
-                                                this.treeDataObject.push(searchArray[i].children[j].children[m].foid);
-                                            }
+                            let company = searchArray[i].children;
+                            if(company != undefined) {
+                                for(var j= 0;j<company.length;j++) {
+                                    let department = company[j].children;
+                                    if(department != undefined) {
+                                        for(var m= 0;m<department.length;m++){
+                                            this.treeDataObject.push(department[m].foid);
+                                            // let person = department[m].children;
+                                            // if(person!= undefined) {
+                                            //     // this.treeDataObject.push(person.foid);
+                                            // }
                                         }
-                                    } else {
-                                        this.treeDataObject.push(searchArray[i].children[j].foid);
                                     }
                                 }
-                            } else {
-                                this.treeDataObject.push(searchArray[i].foid);
                             }
                         }
-
+                        console.log( this.treeDataObject)
                     }
-
-
                 }
             })
             if(data=="addressee"){
                 this.dialogName = "选择主送人"
-                this.defautChecked = this.defautltAddressee;
+                this.defaultsChecked = this.defautltAddressee;
                 this.treeTpye = 'addressee';
             }else if(data=="duplicate"){
                 this.dialogName = "选择抄送人"
-                this.defautChecked = this.defautltDuplicate;
+                this.defaultsChecked = this.defautltDuplicate;
                 this.treeTpye = 'duplicate';
             }
             this.dialogTree=true;
+            let self=this
+            setTimeout(function() {
+                self.loading = false;
+            }, 1000);
         },
         treeSearch(){
-            this.searchClickFlag = true;
             this.AddToUser(this.treeTpye,true,'searchFlag')
         },
         // 选择人员树时，公司部门层级不可点击
@@ -371,18 +372,18 @@ export default {
             if(data=="addressee"){
                 this.formData.addresseeName = '';
                 if(this.defautltAddressee!=null&&this.defautltAddressee.length!=0){
-                    this.defautltAddressee.length = 0;
+                    this.defautltAddressee.splice(0,this.defautltAddressee.length);
                 }
-                 if(this.addresseeList!=null&&this.addresseeList.length!=0){
-                    this.addresseeList.length = 0;
+                 if(this.formData.addresseeList!=null&&this.formData.addresseeList.length!=0){
+                    this.formData.addresseeList.splice(0,this.formData.addresseeList.length);
                 }
             }else if(data=="duplicate"){
                 this.formData.duplicateName = '';
                 if(this.defautltDuplicate!=null&&this.defautltDuplicate.length!=0){
-                    this.defautltDuplicate.length = 0;
+                    this.defautltDuplicate.splice(0,this.defautltDuplicate.length);
                 }
-                 if(this.duplicateList!=null&&this.duplicateList.length!=0){
-                    this.duplicateList.length = 0;
+                 if(this.formData.duplicateList!=null&&this.formData.duplicateList.length!=0){
+                     this.formData.duplicateList.splice(0,this.formData.duplicateList.length);
                 }
             }
         },
@@ -422,29 +423,11 @@ export default {
          * 预设值（回复，转发，编辑跳转带过来的值）
          */
         persetParam(){
-            // alert()
             if(this.perData!=null){
-                let resData = this.perData;
                 this.formData.id = this.perData.id,
                 this.content = this.perData.content,
                 this.formData.subjectName= this.perData.subject + "";
                 this.formData.addresseeList = this.perData.addresseeList
-                if(this.perData.typeFlag == 'draftsEdit') {
-                    let nameString= '';
-                    let checkId=[];
-                    if(this.perData.duplicateList != null) {
-                        for(let i=0;i<this.perData.duplicateList.length;i++){
-                        nameString += this.perData.duplicateList[i].fname+",";
-                        checkId.push(this.perData.duplicateList[i].foid);
-                    };
-                    }
-                    if(nameString!=''){
-                        nameString = nameString.slice(0,nameString.length-1);
-                    }
-                    this.formData.duplicateName = nameString;
-                    this.defautltDuplicate = checkId;
-                    this.formData.duplicateList = this.perData.duplicateList;
-                }
                 this.enclosureConfig.voucherId = this.perData.mailCode;
                 if(!this.perData.status){
                     this.enclosureConfig.haveAttachment = true;
@@ -462,65 +445,100 @@ export default {
                 this.formData.addresseeName = addresseeName;
                 this.defautltAddressee = defautltAddressee;
 
+                //抄送人名字回显，自动勾选
+                this.formData.duplicateList = this.perData.duplicateList;
+                if(this.perData.typeFlag == 'draftsEdit') {
+                    if(this.perData.duplicateList != null) {
+                        let nameString= '';
+                        let checkId=[];
+                        for(let i=0;i<this.perData.duplicateList.length;i++){
+                            nameString += this.perData.duplicateList[i].fname+",";
+                            checkId.push(this.perData.duplicateList[i].foid);
+                        };
+                        if(nameString!=''){
+                            nameString = nameString.slice(0,nameString.length-1);
+                        }
+                        this.formData.duplicateName = nameString;
+                        this.defautltDuplicate = checkId;
+                    }
+                }
+
+
+
             }
            this.$parent.$parent.$parent.clearPerData();
         },
 
+        checkChange(data,check){
+            //去除人员之外的勾选项
+            if(data.fstruid==undefined){
+                if(this.treeTpye=="addressee"){
+                    if(check){
+                        this.formData.addresseeList.push(data)
+                        this.defautltAddressee.push(data.foid)
+                    }else {
+                        //移除人员对象
+                        for(let i=0,list=this.formData.addresseeList ;i<list.length;i++){
+                            if(list[i].foid == data.foid){
+                                this.formData.addresseeList.splice(i,1)
+                            }
+                        }
+                        //移除勾选项
+                        for(let i=0,list=this.defautltAddressee ;i<list.length;i++){
+                            if(list[i] == data.foid){
+                                this.defautltAddressee.splice(i,1)
+                            }
+                        }
+                    }
+                }else if(this.treeTpye=="duplicate"){
+                    if(check){
+                        this.formData.duplicateList.push(data)
+                        this.defautltDuplicate.push(data.foid)
+                    }else {
+                        //移除人员对象
+                        for(let i=0,list=this.formData.duplicateList ;i<list.length;i++){
+                            if(list[i].foid == data.foid){
+                                this.formData.duplicateList.splice(i,1)
+                            }
+                        }
+                        //移除勾选项
+                        for(let i=0,list=this.defautltDuplicate ;i<list.length;i++){
+                            if(list[i] == data.foid){
+                                this.defautltDuplicate.splice(i,1)
+                            }
+                        }
+                    }
+                }
+            }
+        },
 
         /**
          * 人员选择后数据回写
          */
         choiceTree(){
-            let searchFromPersonName = this.formData.addresseeName;
-            let searchFromPersonArray = this.formData.addresseeList;
-            let searchDuplicateName = this.formData.duplicateName;
 
             if(this.treeTpye=="addressee"){
-                let staffList = this.$refs.tree.getCheckedNodes(true);
+                let staffList = this.formData.addresseeList;
                 let nameString= '';
-                let checkId=[];
                 // 自动勾选数据,名字回显
                 for(let i=0;i<staffList.length;i++){
                     nameString += staffList[i].fname+",";
-                    checkId.push(staffList[i].foid);
-                    this.searchFromPersonArrayNew.push(staffList[i]);
                 };
-                if(this.searchClickFlag) {
-                    nameString += searchFromPersonName;
-                    if(searchFromPersonArray !=null) {
-                        for(var m= 0;m < searchFromPersonArray.lenght;m++) {
-                            this.searchFromPersonArrayNew.push(searchFromPersonArray[m]);
-                        }
-                    }
-                    
-                }
-                if(nameString!='' && !this.searchClickFlag){
+                if(nameString!=''){
                     nameString = nameString.slice(0,nameString.length-1);
                 }
                 this.formData.addresseeName = nameString;
-                this.defautltAddressee = checkId;
-                this.formData.addresseeList = this.searchFromPersonArrayNew;
             }else if(this.treeTpye=="duplicate"){
-                let staffList = this.$refs.tree.getCheckedNodes(true)
+                let staffList = this.formData.duplicateList;
                 let nameString= '';
-                let checkId=[];
+                // 自动勾选数据,名字回显
                 for(let i=0;i<staffList.length;i++){
                     nameString += staffList[i].fname+",";
-                    checkId.push(staffList[i].foid);
-                    this.searchFromDuplicateArrayNew.push(staffList[i]);
                 };
-                if(this.searchClickFlag) {
-                    nameString += searchDuplicateName;
-                    for(var m= 0;m < searchFromPersonArray.lenght;m++) {
-                        this.searchFromDuplicateArrayNew.push(searchFromPersonArray[m]);
-                    }
-                }
-                if(nameString!='' && !this.searchClickFlag){
+                if(nameString!=''){
                     nameString = nameString.slice(0,nameString.length-1);
                 }
                 this.formData.duplicateName = nameString;
-                this.defautltDuplicate = checkId;
-                this.formData.duplicateList = this.searchFromDuplicateArrayNew;
             }
 
             this.dialogTree= false;
