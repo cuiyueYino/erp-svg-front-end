@@ -534,10 +534,11 @@ export default {
     fromdata.userId = localStorage.getItem("ms_userId");
     this.getHunTableData(fromdata);
     //查找业务数据
-    let fromdata1 = {};
+    
     //fromdata1.infosBeginNum=0;
     //fromdata1.infosEndNum=2000;
-    this.getmetaClass(fromdata1);
+    //let fromdata1 = {};
+    //this.getmetaClass(fromdata1);
     this.selectCom();
   },
   computed: {},
@@ -584,7 +585,6 @@ export default {
           size:99999
       };
       this.$api.processSet.getProcessClass(fromdata).then((response) => {
-          console.log(response.data.data.rows)
         let responsevalue = response;
         if (responsevalue.data) {
           let returndata = responsevalue.data;
@@ -592,6 +592,7 @@ export default {
         } else {
           this.$message.success("数据库没有业务数据!");
         }
+        this.dialogWFMVisible = true;
       });
     },
     //移除
@@ -779,8 +780,9 @@ export default {
       }
     },
     //查询
-    search() {
-      this.dialogWFMVisible = true;
+    async search() {
+      let fromdata1 = {};
+      await this.getmetaClass(fromdata1);
     },
     reset(){
         this.DataForm = {}

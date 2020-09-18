@@ -546,8 +546,7 @@ export default {
             let index = -1;
             // 循环连接线数组
             for (let h = 0, hLen = this.linkData.length; h < hLen; h++) {
-                if (this.linkData[h].from.key === line.from.key &&
-                    this.linkData[h].to.key === line.to.key) {
+                if (this.linkData[h].from.key === line.from.key && this.linkData[h].to.key === line.to.key) {
                     // 当前循环起始对象键等于目标起始键 并且终止键终止键 则保存索引 并跳出循环体
                     index = h;
                     break;
