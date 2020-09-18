@@ -1,7 +1,7 @@
 <template>
     <div>
         <el-menu class="sidebar-el-menu">
-            <elreplyitem v-for="(ReplyItemData,index) in ReplyData" :key="index" :ReplyItemData="ReplyItemData"></elreplyitem>
+            <elreplyitem v-for="(ReplyItemData,index) in ReplyData" :fparentId="fparentId" :key="index" :ReplyItemData="ReplyItemData"></elreplyitem>
         </el-menu>
     </div>
 </template>
@@ -11,10 +11,10 @@ import elreplyitem from './el-reply-main-item.vue';
 export default {
     components: {
         elreplyitem,
-        
     },
     props: {
-        ReplyData: Array
+        ReplyData: Array,
+        fparentId:String
     },
     data(){
         return{

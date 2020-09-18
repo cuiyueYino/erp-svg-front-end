@@ -61,7 +61,7 @@
                 </el-card>
             </el-form>
             <span slot="footer"  class="dialog-footer">
-                <el-button  @click="ShowFinancVisible=false" type="warning"  icon="el-icon-close" size="small">取消</el-button>
+                <el-button  @click="handleClose" type="warning"  icon="el-icon-close" size="small">取消</el-button>
                 <el-button @click="saveNewAndEdit()" type="success" icon="el-icon-copy-document" size="small">提交</el-button>
             </span>
         </el-dialog>
@@ -84,7 +84,8 @@ export default {
     methods: {
         //关闭当前dialog时给父组件传值
         handleClose(){
-            let foredata=this.formdata;
+            this.ShowFinancVisible=false;
+            let foredata={};
             this.$emit('changeShow',foredata,false);
         },
         //上传附件
@@ -120,10 +121,12 @@ export default {
                 freplycontent:this.formdata.freplycontent,
                 faudit:this.formdata.foid
             }
-
+            if(this.formdata.fparentreply){
+                data.fparentreply=this.formdata.fparentreply;
+            }
             this.$api.processSet.addAuditReply(data).then(res=>{
-                 this.ShowFinancVisible= false;
-                 this.$emit('changeShow',this.formdata,true);
+                this.ShowFinancVisible= false;
+                this.$emit('changeShow',this.formdata,true);
             },error=>{
                 console.log(error)
             })
@@ -132,8 +135,10 @@ export default {
     },
     watch:{
         rowRMPtype(){
-            this.ShowFinancVisible=this.rowRMPtype;
-            this.formdata=this.rowRMPDataObj;
+            if(this.rowRMPtype){
+                this.ShowFinancVisible=this.rowRMPtype;
+                this.formdata=this.rowRMPDataObj;
+            }
         }
     }
 }

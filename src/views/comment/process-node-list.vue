@@ -23,7 +23,7 @@
             <el-table-column type="expand" >
                 <template slot-scope="props">
                     <el-form label-position="left" inline class="demo-table-expand">
-                        <elreplypage :ReplyData="props.row.auditReplyMsg"></elreplypage>
+                        <elreplypage :ReplyData="props.row.auditReplyMsg" :fparentId="props.row.foid"></elreplypage>
                     </el-form>
                 </template>
             </el-table-column>
@@ -79,49 +79,6 @@ export default {
             rowRMPtype:false,
             labelPosition:'left',
             processtableData:[],
-            processtableTmp: [
-                {
-                    Cnumber1:'qqqq',
-                    Cnumber2:'1111',
-                    Cnumber3:'3333',
-                    Cnumber4:'33333',
-                    Cnumber5:'33333',
-                    Cnumber6:'wqw',
-                    Cnumber7:'swsw',
-                    Cnumber8:'sww222',
-                    Cnumber9:'dede',
-                    replydata:[
-                        {
-                            key:'1',
-                            fromusername:'徐小磊',
-                            tousername:'马小龙',
-                            title:'龙哥，大神啊',
-                            resub:[
-                                {
-                                    key:'2',
-                                    fromusername:'徐婷婷',
-                                    tousername:'徐小磊',
-                                    title:'逗逼一枚',
-                                    resub:[
-                                        {
-                                            key:'4',
-                                            fromusername:'马小龙',
-                                            tousername:'徐婷婷',
-                                            title:'赞，👍',
-                                        }
-                                    ]
-                                }
-                            ]
-                        },
-                        {
-                            key:'3',
-                            fromusername:'马小龙',
-                            tousername:'徐小磊',
-                            title:'逗逼一枚',
-                        }
-                    ]
-                }
-            ],
         };
     },
     mounted() {
@@ -172,7 +129,6 @@ export default {
         },
         //回复按钮点击事件
         onRowbuttonClick(data){
-            console.log(data)
             let rowdata={};
             rowdata.senduser=localStorage.getItem('ms_username');
             rowdata.senduserId=localStorage.getItem('ms_userId');

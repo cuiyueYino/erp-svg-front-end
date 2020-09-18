@@ -16,13 +16,14 @@
                     {{ ReplyItemData.replycontent }}
                     </el-col>
                     <el-col :span="2" :offset="1">
-                        <el-button @click="onRowbuttonClick(ReplyItemData)" type="primary"  icon="el-icon-chat-line-round" size="small">回复</el-button>
+                        <el-button @click="onRowbuttonClick(ReplyItemData)" size="small" type="primary">回复</el-button>
                     </el-col>   
                 </el-row>
             </template>
             <elreplyitem 
                 v-for="(ChildrenItem,index) in ReplyItemData.resub"
                 :key="index"
+                :fparentId="fparentId"
                 :ReplyItemData="ChildrenItem"
             ></elreplyitem>
         </el-submenu>
@@ -30,19 +31,19 @@
             <template  slot="title">
                 <el-row>
                     <el-col :span="2">
-                        {{ ReplyItemData.fromusername }}
+                        {{ ReplyItemData.staffName }}
                     </el-col>
                     <el-col :span="1" :offset="1">
                         回复:
                     </el-col>
                     <el-col :span="2" :offset="1">
-                        {{ ReplyItemData.tousername }}
+                        {{ ReplyItemData.replyedName }}
                     </el-col>
                     <el-col :span="12" :offset="1">
-                    {{ ReplyItemData.title }}
+                    {{ ReplyItemData.replyContent }}
                     </el-col>
                     <el-col :span="2" :offset="1">
-                        <el-button @click="onRowbuttonClick(ReplyItemData)" type="primary"  icon="el-icon-chat-line-round" size="small">回复</el-button>
+                        <el-button @click="onRowbuttonClick(ReplyItemData)" size="small" type="primary">回复</el-button>
                     </el-col>   
                 </el-row>
             </template>
@@ -67,24 +68,29 @@ export default {
         };
     },             
     props: {
-        ReplyItemData: Array
+        ReplyItemData: Object,
+        fparentId:String
     },
     methods: {
         onRowbuttonClick(data){
             let rowdata=data;
-            console.log("wesd")
-            rowdata.senduser=localStorage.getItem('ms_name');
+            rowdata.senduser=localStorage.getItem('ms_username');
             rowdata.senduserId=localStorage.getItem('ms_userId');
+            rowdata.staffId=data.staffId;
+            rowdata.staffName=data.staffName;
+            rowdata.foid=data.foid;
+            rowdata.fparentreply=this.fparentId;
             this.rowRMPDataObj=rowdata;
             this.rowRMPtype= true;
         },
         //回复关闭
         closeReplyPage(data,type){
-            if(type === false){
-                this.rowRMPtype = false
+            this.rowRMPtype = false
+            /*if(type === false){
+                
             }else{
                 this.rowRMPtype = true
-            }
+            }*/
         }
     }
 }
