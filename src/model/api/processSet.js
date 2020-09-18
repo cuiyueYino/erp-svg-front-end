@@ -221,6 +221,17 @@ const processSet = {
     addWfsubmit(params){
         return httpReqest.post('/api/wfInterfaces/workFlow/wfsubmit', params);
     },
+    //待办事项- 查询当前节点的配置
+    getProcessorByMaile(params){
+        var valueS='?';
+        for(var item in params){
+            valueS+=item+"="+params[item]+"&";
+        }
+        if(valueS.slice(valueS.length-1,valueS.length) ==="&"){
+            valueS=valueS.slice(0,valueS.length-1);
+        }
+        return httpReqest.get('/api/wfInterfaces/workFlow/getProcessorByMaile'+valueS);
+    },
     //委托
     transmit(params){
         return httpReqest.post('/api/wfInterfaces/workFlow/transmit', params);
@@ -265,7 +276,7 @@ const processSet = {
         return httpReqest.get('/api/wfInterfaces/workFlow/getWfDecisionTypeConByCurNode'+valueS);
     },
     //加批
-    //查询邮件状态wfInterfaces/workFlow/getWFBizMailInfoByUserId?mailId=f8db2a76c7644ed98386b3b931c03c94&userId=BFPID000000OZ9200A
+    //查询邮件状态
     getWFBizMailInfoByUserId(params){
         var valueS='?';
         for(var item in params){
@@ -292,7 +303,14 @@ const processSet = {
 
     //获取审批信息及回复信息
     getAuditAndReplyMsg(params){
-        return httpReqest.post('/api/wfInterfaces/workFlow/processMonitor/getAuditAndReplyMsg', params);
+        var valueS='?';
+        for(var item in params){
+            valueS+=item+"="+params[item]+"&";
+        }
+        if(valueS.slice(valueS.length-1,valueS.length) ==="&"){
+            valueS=valueS.slice(0,valueS.length-1);
+        }
+        return httpReqest.get('/api/wfInterfaces/workFlow/processMonitor/getAuditAndReplyMsg'+valueS);
     },
     //获取审批信息workFlow/auditDetailSearch
     auditDetailSearch(params){
