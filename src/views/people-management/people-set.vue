@@ -654,7 +654,6 @@
 							if(valid1) {
 								this.peopleForm.pluralismModels = this.peopleForm.tableData3
 								if(this.isEdit) {
-									this.peopleForm.ffirmposition = this.editFormData.ffirmposition
 									this.peopleForm.tcompanyoid = this.editFormData.tcompanyoid
 									this.$api.jobUserManagement.updatePeopleData(this.peopleForm).then(res => {
 										if(res.data.code == 0) {
