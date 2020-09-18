@@ -534,7 +534,7 @@ export default {
     fromdata.userId = localStorage.getItem("ms_userId");
     this.getHunTableData(fromdata);
     //查找业务数据
-    
+
     //fromdata1.infosBeginNum=0;
     //fromdata1.infosEndNum=2000;
     //let fromdata1 = {};
@@ -743,6 +743,12 @@ export default {
         finandata.finanrowname = "人员缺省查询方案";
         finandata.finanrowId = "QS_0056";
         finandata.nametitle = this.multipleSelection[0].fsrcCompany;
+        finandata.relay = true,
+        finandata.attention = true,
+        finandata.sign = true,
+        finandata.commit = true,
+        finandata.read = true,
+        finandata.trust = true,
         this.rowWAADataObj = finandata;
         this.rowWAAtype = true;
         this.financingLFCAtype = true;

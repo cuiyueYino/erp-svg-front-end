@@ -459,6 +459,12 @@ export default {
                 finandata.finanrowname="人员缺省查询方案";
                 finandata.finanrowId="QS_0056";
                 finandata.nametitle=this.multipleSelection[0].fsrcCompany;
+                finandata.relay = true,
+                finandata.attention = true,
+                finandata.sign = false,
+                finandata.commit = false,
+                finandata.read = false,
+                finandata.trust = false,
                 this.rowWAADataObj=finandata;
                 this.rowWAAtype=true;
                 this.financingLFCAtype=true;
