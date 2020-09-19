@@ -59,7 +59,7 @@
 <!--                                @focus="onEditorFocus($event)"-->
 <!--                                @change="onEditorChange($event)"-->
 <!--                            ></quill-editor>-->
-                          <editor @contentData="editorChange($event)" style="height: 400px"></editor>
+                          <editor :conValue="formdata.fcontent" @contentData="editorChange($event)" style="height: 400px"></editor>
                         </el-tab-pane>
                         <el-tab-pane label="附件" name="second">
                             <enclosurefile v-on:enclosureFile="enclosureFile" :rowDataFileObj="rowDataFileObj" @changeShow="showFileData" />
@@ -407,7 +407,6 @@ export default {
                     this.formdata = tableDataArr;
                     //阅读量赋值label：重新加载 dom
                     this.$nextTick(() => {
-                        this.editorChange(this.formdata.fcontent);
                         this.readCount = "阅读量:("+this.formdata.freadcount+")";
                     });
                 } else {
