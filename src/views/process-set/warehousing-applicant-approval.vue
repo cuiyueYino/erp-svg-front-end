@@ -412,7 +412,7 @@ export default {
                     this.reload();
                 }else{
                     loading.close();
-                    this.$message.error("保存失败,请填写完整信息");
+                    this.$message.error(res.data.msg+"!");
                 }
 
             },error=>{
