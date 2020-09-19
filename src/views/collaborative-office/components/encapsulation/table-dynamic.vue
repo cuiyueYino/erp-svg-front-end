@@ -17,7 +17,7 @@
 							<!--富文本-->
 							<!--<quill-editor v-if="item.fieldTypeName=='richText' && item.show" style="width: 100%;" v-model="scope.row[item.field]" ref="myQuillEditor" :options="editorOption" @blur="onEditorBlur($event)" @focus="onEditorFocus($event)" @change="onEditorChange($event)"></quill-editor>
 							<editor v-if="item.fieldTypeName == 'richText' && item.show" v-model="ruleForm[item.field]"></editor>-->
-							<editor v-if="item.fieldTypeName == 'richText' && item.show" @contentData="change($event,item.field)"></editor>
+							<editor v-if="item.fieldTypeName == 'richText' && item.show"  :conValue="scope.row[item.field]" @contentData="change($event,item.field)"></editor>
 							<!-- 日期选择器 -->
 							<el-date-picker v-if="item.fieldTypeName=='dateControl' && item.show" @change="getDate(item)" style="width: 100%;" :disabled="!item.edit" v-model="scope.row[item.field]" type="date" value-format="yyyy-MM-dd" placeholder="选择日期" />
 							<!--时间控件-->

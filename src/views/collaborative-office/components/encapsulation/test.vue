@@ -42,7 +42,8 @@
 	export default {
 		name: 'Editor',
 		props: {
-			value: Object
+			value: Object,
+			conValue: String
 		},
 		data() {
 			return {
@@ -145,6 +146,7 @@
 		},
 		mounted() {
 			const dom = this.$el.querySelector('.editor')
+
 			this.quill = new Quill(dom, this.options)
 			// this.quill.setContents(this.value)
 			this.quill.on('text-change', () => {
@@ -166,9 +168,20 @@
 				'.ql-table-delete-column'
 			).innerHTML = `<svg t="1591862261059" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="6755" width="18" height="200"><path d="M641.28 278.613333l-45.226667-45.226666-278.634666 278.762666 278.613333 278.485334 45.248-45.269334-233.365333-233.237333z" p-id="6756"></path></svg>`
 			this.addQuillTitle()
+
+		},
+		watch: {
+			"conValue": {
+				handler(val, oldval) {
+					if(!this.noNull(this.conValue)) {
+						this.quill.root.innerHTML = this.conValue
+					}
+				},
+				deep: true
+			},
 		},
 		activated() {
-			this.quill.setContents({})
+			this.quill.setContents()
 		}
 	}
 </script>
