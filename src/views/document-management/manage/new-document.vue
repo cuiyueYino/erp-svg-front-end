@@ -59,7 +59,7 @@
 <!--                                @focus="onEditorFocus($event)"-->
 <!--                                @change="onEditorChange($event)"-->
 <!--                            ></quill-editor>-->
-                          <editor v-model="formdata.fcontent" style="height: 400px"></editor>
+                          <editor @contentData="editorChange($event)" style="height: 400px"></editor>
                         </el-tab-pane>
                         <el-tab-pane label="附件" name="second">
                             <enclosurefile v-on:enclosureFile="enclosureFile" :rowDataFileObj="rowDataFileObj" @changeShow="showFileData" />
@@ -202,6 +202,7 @@ export default {
             formdata:{
                 fisportalshow:false,
                 fcreatetime:new Date(),
+                fcontent:'',
             },
             checked:false,
             title:'',
@@ -243,6 +244,13 @@ export default {
         // this.formdata.fcreatetime = new Date();
     },
     methods: {
+      editorChange(aaa) {
+        this.$nextTick(() => {
+          this.formdata.fcontent = aaa;
+          this.$set(this.formdata, "fcontent", aaa);
+        });
+
+      },
       //分页改变
       pageChange(pageIndex) {
         debugger;
@@ -399,6 +407,7 @@ export default {
                     this.formdata = tableDataArr;
                     //阅读量赋值label：重新加载 dom
                     this.$nextTick(() => {
+                        this.editorChange(this.formdata.fcontent);
                         this.readCount = "阅读量:("+this.formdata.freadcount+")";
                     });
                 } else {
