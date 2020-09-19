@@ -33,51 +33,36 @@
 				</el-dropdown>
 			</div>
 		</div>
-		<el-dialog  
-			title="用户密码修改" 
-			@close="handleClose" 
-			:visible.sync="dialogVisible" 
-			:append-to-body="true" 
-			v-if="dialogVisible" 
-			:close-on-click-modal="false" 
-			width="40%">
-			<el-form
-				v-model="formdata"
-				class="dataForm"
-				size="mini"
-				:rules="rules"
-				ref="ruleFormTable"
-				:model="formdata"
-				:label-position="labelPosition"
-				>
-					<el-card>
-                    	<el-row>
-							<el-col :span="6">
-								<el-form-item label="用户名" >
-									<el-input v-model="formdata.userName" v-bind:disabled="disabled"></el-input>
-								</el-form-item>
-							</el-col>
-							<el-col :span="6" :offset="6">
-								<el-form-item label="旧密码" prop="oldPassword">
-									<el-input type="password" :maxlength="32" v-model="formdata.oldPassword" ></el-input>
-								</el-form-item>
-							</el-col>
-                    	</el-row>
-						<el-row>
-							<el-col :span="6">
-								<el-form-item label="新密码" prop="newPassword">
-									<el-input type="password" :maxlength="32" v-model="formdata.newPassword" ></el-input>
-								</el-form-item>
-							</el-col>
-							<el-col :span="6" :offset="6">
-								<el-form-item label="确认密码" prop="conPassword">
-									<el-input type="password" :maxlength="32" v-model="formdata.conPassword"></el-input>
-								</el-form-item>
-							</el-col>
-                    	</el-row>
-					</el-card>
-				</el-form>
-				<span slot="footer" class="dialog-footer">
+		<el-dialog title="用户密码修改" @close="handleClose" :visible.sync="dialogVisible" :append-to-body="true" v-if="dialogVisible" :close-on-click-modal="false" width="40%">
+			<el-form v-model="formdata" class="dataForm" size="mini" :rules="rules" ref="ruleFormTable" :model="formdata" :label-position="labelPosition">
+				<el-card>
+					<el-row>
+						<el-col :span="6">
+							<el-form-item label="用户名">
+								<el-input v-model="formdata.userName" v-bind:disabled="disabled"></el-input>
+							</el-form-item>
+						</el-col>
+						<el-col :span="6" :offset="6">
+							<el-form-item label="旧密码" prop="oldPassword">
+								<el-input type="password" :maxlength="32" v-model="formdata.oldPassword"></el-input>
+							</el-form-item>
+						</el-col>
+					</el-row>
+					<el-row>
+						<el-col :span="6">
+							<el-form-item label="新密码" prop="newPassword">
+								<el-input type="password" :maxlength="32" v-model="formdata.newPassword"></el-input>
+							</el-form-item>
+						</el-col>
+						<el-col :span="6" :offset="6">
+							<el-form-item label="确认密码" prop="conPassword">
+								<el-input type="password" :maxlength="32" v-model="formdata.conPassword"></el-input>
+							</el-form-item>
+						</el-col>
+					</el-row>
+				</el-card>
+			</el-form>
+			<span slot="footer" class="dialog-footer">
 					<el-button type='success' icon='el-icon-copy-document' size="small" @click="saveChangePassword()">提交</el-button>
 					<el-button type='warning' icon='el-icon-close' size="small" @click="handleClose()">取消</el-button>
 				</span>
@@ -102,11 +87,23 @@
 					oldpass: ''
 				},
 				labelPosition: 'left',
-				formdata:{},
+				formdata: {},
 				rules: {
-					oldPassword: [{required: true, message: '请输入旧密码', trigger: 'blur'}],
-					newPassword: [{required: true, message: '请输入新密码', trigger: 'blur'}],
-					conPassword: [{required: true, message: '请输入确认密码', trigger: 'blur'}],
+					oldPassword: [{
+						required: true,
+						message: '请输入旧密码',
+						trigger: 'blur'
+					}],
+					newPassword: [{
+						required: true,
+						message: '请输入新密码',
+						trigger: 'blur'
+					}],
+					conPassword: [{
+						required: true,
+						message: '请输入确认密码',
+						trigger: 'blur'
+					}],
 				},
 			};
 		},
@@ -125,41 +122,41 @@
 			}
 		},
 		methods: {
-			handleClose(){
+			handleClose() {
 				this.$refs.ruleFormTable.resetFields();
-				this.dialogVisible=false;
+				this.dialogVisible = false;
 			},
-			saveChangePassword(){
+			saveChangePassword() {
 				this.$refs.ruleFormTable.validate((valid) => {
 					if(valid) {
-						let cpass=this.formdata.conPassword;
-						let npass=this.formdata.newPassword;
-						if(cpass != npass){
+						let cpass = this.formdata.conPassword;
+						let npass = this.formdata.newPassword;
+						if(cpass != npass) {
 							this.$message.error("新密码和确认密码不一致!");
 							return;
-						}else{
-							let formdata={};
-							formdata.oid=localStorage.getItem("ms_userId");
-							formdata.oldPassword=this.formdata.oldPassword;
-							formdata.newPassword=this.formdata.newPassword;
+						} else {
+							let formdata = {};
+							formdata.oid = localStorage.getItem("ms_userId");
+							formdata.oldPassword = this.formdata.oldPassword;
+							formdata.newPassword = this.formdata.newPassword;
 							this.$api.management.changePassword(formdata).then(res => {
-								let returndata=res;
-								if(returndata.data){
-									if(returndata.data.code === 0){
+								let returndata = res;
+								if(returndata.data) {
+									if(returndata.data.code === 0) {
 										this.$message.success("密码修改成功,请重新登录");
-										this.dialogVisible=false;
+										this.dialogVisible = false;
 										localStorage.removeItem('ms_roleId');
 										localStorage.removeItem('ms_username');
 										localStorage.removeItem('ms_name');
 										localStorage.removeItem('ms_userId');
 										this.$router.push({
-											name :"/login"
+											name: "/login"
 										});
 										location.reload();
-									}else{
-										this.$message.error(returndata.data.msg+'!');
+									} else {
+										this.$message.error(returndata.data.msg + '!');
 									}
-								}else{
+								} else {
 									this.$message.error('密码更新失败!');
 								}
 								console.log(res)
@@ -201,11 +198,11 @@
 					localStorage.removeItem('ms_name');
 					localStorage.removeItem('ms_userId');
 					this.$router.push({
-						name :"/login"
+						name: "/login"
 					});
 					location.reload();
 				} else if(command == 'change') {
-					this.formdata.userName=localStorage.getItem('ms_username');
+					this.formdata.userName = localStorage.getItem('ms_username');
 					this.dialogVisible = true;
 				}
 			},
@@ -243,9 +240,12 @@
 			}
 		},
 		watch: {
-			$route (to) {
-				if(to.name ==='insideMailCommon' || to.name ==='todolist'){
+			$route(to) {
+				if(to.name === 'insideMailCommon' || to.name === 'todolist') {
 					this.showFig = false;
+				}
+				if(to.name == 'oaPersonalHome' || to.name == 'oaCompanyHome') {
+					this.showFig = true
 				}
 			}
 		}
@@ -316,6 +316,7 @@
 		background: #f56c6c;
 		color: #fff;
 	}
+	
 	.btn-bell .el-icon-bell {
 		color: #fff;
 	}
