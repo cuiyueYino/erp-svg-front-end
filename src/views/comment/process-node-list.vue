@@ -108,7 +108,7 @@ export default {
                 this.rowRMPtype = false
                 //获取最新的回复信息
                 let Formdata={};
-                Formdata.foid=data.fparentreply;
+                Formdata.foid=data.fparentreplyID;
                 this.$api.processSet.getReplyMsgByAudit(Formdata).then(res=>{
                     if(res.data){
                         if(res.data.code ==0){
@@ -147,7 +147,7 @@ export default {
             rowdata.staffId=data.staffId;
             rowdata.staffName=data.staffName;
             rowdata.foid=data.foid;
-            rowdata.fparentreply=data.foid;
+            rowdata.fparentreplyID=data.foid;
             this.rowRMPDataObj=rowdata;
             this.rowRMPtype= true;
         }
