@@ -24,14 +24,17 @@
                             <el-button type="success" icon="el-icon-circle-check" size="small" plain @click="baseInputTable('委托')" v-if="rowWAADataObj.trust">委托</el-button>
                             <el-button type="success" icon="el-icon-star-off" size="small" plain @click="basefollow()" v-if="rowWAADataObj.attention">关注</el-button>
                             <el-button type="success" icon="el-icon-copy-document" size="small" plain @click="effectOrDisableMsg('ruleForm')" v-if="rowWAADataObj.commit">提交</el-button>
+                            <el-button type="info" icon="el-icon-printer" size="small" v-print="printObj" plain v-if="rowWAADataObj.print" >打印</el-button>
                         </el-col>
                         <el-col :span="12" :offset="12" v-else>
                             <el-button type="success" icon="el-icon-circle-plus-outline" size="small" plain @click="baseInputTable('加签')" v-if="rowWAADataObj.sign">加签</el-button>
                             <el-button type="success" icon="el-icon-position" size="small" plain @click="baseInputTable('转发')" v-if="rowWAADataObj.relay">转发</el-button>
                             <el-button type="success" icon="el-icon-circle-check" size="small"  plain @click="baseInputTable('委托')" v-if="rowWAADataObj.trust">委托</el-button>
                             <el-button type="success" icon="el-icon-star-off" size="small" plain @click="basefollow()" v-if="rowWAADataObj.attention">关注</el-button>
+                            <el-button type="info" icon="el-icon-printer" size="small" v-print="printObj" plain v-if="rowWAADataObj.print" >打印</el-button>
                         </el-col>
                     </el-row>
+                    <div  id="print">
                     <el-row :gutter="24">
                         <ComAnnDetaiPage  :rowComPanDetaiDataObj="rowComPanDetaiDataObj" :rowComPanDetaitype="rowComPanDetaitype" @changeShow="showLookOrUpdate"/>
                         <TempTaskPage  :rowTEMTaskDataObj="rowTEMTaskDataObj" :rowTEMTasktype="rowTEMTasktype" @changeShow="showLookOrUpdate"/>
@@ -54,11 +57,13 @@
                         <WorkItemPage  v-if="itemsFlag" :context="context" :showSeeOrUpd ="showSeeOrUpd" :todoFlag="todoFlag" @changeShow="showLookOrUpdate" />
 			            <EachPerEachTableModifyPage  :rowEachPerEachTableModifyDataObj="rowEachPerEachTableModifyDataObj" :rowEachPerEachTableModifyype="rowEachPerEachTableModifyype" @changeShow="showLookOrUpdate"/>
                     </el-row>
+
                     <el-row>
                         <el-col :span="22">
                             <processnodelist :rowDataprocessObj="rowDataprocessObj" :rowDataprocessOid="rowDataprocessOid"  @changeShow="showprocessData"/>
                         </el-col>
                     </el-row>
+
                     <el-tabs v-model="atctiveName" @tab-click="handleClick">
                         <el-tab-pane label="审批意见" name="first" v-if="rowFstatus == 4?false:true">
                             <el-row >
@@ -86,6 +91,7 @@
                             <creditEnclFilelist :rowEFListDataObj="rowEFListDataObj" :financingEFListtype="financingEFListtype" :fileFlag='rowFstatus' />
                         </el-tab-pane>
                     </el-tabs>
+    </div>
                 </el-card>
             </el-form>
         </el-dialog>
@@ -246,6 +252,10 @@ export default {
             total: 20,
             prechecked:'',
             title:'',
+            printObj:{
+                id:"print",
+                title:"打印"
+            },
         };
     },
     created() {
@@ -687,6 +697,12 @@ export default {
             await this.DisplayOrHide(this.functionType,this.rowWAADataObj);
             return;
         },
+
+        prints(){
+            var prints = document.getElementById('print');
+            prints.title = "标题";
+
+        }
     },
     mounted() {
 
