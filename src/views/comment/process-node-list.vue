@@ -23,7 +23,7 @@
             <el-table-column type="expand" >
                 <template slot-scope="props">
                     <el-form label-position="left" inline class="demo-table-expand">
-                        <elreplypage :ReplyData="props.row.auditReplyMsg" :UpdateData="UpdateReplyData" :fparentId="props.row.foid"></elreplypage>
+                        <elreplypage :ReplyData="props.row.auditReplyMsg" @changeShow="closeReplyPageMain" :fparentId="props.row.foid"></elreplypage>
                     </el-form>
                 </template>
             </el-table-column>
@@ -100,6 +100,25 @@ export default {
                 this.rowFCDtype = true
             }
         },
+        closeReplyPageMain(data){
+            let Formdata={};
+            Formdata.foid=this.rowDataprocessOid.finanrowId;
+            this.$api.processSet.getAuditAndReplyMsg(Formdata).then(res=>{
+                if(res.data){
+                    if(res.data.code ==0){
+                        let resData=res.data.data;
+                        this.processtableData=[];
+                        this.processtableData=resData;
+                    }else{
+                        this.$message.error(res.data.msg+'!');
+                    }
+                }else{
+                    this.$message.error('更新回复信息失败!');
+                }
+            },error=>{
+                console.log(error)
+            })
+        },
         //回复页面关闭
         closeReplyPage(data,type){
             if(type === false){
@@ -108,11 +127,12 @@ export default {
                 this.rowRMPtype = false
                 //获取最新的回复信息
                 let Formdata={};
-                Formdata.foid=data.fparentreplyID;
-                this.$api.processSet.getReplyMsgByAudit(Formdata).then(res=>{
+                Formdata.foid=this.rowDataprocessOid.finanrowId;
+                this.$api.processSet.getAuditAndReplyMsg(Formdata).then(res=>{
                     if(res.data){
                         if(res.data.code ==0){
-                            this.UpdateReplyData=res.data.data;
+                            this.processtableData=[];
+                            this.processtableData=res.data.data;
                             this.rowRMPtype = false
                         }else{
                             this.$message.error(res.data.msg+'!');
@@ -147,7 +167,6 @@ export default {
             rowdata.staffId=data.staffId;
             rowdata.staffName=data.staffName;
             rowdata.foid=data.foid;
-            rowdata.fparentreplyID=data.foid;
             this.rowRMPDataObj=rowdata;
             this.rowRMPtype= true;
         }
