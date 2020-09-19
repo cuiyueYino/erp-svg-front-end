@@ -336,9 +336,14 @@ export default {
             this.$api.processSet.getProcessorByMaile(DataF).then(res=>{
                 if(res.data){
                     if(res.data.code ==0){
-                        //手工指定下一节点
-                        if(res.data.data.fmntnextjoin ===1){
-                            this.baseInputTable("手工指定下一节点");
+                        if(res.data.data){
+                            //手工指定下一节点
+                            if(res.data.data.fmntnextjoin ===1){
+                                this.baseInputTable("手工指定下一节点");
+                            }else{
+                                //正常提交
+                                this.submitMethod('','');
+                            }
                         }else{
                             //正常提交
                             this.submitMethod('','');
@@ -617,42 +622,12 @@ export default {
             });
         },
         //获取审核消息
-        showDetail(){
-            let data = {};
-            if(!this.isOa){
-                let finandata=this.rowWAADataObj.selectData;
-                data = {
-                    mailInfo:{
-                        foid:finandata[0].foid,
-                        srcOid:finandata[0].fsrcoId
-                    }
-                }
-            }else{
-                data = {
-                    mailInfo:{
-                        foid:this.rowWAADataObj.foid,
-                        srcOid:this.rowWAADataObj.fsrcoId
-                    }
-                }
-            }
-            return this.$api.processSet.getMailDetailInfo(data).then(res=>{
-                if(res.data.code ==0){
-                    let detailMsg = res.data.data
-                    this.rowDataprocessObj = detailMsg.auditMsg
-                }else{
-                    this.rowDataprocessObj=[];
-                }
-            },error=>{
-                console.log(error)
-            })
-        },
-        //审批
         getDataprocess(data){
             let DataF={};
-            DataF.oid=data;
-            return this.$api.processSet.auditDetailSearch(DataF).then(res=>{
+            DataF.foid=data;
+            return this.$api.processSet.getAuditAndReplyMsg(DataF).then(res=>{
                 if(res.data.code ==0){
-                    this.rowDataprocessObj=res.data.data.rows;
+                    this.rowDataprocessObj=res.data.data;
                 }else{
                     this.rowDataprocessObj=[];
                 }
@@ -690,8 +665,7 @@ export default {
         },
         //异步变同步
         async asyncCall(type,data,foid) {
-            //await this.getDataprocess(foid);
-            await this.showDetail();
+            await this.getDataprocess(foid);
             await this.getDataType(foid);
             await this.getDecisionType(foid);
             await this.DisplayOrHide(this.functionType,this.rowWAADataObj);
