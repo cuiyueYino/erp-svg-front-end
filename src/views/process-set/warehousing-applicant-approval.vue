@@ -24,14 +24,17 @@
                             <el-button type="success" icon="el-icon-circle-check" size="small" plain @click="baseInputTable('委托')" v-if="rowWAADataObj.trust">委托</el-button>
                             <el-button type="success" icon="el-icon-star-off" size="small" plain @click="basefollow()" v-if="rowWAADataObj.attention">关注</el-button>
                             <el-button type="success" icon="el-icon-copy-document" size="small" plain @click="effectOrDisableMsg('ruleForm')" v-if="rowWAADataObj.commit">提交</el-button>
+                            <el-button type="info" icon="el-icon-printer" size="small" v-print="printObj" plain v-if="rowWAADataObj.print" >打印</el-button>
                         </el-col>
                         <el-col :span="12" :offset="12" v-else>
                             <el-button type="success" icon="el-icon-circle-plus-outline" size="small" plain @click="baseInputTable('加签')" v-if="rowWAADataObj.sign">加签</el-button>
                             <el-button type="success" icon="el-icon-position" size="small" plain @click="baseInputTable('转发')" v-if="rowWAADataObj.relay">转发</el-button>
                             <el-button type="success" icon="el-icon-circle-check" size="small"  plain @click="baseInputTable('委托')" v-if="rowWAADataObj.trust">委托</el-button>
                             <el-button type="success" icon="el-icon-star-off" size="small" plain @click="basefollow()" v-if="rowWAADataObj.attention">关注</el-button>
+                            <el-button type="info" icon="el-icon-printer" size="small" v-print="printObj" plain v-if="rowWAADataObj.print" >打印</el-button>
                         </el-col>
                     </el-row>
+                    <div  id="print">
                     <el-row :gutter="24">
                         <ComAnnDetaiPage  :rowComPanDetaiDataObj="rowComPanDetaiDataObj" :rowComPanDetaitype="rowComPanDetaitype" @changeShow="showLookOrUpdate"/>
                         <TempTaskPage  :rowTEMTaskDataObj="rowTEMTaskDataObj" :rowTEMTasktype="rowTEMTasktype" @changeShow="showLookOrUpdate"/>
@@ -54,11 +57,13 @@
                         <WorkItemPage  v-if="itemsFlag" :context="context" :showSeeOrUpd ="showSeeOrUpd" :todoFlag="todoFlag" @changeShow="showLookOrUpdate" />
 			            <EachPerEachTableModifyPage  :rowEachPerEachTableModifyDataObj="rowEachPerEachTableModifyDataObj" :rowEachPerEachTableModifyype="rowEachPerEachTableModifyype" @changeShow="showLookOrUpdate"/>
                     </el-row>
+
                     <el-row>
                         <el-col :span="22">
                             <processnodelist :rowDataprocessObj="rowDataprocessObj" :rowDataprocessOid="rowDataprocessOid"  @changeShow="showprocessData"/>
                         </el-col>
                     </el-row>
+
                     <el-tabs v-model="atctiveName" @tab-click="handleClick">
                         <el-tab-pane label="审批意见" name="first" v-if="rowFstatus == 4?false:true">
                             <el-row >
@@ -86,6 +91,7 @@
                             <creditEnclFilelist :rowEFListDataObj="rowEFListDataObj" :financingEFListtype="financingEFListtype" :fileFlag='rowFstatus' />
                         </el-tab-pane>
                     </el-tabs>
+    </div>
                 </el-card>
             </el-form>
         </el-dialog>
@@ -246,6 +252,10 @@ export default {
             total: 20,
             prechecked:'',
             title:'',
+            printObj:{
+                id:"print",
+                title:"打印"
+            },
         };
     },
     created() {
@@ -326,9 +336,14 @@ export default {
             this.$api.processSet.getProcessorByMaile(DataF).then(res=>{
                 if(res.data){
                     if(res.data.code ==0){
-                        //手工指定下一节点
-                        if(res.data.data.fmntnextjoin ===1){
-                            this.baseInputTable("手工指定下一节点");
+                        if(res.data.data){
+                            //手工指定下一节点
+                            if(res.data.data.fmntnextjoin ===1){
+                                this.baseInputTable("手工指定下一节点");
+                            }else{
+                                //正常提交
+                                this.submitMethod('','');
+                            }
                         }else{
                             //正常提交
                             this.submitMethod('','');
@@ -397,7 +412,7 @@ export default {
                     this.reload();
                 }else{
                     loading.close();
-                    this.$message.error("保存失败,请填写完整信息");
+                    this.$message.error(res.data.msg+"!");
                 }
 
             },error=>{
@@ -607,42 +622,12 @@ export default {
             });
         },
         //获取审核消息
-        showDetail(){
-            let data = {};
-            if(!this.isOa){
-                let finandata=this.rowWAADataObj.selectData;
-                data = {
-                    mailInfo:{
-                        foid:finandata[0].foid,
-                        srcOid:finandata[0].fsrcoId
-                    }
-                }
-            }else{
-                data = {
-                    mailInfo:{
-                        foid:this.rowWAADataObj.foid,
-                        srcOid:this.rowWAADataObj.fsrcoId
-                    }
-                }
-            }
-            return this.$api.processSet.getMailDetailInfo(data).then(res=>{
-                if(res.data.code ==0){
-                    let detailMsg = res.data.data
-                    this.rowDataprocessObj = detailMsg.auditMsg
-                }else{
-                    this.rowDataprocessObj=[];
-                }
-            },error=>{
-                console.log(error)
-            })
-        },
-        //审批
         getDataprocess(data){
             let DataF={};
-            DataF.oid=data;
-            return this.$api.processSet.auditDetailSearch(DataF).then(res=>{
+            DataF.foid=data;
+            return this.$api.processSet.getAuditAndReplyMsg(DataF).then(res=>{
                 if(res.data.code ==0){
-                    this.rowDataprocessObj=res.data.data.rows;
+                    this.rowDataprocessObj=res.data.data;
                 }else{
                     this.rowDataprocessObj=[];
                 }
@@ -680,13 +665,18 @@ export default {
         },
         //异步变同步
         async asyncCall(type,data,foid) {
-            //await this.getDataprocess(foid);
-            await this.showDetail();
+            await this.getDataprocess(foid);
             await this.getDataType(foid);
             await this.getDecisionType(foid);
             await this.DisplayOrHide(this.functionType,this.rowWAADataObj);
             return;
         },
+
+        prints(){
+            var prints = document.getElementById('print');
+            prints.title = "标题";
+
+        }
     },
     mounted() {
 

@@ -27,10 +27,21 @@
 				this.isOa = true
 				this.innerData = new ITEM().ITEMoa;
 			} else {
+				
 				this.innerData = JSON.parse(sessionStorage.getItem("menuList"));
 			}
 		},
 		watch: {
+			$route: {
+				handler: function(val, oldVal) {
+					if(val.name == 'oaPersonalHome' || val.name == 'oaCompanyHome') {
+						this.isOa = true
+						this.innerData = new ITEM().ITEMoa;
+					}
+				},
+				// 深度观察监听
+				deep: true
+			},
 			navselected(newVal, oldVal) {
 				this.$nextTick(() => {
 					this.nowUrl = newVal
