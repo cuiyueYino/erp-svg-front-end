@@ -13,7 +13,7 @@
             <el-table-column label="审批结论" prop="auditResult"></el-table-column>
             <el-table-column label="审批说明" prop="fopinion"></el-table-column>
             <el-table-column label="审批时间" prop="fcreatetime"></el-table-column>
-            <el-table-column label="标准时间" prop="ftimeunit"></el-table-column>
+            <el-table-column label="标准时间" prop="standardTime"></el-table-column>
             <el-table-column label="耗时" prop="takeTime"></el-table-column>
             <el-table-column label="回复" >
                 <template slot-scope="scope" >
