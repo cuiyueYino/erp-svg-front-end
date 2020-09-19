@@ -23,7 +23,7 @@
             <el-table-column type="expand" >
                 <template slot-scope="props">
                     <el-form label-position="left" inline class="demo-table-expand">
-                        <elreplypage :ReplyData="props.row.auditReplyMsg" :fparentId="props.row.foid"></elreplypage>
+                        <elreplypage :ReplyData="props.row.auditReplyMsg" :UpdateData="UpdateReplyData" :fparentId="props.row.foid"></elreplypage>
                     </el-form>
                 </template>
             </el-table-column>
@@ -74,6 +74,7 @@ export default {
             rowFCDtype:false,
             ShowFinancVisible:false,
             formdata:[],
+            UpdateReplyData:[],
             fileList: [],
             rowRMPDataObj:{},
             rowRMPtype:false,
@@ -101,16 +102,27 @@ export default {
         },
         //回复页面关闭
         closeReplyPage(data,type){
-            this.rowRMPtype = false
             if(type === false){
                 this.rowRMPtype = false
             }else{
                 this.rowRMPtype = false
                 //获取最新的回复信息
-                this.$api.processSet.getAuditAndReplyMsg(data.foid).then(res=>{
-            },error=>{
-                console.log(error)
-            })
+                let Formdata={};
+                Formdata.foid=data.fparentreply;
+                this.$api.processSet.getReplyMsgByAudit(Formdata).then(res=>{
+                    if(res.data){
+                        if(res.data.code ==0){
+                            this.UpdateReplyData=res.data.data;
+                            this.rowRMPtype = false
+                        }else{
+                            this.$message.error(res.data.msg+'!');
+                        }
+                    }else{
+                        this.$message.error('更新回复信息失败!');
+                    }
+                },error=>{
+                    console.log(error)
+                })
             }
         },
         //下一页
@@ -135,13 +147,13 @@ export default {
             rowdata.staffId=data.staffId;
             rowdata.staffName=data.staffName;
             rowdata.foid=data.foid;
+            rowdata.fparentreply=data.foid;
             this.rowRMPDataObj=rowdata;
             this.rowRMPtype= true;
         }
     },
     watch:{
             rowDataprocessObj(oldVal,newVal){
-                console.log(this.rowDataprocessObj)
                 this.processtableData = this.rowDataprocessObj
             }
         }

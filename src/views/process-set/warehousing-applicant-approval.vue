@@ -606,6 +606,37 @@ export default {
                 }
             });
         },
+        //获取审核消息
+        showDetail(){
+            let data = {};
+            if(!this.isOa){
+                let finandata=this.rowWAADataObj.selectData;
+                data = {
+                    mailInfo:{
+                        foid:finandata[0].foid,
+                        srcOid:finandata[0].fsrcoId
+                    }
+                }
+            }else{
+                data = {
+                    mailInfo:{
+                        foid:this.rowWAADataObj.foid,
+                        srcOid:this.rowWAADataObj.fsrcoId
+                    }
+                }
+            }
+            return this.$api.processSet.getMailDetailInfo(data).then(res=>{
+                if(res.data.code ==0){
+                    let detailMsg = res.data.data
+                    this.rowDataprocessObj = detailMsg.auditMsg
+                }else{
+                    this.rowDataprocessObj=[];
+                }
+            },error=>{
+                console.log(error)
+            })
+        },
+        //审批
         getDataprocess(data){
             let DataF={};
             DataF.oid=data;
@@ -649,7 +680,8 @@ export default {
         },
         //异步变同步
         async asyncCall(type,data,foid) {
-            await this.getDataprocess(foid);
+            //await this.getDataprocess(foid);
+            await this.showDetail();
             await this.getDataType(foid);
             await this.getDecisionType(foid);
             await this.DisplayOrHide(this.functionType,this.rowWAADataObj);

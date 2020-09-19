@@ -320,7 +320,17 @@ const processSet = {
     addAuditReply(params){
         return httpReqest.post('/api/wfInterfaces/workFlow/processMonitor/addAuditReply', params);
     },
-
+    //查询审批回复信息
+    getReplyMsgByAudit(params){
+        var valueS='?';
+        for(var item in params){
+            valueS+=item+"="+params[item]+"&";
+        }
+        if(valueS.slice(valueS.length-1,valueS.length) ==="&"){
+            valueS=valueS.slice(0,valueS.length-1);
+        }
+        return httpReqest.get('/api/wfInterfaces/workFlow/processMonitor/getReplyMsgByAudit'+valueS);
+    },
     //删除邮件
     removeMail(params){
         return httpReqest.post('/api/wfInterfaces/workFlow/processMonitor/removeMail', params);

@@ -119,10 +119,12 @@ export default {
                 freplyedpesron:this.formdata.staffId,
                 fpublish:this.formdata.checked == undefined || this.formdata.checked == false ? 0 : 1,
                 freplycontent:this.formdata.freplycontent,
-                faudit:this.formdata.foid
             }
             if(this.formdata.fparentreply){
-                data.fparentreply=this.formdata.fparentreply;
+                data.fparentreply=this.formdata.foid;
+                data.faudit=this.formdata.fparentreply;
+            }else{
+                data.faudit=this.formdata.foid;
             }
             this.$api.processSet.addAuditReply(data).then(res=>{
                 this.ShowFinancVisible= false;
