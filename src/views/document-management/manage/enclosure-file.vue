@@ -1,7 +1,7 @@
 <template>
     <div>
-        <div style="width:200px;height:40px;float:right;">
-            <el-button type="success" icon="el-icon-folder-add" size="small" style="margin-left:50px;magin-right:5px;" @click.prevent="addfileRow()" v-show="isShowButton">新增</el-button>
+        <div style="height:40px;float:right;">
+            <el-button type="success" icon="el-icon-folder-add" size="small" style="magin-right:5px;" @click.prevent="addfileRow()" v-show="isShowButton">新增</el-button>
             <el-button type="danger" size="small" icon='el-icon-delete' @click.prevent="delfileData()" v-show="isShowButton">删除</el-button>
         </div>
         <div>
