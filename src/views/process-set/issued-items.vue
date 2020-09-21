@@ -8,7 +8,7 @@
                     <el-button type="primary" size="small" plain @click="onSerchSubmit('week')">本周</el-button>
                     <el-button type="primary" size="small" plain @click="onSerchSubmit('month')" >本月</el-button>
                 </el-col>
-                 <el-col :span="10">
+                 <el-col :span="10" style='text-align:right'>
                      <el-button type="primary" icon="el-icon-refresh-right" size="small" plain @click="Basecarsh">刷新</el-button>
                      <el-button type="primary" icon="el-icon-search" size="small" plain @click="search">查询</el-button>
                      <el-button type="info" icon="el-icon-view" size="small"  plain @click="Tolook">查看</el-button>
@@ -491,6 +491,7 @@ export default {
             }else{
                 let selectData=this.multipleSelection;
                 let subject=selectData[0].fsubject;
+                subject= subject.substring(0,3);
                 if(subject.indexOf('转发')>-1){
                     this.$message.error('转发邮件不能添加关注!');
                 }else if(subject.indexOf('抄送')>-1){

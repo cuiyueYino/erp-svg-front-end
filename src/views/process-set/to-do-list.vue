@@ -3,7 +3,7 @@
   <div>
     <!-- 搜索框 -->
     <el-card class="box-card">
-      <el-row :gutter="24">
+      <el-row :gutter="24" style='text-align:right'>
         <el-col
           :span="14"
           :offset="10"
@@ -690,6 +690,7 @@ export default {
       } else {
         let selectData = this.multipleSelection;
         let subject = selectData[0].fsubject;
+        subject= subject.substring(0,3);
         if (subject.indexOf("转发") > -1) {
           this.$message.error("转发邮件不能添加关注!");
         } else if (subject.indexOf("抄送") > -1) {

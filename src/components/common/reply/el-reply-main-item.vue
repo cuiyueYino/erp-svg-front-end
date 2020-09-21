@@ -24,6 +24,7 @@
                 v-for="(ChildrenItem,index) in ReplyItemData.childReply"
                 :key="index"
                 :fparentId="fparentId"
+                @changeShow="closeReplyPageMM"
                 :ReplyItemData="ChildrenItem"
             ></elreplyitem>
         </el-submenu>
@@ -94,6 +95,9 @@ export default {
             }else{
                 this.rowRMPtype = false
             }
+        },
+        closeReplyPageMM(data){
+            this.$emit('changeShow',data);
         }
     }
 }

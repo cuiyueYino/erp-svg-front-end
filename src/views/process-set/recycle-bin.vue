@@ -83,19 +83,19 @@ export default {
                     title: '已耗时'
                 },
                 {
-                    key: 'transmitMan',
+                    key: 'encyclicMan',
                     title: '转发人'
                 },
                 {
-                    key: 'transmitTime',
+                    key: 'encyclicTime',
                     title: '转发时间'
                 },
                 {
-                    key: 'encyclicMan',
+                    key: 'transmitMan',
                     title: '委托人'
                 },
                 {
-                    key: 'encyclicTime',
+                    key: 'transmitTime',
                     title: '委托时间'
                 },
                 {
@@ -125,9 +125,9 @@ export default {
         //查询回收站数据
         getrecycleBin(params){
             let fromdata=params;
-            console.log(params)
             this.$api.processSet.getRecycleBinList(fromdata).then(response => {
                 let responsevalue = response;
+                console.log(response)
                 if (responsevalue) {
                     let returndata = responsevalue.data;
                     if(returndata.data){
@@ -199,6 +199,7 @@ export default {
  /deep/ .el-textarea{
       width: 70%;
  }
+
 .box-card:first-child{
     margin-bottom: 16px;
 }
@@ -226,5 +227,6 @@ export default {
          margin-left: 0; 
      }
  }
+ 
 
 </style>
