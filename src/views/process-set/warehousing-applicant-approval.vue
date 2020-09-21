@@ -430,7 +430,7 @@ export default {
             } else {
                 currentDatd = dataContent.selectData[0].fsrcoId;
             }
-            if(dataContent.selectData[0].fsubject.substring(0,3) == '退回：' & dataContent.selectData[0].fcreator == localStorage.getItem("ms_userId")) {
+            if((dataContent.selectData[0].fsubject.substring(0,3) == '退回：' & dataContent.selectData[0].fcreator == localStorage.getItem("ms_userId")) ||  dataContent.selectData[0].fcode == 'manpower') {
                 this.showSeeOrUpd = "3";
             } else {
                 this.showSeeOrUpd = "1";
