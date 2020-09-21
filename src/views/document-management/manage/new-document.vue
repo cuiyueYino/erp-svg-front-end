@@ -451,6 +451,7 @@ export default {
               formDataA.fdocstatus = '1';
               formDataA.fstatus = 1;
             }
+            formDataA.feditor = localStorage.getItem('ms_staffId');
             this.$api.documentManagement.insertDocumentManage(formDataA).then(response => {
                 let responsevalue = response;
                 if (responsevalue.data.data) {
@@ -490,6 +491,7 @@ export default {
                 let creator = localStorage.getItem('ms_userId');
                 formDataA.fcreator = creator;
             }
+            formDataA.feditor = localStorage.getItem('ms_staffId');
             this.$api.documentManagement.updateDocumentManage(formDataA).then(response => {
                 let responsevalue = response;
                 if (responsevalue.data.data) {
