@@ -63,9 +63,8 @@
                             <processnodelist :rowDataprocessObj="rowDataprocessObj" :rowDataprocessOid="rowDataprocessOid"  @changeShow="showprocessData"/>
                         </el-col>
                     </el-row>
-
                     <el-tabs v-model="atctiveName" @tab-click="handleClick">
-                        <el-tab-pane label="审批意见" name="first" v-if="rowFstatus == 4?false:true">
+                        <el-tab-pane label="审批意见" name="first" v-if="!seeFlag && (rowFstatus == 4?false:true)">
                             <el-row >
                                 <el-col :span="12" >
                                     <!-- prop="code" -->
@@ -88,7 +87,7 @@
                             </el-row>
                         </el-tab-pane>
                         <el-tab-pane label="附件" name="second">
-                            <creditEnclFilelist :rowEFListDataObj="rowEFListDataObj" :financingEFListtype="financingEFListtype" :fileFlag='rowFstatus' />
+                            <creditEnclFilelist :rowEFListDataObj="rowEFListDataObj" :financingEFListtype="financingEFListtype" :fileFlag='rowFstatus' :seeFlag="seeFlag" />
                         </el-tab-pane>
                     </el-tabs>
     </div>
@@ -129,6 +128,8 @@ import WorkItemPage from '../../views/collaborative-office/components/see-work-i
 
 export default {
     props: {
+        //判断上个页面跳转过来的类型
+        seeFlag:Boolean,
         rowWAADataObj: Object,
         functionType:String,
         factivity:String,

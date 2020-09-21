@@ -146,7 +146,7 @@
         </el-dialog>
         <PSpage  :rowPSDataObj="rowPSDataObj" :rowPStype="rowPStype" @changeShow="showORhideForPS"/>
         <baseInfoDialog  :rowUTSDataObj="rowUTSDataObj" :rowUTStype="rowUTStype" @changeShow="closeBaseInfo"/>
-        <WAApage  :rowWAADataObj="rowWAADataObj" :rowWAAtype="rowWAAtype" :functionType="functionType" @changeShow="showORhideForWAA"/>
+        <WAApage  :rowWAADataObj="rowWAADataObj" :rowWAAtype="rowWAAtype" :functionType="functionType" :seeFlag="seeFlag" @changeShow="showORhideForWAA"/>
     </div>
 </template>
 <style>
@@ -183,6 +183,7 @@ export default {
     inject: ['reload'],
     data() {
         return {
+            seeFlag:false,
             functionType:'',
             companyoptions:[],
             homeTitle:'',
@@ -474,6 +475,7 @@ export default {
             }else if(this.multipleSelection.length == 0){
                 this.$message.error('请选择一项');
             }else{
+                this.seeFlag = true;
                 let selectData=this.multipleSelection;
                 this.functionType = this.multipleSelection[0].classId;
                 let finandata={};
