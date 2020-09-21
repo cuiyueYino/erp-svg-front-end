@@ -2,7 +2,7 @@
     <div>
         <!-- 搜索框 -->
         <el-card class="box-card">
-           <el-row :gutter="24">
+           <el-row :gutter="24" style='text-align:right'>
                  <el-col :span="10" :offset="14">
                      <el-button type="primary" icon="el-icon-refresh-right" size="small" plain @click="refresh">刷新</el-button>
                      <el-button type="primary" icon="el-icon-search" size="small" plain @click="search">查询</el-button>

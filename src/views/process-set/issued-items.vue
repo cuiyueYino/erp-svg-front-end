@@ -8,7 +8,7 @@
                     <el-button type="primary" size="small" plain @click="onSerchSubmit('week')">本周</el-button>
                     <el-button type="primary" size="small" plain @click="onSerchSubmit('month')" >本月</el-button>
                 </el-col>
-                 <el-col :span="10">
+                 <el-col :span="10" style='text-align:right'>
                      <el-button type="primary" icon="el-icon-refresh-right" size="small" plain @click="Basecarsh">刷新</el-button>
                      <el-button type="primary" icon="el-icon-search" size="small" plain @click="search">查询</el-button>
                      <el-button type="info" icon="el-icon-view" size="small"  plain @click="Tolook">查看</el-button>

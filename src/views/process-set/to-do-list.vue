@@ -3,7 +3,7 @@
   <div>
     <!-- 搜索框 -->
     <el-card class="box-card">
-      <el-row :gutter="24">
+      <el-row :gutter="24" style='text-align:right'>
         <el-col
           :span="14"
           :offset="10"
