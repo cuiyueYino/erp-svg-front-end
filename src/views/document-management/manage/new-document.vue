@@ -253,7 +253,6 @@ export default {
       },
       //分页改变
       pageChange(pageIndex) {
-        debugger;
         this.pageNum = pageIndex;
         // this.toSelect();
         let formDataA ={};
@@ -352,7 +351,6 @@ export default {
         },
         //提交
         onHandleSave(type){
-          debugger;
             let fromDataS={};
             fromDataS=this.formdata;
             if(type == 0){//暂存
@@ -382,7 +380,6 @@ export default {
                     SaveFlag=false
                 }
             }
-            debugger;
             if(this.NewOrEditFlag==="NEW"){
                 fromDataS.creator=localStorage.getItem('ms_userId');
             }else{
@@ -456,7 +453,6 @@ export default {
                 let responsevalue = response;
                 if (responsevalue.data.data) {
                     foid = responsevalue.data.data;
-                    debugger;
                     //上传附件
                     if(this.uploadFiles != null){
                         this.uploadFile("document",foid);
@@ -542,6 +538,7 @@ export default {
 
                       });
                     });
+                    debugger;
                     if(response.data.code == 0 && response.data.data){
                         count++;
                     }
@@ -561,7 +558,6 @@ export default {
         },
         //附件查询
         findAttachmentInfosList(){
-          debugger;
             let formDataA ={};
             let creator = localStorage.getItem('ms_userId');
             formDataA.voucherId = this.rowNMMDataObj.foid;
