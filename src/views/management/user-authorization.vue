@@ -98,7 +98,7 @@
 						</div>
 					</div>
 					<div v-else class="CheckTable">
-						<el-table ref="UserLTable" :data="UserLtableData" tooltip-effect="dark" size="small" border style="width: 100%" @select-all="onUserLSelectionALLChange" @select="onUserLSelectionChange">
+						<el-table ref="UserLTable" :data="UserLtableData" tooltip-effect="dark" size="small" border style="width: 100%" @select-all="onUserLSelectionALLChange"  @select="onUserLSelectionChange">
 							<el-table-column type="selection" min-width="5%"></el-table-column>
 							<el-table-column prop="fcode" size="small" label="登录账户"></el-table-column>
 							<el-table-column prop="fname" size="small" label="用户名称"></el-table-column>
@@ -539,13 +539,40 @@
 			},
 			//右侧角色选中事件
 			onRoleSelectionChange(data, val) {
-				this.getRRoleSelectedList(val.id);
+				if(data.length ==1){
+					this.getRRoleSelectedList(val.id,"add");
+				}else{
+					if(data.length ==10){
+						this.getRRoleSelectedList(val.id,'add');
+					}else{
+						let hasIdS = false;
+						for(var i = 0; i < data.length; i++) {
+							var item = data[i];
+							if(val.id == item.id) {
+								hasIdS = true;
+							}
+						}
+						if(hasIdS) {
+							this.getRRoleSelectedList(val.id,'add');
+						}else{
+							this.getRRoleSelectedList(val.id,'remove');
+						}
+					}
+				}
+				//this.getRRoleSelectedList(val.id);
 			},
 			//右侧角色全部选中事件
 			onRoleSelectionALLChange(data){
 				let RoleSData=data;
-				for(let i=0;i<RoleSData.length;i++){
-					this.getRRoleSelectedList(RoleSData[i].id);
+				if(RoleSData.length>0){
+					for(let i=0;i<RoleSData.length;i++){
+						this.getRRoleSelectedList(RoleSData[i].id,'add');
+					}
+				}else{
+					let TableData=this.RoletableData;
+					for(let i=0;i<TableData.length;i++){
+						this.getRRoleSelectedList(TableData[i].id,'remove');
+					}
 				}
 			},
 			//右侧已选中点击事件
@@ -584,13 +611,19 @@
 				}
 			},
 			//右侧角色选中去重
-			getRRoleSelectedList(id) {
+			getRRoleSelectedList(id,type) {
 				var hasId = false;
 				for(var i = 0; i < this.RoleselectData.length; i++) {
 					var item = this.RoleselectData[i];
 					if(id == item) {
-						this.RoleselectData[i] = '';
-						hasId = true;
+						if(type=="add"){
+							hasId = true;	
+						}else{
+							this.RoleselectData.splice(i, 1); 
+							hasId = true;
+						}
+						//this.RoleselectData[i] = '';
+						//hasId = true;
 					}
 				}
 				if(!hasId) {
@@ -627,22 +660,54 @@
 			//右侧人员全部选中事件
 			onUserLSelectionALLChange(data){
 				let SelectData=data;
-				for(let i=0;i<SelectData.length;i++){
-					this.getRUserSelectedList(SelectData[i].foid);
+				if(SelectData.length >0){
+					for(let i=0;i<SelectData.length;i++){
+						this.getRUserSelectedList(SelectData[i].foid,"add");
+					}
+				}else{
+					let TableData=this.UserLtableData;
+					for(let i=0;i<TableData.length;i++){
+						this.getRUserSelectedList(TableData[i].foid,"remove");
+					}
 				}
 			},
 			//右侧人员选中事件
 			onUserLSelectionChange(data, val) {
-				this.getRUserSelectedList(val.foid);
+				if(data.length ==1){
+					this.getRUserSelectedList(val.foid,"add");
+				}else{
+					if(data.length ==10){
+						this.getRUserSelectedList(val.foid,"add");
+					}else{
+						let hasIdS = false;
+						for(var i = 0; i < data.length; i++) {
+							var item = data[i];
+							if(val.foid == item.foid) {
+								hasIdS = true;
+							}
+						}
+						if(hasIdS) {
+							this.getRUserSelectedList(val.foid,"add");
+						}else{
+							this.getRUserSelectedList(val.foid,"remove");
+						}
+					}
+				}
+				//this.getRUserSelectedList(val.foid,"false");
 			},
 			//右侧人员选中去重
-			getRUserSelectedList(id) {
+			getRUserSelectedList(id,type) {
 				var hasId = false;
 				for(var i = 0; i < this.RUserLselectData.length; i++) {
 					var item = this.RUserLselectData[i];
 					if(id == item) {
-						this.RUserLselectData[i] = '';
-						hasId = true;
+						//this.RUserLselectData[i] = '';
+						if(type=="add"){
+							hasId = true;	
+						}else{
+							this.RUserLselectData.splice(i, 1); 
+							hasId = true;
+						}
 					}
 				}
 				if(!hasId) {
