@@ -60,7 +60,7 @@
 
                         <el-row :gutter="14">
                             <el-col :span="16" style="margin-top: 20px;">
-                              <el-button type="success" plain icon="el-icon-folder-add" size="small" @click="createDocumentCategory">新增</el-button>
+                              <el-button type="success" plain icon="el-icon-folder-add" size="small" :disabled='disFlag' @click="createDocumentCategory">新增</el-button>
                               <el-button type="warning" plain icon="el-icon-edit-outline" size="small" @click="editDocumentCategory()" >修改</el-button>
                               <el-button type="success" icon="el-icon-upload2" size="small" plain @click="operateDocumentCategory(1)">置顶</el-button>
                               <el-button type="warning" icon="el-icon-download" size="small"  plain @click="operateDocumentCategory(2)">取消置顶</el-button>
@@ -114,6 +114,8 @@ export default {
     inject: ['reload'],
     data(){
         return{
+            //判断新增按钮的属性
+            disFlag:true,
             isFind : false,
             isInput: true,
             isDate:false,
@@ -497,6 +499,11 @@ export default {
             fromdata.size=this.pageSize;
             if(data.foid != '0' && data.fcode!='000'){
                 fromdata.fpid=data.foid;
+            }
+            if(data.flevel != '2') {
+                this.disFlag = true;
+            } else {
+                this.disFlag = false;
             }
             this.searchMenutable(fromdata);
         },

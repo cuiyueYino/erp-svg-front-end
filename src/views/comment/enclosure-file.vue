@@ -1,6 +1,6 @@
 <template>
     <div>  
-        <div style="height:40px;float:right;" v-if="fileFlag== 4?false:true">
+        <div style="height:40px;float:right;" v-if="!seeFlag && (fileFlag== 4?false:true)">
             <el-button type="success" icon='el-icon-folder-add' size="small" style="magin-right:5px;" @click.prevent="addfileRow()">新增</el-button>
             <el-button type="danger" icon='el-icon-delete' size="small" @click.prevent="delfileData()">删除</el-button>
         </div>
@@ -120,6 +120,8 @@
 import proData from '../../components/common/proData/proData';
 export default {
     props: {
+        //判断上个页面跳转过来的类型
+        seeFlag:Boolean,
         rowDataFileObj:Object,
         fileFlag:Number
     },

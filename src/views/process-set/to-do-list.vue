@@ -383,6 +383,7 @@
       :rowWAADataObj="rowWAADataObj"
       :rowWAAtype="rowWAAtype"
       :functionType="functionType"
+      :seeFlag="seeFlag"
       @changeShow="showORhideForWAA"
     />
     <baseInfoDialog
@@ -434,6 +435,7 @@ export default {
   inject: ["reload"],
   data() {
     return {
+      seeFlag:false,
       functionType:'',
       detail: false,
       dialogWFMVisible: false,

@@ -142,17 +142,7 @@
                 </el-col>
                 <el-col :span="6" :offset="2">
                     <el-form-item label="延期完成时间：" :label-width="formLabelWidth" :disabled="true">
-                        <el-date-picker
-                            clearable
-                            v-model="formdata.delayEndDate"
-                            format="yyyy-MM-dd HH:mm"
-                            value-format="yyyy-MM-dd HH:mm"
-                            type="datetime"
-                            size="small"
-                            placeholder="选择日期"
-                            style="width: 100%;"
-                            :disabled="false"
-                        ></el-date-picker>
+                        <el-input v-model="formdata.delayEndDate" :disabled="true"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="6" :offset="2">
