@@ -449,7 +449,7 @@ export default {
                 }else{
                     loading.close();
                     this.participator="";
-                    this.$message.error(res.data.msg+"!");
+                    this.$message.error(res.data.msg);
                 }
 
             },error=>{
@@ -498,7 +498,7 @@ export default {
                             this.submitData();
                         }
                     }else{
-                        this.$message.error(res.data.msg+"!");
+                        this.$message.error(res.data.msg);
                     }
                 } else{
                     this.$message.error("系统异常,请填联系管理员!");

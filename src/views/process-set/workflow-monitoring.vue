@@ -502,7 +502,6 @@ export default {
                 page:this.pageNum,
                 size:this.pageSize
             };
-            console.log(data)
             this.$api.processSet.getMailInfo(data).then(res=>{
                 this.total = res.data.data.total;
                 this.tableData = res.data.data.rows;
