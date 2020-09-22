@@ -405,9 +405,10 @@ export default {
                     //阅读量赋值label：重新加载 dom
                     this.$nextTick(() => {
                         this.readCount = "阅读量:("+this.formdata.freadcount+")";
+                      //获取到对象后，赋值完毕显示弹窗
+                      this.ShowFinancVisible=this.rowNMMtype;
                     });
-                    //获取到对象后，赋值完毕显示弹窗
-                    this.ShowFinancVisible=this.rowNMMtype;
+
                 } else {
                     this.$message.success('查询失败!');
                 }
@@ -616,6 +617,8 @@ export default {
                     this.formdata.fcreatorname = localStorage.getItem('ms_username');
                     this.formdata.fcreator = localStorage.getItem('ms_userId');
                     this.formdata.fcreatetime =new Date() ;
+                    //获取到对象后，赋值完毕显示弹窗
+                    this.ShowFinancVisible=this.rowNMMtype;
                 } else if (this.rowNMMDataObj.NewOrEditFlag==="EDIT"){
                     let fromdataA={};
                     fromdataA.from= '3';
@@ -630,7 +633,6 @@ export default {
                     fromdataA.from= '2';
                     this.findDocManageById(fromdataA);
                 }
-
             }
         }
     }
