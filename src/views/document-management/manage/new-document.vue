@@ -59,7 +59,7 @@
 <!--                                @focus="onEditorFocus($event)"-->
 <!--                                @change="onEditorChange($event)"-->
 <!--                            ></quill-editor>-->
-                          <editor :conValue="formdata.fcontent" @contentData="editorChange($event)" style="height: 400px"></editor>
+                          <editor :value="formdata.fcontent" @contentData="editorChange($event)" style="height: 400px"></editor>
                         </el-tab-pane>
                         <el-tab-pane label="附件" name="second">
                             <enclosurefile v-on:enclosureFile="enclosureFile" :rowDataFileObj="rowDataFileObj" @changeShow="showFileData" />
@@ -406,6 +406,8 @@ export default {
                     this.$nextTick(() => {
                         this.readCount = "阅读量:("+this.formdata.freadcount+")";
                     });
+                    //获取到对象后，赋值完毕显示弹窗
+                    this.ShowFinancVisible=this.rowNMMtype;
                 } else {
                     this.$message.success('查询失败!');
                 }
@@ -605,7 +607,6 @@ export default {
                 this.isShowOperateRecord = true;
                 this.isShow = true;
                 this.isEdit = false;
-                this.ShowFinancVisible=this.rowNMMtype;
                 this.title=this.rowNMMDataObj.nametitle;
                 this.NewOrEditFlag=this.rowNMMDataObj.NewOrEditFlag;
                 if(this.rowNMMDataObj.NewOrEditFlag==="NEW"){
@@ -629,6 +630,7 @@ export default {
                     fromdataA.from= '2';
                     this.findDocManageById(fromdataA);
                 }
+
             }
         }
     }
