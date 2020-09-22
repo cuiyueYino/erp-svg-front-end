@@ -28,7 +28,8 @@
             </el-form-item>
             <el-form-item label="业务数据" prop="prosessData">
                 <el-input clearable size="small" v-model="formData.prosessData" placeholder="请输入"></el-input>
-                <img class="icon-search" @click="baseInputTable('审核','业务数据查询 ')" src="../../../assets/img/search.svg">
+                <el-button type="primary" size="mini" icon="el-icon-search" @click="baseInputTable('审核','业务数据查询 ')"></el-button>
+                <!-- <img class="icon-search" @click="baseInputTable('审核','业务数据查询 ')" src="../../../assets/img/search.svg">-->
             </el-form-item>
             <el-form-item label="描述"  prop="fremark">
                 <el-input maxlength="1000"  autosize show-word-limit type="textarea" v-model="formData.fremark"></el-input>

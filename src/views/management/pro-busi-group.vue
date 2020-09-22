@@ -84,7 +84,8 @@
                           placeholder="请选择部门"
                           v-model="form.fname">
                         </el-input>
-                      <img class="icon-search" v-show="!isLook" src="../../assets/img/search.svg" @click="baseInputTable('选择部门')" />
+                        <el-button type="primary" v-show="!isLook" size="mini" icon="el-icon-search" @click="baseInputTable('选择部门')"></el-button>
+                        <!-- <img class="icon-search" v-show="!isLook" src="../../assets/img/search.svg" @click="baseInputTable('选择部门')" />-->
                     </el-form-item>
                 </el-col>
                 </el-row>
