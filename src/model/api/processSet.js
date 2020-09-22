@@ -221,6 +221,10 @@ const processSet = {
     addWfsubmit(params){
         return httpReqest.post('/api/wfInterfaces/workFlow/wfsubmit', params);
     },
+    //根据 userid 获取到职位[包括兼职]
+    getStaffAllFirmpositionname(params){
+        return httpReqest.post('/api/interfaces/staffManage/getStaffAllFirmpositionname', params);
+    },
     //待办事项- 查询当前节点的配置
     getProcessorByMaile(params){
         var valueS='?';
