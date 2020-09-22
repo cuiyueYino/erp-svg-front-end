@@ -355,7 +355,7 @@ export default {
                                     this.submitMethod('','');
                                 }
                             }else{
-                                this.$message.error(res.data.msg+"!");
+                                this.$message.error(res.data.msg);
                             }
                         }else{
                             this.$message.error("保存失败,请填联系管理员!");
@@ -419,7 +419,7 @@ export default {
                     this.reload();
                 }else{
                     loading.close();
-                    this.$message.error(res.data.msg+"!");
+                    this.$message.error(res.data.msg);
                 }
 
             },error=>{
