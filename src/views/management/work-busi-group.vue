@@ -281,7 +281,11 @@ export default {
   },
   created() {
     this.getTableDataGroup();
-    this.form.fcompanyName = this.options[0].id
+    this.getCompany();
+    if(this.options != undefined) {
+      this.form.fcompanyName = this.options[0].id
+    }
+    
   },
   computed: {},
   watch: {
@@ -364,8 +368,11 @@ export default {
             // this.searchForm.fconvenerdeptname = data.fdeptname;
             // this.searchForm.fconvenerdept = data.fdeptid;
           } else if (type === "4") {
+	    this.form.staffRelUsersNames = '';
+            this.form.staffRelUsers = {};
             let internalmans = {};
             let internalMansName = "";
+             this.transStaffRelUserIds = [];
             for (let i in data) {
               if (i < data.length - 1) {
                 internalMansName += data[i].fname + ",";
@@ -373,8 +380,9 @@ export default {
                 internalMansName += data[i].fname;
               }
               internalmans[data[i].foid] = data[i].fname;
+              this.transStaffRelUserIds.push(data[i].foid);
             }
-            Object.assign(this.form.staffRelUsers,internalmans);
+            this.form.staffRelUsers = internalmans;
             if(this.form.staffRelUsersNames == ""){
               this.form.staffRelUsersNames+= internalMansName;
             }else{
