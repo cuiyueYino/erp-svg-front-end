@@ -458,7 +458,6 @@ export default {
             ).then(res=>{
                 if(res.data){
                     if(res.data.code ==0){
-                        debugger;
                         if(res.data.data.length >=2) {
                             //当存在兼职的时候，弹出pop框
                             loading.close();
