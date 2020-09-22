@@ -414,7 +414,7 @@
 									if(index == this.formData.rowList.length - 1 && index2 == item1.colList.length - 1) {
 										if(state) {
 											//DateDiff 方法在下面，计算日期差值方法
-											this.$set(this.ruleForm, item.child, this.DateDiff(this.ruleForm[item.left], this.ruleForm[item.right]))
+											this.$set(this.ruleForm, item.child, this.DateDiff(this.ruleForm[item.left], this.ruleForm[item.right]).toString())
 										}
 									}
 								})
