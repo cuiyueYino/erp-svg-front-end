@@ -235,7 +235,8 @@ export default {
                 this.formdata.curNodeName = detailMsg.mailDetail.curNodeName
                 this.formdata.activityName = detailMsg.mailDetail.activityName
                 this.formdata.metaClassName = detailMsg.mailDetail.metaClassName
-
+                this.formdata.documentfoid="";
+                this.formdata.documentNo=""
                 this.tableData = detailMsg.participatorList
 
                 let tmpReviewers = ''
@@ -326,7 +327,16 @@ export default {
                 },
             }
             this.$api.processSet.saveEdit(data).then(res=>{
-                this.$emit('changeShow',true);
+                if(res.data){
+                    if(res.data.code ==0){
+                        this.ShowFinancVisible=false;
+                        this.$emit('changeShow',true);
+                    }else{
+                        this.$message.error(res.data.msg);
+                    }
+                }else{
+                    this.$message.error("保存失败!");
+                }
             },error=>{
                 console.log(error)
             })
@@ -346,6 +356,8 @@ export default {
                 rowData.nametitle = finandata[0].subject;
                 this.rowDataprocessOid=rowData;
                 let lookOrUpdate=this.rowCWMDataObj.lookflag;
+                this.formdata.documentfoid="";
+                this.formdata.documentNo=""
                 if(lookOrUpdate ==='look'){
                     this.LookOrupdate = false;
                 }else{
