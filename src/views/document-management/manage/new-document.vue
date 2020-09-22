@@ -245,9 +245,14 @@ export default {
     },
     methods: {
       editorChange(aaa) {
+        debugger;
         this.$nextTick(() => {
-          this.formdata.fcontent = aaa;
-          this.$set(this.formdata, "fcontent", aaa);
+          if("<p>undefined</p>" == aaa){
+            this.formdata.fcontent = '';
+          } else {
+            this.formdata.fcontent = aaa;
+          }
+          this.$set(this.formdata, "fcontent", this.formdata.fcontent);
         });
 
       },
@@ -617,6 +622,7 @@ export default {
                     this.formdata.fcreatorname = localStorage.getItem('ms_username');
                     this.formdata.fcreator = localStorage.getItem('ms_userId');
                     this.formdata.fcreatetime =new Date() ;
+                    this.formdata.fcontent = '';
                     //获取到对象后，赋值完毕显示弹窗
                     this.ShowFinancVisible=this.rowNMMtype;
                 } else if (this.rowNMMDataObj.NewOrEditFlag==="EDIT"){
