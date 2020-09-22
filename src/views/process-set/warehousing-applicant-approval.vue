@@ -96,12 +96,12 @@
         </el-dialog>
         <baseInfoDialog  :rowUTSDataObj="rowUTSDataObj" :rowUTStype="rowUTStype" @changeShow="closeBaseInfo"/>
 	<!-- 部门/职位弹窗 -->
-	<erpDialog erpDialogwidth="false" :title="choseDepart" :dialogShow="jobVisible">
+	<erpDialog erpDialogwidth="false" title="选择岗位" :dialogShow="jobVisible">
 		<!-- 岗位表格 -->
 		<dynamic-table :columns="columns" :table-data="tableData" :isShowPager="false" @current-change="onCurrentChange" @selection-change="onSelectionChange" v-loading="false" element-loading-text="加载中"></dynamic-table>
 		<div slot="footer">
-			<el-button type='success' size="small" icon='el-icon-check' @click="submitMethod('','');">确定</el-button>
-			<el-button type='warning' icon='el-icon-close' size="small" @click="jobVisible = false">取消</el-button>
+			<el-button type='success' size="small" icon='el-icon-check' @click="submitMethodGW('','');">确定</el-button>
+			<el-button type='warning' icon='el-icon-close' size="small" @click="jobVisibleGW">取消</el-button>
 		</div>
 	</erpDialog>
     </div>
@@ -217,6 +217,7 @@ export default {
                 fresult:1,
                 remark:''
             },
+            participator:'',
             rules: {
                 remark: [
                     { validator: validateRemark, trigger: 'blur' }
@@ -404,26 +405,8 @@ export default {
             }
 	    },
         //提交保存的接口
-        submitData(paramsData){
-            this.$api.processSet.addWfsubmit(paramsData).then(res=>{
-                if( res.data.code == 0 ){
-                    this.$message.success('保存成功');
-                    // loading.close();
-                    this.ShowFinancVisible = false;
-                    this.$emit('changeShow',false);
-                    this.reload();
-                }else{
-                    loading.close();
-                    this.$message.error(res.data.msg+"!");
-                }
-
-            },error=>{
-                // loading.close();
-                console.log(error)
-            });
-        },
-        submitMethod(name,val) {
-             const loading = this.$loading({
+        submitData(Data){
+            const loading = this.$loading({
                  lock: true,
                  text: 'Loading',
                  spinner: 'el-icon-loading',
@@ -449,8 +432,54 @@ export default {
             twfauditObj["fresult"] = this.formdata.fresult;
             twfauditObj["fopinion"] = this.formdata.remark;
             paramsData["twfaudit"] = twfauditObj;
+            if(this.participator!=''){
+                paramsData["participator"] = this.participator;
+            }
+            if(Data){
+                paramsData["position"] = Data;
+            }
+            this.$api.processSet.addWfsubmit(paramsData).then(res=>{
+                if( res.data.code == 0 ){
+                    this.$message.success('保存成功');
+                    // loading.close();
+                    this.ShowFinancVisible = false;
+                    this.participator="";
+                    this.$emit('changeShow',false);
+                    this.reload();
+                }else{
+                    loading.close();
+                    this.participator="";
+                    this.$message.error(res.data.msg+"!");
+                }
+
+            },error=>{
+                // loading.close();
+                console.log(error)
+            });
+        },
+        //选择岗位关闭
+        jobVisibleGW(){
+            this.participator="";
+            this.jobVisible =false;
+            this.multipleSelection=[];
+        },
+        //选择岗位
+        submitMethodGW(){
+            let SelectData=this.multipleSelection;
+            if(SelectData.length == 0){
+                this.$message.error("请选择岗位!");
+            }else{
+                if(SelectData.length == 1){
+                    this.jobVisible =false;
+                    this.submitData(this.multipleSelection[0].foid);
+                }else{
+                   this.$message.error("只能选择一个岗位!");     
+                } 
+            }
+        },
+        submitMethod(name,val) {
             if(name ==='手工指定'){
-                paramsData["participator"] = "3|"+val;
+                this.participator= "3|"+val;
             }
             //获取人员岗位的接口
             this.$api.processSet.getStaffAllFirmpositionname(
@@ -460,17 +489,14 @@ export default {
                     if(res.data.code ==0){
                         if(res.data.data.length >=2) {
                             //当存在兼职的时候，弹出pop框
-                            loading.close();
                             this.jobVisible = true;
-                            this.tableData = res.data.data;
                             for(var i=0;i<res.data.data.length;i++){
                                 res.data.data[i]['index'] = i + 1;
                             }
-                            paramsData["position"] = this.multipleSelection[0].foid;
+                            this.tableData = res.data.data;
                         } else {
+                            this.submitData();
                         }
-                        this.jobVisible = false;
-                        this.submitData(paramsData);
                     }else{
                         this.$message.error(res.data.msg+"!");
                     }
