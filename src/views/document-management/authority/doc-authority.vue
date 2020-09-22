@@ -250,6 +250,7 @@ export default {
               this.$message.error("请选择有效二级的文档类别进行授权!");
               return;
             }
+            debugger;
             let SelectData=this.multipleSelection; // 选中的角色
             // if(SelectData.length < 1){
             //     this.$message.error("请选择一个角色授权!");
@@ -340,6 +341,7 @@ export default {
         },
         //table选中事件
         onSelectionChange(data){
+          debugger;
             this.multipleSelection = data;
         },
         // 改变table行样式
@@ -378,11 +380,16 @@ export default {
                     this.$nextTick(() => {
                         this.$refs.roleTable.clearSelection();
                         if(this.tableData){
+                          debugger;
+                          let temp = [];
                             this.tableData.forEach(row => {
                               if (row.fauth == "1") {
                                 this.$refs.roleTable.toggleRowSelection(row,true);
-                            }
-                        });
+                                temp.push(row);
+                              }
+                            });
+                            //赋值勾选数据
+                          this.multipleSelection = temp;
                         }
                     });
                 } else {
