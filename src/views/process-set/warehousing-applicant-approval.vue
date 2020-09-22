@@ -334,29 +334,35 @@ export default {
             }else{
                 DataF.foid=this.rowWAADataObj.selectData[0].foid;
             }
-            this.$api.processSet.getProcessorByMaile(DataF).then(res=>{
-                if(res.data){
-                    if(res.data.code ==0){
-                        if(res.data.data){
-                            //手工指定下一节点
-                            if(res.data.data.fmntnextjoin ===1){
-                                this.baseInputTable("手工指定下一节点");
+            this.$confirm('单据提交后将流转到下一个节点，确实要提交当前数据吗？', '确认', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    this.$api.processSet.getProcessorByMaile(DataF).then(res=>{
+                        if(res.data){
+                            if(res.data.code ==0){
+                                if(res.data.data){
+                                    //手工指定下一节点
+                                    if(res.data.data.fmntnextjoin ===1){
+                                        this.baseInputTable("手工指定下一节点");
+                                    }else{
+                                        //正常提交
+                                        this.submitMethod('','');
+                                    }
+                                }else{
+                                    //正常提交
+                                    this.submitMethod('','');
+                                }
                             }else{
-                                //正常提交
-                                this.submitMethod('','');
+                                this.$message.error(res.data.msg+"!");
                             }
                         }else{
-                            //正常提交
-                            this.submitMethod('','');
+                            this.$message.error("保存失败,请填联系管理员!");
                         }
-                    }else{
-                        this.$message.error(res.data.msg+"!");
-                    }
-                }else{
-                    this.$message.error("保存失败,请填联系管理员!");
-                }
-            },error=>{
-                console.log(error)
+                    },error=>{
+                        console.log(error)
+                    });
             })
         },
         //提交按钮点击事件

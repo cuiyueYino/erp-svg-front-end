@@ -128,7 +128,7 @@
                 format="yyyy-MM-dd HH:mm"
                 type="datetime"
                 size="small"
-                placeholder="选择日期"
+                placeholder="选择时间"
                 style="width: 100%;"
               ></el-date-picker>
             </el-form-item>
@@ -142,7 +142,7 @@
                 value-format="yyyy-MM-dd HH:mm"
                 type="datetime"
                 size="small"
-                placeholder="选择日期"
+                placeholder="选择时间"
                 style="width: 100%;"
               ></el-date-picker>
             </el-form-item>
