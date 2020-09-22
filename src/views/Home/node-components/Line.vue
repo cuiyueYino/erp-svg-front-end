@@ -53,7 +53,7 @@
                             <el-tab-pane label="调用服务" name="4">
                                 <el-form-item label="条件" :label-width="formLabelWidth"  >
                                     <el-input placeholder="请选择" v-model="formData.baseInputServe" :disabled="true"> </el-input>
-                                    <el-button type="primary" size="mini" icon="el-icon-search" @click="baseInputTable('服务','服务查询')"></el-button>
+                                    <el-button type="primary" size="medium" icon="el-icon-search" @click="baseInputTable('服务','服务查询')"></el-button>
                                     <!--<img class="icon-search" src="../../../assets/img/search.svg"  @click="baseInputTable('服务','服务查询')">-->
                                 </el-form-item>
                                 <el-form-item label="条件表达式" :label-width="formLabelWidth" prop="baseTextarea"> 
