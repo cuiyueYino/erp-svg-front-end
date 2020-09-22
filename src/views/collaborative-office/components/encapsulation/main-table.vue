@@ -29,7 +29,7 @@
 				<vxe-table-column field="code" title="主表编码"></vxe-table-column>
 				<vxe-table-column field="name" title="主表名称"></vxe-table-column>
 				<vxe-table-column field="workItemTypeName" title="主表分类"></vxe-table-column>
-				<vxe-table-column field="remark" title="描述"></vxe-table-column>
+				<vxe-table-column :formatter="textLength" field="remark" title="描述"></vxe-table-column>
 			</vxe-table>
 		</el-card>
 	</div>
@@ -80,6 +80,14 @@
 				this.tableData = this.$refs.multipleTable.getCheckboxRecords()
 
 			},
+            //描述显示
+            textLength(row){
+                if(row.remark!=null&&row.remark.length>20) {
+                    return row.remark.substring(0,10)+"...";
+                }else {
+                    return row.remark;
+                }
+            },
 			check() {
 				this.$refs.multipleTable.setAllCheckboxRow(false);
 				this.tableData = this.roleCon.allData;
