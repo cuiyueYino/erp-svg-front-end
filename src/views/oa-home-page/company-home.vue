@@ -25,7 +25,7 @@
           </el-tab-pane>
         </el-tabs>
       </el-card>
-    </el-main>  
+    </el-main>
     <el-aside width="530px">
       <div class="img1" @click="toWebsite">
         <div class="website">
@@ -95,7 +95,7 @@ export default {
        this.$api.documentManagement
         .getDocumentCategoryOrgArch('1')
         .then((res) => {
-          listData = eval("(" + res.data.data + ")"); 
+          listData = eval("(" + res.data.data + ")");
           this.getMenuData(listData);
         })
     },
@@ -140,7 +140,7 @@ export default {
                 })
                  listData[i].children[j].children = conNow.children
               }
-            } 
+            }
             this.menuList = listData;
         }
         console.log(listData)
@@ -183,7 +183,7 @@ export default {
         page: 1,
         size: 10,
       };
-       return new Promise((resolve,reject)=>{ 
+       return new Promise((resolve,reject)=>{
           this.$api.documentManagement.findDocumentManageByPage(data)
           .then((res) => {
                resolve(res.data.data.rows)
@@ -233,14 +233,34 @@ export default {
           }
       },
     //查看页面详情
-    toLook(val) {console.log(val)
-    this.rowNMMtype = true;
-        let finandata={};
-        finandata.nametitle="文档管理查看";
-        finandata.NewOrEditFlag="SHOW";
-        finandata.foid=val.foid;
-        finandata.flag = 1;
-        this.rowNMMDataObj=finandata;
+    toLook(val) {
+        //验证是否有权限
+        let param={};
+        param.fdocmanageoid = val.foid;
+        param.froleid = localStorage.getItem('ms_roles');
+        param.fauth = '2';
+        this.$api.documentManagement.isHaveDocAuthority(param).then(response => {
+          let responsevalue = response;
+          //有打印权限
+          if (responsevalue.data.data >= 1) {
+            this.rowNMMtype = true;
+            let finandata={};
+            finandata.printFlg = '2';
+            finandata.nametitle="文档浏览查看";
+            finandata.NewOrEditFlag="SHOW";
+            finandata.foid=val.foid;
+            finandata.flag = 1;
+            this.rowNMMDataObj=finandata;
+          } else {
+            this.rowNMMtype = true;
+            let finandata={};
+            finandata.nametitle="文档管理查看";
+            finandata.NewOrEditFlag="SHOW";
+            finandata.foid=val.foid;
+            finandata.flag = 1;
+            this.rowNMMDataObj=finandata;
+          }
+        });
     // let data ={
     //     "from": "1",
     //     "foid": val.foid,

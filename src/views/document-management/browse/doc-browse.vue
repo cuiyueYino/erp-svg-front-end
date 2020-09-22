@@ -235,7 +235,7 @@ export default {
                 this.$message.error("只能选择一个!");
             }else{
                 if(SelectData[0]){
-                //   debugger;
+                  debugger;
                     //验证是否有权限
                     let finandata={};
                     finandata.fdocmanageoid = SelectData[0].foid;
@@ -243,6 +243,7 @@ export default {
                     finandata.fauth = '2';
                     this.$api.documentManagement.isHaveDocAuthority(finandata).then(response => {
                         let responsevalue = response;
+                        //有打印权限
                         if (responsevalue.data.data >= 1) {
                             this.rowNMMtype = true;
                             let finandata={};
@@ -382,6 +383,15 @@ export default {
             let fromdata=data;
             fromdata.fuserid = localStorage.getItem('ms_userId');
             fromdata.fdocstatus = '3';
+            fromdata.from = '1';
+
+            var roles= [];
+            var rolesStr=localStorage.getItem('ms_roles');
+            //字符串截取为数组
+            if(rolesStr){
+              roles = rolesStr.split(",");
+            }
+            fromdata.roleIdSet = roles;
             this.$api.documentManagement.findDocumentManageByPage(fromdata).then(response => {
                 let responsevalue = response;
                 if (responsevalue) {
