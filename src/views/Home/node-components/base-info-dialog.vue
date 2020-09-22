@@ -111,9 +111,11 @@
             <el-col  v-if="type === '用户'" :span="12" class="tree-class">
                 <!-- 树状图 -->
                 <el-tree
-                    v-show="type === '用户'"
+                    v-if="type === '用户'"
+                    ref="userTree"
                     :data="treeData"
                     :props="defaultProps"
+                    :filter-node-method="filterNodeMethod"
                     accordion
                     @node-click="handleNodeClick">
                 </el-tree>
@@ -190,6 +192,7 @@ export default {
             pageSize: 10,
             total: 20,
             totalpage:true,
+            expandCFlag:false,
             tableLoading:false,
             // 关闭对话框配置
             closeConfig: false,
@@ -325,6 +328,7 @@ export default {
                         this.$api.processSet.getUserTree(fromdata).then(res=>{
                             let resData=res.data.data;
                             let resDataArr= eval("("+resData+")");//console.log(resDataArr.JsonInfo[0])
+                            //this.treeData = resDataArr;
                             this.treeData = resDataArr.JsonInfo;
                             this.totalpage=false;
                         },error=>{
@@ -473,9 +477,18 @@ export default {
         }
     },
     methods: {
+        //隐藏用户
+        filterNodeMethod(val,data,node){
+            if(node.data.types =='2'){
+                return false
+            }else{
+                return true
+            }
+        },
         handleNodeClick(data) {
             let children = data.children;
             if(children){
+                this.$refs.userTree.filter('');
                 if(children.length > 0){
                     if(this.title =='用户查询'){
                         if(children[0].types === '2'){
@@ -486,7 +499,6 @@ export default {
                         this.gridData = children;
                         this.searchgridData= children;
                     }
-                    
                 }
             }
         },

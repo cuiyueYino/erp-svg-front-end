@@ -270,7 +270,7 @@ export default {
                     this.$emit('changeShow',false);
                     this.$message.success('转发成功!');
                 }else{
-                    this.$message.error(resData.data.msg+"!");
+                    this.$message.error(resData.data.msg);
                 }               
             },error=>{
                 console.log(error)
@@ -291,7 +291,7 @@ export default {
                     this.$emit('changeShow',false);
                     this.$message.success('委托成功!');
                 }else{
-                    this.$message.error(resData.data.msg+"!");
+                    this.$message.error(resData.data.msg);
                 }
             },error=>{
                 console.log(error)
@@ -312,7 +312,7 @@ export default {
                     this.$emit('changeShow',false);
                     this.$message.success('加签成功!');
                 }else{
-                    this.$message.error(resData.data.msg+"!");
+                    this.$message.error(resData.data.msg);
                 } 
             },error=>{
                 console.log(error)
