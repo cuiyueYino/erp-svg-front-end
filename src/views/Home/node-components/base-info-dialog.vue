@@ -488,18 +488,27 @@ export default {
         handleNodeClick(data) {
             let children = data.children;
             if(children){
-                this.$refs.userTree.filter('');
                 if(children.length > 0){
                     if(this.title =='用户查询'){
                         if(children[0].types === '2'){
                             this.gridData = children;
                             this.searchgridData= children;
+                        }else{
+                            this.gridData=[];
+                            this.searchgridData=[];
                         }
                     }else if(this.title =='组织结构查询'){
                         this.gridData = children;
                         this.searchgridData= children;
                     }
+                    this.$refs.userTree.filter('');
+                }else{
+                    this.gridData=[];
+                    this.searchgridData=[];
                 }
+            }else{
+                this.gridData=[];
+                this.searchgridData=[];
             }
         },
         closeDialog(){
