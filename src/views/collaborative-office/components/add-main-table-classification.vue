@@ -161,10 +161,10 @@
 							message: '请输入主表分类名称',
 							trigger: 'change'
 						},
-						{
+						/*{
 							pattern: "[\u4e00-\u9fa5]",
 							message: '请输入主表分类名称为中文'
-						}
+						}*/
 					],
 					tableName: [{
 						required: true,

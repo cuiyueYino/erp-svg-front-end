@@ -316,10 +316,10 @@
 							message: '请输入主表分类名称',
 							trigger: 'blur'
 						},
-						{
+						/*{
 							pattern: "[\u4e00-\u9fa5]",
 							message: '请输入正确的主表分类名称'
-						}
+						}*/
 					],
 					workItemTypeName: [{
 						required: true,
