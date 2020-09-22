@@ -279,7 +279,7 @@
         let data = {
           fcompany: this.fcompanyid,
           page: this.pageNum,
-          size: this.pageSize,
+          size: 9999,
         };
         this.$api.confMangement.getConfMntList(data).then(
           (res) => {

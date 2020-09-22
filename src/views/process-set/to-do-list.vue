@@ -723,8 +723,8 @@ export default {
     //分页、下一页
     onCurrentChange(val) {
       this.fromdata.infosBeginNum = ((val - 1) * 10)+1;
-        this.fromdata.infosEndNum = val * 10;
-        this.fromdata.userId = localStorage.getItem("ms_userId");
+      this.fromdata.infosEndNum = val * 10;
+      this.fromdata.userId = localStorage.getItem("ms_userId");
       this.getHunTableData(this.fromdata);
     },
     //刷新
@@ -759,6 +759,7 @@ export default {
     },
     showORhideForWAA(data) {
       if (data === false) {
+        this.reload();
         this.rowWAAtype = false;
       } else {
         this.rowWAAtype = true;

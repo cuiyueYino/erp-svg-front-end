@@ -110,7 +110,23 @@
                 <el-button type='success' icon='el-icon-copy-document' size="small" @click="saveNewAndEdit()">提交</el-button>
             </span>
         </el-dialog>
-        <UserTree  :rowUTSDataObj="rowUTSDataObj" :rowUTStype="rowUTStype" @changeShow="closeBaseInfo"/>
+        <erpDialog erpDialogwidth="false" title="选择目标节点" :dialogShow="ReviewVisible">
+            <!-- 岗位表格 -->
+            <dynamic-table 
+                :columns="jdcolumns" 
+                :table-data="tableDataJD" 
+                :isShowPager="false"
+                @selection-change="onSelectionChange" 
+                v-loading="false" 
+                :height="300"
+                element-loading-text="加载中"
+                >
+            </dynamic-table>
+            <div slot="footer">
+                <el-button type='success' size="small" icon='el-icon-check' @click="submitMethodGW">确定</el-button>
+                <el-button type='warning' icon='el-icon-close' size="small" @click="jDVisibleGW">取消</el-button>
+            </div>
+        </erpDialog>
     </div>
 </template>
 <script>
@@ -132,6 +148,7 @@ export default {
     inject: ['reload'],
     data(){
         return{
+            ReviewVisible:false,
             ShowFinancVisible:false,
             labelPosition: 'left',
             disabled:true,
@@ -143,6 +160,7 @@ export default {
             pageNum: 1,
             pageSize: 10,
             total: 20,
+            JDtype:'',
             mailDetail:{},
             auditMsg:[],
             participatorList:[],
@@ -178,6 +196,21 @@ export default {
             },
             tableData:[],
             objectoptions:new proData().project,
+            tableDataJD:[],
+            multipleSelection:[],
+            jdcolumns: [
+                {
+                    type: "selection"
+                },
+                {
+                    key: "fcode",
+                    title: "节点编码"
+                },
+                {
+                    key: "fname",
+                    title: "节点名称"
+                },
+	        ],
         }
     },
     methods: {
@@ -221,34 +254,82 @@ export default {
             this.ShowFinancVisible=false;
             this.$emit('changeShow',false);
         },
-        //人员查询
-        MoreSearchPS(data){ 
-            this.rowUTStype = true;
-            let finandata=data;
-            finandata.finanrowname="人员缺省查询方案";
-            finandata.finanrowId="QS_0056";
-            finandata.nametitle="待办事项";
-            finandata.FunctionType='人员查询';
-            this.rowUTSDataObj=finandata;
-        },
-        //人员查询结果处理
-        closeBaseInfo(data){
-            if(data.length > 0){
-                this.newReviewers = data
-                let tmpReviewers = ''
-                data.forEach(element => {
-                    tmpReviewers += element.fname + ','
-                }); 
-                this.formdata.documentNo = tmpReviewers.substring(0,tmpReviewers.length-1)
+        submitMethodGW(){
+            let SelectData=this.multipleSelection;
+            if(SelectData.length == 0){
+                this.$message.error("请选择岗位!");
+            }else{
+                if(SelectData.length == 1){
+                    this.formdata.documentNo=SelectData[0].fname;
+                    this.formdata.documentfoid=SelectData[0].foid;
+                    this.multipleSelection=[];
+                    if(this.formdata.radio =='1'){
+                        this.JDtype='1';
+                    }else{
+                        this.JDtype='2';
+                    }
+                    this.ReviewVisible=false;
+                }else{
+                   this.$message.error("只能选择一个岗位!");     
+                } 
             }
-            this.rowUTStype = false
+        },
+        jDVisibleGW(){
+            this.ReviewVisible=false;
+            this.multipleSelection=[];
+        },
+        onSelectionChange(val) {
+            this.multipleSelection = val;
+        },
+        //查询目标节点
+        MoreSearchPS(data){
+            this.multipleSelection=[];
+            let finandata=this.rowCWMDataObj.selectOption;
+            let FroMData=[];
+            FroMData.mailId=finandata[0].foid;
+            FroMData.transType=data.radio;
+            this.$api.processSet.getAllowJumpNodes(FroMData).then(res=>{
+                if(res.data){
+                    if(res.data.code ==0){
+                        this.tableDataJD=res.data.data;
+                        this.ReviewVisible=true;
+                    }else{
+                        this.$message.error(res.data.msg);
+                    }
+                }else{
+                    this.$message.error("获取节点失败!");
+                }
+            },error=>{
+                console.log(error)
+            })
         },
         //流程图
         showprocessData(data){
             console.log(data)
         },
         saveNewAndEdit(){
-
+            if(this.formdata.documentNo == ''){
+                this.$message.error('请选择目标节点！');
+                return;
+            }
+            if(this.formdata.radio != this.JDtype){
+                this.$message.error('流转方式和目标节点选择不一致！');
+                return;
+            } 
+            let data = {
+                userId:localStorage.getItem('ms_userId'),
+                transType:this.formdata.radio,
+                transNode:this.formdata.documentfoid,
+                mailDetailInfo:{
+                    foid:this.mailDetail.foid,
+                    srcOid:this.mailDetail.srcOid
+                },
+            }
+            this.$api.processSet.saveEdit(data).then(res=>{
+                this.$emit('changeShow',true);
+            },error=>{
+                console.log(error)
+            })
         }
     },
     watch:{

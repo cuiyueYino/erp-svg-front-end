@@ -221,6 +221,10 @@ const processSet = {
     addWfsubmit(params){
         return httpReqest.post('/api/wfInterfaces/workFlow/wfsubmit', params);
     },
+    //根据 userid 获取到职位[包括兼职]
+    getStaffAllFirmpositionname(params){
+        return httpReqest.post('/api/interfaces/staffManage/getStaffAllFirmpositionname', params);
+    },
     //待办事项- 查询当前节点的配置
     getProcessorByMaile(params){
         var valueS='?';
@@ -345,7 +349,17 @@ const processSet = {
     getTmClass(){
         return httpReqest.post('/api/wfInterfaces/workFlow/processMonitor/getTmClass');
     },
-
+    //保存编辑信息
+    getAllowJumpNodes(params){
+        var valueS='?';
+        for(var item in params){
+            valueS+=item+"="+params[item]+"&";
+        }
+        if(valueS.slice(valueS.length-1,valueS.length) ==="&"){
+            valueS=valueS.slice(0,valueS.length-1);
+        }
+        return httpReqest.get('/api/wfInterfaces/workFlow/processMonitor/getAllowJumpNodes'+valueS);
+    },
     //保存编辑信息
     saveEdit(params){
         return httpReqest.post('/api/wfInterfaces/workFlow/processMonitor/confirm', params);

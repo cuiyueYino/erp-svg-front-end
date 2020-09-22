@@ -17,7 +17,8 @@
                         </el-form-item>
                         <el-form-item label="业务工作" :label-width="formLabelWidth" prop="work">
                             <el-input v-model="formData.work" autocomplete="off"></el-input>
-                            <img class="icon-search" @click="workSearch" src="../../../assets/img/search.svg">
+                            <el-button type="primary" size="mini" icon="el-icon-search" @click="workSearch"></el-button>
+                            <!-- <img class="icon-search" @click="workSearch" src="../../../assets/img/search.svg">-->
                         </el-form-item>
                         <el-form-item label="业务数据" :label-width="formLabelWidth"   prop="workData">
                             <el-input v-model="formData.workData" autocomplete="off" :disabled="true" ></el-input>

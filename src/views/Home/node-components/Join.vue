@@ -17,12 +17,14 @@
                 </el-form-item>
                 <el-form-item label="审核工作" :label-width="formLabelWidth" prop="work">
                     <el-input v-model="formData.work" autocomplete="off"></el-input>
-                    <img class="icon-search" @click="workSearch('审核工作')" src="../../../assets/img/search.svg">
+                    <el-button type="primary" size="mini" icon="el-icon-search" @click="workSearch('审核工作')"></el-button>
+                    <!-- <img class="icon-search" @click="workSearch('审核工作')" src="../../../assets/img/search.svg"> -->
                     <el-button type="success" icon='el-icon-folder-add'  size="small" plain class="joinWorkBtn" @click="addJoinWork('新增审核业务')">新增审核</el-button>
                 </el-form-item>
                 <el-form-item label="源单据业务" :label-width="formLabelWidth" >
                     <el-input v-model="formData.workData" autocomplete="off"></el-input>
-                    <img class="icon-search"  @click="workSearch('源单据业务')" src="../../../assets/img/search.svg">
+                    <el-button type="primary" size="mini" icon="el-icon-search" @click="workSearch('源单据业务')"></el-button>
+                    <!-- <img class="icon-search"  @click="workSearch('源单据业务')" src="../../../assets/img/search.svg">-->
                 </el-form-item>
                 <el-form-item label="业务数据" :label-width="formLabelWidth" >
                     <el-input v-model="formData.fmclassName" autocomplete="off" :disabled="true"></el-input>
@@ -183,7 +185,8 @@
                         <el-tab-pane label="角色" name="1">
                             <el-form-item label="角色" :label-width="formLabelWidth">
                                 <el-input placeholder="请选择" v-model="roleReq.name" :disabled="true"></el-input>
-                                <img class="icon-search" src="../../../assets/img/search.svg" @click="baseInputTable('角色','角色查询')" />
+                                <el-button type="primary" size="medium" icon="el-icon-search" @click="baseInputTable('角色','角色查询')"></el-button>
+                                <!-- <img class="icon-search" src="../../../assets/img/search.svg" @click="baseInputTable('角色','角色查询')" />-->
                             </el-form-item>
                             <el-form-item label="条件表达式" :label-width="formLabelWidth">
                                 <el-input type="textarea" v-model="roleReq.role_expression" :disabled="true"></el-input>
@@ -192,7 +195,8 @@
                         <el-tab-pane label="用户" name="2">
                             <el-form-item label="用户" :label-width="formLabelWidth">
                                 <el-input placeholder="请选择" v-model="UserListReq.fname" :disabled="true"></el-input>
-                                <img class="icon-search" src="../../../assets/img/search.svg"  @click="baseInputTable('用户','用户查询')"/>
+                                <el-button type="primary" size="medium" icon="el-icon-search" @click="baseInputTable('用户','用户查询')"></el-button>
+                                <!--<img class="icon-search" src="../../../assets/img/search.svg"  @click="baseInputTable('用户','用户查询')"/>-->
                             </el-form-item>
                             <el-form-item label="条件表达式" :label-width="formLabelWidth">
                                 <el-input type="textarea" v-model="UserListReq.fenglishname" :disabled="true"></el-input>
@@ -201,7 +205,8 @@
                         <el-tab-pane label="服务" name="3">
                             <el-form-item label="服务" :label-width="formLabelWidth">
                                 <el-input placeholder="请选择" v-model="serveReq.fname" :disabled="true"></el-input>
-                                <img class="icon-search"  src="../../../assets/img/search.svg"   @click="baseInputTable('服务','服务查询')"/>
+                                <el-button type="primary" size="medium" icon="el-icon-search" @click="baseInputTable('服务','服务查询')"></el-button>
+                                <!--<img class="icon-search"  src="../../../assets/img/search.svg"   @click="baseInputTable('服务','服务查询')"/>-->
                             </el-form-item>
                             <el-form-item label="条件表达式" :label-width="formLabelWidth">
                                 <el-input type="textarea" v-model="serveReq.fenglishname"></el-input>
@@ -215,7 +220,8 @@
                         <el-tab-pane label="职务" name="5">
                             <el-form-item label="职务" :label-width="formLabelWidth">
                                 <el-input placeholder="请选择" v-model="posLReq.fname" :disabled="true"></el-input>
-                                <img class="icon-search"  src="../../../assets/img/search.svg"  @click="baseInputTable('职务','职务查询')"  />
+                                <el-button type="primary" size="medium" icon="el-icon-search" @click="baseInputTable('职务','职务查询')"></el-button>
+                                <!--<img class="icon-search"  src="../../../assets/img/search.svg"  @click="baseInputTable('职务','职务查询')"  />-->
                             </el-form-item>
                             <el-form-item label="条件表达式" :label-width="formLabelWidth">
                                 <el-input type="textarea" v-model="posLReq.fenglishname"></el-input>
