@@ -95,6 +95,15 @@
             </el-form>
         </el-dialog>
         <baseInfoDialog  :rowUTSDataObj="rowUTSDataObj" :rowUTStype="rowUTStype" @changeShow="closeBaseInfo"/>
+	<!-- 部门/职位弹窗 -->
+	<erpDialog erpDialogwidth="false" :title="choseDepart" :dialogShow="jobVisible">
+		<!-- 岗位表格 -->
+		<dynamic-table :columns="columns" :table-data="tableData" :isShowPager="false" @current-change="onCurrentChange" @selection-change="onSelectionChange" v-loading="false" element-loading-text="加载中"></dynamic-table>
+		<div slot="footer">
+			<el-button type='success' size="small" icon='el-icon-check' @click="submitMethod('','');">确定</el-button>
+			<el-button type='warning' icon='el-icon-close' size="small" @click="jobVisible = false">取消</el-button>
+		</div>
+	</erpDialog>
     </div>
 </template>
 
@@ -180,6 +189,20 @@ export default {
                 }
         };
         return {
+		columns: [{
+						type: "selection"
+					},
+					{
+						key: "index",
+						title: "序号"
+					},
+					{
+						key: "firmpositioName",
+						title: "岗位名称"
+					},
+	        ],
+            tableData: [],
+            jobVisible: false,
             fresultObject:{},
             fresultArray:[],
             itemsFlag:false,
@@ -379,6 +402,25 @@ export default {
                 //this.submitMethod();
                 this.checkMaile()
             }
+	    },
+        //提交保存的接口
+        submitData(paramsData){
+            this.$api.processSet.addWfsubmit(paramsData).then(res=>{
+                if( res.data.code == 0 ){
+                    this.$message.success('保存成功');
+                    // loading.close();
+                    this.ShowFinancVisible = false;
+                    this.$emit('changeShow',false);
+                    this.reload();
+                }else{
+                    loading.close();
+                    this.$message.error(res.data.msg+"!");
+                }
+
+            },error=>{
+                // loading.close();
+                console.log(error)
+            });
         },
         submitMethod(name,val) {
              const loading = this.$loading({
@@ -410,22 +452,36 @@ export default {
             if(name ==='手工指定'){
                 paramsData["participator"] = "3|"+val;
             }
-            this.$api.processSet.addWfsubmit(paramsData).then(res=>{
-                if( res.data.code == 0 ){
-                    this.$message.success('保存成功');
-                    loading.close();
-                    this.ShowFinancVisible = false;
-                    this.$emit('changeShow',false);
-                    this.reload();
-                }else{
-                    loading.close();
-                    this.$message.error(res.data.msg);
+            //获取人员岗位的接口
+            this.$api.processSet.getStaffAllFirmpositionname(
+                {foid: localStorage.getItem('ms_userId')}
+            ).then(res=>{
+                if(res.data){
+                    if(res.data.code ==0){
+                        debugger;
+                        if(res.data.data.length >=2) {
+                            //当存在兼职的时候，弹出pop框
+                            loading.close();
+                            this.jobVisible = true;
+                            this.tableData = res.data.data;
+                            for(var i=0;i<res.data.data.length;i++){
+                                res.data.data[i]['index'] = i + 1;
+                            }
+                            paramsData["position"] = this.multipleSelection[0].foid;
+                        } else {
+                        }
+                        this.jobVisible = false;
+                        this.submitData(paramsData);
+                    }else{
+                        this.$message.error(res.data.msg+"!");
+                    }
+                } else{
+                    this.$message.error("系统异常,请填联系管理员!");
                 }
-
             },error=>{
-                loading.close();
                 console.log(error)
-            });
+            })
+            
          },
         showprocessData(){},
         //判断
