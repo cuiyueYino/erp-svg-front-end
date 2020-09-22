@@ -349,7 +349,17 @@ const processSet = {
     getTmClass(){
         return httpReqest.post('/api/wfInterfaces/workFlow/processMonitor/getTmClass');
     },
-
+    //保存编辑信息
+    getAllowJumpNodes(params){
+        var valueS='?';
+        for(var item in params){
+            valueS+=item+"="+params[item]+"&";
+        }
+        if(valueS.slice(valueS.length-1,valueS.length) ==="&"){
+            valueS=valueS.slice(0,valueS.length-1);
+        }
+        return httpReqest.get('/api/wfInterfaces/workFlow/processMonitor/getAllowJumpNodes'+valueS);
+    },
     //保存编辑信息
     saveEdit(params){
         return httpReqest.post('/api/wfInterfaces/workFlow/processMonitor/confirm', params);
