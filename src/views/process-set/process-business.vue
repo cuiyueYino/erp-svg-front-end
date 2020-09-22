@@ -75,10 +75,11 @@
                             autocomplete="off"
                             placeholder="请选择部门"
                             ></el-input>
-                            <img class="icon-search"
+                            <el-button type="primary" size="mini" v-show="homeTitle !== '查看业务'" icon="el-icon-search" @click="workSearch"></el-button>
+                            <!-- <img class="icon-search"
                             v-show="homeTitle !== '查看业务'"
                             @click="workSearch"
-                            src="../../assets/img/search.svg">
+                            src="../../assets/img/search.svg">-->
                         </el-form-item>
                     </el-col>
                 </el-row>

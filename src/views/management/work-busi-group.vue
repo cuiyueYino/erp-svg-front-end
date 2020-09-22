@@ -82,11 +82,13 @@
             </el-form-item>
             <el-form-item label="组长：" :label-width="formLabelWidth" prop="fteamleaderName">
               <el-input v-model="form.fteamleaderName" :disabled="isLook" placeholder="请选择组长" size="small" autocomplete="off" readonly></el-input>
-              <img class="icon-search" v-show="!isLook" src="../../assets/img/search.svg" @click="addFteamleader('1','用户查询',)"/>
+              <el-button type="primary" v-show="!isLook" size="mini" icon="el-icon-search" @click="addFteamleader('1','用户查询',)"></el-button>
+              <!-- <img class="icon-search" v-show="!isLook" src="../../assets/img/search.svg" @click="addFteamleader('1','用户查询',)"/>-->
             </el-form-item>
             <el-form-item label="组员：" :label-width="formLabelWidth" prop="staffRelUsersNames">
                <el-input type="textarea" autosize :disabled="isLook" size="small" placeholder="请选择组员" v-model="form.staffRelUsersNames" readonly></el-input>
-               <img class="icon-search" v-show=" !isLook" src="../../assets/img/search.svg" @click="addFteamleader('4','用户查询',)"/>
+               <!-- <img class="icon-search" v-show=" !isLook" src="../../assets/img/search.svg" @click="addFteamleader('4','用户查询',)"/>-->
+               <el-button type="primary" v-show=" !isLook" size="mini" icon="el-icon-search" @click="addFteamleader('4','用户查询',)"></el-button>
             </el-form-item>
           </el-col>
           <el-col :span="22">

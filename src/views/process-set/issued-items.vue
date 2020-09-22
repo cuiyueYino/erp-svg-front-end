@@ -91,9 +91,10 @@
                        <el-col :span="22" :offset="2">
                             <el-form-item label="发起人" label-width="120px">
                                 <el-input clearable  v-model="DataForm.displaystartMan" placeholder="请输入" class="Carfiles"></el-input>
-                                 <img class="icon-search"
+                                <el-button type="primary" size="mini" icon="el-icon-search" @click="MoreSearchPS(DataForm)"></el-button>
+                                <!-- <img class="icon-search"
                                     @click="MoreSearchPS(DataForm)"
-                                    src="../../assets/img/search.svg">
+                                    src="../../assets/img/search.svg">-->
                             </el-form-item>
                        </el-col>
                         <el-col :span="22" :offset="2">
