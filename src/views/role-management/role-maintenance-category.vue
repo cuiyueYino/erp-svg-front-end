@@ -274,6 +274,10 @@ export default {
             let fromdata={};
             fromdata.page=page;
             fromdata.size=size;
+            let ClickData=this.NodeClickData;
+            if(ClickData.id){
+                fromdata.parentId=ClickData.id;
+            }
             this.$api.RoleManagement.findRoleTypePage(fromdata).then(response => {
                 let responsevalue = response;
                 if (responsevalue) {
@@ -500,15 +504,17 @@ export default {
         //树结构点击事件
         handleNodeClick(data) {
             this.NodeClickData=data;
+            console.log(this.NodeClickData)
             let treeType=data.type;
             if(treeType==1 || treeType==2){
                 if(data.children.length > 0){
-                    let dataA=[];
+                    /*let dataA=[];
                     let dataB=[];
                     dataA.push(data);
                     dataB=dataB.concat(dataA,data.children);
                     this.tableData =dataB;
-                    this.total=(data.children.length+1);
+                    this.total=(data.children.length+1);*/
+                    this.searchRoleType(1,this.pageSize)
                 }else{
                     let dataA=[];
                     dataA.push(data);
