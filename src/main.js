@@ -35,7 +35,8 @@ import globalVariable from './utils/global_variable.js';
 import permission from './permission.js'
 
 //打印
-import Print from 'vue-print-nb'
+// import Print from 'vue-print-nb'
+import Print from './plugins/print/Print'
 
 import erpDialog from './components/page/erpDialog.vue'
 Vue.component('erpDialog', erpDialog)
