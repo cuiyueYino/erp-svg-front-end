@@ -13,27 +13,27 @@
 									</el-select>
 								</el-form-item>
 							</el-col>
-							<el-col :span="3">
+							<el-col :span="4">
 								<el-form-item prop="code">
 									<el-input clearable v-model="formInline.code" placeholder="主表分类编码"></el-input>
 								</el-form-item>
 							</el-col>
-							<el-col :span="3">
+							<el-col :span="4">
 								<el-form-item prop="name">
 									<el-input clearable v-model="formInline.name" placeholder="主表分类名称"></el-input>
 								</el-form-item>
 							</el-col>
-							<el-col :span="3">
+							<el-col :span="4">
 								<el-form-item prop="tableName">
 									<el-input clearable v-model="formInline.tableName" placeholder="数据库表名"></el-input>
 								</el-form-item>
 							</el-col>
-							<el-col :span="3">
+							<el-col :span="4">
 								<el-form-item prop="remark">
 									<el-input clearable v-model="formInline.remark" placeholder="描述"></el-input>
 								</el-form-item>
 							</el-col>
-							<el-col :span="8">
+							<el-col :span="5">
 								<el-form-item>
 									<el-button type="primary" icon='el-icon-search' size="small" @click="$refs.pageNation.toBegin()">搜索</el-button>
 									<el-button type="primary" icon='el-icon-refresh' size="small" @click="$refs.formInline.resetFields();toSelect()">重置</el-button>
