@@ -588,7 +588,7 @@ export default {
                 this.$message.error('请选择一项');
             }else{
                 let selectData=this.multipleSelection;
-                let subject=selectData[0].fsubject;
+                /*let subject=selectData[0].fsubject;
                 subject= subject.substring(0,3);
                 if(subject.indexOf('转发')>-1){
                     this.$message.error('转发邮件不能添加关注!');
@@ -611,6 +611,21 @@ export default {
                         }
                     });
                 }
+                */
+                //bug 730
+                let fromdata={};
+                fromdata.fvoucherOid=selectData[0].fsrcoId;
+                fromdata.fattentionOid=localStorage.getItem("ms_userId");
+                this.$api.processSet.addAttention(fromdata).then(response => {
+                    let responsevalue = response;
+                    if (responsevalue) {
+                        let returndata = responsevalue.data;
+                        this.$message.success('添加关注成功!');
+                        this.reload();
+                    } else {
+                        this.$message.success('数据库没有该条数据!');
+                    }
+                });
             }
         },
     },
