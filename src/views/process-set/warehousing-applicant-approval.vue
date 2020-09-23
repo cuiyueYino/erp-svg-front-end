@@ -15,7 +15,7 @@
                     <el-row :gutter="24" style="text-align: right">
                         <el-col :span="10" :offset="14" v-if="rowFstatus == 4?true:false">
                             <el-button type="success" icon="el-icon-position" size="small" plain @click="baseInputTable('转发')" v-if="rowWAADataObj.sign">转发</el-button>
-                            <!-- <el-button type="success" icon="el-icon-star-off" size="small" plain @click="basefollow()">关注</el-button> -->
+                            <el-button type="success" icon="el-icon-star-off" size="small" plain @click="basefollow()" v-if="rowWAADataObj.attention">关注</el-button>
                             <el-button type="primary" icon="el-icon-postcard" size="small" plain @click="removeBizMail" v-if="rowWAADataObj.read">已阅</el-button>
                         </el-col>
                         <el-col :span="12" :offset="12" v-else-if="rowFstatus == 1?true:false">
@@ -353,40 +353,48 @@ export default {
         //判断当前节点是否是手工指定下一节点
         checkMaile(){
             let DataF={};
+            let subject = "";
             if(this.isOa) {
                 DataF.foid=this.rowWAADataObj.foid;
+                subject=this.rowWAADataObj.fsubject;
             }else{
                 DataF.foid=this.rowWAADataObj.selectData[0].foid;
+                subject=this.rowWAADataObj.selectData[0].fsubject;
+            }
+            subject= subject.substring(0,4);
+            if (subject.indexOf("正在加签") > -1) {
+                this.$message.error('加签未结束，请结束加签再提交!');
+                return;
             }
             this.$confirm('单据提交后将流转到下一个节点，确实要提交当前数据吗？', '确认', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
-                    type: 'warning'
-                }).then(() => {
-                    this.$api.processSet.getProcessorByMaile(DataF).then(res=>{
-                        if(res.data){
-                            if(res.data.code ==0){
-                                if(res.data.data){
-                                    //手工指定下一节点
-                                    if(res.data.data.fmntnextjoin ===1){
-                                        this.baseInputTable("手工指定下一节点");
-                                    }else{
-                                        //正常提交
-                                        this.submitMethod('','');
-                                    }
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).then(() => {
+                this.$api.processSet.getProcessorByMaile(DataF).then(res=>{
+                    if(res.data){
+                        if(res.data.code ==0){
+                            if(res.data.data){
+                                //手工指定下一节点
+                                if(res.data.data.fmntnextjoin ===1){
+                                    this.baseInputTable("手工指定下一节点");
                                 }else{
                                     //正常提交
                                     this.submitMethod('','');
                                 }
                             }else{
-                                this.$message.error(res.data.msg);
+                                //正常提交
+                                this.submitMethod('','');
                             }
                         }else{
-                            this.$message.error("保存失败,请填联系管理员!");
+                            this.$message.error(res.data.msg);
                         }
-                    },error=>{
-                        console.log(error)
-                    });
+                    }else{
+                        this.$message.error("保存失败,请填联系管理员!");
+                    }
+                },error=>{
+                    console.log(error)
+                });
             })
         },
         //提交按钮点击事件
@@ -662,7 +670,7 @@ export default {
                 selectData.push(this.rowWAADataObj);
             }
             let subject=selectData[0].fsubject;
-            subject= subject.substring(0,3);
+            subject= subject.substring(0,4);
             if(subject.indexOf('转发')>-1){
                 this.$message.error('转发邮件不能添加关注!');
             }else if(subject.indexOf('抄送')>-1){
@@ -795,6 +803,7 @@ export default {
                     formDataA.userId=localStorage.getItem("ms_userId");
                     this.title = "入库申请申请人审批";
                 }
+                console.log(this.rowWAADataObj)
                 this.$api.processSet.getunhandledTask(formDataA).then(response => {
                     let responsevalue = response;
                     if (responsevalue) {

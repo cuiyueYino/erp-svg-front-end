@@ -655,16 +655,33 @@ export default {
         let selectData = this.multipleSelection;
         if(selectData[0].repeat && selectData[0].repeat!=''){
           if(data =='委托' || data =='加签'){
-            this.$message.error("被转发邮件不能"+data+"!");
+            this.$message.error("当前邮件是转发邮件，不能进行"+data+"!");
             return;
           }
         }
-        /*if(selectData[0].trustMan !=''){
-          if(data =='委托' || data =='加签'){
-            this.$message.error("被委托邮件不能"+data+"!");
+        if(data =='委托'){
+          let subject =selectData[0].fsubject;
+          subject= subject.substring(0,4);
+          if (subject.indexOf("正在加签") > -1) {
+            this.$message.error('当前邮件是正在加签邮件，不能进行委托!');
             return;
+          }else{
+            if (subject.indexOf("加签") > -1) {
+              this.$message.error('当前邮件是加签邮件，不能进行委托!');
+              return;
+            }
           }
-        }*/
+        }
+        if(data =='加签'){
+          let subject1 =selectData[0].fsubject;
+          subject1= subject1.substring(0,4);
+          if (subject.indexOf("正在加签") > -1) {}else{
+            if (subject.indexOf("加签") > -1) {
+              this.$message.error('当前邮件是加签邮件，不能进行加签!');
+              return;
+            }
+          }
+        }
         this.rowUTStype = true;
         let finandata = {};
         finandata.finanrowname = "人员缺省查询方案";
@@ -692,7 +709,7 @@ export default {
       } else {
         let selectData = this.multipleSelection;
         let subject = selectData[0].fsubject;
-        subject= subject.substring(0,3);
+        subject= subject.substring(0,4);
         if (subject.indexOf("转发") > -1) {
           this.$message.error("转发邮件不能添加关注!");
         } else if (subject.indexOf("抄送") > -1) {
@@ -746,12 +763,24 @@ export default {
         finandata.finanrowname = "人员缺省查询方案";
         finandata.finanrowId = "QS_0056";
         finandata.nametitle = this.multipleSelection[0].fsrcCompany;
-        finandata.relay = true,
-        finandata.attention = true,
-        finandata.sign = true,
-        finandata.commit = true,
-        finandata.read = true,
-        finandata.trust = true,
+        let subject = selectData[0].fsubject;
+        subject= subject.substring(0,4);
+        if (subject.indexOf("加签") > -1) {
+          finandata.relay = false;
+          finandata.attention = false;
+          finandata.sign = false;
+          finandata.commit = true;
+          finandata.read = false;
+          finandata.trust = false;
+        }else{
+          finandata.relay = true;
+          finandata.attention = true;
+          finandata.sign = true;
+          finandata.commit = true;
+          finandata.read = true;
+          finandata.trust = true;
+        }
+        
         this.rowWAADataObj = finandata;
         this.rowWAAtype = true;
         this.financingLFCAtype = true;
