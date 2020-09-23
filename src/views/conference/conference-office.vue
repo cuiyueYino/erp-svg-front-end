@@ -353,6 +353,15 @@
               message: "长度在 1 到 50 个字符",
               trigger: "blur",
             },
+            /*
+						 孟鹏飞 9.23 
+						 编码只能输入 英文和数字
+						 * */
+						{
+							pattern: /^[1-9]\d*$/,
+							message: '请输入正确的编码',
+							trigger: 'blur'
+						}
           ],
           fname: [
             {required: true, message: "请输入名称", trigger: "blur"},
@@ -363,7 +372,14 @@
               trigger: "blur",
             },
           ],
-          fvolume: [{required: true, validator: checkInt, trigger: "blur"}],
+          fvolume: [
+          {required: true, validator: checkInt, trigger: "blur"},
+          {
+							pattern: /^[1-9]\d*$/,
+							message: '请输入正确的容量',
+							trigger: 'blur'
+						}
+          ],
           fsite: [
             {required: true, message: "请输入地点", trigger: "blur"},
             {
