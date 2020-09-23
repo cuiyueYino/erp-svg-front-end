@@ -37,15 +37,13 @@
         <el-row :gutter="24">
           <el-col :span="11">
             <el-form-item label="编码：" :label-width="formLabelWidth" prop="fcode">
-              <el-input v-if="title == '新建会议申请' || title == '修改会议申请'" v-model="searchForm.fcode" size="small"
-                        autocomplete="off"></el-input>
+              <el-input v-if="title == '新建会议申请' || title == '修改会议申请'" v-model="searchForm.fcode" size="small" autocomplete="off"></el-input>
               <el-input v-else v-model="searchForm.fcode" :disabled="true" size="small" autocomplete="off"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="11" style="margin-left: 32px;">
             <el-form-item label="名称：" :label-width="formLabelWidth" prop="fname">
-              <el-input v-if="title == '新建会议申请' || title == '修改会议申请'" v-model="searchForm.fname" size="small"
-                        autocomplete="off"></el-input>
+              <el-input v-if="title == '新建会议申请' || title == '修改会议申请'" v-model="searchForm.fname" size="small" autocomplete="off"></el-input>
               <el-input v-else v-model="searchForm.fname" :disabled="true" size="small" autocomplete="off"></el-input>
             </el-form-item>
           </el-col>
@@ -707,6 +705,11 @@
               message: "长度在 1 到 50 个字符",
               trigger: "blur",
             },
+            {
+							pattern: "^[a-zA-Z0-9_-]+$",
+              message: '请输入字母数字下划线',
+              trigger: "blur"
+						}
           ],
           fname: [
             {required: true, message: "请输入名称", trigger: "blur"},
@@ -719,7 +722,13 @@
           ],
           fcpmcount: [
             {required: true, message: "请输入参会人数（人）", trigger: "blur"},
-            {validator: checkInt, trigger: "blur"}],
+            {
+							pattern: "^[1-9]*$",
+              message: '请输入正整数',
+              trigger: "blur"
+						}
+          ],
+            //{validator: checkInt, trigger: "blur"}],
           fconvenername: [
             {required: true, message: "请输入召集人", trigger: "change"},
             {
@@ -833,7 +842,6 @@
                    this.searchForm.fcompanyname = item.name
                }
            })
-           console.log( this.searchForm)
        },
       //公司
       getCompany() {
@@ -876,7 +884,6 @@
       // 暂存
       stagingConfApply(formName) {
         this.check();
-        console.log(this.searchForm);
         this.$api.confMangement
           .stagingConfApply(this.searchForm)
           .then((res) => {
