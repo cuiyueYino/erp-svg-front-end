@@ -89,12 +89,16 @@
                 <el-row class="elrowStyle">
                     <el-col :span="6" class="elColCenter">部门</el-col>
                     <el-col :span="6"  class="elColCenter">等于</el-col>
-                    <el-col :span="5">
+                    <el-col :span="6">
                        <el-input v-model="dialog.departmentName" size="mini"></el-input>
                     </el-col>
-                    <el-col :span="1">
+                	 <!--
+                     	孟鹏飞 9.23修改
+                    	部门直接通过输入值查询
+                    -->
+                    <!--<el-col :span="1">
                         <el-button type="primary" size="mini" icon="el-icon-search" @click="MoreSearchDS(dialog)"></el-button>
-                    </el-col>
+                    </el-col>-->
                 </el-row>
                 <el-row class="elrowStyle">
                     <el-col :span="6" class="elColCenter">在职状态</el-col>
