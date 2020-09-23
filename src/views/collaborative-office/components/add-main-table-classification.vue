@@ -269,8 +269,8 @@
 		  	//字段类型改变
 			fieldChange(row){
 				if(row.fieldType != 9){
-				this.fieldContent.fieldContent = null;
-				this.fieldContent.fieldContentName = null;
+					row.fieldContent = "";
+					row.fieldContentName = "";
 				}
 			},
 			//状态改变
