@@ -54,7 +54,7 @@
                         <EachPerEachTableAdjPage  :rowEachPerEachTableAdjDataObj="rowEachPerEachTableAdjDataObj" :rowEachPerEachTableAdjtype="rowEachPerEachTableAdjtype" @changeShow="showLookOrUpdate"/>
                         <ConferenceApplyPage  :rowConferenceApplyDataObj="rowConferenceApplyDataObj" :rowConferenceApplytype="rowConferenceApplytype" @changeShow="showLookOrUpdate"/>
                         <EconomicIndicatorsPage  :rowEconomicIndicatorsDataObj="rowEconomicIndicatorsDataObj" :rowEconomicIndicatorstype="rowEconomicIndicatorstype" @changeShow="showLookOrUpdate"/>
-                        <WorkItemPage  v-if="itemsFlag" :context="context" :showSeeOrUpd ="showSeeOrUpd" :todoFlag="todoFlag" @changeShow="showLookOrUpdate" />
+			            <workList v-if="itemsFlag" :context="context" :showSeeOrUpd="showSeeOrUpd" :todoFlag="todoFlag" />
 			            <EachPerEachTableModifyPage  :rowEachPerEachTableModifyDataObj="rowEachPerEachTableModifyDataObj" :rowEachPerEachTableModifyype="rowEachPerEachTableModifyype" @changeShow="showLookOrUpdate"/>
                     </el-row>
 
@@ -132,7 +132,8 @@ import EmpApprTabNumDetailPage from '../plan-options/employees-appraisal-table-n
 import CooTaskDetailPage from '../plan-options/cooperate-task-detail.vue';// 配合任务  A
 import ConferenceApplyPage from '../plan-options/conference-apply-detail.vue';// 会议申请
 import EconomicIndicatorsPage from '../plan-options/economic-Indicators-detail.vue';// 经济指标
-import WorkItemPage from '../../views/collaborative-office/components/see-work-items.vue';// 工作事项的详情
+//import WorkItemPage from '../../views/collaborative-office/components/see-work-items.vue';// 工作事项的详情
+import workList from '../plan-options/work-list.vue'; // 工作事项的详情
 
 
 export default {
@@ -176,7 +177,8 @@ export default {
         CooTaskDetailPage,
         ConferenceApplyPage,
         EconomicIndicatorsPage,
-        WorkItemPage,
+//      WorkItemPage,
+        workList,
         EachPerEachTableModifyPage
     },
     inject: ['reload'],
