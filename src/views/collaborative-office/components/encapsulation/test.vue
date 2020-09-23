@@ -80,6 +80,7 @@
 									align: []
 								}],
 								['clean'],
+								['image'],
 								[{
 										table: 'TD'
 									},
