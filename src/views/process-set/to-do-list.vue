@@ -11,63 +11,54 @@
           <el-button
             type="danger"
             icon="el-icon-error"
-            plain
             @click="remove"
             size="small"
           >移除</el-button>
           <el-button
             type="success"
             icon="el-icon-refresh-right"
-            plain
             @click="refresh"
             size="small"
           >刷新</el-button>
           <el-button
             type="primary"
             icon="el-icon-search"
-            plain
             @click="search"
             size="small"
           >查询</el-button>
           <el-button
             type="danger"
             icon="el-icon-picture-outline"
-            plain
             @click="flowChart()"
             size="small"
           >流程图</el-button>
           <el-button
             type="success"
             icon="el-icon-folder-checked"
-            plain
             @click="handle()"
             size="small"
           >处理</el-button>
           <el-button
             type="success"
             icon="el-icon-position"
-            plain
             @click="baseInputTable('转发')"
             size="small"
           >转发</el-button>
           <el-button
             type="success"
             icon="el-icon-circle-check"
-            plain
             @click="baseInputTable('委托')"
             size="small"
           >委托</el-button>
           <el-button
             type="success"
             icon="el-icon-star-off"
-            plain
             @click="basefollow()"
             size="small"
           >关注</el-button>
           <el-button
             type="success"
             icon="el-icon-circle-plus-outline"
-            plain
             @click="baseInputTable('加签')"
             size="small"
           >加签</el-button>

@@ -4,13 +4,13 @@
         <el-card class="box-table">
            <el-row :gutter="24" style="text-align: right">
                 <el-col :span="11" :offset="13">
-                    <el-button type="success" icon="el-icon-refresh-right" size="small" plain @click="refresh">刷新</el-button>
-                    <el-button type="primary" icon="el-icon-search" size="small" plain @click="search">查询</el-button>
-                    <el-button type="info" icon="el-icon-view" size="small" plain @click="Tolook">查看</el-button>
-                    <el-button type="success" icon="el-icon-position" size="small" plain @click="baseInputTable('转发')">转发</el-button>
-                    <el-button type="success" icon="el-icon-circle-plus-outline" size="small" plain @click="AdditionalApp()">加批</el-button>
-                    <el-button type="success" icon="el-icon-star-off" size="small" plain @click="basefollow()">关注</el-button>
-<!--                    <el-button type="info" icon="el-icon-printer" size="small" plain @click="basePrinting()">打印</el-button>-->
+                    <el-button type="success" icon="el-icon-refresh-right" size="small"  @click="refresh">刷新</el-button>
+                    <el-button type="primary" icon="el-icon-search" size="small"  @click="search">查询</el-button>
+                    <el-button type="info" icon="el-icon-view" size="small"  @click="Tolook">查看</el-button>
+                    <el-button type="success" icon="el-icon-position" size="small"  @click="baseInputTable('转发')">转发</el-button>
+                    <el-button type="success" icon="el-icon-circle-plus-outline" size="small"  @click="AdditionalApp()">加批</el-button>
+                    <el-button type="success" icon="el-icon-star-off" size="small"  @click="basefollow()">关注</el-button>
+<!--                    <el-button type="info" icon="el-icon-printer" size="small"  @click="basePrinting()">打印</el-button>-->
                 </el-col>
             </el-row>
         </el-card>

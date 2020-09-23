@@ -4,12 +4,12 @@
         <el-card class="box-card">
            <el-row :gutter="24">
                  <el-col :span="10" :offset="14">
-                     <el-button type="success" icon="el-icon-refresh-right" size="small" plain @click="refresh">刷新</el-button>
-                     <el-button type="primary" icon="el-icon-search" size="small" plain @click="search">查询</el-button>
-                     <el-button type="danger" icon="el-icon-help" size="small" plain @click="circulation">流转</el-button>
-                     <el-button type="warning" icon="el-icon-edit-outline" size="small" plain @click="toEdit">修改</el-button>
-                     <el-button type="danger" icon='el-icon-delete' size="small" plain @click="deleteMsg">删除</el-button>
-                     <el-button type="info" icon="el-icon-view" size="small" plain @click="Tolook">查看</el-button>
+                     <el-button type="success" icon="el-icon-refresh-right" size="small"  @click="refresh">刷新</el-button>
+                     <el-button type="primary" icon="el-icon-search" size="small"  @click="search">查询</el-button>
+                     <el-button type="danger" icon="el-icon-help" size="small"  @click="circulation">流转</el-button>
+                     <el-button type="warning" icon="el-icon-edit-outline" size="small"  @click="toEdit">修改</el-button>
+                     <el-button type="danger" icon='el-icon-delete' size="small"  @click="deleteMsg">删除</el-button>
+                     <el-button type="info" icon="el-icon-view" size="small"  @click="Tolook">查看</el-button>
                  </el-col>
             </el-row>
         </el-card>

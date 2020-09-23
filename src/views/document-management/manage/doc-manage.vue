@@ -54,19 +54,19 @@
                               ></el-date-picker>
                             </el-col>
                             <el-col :span="1">
-                                <el-button type="primary" size="small" icon="el-icon-search" plain @click="findData">查询</el-button>
+                                <el-button type="primary" size="small" icon="el-icon-search"  @click="findData">查询</el-button>
                             </el-col>
                         </el-row>
 
                         <el-row :gutter="14">
                             <el-col :span="16" style="margin-top: 20px;">
-                              <el-button type="success" plain icon="el-icon-folder-add" size="small" :disabled='disFlag' @click="createDocumentCategory">新增</el-button>
-                              <el-button type="warning" plain icon="el-icon-edit-outline" size="small" @click="editDocumentCategory()" >修改</el-button>
-                              <el-button type="success" icon="el-icon-upload2" size="small" plain @click="operateDocumentCategory(1)">置顶</el-button>
-                              <el-button type="warning" icon="el-icon-download" size="small"  plain @click="operateDocumentCategory(2)">取消置顶</el-button>
-                              <el-button type="success" icon="el-icon-plus" size="small" plain @click="operateDocumentCategory(3)">发布</el-button>
-                              <el-button type="warning" icon="el-icon-folder-delete" size="small" plain @click="operateDocumentCategory(4)">取消发布</el-button>
-                              <el-button type="info" plain icon="el-icon-view" size="small" @click="showDocumentCategory">查看</el-button>
+                              <el-button type="success"  icon="el-icon-folder-add" size="small" :disabled='disFlag' @click="createDocumentCategory">新增</el-button>
+                              <el-button type="warning"  icon="el-icon-edit-outline" size="small" @click="editDocumentCategory()" >修改</el-button>
+                              <el-button type="success" icon="el-icon-upload2" size="small"  @click="operateDocumentCategory(1)">置顶</el-button>
+                              <el-button type="warning" icon="el-icon-download" size="small"   @click="operateDocumentCategory(2)">取消置顶</el-button>
+                              <el-button type="success" icon="el-icon-plus" size="small"  @click="operateDocumentCategory(3)">发布</el-button>
+                              <el-button type="warning" icon="el-icon-folder-delete" size="small"  @click="operateDocumentCategory(4)">取消发布</el-button>
+                              <el-button type="info"  icon="el-icon-view" size="small" @click="showDocumentCategory">查看</el-button>
                             </el-col>
                         </el-row>
                     </el-card>

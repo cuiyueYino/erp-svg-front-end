@@ -15,7 +15,7 @@
 				<el-col :span="6" style="text-align: right;">
 					<el-button @click="submitForm(2)" type="success" size="small" icon="el-icon-copy-document">提交</el-button>
 					<el-button @click="submitForm(1)" type="success" size="small" icon="el-icon-folder-remove">暂存</el-button>
-					<el-button @click="preview()" type="primary" plain size="small" icon="el-icon-view">预览</el-button>
+					<el-button @click="preview()" type="primary"   size="small" icon="el-icon-view">预览</el-button>
 					<el-button type="danger" size="small" icon="el-icon-close" @click="$parent.toSelect()">返回</el-button>
 				</el-col>
 			</el-row>
@@ -214,7 +214,7 @@
 		<div v-if="showFigForm">
 			<formAndTable :files="files" dis="2" showAdd="1" :form-data="conData">
 				<el-row style="text-align: right;margin-bottom: 10px;">
-					<el-button icon="el-icon-arrow-left" size="small" type="danger" plain @click="showFigForm = false">返回</el-button>
+					<el-button icon="el-icon-arrow-left" size="small" type="danger"   @click="showFigForm = false">返回</el-button>
 				</el-row>
 			</formAndTable>
 		</div>

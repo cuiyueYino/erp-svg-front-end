@@ -87,8 +87,8 @@
                     </el-row>
                     <el-row :gutter="24">
                         <el-col :span="6" :offset="18">
-                            <el-button type="primary" size="small" icon='el-icon-refresh' plain @click="reWorkSearchTable('formData')">重置</el-button>
-                            <el-button type="primary" size="small" icon='el-icon-search' plain @click="workSearchTableBtn">搜索</el-button>
+                            <el-button type="primary" size="small" icon='el-icon-refresh'  @click="reWorkSearchTable('formData')">重置</el-button>
+                            <el-button type="primary" size="small" icon='el-icon-search'  @click="workSearchTableBtn">搜索</el-button>
                         </el-col>
                     </el-row>
                     <!-- 表格 -->
@@ -108,8 +108,8 @@
                     <!-- Condition END-->
                     <!-- footer -->
                     <footer>
-                        <el-button  type='success' icon='el-icon-check' size="small" plain @click="gridDataAdd">确定</el-button>
-                        <!-- <el-button  type="primary" size="small" plain @click="dialogTableVisible = false">关闭</el-button> -->
+                        <el-button  type='success' icon='el-icon-check' size="small"  @click="gridDataAdd">确定</el-button>
+                        <!-- <el-button  type="primary" size="small"  @click="dialogTableVisible = false">关闭</el-button> -->
                     </footer>
                     <!-- footer END-->
                 </el-dialog>

@@ -29,10 +29,10 @@
 							</el-radio-group>
 						</el-form-item>
 						<el-form-item style="margin-left:0px;float:right;">
-							<el-button type="primary" icon='el-icon-search' size="small" plain @click="onSubmit">搜索</el-button>
-							<el-button type="primary" icon='el-icon-refresh' size="small" plain @click="resetForm('searchForm')">重置</el-button>
-							<el-button type="success" icon='el-icon-folder-add' size="small" plain @click="add">新增</el-button>
-							<el-button type="warning" icon='el-icon-document-copy' size="small" plain @click="toEdit('编辑')">编辑</el-button>
+							<el-button type="primary" icon='el-icon-search' size="small"  @click="onSubmit">搜索</el-button>
+							<el-button type="primary" icon='el-icon-refresh' size="small"  @click="resetForm('searchForm')">重置</el-button>
+							<el-button type="success" icon='el-icon-folder-add' size="small"  @click="add">新增</el-button>
+							<el-button type="warning" icon='el-icon-document-copy' size="small"  @click="toEdit('编辑')">编辑</el-button>
 						</el-form-item>
 					</el-col>
 				</el-row>

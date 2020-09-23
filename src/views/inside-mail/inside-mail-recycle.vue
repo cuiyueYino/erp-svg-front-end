@@ -35,12 +35,12 @@
                 </el-col >
                 <el-col :span="4">
                     <el-button el-button type="primary" icon='el-icon-search' size="small" @click="search">搜索</el-button>
-                    <el-button type="primary" plain icon="el-icon-tickets" size="small" @click="showAll">显示全部</el-button>
+                    <el-button type="primary"  icon="el-icon-tickets" size="small" @click="showAll">显示全部</el-button>
                 </el-col>
                 <el-col :span="13" style="text-align: right;">
-                    <el-button type="warning" plain icon="el-icon-bangzhu" @click="recover">还原</el-button>
-                    <el-button type="info" plain icon="el-icon-view"  size="small" @click="read">查看</el-button>
-                    <el-button type="danger" plain icon="el-icon-delete" size="small" @click="deleteMsg">删除</el-button>
+                    <el-button type="warning"  icon="el-icon-bangzhu" @click="recover">还原</el-button>
+                    <el-button type="info"  icon="el-icon-view"  size="small" @click="read">查看</el-button>
+                    <el-button type="danger"  icon="el-icon-delete" size="small" @click="deleteMsg">删除</el-button>
                 </el-col>
             </el-row>
         </el-card>

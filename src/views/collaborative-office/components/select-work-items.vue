@@ -36,7 +36,7 @@
 					<el-button @click="$parent.toAdd('1')" icon="el-icon-folder-add" type="success" size="small">新增</el-button>
 					<el-button @click="toUpd()" icon="el-icon-edit-outline" type="warning" size="small">修改</el-button>
 					<el-button @click="del()" icon="el-icon-delete" type="danger" size="small">删除</el-button>
-					<el-button @click="toSee()" icon="el-icon-view" type="info" plain size="small">查看</el-button>
+					<el-button @click="toSee()" icon="el-icon-view" type="info"   size="small">查看</el-button>
 				</el-col>
 			</el-row>
 		</el-card>

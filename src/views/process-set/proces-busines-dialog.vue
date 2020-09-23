@@ -30,7 +30,7 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-button type="primary"  icon='el-icon-search' size="small" plain  @click="searchKey">查询</el-button>
+                        <el-button type="primary"  icon='el-icon-search' size="small"   @click="searchKey">查询</el-button>
                     </el-col>
             <el-col :span="24" class="user-tree">
             <!-- 树状图 -->
@@ -64,8 +64,8 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
-                        <el-button type="success" size="small" icon='el-icon-search' plain @click="workSearchTable">搜索</el-button>
-                        <el-button type="primary" size="small" icon='el-icon-refresh' plain @click="reWorkSearchTable()">重置</el-button>
+                        <el-button type="success" size="small" icon='el-icon-search'  @click="workSearchTable">搜索</el-button>
+                        <el-button type="primary" size="small" icon='el-icon-refresh'  @click="reWorkSearchTable()">重置</el-button>
                     </el-col>
                  </el-row>
                 <!--<el-col :span="8" v-show="type !== '用户'">
@@ -146,8 +146,8 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
-                        <el-button type="success" size="small" icon='el-icon-search' plain @click="workSearchTable">搜索</el-button>
-                        <el-button type="primary" size="small" icon='el-icon-refresh' plain @click="reWorkSearchTable()">重置</el-button>
+                        <el-button type="success" size="small" icon='el-icon-search'  @click="workSearchTable">搜索</el-button>
+                        <el-button type="primary" size="small" icon='el-icon-refresh'  @click="reWorkSearchTable()">重置</el-button>
                     </el-col>
                 </el-row>
             

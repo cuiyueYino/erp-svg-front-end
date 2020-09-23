@@ -14,24 +14,24 @@
                 <el-card>
                     <el-row :gutter="24" style="text-align: right">
                         <el-col :span="10" :offset="14" v-if="rowFstatus == 4?true:false">
-                            <el-button type="success" icon="el-icon-position" size="small" plain @click="baseInputTable('转发')" v-if="rowWAADataObj.relay">转发</el-button>
-                            <el-button type="success" icon="el-icon-star-off" size="small" plain @click="basefollow()" v-if="rowWAADataObj.attention">关注</el-button>
-                            <el-button type="primary" icon="el-icon-postcard" size="small" plain @click="removeBizMail" v-if="rowWAADataObj.read">已阅</el-button>
+                            <el-button type="success" icon="el-icon-position" size="small"  @click="baseInputTable('转发')" v-if="rowWAADataObj.relay">转发</el-button>
+                            <el-button type="success" icon="el-icon-star-off" size="small"  @click="basefollow()" v-if="rowWAADataObj.attention">关注</el-button>
+                            <el-button type="primary" icon="el-icon-postcard" size="small"  @click="removeBizMail" v-if="rowWAADataObj.read">已阅</el-button>
                         </el-col>
                         <el-col :span="12" :offset="12" v-else-if="rowFstatus == 1?true:false">
-                            <el-button type="success" icon="el-icon-circle-plus-outline" size="small" plain @click="baseInputTable('加签')" v-if="rowWAADataObj.sign">加签</el-button>
-                            <el-button type="success" icon="el-icon-position" size="small" plain @click="baseInputTable('转发')" v-if="rowWAADataObj.relay">转发</el-button>
-                            <el-button type="success" icon="el-icon-circle-check" size="small" plain @click="baseInputTable('委托')" v-if="rowWAADataObj.trust">委托</el-button>
-                            <el-button type="success" icon="el-icon-star-off" size="small" plain @click="basefollow()" v-if="rowWAADataObj.attention">关注</el-button>
-                            <el-button type="success" icon="el-icon-copy-document" size="small" plain @click="effectOrDisableMsg('ruleForm')" v-if="rowWAADataObj.commit">提交</el-button>
-                            <el-button type="info" icon="el-icon-printer" size="small" v-print="printObj" plain v-if="rowWAADataObj.print" >打印</el-button>
+                            <el-button type="success" icon="el-icon-circle-plus-outline" size="small"  @click="baseInputTable('加签')" v-if="rowWAADataObj.sign">加签</el-button>
+                            <el-button type="success" icon="el-icon-position" size="small"  @click="baseInputTable('转发')" v-if="rowWAADataObj.relay">转发</el-button>
+                            <el-button type="success" icon="el-icon-circle-check" size="small"  @click="baseInputTable('委托')" v-if="rowWAADataObj.trust">委托</el-button>
+                            <el-button type="success" icon="el-icon-star-off" size="small"  @click="basefollow()" v-if="rowWAADataObj.attention">关注</el-button>
+                            <el-button type="success" icon="el-icon-copy-document" size="small"  @click="effectOrDisableMsg('ruleForm')" v-if="rowWAADataObj.commit">提交</el-button>
+                            <el-button type="info" icon="el-icon-printer" size="small" v-print="printObj"  v-if="rowWAADataObj.print" >打印</el-button>
                         </el-col>
                         <el-col :span="12" :offset="12" v-else>
-                            <el-button type="success" icon="el-icon-circle-plus-outline" size="small" plain @click="baseInputTable('加签')" v-if="rowWAADataObj.sign">加签</el-button>
-                            <el-button type="success" icon="el-icon-position" size="small" plain @click="baseInputTable('转发')" v-if="rowWAADataObj.relay">转发</el-button>
-                            <el-button type="success" icon="el-icon-circle-check" size="small"  plain @click="baseInputTable('委托')" v-if="rowWAADataObj.trust">委托</el-button>
-                            <el-button type="success" icon="el-icon-star-off" size="small" plain @click="basefollow()" v-if="rowWAADataObj.attention">关注</el-button>
-                            <el-button type="info" icon="el-icon-printer" size="small" v-print="printObj" plain v-if="rowWAADataObj.print" >打印</el-button>
+                            <el-button type="success" icon="el-icon-circle-plus-outline" size="small"  @click="baseInputTable('加签')" v-if="rowWAADataObj.sign">加签</el-button>
+                            <el-button type="success" icon="el-icon-position" size="small"  @click="baseInputTable('转发')" v-if="rowWAADataObj.relay">转发</el-button>
+                            <el-button type="success" icon="el-icon-circle-check" size="small"   @click="baseInputTable('委托')" v-if="rowWAADataObj.trust">委托</el-button>
+                            <el-button type="success" icon="el-icon-star-off" size="small"  @click="basefollow()" v-if="rowWAADataObj.attention">关注</el-button>
+                            <el-button type="info" icon="el-icon-printer" size="small" v-print="printObj"  v-if="rowWAADataObj.print" >打印</el-button>
                         </el-col>
                     </el-row>
                     <div  id="print">

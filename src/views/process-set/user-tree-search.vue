@@ -30,7 +30,7 @@
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="4">
-                                    <el-button type="primary" icon='el-icon-search' size="small"  plain @click="searchKey">查询</el-button>
+                                    <el-button type="primary" icon='el-icon-search' size="small"   @click="searchKey">查询</el-button>
                                 </el-col>
                             </el-row>
                             <!-- 表格 -->

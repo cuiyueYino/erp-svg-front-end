@@ -24,7 +24,7 @@
                 ></el-input>
               </el-form-item>
               <el-form-item>
-                <el-button type="primary" icon='el-icon-search' size="small" plain @click="searchKey">搜索</el-button>
+                <el-button type="primary" icon='el-icon-search' size="small"   @click="searchKey">搜索</el-button>
               </el-form-item>
               <el-form-item>
                 <el-button type="success" icon='el-icon-check' size="small" @click="saveConfig">确定</el-button>
