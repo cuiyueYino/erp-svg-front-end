@@ -134,6 +134,8 @@
 					company: '_DefaultCompanyOId'
 				},
 				pageNum: 1,
+                pageNumUser:1,
+                pageNumRole:1,
 				pageSize: 10,
 				total: 2,
 				pageNum1: 1,
@@ -190,19 +192,19 @@
 						label: '公司名称'
 					},
 				],
+
+                //拼接查询条件
+                reqRole:{},
+                reqUser:{},
 			}
 		},
 		created() {
 			this.leftData = this.roleData;
 			this.rightData = this.UserData;
-			let fromdata = {};
-			fromdata.page = this.pageNum;
-			fromdata.size = this.pageSize;
-			this.searchRole(fromdata);
-			let fromdataU = {};
-			fromdataU.page = this.pageNum;
-			fromdataU.size = this.pageSize;
-			this.getUserData(fromdataU);
+
+			this.searchRole();
+
+			this.getUserData();
 			this.selectCom();
 		},
 		methods: {
@@ -217,9 +219,13 @@
 				};
 			},
 			//获取人员
-			getUserData(data) {
-				let fromdata = data;
-				this.$api.management.getUserTableData(fromdata).then(response => {
+			getUserData() {
+                let fromData={
+                    page : this.pageNumUser,
+                    size : this.pageSize,
+                };
+                Object.assign(fromData,this.reqUser);
+				this.$api.management.getUserTableData(fromData).then(response => {
 					let responsevalue = response;
 					if(responsevalue) {
 						let returndata = responsevalue.data;
@@ -267,9 +273,13 @@
 				});
 			},
 			//获取角色
-			searchRole(data) {
-				let fromdata = data;
-				this.$api.RoleManagement.findRolePage(fromdata).then(response => {
+			searchRole() {
+                let fromData={
+                    page : this.pageNumRole,
+                    size : this.pageSize,
+                };
+                Object.assign(fromData,this.reqRole);
+				this.$api.RoleManagement.findRolePage(fromData).then(response => {
 					let responsevalue = response;
 					if(responsevalue) {
 						let returndata = responsevalue.data;
@@ -295,29 +305,25 @@
 			filterLeft() {
 				this.ALLSelectFlage = false;
 				if(this.dimension == true) {
-					let fromdata = {};
-					fromdata.page =1;
-					fromdata.size = this.pageSize;
+					this.pageNumUser =1;
 					if(this.formInline.regionleft == "name") {
-						fromdata.fname = this.formInline.searchValueleft;
+						this.reqUser.fname = this.formInline.searchValueleft;
 					} else if(this.formInline.regionleft == "code") {
-						fromdata.fcode = this.formInline.searchValueleft;
+                        this.reqUser.fcode = this.formInline.searchValueleft;
 					} else if(this.formInline.regionleft == "company") {
-						fromdata.fcompanyname = this.formInline.searchValueleft;
+                        this.reqUser.fcompanyname = this.formInline.searchValueleft;
 					}
-					this.getUserData(fromdata);
+					this.getUserData();
 				} else {
-					let fromdataU = {};
-					fromdataU.page = 1;
-					fromdataU.size = this.pageSize;
+					this.pageNumRole = 1;
 					if(this.formInline.regionleft == "name") {
-						fromdataU.name = this.formInline.searchValueleft;
+						this.reqRole.name = this.formInline.searchValueleft;
 					} else if(this.formInline.regionleft == "code") {
-						fromdataU.code = this.formInline.searchValueleft;
+                        this.reqRole.code = this.formInline.searchValueleft;
 					} else if(this.formInline.regionleft == "company") {
-						fromdataU.companyName = this.formInline.searchValueleft;
+                        this.reqRole.companyName = this.formInline.searchValueleft;
 					}
-					this.searchRole(fromdataU);
+					this.searchRole();
 				}
 			},
 			//右边过滤条件
@@ -327,60 +333,56 @@
 				this.disShowPager = true;
 				this.ALLSelectFlage = false;
 				if(this.dimension == true) {
-					let fromdataU = {};
-					fromdataU.page = 1;
-					fromdataU.size = this.pageSize1;
+					this.pageNumRole = 1;
 					if(this.formInline.regionRight == "name") {
-						fromdataU.name = this.formInline.searchValueright;
+                        this.reqRole.name = this.formInline.searchValueright;
 					} else if(this.formInline.regionRight == "code") {
-						fromdataU.code = this.formInline.searchValueright;
+                        this.reqRole.code = this.formInline.searchValueright;
 					} else if(this.formInline.regionRight == "company") {
-						fromdataU.companyName = this.formInline.searchValueright;
+                        this.reqRole.companyName = this.formInline.searchValueright;
 					}
-					this.searchRole(fromdataU);
+					this.searchRole();
 				} else {
-					let fromdata = {};
-					fromdata.page = 1;
-					fromdata.size = this.pageSize2;
+					this.pageNumUser = 1;
 					if(this.formInline.regionRight == "name") {
-						fromdata.fname = this.formInline.searchValueright;
+                        this.reqUser.fname = this.formInline.searchValueright;
 					} else if(this.formInline.regionRight == "code") {
-						fromdata.fcode = this.formInline.searchValueright;
+                        this.reqUser.fcode = this.formInline.searchValueright;
 					} else if(this.formInline.regionRight == "company") {
-						fromdata.fcompanyname = this.formInline.searchValueright;
+                        this.reqUser.fcompanyname = this.formInline.searchValueright;
 					}
-					this.getUserData(fromdata);
+					this.getUserData();
 				}
 			},
 			//左边全部点击事件
 			getALLLeft() {
 				this.ALLSelectFlage = false;
+                this.formInline.regionleft = "";
+                this.formInline.searchValueleft = "";
 				if(this.dimension == true) {
-					let fromdata = {};
-					fromdata.page = 1;
-					fromdata.size = this.pageSize;
-					this.getUserData(fromdata);
+					this.reqUser= {};
+					this.pageNumUser = 1;
+					this.getUserData();
 				} else {
-					let fromdataU = {};
-					fromdataU.page = 1;
-					fromdataU.size = this.pageSize;
-					this.searchRole(fromdataU);
+					this.reqRole = {};
+					this.pageNumRole = 1;
+					this.searchRole();
 				}
 			},
 			//右边全部点击事件
 			getALLRight() {
 				this.ALLSelectFlage = false;
 				this.disShowPager = true;
+                this.formInline.regionRight = "";
+                this.formInline.searchValueright = "";
 				if(this.dimension == true) {
-					let fromdataU = {};
-					fromdataU.page = 1;
-					fromdataU.size = this.pageSize1;
-					this.searchRole(fromdataU);
+                    this.reqRole = {};
+                    this.pageNumRole = 1;
+					this.searchRole();
 				} else {
-					let fromdata = {};
-					fromdata.page = 1;
-					fromdata.size = this.pageSize2;
-					this.getUserData(fromdata);
+                    this.reqUser= {};
+                    this.pageNumUser = 1;
+					this.getUserData();
 				}
 			},
 			//切换维度
@@ -408,14 +410,12 @@
 				}
 				//this.formInline.regionleft='';
 				//this.formInline.regionRight='';
-				let fromdata = {};
-				fromdata.page = 1;
-				fromdata.size = this.pageSize;
-				this.searchRole(fromdata);
-				let fromdataU = {};
-				fromdataU.page = 1;
-				fromdataU.size = this.pageSize;
-				this.getUserData(fromdataU);
+                this.reqRole = {};
+                this.pageNumRole = 1;
+				this.searchRole();
+                this.reqUser= {};
+                this.pageNumUser = 1;
+				this.getUserData();
 			},
 			//左侧人员table行点击事件
 			selectRow(row, column, event) {
@@ -482,60 +482,32 @@
 				this.ALLSelectFlage = false;
 				this.roleLselectedList = [];
 				this.RUserLselectData = [];
-				let fromdataU = {};
-				fromdataU.page = val;
-				fromdataU.size = this.pageSize;
-				if(this.formInline.regionleft == "name") {
-					fromdataU.name = this.formInline.searchValueleft;
-				} else if(this.formInline.regionleft == "code") {
-					fromdataU.code = this.formInline.searchValueleft;
-				} else if(this.formInline.regionleft == "company") {
-					fromdataU.company = this.formInline.searchValueleft;
-				}
-				this.searchRole(fromdataU);
-				let fromdata = {};
-				fromdata.page = 1;
-				fromdata.size = this.pageSize;
-				this.getUserData(fromdata);
+                this.pageNumRole = val;
+				this.searchRole();
+                this.reqUser= {};
+                this.pageNumUser = 1;
+				this.getUserData();
 			},
 			//左侧人员分页下一页
 			onUserCurrentChange(val) {
 				this.UserselectedList = [];
 				this.RoleselectData = [];
 				this.ALLSelectFlage = false;
-				let fromdata = {};
-				fromdata.page = val;
-				fromdata.size = this.pageSize;
-				if(this.formInline.regionleft == "name") {
-					fromdata.fname = this.formInline.searchValueleft;
-				} else if(this.formInline.regionleft == "code") {
-					fromdata.fcode = this.formInline.searchValueleft;
-				} else if(this.formInline.regionleft == "company") {
-					fromdata.fcompanyoid = this.formInline.searchValueleft;
-				}
-				this.getUserData(fromdata);
-				let fromdataU = {};
-				fromdataU.page = 1;
-				fromdataU.size = this.pageSize;
-				this.searchRole(fromdataU);
+                this.pageNumUser = val;
+				this.getUserData();
+
+                this.reqRole = {};
+                this.pageNumRole = 1;
+				this.searchRole();
 			},
 			//右侧角色下一页
 			onRoleCurrentChange(val) {
-				let fromdataU = {};
-				fromdataU.page = val;
-				fromdataU.size = this.pageSize1;
-				if(this.formInline.regionRight == "name") {
-					fromdataU.name = this.formInline.searchValueright;
-				} else if(this.formInline.regionRight == "code") {
-					fromdataU.code = this.formInline.searchValueright;
-				} else if(this.formInline.regionRight == "company") {
-					fromdataU.company = this.formInline.searchValueright;
-				}
+                this.pageNumRole = val;
 				if(this.ALLSelectFlage == true) {
 					let RoleRSelect = this.RoleselectData;
-					fromdataU.roleIds = RoleRSelect;
+					this.reqRole.roleIds = RoleRSelect;
 				}
-				this.searchRole(fromdataU);
+				this.searchRole();
 			},
 			//右侧角色选中事件
 			onRoleSelectionChange(data, val) {
@@ -579,14 +551,12 @@
 			RightSelecT() {
 				this.ALLSelectFlage = true;
 				if(this.dimension == true) {
-					let fromdataU = {};
-					fromdataU.page =1;
-					fromdataU.size = this.pageSize1;
+                    this.pageNumRole = 1;
 					if(this.RoleselectData.length > 0) {
 						let RoleRSelect = this.RoleselectData;
-						fromdataU.roleIds = RoleRSelect;
+                        this.reqRole.roleIds = RoleRSelect;
 					}
-					this.searchRole(fromdataU);
+					this.searchRole();
 				} else {
 					if(this.RUserLselectData.length > 0) {
 						this.UserSelectDataPage(1, this.pageSize, this.RUserLselectData);
@@ -617,9 +587,9 @@
 					var item = this.RoleselectData[i];
 					if(id == item) {
 						if(type=="add"){
-							hasId = true;	
+							hasId = true;
 						}else{
-							this.RoleselectData.splice(i, 1); 
+							this.RoleselectData.splice(i, 1);
 							hasId = true;
 						}
 						//this.RoleselectData[i] = '';
@@ -644,17 +614,8 @@
 				if(this.ALLSelectFlage === true) {
 					this.UserSelectDataPage(val, this.pageSize, this.RUserLselectData);
 				} else {
-					let fromdata = {};
-					fromdata.page = val;
-					fromdata.size = this.pageSize2;
-					if(this.formInline.regionRight == "name") {
-						fromdata.fname = this.formInline.searchValueright;
-					} else if(this.formInline.regionRight == "code") {
-						fromdata.fcode = this.formInline.searchValueright;
-					} else if(this.formInline.regionRight == "company") {
-						fromdata.fcompanyoid = this.formInline.searchValueright;
-					}
-					this.getUserData(fromdata);
+                    this.pageNumUser = val;
+					this.getUserData();
 				}
 			},
 			//右侧人员全部选中事件
@@ -703,9 +664,9 @@
 					if(id == item) {
 						//this.RUserLselectData[i] = '';
 						if(type=="add"){
-							hasId = true;	
+							hasId = true;
 						}else{
-							this.RUserLselectData.splice(i, 1); 
+							this.RUserLselectData.splice(i, 1);
 							hasId = true;
 						}
 					}
@@ -815,45 +776,45 @@
 	/deep/ .el-textarea .el-input__count {
 		background: #fff0;
 	}
-	
+
 	/deep/ .el-select {
 		width: 100%;
 	}
-	
+
 	/deep/ .el-dropdown-menu__item {
 		padding: 0;
 	}
-	
+
 	.el-dropdown-link {
 		cursor: pointer;
 		color: #409EFF;
 		margin-right: 10px;
 	}
-	
+
 	.el-icon-arrow-down {
 		font-size: 12px;
 	}
-	
+
 	.box-card:first-child {
 		margin-bottom: 16px;
 	}
-	
+
 	.search-all {
 		margin-left: 50px;
 	}
-	
+
 	.dataForm {
 		margin-top: 10px;
 	}
-	
+
 	.elrowStyle {
 		margin-top: 20px;
 	}
-	
+
 	.elColCenter {
 		text-align: center;
 	}
-	
+
 	.pbackground {
 		text-align: center;
 		height: 30px;
@@ -861,7 +822,7 @@
 		line-height: 30px;
 		background-color: skyblue;
 	}
-	
+
 	.CheckTable {
 		overflow-y: auto;
 	}
@@ -872,15 +833,15 @@
 			min-height: 300px !important;
 		}
 	}
-	
+
 	.el-dialog__body {
 		padding: 0;
 	}
-	
+
 	.el-card__header {
 		padding: 10px 20px;
 	}
-	
+
 	.magiantop {
 		margin-top: 20px;
 	}

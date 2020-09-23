@@ -7,7 +7,7 @@
 						<el-row>
 							<el-col :span="3">
 								<el-form-item prop="status">
-									<el-select clearable v-model="formInline.status" placeholder="状态">
+									<el-select clearable v-model="formInline.status" placeholder="状态" v-if="this.show==1?false:true">
 										<el-option v-for="item in statusList" :key="item.id" :label="item.value" :value="item.id">
 										</el-option>
 									</el-select>

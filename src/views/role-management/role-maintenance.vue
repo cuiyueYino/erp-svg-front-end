@@ -119,14 +119,15 @@ export default {
             },
             checked:'',
             company:'_DefaultCompanyOId',
+
+            //搜索条件
+            reqParam :{},
         }
     },
     created(){
         this.maketree(this.company);
-        let fromdata={};
-        fromdata.page=this.pageNum;
-        fromdata.size=this.pageSize;
-        this.searchRole(fromdata);
+
+        this.searchRole();
     },
     computed:{
 
@@ -197,9 +198,13 @@ export default {
             });
         },
         //查询角色列表
-        searchRole(data){
-            let fromdata=data;
-            this.$api.RoleManagement.findRolePage(fromdata).then(response => {
+        searchRole(){
+            let fromData={
+                page : this.pageNum,
+                size : this.pageSize,
+            };
+            Object.assign(fromData,this.reqParam)
+            this.$api.RoleManagement.findRolePage(fromData).then(response => {
                 let responsevalue = response;
                 if (responsevalue) {
                     let returndata = responsevalue.data;
@@ -248,27 +253,25 @@ export default {
         onSubmit(){
             //清除树形默认选择
             this.NodeClickData={};
-            let fromdata={};
-            fromdata.page=this.pageNum;
-            fromdata.size=this.pageSize;
+            this.pageNum = 1;
             if(this.region=="name"){
-                fromdata.name=this.formCode;
+                this.reqParam.name=this.formCode;
             }else if(this.region=="code"){
-                fromdata.code=this.formCode;
+                this.reqParam.code=this.formCode;
             }else if(this.region=="roleType"){
-                fromdata.roleTypeName=this.formCode;
+                this.reqParam.roleTypeName=this.formCode;
             }
-            this.searchRole(fromdata);
+            this.searchRole();
         },
         getAll(){
             //清除树形默认选择，搜索条件数据
             this.NodeClickData={};
             this.region="";
             this.formCode="";
-            let fromdata={};
-            fromdata.page=this.pageNum;
-            fromdata.size=this.pageSize;
-            this.searchRole(fromdata);
+            this.pageNum=1;
+            this.emptyParam();
+
+            this.searchRole();
         },
         renderContent(h, { node, data, store }) {
             if(data){
@@ -309,34 +312,14 @@ export default {
             this.region="";
             this.formCode="";
             this.NodeClickData=data;
-            let fromdata={};
-            fromdata.page=this.pageNum;
-            fromdata.size=this.pageSize;
-            fromdata.roleType=data.id;
-            this.searchRole(fromdata);
+
+            this.reqParam.roleType=data.id;
+            this.searchRole();
         },
         //下一页，分页
         onCurrentChange(val){
-            let fromdata={};
-            fromdata.page=val;
-            fromdata.size=this.pageSize;
-            if(this.NodeClickData.id){
-                fromdata.roleType=this.NodeClickData.id;
-            }
-            if(this.region=="name"){
-                if(this.formCode){
-                    fromdata.name=this.formCode;
-                }
-            }else if(this.region=="code"){
-                if(this.formCode){
-                    fromdata.code=this.formCode;
-                }
-            }else if(this.region=="roleType"){
-                if(this.formCode){
-                    fromdata.roleTypeName=this.formCode;
-                }
-            }
-            this.searchRole(fromdata);
+            this.pageNum=val;
+            this.searchRole();
         },
         //选择，多选
         onSelectionChange(val){
@@ -384,7 +367,16 @@ export default {
                     this.$message.error("请选择一行数据!");
                 }
             }
-        }
+        },
+
+        /**
+         * 清空参数列表
+         */
+        emptyParam(){
+            for(let key of Object.keys(this.reqParam)){
+                delete this.reqParam[key];
+            }
+        },
     }
 }
 </script>
