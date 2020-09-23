@@ -47,7 +47,7 @@
 				<el-row :gutter="22">
 					<el-col :span="11">
 						<el-form-item label="公司：" :label-width="formLabelWidth" class="pop-select" prop="tcompanyoid">
-							<el-select v-model="peopleForm.tcompanyoid" @change="getTcompanyo" size="small" clearable placeholder="请选择">
+							<el-select v-model="peopleForm.tcompanyoid" @change="getTcompanyo" size="small" clearable placeholder="请选择" :disabled='editDis'>
 								<el-option v-for="item in options" :key="item.id" :label="item.name" :value="item.id"></el-option>
 							</el-select>
 						</el-form-item>
@@ -164,6 +164,7 @@
 		name: "peopleSet",
 		data() {
 			return {
+				editDis:false,
 				//校验规则-table
 				rulesTable: {
 					fcompanyoid: [{
@@ -633,6 +634,7 @@
 			add() {
 				this.dialogFormVisible = true;
 				this.isEdit = false;
+				this.editDis = false;
 				this.getCompany()
 				this.peopleForm = {
 					ffirmposition: "",
@@ -726,6 +728,7 @@
 					} else {
 						this.dialogFormVisible = true;
 						this.isEdit = true;
+						this.editDis = true;
 						this.$api.jobUserManagement.addPeopleData(this.multipleSelection[0].toid).then(res => {
 								if(res.status == '200') {
 									let newData;
