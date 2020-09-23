@@ -57,7 +57,7 @@
                     </el-row>
                     <el-tabs v-model="atctiveName" @tab-click="handleClick">
                             <el-tab-pane label="内容" name="first" >
-                                <div id="print" >
+                                <div id="print" ref="print">
                                     <p v-html="formdata.fcontent" ></p>
                                 </div>
                                 <!-- <quill-editor id="print"
@@ -168,7 +168,8 @@ export default {
     },
     methods: {
         printMethod(){
-            this.printContent = this.formdata.fcontent;
+            // this.printContent = this.formdata.fcontent;
+          this.$print(this.$refs.print);
         },
         //滑块切换
         handleClick(tab){

@@ -322,10 +322,15 @@ export default {
         saveConfig(){
             let ParentSelectData=this.rowUTSDataObj.SelectionData;
             let selectListData=this.teldata;
-            console.log(selectListData)
             if(selectListData.length >0){
                 if(this.saveType ==='手工指定下一节点'){
-                    if(selectListData.length >2){
+                    if(selectListData.length >1){
+                        this.$message.error("请选择一名人员!");
+                        return;
+                    }
+                }
+                if(this.saveType ==='委托'){
+                    if(selectListData.length >1){
                         this.$message.error("请选择一名人员!");
                         return;
                     }
