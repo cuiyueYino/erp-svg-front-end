@@ -172,6 +172,7 @@ export default {
   name: "positionType",
   data() {
     return {
+      isFind : false,//是否加搜索条件
       editFormVisible: false,
       addFormVisible: false,
       queryFormVisible: false,
@@ -325,10 +326,15 @@ export default {
     onCurrentChange(val) {
       this.pageNum = val;
       this.isEdit = false;
-      this.getPositionTypeTableData("");
+      if(this.isFind){
+        this.getPositionTypeTableData(this.form.select);
+      } else {
+        this.getPositionTypeTableData("");
+      }
     },
     // 搜索
     onSubmit() {
+      this.isFind = true;
       console.log(this.form.select);
       this.pageNum = 1;
       this.isEdit = false;
@@ -336,6 +342,7 @@ export default {
     },
     // 显示全部信息
     resetForm(formName) {
+      this.isFind = false;
       this.$refs[formName].resetFields();
       this.pageNum = 1;
       this.isEdit = false;

@@ -15,7 +15,7 @@
               </el-form-item>
             </el-col>
             <el-form-item prop="selectVal">
-              <el-input clearable v-model="form.selectVal" placeholder="请输入任意查询内容"></el-input>
+              <el-input clearable v-model="form.selectVal" placeholder="请输入任意查询内容" ></el-input>
             </el-form-item>
             <el-form-item>
               <el-button type="primary" icon='el-icon-search' size="small"  @click="onSubmit">搜索</el-button>
@@ -211,6 +211,7 @@ export default {
   },
   data() {
     return {
+      isFind : false,//是否加搜索条件
       editFormVisible: false,
       addFormVisible: false,
       queryFormVisible: false,
@@ -311,17 +312,24 @@ export default {
     },
     //分页、下一页
     onCurrentChange(val) {
+      debugger;
       this.pageNum = val;
       this.isEdit = false;
-      this.getTableData(this.form.select);
+      if(this.isFind){
+        this.getTableData(this.form.select);
+      } else {
+        this.getTableData("");
+      }
     },
     // 搜索
     onSubmit() {
+      this.isFind = true;
       this.isEdit = false;
       console.log(this.form.select);
       this.getTableData(this.form.select);
     },
     resetForm(formName) {
+      this.isFind = false;
       this.$refs[formName].resetFields();
       this.pageNum = 1;
       this.isEdit = false;
