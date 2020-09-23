@@ -126,7 +126,9 @@ export default {
             documentFpid:'',
             input: '',
             documentData: new documentData().document,
-            formInline: {},
+            formInline: {
+            	document:"",
+            },
             rowNMMtype:false,
             rowNMMDataObj:{},
             pageNum: 1,
