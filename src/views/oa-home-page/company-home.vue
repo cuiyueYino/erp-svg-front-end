@@ -234,6 +234,7 @@ export default {
       },
     //查看页面详情
     toLook(val) {
+        val.fisread = "1";
         //验证是否有权限
         let param={};
         param.fdocmanageoid = val.foid;
