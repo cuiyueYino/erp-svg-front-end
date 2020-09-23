@@ -14,7 +14,7 @@
                 <el-card>
                     <el-row :gutter="24" style="text-align: right">
                         <el-col :span="10" :offset="14" v-if="rowFstatus == 4?true:false">
-                            <el-button type="success" icon="el-icon-position" size="small" plain @click="baseInputTable('转发')" v-if="rowWAADataObj.sign">转发</el-button>
+                            <el-button type="success" icon="el-icon-position" size="small" plain @click="baseInputTable('转发')" v-if="rowWAADataObj.relay">转发</el-button>
                             <el-button type="success" icon="el-icon-star-off" size="small" plain @click="basefollow()" v-if="rowWAADataObj.attention">关注</el-button>
                             <el-button type="primary" icon="el-icon-postcard" size="small" plain @click="removeBizMail" v-if="rowWAADataObj.read">已阅</el-button>
                         </el-col>
