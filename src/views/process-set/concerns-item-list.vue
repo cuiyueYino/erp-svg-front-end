@@ -563,6 +563,7 @@ export default {
             if(overTimeS && overTimeS!=''){
                 fromdata.overTime=this.DataForm.overTime;
             }
+            fromdata.userId=localStorage.getItem("ms_userId")
             this.getAttentionTask(fromdata);
         },
         //查询发起人员
