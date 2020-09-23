@@ -319,7 +319,6 @@ export default {
     onSubmit() {
       this.isEdit = false;
       console.log(this.form.select);
-      this.pageNum = 1;
       this.getTableData(this.form.select);
     },
     resetForm(formName) {
