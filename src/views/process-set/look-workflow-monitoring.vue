@@ -279,7 +279,16 @@ export default {
                 newReviewers:reviewsIds.substring(0,reviewsIds.length-1)
             }
             this.$api.processSet.saveEdit(data).then(res=>{
-                this.$emit('changeShow',true);
+                if(res.data){
+                    if(res.data.code ==0){
+                        this.ShowFinancVisible=false;
+                        this.$emit('changeShow',true);
+                    }else{
+                        this.$message.error(res.data.msg);
+                    }
+                }else{
+                    this.$message.error("修改失败!");
+                }
             },error=>{
                 console.log(error)
             })

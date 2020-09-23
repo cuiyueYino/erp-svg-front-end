@@ -7,7 +7,7 @@
 			<el-row style="margin-bottom: 10px;">
 				<el-col :span="18">
 					公司：
-					<el-select size='mini' value-key="id" v-model="company" placeholder="公司">
+					<el-select size='mini' value-key="id" v-model="company" placeholder="公司" @change="selectChanged">
 						<el-option v-for="item in CompanyData" :key="item.id" :label="item.name" :value="item">
 						</el-option>
 					</el-select>
@@ -25,8 +25,8 @@
 		<el-dialog title="工作事项模板主表" top="1vh" :destroy-on-close="true" v-if="dialogVisible" center :visible.sync="dialogVisible" width="80%">
 			<selectMainTable show="1" status="3" :userId="UserId" :company="companyID" ref="childMain"></selectMainTable>
 			<div slot="footer" class="dialog-footer">
-				<el-button type="success"  icon="el-icon-check" size="small" @click="getDialogVisible">确定</el-button>
-				<el-button type="warning"  icon="el-icon-close" size="small" @click="dialogVisible = false">取消</el-button>
+				<el-button type="success" icon="el-icon-check" size="small" @click="getDialogVisible">确定</el-button>
+				<el-button type="warning" icon="el-icon-close" size="small" @click="dialogVisible = false">取消</el-button>
 			</div>
 		</el-dialog>
 	</div>
@@ -55,7 +55,7 @@
 				//选择公司
 				company: "",
 				UserId: "",
-				companyID:{},
+				companyID: {},
 				//全部服务
 				tServiceByParams: JSON.parse(localStorage.getItem('tServiceByParams')),
 				//全部公司
@@ -84,17 +84,28 @@
 					this.company = item
 				}
 			})*/
-            this.company = this.CompanyData[0]
+			this.company = this.CompanyData[0]
 			this.$api.collaborativeOffice.findList({}).then(data => {
 				this.selectList = data.data.data
 			})
 		},
 
 		methods: {
+			//公司select选择的时候
+			selectChanged(val) {
+				this.popup('切换公司将会清空数据,请确认?').then(res => {
+					this.conData = {
+						top: {},
+						bottom: []
+					}
+				}).catch(() => {
+
+				})
+			},
 			//选择模板
-			selectMainTable(){
-				this.companyID=this.company;
-				this.UserId=localStorage.getItem("ms_userId");
+			selectMainTable() {
+				this.companyID = this.company;
+				this.UserId = localStorage.getItem("ms_userId");
 				this.dialogVisible = true;
 			},
 			//提交/暂存
@@ -250,9 +261,9 @@
 							//两个字段都要添加属性parameterList，里面存储需要计算的字段名和需要显示的字段名child
 							if(left == itemChild.field || right == itemChild.field) {
 								var a = {
-									left : left,
-									right : right,
-									child : item.field
+									left: left,
+									right: right,
+									child: item.field
 								}
 								itemChild.parameterList.push(a)
 							}
@@ -318,51 +329,52 @@
 					this.conData.bottom[rowIndex].rowList = cur
 				}
 			},
-			maketree(data,type){
-				let parent=[];
+			maketree(data, type) {
+				let parent = [];
 				for(var i = data[0].children.length - 1; i >= 0; i--) {
-					if(type =="公司"){
-						if(data[0].children[i].ftype == 1){
+					if(type == "公司") {
+						if(data[0].children[i].ftype == 1) {
 							parent.push(data[0].children[i]);
 						}
-					}else{
-						if(data[0].children[i].ftype == 1 || data[0].children[i].ftype == 2){
+					} else {
+						if(data[0].children[i].ftype == 1 || data[0].children[i].ftype == 2) {
 							parent.push(data[0].children[i]);
 						}
 					}
 				}
-				children(parent,type);
-				function children(parent,type) {
-					if(parent){
+				children(parent, type);
+
+				function children(parent, type) {
+					if(parent) {
 						for(var i = parent.length - 1; i >= 0; i--) {
-							if(parent[i].children){
+							if(parent[i].children) {
 								let obj = parent[i];
-								obj.childrenList=[];
+								obj.childrenList = [];
 								for(var j = parent[i].children.length - 1; j >= 0; j--) {
-									if(type =="公司"){
-										if(parent[i].children[j].ftype == 1){
+									if(type == "公司") {
+										if(parent[i].children[j].ftype == 1) {
 											obj.childrenList.push(parent[i].children[j]);
 										}
-									}else{
-										if(parent[i].children[j].ftype == 1 || parent[i].children[j].ftype == 2){
+									} else {
+										if(parent[i].children[j].ftype == 1 || parent[i].children[j].ftype == 2) {
 											obj.childrenList.push(parent[i].children[j]);
 										}
 									}
 								}
-								obj.children=[];
-								obj.children=obj.childrenList;
+								obj.children = [];
+								obj.children = obj.childrenList;
 								delete obj.childrenList;
-								parent[i]=obj;
-								children(parent[i].children,type);
-							}else{
-								parent[i].children=[];
+								parent[i] = obj;
+								children(parent[i].children, type);
+							} else {
+								parent[i].children = [];
 							}
 						}
 					}
 				}
-				let Fdata= data[0];
-				Fdata.children=parent;
-				let RetrunData=[];
+				let Fdata = data[0];
+				Fdata.children = parent;
+				let RetrunData = [];
 				RetrunData.push(Fdata);
 				return RetrunData;
 			},
@@ -403,7 +415,7 @@
 							}
 							item.browseBoxList = list
 							*/
-							let ComData=this.maketree(list,'公司');
+							let ComData = this.maketree(list, '公司');
 							item.browseBoxList = ComData;
 							//部门
 						} else if(item.toSelect.id == 2) {
@@ -417,7 +429,7 @@
 							})
 							item.browseBoxList = list
 							*/
-							let ZhiwuData=this.maketree(list,'职位');
+							let ZhiwuData = this.maketree(list, '职位');
 							item.browseBoxList = ZhiwuData
 							//职位（无需删除，保留原数据）
 						} else if(item.toSelect.id == 3) {
@@ -462,23 +474,23 @@
 		color: red;
 		font-size: 20px;
 	}
-
+	
 	>>>.el-card {
 		margin-bottom: 10px;
 	}
-
+	
 	>>>.el-card__body {
 		padding: 10px;
 	}
-
+	
 	>>>.el-input.is-disabled .el-input__inner {
 		color: #000000 !important;
 	}
-
+	
 	>>>.el-textarea.is-disabled .el-textarea__inner {
 		color: #000000 !important;
 	}
-
+	
 	>>>.el-checkbox__input.is-disabled.is-checked .el-checkbox__inner::after {
 		border-color: #000000!important;
 	}

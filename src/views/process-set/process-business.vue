@@ -9,18 +9,18 @@
                         <el-input clearable v-model="formCode" placeholder="请输入任意查询内容"></el-input>
                     </el-form-item>
                     <el-form-item>
-                        <el-button type="success" size="small" icon='el-icon-search' plain @click="onSubmit">搜索</el-button>
+                        <el-button type="success" size="small" icon='el-icon-search'  @click="onSubmit">搜索</el-button>
                     </el-form-item>
                     <el-form-item>
-                        <el-button type="primary" size="small" icon='el-icon-refresh' plain @click="getAll" class="search-all">重置</el-button>
+                        <el-button type="primary" size="small" icon='el-icon-refresh'  @click="getAll" class="search-all">重置</el-button>
                     </el-form-item>
                     </el-form>
                 </el-col>
                  <el-col :span="6" :offset="4">
-                     <el-button type="success" icon='el-icon-folder-add' size="small" plain @click="add('新增业务')">新增</el-button>
-                     <el-button type="danger" icon='el-icon-delete' size="small" plain @click="deleteMsgData">删除</el-button>
-                     <el-button type="warning" icon='el-icon-document-copy' size="small" plain @click="add('编辑业务')">编辑</el-button>
-                     <el-button type="info" icon="el-icon-view" size="small" plain @click="add('查看业务')">查看</el-button>
+                     <el-button type="success" icon='el-icon-folder-add' size="small"  @click="add('新增业务')">新增</el-button>
+                     <el-button type="danger" icon='el-icon-delete' size="small"  @click="deleteMsgData">删除</el-button>
+                     <el-button type="warning" icon='el-icon-document-copy' size="small"  @click="add('编辑业务')">编辑</el-button>
+                     <el-button type="info" icon="el-icon-view" size="small"  @click="add('查看业务')">查看</el-button>
                  </el-col>
             </el-row>
         </el-card>
@@ -98,8 +98,8 @@
                         ></dynamic-table>
                     </el-col>
                      <el-col :span="3" class="joinBtnBox">
-                        <el-button type="success" size="small" icon='el-icon-folder-add' :disabled="homeTitle == '查看业务'?true:false"  plain @click="joinSearch('用户')">新增</el-button>
-                        <el-button type="danger" size="small" icon='el-icon-delete' :disabled="homeTitle == '查看业务'?true:false"  plain @click="deleteMsg">删除</el-button>
+                        <el-button type="success" size="small" icon='el-icon-folder-add' :disabled="homeTitle == '查看业务'?true:false"   @click="joinSearch('用户')">新增</el-button>
+                        <el-button type="danger" size="small" icon='el-icon-delete' :disabled="homeTitle == '查看业务'?true:false"   @click="deleteMsg">删除</el-button>
                     </el-col>
                 </el-row>
             <el-row :gutter="20">

@@ -53,7 +53,7 @@
             </el-form>
             <span slot="footer" class="dialog-footer">
                 <el-button type='success' icon='el-icon-copy-document' size="small" v-if="isShow" @click="onHandleSave">保存</el-button>
-                <el-button type="warning" plain icon="el-icon-close" size="small" v-if="isShow" @click="handleClose">取消</el-button>
+                <el-button type="warning"   icon="el-icon-close" size="small" v-if="isShow" @click="handleClose">取消</el-button>
             </span>
         </el-dialog>
     </div>

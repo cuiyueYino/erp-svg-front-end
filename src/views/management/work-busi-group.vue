@@ -22,18 +22,18 @@
                 <el-input clearable v-model="formCode" placeholder="请输入任意查询内容"></el-input>
             </el-form-item>
             <el-form-item>
-                <el-button type="primary" icon='el-icon-search' size="small" plain @click="onSubmit">搜索</el-button>
+                <el-button type="primary" icon='el-icon-search' size="small"  @click="onSubmit">搜索</el-button>
             </el-form-item>
             <el-form-item>
-                <el-button type="primary" icon='el-icon-tickets' size="small" plain @click="getAll" class="search-all">显示全部信息</el-button>
+                <el-button type="primary" icon='el-icon-tickets' size="small"  @click="getAll" class="search-all">显示全部信息</el-button>
             </el-form-item>
         </el-form>
        </el-col>
         <el-col :span="8" style="text-align: right;">
-            <el-button type="success" icon="el-icon-folder-add" size="small" plain @click="toEdit('新增')"> 新增</el-button>
-            <el-button type="danger" plain icon="el-icon-delete" size="small" @click="deleteMsg"> 删除</el-button>
-            <el-button type="warning" plain icon="el-icon-document-copy" size="small" @click="toEdit('编辑')"> 编辑</el-button>
-            <el-button type="info" plain icon="el-icon-view"  size="small" @click="toEdit('查看')"> 查看</el-button>
+            <el-button type="success" icon="el-icon-folder-add" size="small"  @click="toEdit('新增')"> 新增</el-button>
+            <el-button type="danger"  icon="el-icon-delete" size="small" @click="deleteMsg"> 删除</el-button>
+            <el-button type="warning"  icon="el-icon-document-copy" size="small" @click="toEdit('编辑')"> 编辑</el-button>
+            <el-button type="info"  icon="el-icon-view"  size="small" @click="toEdit('查看')"> 查看</el-button>
         </el-col>
     </el-row>
 
@@ -281,7 +281,11 @@ export default {
   },
   created() {
     this.getTableDataGroup();
-    this.form.fcompanyName = this.options[0].id
+    this.getCompany();
+    if(this.options != undefined) {
+      this.form.fcompanyName = this.options[0].id
+    }
+    
   },
   computed: {},
   watch: {
@@ -364,8 +368,11 @@ export default {
             // this.searchForm.fconvenerdeptname = data.fdeptname;
             // this.searchForm.fconvenerdept = data.fdeptid;
           } else if (type === "4") {
+	    this.form.staffRelUsersNames = '';
+            this.form.staffRelUsers = {};
             let internalmans = {};
             let internalMansName = "";
+             this.transStaffRelUserIds = [];
             for (let i in data) {
               if (i < data.length - 1) {
                 internalMansName += data[i].fname + ",";
@@ -373,8 +380,9 @@ export default {
                 internalMansName += data[i].fname;
               }
               internalmans[data[i].foid] = data[i].fname;
+              this.transStaffRelUserIds.push(data[i].foid);
             }
-            Object.assign(this.form.staffRelUsers,internalmans);
+            this.form.staffRelUsers = internalmans;
             if(this.form.staffRelUsersNames == ""){
               this.form.staffRelUsersNames+= internalMansName;
             }else{

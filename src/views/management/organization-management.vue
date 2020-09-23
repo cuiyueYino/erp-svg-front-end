@@ -6,25 +6,25 @@
                  <el-col :span="10" :offset="14">
                     <el-dropdown trigger="click">
                         <span class="el-dropdown-link">
-                            <el-button type="success" icon="el-icon-folder-add" size="small" plain >新增</el-button>
+                            <el-button type="success" icon="el-icon-folder-add" size="small"  >新增</el-button>
                         </span>
                         <el-dropdown-menu slot="dropdown">
                             <el-dropdown-item>
-                                <el-button type="success" icon="el-icon-refresh" plain @click="createCompany">公司</el-button>
+                                <el-button type="success" icon="el-icon-refresh"  @click="createCompany">公司</el-button>
                             </el-dropdown-item>
                             <el-dropdown-item>
-                                <el-button type="success" icon="el-icon-refresh" plain @click="createDepartment">部门</el-button>
+                                <el-button type="success" icon="el-icon-refresh"  @click="createDepartment">部门</el-button>
                             </el-dropdown-item>
                             <el-dropdown-item>
-                                <el-button type="success" icon="el-icon-refresh" plain @click="createDuties">职位</el-button>
+                                <el-button type="success" icon="el-icon-refresh"  @click="createDuties">职位</el-button>
                             </el-dropdown-item>
                         </el-dropdown-menu>
                     </el-dropdown>
-                     <el-button type="warning" plain icon="el-icon-edit-outline" size="small" @click="editCDD">修改</el-button>
-                     <el-button type="success" icon='el-icon-copy-document' size="small" plain @click="saveCDD">保存</el-button>
-                     <el-button type="danger" plain icon="el-icon-delete" size="small" @click="remove">删除</el-button>
-                     <el-button type="danger" icon="el-icon-document-remove" size="small" plain @click="tovoid">作废</el-button>
-                     <el-button type="info" icon="el-icon-document-remove" size="small" plain @click="toNotvoid">反作废</el-button>
+                     <el-button type="warning"  icon="el-icon-edit-outline" size="small" @click="editCDD">修改</el-button>
+                     <el-button type="success" icon='el-icon-copy-document' size="small"  @click="saveCDD">保存</el-button>
+                     <el-button type="danger"  icon="el-icon-delete" size="small" @click="remove">删除</el-button>
+                     <el-button type="danger" icon="el-icon-document-remove" size="small"  @click="tovoid">作废</el-button>
+                     <el-button type="info" icon="el-icon-document-remove" size="small"  @click="toNotvoid">反作废</el-button>
                  </el-col>
             </el-row>
         </el-card>

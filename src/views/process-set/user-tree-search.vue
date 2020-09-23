@@ -30,7 +30,7 @@
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="4">
-                                    <el-button type="primary" icon='el-icon-search' size="small"  plain @click="searchKey">查询</el-button>
+                                    <el-button type="primary" icon='el-icon-search' size="small"   @click="searchKey">查询</el-button>
                                 </el-col>
                             </el-row>
                             <!-- 表格 -->
@@ -322,6 +322,7 @@ export default {
         saveConfig(){
             let ParentSelectData=this.rowUTSDataObj.SelectionData;
             let selectListData=this.teldata;
+            console.log(selectListData)
             if(selectListData.length >0){
                 if(this.saveType ==='手工指定下一节点'){
                     if(selectListData.length >2){
@@ -331,7 +332,8 @@ export default {
                 }
                 let participator='';
                 for(let j=0;j<selectListData.length;j++){
-                    participator+=selectListData[j].foid+',';
+                    //participator+=selectListData[j].foid+',';
+                    participator+=selectListData[j].userid+',';
                 }
                 participator=participator.slice(0,participator.length-1);
                 if(this.saveType ==='转发'){

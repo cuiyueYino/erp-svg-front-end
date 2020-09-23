@@ -84,8 +84,8 @@
                         </el-form-item>
                     </el-col> 
                     <el-col :span="8" >
-                        <el-button type="primary" size="small" icon='el-icon-refresh' plain @click="reWorkSearchTable('formData')">重置</el-button>
-                        <el-button type="primary" size="small" icon='el-icon-search' plain @click="workSearchTable">搜索</el-button>
+                        <el-button type="primary" size="small" icon='el-icon-refresh'  @click="reWorkSearchTable('formData')">重置</el-button>
+                        <el-button type="primary" size="small" icon='el-icon-search'  @click="workSearchTable">搜索</el-button>
                     </el-col>
                 </el-row>
                 
@@ -109,7 +109,7 @@
                 <!-- footer -->
                 <footer>
                     <el-button   type='success' icon='el-icon-check' size="small"   @click="gridDataAdd">确定</el-button>
-                    <!-- <el-button  type="primary" size="small" plain @click="dialogTableVisible = false">关闭</el-button> -->
+                    <!-- <el-button  type="primary" size="small"  @click="dialogTableVisible = false">关闭</el-button> -->
                 </footer>
                 <!-- footer END-->
             </el-dialog>

@@ -11,9 +11,9 @@
 					<el-col :span="10">
 						<el-form-item>
 							<el-button type="primary" icon='el-icon-search' size="small" @click="selectList()">搜索</el-button>
-							<el-button type="primary" icon='el-icon-refresh' size="small" plain @click="$refs.formInline.resetFields();showFig == 2 ? clear2() : clear();">重置</el-button>
-							<el-button v-if="showFig == 1" type="primary" icon='el-icon-menu' size="small" plain @click="getAll('formInline')">全部</el-button>
-							<el-button v-if="showFig == 1" type="success" icon='el-icon-circle-check' size="small" plain @click="getConList()">已选中</el-button>
+							<el-button type="primary" icon='el-icon-refresh' size="small"   @click="$refs.formInline.resetFields();showFig == 2 ? clear2() : clear();">重置</el-button>
+							<el-button v-if="showFig == 1" type="primary" icon='el-icon-menu' size="small"   @click="getAll('formInline')">全部</el-button>
+							<el-button v-if="showFig == 1" type="success" icon='el-icon-circle-check' size="small"   @click="getConList()">已选中</el-button>
 						</el-form-item>
 					</el-col>
 					<el-col v-if="showFig == 1" :span="8" style="text-align: right;">

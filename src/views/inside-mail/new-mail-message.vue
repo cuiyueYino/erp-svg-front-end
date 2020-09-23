@@ -3,8 +3,8 @@
         <!-- 搜索框 -->
         <el-row :gutter="24">
                 <el-col :span="6" :offset="18">
-                    <el-button type="primary" icon="el-icon-s-promotion" size="small" plain @click="editCDD">发送</el-button>
-                    <el-button type="success" icon="el-icon-folder-remove" size="small" plain @click="saveCDD">暂存</el-button>
+                    <el-button type="primary" icon="el-icon-s-promotion" size="small"  @click="editCDD">发送</el-button>
+                    <el-button type="success" icon="el-icon-folder-remove" size="small"  @click="saveCDD">暂存</el-button>
                 </el-col>
         </el-row>
         <el-form

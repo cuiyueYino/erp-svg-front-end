@@ -19,10 +19,10 @@
                     </el-form>
                 </el-col>
                  <el-col :span="10" :offset="2">
-                    <el-button type="success" icon='el-icon-folder-add' size="small" plain @click="createRoleMainte">新增</el-button>
-                    <el-button type="warning" icon="el-icon-edit-outline" size="small" plain @click="modifyRoleMainte">修改</el-button>
-                    <el-button type="info" icon="el-icon-view" size="small" plain @click="lookRoleMainte">查看</el-button>
-                    <el-button type="danger" icon='el-icon-delete' size="small" plain @click="removeRoleMainte">删除</el-button>
+                    <el-button type="success" icon='el-icon-folder-add' size="small"  @click="createRoleMainte">新增</el-button>
+                    <el-button type="warning" icon="el-icon-edit-outline" size="small"  @click="modifyRoleMainte">修改</el-button>
+                    <el-button type="info" icon="el-icon-view" size="small"  @click="lookRoleMainte">查看</el-button>
+                    <el-button type="danger" icon='el-icon-delete' size="small"  @click="removeRoleMainte">删除</el-button>
                  </el-col>
             </el-row>
         </el-card>

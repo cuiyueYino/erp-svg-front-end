@@ -98,11 +98,11 @@
           </el-col>
           <el-col :span="4">
             <el-form-item>
-              <el-button type="primary" size="small" icon="el-icon-search" plain @click="search">查询</el-button>
+              <el-button type="primary" size="small" icon="el-icon-search"   @click="search">查询</el-button>
               <el-button
                 type="info"
                 size="small"
-                plain
+                 
                 icon="el-icon-notebook-2"
                 @click="upload"
               >导出</el-button>

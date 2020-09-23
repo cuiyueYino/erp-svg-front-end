@@ -75,8 +75,8 @@
               ></dynamic-table>
             </el-col>
             <el-col :span="3" class="joinBtnBox">
-              <el-button type="success" icon="el-icon-folder-add" size="small" plain @click="joinSearch('新增参与者')">新增</el-button>
-              <el-button type="danger" size="small" icon='el-icon-delete' plain @click="deleteMsg('新增参与者')">删除</el-button>
+              <el-button type="success" icon="el-icon-folder-add" size="small"  @click="joinSearch('新增参与者')">新增</el-button>
+              <el-button type="danger" size="small" icon='el-icon-delete'  @click="deleteMsg('新增参与者')">删除</el-button>
             </el-col>
           </el-row>
           <!-- Condition END-->
@@ -96,8 +96,8 @@
               ></dynamic-table>
             </el-col>
             <el-col :span="3" class="joinBtnBox">
-              <el-button type="success" icon="el-icon-folder-add" size="small" plain @click="joinSearch('新增抄送')">新增</el-button>
-              <el-button type="danger" size="small" icon='el-icon-delete' plain @click="deleteMsg('新增抄送')">删除</el-button>
+              <el-button type="success" icon="el-icon-folder-add" size="small"  @click="joinSearch('新增抄送')">新增</el-button>
+              <el-button type="danger" size="small" icon='el-icon-delete'  @click="deleteMsg('新增抄送')">删除</el-button>
             </el-col>
           </el-row>
           <!-- Condition END-->
@@ -240,8 +240,8 @@
           </el-row>
           <el-row :gutter="24">
             <el-col :span="6" :offset="18">
-              <el-button type="primary" size="small" icon='el-icon-refresh' plain @click="reWorkSearchTable('formData')">重置</el-button>
-              <el-button type="primary" size="small" icon='el-icon-search' plain @click="workSearchTableBtn">搜索</el-button>
+              <el-button type="primary" size="small" icon='el-icon-refresh'  @click="reWorkSearchTable('formData')">重置</el-button>
+              <el-button type="primary" size="small" icon='el-icon-search'  @click="workSearchTableBtn">搜索</el-button>
             </el-col>
           </el-row>
           <!-- 表格 -->
@@ -264,7 +264,7 @@
         <!-- footer -->
         <footer>
           <el-button type='success' icon='el-icon-check' size="small" @click="gridDataAdd">确定</el-button>
-          <!-- <el-button  type="primary" size="small" plain @click="dialogTableVisible = false">关闭</el-button> -->
+          <!-- <el-button  type="primary" size="small"  @click="dialogTableVisible = false">关闭</el-button> -->
         </footer>
         <!-- footer END-->
       </el-dialog>

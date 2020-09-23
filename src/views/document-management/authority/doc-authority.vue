@@ -56,18 +56,18 @@
                                         <el-input v-model="input" placeholder="请输入内容"></el-input>
                                     </el-col>
                                     <el-col :span="3">
-                                        <el-button type="primary" icon="el-icon-help" size="small" plain @click="findData(1)">过滤</el-button>
+                                        <el-button type="primary" icon="el-icon-help" size="small"   @click="findData(1)">过滤</el-button>
                                     </el-col>
                                     <el-col :span="3">
-                                        <el-button type="primary" icon="el-icon-menu" size="small" plain @click="findData(2)">全部</el-button>
+                                        <el-button type="primary" icon="el-icon-menu" size="small"   @click="findData(2)">全部</el-button>
                                     </el-col>
                                     <el-col :span="3">
-                                        <el-button type="success" icon="el-icon-circle-check" size="small" plain @click="findData(3)">已选中</el-button>
+                                        <el-button type="success" icon="el-icon-circle-check" size="small"   @click="findData(3)">已选中</el-button>
                                     </el-col>
                                 </el-form>
                             </el-col>
                             <el-col :span="1" :offset="5">
-                                <el-button type="success" icon='el-icon-check' size="small" plain @click="submitAuth">确定</el-button>
+                                <el-button type="success" icon='el-icon-check' size="small"   @click="submitAuth">确定</el-button>
                             </el-col>
                         </el-row>
                     </el-card>

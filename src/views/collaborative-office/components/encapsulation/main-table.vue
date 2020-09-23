@@ -11,9 +11,9 @@
 					<el-col :span="10">
 						<el-form-item>
 							<el-button type="primary" icon='el-icon-search' size="small" @click="toSelect()">搜索</el-button>
-							<el-button type="primary" icon='el-icon-refresh' size="small" plain @click="$refs.formInline.resetFields();showFig == 2 ? clear2() : clear();">重置</el-button>
-							<el-button v-if="showFig == 2" type="primary" icon='el-icon-menu' size="small" plain @click="getAll('formInline')">全部</el-button>
-							<el-button v-if="showFig == 2" type="success" icon='el-icon-circle-check' size="small" plain @click="getConList()">已选中</el-button>
+							<el-button type="primary" icon='el-icon-refresh' size="small"   @click="$refs.formInline.resetFields();showFig == 2 ? clear2() : clear();">重置</el-button>
+							<el-button v-if="showFig == 2" type="primary" icon='el-icon-menu' size="small"   @click="getAll('formInline')">全部</el-button>
+							<el-button v-if="showFig == 2" type="success" icon='el-icon-circle-check' size="small"   @click="getConList()">已选中</el-button>
 						</el-form-item>
 					</el-col>
 					<el-col v-if="showFig == 2" :span="8" style="text-align: right;">
@@ -29,7 +29,7 @@
 				<vxe-table-column field="code" title="主表编码"></vxe-table-column>
 				<vxe-table-column field="name" title="主表名称"></vxe-table-column>
 				<vxe-table-column field="workItemTypeName" title="主表分类"></vxe-table-column>
-				<vxe-table-column field="remark" title="描述"></vxe-table-column>
+				<vxe-table-column :formatter="textLength" field="remark" title="描述"></vxe-table-column>
 			</vxe-table>
 		</el-card>
 	</div>
@@ -80,6 +80,14 @@
 				this.tableData = this.$refs.multipleTable.getCheckboxRecords()
 
 			},
+            //描述显示
+            textLength(row){
+                if(row.cellValue!=null&&row.cellValue.length>8) {
+                    return row.cellValue.substring(0,8)+"...";
+                }else {
+                    return row.cellValue;
+                }
+            },
 			check() {
 				this.$refs.multipleTable.setAllCheckboxRow(false);
 				this.tableData = this.roleCon.allData;
@@ -131,7 +139,6 @@
 			},
 			//搜索
 			toSelect() {
-				console.log(11111111)
 				this.$api.collaborativeOffice.apiUrl("workItemTemp/findByParams", this.formInline).then(data => {
 					this.conList = data.data.data
 					this.tableData = JSON.parse(JSON.stringify(this.conList))

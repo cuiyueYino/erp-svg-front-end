@@ -7,33 +7,33 @@
 						<el-row>
 							<el-col :span="3">
 								<el-form-item prop="status">
-									<el-select clearable v-model="formInline.status" placeholder="状态">
+									<el-select clearable v-model="formInline.status" placeholder="状态" v-if="this.show==1?false:true">
 										<el-option v-for="item in statusList" :key="item.id" :label="item.value" :value="item.id">
 										</el-option>
 									</el-select>
 								</el-form-item>
 							</el-col>
-							<el-col :span="3">
+							<el-col :span="4">
 								<el-form-item prop="code">
 									<el-input clearable v-model="formInline.code" placeholder="主表分类编码"></el-input>
 								</el-form-item>
 							</el-col>
-							<el-col :span="3">
+							<el-col :span="4">
 								<el-form-item prop="name">
 									<el-input clearable v-model="formInline.name" placeholder="主表分类名称"></el-input>
 								</el-form-item>
 							</el-col>
-							<el-col :span="3">
+							<el-col :span="4">
 								<el-form-item prop="tableName">
 									<el-input clearable v-model="formInline.tableName" placeholder="数据库表名"></el-input>
 								</el-form-item>
 							</el-col>
-							<el-col :span="3">
+							<el-col :span="4">
 								<el-form-item prop="remark">
 									<el-input clearable v-model="formInline.remark" placeholder="描述"></el-input>
 								</el-form-item>
 							</el-col>
-							<el-col :span="8">
+							<el-col :span="5">
 								<el-form-item>
 									<el-button type="primary" icon='el-icon-search' size="small" @click="$refs.pageNation.toBegin()">搜索</el-button>
 									<el-button type="primary" icon='el-icon-refresh' size="small" @click="$refs.formInline.resetFields();toSelect()">重置</el-button>
@@ -47,7 +47,7 @@
 					<el-button @click="toUpd()" icon="el-icon-edit-outline" type="warning" size="small">修改</el-button>
 					<el-button @click="updateStatus(3)" icon="el-icon-magic-stick" type="success" size="small">生效</el-button>
 					<el-button @click="updateStatus(7)" icon="el-icon-circle-close" type="danger" size="small">禁用</el-button>
-					<el-button @click="toSee()" icon="el-icon-view" type="info" plain size="small">查看</el-button>
+					<el-button @click="toSee()" icon="el-icon-view" type="info"   size="small">查看</el-button>
 				</el-col>
 			</el-row>
 		</el-card>
@@ -183,8 +183,8 @@
 			},
             //描述显示
             textLength(row){
-                if(row.remark!=null&&row.remark.length>50) {
-                    return row.remark.substring(0,50)+"...";
+                if(row.remark!=null&&row.remark.length>20) {
+                    return row.remark.substring(0,20)+"...";
                 }else {
                     return row.remark;
                 }

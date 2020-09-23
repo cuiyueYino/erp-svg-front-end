@@ -16,7 +16,7 @@
 					<el-col v-if="showFigNum == 2" :span="6" style="text-align: right;">
 						<el-button @click="submitForm(2)" type="success" size="small" icon="el-icon-copy-document">提交</el-button>
 						<el-button @click="submitForm(1)" type="success" size="small" icon="el-icon-folder-remove">暂存</el-button>
-						<el-button @click="preview()" type="primary" plain size="small" icon="el-icon-view">预览</el-button>
+						<el-button @click="preview()" type="primary"   size="small" icon="el-icon-view">预览</el-button>
 						<el-button type="danger" @click="$parent.toSelect()" size="small" icon="el-icon-close">返回</el-button>
 					</el-col>
 					<el-col v-else :span="6" style="text-align: right;">
@@ -193,7 +193,7 @@
 							</el-select>
 						</el-col>
 						<el-col :span="6" style="text-align: right;">
-							<el-button icon="el-icon-arrow-left" size="small" type="danger" plain @click="showFigForm = false">返回</el-button>
+							<el-button icon="el-icon-arrow-left" size="small" type="danger"   @click="showFigForm = false">返回</el-button>
 						</el-col>
 					</el-row>
 				</el-card>
@@ -257,10 +257,10 @@
 							message: '请输入主表分类名称',
 							trigger: 'blur'
 						},
-						{
+						/*{
 							pattern: "[\u4e00-\u9fa5]",
 							message: '请输入正确的主表分类名称'
-						}
+						}*/
 					],
 					workItemTypeName: [{
 						required: true,

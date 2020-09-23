@@ -160,10 +160,10 @@
 							message: '请输入子表分类名称',
 							trigger: 'change'
 						},
-						{
+						/*{
 							pattern: "[\u4e00-\u9fa5]",
 							message: '请输入中文的子表分类名称'
-						}
+						}*/
 					],
 					tableName: [{
 						required: true,

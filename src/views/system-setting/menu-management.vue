@@ -17,9 +17,9 @@
                     </el-form>
                 </el-col>
                  <el-col :span="6" :offset="6">
-                    <el-button type="success" icon='el-icon-folder-add' size="small" plain @click="createMainte">新增</el-button>
-                    <el-button type="warning" icon="el-icon-edit-outline" size="small" plain @click="editMainte">修改</el-button>
-                    <el-button type="danger" icon='el-icon-delete' size="small" plain @click="removeMainte">删除</el-button>
+                    <el-button type="success" icon='el-icon-folder-add' size="small"  @click="createMainte">新增</el-button>
+                    <el-button type="warning" icon="el-icon-edit-outline" size="small"  @click="editMainte">修改</el-button>
+                    <el-button type="danger" icon='el-icon-delete' size="small"  @click="removeMainte">删除</el-button>
                  </el-col>
             </el-row>
         </el-card>
@@ -149,7 +149,7 @@ export default {
                 this.$message.error("只能选择一个!");
             }else{
                 if(SelectData[0]){
-                    this.$confirm('此操作将永久删除该邮件, 是否继续?', '提示', {
+                    this.$confirm('此操作将永久删除, 是否继续?', '提示', {
                         confirmButtonText: '确定',
                         cancelButtonText: '取消',
                         type: 'warning'

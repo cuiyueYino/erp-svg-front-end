@@ -38,7 +38,7 @@
 					<el-button @click="toUpd()" icon="el-icon-edit-outline" type="warning" size="small">修改</el-button>
 					<el-button @click="updateStatus(3)" icon="el-icon-magic-stick" type="success" size="small">生效</el-button>
 					<el-button @click="updateStatus(7)" icon="el-icon-circle-close" type="danger" size="small">禁用</el-button>
-					<el-button @click="toSee()" icon="el-icon-view" type="info" plain size="small">查看</el-button>
+					<el-button @click="toSee()" icon="el-icon-view" type="info"   size="small">查看</el-button>
 				</el-col>
 			</el-row>
 		</el-card>
@@ -115,6 +115,21 @@
 			}
 		},
 		created() {
+		    if(this.show==1){
+                this.formInlineList = [{
+                    id: "code",
+                    name: "主表编码"
+                }, {
+                    id: "name",
+                    name: "主表名称"
+                }, {
+                    id: "workItemTypeName",
+                    name: "主表分类"
+                }, {
+                    id: "remark",
+                    name: "描述"
+                }]
+            }
 			if(this.company){
 				this.companyName=this.company;
 			}
@@ -137,6 +152,8 @@
 				this.selectCon = data.id
 				this.toSelectData = JSON.parse(JSON.stringify(this.formInline))
 				this.toSelectData[data.id] = this.selectData
+                this.selectData='';
+
 			},
 			//查看
 			toSee() {
@@ -175,7 +192,7 @@
 						}
 					})
 					}
-					
+
 				}
 			}, //状态展示
 			statusShow(row) {
@@ -202,8 +219,8 @@
 			},
             //描述显示
             textLength(row){
-                if(row.remark!=null&&row.remark.length>50) {
-                    return row.remark.substring(0,50)+"...";
+                if(row.remark!=null&&row.remark.length>20) {
+                    return row.remark.substring(0,20)+"...";
                 }else {
                     return row.remark;
                 }

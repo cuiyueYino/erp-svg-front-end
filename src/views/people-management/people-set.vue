@@ -12,7 +12,6 @@
 									<el-option label="编码" value="tcode"></el-option>
 									<el-option label="职位" value="ffirmpositionname"></el-option>
 									<el-option label="描述" value="tdescription"></el-option>
-									<el-option label="公司" value="tcompanyname"></el-option>
 									<el-option label="部门" value="tdepartmentname"></el-option>
 									<el-option label="在职状态" value="fpositionstate"></el-option>
 									<el-option label="是否兼职" value="tispluralism"></el-option>
@@ -24,17 +23,17 @@
 						</el-form-item>
 
 						<el-form-item>
-							<el-button type="primary" icon='el-icon-search' size="small" plain @click="showFig = false;onSubmit()">搜索</el-button>
+							<el-button type="primary" icon='el-icon-search' size="small"  @click="showFig = false;onSubmit()">搜索</el-button>
 						</el-form-item>
 						<el-form-item>
-							<el-button type="primary" icon="el-icon-tickets" size="small" plain @click="showFig = false;resetForm('form')" class="search-all">显示全部信息</el-button>
+							<el-button type="primary" icon="el-icon-tickets" size="small"  @click="showFig = false;resetForm('form')" class="search-all">显示全部信息</el-button>
 						</el-form-item>
 					</el-form>
 				</el-col>
 				<el-col :span="6" style="text-align: right;">
-					<el-button type="success" icon="el-icon-folder-add" size="small" plain @click="add()">新增</el-button>
-					<el-button type="danger" plain icon="el-icon-delete" size="small" @click="deleteMsg">删除</el-button>
-					<el-button type="warning" plain icon="el-icon-document-copy" size="small" @click="toEdit('编辑')">编辑</el-button>
+					<el-button type="success" icon="el-icon-folder-add" size="small"  @click="add()">新增</el-button>
+					<el-button type="danger"  icon="el-icon-delete" size="small" @click="deleteMsg">删除</el-button>
+					<el-button type="warning"  icon="el-icon-document-copy" size="small" @click="toEdit('编辑')">编辑</el-button>
 				</el-col>
 			</el-row>
 		</el-card>
@@ -133,10 +132,10 @@
 					</el-table-column>
 					<el-table-column align="right" width="100">
 						<template slot="header" slot-scope="scope">
-							<el-button type="success" icon="el-icon-folder-add" size="small" plain @click="addRow()">新增</el-button>
+							<el-button type="success" icon="el-icon-folder-add" size="small"  @click="addRow()">新增</el-button>
 						</template>
 						<template slot-scope="scope">
-							<el-button type="danger" plain icon="el-icon-delete" size="small" @click="peopleForm.tableData3.splice(scope.$index, 1)">删除</el-button>
+							<el-button type="danger"  icon="el-icon-delete" size="small" @click="peopleForm.tableData3.splice(scope.$index, 1)">删除</el-button>
 						</template>
 					</el-table-column>
 				</el-table>
@@ -144,7 +143,7 @@
 			<div slot="footer">
 				<el-button type="success" icon='el-icon-copy-document' size="small" @click="addSubmit('peopleForm')">保存</el-button>
 				<el-button type='warning' icon='el-icon-close' size="small" @click="dialogFormVisible = false">取消</el-button>
-				
+
 			</div>
 		</erpDialog>
 		<!-- 部门/职位弹窗 -->

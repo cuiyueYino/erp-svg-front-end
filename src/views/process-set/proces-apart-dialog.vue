@@ -74,8 +74,8 @@
                
                
                 <el-col :span="6" >
-                    <el-button type="success" size="small" icon='el-icon-search' plain @click="workSearchTable">搜索</el-button>
-                    <el-button type="primary" size="small" icon='el-icon-refresh' plain @click="reWorkSearchTable">重置</el-button>
+                    <el-button type="success" size="small" icon='el-icon-search'  @click="workSearchTable">搜索</el-button>
+                    <el-button type="primary" size="small" icon='el-icon-refresh'  @click="reWorkSearchTable">重置</el-button>
                 </el-col>
              </el-row>
                

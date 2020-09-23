@@ -24,7 +24,7 @@
                 ></el-input>
               </el-form-item>
               <el-form-item>
-                <el-button type="primary" icon='el-icon-search' size="small" plain @click="searchKey">搜索</el-button>
+                <el-button type="primary" icon='el-icon-search' size="small"   @click="searchKey">搜索</el-button>
               </el-form-item>
               <el-form-item>
                 <el-button type="success" icon='el-icon-check' size="small" @click="saveConfig">确定</el-button>
@@ -54,8 +54,6 @@
         <el-button type="success" icon='el-icon-check' size="small" @click="saveConfig" v-if="strictly">确定</el-button>
       </div>
     </el-dialog>
-    
-    
   </div>
 </template>
 
@@ -118,7 +116,7 @@
     },
     computed: {},
     created(){
-        // this.defautChecked = this.fteamleaderId;
+        this.defautChecked = this.fteamleaderId;
     },
     watch: {
       // 对话框显示 自动聚焦name输入框
@@ -263,7 +261,6 @@
         } else {
           selectData = this.$refs.tree.getCheckedNodes();
         }
-        console.log(selectData);
         if (selectData.length > 0) {
           if (selectData.length > 1 && this.type != "4") {
             this.$message.error("只能选择一条数据!");
@@ -312,6 +309,7 @@
             this.$refs.tree.setCheckedNodes([data]);
             if (this.$refs.tree.getCheckedNodes(true).length > 1) {
               this.goOut("请选择一条数据");
+              // this.defautChecked = 
             }
           }
         }

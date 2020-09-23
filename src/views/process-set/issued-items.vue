@@ -4,16 +4,16 @@
         <el-card class="box-table">
            <el-row :gutter="24">
                <el-col :span="14">
-                    <el-button type="primary" size="small" plain @click="onSerchSubmit('day')">当日</el-button>
-                    <el-button type="primary" size="small" plain @click="onSerchSubmit('week')">本周</el-button>
-                    <el-button type="primary" size="small" plain @click="onSerchSubmit('month')" >本月</el-button>
+                    <el-button type="primary" size="small"  @click="onSerchSubmit('day')">当日</el-button>
+                    <el-button type="primary" size="small"  @click="onSerchSubmit('week')">本周</el-button>
+                    <el-button type="primary" size="small"  @click="onSerchSubmit('month')" >本月</el-button>
                 </el-col>
                  <el-col :span="10" style='text-align:right'>
-                     <el-button type="primary" icon="el-icon-refresh-right" size="small" plain @click="Basecarsh">刷新</el-button>
-                     <el-button type="primary" icon="el-icon-search" size="small" plain @click="search">查询</el-button>
-                     <el-button type="info" icon="el-icon-view" size="small"  plain @click="Tolook">查看</el-button>
-                     <el-button type="success" icon="el-icon-position" size="small" plain @click="baseInputTable('转发')">转发</el-button>
-                     <el-button type="success" icon="el-icon-star-off" size="small" plain @click="basefollow">关注</el-button>
+                     <el-button type="primary" icon="el-icon-refresh-right" size="small"  @click="Basecarsh">刷新</el-button>
+                     <el-button type="primary" icon="el-icon-search" size="small"  @click="search">查询</el-button>
+                     <el-button type="info" icon="el-icon-view" size="small"   @click="Tolook">查看</el-button>
+                     <el-button type="success" icon="el-icon-position" size="small"  @click="baseInputTable('转发')">转发</el-button>
+                     <el-button type="success" icon="el-icon-star-off" size="small"  @click="basefollow">关注</el-button>
                  </el-col>
             </el-row>
         </el-card>
@@ -493,7 +493,7 @@ export default {
                 this.$message.error('请选择一项');
             }else{
                 let selectData=this.multipleSelection;
-                let subject=selectData[0].fsubject;
+                /*let subject=selectData[0].fsubject;
                 subject= subject.substring(0,3);
                 if(subject.indexOf('转发')>-1){
                     this.$message.error('转发邮件不能添加关注!');
@@ -515,7 +515,21 @@ export default {
                             this.$message.success('数据库没有该条数据!');
                         }
                     });
-                }
+                }*/
+                // bug 730
+                let fromdata={};
+                fromdata.fvoucherOid=selectData[0].fsrcoId;
+                fromdata.fattentionOid=localStorage.getItem("ms_userId");
+                this.$api.processSet.addAttention(fromdata).then(response => {
+                    let responsevalue = response;
+                    if (responsevalue) {
+                        let returndata = responsevalue.data;
+                        this.$message.success('添加关注成功!');
+                        this.reload();
+                    } else {
+                        this.$message.success('数据库没有该条数据!');
+                    }
+                });
             }
         },
         //多选

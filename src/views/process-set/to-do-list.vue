@@ -11,63 +11,54 @@
           <el-button
             type="danger"
             icon="el-icon-error"
-            plain
             @click="remove"
             size="small"
           >移除</el-button>
           <el-button
             type="success"
             icon="el-icon-refresh-right"
-            plain
             @click="refresh"
             size="small"
           >刷新</el-button>
           <el-button
             type="primary"
             icon="el-icon-search"
-            plain
             @click="search"
             size="small"
           >查询</el-button>
           <el-button
             type="danger"
             icon="el-icon-picture-outline"
-            plain
             @click="flowChart()"
             size="small"
           >流程图</el-button>
           <el-button
             type="success"
             icon="el-icon-folder-checked"
-            plain
             @click="handle()"
             size="small"
           >处理</el-button>
           <el-button
             type="success"
             icon="el-icon-position"
-            plain
             @click="baseInputTable('转发')"
             size="small"
           >转发</el-button>
           <el-button
             type="success"
             icon="el-icon-circle-check"
-            plain
             @click="baseInputTable('委托')"
             size="small"
           >委托</el-button>
           <el-button
             type="success"
             icon="el-icon-star-off"
-            plain
             @click="basefollow()"
             size="small"
           >关注</el-button>
           <el-button
             type="success"
             icon="el-icon-circle-plus-outline"
-            plain
             @click="baseInputTable('加签')"
             size="small"
           >加签</el-button>
@@ -655,16 +646,33 @@ export default {
         let selectData = this.multipleSelection;
         if(selectData[0].repeat && selectData[0].repeat!=''){
           if(data =='委托' || data =='加签'){
-            this.$message.error("被转发邮件不能"+data+"!");
+            this.$message.error("当前邮件是转发邮件，不能进行"+data+"!");
             return;
           }
         }
-        /*if(selectData[0].trustMan !=''){
-          if(data =='委托' || data =='加签'){
-            this.$message.error("被委托邮件不能"+data+"!");
+        if(data =='委托'){
+          let subject =selectData[0].fsubject;
+          subject= subject.substring(0,4);
+          if (subject.indexOf("正在加签") > -1) {
+            this.$message.error('当前邮件是正在加签邮件，不能进行委托!');
             return;
+          }else{
+            if (subject.indexOf("加签") > -1) {
+              this.$message.error('当前邮件是加签邮件，不能进行委托!');
+              return;
+            }
           }
-        }*/
+        }
+        if(data =='加签'){
+          let subject1 =selectData[0].fsubject;
+          subject1= subject1.substring(0,4);
+          if (subject.indexOf("正在加签") > -1) {}else{
+            if (subject.indexOf("加签") > -1) {
+              this.$message.error('当前邮件是加签邮件，不能进行加签!');
+              return;
+            }
+          }
+        }
         this.rowUTStype = true;
         let finandata = {};
         finandata.finanrowname = "人员缺省查询方案";
@@ -691,8 +699,8 @@ export default {
         this.$message.error("请选择一项");
       } else {
         let selectData = this.multipleSelection;
-        let subject = selectData[0].fsubject;
-        subject= subject.substring(0,3);
+        /*let subject = selectData[0].fsubject;
+        subject= subject.substring(0,4);
         if (subject.indexOf("转发") > -1) {
           this.$message.error("转发邮件不能添加关注!");
         } else if (subject.indexOf("抄送") > -1) {
@@ -713,7 +721,21 @@ export default {
               this.$message.success("数据库没有该条数据!");
             }
           });
-        }
+        }*/
+        //bug 730
+        let fromdata = {};
+        fromdata.fvoucherOid = selectData[0].fsrcoId;
+        fromdata.fattentionOid = localStorage.getItem("ms_userId");
+        this.$api.processSet.addAttention(fromdata).then((response) => {
+          let responsevalue = response;
+          if (responsevalue) {
+            let returndata = responsevalue.data;
+            this.$message.success("添加关注成功!");
+            this.reload();
+          } else {
+            this.$message.success("数据库没有该条数据!");
+          }
+        });
       }
     },
     //table多选
@@ -746,12 +768,24 @@ export default {
         finandata.finanrowname = "人员缺省查询方案";
         finandata.finanrowId = "QS_0056";
         finandata.nametitle = this.multipleSelection[0].fsrcCompany;
-        finandata.relay = true,
-        finandata.attention = true,
-        finandata.sign = true,
-        finandata.commit = true,
-        finandata.read = true,
-        finandata.trust = true,
+        let subject = selectData[0].fsubject;
+        subject= subject.substring(0,4);
+        if (subject.indexOf("加签") > -1) {
+          finandata.relay = false;
+          finandata.attention = false;
+          finandata.sign = false;
+          finandata.commit = true;
+          finandata.read = false;
+          finandata.trust = false;
+        }else{
+          finandata.relay = true;
+          finandata.attention = true;
+          finandata.sign = true;
+          finandata.commit = true;
+          finandata.read = true;
+          finandata.trust = true;
+        }
+        
         this.rowWAADataObj = finandata;
         this.rowWAAtype = true;
         this.financingLFCAtype = true;
