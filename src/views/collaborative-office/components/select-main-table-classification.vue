@@ -59,7 +59,7 @@
 				<el-table-column prop="tableName" label="数据库表名" width="280" align="center"></el-table-column>
 				<el-table-column :formatter="textLength" prop="remark" label="描述" align="center" width="580" :show-overflow-tooltip="true"></el-table-column>
 			</el-table>
-			<pageNation :total="currentTotal" v-if="currentTotal != 0" ref="pageNation" @pageChange="pageChange"></pageNation>
+			<pageNation :total="currentTotal" ref="pageNation" @pageChange="pageChange"></pageNation>
 		</el-card>
 	</div>
 </template>
