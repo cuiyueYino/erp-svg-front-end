@@ -126,7 +126,7 @@ export default {
             docAuthorityData: new documentData().docAuthority,
             docRoleAuthData: new documentData().docRoleAuth,
             formInline: {
-
+auth:"",
             },
             formInSelect:{
                 select:'1',
@@ -197,6 +197,9 @@ export default {
                 }
             }else if(3 == param){
                 fromdata.fauth = '1';//给个已选中标识，后台做筛选
+            }else if(2 == param){
+                this.formInline.auth = ""
+                this.input = ""
             }
             let docmanageids= '';
             let nodes = this.$refs.tree.getCheckedNodes();
@@ -341,7 +344,6 @@ export default {
         },
         //table选中事件
         onSelectionChange(data){
-          debugger;
             this.multipleSelection = data;
         },
         // 改变table行样式
@@ -380,7 +382,6 @@ export default {
                     this.$nextTick(() => {
                         this.$refs.roleTable.clearSelection();
                         if(this.tableData){
-                          debugger;
                           let temp = [];
                             this.tableData.forEach(row => {
                               if (row.fauth == "1") {
