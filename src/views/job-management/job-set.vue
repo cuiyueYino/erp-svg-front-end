@@ -313,7 +313,7 @@ export default {
     onCurrentChange(val) {
       this.pageNum = val;
       this.isEdit = false;
-      this.getTableData("");
+      this.getTableData(this.form.select);
     },
     // 搜索
     onSubmit() {
