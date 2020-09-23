@@ -38,7 +38,7 @@
                 element-loading-text="加载中"
             ></dynamic-table>
         </el-card>
-    <!-- 弹出框 -->
+        <!-- 弹出框 -->
         <el-dialog :title="homeTitle" :visible.sync="dialogFormVisible" :close-on-click-modal="false">
             <el-form :model="form" :rules="rules" ref="form">
                  <el-row>
@@ -197,9 +197,18 @@ export default {
         this.getPBListData(fromdata);
         // 获取公司方法
         this.$api.processSet.getUserCompany(localStorage.getItem("ms_userId")).then((res) => {
-            if (res.status == "200") {
-                this.options = res.data.data;
+            let optionsD=[];
+            if(res.data){
+                if(res.data.data){
+                    let Cdata=res.data.data;
+                    for(let i=0;i<Cdata.length;i++){
+                        if(Cdata[i]){
+                            optionsD.push(Cdata[i]);
+                        }
+                    }
+                }
             }
+            this.options = optionsD;
         }),
         (error) => {
           console.log(error);
