@@ -46,7 +46,7 @@
 		<el-dialog :title="isEdit?'编辑用户':'新建用户'" class="add-user" center top="20px" v-if="dialogFormVisible" :visible.sync="dialogFormVisible" :close-on-click-modal="false">
 			<el-form :model="form" :rules="rules" ref="form">
 				<el-row>
-					<el-col :span="12">
+					<el-col :span="11">
 						<el-form-item label="公司：" :label-width="formLabelWidth" class="pop-select" prop="fcompanyoid">
 							<el-select disabled v-model="form.fcompanyoid" size="small" clearable placeholder="请选择">
 								<el-option label="福佳集团" value="_DefaultCompanyOId"></el-option>
@@ -55,37 +55,53 @@
 					</el-col>
 				</el-row>
 				<el-row :gutter="24">
-					<el-col :span="12">
+					<el-col :span="11">
 						<el-form-item label="登录账号：" :label-width="formLabelWidth" prop="fcodeStr">
 							<el-input v-model="form.fcodeStr" :disabled="isEdit" size="small" @input="change($event)" autocomplete="off"></el-input>
 						</el-form-item>
+					</el-col>
+					<el-col :span="11" :offset="2">
+						<el-form-item label="名称：" :label-width="formLabelWidth" prop="fname">
+							<el-input v-model="form.fname" size="small" autocomplete="off" @input="change($event)"></el-input>
+						</el-form-item>
+					</el-col>
+				</el-row>
+				<el-row :gutter="24">
+					<el-col :span="11">
 						<el-form-item label="密码：" :label-width="formLabelWidth" prop="fpasswordStr">
 							<el-input v-model="form.fpasswordStr" :disabled="isEdit && !isReset" type="password" @input="change($event)"  size="small"></el-input>
 						</el-form-item>
+					</el-col>
+					<el-col :span="11" :offset="2">
+						<el-form-item label="确认密码：" :label-width="formLabelWidth" prop="fpasswordSure">
+							<el-input v-model="form.fpasswordSure" :disabled="isEdit && !isReset" type="password" @input="change($event)" size="small"></el-input>
+						</el-form-item>
+					</el-col>
+				</el-row>
+				<el-row :gutter="24">
+					<el-col :span="11">
 						<el-form-item label="使用者：" :label-width="formLabelWidth" prop="fstaffName">
 							<el-input v-model="form.fstaffName" :disabled="isEdit && !isReset" size="small" autocomplete="off"></el-input>
 							<el-button type="primary" v-show="!isEdit || isReset" size="mini" icon="el-icon-search" @click="addDepart();loading = true"></el-button>
 							<!--<img class="icon-search" v-show="!isEdit || isReset" src="../../assets/img/search.svg" @click="addDepart();loading = true" />-->
 						</el-form-item>
+					</el-col>
+					<el-col :span="11" :offset="2">
+						<el-form-item label="所在部门：" :label-width="formLabelWidth" prop="departmentname">
+							<el-input v-model="form.departmentname" disabled size="small" autocomplete="off"></el-input>
+						</el-form-item>
+					</el-col>
+				</el-row>
+				<el-row :gutter="24">
+					<el-col :span="11">
 						<el-form-item v-show="isEdit" label="重置：" :label-width="formLabelWidth">
 							<el-checkbox v-model="resetCheck" size="small"></el-checkbox>
 						</el-form-item>
 					</el-col>
-					<el-col :span="12">
-						<el-form-item label="名称：" :label-width="formLabelWidth" prop="fname">
-							<el-input v-model="form.fname" size="small" autocomplete="off" @input="change($event)"></el-input>
-						</el-form-item>
-
-						<el-form-item label="确认密码：" :label-width="formLabelWidth" prop="fpasswordSure">
-							<el-input v-model="form.fpasswordSure" :disabled="isEdit && !isReset" type="password" @input="change($event)" size="small"></el-input>
-						</el-form-item>
-						<el-form-item label="所在部门：" :label-width="formLabelWidth" prop="departmentname">
-							<el-input v-model="form.departmentname" disabled size="small" autocomplete="off"></el-input>
-						</el-form-item>
+					<el-col :span="11" :offset="2">
 						<el-form-item label="禁用：" prop="fforbid" :label-width="formLabelWidth">
 							<el-checkbox v-model="checked" size="small" @change="checkFun"></el-checkbox>
 						</el-form-item>
-
 					</el-col>
 				</el-row>
 				<el-row :span="21">
