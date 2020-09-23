@@ -263,8 +263,9 @@ export default {
 
     },
     mounted() {
+      debugger;
         this.treeloading = true;
-        this.$api.management.selectAllOrganizationInfo().then(response => {
+        this.$api.management.selectAllOrganization().then(response => {
             let responsevalue = response;
             if (responsevalue) {
                 let tabledata=eval('(' + responsevalue.data.data + ')');
