@@ -117,7 +117,7 @@ export default {
             let data = {
                 fcreator:this.formdata.senduserId,
                 freplyedpesron:this.formdata.staffId,
-                fpublish:this.formdata.checked == undefined || this.formdata.checked == false ? 1 : 0,
+                fpublish:this.formdata.checked == undefined || this.formdata.checked == false ? 0 : 1,
                 freplycontent:this.formdata.freplycontent,
             }
             if(this.formdata.fparentreply){
