@@ -268,10 +268,8 @@
 		methods: {
 		  	//字段类型改变
 			fieldChange(row){
-				if(row.fieldType != 9){
-					row.fieldContent = "";
-					row.fieldContentName = "";
-				}
+				row.fieldContent = "";
+				row.fieldContentName = "";
 			},
 			//状态改变
 			forbidChange(row) {

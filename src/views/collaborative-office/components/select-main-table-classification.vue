@@ -6,7 +6,7 @@
 					<el-form label-width="10px" ref="formInline" :model="formInline" class="demo-form-inline">
 						<el-row>
 							<el-col :span="3">
-								<el-form-item prop="status">
+								<el-form-item prop="status" v-if="show != '1'">
 									<el-select clearable v-model="formInline.status" placeholder="状态" v-if="this.show==1?false:true">
 										<el-option v-for="item in statusList" :key="item.id" :label="item.value" :value="item.id">
 										</el-option>
@@ -42,7 +42,7 @@
 						</el-row>
 					</el-form>
 				</el-col>
-				<el-col v-show="show != '1'" style="text-align: right;" :span="10">
+				<el-col v-if="show != '1'" style="text-align: right;" :span="10">
 					<el-button @click="$parent.toAdd('1')" icon="el-icon-folder-add" type="success" size="small">新增</el-button>
 					<el-button @click="toUpd()" icon="el-icon-edit-outline" type="warning" size="small">修改</el-button>
 					<el-button @click="updateStatus(3)" icon="el-icon-magic-stick" type="success" size="small">生效</el-button>
@@ -59,7 +59,7 @@
 				<el-table-column prop="tableName" label="数据库表名" width="280" align="center"></el-table-column>
 				<el-table-column :formatter="textLength" prop="remark" label="描述" align="center" width="580" :show-overflow-tooltip="true"></el-table-column>
 			</el-table>
-			<pageNation :total="currentTotal" v-if="currentTotal != 0" ref="pageNation" @pageChange="pageChange"></pageNation>
+			<pageNation :total="currentTotal" ref="pageNation" @pageChange="pageChange"></pageNation>
 		</el-card>
 	</div>
 </template>

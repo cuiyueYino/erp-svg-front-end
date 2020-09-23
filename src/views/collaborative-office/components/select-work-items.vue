@@ -50,7 +50,7 @@
 				<el-table-column prop="voucherTime" label="经办时间" align="center"></el-table-column>
 				<el-table-column prop="tempName" label="工作事项模板" align="center"></el-table-column>
 			</el-table>
-			<pageNation :total="currentTotal" v-if="currentTotal != 0" ref="pageNation" @pageChange="pageChange"></pageNation>
+			<pageNation :total="currentTotal"  ref="pageNation" @pageChange="pageChange"></pageNation>
 		</el-card>
 	</div>
 </template>

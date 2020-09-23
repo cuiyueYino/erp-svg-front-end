@@ -50,7 +50,7 @@
 				<el-table-column prop="workItemTypeName" label="主表分类" align="center"></el-table-column>
 				<el-table-column :formatter="textLength" prop="remark" label="描述" align="center"></el-table-column>
 			</el-table>
-			<pageNation :total="currentTotal" v-if="currentTotal != 0" ref="pageNation" @pageChange="pageChange"></pageNation>
+			<pageNation :total="currentTotal" ref="pageNation" @pageChange="pageChange"></pageNation>
 		</el-card>
 	</div>
 </template>
