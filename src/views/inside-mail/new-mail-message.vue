@@ -427,28 +427,31 @@ export default {
                 this.formData.id = this.perData.id,
                 this.content = this.perData.content,
                 this.formData.subjectName= this.perData.subject + "";
-                this.formData.addresseeList = this.perData.addresseeList
+
                 this.enclosureConfig.voucherId = this.perData.mailCode;
                 if(!this.perData.status){
                     this.enclosureConfig.haveAttachment = true;
                 }
                  // 主送人自动勾选数据,名字回显
-                let addresseeName= '';
-                let defautltAddressee=[];
-                for(let i in this.perData.addresseeList){
-                    addresseeName += this.perData.addresseeList[i].fname+",";
-                    defautltAddressee.push(this.perData.addresseeList[i].foid);
+                if(this.perData.addresseeList!=null){
+                    this.formData.addresseeList = this.perData.addresseeList
+                    let addresseeName= '';
+                    let defautltAddressee=[];
+                    for(let i in this.perData.addresseeList){
+                        addresseeName += this.perData.addresseeList[i].fname+",";
+                        defautltAddressee.push(this.perData.addresseeList[i].foid);
+                    }
+                    if(addresseeName!=''){
+                        addresseeName = addresseeName.slice(0,addresseeName.length-1);
+                    }
+                    this.formData.addresseeName = addresseeName;
+                    this.defautltAddressee = defautltAddressee;
                 }
-                if(addresseeName!=''){
-                    addresseeName = addresseeName.slice(0,addresseeName.length-1);
-                }
-                this.formData.addresseeName = addresseeName;
-                this.defautltAddressee = defautltAddressee;
 
                 //抄送人名字回显，自动勾选
-                this.formData.duplicateList = this.perData.duplicateList;
                 if(this.perData.typeFlag == 'draftsEdit') {
                     if(this.perData.duplicateList != null) {
+                        this.formData.duplicateList = this.perData.duplicateList;
                         let nameString= '';
                         let checkId=[];
                         for(let i=0;i<this.perData.duplicateList.length;i++){
