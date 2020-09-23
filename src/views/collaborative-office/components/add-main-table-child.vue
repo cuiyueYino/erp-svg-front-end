@@ -462,8 +462,27 @@
 			},
 			//公司select选择的时候
 			selectChanged(val) {
-				this.ruleForm.workItemTypeSubName = '';
-				this.ruleForm.workItemTempName = '';
+				this.popup('切换公司将会清空数据,请确认?').then(res => {
+					this.ruleForm.workItemTypeSubName = '';
+					this.ruleForm.workItemTempName = '';
+					this.ruleForm = {
+						code: "",
+						name: "",
+						workItemTypeSubName: "",
+						workItemTypeSub: "",
+						workItemTempName: "",
+						workItemTemp: "",
+						showName: "",
+						type: "",
+						orderNum: "",
+						remark: "",
+						creator: localStorage.getItem('ms_userId'),
+						company: val,
+						lines: [],
+					}
+				}).catch(() => {
+
+				})
 			},
 			//子表类型（校验不同）
 			getType(type) {

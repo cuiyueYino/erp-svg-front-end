@@ -363,8 +363,24 @@
 			},
 			//公司select选择的时候
 			selectChanged(val) {
-				this.ruleForm.workItemTypeSubName = '';
-				this.ruleForm.workItemTempName = '';
+				this.popup('切换公司将会清空数据,请确认?').then(res => {
+					this.ruleForm.workItemTypeSubName = '';
+					this.ruleForm.workItemTempName = '';
+					this.ruleForm = {
+						code: "",
+						name: "",
+						tableName: "",
+						status: "",
+						oprStatus: "",
+						remark: "",
+						creator: localStorage.getItem('ms_userId'),
+						company: val,
+						workItemTypeName: "",
+						lines: [],
+					}
+				}).catch(() => {
+
+				})
 			},
 			//服务类型
 			ftypeShow(row) {

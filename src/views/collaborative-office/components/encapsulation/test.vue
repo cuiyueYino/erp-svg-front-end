@@ -145,9 +145,12 @@
 		},
 		mounted() {
 			const dom = this.$el.querySelector('.editor')
-
 			this.quill = new Quill(dom, this.options)
-			this.quill.root.innerHTML = this.value
+			if(typeof(this.value) == "undefined"){
+				this.quill.root.innerHTML = ""
+			}else{
+				this.quill.root.innerHTML = this.value
+			}
 			this.quill.on('text-change', () => {
 				this.$emit('contentData', this.quill.root.innerHTML)
 			})
