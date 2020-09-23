@@ -100,7 +100,7 @@
                             <el-button type="primary" size="mini" icon="el-icon-search" @click="MoreSearchPS(formdata)"></el-button>
                         </el-col>
                     </el-row>
-                    <processnodelist :rowDataprocessObj="rowDataprocessObj" :rowDataprocessOid="rowDataprocessOid" @changeShow="showprocessData"/> 
+                    <processnodelist :rowDataprocessObj="rowDataprocessObj" rowDataprocesstype='0' :rowDataprocessOid="rowDataprocessOid" @changeShow="showprocessData"/> 
                 </el-card>
             </el-form>
             <span slot="footer" v-if="LookOrupdate" class="dialog-footer">

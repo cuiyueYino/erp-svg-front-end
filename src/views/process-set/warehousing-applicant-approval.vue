@@ -60,7 +60,7 @@
 
                     <el-row>
                         <el-col :span="22">
-                            <processnodelist :rowDataprocessObj="rowDataprocessObj" :rowDataprocessOid="rowDataprocessOid"  @changeShow="showprocessData"/>
+                            <processnodelist :rowDataprocessObj="rowDataprocessObj" rowDataprocesstype='1' :rowDataprocessOid="rowDataprocessOid"  @changeShow="showprocessData"/>
                         </el-col>
                     </el-row>
                     <el-tabs v-model="atctiveName" @tab-click="handleClick">
@@ -87,10 +87,10 @@
                             </el-row>
                         </el-tab-pane>
                         <el-tab-pane label="附件" name="second">
-                            <creditEnclFilelist :rowEFListDataObj="rowEFListDataObj" :financingEFListtype="financingEFListtype" :fileFlag='rowFstatus' :seeFlag="seeFlag" />
+                            <creditEnclFilelist :rowEFListDataObj="rowEFListDataObj"  :financingEFListtype="financingEFListtype" :fileFlag='rowFstatus' :seeFlag="seeFlag" />
                         </el-tab-pane>
                     </el-tabs>
-    </div>
+                </div>
                 </el-card>
             </el-form>
         </el-dialog>
@@ -738,6 +738,8 @@ export default {
         getDataprocess(data){
             let DataF={};
             DataF.foid=data;
+            DataF.loadUser=localStorage.getItem("ms_userId");
+            DataF.module='1';
             return this.$api.processSet.getAuditAndReplyMsg(DataF).then(res=>{
                 if(res.data.code ==0){
                     this.rowDataprocessObj=res.data.data;

@@ -379,6 +379,7 @@ export default {
                     this.ShowFinancVisible=stype;
                     this.CeateTypeflag=Ctype;
                     this.forDisabled=ftype;
+                    this.company=tableDataArr.company;
                     this.formdata = tableDataArr;
                 } else {
                     this.$message.success('数据库没有该条数据!');

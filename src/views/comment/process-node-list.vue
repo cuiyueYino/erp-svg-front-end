@@ -55,6 +55,7 @@ import elreplypage from '../../components/common/reply/el-reply-main.vue';
 export default {
     props: {
         rowDataprocessObj:Array,
+        rowDataprocesstype:String,
         rowDataprocessOid:Object
     },
     name: 'basetable',
@@ -103,6 +104,8 @@ export default {
         closeReplyPageMain(data){
             let Formdata={};
             Formdata.foid=this.rowDataprocessOid.finanrowId;
+            Formdata.loadUser=localStorage.getItem("ms_userId");
+            Formdata.module=this.rowDataprocesstype;
             this.$api.processSet.getAuditAndReplyMsg(Formdata).then(res=>{
                 if(res.data){
                     if(res.data.code ==0){
@@ -128,6 +131,8 @@ export default {
                 //获取最新的回复信息
                 let Formdata={};
                 Formdata.foid=this.rowDataprocessOid.finanrowId;
+                Formdata.loadUser=localStorage.getItem("ms_userId");
+                Formdata.module=this.rowDataprocesstype;
                 this.$api.processSet.getAuditAndReplyMsg(Formdata).then(res=>{
                     if(res.data){
                         if(res.data.code ==0){

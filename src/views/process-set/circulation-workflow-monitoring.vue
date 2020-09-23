@@ -102,7 +102,7 @@
                             </el-form-item>
                         </el-col>
                     </el-row>
-                    <processnodelist :rowDataprocessObj="rowDataprocessObj" :rowDataprocessOid="rowDataprocessOid"  @changeShow="showprocessData"/> 
+                    <processnodelist :rowDataprocessObj="rowDataprocessObj" rowDataprocesstype='0' :rowDataprocessOid="rowDataprocessOid"  @changeShow="showprocessData"/> 
                 </el-card>
             </el-form>
             <span slot="footer" v-if="LookOrupdate" class="dialog-footer">
