@@ -541,6 +541,8 @@
         :type="baseInputType"
         :title="baseInputTitle"
         :fcompanyid="fcompanyid"
+        :transStaffRelUserIds='transStaffRelUserIds'
+        :internalMansName='internalMansName'
         @closeDialog="closeBaseInfo"
       ></staff-tree-search>
     </el-form>
@@ -634,7 +636,9 @@
                 this.searchForm.internalMansName = internalMansName;
                 this.searchForm.internalMans = internalMans;
                 this.$set(this.searchForm,"fcompany",resData.fcompanyid)
-
+                for(var i=0;i<res.data.data.rows[0].internalmans.length;i++) {
+                  this.transStaffRelUserIds.push(res.data.data.rows[0].internalmans[i].foid);
+                }
               } else {
                 this.$message.error("数据获取失败");
               }
@@ -658,6 +662,8 @@
         }
       };
       return {
+        internalMansName:'internalMansName',
+        transStaffRelUserIds:[],
         formFlag:1,
         options: JSON.parse(localStorage.getItem('CompanyData')),
         pageNum: 1,
@@ -787,6 +793,7 @@
       fcpmcountMethod(){
         this.searchForm.fconfname = '';
       },
+    
       //新建弹窗赋值默认值：当前user对应的人员信息
       getCurrentStaffInfo(){
         let fromdata={};
@@ -926,6 +933,9 @@
             this.searchForm.fcontactdeptname = data.fdeptname;
             this.searchForm.fcontactdept = data.fdeptid;
           } else if (type === "4") {
+            this.searchForm.internalMansName = '';
+            this.searchForm.internalmans = [];
+             this.transStaffRelUserIds = [];
             let internalmans = [];
             let internalMansName = "";
             for (let i in data) {
@@ -940,8 +950,11 @@
               };
               internalmans.push(staff);
             }
-            this.searchForm.internalmans = this.searchForm.internalmans.concat(internalmans);
-            console.log(this.searchForm.internalmans);
+            for(var i=0;i<data.length;i++) {
+                this.transStaffRelUserIds.push(data[i].foid);
+              }
+            this.searchForm.internalmans = internalmans;
+
             if(this.searchForm.internalMansName == ""){
               this.searchForm.internalMansName += internalMansName;
             }else{

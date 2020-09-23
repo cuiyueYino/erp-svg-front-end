@@ -727,13 +727,13 @@
 						this.dialogFormVisible = true;
 						this.isEdit = true;
 						this.$api.jobUserManagement.addPeopleData(this.multipleSelection[0].toid).then(res => {
-								console.log(res)
 								if(res.status == '200') {
 									let newData;
 									newData = JSON.parse(JSON.stringify(res.data.data));
 									this.editFormData = res.data.data;
 									this.peopleForm = newData;
-									this.peopleForm.ffirmposition = res.data.data.ffirmpositionname;
+									this.peopleForm.ffirmposition = res.data.data.ffirmposition;
+									this.peopleForm.ffirmpositionname = res.data.data.ffirmpositionname;
 									this.peopleForm.tcompanyoid = res.data.data.tcompanyoid;
 									this.peopleForm.tableData3 = res.data.data.pluralismModels == null ? [] : res.data.data.pluralismModels;
 									// console.log(this.editFormData,res.data.data,newData )

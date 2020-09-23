@@ -65,6 +65,7 @@
       //搜索框的id的集合
       fteamleaderId:Array,
       transStaffRelUserIds:Array,
+      internalMansName:String,
       // 当前配置查询类型
       type: {
         type: String,
@@ -121,15 +122,20 @@
     watch: {
       // 对话框显示 自动聚焦name输入框
       visible(bool) {
-        if(this.fteamleaderId == undefined || this.fteamleaderId == undefined ) {
-            this.defautChecked = [];
-            this.treeDataObject = [];
-        } else if (this.type == 1) {
-            this.defautChecked = this.fteamleaderId;
-            this.treeDataObject = this.fteamleaderId;
-        } else {
+        if(this.internalMansName == 'internalMansName') {
             this.defautChecked = this.transStaffRelUserIds;
             this.treeDataObject = this.transStaffRelUserIds;
+        } else {
+          if(this.fteamleaderId == undefined || this.fteamleaderId == undefined ) {
+              this.defautChecked = [];
+              this.treeDataObject = [];
+          } else if (this.type == 1) {
+              this.defautChecked = this.fteamleaderId;
+              this.treeDataObject = this.fteamleaderId;
+          } else {
+              this.defautChecked = this.transStaffRelUserIds;
+              this.treeDataObject = this.transStaffRelUserIds;
+          }
         }
         this.dialogVisible = bool;
         this.treeData = [];
@@ -201,7 +207,7 @@
                           }
                       }
                   } else {
-                      this.treeDataObject.push(searchArray[i].foid);
+                      this.treeDataObject.push('');
                   }
               }
               this.operateUserTree(staffTree);
