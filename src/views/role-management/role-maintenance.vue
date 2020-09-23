@@ -19,17 +19,17 @@
                         </el-form-item>
 
                         <el-form-item>
-                            <el-button type="primary" icon='el-icon-search' size="small" plain @click="onSubmit">搜索</el-button>
+                            <el-button type="primary" icon='el-icon-search' size="small"   @click="onSubmit">搜索</el-button>
                         </el-form-item>
                         <el-form-item>
-                            <el-button type="primary" icon='el-icon-tickets' size="small" plain @click="getAll" class="search-all">显示全部信息</el-button>
+                            <el-button type="primary" icon='el-icon-tickets' size="small"   @click="getAll" class="search-all">显示全部信息</el-button>
                         </el-form-item>
                     </el-form>
                 </el-col>
                  <el-col :span="10" :offset="2">
-                    <el-button type="success" icon='el-icon-folder-add' size="small" plain @click="createRoleMainte">新增</el-button>
-                    <el-button type="warning" icon="el-icon-edit-outline" size="small" plain @click="modifyRoleMainte">修改</el-button>
-                    <el-button type="danger" icon='el-icon-delete' size="small" plain @click="removeRoleMainte">删除</el-button>
+                    <el-button type="success" icon='el-icon-folder-add' size="small"   @click="createRoleMainte">新增</el-button>
+                    <el-button type="warning" icon="el-icon-edit-outline" size="small"   @click="modifyRoleMainte">修改</el-button>
+                    <el-button type="danger" icon='el-icon-delete' size="small"   @click="removeRoleMainte">删除</el-button>
                  </el-col>
             </el-row>
         </el-card>
