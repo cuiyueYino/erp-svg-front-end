@@ -12,7 +12,6 @@
 									<el-option label="编码" value="tcode"></el-option>
 									<el-option label="职位" value="ffirmpositionname"></el-option>
 									<el-option label="描述" value="tdescription"></el-option>
-									<el-option label="公司" value="tcompanyname"></el-option>
 									<el-option label="部门" value="tdepartmentname"></el-option>
 									<el-option label="在职状态" value="fpositionstate"></el-option>
 									<el-option label="是否兼职" value="tispluralism"></el-option>
@@ -144,7 +143,7 @@
 			<div slot="footer">
 				<el-button type="success" icon='el-icon-copy-document' size="small" @click="addSubmit('peopleForm')">保存</el-button>
 				<el-button type='warning' icon='el-icon-close' size="small" @click="dialogFormVisible = false">取消</el-button>
-				
+
 			</div>
 		</erpDialog>
 		<!-- 部门/职位弹窗 -->

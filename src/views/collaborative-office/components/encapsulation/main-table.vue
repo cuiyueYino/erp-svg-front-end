@@ -82,10 +82,10 @@
 			},
             //描述显示
             textLength(row){
-                if(row.remark!=null&&row.remark.length>20) {
-                    return row.remark.substring(0,10)+"...";
+                if(row.cellValue!=null&&row.cellValue.length>8) {
+                    return row.cellValue.substring(0,8)+"...";
                 }else {
-                    return row.remark;
+                    return row.cellValue;
                 }
             },
 			check() {
@@ -139,7 +139,6 @@
 			},
 			//搜索
 			toSelect() {
-				console.log(11111111)
 				this.$api.collaborativeOffice.apiUrl("workItemTemp/findByParams", this.formInline).then(data => {
 					this.conList = data.data.data
 					this.tableData = JSON.parse(JSON.stringify(this.conList))
