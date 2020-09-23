@@ -3,9 +3,13 @@ import httpReqest from '../../utils/https';
 const v = base.dev;
 //const testV = base.test;
 const management = {
-    // 获取树形结构数据
+    // 获取树形结构数据：不包括作废数据
     selectAllOrganizationInfo(){
         return httpReqest.get('/api/interfaces/organization/selectAllOrganizationInfo');
+    },
+    // 获取树形结构所有数据
+    selectAllOrganization(){
+        return httpReqest.get('/api/interfaces/organization/selectAllOrganization');
     },
     //查询公司
     getselectCompanyInfo(params){
