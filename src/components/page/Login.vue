@@ -7,12 +7,12 @@
 				<div class="ms-title">用户登录</div>
 				<el-form :model="param" :rules="rules" ref="login" label-width="0px" class="ms-content">
 					<el-form-item prop="username">
-						<el-input v-model="param.username" placeholder="username">
+						<el-input v-model="param.username" placeholder="用户名">
 							<el-button tabindex=-1 slot="prepend" icon="el-icon-lx-people"></el-button>
 						</el-input>
 					</el-form-item>
 					<el-form-item prop="password">
-						<el-input type="password" placeholder="password" v-model="param.password" @keyup.enter.native="submitForm()">
+						<el-input type="password" placeholder="密码" v-model="param.password" @keyup.enter.native="submitForm()">
 							<el-button tabindex=-1 slot="prepend" icon="el-icon-lx-lock"></el-button>
 						</el-input>
 					</el-form-item>
