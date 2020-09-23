@@ -143,6 +143,7 @@
 				this.selectCon = data.id
 				this.toSelectData = JSON.parse(JSON.stringify(this.formInline))
 				this.toSelectData[data.id] = this.selectData
+                this.selectData = '';
 			},
 			//查看
 			toSee() {

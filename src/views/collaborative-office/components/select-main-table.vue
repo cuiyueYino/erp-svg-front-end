@@ -115,6 +115,21 @@
 			}
 		},
 		created() {
+		    if(this.show==1){
+                this.formInlineList = [{
+                    id: "code",
+                    name: "主表编码"
+                }, {
+                    id: "name",
+                    name: "主表名称"
+                }, {
+                    id: "workItemTypeName",
+                    name: "主表分类"
+                }, {
+                    id: "remark",
+                    name: "描述"
+                }]
+            }
 			if(this.company){
 				this.companyName=this.company;
 			}
@@ -137,6 +152,8 @@
 				this.selectCon = data.id
 				this.toSelectData = JSON.parse(JSON.stringify(this.formInline))
 				this.toSelectData[data.id] = this.selectData
+                this.selectData='';
+
 			},
 			//查看
 			toSee() {
