@@ -451,7 +451,7 @@ export default {
             this.$api.processSet.addWfsubmit(paramsData).then(res=>{
                 if( res.data.code == 0 ){
                     this.$message.success('保存成功');
-                    // loading.close();
+                       loading.close();
                     this.ShowFinancVisible = false;
                     this.participator="";
                     this.$emit('changeShow',false);

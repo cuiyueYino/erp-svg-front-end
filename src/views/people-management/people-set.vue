@@ -284,6 +284,15 @@
 							max: 100,
 							message: "长度在 1 到 50 个字符",
 							trigger: "blur"
+						},
+						/*
+						 孟鹏飞 9.23 
+						 编码只能输入 英文和数字
+						 * */
+						{
+							pattern: /^\w+$/,
+							message: '请输入正确的编码',
+							trigger: 'blur'
 						}
 					],
 					tname: [{
