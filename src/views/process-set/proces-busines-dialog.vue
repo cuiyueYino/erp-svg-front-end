@@ -585,8 +585,8 @@ export default {
             Roledata.page=val;
             Roledata.size=this.pageSize;
             Roledata.companyOid=this.companyId;
-            Roledata.code=this.formData.formCodeDep;
-            Roledata.name=this.formData.formNameDep;
+            Roledata.fcode=this.formData.formCodeDep;
+            Roledata.fname=this.formData.formNameDep;
             Roledata.changePage=true;
             this.getDepartment(Roledata);
         },
