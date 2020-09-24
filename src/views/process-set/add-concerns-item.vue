@@ -298,7 +298,48 @@ export default {
             let fromdata={};
             fromdata.infosBeginNum=(val-1)*10 +1;
             fromdata.infosEndNum=val*10;
-            fromdata.userId=localStorage.getItem("ms_userId")
+            fromdata.type='1';
+            fromdata.userId=localStorage.getItem("ms_userId");
+            let CompanyS=this.DataForm.srcCompany;
+            if(CompanyS && CompanyS!=''){
+                fromdata.srcCompany=this.DataForm.srcCompany;
+            }
+            let MetaCS=this.DataForm.metaClass;
+            if(MetaCS && MetaCS!=''){
+                fromdata.metaClass=this.DataForm.metaClass;
+            }
+            let activNS=this.DataForm.activityName;
+            if(activNS && activNS!=''){
+                fromdata.activityName=this.DataForm.activityName;
+            }
+            let subjectS=this.DataForm.subject;
+            if(subjectS && subjectS!=''){
+                fromdata.subject=this.DataForm.subject;
+            }
+            let receTFS=this.DataForm.receiveTimeFrom;
+            if(receTFS && receTFS!=''){
+                fromdata.receiveTimeFrom=this.DataForm.receiveTimeFrom;
+            }
+            let receTTS=this.DataForm.receiveTimeTo;
+            if(receTTS && receTTS!=''){
+                fromdata.receiveTimeTo=this.DataForm.receiveTimeTo;
+            }
+            let dispsMS=this.DataForm.displaystartMan;
+            if(dispsMS && dispsMS!=''){
+                fromdata.displaystartMan=this.DataForm.displaystartManId;
+            }
+            let StartTFS=this.DataForm.startTimeFrom;
+            if(StartTFS && StartTFS!=''){
+                fromdata.startTimeFrom=this.DataForm.startTimeFrom;
+            }
+            let StartTTS=this.DataForm.startTimeTo;
+            if(StartTTS && StartTTS!=''){
+                fromdata.startTimeTo=this.DataForm.startTimeTo;
+            }
+            let overTimeS=this.DataForm.overTime;
+            if(overTimeS && overTimeS!=''){
+                fromdata.overTime=this.DataForm.overTime;
+            }
             this.getHunTableData(fromdata);
         },
         //根据状态改背景色
@@ -323,6 +364,7 @@ export default {
             let fromdata={};
             fromdata.infosBeginNum=1;
             fromdata.infosEndNum=this.pageSize;
+            fromdata.type='1';
             fromdata.userId=localStorage.getItem("ms_userId")
             this.getHunTableData(fromdata);
         },
@@ -372,6 +414,7 @@ export default {
             let fromdata={};
             fromdata.infosBeginNum=1;
             fromdata.infosEndNum=this.pageSize;
+            fromdata.type='1';
             fromdata.userId=localStorage.getItem("ms_userId");
             let CompanyS=this.DataForm.srcCompany;
             if(CompanyS && CompanyS!=''){
@@ -532,6 +575,7 @@ export default {
                 let fromdata={};
                 fromdata.infosBeginNum=1;
                 fromdata.infosEndNum=this.pageSize;
+                fromdata.type='1';
                 fromdata.userId=localStorage.getItem("ms_userId");
                 this.getHunTableData(fromdata);
                 //查找业务数据
