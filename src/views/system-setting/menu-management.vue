@@ -5,7 +5,7 @@
                 <el-col :span="12">
                     <el-form :inline="true"  class="demo-form-inline">
                         <el-col :span="5">
-                            <el-select v-model="formInline.company" @change="Comchange" placeholder="公司" clearable>
+                            <el-select v-model="formInline.company" @change="Comchange" placeholder="公司" clearable disabled>
                                 <el-option
                                     v-for="item in companyData"
                                     :key="item.id"
