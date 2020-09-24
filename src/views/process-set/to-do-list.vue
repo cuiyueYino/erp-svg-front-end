@@ -785,7 +785,6 @@ export default {
           finandata.read = true;
           finandata.trust = true;
         }
-        
         this.rowWAADataObj = finandata;
         this.rowWAAtype = true;
         this.financingLFCAtype = true;

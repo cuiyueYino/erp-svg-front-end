@@ -14,7 +14,8 @@
                                     <li>{{item.fsubject}}<span class="li-after" v-show="item.fisread=='0'"></span></li>
                                 </ul>
                                 <ul class="ul-middle" :key="item.foid">
-                                    <li @click="taskDetail(item.fsrcoId,item.classId,item.factivity,item.fsubject,item.foid,)">{{item.fsrcCompany}}</li>
+                                    <!--<li @click="taskDetail(item.fsrcoId,item.classId,item.factivity,item.fsubject,item.foid,)">{{item.fsrcCompany}}</li>-->
+                                    <li>{{item.fsrcCompany}}</li>
                                 </ul>
                                 <ul class="ul-middle" :key="item.foid">
                                     <li>{{item.faddresser}}</li>
@@ -74,7 +75,7 @@
                         </el-tab-pane>
                         <el-tab-pane label="回收站" name="5">
                             <template v-for="item in getRecycleBinList" class="li-box">
-                                <ul :class="{'ul-middle':true ,'subjectStyle':item.fisread=='0' }" @click="toLookItems(item,'5')" :key="item.foid">
+                                <ul :class="{'ul-middle':true ,'subjectStyle':item.fisread=='0' }" :key="item.foid">
                                     <li>{{item.fsubject}}<span class="li-after" v-show="item.fisread=='0'"></span></li>
                                 </ul>
                                 <ul class="ul-middle" :key="item.foid">
@@ -83,7 +84,7 @@
                                 <ul class="ul-middle" :key="item.foid">
                                     <li>{{item.faddresser}}</li>
                                 </ul>
-                                <ul class="ul-middle" @click="toLookItems(item,'5')" :key="item.foid">
+                                <ul class="ul-middle" :key="item.foid">
                                     <li>{{item.freceiveTime}}</li>
                                 </ul>
                             </template>
@@ -227,7 +228,7 @@
                     </el-row>
                 </el-form>
             </el-dialog>
-            <WAApage  :rowWAADataObj="rowWAADataObj" :rowWAAtype="rowWAAtype" :isOa="isOa" @changeShow="showORhideForWAA" :functionType="functionType" />
+            <WAApage  :rowWAADataObj="rowWAADataObj" :rowWAAtype="rowWAAtype" :isOa="isOa" @changeShow="showORhideForWAA" :seeFlag="seeFlag" :functionType="functionType" />
         </el-container>
     </div>
 </template>
@@ -252,6 +253,7 @@ export default {
             factivity:'',
             fsubject:'',
             isOa:false,
+            seeFlag:false,
             rowWAADataObj:{},
             rowWAAtype:false,
             dialogVisible:false,
@@ -349,16 +351,61 @@ export default {
             }
         },
         toLookItems(val,activeName){
+            this.seeFlag = true;
             let finandata = val;
-            finandata.selectData = val;
+            //finandata.selectData = val;
             finandata.finanrowname="人员缺省查询方案";
             finandata.finanrowId="QS_0056";
             finandata.nametitle = "入库申请申请人审批";
             finandata.foid = val.foid;
-            this.rowWAADataObj = finandata;
             this.functionType = val.classId;
-            this.rowWAAtype=true;
             this.isOa = true;
+            if(activeName=='3'){
+                finandata.relay = true;
+                finandata.attention = true;
+                finandata.print = true;
+                finandata.sign = false;
+                finandata.commit = false;
+                finandata.read = false;
+                finandata.trust = false;
+            }
+            if(activeName=='1'){
+                let subject = val.fsubject;
+                subject= subject.substring(0,4);
+                if (subject.indexOf("加签") > -1) {
+                    finandata.relay = false;
+                    finandata.attention = false;
+                    finandata.sign = false;
+                    finandata.commit = true;
+                    finandata.read = false;
+                    finandata.trust = false;
+                }else{
+                    finandata.relay = true;
+                    finandata.attention = true;
+                    finandata.sign = true;
+                    finandata.commit = true;
+                    finandata.read = true;
+                    finandata.trust = true;
+                }
+            }
+            if(activeName=='2'){
+                finandata.relay = true;
+                finandata.attention = false;
+                finandata.sign = false;
+                finandata.commit = false;
+                finandata.read = false;
+                finandata.trust = false;
+            }
+            if(activeName=='4'){
+                finandata.relay = true;
+                finandata.attention = true;
+                finandata.sign = false;
+                finandata.commit = false;
+                finandata.read = false;
+                finandata.trust = false;
+            }
+            this.rowWAADataObj = finandata;
+            this.rowWAAtype=true;
             let localKey = localStorage.getItem('ms_userId') + "_" + val.foid;
             localStorage.setItem(localKey, "1");
             /*

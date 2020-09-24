@@ -223,6 +223,8 @@ export default {
     },
     data () {
         return {
+            formCodeDepFlag:'',
+            formNameDepFlag:'',
             searchKeyW:'',
             options: [],
             Roleoptions: [],
@@ -314,6 +316,9 @@ export default {
          // 对话框显示 自动聚焦name输入框
         visible (bool) {
             this.dialogVisible = bool;
+            // if(bool){
+            //     this.formData.formCodeDep ='';
+            // }
             if(this.type =='用户'){
                 let fromdata={};
                 fromdata.id='_DefaultCompanyOId';
@@ -368,18 +373,17 @@ export default {
         },
         //查询部门
         getDepartment(data){
-            // debugger;
             let fromdata = {};
             fromdata.company = data.companyOid;
             fromdata.code = data.fcode;
             fromdata.name = data.fname;
             fromdata.page = data.page;
             fromdata.size = data.size;
-            if((fromdata.code != '' && fromdata.code != undefined) || (fromdata.name != '' && fromdata.name != undefined)){
-                if(!fromdata.changePage){//处理当前页数不在第一页时，发生条件搜索的情况
-                    fromdata.page = 1;
-                }
-            }
+            // if((fromdata.code != '' && fromdata.code != undefined) || (fromdata.name != '' && fromdata.name != undefined)){
+            //     if(!fromdata.changePage){//处理当前页数不在第一页时，发生条件搜索的情况
+            //         fromdata.page = 1;
+            //     }
+            // }
             this.$api.processSet.getDepartmentInfosByCompany(fromdata).then(res=>{
                 let resData=res;
                 this.griddepData=resData.data.data.rows;
@@ -495,12 +499,14 @@ export default {
                 Roledata.name=this.formData.formName;
                 this.getUserRole(Roledata);
             }else{
+                this.formCodeDepFlag = this.formData.formCodeDep;
+                this.formNameDepFlag = this.formData.formNameDep;
                 let Roledata={};
                 Roledata.queryType='';
-                Roledata.page=this.pageNum;
+                Roledata.page=1;
                 Roledata.size=this.pageSize;
-                Roledata.fcode=this.formData.formCodeDep;
-                Roledata.fname=this.formData.formNameDep;
+                Roledata.fcode=this.formCodeDepFlag;
+                Roledata.fname=this.formNameDepFlag;
                 Roledata.companyOid=this.companyId;
                 this.getDepartment(Roledata);
             }
@@ -585,8 +591,8 @@ export default {
             Roledata.page=val;
             Roledata.size=this.pageSize;
             Roledata.companyOid=this.companyId;
-            Roledata.fcode=this.formData.formCodeDep;
-            Roledata.fname=this.formData.formNameDep;
+            Roledata.fcode=this.formCodeDepFlag;
+            Roledata.fname=this.formNameDepFlag;
             Roledata.changePage=true;
             this.getDepartment(Roledata);
         },

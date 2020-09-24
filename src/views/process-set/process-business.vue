@@ -6,7 +6,7 @@
                <el-col :span="14">
                     <el-form :inline="true" @submit.native.prevent  class="demo-form-inline">
                     <el-form-item >
-                        <el-input clearable v-model="formCode" placeholder="请输入任意查询内容"></el-input>
+                        <el-input clearable v-model="formCode" placeholder="请输入公司查询"></el-input>
                     </el-form-item>
                     <el-form-item>
                         <el-button type="success" size="small" icon='el-icon-search'  @click="onSubmit">搜索</el-button>
