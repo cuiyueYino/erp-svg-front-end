@@ -197,6 +197,8 @@ auth:"",
                 }
             }else if(3 == param){
                 fromdata.fauth = '1';//给个已选中标识，后台做筛选
+                this.formInline.auth = ""
+                this.input  = ""
             }else if(2 == param){
                 this.formInline.auth = ""
                 this.input = ""
