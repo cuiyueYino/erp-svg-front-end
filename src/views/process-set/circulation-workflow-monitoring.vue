@@ -261,14 +261,18 @@ export default {
                 this.$message.error("请选择岗位!");
             }else{
                 if(SelectData.length == 1){
-                    this.formdata.documentNo=SelectData[0].fname;
-                    this.formdata.documentfoid=SelectData[0].foid;
-                    this.multipleSelection=[];
                     if(this.formdata.radio =='1'){
                         this.JDtype='1';
                     }else{
+                        if(SelectData[0].fnodetype == 1){
+                            this.$message.error("不能回退到起始节点!");
+                            return;
+                        }
                         this.JDtype='2';
                     }
+                    this.formdata.documentNo=SelectData[0].fname;
+                    this.formdata.documentfoid=SelectData[0].foid;
+                    this.multipleSelection=[];
                     this.ReviewVisible=false;
                 }else{
                    this.$message.error("只能选择一个岗位!");     
