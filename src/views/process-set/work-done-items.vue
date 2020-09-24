@@ -269,19 +269,19 @@ export default {
                 title: '当前审批人'
             },
              {
-                key: 'trustMan',
+                key: 'repeat',
                 title: '转发人'
             },
              {
-                key: 'trustTime',
+                key: 'repeatTime',
                 title: '转发时间'
             },
             {
-                key: 'repeat',
+                key: 'trustMan',
                 title: '委托人'
             },
              {
-                key: 'repeatTime',
+                key: 'trustTime',
                 title: '委托时间'
             },
 
