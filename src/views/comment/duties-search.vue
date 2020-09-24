@@ -87,7 +87,7 @@
                        <el-input v-model="dialog.name"></el-input>
                     </el-col>
                 </el-row>
-                <el-row class="elrowStyle">
+                <!-- <el-row class="elrowStyle">
                     <el-col :span="6" class="elColCenter">状态</el-col>
                     <el-col :span="6" class="elColCenter">等于</el-col>
                     <el-col :span="6">
@@ -114,7 +114,7 @@
                             ></el-option>
                         </el-select>
                     </el-col>
-                </el-row>
+                </el-row> -->
             </el-card>
             </el-form>
             <span slot="footer" class="dialog-footer">
@@ -271,10 +271,10 @@ export default {
             if(fstatusS && fstatusS!=''){
                 fromdata.fstatus=this.dialog.fstatus;
             }
-            let fpostype=this.dialog.fpositioncategory;
-            if(fpostype && fpostype!=''){
-                fromdata.fpositioncategory=this.dialog.fpositioncategory;
-            }
+            // let fpostype=this.dialog.fpositioncategory;
+            // if(fpostype && fpostype!=''){
+            //     fromdata.fpositioncategory=this.dialog.fpositioncategory;
+            // }
             this.$api.jobUserManagement.getTableData(fromdata).then(response => {
                 let responsevalue = response;
                 if (responsevalue) {
@@ -320,10 +320,10 @@ export default {
             if(fstatusS && fstatusS!=''){
                 fromdata.fstatus=this.dialog.fstatus;
             }
-            let fpostype=this.dialog.fpositioncategory;
-            if(fpostype && fpostype!=''){
-                fromdata.fpositioncategory=this.dialog.fpositioncategory;
-            }
+            // let fpostype=this.dialog.fpositioncategory;
+            // if(fpostype && fpostype!=''){
+            //     fromdata.fpositioncategory=this.dialog.fpositioncategory;
+            // }
             this.$api.jobUserManagement.getTableData(fromdata).then(response => {
                 let responsevalue = response;
                 if (responsevalue) {
