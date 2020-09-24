@@ -723,7 +723,7 @@
           fcpmcount: [
             {required: true, message: "请输入参会人数（人）", trigger: "blur"},
             {
-							pattern: "^[1-9]*$",
+							pattern: "^[0-9]*[1-9][0-9]*$",
               message: '请输入正整数',
               trigger: "blur"
 						}
