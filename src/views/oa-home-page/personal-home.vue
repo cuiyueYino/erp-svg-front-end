@@ -617,7 +617,7 @@ export default {
             window.open("http://www.fujiagroup.com/");
         },
         toTel() {
-            window.open("http://192.168.85.96:8092/file/txl.html");
+            window.open("http://192.168.85.96:8093/file/txl.html");
         },
     }
 }
