@@ -449,19 +449,24 @@ export default {
                 paramsData["position"] = Data;
             }
             this.$api.processSet.addWfsubmit(paramsData).then(res=>{
-                if( res.data.code == 0 ){
-                    this.$message.success('保存成功');
-                    loading.close();
-                    this.ShowFinancVisible = false;
-                    this.participator="";
-                    this.$emit('changeShow',false);
-                    this.reload();
+                if(res.data){
+                    if( res.data.code == 0 ){
+                        this.$message.success('保存成功');
+                        loading.close();
+                        this.ShowFinancVisible = false;
+                        this.participator="";
+                        this.$emit('changeShow',false);
+                        this.reload();
+                    }else{
+                        loading.close();
+                        this.participator="";
+                        this.$message.error(res.data.msg);
+                    }
                 }else{
                     loading.close();
                     this.participator="";
-                    this.$message.error(res.data.msg);
-                }
-
+                    this.$message.error('提交失败!');
+                } 
             },error=>{
                 // loading.close();
                 console.log(error)
