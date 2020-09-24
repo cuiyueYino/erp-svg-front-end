@@ -111,10 +111,10 @@ export default {
     
     created(){
         let fromdata={};
-        fromdata.infosBeginNum=0;
-        fromdata.infosEndNum=this.pageSize;
+        //fromdata.infosBeginNum=1;
+        //fromdata.infosEndNum=this.pageSize;
         fromdata.size=this.pageSize;
-        fromdata.page=this.pageNum;
+        fromdata.page=1;
         fromdata.oid=localStorage.getItem("ms_userId")
         this.getrecycleBin(fromdata);
     },
@@ -151,10 +151,10 @@ export default {
         //分页、下一页
         onCurrentChange(val){
             let fromdata={};
-            fromdata.infosBeginNum=(val-1)*10;
-            fromdata.infosEndNum=val*10;
+            //fromdata.infosBeginNum=(val-1)*10+1;
+            //fromdata.infosEndNum=val*10;
             fromdata.size=this.pageSize;
-            fromdata.page=this.pageNum;
+            fromdata.page=val;
             fromdata.oid=localStorage.getItem("ms_userId")
             this.getrecycleBin(fromdata);
         },
