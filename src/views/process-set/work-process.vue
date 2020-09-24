@@ -6,7 +6,7 @@
                <el-col :span="14">
                     <el-form @submit.native.prevent :inline="true"  class="demo-form-inline">
                     <el-form-item >
-                        <el-input clearable v-model="formCode" placeholder="请输入任意查询内容"></el-input>
+                        <el-input clearable v-model="formCode" placeholder="请输入编码和名称"></el-input>
                     </el-form-item>
 
                     <el-form-item>
@@ -150,6 +150,7 @@ export default {
         tableData:[],
         multipleSelection: [],
         checked:false,
+        searchFlag:false,
         backchecked:false,
          form: {
           name: '',
@@ -207,7 +208,11 @@ export default {
         onCurrentChange(val){
             this.pageNum = val;
             if(this.formCode){
-                this.getTableData(this.formCode);
+                if(this.searchFlag){
+                    this.getTableData(this.formCode);
+                }else{
+                    this.getTableData('')   
+                }
             }else{
                 this.getTableData('')
             }
@@ -215,12 +220,14 @@ export default {
         // 搜索
         onSubmit(){
             this.pageNum=1;
+            this.searchFlag=true;
             this.getTableData(this.formCode);
         },
         getAll(){
             // 清空搜索框数据
             this.pageNum=1;
             this.formCode = '';
+            this.searchFlag=false;
             this.getTableData('')
         },
          closeBaseInfo(data, dialogtitle, type) {
@@ -238,14 +245,15 @@ export default {
         },
         // 获取表格数据
         getTableData(params){
-            let data = {
-                fcode: params,
-                page:this.pageNum,
-                size:this.pageSize
-            };
+            let data={};
+            data.page=this.pageNum;
+            data.size=this.pageSize;
+            if(params !=''){
+                data.fcode=params;
+            }
             this.$api.processSet.getTableData(data).then(res=>{
                 this.tableData = res.data.data.rows
-                 this.total = res.data.data.total
+                this.total = res.data.data.total
             },error=>{
                 console.log(error)
             })
