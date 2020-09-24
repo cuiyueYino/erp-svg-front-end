@@ -443,7 +443,8 @@ export default {
             if(data === false){
                 this.rowCWMtype = false
             }else{
-                this.rowCWMtype = true
+                this.rowCWMtype = false
+                this.refresh();
             }
         },
         //查询
