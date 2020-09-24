@@ -311,7 +311,7 @@ export default {
         let fromdata={};
         fromdata.infosBeginNum=1;
         fromdata.infosEndNum=this.pageSize;
-        fromdata.userId=localStorage.getItem("ms_userId")
+        fromdata.userId=localStorage.getItem("ms_userId");
         this.getAttentionTask(fromdata);
         //查找业务数据
         let fromdata1={};
@@ -413,7 +413,11 @@ export default {
         },
         //分页、下一页
         onCurrentChange(val){
-            this.pageNum = val;
+            let fromdata={};
+            fromdata.infosBeginNum=(val-1)*10 +1;
+            fromdata.infosEndNum=val*10;
+            fromdata.userId=localStorage.getItem("ms_userId")
+            this.getAttentionTask(fromdata);
         },
         //刷新
         refresh(){
@@ -521,8 +525,8 @@ export default {
         //高级搜索关注事项
         onHandleMoreSearch(){
             let fromdata={};
-            fromdata.page=this.pageNum;
-            fromdata.size=this.pageSize;
+            fromdata.infosBeginNum=1;
+            fromdata.infosEndNum=this.pageSize;
             let CompanyS=this.DataForm.srcCompany;
             if(CompanyS && CompanyS!=''){
                 fromdata.srcCompany=this.DataForm.srcCompany;
