@@ -263,7 +263,6 @@ export default {
 
     },
     mounted() {
-      debugger;
         this.treeloading = true;
         this.$api.management.selectAllOrganization().then(response => {
             let responsevalue = response;
