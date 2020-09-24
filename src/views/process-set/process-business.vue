@@ -52,7 +52,7 @@
                         <el-select
                             v-model="form.fcompanyoid"
                             size="small"
-                            :disabled="homeTitle == '查看业务'?true:false"
+                            :disabled="homeTitle == '查看业务'||homeTitle =='编辑业务'?true:false"
                             clearable
                         >
                             <el-option
