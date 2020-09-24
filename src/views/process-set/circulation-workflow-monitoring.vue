@@ -330,7 +330,7 @@ export default {
                 if(res.data){
                     if(res.data.code ==0){
                         this.ShowFinancVisible=false;
-                        this.$emit('changeShow',true);
+                        this.$emit('changeShow',false);
                     }else{
                         this.$message.error(res.data.msg);
                     }
