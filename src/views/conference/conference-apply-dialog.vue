@@ -802,7 +802,7 @@
       fcpmcountMethod(){
         this.searchForm.fconfname = '';
       },
-    
+
       //新建弹窗赋值默认值：当前user对应的人员信息
       getCurrentStaffInfo(){
         let fromdata={};
@@ -842,6 +842,7 @@
                    this.searchForm.fcompanyname = item.name
                }
            })
+           this.searchForm.fconfname = "";
        },
       //公司
       getCompany() {

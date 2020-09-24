@@ -61,7 +61,7 @@
             </div>
             <div class="second-li">
               <label
-                :class="item.fconfshow == null ? 'unUsingConf-fontStyle confFirst_style' : 'usingConf-fontStyle confFirst_style'">{{item.fname}}</label>
+                :class="item.fconfshow == null ? 'unUsingConf-fontStyle confFirst_style' : 'usingConf-fontStyle confFirst_style'">{{item.fname|textLength}}</label>
             </div>
             <div v-if="item.fconfshow != null" class="third-li">
               <el-tooltip
@@ -139,6 +139,15 @@
   import conferenceApplySearch from "./conference-apply-search";
 
   export default {
+      filters: {
+          textLength(row) {
+              if (row != null && row.length > 20) {
+                  return row.substring(0, 20) + "...";
+              } else {
+                  return row;
+              }
+          }
+      },
     name: "confManagements",
     components: {
       // eslint-disable-next-line vue/no-unused-components
