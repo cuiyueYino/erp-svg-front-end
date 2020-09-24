@@ -299,6 +299,7 @@ export default {
             //     formDataA.userCode =  'test';
             // }
             this.$api.insideMail.findInfosList(formDataA).then(response => {
+            	this.enclosureTableData = []
                 if (response.data.data) {
                     let values = response.data.data;
                     let flag = true;
