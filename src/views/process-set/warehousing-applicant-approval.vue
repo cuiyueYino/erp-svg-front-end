@@ -87,7 +87,8 @@
                             </el-row>
                         </el-tab-pane>
                         <el-tab-pane label="附件" name="second">
-                            <creditEnclFilelist :rowEFListDataObj="rowEFListDataObj"  :financingEFListtype="financingEFListtype" :fileFlag='rowFstatus' :seeFlag="seeFlag" />
+                            <enclosurefile v-on:enclosureFile="enclosureFile" :rowDataFileObj="rowDataFileObj"  @changeShow="showFileData" />
+                            <!-- <creditEnclFilelist :rowEFListDataObj="rowEFListDataObj"  :financingEFListtype="financingEFListtype" :fileFlag='rowFstatus' :seeFlag="seeFlag" />-->
                         </el-tab-pane>
                     </el-tabs>
                 </div>
@@ -108,6 +109,7 @@
 </template>
 
 <script>
+import enclosurefile from '../document-management/manage/enclosure-file.vue';
 import DynamicTable from '../../components/common/dytable/dytable.vue';
 import proData from '../../components/common/proData/proData';
 import processnodelist from '../../views/comment/process-node-list.vue';//流程相关
@@ -155,6 +157,7 @@ export default {
     },
     name: 'basetable',
     components: {
+        enclosurefile,
         DynamicTable,
         creditEnclFilelist,
         ComAnnDetaiPage,
@@ -225,6 +228,8 @@ export default {
                     { validator: validateRemark, trigger: 'blur' }
                 ],
             },
+            rowDataFileObj:{},
+            attachmentData:[],
             rowFstatus:0,
             rowUTStype:false,
             rowCOOTasktype:false,
@@ -315,6 +320,14 @@ export default {
             //this.reload();
             this.$emit('changeShow',false);
         },
+        enclosureFile:function(event){
+            //子组件传来的event中，fileFoid存在，代表要删除该文件。否则，为上传该文件
+            if(event.fileFoid){
+                this.delFileFoids.push(event.fileFoid);
+            } else {
+                this.uploadFiles.push(event);
+            }
+        },
         onSelectionChange(val) {
             this.multipleSelection = val;
         },
@@ -336,6 +349,37 @@ export default {
                 this.financingLFCAtype = true
             }
         },
+        //附件
+        showFileData(data){
+            this.FiletableData=data;
+        },
+        //附件查询
+        findAttachmentInfosList(){
+            let formDataA ={};
+            let creator = localStorage.getItem('ms_userId');
+            formDataA.voucherId = this.rowNMMDataObj.foid;
+            formDataA.menuCode = 'document';
+            if(creator){
+                formDataA.userCode =  creator;
+            } else {
+                formDataA.userCode =  'test';
+            }
+            /*this.$api.documentManagement.findInfosList(formDataA).then(response => {
+                let responsevalue = response;
+                if (responsevalue.data.data) {
+                    let values = responsevalue.data.data;
+                    let rowObj = {};
+                    rowObj.operateFlag ='QUERY';
+                    //主表单的操作 //show标志传到附件中，控制 新增/删除 button隐藏
+                    rowObj.masterOperateFlag = this.rowNMMDataObj.NewOrEditFlag;
+                    rowObj.values = values;
+                    this.rowDataFileObj = rowObj;
+                    console.log(this.rowDataFileObj);
+                } else {
+                    this.$message.error(responsevalue.data.msg);
+                }
+            });*/
+        },
         //滑块切换
         handleClick(tab){
             var tabsname =tab.paneName;
@@ -345,10 +389,16 @@ export default {
                     //this.financingLFCAtype=true;
                 }else if(tabsname ==="second"){
                     //授信品种管理
-                    this.financingCVMListtype=true;
+                    //this.financingCVMListtype=true;
+                    //附件列表:附件查询
+                    if(this.NewOrEditFlag==="EDIT" || this.NewOrEditFlag==="SHOW"){
+                        this.findAttachmentInfosList();
+                        this.rowDataFileObj.operateFlag = "QUERY";
+                        this.rowDataFileObj.values = this.attachmentData;
+                    }
                 }else{
                     //附件列表
-                    this.financingEFListtype=true;
+                    //this.financingEFListtype=true;
                 }
             }
         },
@@ -659,6 +709,9 @@ export default {
         closeBaseInfo(type,data){
             if(type === false){
                 this.rowUTStype = false
+                if(data.length==0){
+                    this.handleClose();
+                }
             }else{
                 this.rowUTStype = true
             }

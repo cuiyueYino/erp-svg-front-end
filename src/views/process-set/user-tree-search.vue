@@ -200,7 +200,7 @@ export default {
         //关闭当前dialog时给父组件传值
         handleClose(){
             this.ShowFinancVisible=false;
-            if(this.saveType ==='转发' || this.saveType ==='委托'|| this.saveType ==='加签'){
+            if(this.saveType ==='转发' || this.saveType ==='委托'|| this.saveType ==='加签' || this.saveType ==='手工指定下一节点'){
                 this.$emit('changeShow',false);
             }else{
                 this.teldata = [];
@@ -267,7 +267,8 @@ export default {
                 if(resData.data.data){
                     this.ShowFinancVisible=false;
                     //this.reload();
-                    this.$emit('changeShow',false);
+                    let data=[];
+                    this.$emit('changeShow',false,data);
                     this.$message.success('转发成功!');
                 }else{
                     this.$message.error(resData.data.msg);
@@ -288,7 +289,8 @@ export default {
                 if(resData.data.data){
                     this.ShowFinancVisible=false;
                     //this.reload();
-                    this.$emit('changeShow',false);
+                    let data=[];
+                    this.$emit('changeShow',false,data);
                     this.$message.success('委托成功!');
                 }else{
                     this.$message.error(resData.data.msg);
@@ -309,7 +311,8 @@ export default {
                 if(resData.data.data){
                     this.ShowFinancVisible=false;
                     //this.reload();
-                    this.$emit('changeShow',false);
+                    let data=[];
+                    this.$emit('changeShow',false,data);
                     this.$message.success('加签成功!');
                 }else{
                     this.$message.error(resData.data.msg);
