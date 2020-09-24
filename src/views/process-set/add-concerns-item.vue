@@ -169,7 +169,7 @@
             </div>
         </el-dialog>
         <PSpage  :rowPSDataObj="rowPSDataObj" :rowPStype="rowPStype" @changeShow="showORhideForPS"/>
-        <WAApage  :rowWAADataObj="rowWAADataObj" :rowWAAtype="rowWAAtype" @changeShow="showORhideForWAA"/>
+        <WAApage  :rowWAADataObj="rowWAADataObj" :rowWAAtype="rowWAAtype" :functionType="functionType" :seeFlag="seeFlag" @changeShow="showORhideForWAA"/>
     </div>
 </template>
 
@@ -199,6 +199,8 @@ export default {
             ShowFinancVisible:false,
             labelPosition: 'left',
             disabled:false,
+            functionType:'',
+            seeFlag:false,
             dialogWFMVisible:false,
             rowPStype:false,
             rowWAAtype:false,
@@ -336,12 +338,20 @@ export default {
                 }else if(this.multipleSelection.length == 0){
                     this.$message.error('请选择一项');
                 }else{
+                    this.seeFlag = true;
                     let selectData=this.multipleSelection;
+                    this.functionType = this.multipleSelection[0].classId;
                     let finandata={};
                     finandata.selectData=selectData;
                     finandata.finanrowname="人员缺省查询方案";
                     finandata.finanrowId="QS_0056";
-                    finandata.nametitle="入库申请申请人审批";
+                    finandata.nametitle=this.multipleSelection[0].fsrcCompany;
+                    finandata.relay = false,
+                    finandata.attention = false,
+                    finandata.sign = false,
+                    finandata.commit = false,
+                    finandata.read = false,
+                    finandata.trust = false,
                     this.rowWAADataObj=finandata;
                     this.rowWAAtype=true;
                     this.financingLFCAtype=true;
@@ -403,6 +413,7 @@ export default {
             if(overTimeS && overTimeS!=''){
                 fromdata.overTime=this.DataForm.overTime;
             }
+            this.dialogWFMVisible = false;
             this.getHunTableData(fromdata);
         },
         //关注按钮点击事件
