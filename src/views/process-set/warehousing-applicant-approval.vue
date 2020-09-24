@@ -579,13 +579,18 @@ export default {
             var currentDatd = "";
             if(this.isOa) {
                 currentDatd = dataContent.fsrcoId;
+                if((dataContent.fsubject.substring(0,3) == '退回：' & dataContent.fcreator == localStorage.getItem("ms_userId")) ||  dataContent.fcode == 'manpower') {
+                    this.showSeeOrUpd = "3";
+                } else {
+                    this.showSeeOrUpd = "1";
+                }
             } else {
                 currentDatd = dataContent.selectData[0].fsrcoId;
-            }
-            if((dataContent.selectData[0].fsubject.substring(0,3) == '退回：' & dataContent.selectData[0].fcreator == localStorage.getItem("ms_userId")) ||  dataContent.selectData[0].fcode == 'manpower') {
-                this.showSeeOrUpd = "3";
-            } else {
-                this.showSeeOrUpd = "1";
+                if((dataContent.selectData[0].fsubject.substring(0,3) == '退回：' & dataContent.selectData[0].fcreator == localStorage.getItem("ms_userId")) ||  dataContent.selectData[0].fcode == 'manpower') {
+                    this.showSeeOrUpd = "3";
+                } else {
+                    this.showSeeOrUpd = "1";
+                }
             }
             // 判断是否为工作事项的flag
             if(dataType.indexOf("OA")  == 0) {
@@ -881,7 +886,6 @@ export default {
                     formDataA.userId=localStorage.getItem("ms_userId");
                     this.title = "入库申请申请人审批";
                 }
-                console.log(this.rowWAADataObj)
                 this.$api.processSet.getunhandledTask(formDataA).then(response => {
                     let responsevalue = response;
                     if (responsevalue) {
