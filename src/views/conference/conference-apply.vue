@@ -177,6 +177,7 @@
           },
         ],
 
+          reqParam:{},
       };
     },
     created() {
@@ -247,7 +248,10 @@
       // 搜索
       onSubmit() {
         this.pageNum = 1;
-        this.getTableData(this.form.select);
+        this.reqParam = {
+            [this.form.select] :this.form.selectVal,
+        }
+        this.getTableData();
       },
       // 获取列表数据
       getTableData(params) {
@@ -256,11 +260,11 @@
           fcreator = null;
         }
         let data = {
-          [params]: this.form.selectVal,
           page: this.pageNum,
           size: this.pageSize,
           fcreator: fcreator,
         };
+        Object.assign(data,this.reqParam);
         this.$api.confMangement.getApplyList(data).then(
           (res) => {
             let taData = res.data.data.rows;
