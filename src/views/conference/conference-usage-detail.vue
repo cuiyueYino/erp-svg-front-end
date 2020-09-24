@@ -102,7 +102,7 @@
               <el-button
                 type="info"
                 size="small"
-                 
+
                 icon="el-icon-notebook-2"
                 @click="upload"
               >导出</el-button>
@@ -268,6 +268,7 @@ export default {
       form: {},
       formProcess: {},
       tableData: [],
+        reqParam:{},
     };
   },
   methods: {
@@ -317,19 +318,20 @@ export default {
     },
     // 查询
     search() {
+        this.reqParam = this.form;
       this.pageNum = 1;
       this.getTableData();
     },
     // 导出
     upload() {
-      let data = this.form;
+      let data = this.reqParam;
       data.page = this.pageNum;
       data.size = this.pageSize;
       this.$api.confMangement.confUsageDetailExport(data);
     },
     // 获取表格数据
     getTableData() {
-      let data = this.form;
+      let data = this.reqParam;
       data.page = this.pageNum;
       data.size = this.pageSize;
       this.$api.confMangement.getConfUsageDetail(data).then(
