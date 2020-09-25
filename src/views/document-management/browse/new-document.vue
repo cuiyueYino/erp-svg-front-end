@@ -269,7 +269,6 @@ export default {
     },
     watch:{
         rowNMMtype(oldVal,newVal){
-          debugger;
             this.atctiveName = 'first';
             this.isShow = true;
             this.isEdit = false;

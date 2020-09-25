@@ -75,17 +75,17 @@
                         </el-tab-pane>
                         <el-tab-pane label="回收站" name="5">
                             <template v-for="item in getRecycleBinList" class="li-box">
-                                <ul :class="{'ul-middle':true ,'subjectStyle':item.fisread=='0' }" :key="item.foid">
-                                    <li>{{item.fsubject}}<span class="li-after" v-show="item.fisread=='0'"></span></li>
+                                <ul :class="{'ul-middle':true}" :key="item.foid">
+                                    <li>{{item.subject}}</li>
                                 </ul>
                                 <ul class="ul-middle" :key="item.foid">
-                                    <li>{{item.fsrcCompany}}</li>
+                                    <li>{{item.metaClassName}}</li>
                                 </ul>
                                 <ul class="ul-middle" :key="item.foid">
-                                    <li>{{item.faddresser}}</li>
+                                    <li>{{item.startMan}}</li>
                                 </ul>
                                 <ul class="ul-middle" :key="item.foid">
-                                    <li>{{item.freceiveTime}}</li>
+                                    <li>{{item.receiveTime}}</li>
                                 </ul>
                             </template>
                         </el-tab-pane>
@@ -575,9 +575,9 @@ export default {
         //回收站
         getRecycleBinItems(){
             let data={
-                infosBeginNum: 1,
-                infosEndNum: 10,
-                userId: localStorage.getItem('ms_userId')
+                page: 1,
+                size: 10,
+                oid: localStorage.getItem('ms_userId')
             }
             this.$api.processSet.getRecycleBinList(data).then(res=>{
                 let RecycleBinList=[];

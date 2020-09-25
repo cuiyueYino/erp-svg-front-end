@@ -208,6 +208,7 @@ export default {
 	        ],
             tableData: [],
             jobVisible: false,
+            NewOrEditFlag:'',
             fresultObject:{},
             fresultArray:[],
             itemsFlag:false,
