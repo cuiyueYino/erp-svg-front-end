@@ -432,6 +432,7 @@ export default {
                 subject=this.rowWAADataObj.fsubject;
             }else{
                 DataF.foid=this.rowWAADataObj.selectData[0].foid;
+                DataF.fcreator=this.rowWAADataObj.selectData[0].fcreator;
                 subject=this.rowWAADataObj.selectData[0].fsubject;
             }
             subject= subject.substring(0,4);
@@ -546,7 +547,7 @@ export default {
                     loading.close();
                     this.participator="";
                     this.$message.error('提交失败!');
-                } 
+                }
             },error=>{
                 // loading.close();
                 console.log(error)
@@ -568,8 +569,8 @@ export default {
                     this.jobVisible =false;
                     this.submitData(this.multipleSelection[0].foid);
                 }else{
-                   this.$message.error("只能选择一个岗位!");     
-                } 
+                   this.$message.error("只能选择一个岗位!");
+                }
             }
         },
         submitMethod(name,val) {
@@ -601,7 +602,7 @@ export default {
             },error=>{
                 console.log(error)
             })
-            
+
          },
         showprocessData(){},
         //判断
@@ -864,7 +865,7 @@ export default {
                         this.findAttachmentInfosList();
                         this.rowDataFileObj.operateFlag = "QUERY";
                         this.rowDataFileObj.values = this.attachmentData;
-                    } 
+                    }
                 }
             },error=>{
                 console.log(error)
