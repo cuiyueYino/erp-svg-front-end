@@ -745,17 +745,18 @@ export default {
         },
         closeBaseInfo(type,data){
             if(type === false){
-                this.rowUTStype = false
-                if(data.length==0){
-                    this.handleClose();
+                this.rowUTStype = false;
+                if(data){
+                    if(data.length==0){
+                        this.handleClose();
+                    }else{
+                        if(data[0].userid){
+                            this.submitMethod('手工指定',data[0].userid);
+                        }
+                    }
                 }
             }else{
                 this.rowUTStype = true
-            }
-            if(data){
-                if(data[0].userid){
-                    this.submitMethod('手工指定',data[0].userid);
-                }
             }
         },
         //关注点击事件

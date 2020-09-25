@@ -263,7 +263,6 @@ export default {
             fromdata.participator=user;
             this.$api.processSet.setencyclic(fromdata).then(res=>{
                 let resData=res;
-                console.log(resData)
                 if(resData.data.data){
                     this.ShowFinancVisible=false;
                     //this.reload();
