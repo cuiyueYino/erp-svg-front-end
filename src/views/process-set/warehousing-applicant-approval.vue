@@ -396,7 +396,6 @@ export default {
                     rowObj.masterOperateFlag = this.rowWAADataObj.NewOrEditFlag;
                     rowObj.values = values;
                     this.rowDataFileObj = rowObj;
-                    console.log(this.rowDataFileObj);
                 } else {
                     this.$message.error(responsevalue.data.msg);
                 }
@@ -608,14 +607,14 @@ export default {
             var currentDatd = "";
             if(this.isOa) {
                 currentDatd = dataContent.fsrcoId;
-                if((dataContent.fsubject.substring(0,3) == '退回：' & dataContent.fcreator == localStorage.getItem("ms_userId")) ||  dataContent.fcode == 'manpower') {
+                if((dataContent.fsubject.substring(0,3) == '退回：' && dataContent.fcreator == localStorage.getItem("ms_userId")) ||  dataContent.fcode == 'manpower') {
                     this.showSeeOrUpd = "3";
                 } else {
                     this.showSeeOrUpd = "1";
                 }
             } else {
                 currentDatd = dataContent.selectData[0].fsrcoId;
-                if((dataContent.selectData[0].fsubject.substring(0,3) == '退回：' & dataContent.selectData[0].fcreator == localStorage.getItem("ms_userId")) ||  dataContent.selectData[0].fcode == 'manpower') {
+                if((dataContent.selectData[0].fsubject.substring(0,3) == '退回：' && dataContent.selectData[0].fcreator == localStorage.getItem("ms_userId")) ||  dataContent.selectData[0].fcode == 'manpower') {
                     this.showSeeOrUpd = "3";
                 } else {
                     this.showSeeOrUpd = "1";
@@ -853,6 +852,14 @@ export default {
                 if(res.data.code == 0){
                     let SetelData=res.data.data;
                     this.rowFstatus=SetelData.fstatus;
+                    if(!this.seeFlag && (SetelData.fstatus == 4?false:true)){
+                        this.atctiveName="first";
+                    }else{
+                        this.atctiveName="second";
+                        this.findAttachmentInfosList();
+                        this.rowDataFileObj.operateFlag = "QUERY";
+                        this.rowDataFileObj.values = this.attachmentData;
+                    } 
                 }
             },error=>{
                 console.log(error)
