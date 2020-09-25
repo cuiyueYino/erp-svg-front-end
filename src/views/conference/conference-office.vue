@@ -35,7 +35,7 @@
           </el-button>
           <el-button
             type="success"
-             
+
             icon="el-icon-magic-stick"
             size="small"
             @click="toUpdate(0)"
@@ -273,6 +273,7 @@
       return {
         options: [],
         isEdit: false,
+        isSearch: false,
         addFormVisible: false,
         queryFormVisible: false,
         baseInputTableF: false,
@@ -354,7 +355,7 @@
               trigger: "blur",
             },
             /*
-						 孟鹏飞 9.23 
+						 孟鹏飞 9.23
 						 编码只能输入 英文和数字
 						 * */
 						{
@@ -446,6 +447,7 @@
       },
       // 搜索
       onSubmit() {
+        this.isSearch = true;
         this.isEdit = false;
         this.pageNum = 1;
         this.getTableData(this.form.select);
@@ -478,6 +480,7 @@
           this.$message.error("请选择一条数据进行编辑");
           return;
         }
+        this.isSearch = true;
         this.isEdit = true;
         this.getTableData("foid");
         this.addFormVisible = true;
@@ -565,11 +568,15 @@
       resetForm(formName) {
         this.$refs[formName].resetFields();
         this.isEdit = false;
+        this.isSearch = false;
         this.pageNum = 1;
         this.getTableData("");
       },
       // 获取列表数据
       getTableData(params) {
+        if(this.isSearch == false){
+          params = "";
+        }
         let data;
         switch (this.isEdit) {
           case true:
