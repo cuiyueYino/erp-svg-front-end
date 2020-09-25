@@ -549,7 +549,6 @@
 							let obj = {};
 							//循环判断是否有添加服务的字段名
 							this.ruleForm.lines.forEach((item, index1) => {
-								item.parameterList = []
 								//时间控件计算差值
 								this.ruleForm.lines.forEach(itemChild => {
 									//通过‘-’符号确定需要计算的两边
@@ -565,11 +564,13 @@
 												right: right,
 												child: item.field
 											}
+											itemChild.parameterList = []
 											itemChild.parameterList.push(a)
 										}
 									}
 									//发现被添加服务的字段后，绑定双方
 									if(itemChild.parameter == item.field) {
+										item.parameterList = []
 										item.parameterList.push(itemChild.field)
 									}
 								})

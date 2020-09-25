@@ -540,11 +540,13 @@
 												right: right,
 												child: item.field
 											}
+											itemChild.parameterList = []
 											itemChild.parameterList.push(a)
 										}
 									}
 									//发现被添加服务的字段后，绑定双方
 									if(itemChild.parameter == item.field) {
+										item.parameterList = []
 										item.parameterList.push(itemChild.field)
 									}
 								})
