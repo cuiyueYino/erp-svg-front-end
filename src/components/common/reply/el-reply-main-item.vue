@@ -12,10 +12,13 @@
                     <el-col :span="3" :offset="1">
                         {{ ReplyItemData.replyedName }}
                     </el-col>
-                    <el-col :span="10" :offset="1">
+                    <el-col :span="8" :offset="1">
                     {{ ReplyItemData.replyContent}}
                     </el-col>
-                    <el-col :span="2" :offset="1">
+                    <el-col :span="3" :offset="1">
+                    {{ ReplyItemData.fileName}}
+                    </el-col>
+                    <el-col :span="1" :offset="1">
                         <el-button @click="onRowbuttonClick(ReplyItemData)" size="small" type="primary">回复</el-button>
                     </el-col>   
                 </el-row>
@@ -40,10 +43,13 @@
                     <el-col :span="3" :offset="1">
                         {{ ReplyItemData.replyedName }}
                     </el-col>
-                    <el-col :span="10" :offset="1">
+                    <el-col :span="8" :offset="1">
                     {{ ReplyItemData.replyContent }}
                     </el-col>
-                    <el-col :span="2" :offset="1">
+                    <el-col :span="3" :offset="1">
+                    {{ ReplyItemData.fileName}}
+                    </el-col>
+                    <el-col :span="1" :offset="1">
                         <el-button @click="onRowbuttonClick(ReplyItemData)" size="small" type="primary">回复</el-button>
                     </el-col>   
                 </el-row>
