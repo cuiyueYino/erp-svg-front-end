@@ -449,7 +449,7 @@ export default {
                 let selectData=this.multipleSelection;
                 let fromdata={};
                 fromdata.fvoucherOid=selectData[0].fsrcoId;
-                fromdata.fattentionOid=localStorage.getItem("ms_staffId");
+                fromdata.fattentionOid=localStorage.getItem("ms_userId");
                 this.$api.processSet.deleteAttention(fromdata).then(response => {
                     let responsevalue = response;
                     if (responsevalue) {
