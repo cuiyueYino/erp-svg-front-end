@@ -245,7 +245,6 @@ export default {
     },
     methods: {
       editorChange(aaa) {
-        debugger;
         this.$nextTick(() => {
           if("<p>undefined</p>" == aaa){
             this.formdata.fcontent = '';
@@ -546,7 +545,6 @@ export default {
 
                       });
                     });
-                    debugger;
                     if(response.data.code == 0 && response.data.data){
                         count++;
                     }

@@ -231,6 +231,10 @@ export default {
             },
             rowDataFileObj:{},
             attachmentData:[],
+            uploadFiles:[],
+            NewOrEditFlag:'',
+            FiletableData: [],
+            delFileFoids:[],
             rowFstatus:0,
             rowUTStype:false,
             rowCOOTasktype:false,
@@ -329,6 +333,17 @@ export default {
                 this.uploadFiles.push(event);
             }
         },
+        //删除附件
+        delFile(){
+            let ids = '';
+            let list = this.delFileFoids.forEach(element => {
+                ids = ids + '\'' + element +'\','
+            });
+            ids = ids.substring(0,ids.length-1)
+            this.$api.documentManagement.deleteInfoByIds(ids).then((response) => {
+                console.log(response.data);
+            });
+        },
         onSelectionChange(val) {
             this.multipleSelection = val;
         },
@@ -358,28 +373,34 @@ export default {
         findAttachmentInfosList(){
             let formDataA ={};
             let creator = localStorage.getItem('ms_userId');
-            formDataA.voucherId = this.rowNMMDataObj.foid;
+            let FoidS='';
+            if(this.isOa) {
+                FoidS= this.rowWAADataObj.foid;
+            }else{
+                FoidS= this.rowWAADataObj.selectData[0].foid;
+            }
+            formDataA.voucherId = FoidS;
             formDataA.menuCode = 'document';
             if(creator){
                 formDataA.userCode =  creator;
             } else {
                 formDataA.userCode =  'test';
             }
-            /*this.$api.documentManagement.findInfosList(formDataA).then(response => {
+            this.$api.documentManagement.findInfosList(formDataA).then(response => {
                 let responsevalue = response;
                 if (responsevalue.data.data) {
                     let values = responsevalue.data.data;
                     let rowObj = {};
                     rowObj.operateFlag ='QUERY';
                     //主表单的操作 //show标志传到附件中，控制 新增/删除 button隐藏
-                    rowObj.masterOperateFlag = this.rowNMMDataObj.NewOrEditFlag;
+                    rowObj.masterOperateFlag = this.rowWAADataObj.NewOrEditFlag;
                     rowObj.values = values;
                     this.rowDataFileObj = rowObj;
                     console.log(this.rowDataFileObj);
                 } else {
                     this.$message.error(responsevalue.data.msg);
                 }
-            });*/
+            });
         },
         //滑块切换
         handleClick(tab){
@@ -392,11 +413,9 @@ export default {
                     //授信品种管理
                     //this.financingCVMListtype=true;
                     //附件列表:附件查询
-                    if(this.NewOrEditFlag==="EDIT" || this.NewOrEditFlag==="SHOW"){
-                        this.findAttachmentInfosList();
-                        this.rowDataFileObj.operateFlag = "QUERY";
-                        this.rowDataFileObj.values = this.attachmentData;
-                    }
+                    this.findAttachmentInfosList();
+                    this.rowDataFileObj.operateFlag = "QUERY";
+                    this.rowDataFileObj.values = this.attachmentData;
                 }else{
                     //附件列表
                     //this.financingEFListtype=true;
@@ -475,16 +494,19 @@ export default {
              });
             let paramsData = {};
             let twfbizmailReqVoObj = {};
+            let FoidS='';
             if(this.isOa) {
                 paramsData["mactivityOid"] = this.rowWAADataObj.factivity;
                 paramsData["srcOid"] = this.rowWAADataObj.fsrcoId;
                 paramsData["subject"] = this.rowWAADataObj.fsubject;
                 twfbizmailReqVoObj["foid"] = this.rowWAADataObj.foid;
+                FoidS= this.rowWAADataObj.foid;
             } else {
                 paramsData["mactivityOid"] = this.rowWAADataObj.selectData[0].factivity;
                 paramsData["srcOid"] = this.rowWAADataObj.selectData[0].fsrcoId;
                 paramsData["subject"] = this.rowWAADataObj.selectData[0].fsubject;
                 twfbizmailReqVoObj["foid"] = this.rowWAADataObj.selectData[0].foid;
+                FoidS= this.rowWAADataObj.selectData[0].foid;
             }
             paramsData["currUserId"] = localStorage.getItem("ms_userId");
             paramsData["processCode"] = "schedule";
@@ -502,6 +524,12 @@ export default {
             this.$api.processSet.addWfsubmit(paramsData).then(res=>{
                 if(res.data){
                     if( res.data.code == 0 ){
+                        if(this.uploadFiles != null){
+                            this.uploadFile("document",FoidS);
+                        }
+                        if(this.delFileFoids != null){
+                            this.delFile();
+                        }
                         this.$message.success('保存成功');
                         loading.close();
                         this.ShowFinancVisible = false;
@@ -857,7 +885,43 @@ export default {
             var prints = document.getElementById('print');
             prints.title = "标题";
 
-        }
+        },
+        //附件上传 ：同步上传
+        async uploadFile(menuCode,voucherId){
+            if(menuCode==""||menuCode===undefined||menuCode==null){
+                layer.alert("请填写menuCode");
+                return;
+            }
+            if(voucherId==""||voucherId===undefined||voucherId==null){
+                layer.alert("请填写voucherId");
+                return;
+            }
+            let creator = localStorage.getItem('ms_userId');
+            // formData.append('files', this.uploadFiles);
+            let length = this.uploadFiles.length;
+            let count = 0;
+            for(var i=0; i < length; i++ ){
+                var formData = new FormData();
+                formData.append('file', this.uploadFiles[i]);
+                formData.append('menuCode',menuCode);
+                if(creator){
+                    formData.append('userCode',creator);
+                } else {
+                    formData.append('userCode','test');
+                }
+                formData.append('voucherId',voucherId);
+                // this.$api.documentManagement.uploadFileBatch(formData).then((response) => {
+                await this.$api.documentManagement.uploadFile(formData).then((response) => {
+                    return new Promise(resolve => {
+                      //返回id和name 用于显示或者存储(服务10不出意外应该是input，无法显示和存储不同，暂时没法解决，只能显示id)
+                      resolve({});
+                    });
+                    if(response.data.code == 0 && response.data.data){
+                        count++;
+                    }
+                });
+            }
+        },
     },
     mounted() {
 

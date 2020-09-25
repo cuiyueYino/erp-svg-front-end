@@ -368,6 +368,7 @@ export default {
                 finandata.commit = false;
                 finandata.read = false;
                 finandata.trust = false;
+                finandata.NewOrEditFlag = 'SHOW';
             }
             if(activeName=='1'){
                 this.seeFlag = false;
@@ -380,6 +381,7 @@ export default {
                     finandata.commit = true;
                     finandata.read = false;
                     finandata.trust = false;
+                    finandata.NewOrEditFlag = 'NEW';
                 }else{
                     finandata.relay = true;
                     finandata.attention = true;
@@ -387,6 +389,7 @@ export default {
                     finandata.commit = true;
                     finandata.read = true;
                     finandata.trust = true;
+                    finandata.NewOrEditFlag = 'NEW';
                 }
             }
             if(activeName=='2'){
@@ -397,6 +400,7 @@ export default {
                 finandata.commit = false;
                 finandata.read = false;
                 finandata.trust = false;
+                finandata.NewOrEditFlag = 'SHOW';
             }
             if(activeName=='4'){
                 this.seeFlag = true;
@@ -406,6 +410,7 @@ export default {
                 finandata.commit = false;
                 finandata.read = false;
                 finandata.trust = false;
+                finandata.NewOrEditFlag = 'SHOW';
             }
             this.rowWAADataObj = finandata;
             this.rowWAAtype=true;

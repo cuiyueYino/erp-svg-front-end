@@ -492,6 +492,7 @@ export default {
                 finandata.commit = false;
                 finandata.read = false;
                 finandata.trust = false;
+                finandata.NewOrEditFlag = 'SHOW';
                 this.rowWAADataObj=finandata;
                 this.rowWAAtype=true;
                 this.financingLFCAtype=true;
