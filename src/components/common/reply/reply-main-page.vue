@@ -40,7 +40,7 @@
                             </el-form-item>
                         </el-col>
                     </el-row>
-                    <el-row>
+                    <!--<el-row>
                         <el-col :span="22">
                             <el-form-item label="附件" >
                                 <el-upload
@@ -57,7 +57,7 @@
                                 </el-upload>
                             </el-form-item>
                         </el-col>
-                    </el-row>
+                    </el-row>-->
                 </el-card>
             </el-form>
             <span slot="footer"  class="dialog-footer">
