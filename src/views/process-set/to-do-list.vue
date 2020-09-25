@@ -405,6 +405,9 @@
 .el-table .orange {
   background: #ffa000;
 }
+.el-table .yellow {
+  background: yellow;
+}
 </style>
 <script>
 import DynamicTable from "../../components/common/dytable/dytable.vue";
@@ -625,6 +628,7 @@ export default {
     },
     //根据状态改背景色
     tableRowClassName({ row }) {
+      // debugger
       if (row.fstatus === "暂停") {
         return "gray";
       } else if (row.fstatus === "已作废") {
@@ -633,6 +637,8 @@ export default {
         return "green";
       }else if(row.timeOutStatus =='1'){
         return "orange";
+      }else if((row.fsubject.substring(0,3) == '退回：' && row.fcreator == localStorage.getItem("ms_userId")) ||  row.fcode == 'manpower') {
+        return 'yellow'
       }
       return "";
     },
