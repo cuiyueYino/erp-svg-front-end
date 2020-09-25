@@ -326,7 +326,6 @@ export default {
         enclosureConfig: {
             handler:function(val,oldval){
                 if(this.enclosureConfig.voucherId){
-                    console.log(this.enclosureConfig.voucherId)
                     this.showFileData(this.enclosureConfig.voucherId)
                 }
             },
@@ -339,7 +338,9 @@ export default {
         }*/
     },
     created(){
-        console.log(this.enclosureConfig);
+        if(this.enclosureConfig.voucherId){
+            this.showFileData(this.enclosureConfig.voucherId)
+        }
     }
 }
 </script>
