@@ -8,7 +8,7 @@
                      <el-button type="primary" icon="el-icon-search" size="small"  @click="search">查询</el-button>
                      <el-button type="info" icon="el-icon-view" size="small"  @click="Tolook">查看</el-button>
                      <el-button type="success" icon="el-icon-position" size="small"  @click="baseInputTable('转发')">转发</el-button>
-                     <el-button type="warning" icon="el-icon-plus" size="small"  @click="AddRow">添加</el-button>
+                     <!--<el-button type="warning" icon="el-icon-plus" size="small"  @click="AddRow">添加</el-button>-->
                      <el-button type="warning" icon="el-icon-close" size="small"  @click="DisableRow">取消</el-button>
                  </el-col>
             </el-row>
