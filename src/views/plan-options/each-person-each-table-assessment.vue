@@ -7,6 +7,7 @@
             size="mini"
             :model="formdata"
             :label-position="labelPosition"
+             :disabled="!disFlag"
         >
             <el-row>
                 <el-col :span="6">
@@ -192,6 +193,7 @@ export default {
     props: {
         rowEachPerEachTableAssDataObj: String,
         rowEachPerEachTableAsstype:Boolean,
+        disFlag:Boolean
     },
     components: {
         DynamicTable,

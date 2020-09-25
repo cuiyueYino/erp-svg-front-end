@@ -36,26 +36,26 @@
                     </el-row>
                     <div  id="print">
                     <el-row :gutter="24">
-                        <ComAnnDetaiPage  :rowComPanDetaiDataObj="rowComPanDetaiDataObj" :rowComPanDetaitype="rowComPanDetaitype" @changeShow="showLookOrUpdate"/>
-                        <TempTaskPage  :rowTEMTaskDataObj="rowTEMTaskDataObj" :rowTEMTasktype="rowTEMTasktype" @changeShow="showLookOrUpdate"/>
-                        <EachPerEachJobDetailPage  :rowEACHPerEachJobDetDataObj="rowEACHPerEachJobDetDataObj" :rowEACHPerEachJobDettype="rowEACHPerEachJobDettype" @changeShow="showLookOrUpdate"/>
-                        <EachPerEachTableReportPage  :rowEachPerEachTableReportDataObj="rowEachPerEachTableReportDataObj" :rowEachPerEachTableReporttype="rowEachPerEachTableReporttype" @changeShow="showLookOrUpdate"/>
-                        <EachPerEachTableInvalidPage  :rowEachPerEachTableInvalidDataObj="rowEachPerEachTableInvalidDataObj" :rowEachPerEachTableInvalidtype="rowEachPerEachTableInvalidtype" @changeShow="showLookOrUpdate"/>
-                        <EachPerEachTablePersonPage  :rowEachPerEachTablePersonDataObj="rowEachPerEachTablePersonDataObj" :rowEachPerEachTablePersontype="rowEachPerEachTablePersontype" @changeShow="showLookOrUpdate"/>
-                        <EachPerEachTableDelayPage  :rowEachPerEachTableDelayDataObj="rowEachPerEachTableDelayDataObj" :rowEachPerEachTableDelaytype="rowEachPerEachTableDelaytype" @changeShow="showLookOrUpdate"/>
-                        <EachPerEachTableAssPage  :rowEachPerEachTableAssDataObj="rowEachPerEachTableAssDataObj" :rowEachPerEachTableAsstype="rowEachPerEachTableAsstype" @changeShow="showLookOrUpdate"/>
-                        <EachPerEachTableEntrustPage  :rowEachPerEachTableEntrustDataObj="rowEachPerEachTableEntrustDataObj" :rowEachPerEachTableEntrusttype="rowEachPerEachTableEntrusttype" @changeShow="showLookOrUpdate"/>
-                        <EachPerEachTableDetailPage  :rowEachPerEachTableDetailDataObj="rowEachPerEachTableDetailDataObj" :rowEachPerEachTableDetailtype="rowEachPerEachTableDetailtype" @changeShow="showLookOrUpdate"/>
-                        <DepartAnnPlanDetPage  :rowDepartAnnPlanDetDataObj="rowDepartAnnPlanDetDataObj" :rowDepartAnnPlanDettype="rowDepartAnnPlanDettype" @changeShow="showLookOrUpdate"/>
-                        <DepartMonPlanDetPage  :rowDepartMonPlanDetDataObj="rowDepartMonPlanDetDataObj" :rowDepartMonPlanDettype="rowDepartMonPlanDettype" @changeShow="showLookOrUpdate"/>
-                        <EmpApprTabDetailPage  :rowEmpApprTabDetailDataObj="rowEmpApprTabDetailDataObj" :rowEmpApprTabDetailtype="rowEmpApprTabDetailtype" @changeShow="showLookOrUpdate"/>
-                        <EmpApprTabNumDetailPage  :rowEmpApprTabNumDetailDataObj="rowEmpApprTabNumDetailDataObj" :rowEmpApprTabNumDetailtype="rowEmpApprTabNumDetailtype" @changeShow="showLookOrUpdate"/>
-                        <CooTaskDetailPage  :rowCooTaskDetailDataObj="rowCooTaskDetailDataObj" :rowCooTaskDetailtype="rowCooTaskDetailtype" @changeShow="showLookOrUpdate"/>
-                        <EachPerEachTableAdjPage  :rowEachPerEachTableAdjDataObj="rowEachPerEachTableAdjDataObj" :rowEachPerEachTableAdjtype="rowEachPerEachTableAdjtype" @changeShow="showLookOrUpdate"/>
-                        <ConferenceApplyPage  :rowConferenceApplyDataObj="rowConferenceApplyDataObj" :rowConferenceApplytype="rowConferenceApplytype" @changeShow="showLookOrUpdate"/>
-                        <EconomicIndicatorsPage  :rowEconomicIndicatorsDataObj="rowEconomicIndicatorsDataObj" :rowEconomicIndicatorstype="rowEconomicIndicatorstype" @changeShow="showLookOrUpdate"/>
+                        <ComAnnDetaiPage  :disFlag='disFlag' :rowComPanDetaiDataObj="rowComPanDetaiDataObj" :rowComPanDetaitype="rowComPanDetaitype" @changeShow="showLookOrUpdate"/>
+                        <TempTaskPage  :disFlag='disFlag' :rowTEMTaskDataObj="rowTEMTaskDataObj" :rowTEMTasktype="rowTEMTasktype" @changeShow="showLookOrUpdate"/>
+                        <EachPerEachJobDetailPage  :disFlag='disFlag' :rowEACHPerEachJobDetDataObj="rowEACHPerEachJobDetDataObj" :rowEACHPerEachJobDettype="rowEACHPerEachJobDettype" @changeShow="showLookOrUpdate"/>
+                        <EachPerEachTableReportPage  :disFlag="disFlag"  :rowEachPerEachTableReportDataObj="rowEachPerEachTableReportDataObj" :rowEachPerEachTableReporttype="rowEachPerEachTableReporttype" @changeShow="showLookOrUpdate"/>
+                        <EachPerEachTableInvalidPage  :disFlag='disFlag' :rowEachPerEachTableInvalidDataObj="rowEachPerEachTableInvalidDataObj" :rowEachPerEachTableInvalidtype="rowEachPerEachTableInvalidtype" @changeShow="showLookOrUpdate"/>
+                        <EachPerEachTablePersonPage  :disFlag='disFlag' :rowEachPerEachTablePersonDataObj="rowEachPerEachTablePersonDataObj" :rowEachPerEachTablePersontype="rowEachPerEachTablePersontype" @changeShow="showLookOrUpdate"/>
+                        <EachPerEachTableDelayPage :disFlag='disFlag'  :rowEachPerEachTableDelayDataObj="rowEachPerEachTableDelayDataObj" :rowEachPerEachTableDelaytype="rowEachPerEachTableDelaytype" @changeShow="showLookOrUpdate"/>
+                        <EachPerEachTableAssPage  :disFlag='disFlag' :rowEachPerEachTableAssDataObj="rowEachPerEachTableAssDataObj" :rowEachPerEachTableAsstype="rowEachPerEachTableAsstype" @changeShow="showLookOrUpdate"/>
+                        <EachPerEachTableEntrustPage :disFlag='disFlag'  :rowEachPerEachTableEntrustDataObj="rowEachPerEachTableEntrustDataObj" :rowEachPerEachTableEntrusttype="rowEachPerEachTableEntrusttype" @changeShow="showLookOrUpdate"/>
+                        <EachPerEachTableDetailPage  :disFlag='disFlag' :rowEachPerEachTableDetailDataObj="rowEachPerEachTableDetailDataObj" :rowEachPerEachTableDetailtype="rowEachPerEachTableDetailtype" @changeShow="showLookOrUpdate"/>
+                        <DepartAnnPlanDetPage  :disFlag='disFlag' :rowDepartAnnPlanDetDataObj="rowDepartAnnPlanDetDataObj" :rowDepartAnnPlanDettype="rowDepartAnnPlanDettype" @changeShow="showLookOrUpdate"/>
+                        <DepartMonPlanDetPage :disFlag='disFlag'  :rowDepartMonPlanDetDataObj="rowDepartMonPlanDetDataObj" :rowDepartMonPlanDettype="rowDepartMonPlanDettype" @changeShow="showLookOrUpdate"/>
+                        <EmpApprTabDetailPage :disFlag='disFlag'  :rowEmpApprTabDetailDataObj="rowEmpApprTabDetailDataObj" :rowEmpApprTabDetailtype="rowEmpApprTabDetailtype" @changeShow="showLookOrUpdate"/>
+                        <EmpApprTabNumDetailPage :disFlag='disFlag'  :rowEmpApprTabNumDetailDataObj="rowEmpApprTabNumDetailDataObj" :rowEmpApprTabNumDetailtype="rowEmpApprTabNumDetailtype" @changeShow="showLookOrUpdate"/>
+                        <CooTaskDetailPage  :disFlag='disFlag' :rowCooTaskDetailDataObj="rowCooTaskDetailDataObj" :rowCooTaskDetailtype="rowCooTaskDetailtype" @changeShow="showLookOrUpdate"/>
+                        <EachPerEachTableAdjPage :disFlag='disFlag' :rowEachPerEachTableAdjDataObj="rowEachPerEachTableAdjDataObj" :rowEachPerEachTableAdjtype="rowEachPerEachTableAdjtype" @changeShow="showLookOrUpdate"/>
+                        <ConferenceApplyPage  :disFlag='disFlag'  :rowConferenceApplyDataObj="rowConferenceApplyDataObj" :rowConferenceApplytype="rowConferenceApplytype" @changeShow="showLookOrUpdate"/>
+                        <EconomicIndicatorsPage  :disFlag='disFlag' :rowEconomicIndicatorsDataObj="rowEconomicIndicatorsDataObj" :rowEconomicIndicatorstype="rowEconomicIndicatorstype" @changeShow="showLookOrUpdate"/>
 			            <workList v-if="itemsFlag" :context="context" :showSeeOrUpd="showSeeOrUpd" :todoFlag="todoFlag" />
-			            <EachPerEachTableModifyPage  :rowEachPerEachTableModifyDataObj="rowEachPerEachTableModifyDataObj" :rowEachPerEachTableModifyype="rowEachPerEachTableModifyype" @changeShow="showLookOrUpdate"/>
+			            <EachPerEachTableModifyPage  :disFlag='disFlag' :rowEachPerEachTableModifyDataObj="rowEachPerEachTableModifyDataObj" :rowEachPerEachTableModifyype="rowEachPerEachTableModifyype" @changeShow="showLookOrUpdate"/>
                     </el-row>
 
                     <el-row>
@@ -245,6 +245,7 @@ export default {
             rowEachPerEachTableDelaytype:false,
             rowEachPerEachTableAsstype:false,
             rowEachPerEachTableReporttype:false,
+            disFlag:false,
             rowEachPerEachTableInvalidtype:false,
             rowEachPerEachTablePersontype:false,
             rowEachPerEachTableEntrusttype:false,
@@ -309,6 +310,7 @@ export default {
             this.rowEachPerEachTableDelaytype=false;
             this.rowEachPerEachTableAsstype=false;
             this.rowEachPerEachTableReporttype=false;
+            this.disFlag=false;
             this.rowEachPerEachTableInvalidtype=false;
             this.rowEachPerEachTablePersontype=false;
             this.rowEachPerEachTableEntrusttype=false;
@@ -616,8 +618,10 @@ export default {
                 currentDatd = dataContent.selectData[0].fsrcoId;
                 if((dataContent.selectData[0].fsubject.substring(0,3) == '退回：' && dataContent.selectData[0].fcreator == localStorage.getItem("ms_userId")) ||  dataContent.selectData[0].fcode == 'manpower') {
                     this.showSeeOrUpd = "3";
+                    this.disFlag = true;
                 } else {
                     this.showSeeOrUpd = "1";
+                    this.disFlag = false;
                 }
             }
             // 判断是否为工作事项的flag

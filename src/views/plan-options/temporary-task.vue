@@ -8,6 +8,7 @@
             size="mini"
             :model="formdata"
             :label-position="labelPosition"
+            :disabled="!disFlag"
         >
             <el-row>
                 <el-col :span="6">
@@ -184,6 +185,7 @@ export default {
     props: {
         rowTEMTaskDataObj: "",
         rowTEMTasktype:Boolean,
+        disFlag:Boolean
     },
     components: {
         DynamicTable,

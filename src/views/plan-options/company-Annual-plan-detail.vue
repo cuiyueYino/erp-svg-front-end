@@ -11,6 +11,7 @@
       size="mini"
       :model="formdata"
       :label-position="labelPosition"
+      :disabled="!disFlag"
     >
       <el-row>
         <el-col :span="6">
@@ -148,6 +149,7 @@ export default {
   props: {
     rowComPanDetaiDataObj: Object,
     rowComPanDetaitype: Boolean,
+    disFlag:Boolean
   },
   components: {
     DynamicTable,

@@ -10,6 +10,7 @@
       class="dataForm"
       size="mini"
       :label-position="labelPosition"
+      :disabled="!disFlag"
     >
       <el-row>
         <el-col :span="6">
@@ -21,7 +22,7 @@
               v-model="searchForm.fcompanyname"
               autocomplete="off"
               size="small"
-              :disabled="true"
+                
             ></el-input>
           </el-form-item>
         </el-col>
@@ -34,7 +35,7 @@
           >
             <el-input
               v-model="searchForm.fcode"
-              :disabled="true"
+                
               size="small"
               autocomplete="off"
             ></el-input>
@@ -49,7 +50,7 @@
           >
             <el-input
               v-model="searchForm.fname"
-              :disabled="true"
+                
               size="small"
               autocomplete="off"
             ></el-input>
@@ -62,7 +63,7 @@
           >
             <el-input
               v-model="searchForm.fconvenername"
-              :disabled="true"
+                
               size="small"
               autocomplete="off"
             ></el-input>
@@ -77,7 +78,7 @@
                     <el-input
                     class="unfocus"
                     v-model="searchForm.fconvenerdeptname"
-                    :disabled="true"
+                      
                     size="small"
                     autocomplete="off"
                     ></el-input>
@@ -90,7 +91,7 @@
                 >
                     <el-input
                     v-model="searchForm.fcontactname"
-                    :disabled="true"
+                      
                     size="small"
                     autocomplete="off"
                     ></el-input>
@@ -104,7 +105,7 @@
                     <el-input
                     class="unfocus"
                     v-model="searchForm.fcontactdeptname"
-                    :disabled="true"
+                      
                     size="small"
                     autocomplete="off"
                     ></el-input>
@@ -121,7 +122,7 @@
                 >
                     <el-input
                     v-model="searchForm.fphone"
-                    :disabled="true"
+                      
                     size="small"
                     autocomplete="off"
                     ></el-input>
@@ -136,7 +137,7 @@
                 >
                     <el-input
                     v-model="searchForm.fcpmcount"
-                    :disabled="true"
+                      
                     size="small"
                     autocomplete="off"
                     ></el-input>
@@ -155,7 +156,7 @@
                     type="datetime"
                     size="small"
                     placeholder="选择日期"
-                    :disabled="true"
+                      
                     ></el-date-picker>
                 </el-form-item>
                 </el-col>
@@ -176,7 +177,7 @@
                 type="datetime"
                 size="small"
                 placeholder="选择日期"
-                :disabled="true"
+                  
                 ></el-date-picker>
             </el-form-item>
             </el-col>
@@ -187,7 +188,7 @@
             >
                 <el-input
                 v-model="searchForm.fconfname"
-                :disabled="true"
+                  
                 size="small"
                 autocomplete="off"
                 ></el-input>
@@ -204,7 +205,7 @@
                 inactive-color="#cccccc"
                 :active-value="0"
                 :inactive-value="1"
-                :disabled="true"
+                  
                 ></el-switch>
             </el-form-item>
             </el-col>
@@ -218,7 +219,7 @@
             <el-select
               size="small"
               v-model="searchForm.fimportanceValue"
-              :disabled="true"
+                
               placeholder="请选择"
             >
               <el-option
@@ -245,7 +246,7 @@
               inactive-color="#cccccc"
               :active-value="1"
               :inactive-value="0"
-              :disabled="true"
+                
             ></el-switch>
           </el-form-item>
         </el-col>
@@ -264,7 +265,7 @@
               type="textarea"
               class="unfocus"
               v-model="searchForm.internalMansName"
-              :disabled="true"
+                
             ></el-input>
           </el-form-item>
         </el-col>
@@ -281,7 +282,7 @@
               show-word-limit
               autosize
               type="textarea"
-              :disabled="true"
+                
               v-model="searchForm.fexternalman"
             ></el-input>
           </el-form-item>
@@ -299,7 +300,7 @@
               show-word-limit
               autosize
               type="textarea"
-              :disabled="true"
+                
               v-model="searchForm.fmeetcontent"
             ></el-input>
           </el-form-item>
@@ -314,6 +315,7 @@ export default {
   props: {
     rowConferenceApplyDataObj: Object,
     rowConferenceApplytype: Boolean,
+    disFlag:Boolean
   },
   data() {
     return {

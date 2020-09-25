@@ -6,12 +6,12 @@
             class="dataForm"
             size="mini"
             :model="formdata"
-            :label-position="labelPosition"
+            :label-position="labelPosition" :disabled="!disFlag"
         >
             <el-row>
                 <el-col :span="6">
                     <el-form-item label="公司：">
-                        <el-select v-model="formdata.company" value-key="value" :disabled="true">
+                        <el-select v-model="formdata.company" value-key="value">
                             <el-option
                                 v-for="item in companyData"
                                 :key="item.value"
@@ -23,7 +23,7 @@
                 </el-col>
                 <el-col :span="6" :offset="2">
                     <el-form-item label="项目：">
-                        <el-select v-model="formdata.project" value-key="value" :disabled="true">
+                        <el-select v-model="formdata.project" value-key="value">
                             <el-option
                                 v-for="item in companyData"
                                 :key="item.value"
@@ -37,35 +37,35 @@
             <el-row>
                 <el-col :span="6">
                     <el-form-item label="部门：">
-                        <el-input v-model="formdata.bumen" :disabled="true"></el-input>
+                        <el-input v-model="formdata.bumen"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="6" :offset="2">
                     <el-form-item label="任务状态：">
-                        <el-input v-model="formdata.renwuzhaungtai" :disabled="true"></el-input>
+                        <el-input v-model="formdata.renwuzhaungtai"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="6" :offset="2">
                     <el-form-item label="任务类型：">
-                        <el-input v-model="formdata.renwuleixing" :disabled="true"></el-input>
+                        <el-input v-model="formdata.renwuleixing"></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>
             <el-row>
                 <el-col :span="6">
                     <el-form-item label="任务级别：">
-                        <el-input v-model="formdata.renwujibie" :disabled="true"></el-input>
+                        <el-input v-model="formdata.renwujibie"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="3" :offset="1">
-                    <el-form-item label="周期性任务：" ><el-checkbox v-model="formdata.checked" :disabled="true"></el-checkbox></el-form-item>
+                    <el-form-item label="周期性任务：" ><el-checkbox v-model="formdata.checked"></el-checkbox></el-form-item>
                 </el-col>
                 <el-col :span="2">
-                    <el-form-item label="年计划调整：" ><el-checkbox v-model="formdata.checked" :disabled="true"></el-checkbox></el-form-item>
+                    <el-form-item label="年计划调整：" ><el-checkbox v-model="formdata.checked" ></el-checkbox></el-form-item>
                 </el-col>
                 <el-col :span="9" :offset="2">
                     <el-form-item label="重点级别：">
-                        <el-checkbox-group v-model="focusLevelCheckList" :disabled="true">
+                        <el-checkbox-group v-model="focusLevelCheckList" >
                             <el-checkbox label="集团重点"></el-checkbox>
                             <el-checkbox label="公司重点"></el-checkbox>
                             <el-checkbox label="部门重点"></el-checkbox>
@@ -76,90 +76,90 @@
             <el-row>
                 <el-col :span="6">
                     <el-form-item label="工作名称：">
-                        <el-input v-model="formdata.gongzuomingcheng" :disabled="true"></el-input>
+                        <el-input v-model="formdata.gongzuomingcheng"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="14" :offset="2">
                     <el-form-item label="工作标准：">
-                        <el-input v-model="formdata.gongzuobiaozhun" :disabled="true"></el-input>
+                        <el-input v-model="formdata.gongzuobiaozhun" ></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>  
             <el-row>
                 <el-col :span="6">
                     <el-form-item label="责任人：">
-                        <el-input v-model="formdata.bumen" :disabled="true"></el-input>
+                        <el-input v-model="formdata.bumen"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="6" :offset="2">
                     <el-form-item label="检查人：">
-                        <el-input v-model="formdata.renwuzhaungtai" :disabled="true"></el-input>
+                        <el-input v-model="formdata.renwuzhaungtai" ></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="6" :offset="2">
                     <el-form-item label="交办人：">
-                        <el-input v-model="formdata.renwuleixing" :disabled="true"></el-input>
+                        <el-input v-model="formdata.renwuleixing"></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>
             <el-row>
                 <el-col :span="6">
                     <el-form-item label="开始时间：">
-                        <el-input v-model="formdata.starttime" :disabled="true"></el-input>
+                        <el-input v-model="formdata.starttime"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="6" :offset="2">
                     <el-form-item label="完成时间：">
-                        <el-input v-model="formdata.endtime" :disabled="true"></el-input>
+                        <el-input v-model="formdata.endtime"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="6" :offset="2">
                     <el-form-item label="秘书：">
-                        <el-input v-model="formdata.mishu" :disabled="true"></el-input>
+                        <el-input v-model="formdata.mishu"></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>
             <el-row>
                 <el-col :span="6">
                      <el-form-item label="完成情况(%)：">
-                        <el-input v-model="formdata.text1" :disabled="true"></el-input>
+                        <el-input v-model="formdata.text1"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="6" :offset="2">
                     <el-form-item label="经办人：">
-                        <el-input v-model="formdata.text1" :disabled="true"></el-input>
+                        <el-input v-model="formdata.text1"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="6" :offset="2">
                     <el-form-item label="经办时间：">
-                        <el-input v-model="formdata.text1" :disabled="true"></el-input>
+                        <el-input v-model="formdata.text1"></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>
             <el-row>
                 <el-col :span="6">
-                    <el-form-item label="是否自己完成："><el-checkbox v-model="formdata.checked" :disabled="true"></el-checkbox></el-form-item>
+                    <el-form-item label="是否自己完成："><el-checkbox v-model="formdata.checked"  ></el-checkbox></el-form-item>
                 </el-col>
                 <el-col :span="5" :offset="2">
                     <el-form-item label="协办人：">
-                        <el-input v-model="formdata.text1" :disabled="true"></el-input>
+                        <el-input v-model="formdata.text1"  ></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="1">
-                    <el-button type="primary" size="mini" icon="el-icon-search" :disabled="true"></el-button>
+                    <el-button type="primary" size="mini" icon="el-icon-search"  ></el-button>
                 </el-col>
             </el-row>
             <el-row>
                 <el-col :span="22">
                     <el-form-item label="情况说明：">
-                        <el-input v-model="formdata.text1" :disabled="true"></el-input>
+                        <el-input v-model="formdata.text1"  ></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>
             <el-row>
                 <el-col :span="22">
                     <el-form-item label="备注：">
-                        <el-input v-model="formdata.text1" :disabled="true"></el-input>
+                        <el-input v-model="formdata.text1"  ></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>
@@ -190,6 +190,7 @@ export default {
     props: {
         rowEachPerEachTableDelayDataObj: Object,
         rowEachPerEachTableReporttype:Boolean,
+        disFlag:Boolean
     },
     components: {
         DynamicTable,
@@ -201,7 +202,7 @@ export default {
                     key: 'key1',
                     title: '序号'
                 },
-                {
+                {     
                     key: 'key2',
                     title: '名称'
                 },
