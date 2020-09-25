@@ -11,14 +11,14 @@
 					<el-col :span="10">
 						<el-form-item>
 							<el-button type="primary" icon='el-icon-search' size="small" @click="selectList()">搜索</el-button>
-							<el-button type="primary" icon='el-icon-refresh' size="small"   @click="$refs.formInline.resetFields();showFig == 1 ? clear2() : clear();">重置</el-button>
-							<el-button v-if="showFig == 1" type="primary" icon='el-icon-menu' size="small"   @click="getAll('formInline')">全部</el-button>
-							<el-button v-if="showFig == 1" type="success" icon='el-icon-circle-check' size="small"   @click="getConList()">已选中</el-button>
+							<el-button type="primary" icon='el-icon-refresh' size="small" @click="$refs.formInline.resetFields();showFig == 1 ? clear2() : clear();">重置</el-button>
+							<el-button v-if="showFig == 1" type="primary" icon='el-icon-menu' size="small" @click="getAll('formInline')">全部</el-button>
+							<el-button v-if="showFig == 1" type="success" icon='el-icon-circle-check' size="small" @click="getConList()">已选中</el-button>
 						</el-form-item>
 					</el-col>
 					<el-col v-if="showFig == 1" :span="8" style="text-align: right;">
 						<el-form-item>
-							<el-button type="warning" icon="el-icon-sort"  size="small" @click="switchChild()">切换维度</el-button>
+							<el-button type="warning" icon="el-icon-sort" size="small" @click="switchChild()">切换维度</el-button>
 							<el-button type="success" icon='el-icon-check' size="small" @click="workItemAuthRole()">确定</el-button>
 						</el-form-item>
 					</el-col>
@@ -156,7 +156,6 @@
 					workItemId: id,
 					tname: ""
 				}).then(data => {
-					console.log(data)
 					this.loading = false
 					this.roleList = data.data.data
 					this.conList = JSON.parse(JSON.stringify(this.roleList))
@@ -184,7 +183,6 @@
 					userIdList: this.roleIds,
 					workItemId: this.roleCon.id
 				}).then(data => {
-					console.log(data)
 					loading.close();
 					if(this.dataBack(data, "授权成功")) {
 						this.$parent.$parent.$parent.$parent.refresh()
@@ -196,7 +194,6 @@
 			},
 			getRoleList() {
 				this.$api.collaborativeOffice.findUserAuthByWorkItem(this.formInline).then(data => {
-					console.log(data)
 					this.loading = false
 					this.roleList = data.data.data
 					this.conList = JSON.parse(JSON.stringify(this.roleList))
@@ -213,11 +210,11 @@
 						this.conList = data.data.data
 						let tableDataAll = JSON.parse(JSON.stringify(this.conList));
 						this.tableAllData = tableDataAll;
-					})
-					this.$api.collaborativeOffice.findWorkItemByUser({
-						userId: row.row.toid
-					}).then(data => {
-						this.$emit("getCon", data.data.data, row.row.toid, this.tableAllData)
+						this.$api.collaborativeOffice.findWorkItemByUser({
+							userId: row.row.toid
+						}).then(data => {
+							this.$emit("getCon", data.data.data, row.row.toid, this.tableAllData)
+						})
 					})
 				}
 			},
@@ -240,7 +237,7 @@
 		background-color: rgb(148, 185, 205);
 		color: white;
 	}
-
+	
 	.box-card:first-child {
 		margin-bottom: 16px;
 	}

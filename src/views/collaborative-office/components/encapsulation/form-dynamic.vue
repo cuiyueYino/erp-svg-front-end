@@ -350,13 +350,7 @@
 							//找到模板字段和数据key相同的
 							if(item.field == key) {
 								//存入需要返回的值,如果是整形或者浮点 转化为相应类型
-								if(item.fieldType == 4) {
-									this.$set(this.ruleForm, key, parseInt(valObject[key]))
-								} else if(item.fieldType == 5) {
-									this.$set(this.ruleForm, key, parseFloat(valObject[key]))
-								} else {
-									this.$set(this.ruleForm, key, valObject[key])
-								}
+								this.$set(this.ruleForm, key, valObject[key].toString())
 								/*
 								 * 设置浏览框展示数据 _NameShow(这些数据在新增或者修改返回时需要被删除)
 								 */
@@ -583,7 +577,7 @@
 								})
 								this.rules[item.field].push({
 									max: 20,
-									message: '请输入正确的' + item.fieldName,
+									message: '请输入正确的1' + item.fieldName,
 									trigger: 'change'
 								})
 								return "integers"
@@ -597,7 +591,7 @@
 								})
 								this.rules[item.field].push({
 									max: 20,
-									message: '请输入正确的' + item.fieldName,
+									message: '请输入正确的1' + item.fieldName,
 									trigger: 'change'
 								})
 								return "floatingPoint"

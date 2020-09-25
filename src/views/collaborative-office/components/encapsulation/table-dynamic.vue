@@ -163,10 +163,10 @@
 								}
 								for(var keyVal in val) {
 									if(item.fieldType == 4 && item.field == keyVal) {
-										val[keyVal] = parseInt(val[keyVal])
+										val[keyVal] =val[keyVal].toString()
 									}
 									if(item.fieldType == 5 && item.field == keyVal) {
-										val[keyVal] = parseFloat(val[keyVal])
+										val[keyVal] = val[keyVal].toString()
 									}
 									if(item.fieldType == 1 && item.field == keyVal) {
 										switch(item.toSelect.id) {

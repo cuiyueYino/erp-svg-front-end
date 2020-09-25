@@ -11,14 +11,14 @@
 					<el-col :span="10">
 						<el-form-item>
 							<el-button type="primary" icon='el-icon-search' size="small" @click="selectList()">搜索</el-button>
-							<el-button type="primary" icon='el-icon-refresh' size="small"   @click="$refs.formInline.resetFields();showFig == 2 ? clear2() : clear();">重置</el-button>
-							<el-button v-if="showFig == 1" type="primary" icon='el-icon-menu' size="small"   @click="getAll('formInline')">全部</el-button>
-							<el-button v-if="showFig == 1" type="success" icon='el-icon-circle-check' size="small"   @click="getConList()">已选中</el-button>
+							<el-button type="primary" icon='el-icon-refresh' size="small" @click="$refs.formInline.resetFields();showFig == 2 ? clear2() : clear();">重置</el-button>
+							<el-button v-if="showFig == 1" type="primary" icon='el-icon-menu' size="small" @click="getAll('formInline')">全部</el-button>
+							<el-button v-if="showFig == 1" type="success" icon='el-icon-circle-check' size="small" @click="getConList()">已选中</el-button>
 						</el-form-item>
 					</el-col>
 					<el-col v-if="showFig == 1" :span="8" style="text-align: right;">
 						<el-form-item>
-							<el-button type="warning" icon="el-icon-sort"  size="small" @click="switchChild()">切换维度</el-button>
+							<el-button type="warning" icon="el-icon-sort" size="small" @click="switchChild()">切换维度</el-button>
 							<el-button type="success" icon='el-icon-check' size="small" @click="workItemAuthRole()">确定</el-button>
 						</el-form-item>
 					</el-col>
@@ -208,11 +208,11 @@
 						this.conList = data.data.data
 						let tableDataAll = JSON.parse(JSON.stringify(this.conList));
 						this.tableAllData = tableDataAll;
-					})
-					this.$api.collaborativeOffice.findWorkItemByRoleId({
-						roleId: row.row.id
-					}).then(data => {
-						this.$emit("getCon", data.data.data, row.row.id, this.tableAllData);
+						this.$api.collaborativeOffice.findWorkItemByRoleId({
+							roleId: row.row.id
+						}).then(data => {
+							this.$emit("getCon", data.data.data, row.row.id, this.tableAllData);
+						})
 					})
 				}
 			},
