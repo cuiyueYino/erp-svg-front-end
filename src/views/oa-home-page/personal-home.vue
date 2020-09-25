@@ -351,7 +351,6 @@ export default {
             }
         },
         toLookItems(val,activeName){
-            this.seeFlag = true;
             let finandata = val;
             //finandata.selectData = val;
             finandata.finanrowname="人员缺省查询方案";
@@ -361,6 +360,7 @@ export default {
             this.functionType = val.classId;
             this.isOa = true;
             if(activeName=='3'){
+                this.seeFlag = true;
                 finandata.relay = true;
                 finandata.attention = true;
                 finandata.print = true;
@@ -370,6 +370,7 @@ export default {
                 finandata.trust = false;
             }
             if(activeName=='1'){
+                this.seeFlag = false;
                 let subject = val.fsubject;
                 subject= subject.substring(0,4);
                 if (subject.indexOf("加签") > -1) {
@@ -389,6 +390,7 @@ export default {
                 }
             }
             if(activeName=='2'){
+                this.seeFlag = true;
                 finandata.relay = true;
                 finandata.attention = false;
                 finandata.sign = false;
@@ -397,6 +399,7 @@ export default {
                 finandata.trust = false;
             }
             if(activeName=='4'){
+                this.seeFlag = true;
                 finandata.relay = true;
                 finandata.attention = true;
                 finandata.sign = false;
