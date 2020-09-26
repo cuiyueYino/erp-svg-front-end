@@ -429,6 +429,7 @@ export default {
             let subject = "";
             if(this.isOa) {
                 DataF.foid=this.rowWAADataObj.foid;
+                DataF.fcreator=this.rowWAADataObj.fcreator;
                 subject=this.rowWAADataObj.fsubject;
             }else{
                 DataF.foid=this.rowWAADataObj.selectData[0].foid;
