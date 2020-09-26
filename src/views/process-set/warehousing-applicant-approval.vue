@@ -369,15 +369,17 @@
 			//附件查询
 			findAttachmentInfosList() {
 				let formDataA = {};
-				let creator = localStorage.getItem('ms_userId');
 				let FoidS = '';
+				let fsrcoId= '';
 				if(this.isOa) {
 					FoidS = this.rowWAADataObj.foid;
+					fsrcoId=this.rowWAADataObj.fsrcoId;
 				} else {
 					FoidS = this.rowWAADataObj.selectData[0].foid;
+					fsrcoId=this.rowWAADataObj.selectData[0].fsrcoId;
 				}
 				formDataA.voucherId = FoidS;
-				formDataA.userCode =  FoidS;
+				formDataA.userCode =  fsrcoId;
             	formDataA.menuCode = 'WApplicantApproval';
 				this.$api.documentManagement.findInfosList(formDataA).then(response => {
 					let responsevalue = response;
@@ -489,18 +491,21 @@
 				let paramsData = {};
 				let twfbizmailReqVoObj = {};
 				let FoidS = '';
+				let fsrcoId= '';
 				if(this.isOa) {
 					paramsData["mactivityOid"] = this.rowWAADataObj.factivity;
 					paramsData["srcOid"] = this.rowWAADataObj.fsrcoId;
 					paramsData["subject"] = this.rowWAADataObj.fsubject;
 					twfbizmailReqVoObj["foid"] = this.rowWAADataObj.foid;
 					FoidS = this.rowWAADataObj.foid;
+					fsrcoId=this.rowWAADataObj.fsrcoId;
 				} else {
 					paramsData["mactivityOid"] = this.rowWAADataObj.selectData[0].factivity;
 					paramsData["srcOid"] = this.rowWAADataObj.selectData[0].fsrcoId;
 					paramsData["subject"] = this.rowWAADataObj.selectData[0].fsubject;
 					twfbizmailReqVoObj["foid"] = this.rowWAADataObj.selectData[0].foid;
 					FoidS = this.rowWAADataObj.selectData[0].foid;
+					fsrcoId=this.rowWAADataObj.selectData[0].fsrcoId;
 				}
 				paramsData["currUserId"] = localStorage.getItem("ms_userId");
 				paramsData["processCode"] = "schedule";
@@ -519,7 +524,7 @@
 					if(res.data) {
 						if(res.data.code == 0) {
 							if(this.uploadFiles != null) {
-								this.uploadFile("WApplicantApproval", FoidS);
+								this.uploadFile("WApplicantApproval", FoidS,fsrcoId);
 							}
 							if(this.delFileFoids != null) {
 								this.delFile();
@@ -861,7 +866,7 @@
 
 			},
 			//附件上传 ：同步上传
-			async uploadFile(menuCode, voucherId) {
+			async uploadFile(menuCode, voucherId,fsrcoId) {
 				if(menuCode == "" || menuCode === undefined || menuCode == null) {
 					layer.alert("请填写menuCode");
 					return;
@@ -870,7 +875,7 @@
 					layer.alert("请填写voucherId");
 					return;
 				}
-				let creator = voucherId;//按照邮件分别存附件
+				let creator = fsrcoId;//按照邮件分别存附件
 				// formData.append('files', this.uploadFiles);
 				let length = this.uploadFiles.length;
 				let count = 0;
