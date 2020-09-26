@@ -11,12 +11,12 @@
 				</el-option>
 			</el-select>
 		</el-col>-->
-			<el-col style="text-align: right;" v-if="showSeeOrUpd1()" :span="24">
-				<el-button @click="submitForm(2)" type="success" size="small" icon="el-icon-copy-document">提交</el-button>
-				<!--<el-button @click="submitForm(1)" type="success" size="small" icon="el-icon-folder-remove">暂存</el-button>
+			<!--<el-col style="text-align: right;" v-if="showSeeOrUpd1()" :span="24">-->
+			<!--<el-button @click="submitForm(2)" type="success" size="small" icon="el-icon-copy-document">提交</el-button>-->
+			<!--<el-button @click="submitForm(1)" type="success" size="small" icon="el-icon-folder-remove">暂存</el-button>
 			<el-button @click="selectMainTable" type="success" size="small" icon="el-icon-s-promotion">选择模板</el-button>
 			<el-button type="danger" @click="$parent.toSelect()" size="small" icon="el-icon-close">返回</el-button>-->
-			</el-col>
+			<!--</el-col>-->
 			<!--<el-col style="text-align: right;" v-if="!todoFlag && showSeeOrUpd != 3" :span="18">
 			<el-button type="danger" @click="$parent.toSelect()" size="small" icon="el-icon-close">返回</el-button>
 		</el-col>-->
@@ -82,31 +82,28 @@
 				this.getDialogVisible()
 			})
 		},
-//		watch: {
-//			context: { 
-//				handler(newVal, oldVal) {
-//					console.log(newVal)
-//					this.getDialogVisible()
-//				},
-//				deep:  true
-//			}
-//		},
+		//		watch: {
+		//			context: { 
+		//				handler(newVal, oldVal) {
+		//					console.log(newVal)
+		//					this.getDialogVisible()
+		//				},
+		//				deep:  true
+		//			}
+		//		},
 		 
 		methods: {
-			showSeeOrUpd1(){
-				console.log(this.context.gestor)
-				if((this.context.gestor == localStorage.getItem('ms_staffId') || typeof(this.context.gestor) == 'undefined') && this.showSeeOrUpd == 3){
-					console.log(1)
+			showSeeOrUpd1() {
+				if((this.context.gestor == localStorage.getItem('ms_staffId') || typeof(this.context.gestor) == 'undefined') && this.showSeeOrUpd == 3) {
 					return true
-				}else{
-					console.log(2)
+				} else {
 					return false
 				}
 			},
-			showSeeOrUpd2(){
-				if((this.context.gestor == localStorage.getItem('ms_staffId') || typeof(this.context.gestor) == 'undefined') && this.showSeeOrUpd == 3){
+			showSeeOrUpd2() {
+				if((this.context.gestor == localStorage.getItem('ms_staffId') || typeof(this.context.gestor) == 'undefined') && this.showSeeOrUpd == 3) {
 					return '3'
-				}else{
+				} else {
 					return '1'
 				}
 			},
@@ -197,8 +194,7 @@
 					console.log(backData)
 					this.$api.collaborativeOffice.dataToDataWorkItem(backData).then(data => {
 						if(this.dataBack(data, "修改成功")) {
-//							this.$refs.child.toUpload(this.context.id)
-							this.$parent.toSelect()
+							this.$parent.$parent.$parent.$parent.$parent.$parent.rowWAAtype = false
 						}
 					})
 				} else {
@@ -207,15 +203,13 @@
 			},
 			//选择模板
 			getDialogVisible() {
-				console.log(this.context)
-				if(this.noNull(this.context)){
+				if(this.noNull(this.context)) {
 					return
 				}
 				//获取模板详细数据
 				this.$api.collaborativeOffice.findById({
 					id: this.context.tempId
 				}).then(data => {
-					console.log(data)
 					this.activityId = data.data.data.workItemTemp.activityId
 					//整理传入子组件的数据top 主表  bottom 子表
 					this.tempId = this.context.tempId

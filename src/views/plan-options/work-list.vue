@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<WorkItemPage @getSrcId="getSrcId" v-for="(item,key) in context" :key="key" style="display: block;" :showChild="key == 0 ? '1' : '2'" :context="item" :showSeeOrUpd="showSeeOrUpd1(item)" :todoFlag="todoFlag"></WorkItemPage>
+		<WorkItemPage ref="childOtherChild" @getSrcId="getSrcId" v-for="(item,key) in context" :key="key" style="display: block;" :showChild="key == 0 ? '1' : '2'" :context="item" :showSeeOrUpd="showSeeOrUpd1(item)" :todoFlag="todoFlag"></WorkItemPage>
 	</div>
 </template>
 
@@ -29,13 +29,11 @@
 			this.$api.collaborativeOffice.findIds({
 				srcId: this.currentDatd,
 			}).then((res) => {
-				console.log(res)
 				this.getContext(res)
 			})
 		},
 		methods: {
 			getSrcId(){
-				console.log(1)
 				return this.rowWAADataObj.fsrcoId
 			},
 			showSeeOrUpd1(row){
@@ -52,7 +50,6 @@
 						tempId: res.data.data[i].tempId,
 						tableName: res.data.data[i].tableName
 					}).then(data => {
-						console.log(JSON.parse(data.data.data))
 						return new Promise(resolve => {
 							this.$api.collaborativeOffice.findlnfosList({
 								voucherId: JSON.parse(data.data.data).id,
@@ -64,7 +61,6 @@
 								a.tempId = res.data.data[i].tempId;
 								a.tableName = res.data.data[i].tableName;
 								a.files = val.data.data;
-								console.log(a)
 								this.context.push(a)
 								resolve({})
 							})

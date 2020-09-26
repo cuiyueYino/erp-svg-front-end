@@ -332,8 +332,10 @@
 					//子表需要循环找到正确的数据
 					for(var key in this.formData.wholeData) {
 						if(key == this.formData.id) {
-							valObject = this.formData.wholeData[key][0]
-							this.$set(this.ruleForm, "id", valObject.id)
+							if(this.formData.wholeData[key].length != 0) {
+								valObject = this.formData.wholeData[key][0]
+								this.$set(this.ruleForm, "id", valObject.id)
+							}
 						}
 					}
 				}

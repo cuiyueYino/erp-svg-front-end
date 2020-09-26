@@ -3,7 +3,7 @@
 		<el-dialog :title="title" @close="handleClose" :visible.sync="ShowFinancVisible" :append-to-body="true" v-if="ShowFinancVisible" :close-on-click-modal="false" width="60%">
 			<el-form label-width="110px" v-model="formdata" class="dataForm" size="mini" :model="formdata" :label-position="labelPosition" :rules="rules" ref="ruleForm">
 				<el-card>
-					<el-row :gutter="24" style="text-align: right">
+					<el-row :gutter="24" style="text-align: right" v-if="showSeeOrUpd == 1">
 						<el-col :span="10" :offset="14" v-if="rowFstatus == 4?true:false">
 							<el-button type="success" icon="el-icon-position" size="small" @click="baseInputTable('转发')" v-if="rowWAADataObj.relay">转发</el-button>
 							<el-button type="success" icon="el-icon-star-off" size="small" @click="basefollow()" v-if="rowWAADataObj.attention">关注</el-button>
@@ -25,9 +25,9 @@
 							<el-button type="info" icon="el-icon-printer" size="small" v-print="printObj" v-if="rowWAADataObj.print">打印</el-button>
 						</el-col>
 					</el-row>
-					<!--<el-row :gutter="24" style="text-align: right">
-							<el-button type="success" icon="el-icon-position" size="small" @click="baseInputTable('转发')" >提交</el-button>
-					</el-row>-->
+					<el-row v-if="showSeeOrUpd == 3" :gutter="24" style="text-align: right">
+							<el-button type="success" icon="el-icon-position" size="small" @click="toSeve" >提交</el-button>
+					</el-row>
 					<div id="print">
 						<el-row :gutter="24">
 							<ComAnnDetaiPage :disFlag='disFlag' :rowComPanDetaiDataObj="rowComPanDetaiDataObj" :rowComPanDetaitype="rowComPanDetaitype" @changeShow="showLookOrUpdate" />
@@ -48,7 +48,7 @@
 							<EachPerEachTableAdjPage :disFlag='disFlag' :rowEachPerEachTableAdjDataObj="rowEachPerEachTableAdjDataObj" :rowEachPerEachTableAdjtype="rowEachPerEachTableAdjtype" @changeShow="showLookOrUpdate" />
 							<ConferenceApplyPage ref='child' :disFlag='disFlag'   :rowConferenceApplyDataObj="rowConferenceApplyDataObj" :rowConferenceApplytype="rowConferenceApplytype" @changeShow="showLookOrUpdate" />
 							<EconomicIndicatorsPage :disFlag='disFlag' :rowEconomicIndicatorsDataObj="rowEconomicIndicatorsDataObj" :rowEconomicIndicatorstype="rowEconomicIndicatorstype" @changeShow="showLookOrUpdate" />
-							<workList :formdata="formdata" :rowWAADataObj="rowWAADataObj" :currentDatd="currentDatd" v-if="itemsFlag" :context="context" :showSeeOrUpd="showSeeOrUpd" :todoFlag="todoFlag" />
+							<workList ref="childOher" :formdata="formdata" :rowWAADataObj="rowWAADataObj" :currentDatd="currentDatd" v-if="itemsFlag" :context="context" :showSeeOrUpd="showSeeOrUpd" :todoFlag="todoFlag" />
 							<EachPerEachTableModifyPage :disFlag='disFlag' :rowEachPerEachTableModifyDataObj="rowEachPerEachTableModifyDataObj" :rowEachPerEachTableModifyype="rowEachPerEachTableModifyype" @changeShow="showLookOrUpdate" />
 						</el-row>
 
@@ -298,6 +298,13 @@
 
 		},
 		methods: {
+			toSeve(){
+				this.$refs.childOher.$refs.childOtherChild.forEach(item =>{
+					if((item.context.gestor == localStorage.getItem('ms_staffId') || typeof(item.context.gestor) == 'undefined') && this.showSeeOrUpd == 3){
+						item.submitForm(2)
+					}
+				})
+			},
 			//关闭当前dialog时给父组件传值
 			handleClose() {
 				this.rowCOOTasktype = false;
