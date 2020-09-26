@@ -29,6 +29,7 @@
 			this.$api.collaborativeOffice.findIds({
 				srcId: this.currentDatd,
 			}).then((res) => {
+				console.log(res)
 				this.getContext(res)
 			})
 		},
@@ -58,8 +59,10 @@
 								userCode: localStorage.getItem('ms_userId'),
 								menuCode: "workItem"
 							}).then(val => {
+								
 								var a = JSON.parse(data.data.data)
 								a.tempId = res.data.data[i].tempId;
+								a.tableName = res.data.data[i].tableName;
 								a.files = val.data.data;
 								console.log(a)
 								this.context.push(a)

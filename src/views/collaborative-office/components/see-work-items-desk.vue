@@ -11,7 +11,7 @@
 				</el-option>
 			</el-select>
 		</el-col>-->
-			<el-col style="text-align: right;" v-if="showSeeOrUpd == 3" :span="24">
+			<el-col style="text-align: right;" v-if="showSeeOrUpd1()" :span="24">
 				<el-button @click="submitForm(2)" type="success" size="small" icon="el-icon-copy-document">提交</el-button>
 				<!--<el-button @click="submitForm(1)" type="success" size="small" icon="el-icon-folder-remove">暂存</el-button>
 			<el-button @click="selectMainTable" type="success" size="small" icon="el-icon-s-promotion">选择模板</el-button>
@@ -21,7 +21,7 @@
 			<el-button type="danger" @click="$parent.toSelect()" size="small" icon="el-icon-close">返回</el-button>
 		</el-col>-->
 		</el-row>
-		<formAndTable :showChild="showChild" :files="context.files" :dis="showSeeOrUpd" showAdd="2" ref="child" :form-data="conData"></formAndTable>
+		<formAndTable :showChild="showChild" :files="context.files" :dis="showSeeOrUpd2()" showAdd="2" ref="child" :form-data="conData"></formAndTable>
 	</div>
 </template>
 <script>
@@ -71,7 +71,6 @@
 			}
 		},
 		created() {
-			console.log(this.context)
 			//最上端公司选择
 			this.CompanyData.forEach(item => {
 				if(item.id == this.context.company) {
@@ -94,6 +93,23 @@
 //		},
 		 
 		methods: {
+			showSeeOrUpd1(){
+				console.log(this.context.gestor)
+				if((this.context.gestor == localStorage.getItem('ms_staffId') || typeof(this.context.gestor) == 'undefined') && this.showSeeOrUpd == 3){
+					console.log(1)
+					return true
+				}else{
+					console.log(2)
+					return false
+				}
+			},
+			showSeeOrUpd2(){
+				if((this.context.gestor == localStorage.getItem('ms_staffId') || typeof(this.context.gestor) == 'undefined') && this.showSeeOrUpd == 3){
+					return '3'
+				}else{
+					return '1'
+				}
+			},
 			//选择模板
 			selectMainTable() {
 				this.companyID = this.company;
@@ -117,12 +133,13 @@
 					backData.fresult = '1';
 					backData.foponion = '提交人申请';
 					backData.mailId = this.$parent.rowWAADataObj.selectData[0].foid;
+					backData.activityId = this.$parent.rowWAADataObj.selectData[0].factivity;
 					//标题
-					backData.title = ""
+					backData.title = this.$parent.rowWAADataObj.selectData[0].fsubject;
 					//经办人
-					backData.gestor = ""
+					backData.gestor = localStorage.getItem('ms_staffId')
 					//经办部门
-					backData.gestorDept = ""
+					backData.gestorDept = localStorage.getItem('ms_userDepartId')
 					//经办时间
 
 					backData.voucherTime = ""
@@ -135,8 +152,6 @@
 					backData.status = 2
 					//主表名称
 					backData.tableName = ""
-					//主表字段-业务活动ID
-					backData.activityId = ""
 					//主表Id
 					backData.tempId = ""
 					backData.srcId = JSON.parse(JSON.stringify(this.$refs.child.conData.id))
@@ -145,6 +160,7 @@
 					/*
 					 * 存入里层信息
 					 * */
+					backData.jsonStr.tableName = this.context.tableName;
 					//状态
 					backData.jsonStr.status = status
 					//公司ID
@@ -181,7 +197,7 @@
 					console.log(backData)
 					this.$api.collaborativeOffice.dataToDataWorkItem(backData).then(data => {
 						if(this.dataBack(data, "修改成功")) {
-							this.$refs.child.toUpload(this.context.id)
+//							this.$refs.child.toUpload(this.context.id)
 							this.$parent.toSelect()
 						}
 					})

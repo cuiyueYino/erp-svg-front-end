@@ -25,6 +25,9 @@
 							<el-button type="info" icon="el-icon-printer" size="small" v-print="printObj" v-if="rowWAADataObj.print">打印</el-button>
 						</el-col>
 					</el-row>
+					<!--<el-row :gutter="24" style="text-align: right">
+							<el-button type="success" icon="el-icon-position" size="small" @click="baseInputTable('转发')" >提交</el-button>
+					</el-row>-->
 					<div id="print">
 						<el-row :gutter="24">
 							<ComAnnDetaiPage :disFlag='disFlag' :rowComPanDetaiDataObj="rowComPanDetaiDataObj" :rowComPanDetaitype="rowComPanDetaitype" @changeShow="showLookOrUpdate" />

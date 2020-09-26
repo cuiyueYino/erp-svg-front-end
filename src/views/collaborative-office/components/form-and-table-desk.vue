@@ -202,6 +202,10 @@
 						this.conData = this.$refs.mainTableChild.ruleForm
 					} else {
 						this.conData.id = this.formData.top.wholeData.id
+//						this.conData.creator = localStorage.getItem("ms_userId")
+						this.conData.gestor = localStorage.getItem('ms_staffId')
+						this.conData.gestorDept = localStorage.getItem('ms_userDepartId')
+						this.conData.oprStatus = 2
 					}
 					//整理子表返回数据
 					if(typeof(this.$refs.refCon) != "undefined") {
