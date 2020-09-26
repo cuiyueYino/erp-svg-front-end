@@ -3,7 +3,7 @@
     v-if="ShowFinancVisible"
     class="itemDivStyle"
   >
-  <el-form :model="searchForm" :rules="rules" ref="searchForm" style="margin: 0px 20px;">
+  <el-form :model="searchForm" :rules="rules" ref="searchForm" style="margin: 0px 20px;" :disabled="!disFlag">
         <el-row :gutter="24">
           <el-col :span="11">
             <el-form-item label="公司：" :label-width="formLabelWidth" class="pop-select" prop="fcompanyid">

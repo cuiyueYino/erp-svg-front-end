@@ -359,8 +359,8 @@
 						 编码只能输入 英文和数字
 						 * */
 						{
-							pattern: /^[1-9]\d*$/,
-							message: '请输入正确的编码',
+							pattern: /^[a-z_A-Z0-9-\.!@#\$%\\\^&\*\)\(\+=\{\}\[\]\/",'<>~\·`\?:;|]+$/,
+							message: '请输入数字、英文或者英文符号',
 							trigger: 'blur'
 						}
           ],
@@ -377,7 +377,7 @@
           {required: true, validator: checkInt, trigger: "blur"},
           {
 							pattern: /^[1-9]\d*$/,
-							message: '请输入正确的容量',
+							message: '请输入正整数',
 							trigger: 'blur'
 						}
           ],
