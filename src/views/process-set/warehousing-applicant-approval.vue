@@ -43,7 +43,7 @@
 							<EmpApprTabNumDetailPage :disFlag='disFlag' :rowEmpApprTabNumDetailDataObj="rowEmpApprTabNumDetailDataObj" :rowEmpApprTabNumDetailtype="rowEmpApprTabNumDetailtype" @changeShow="showLookOrUpdate" />
 							<CooTaskDetailPage :disFlag='disFlag' :rowCooTaskDetailDataObj="rowCooTaskDetailDataObj" :rowCooTaskDetailtype="rowCooTaskDetailtype" @changeShow="showLookOrUpdate" />
 							<EachPerEachTableAdjPage :disFlag='disFlag' :rowEachPerEachTableAdjDataObj="rowEachPerEachTableAdjDataObj" :rowEachPerEachTableAdjtype="rowEachPerEachTableAdjtype" @changeShow="showLookOrUpdate" />
-							<ConferenceApplyPage :disFlag='disFlag'   :rowConferenceApplyDataObj="rowConferenceApplyDataObj" :rowConferenceApplytype="rowConferenceApplytype" @changeShow="showLookOrUpdate" />
+							<ConferenceApplyPage ref='child' :disFlag='disFlag'   :rowConferenceApplyDataObj="rowConferenceApplyDataObj" :rowConferenceApplytype="rowConferenceApplytype" @changeShow="showLookOrUpdate" />
 							<EconomicIndicatorsPage :disFlag='disFlag' :rowEconomicIndicatorsDataObj="rowEconomicIndicatorsDataObj" :rowEconomicIndicatorstype="rowEconomicIndicatorstype" @changeShow="showLookOrUpdate" />
 							<workList :formdata="formdata" :rowWAADataObj="rowWAADataObj" :currentDatd="currentDatd" v-if="itemsFlag" :context="context" :showSeeOrUpd="showSeeOrUpd" :todoFlag="todoFlag" />
 							<EachPerEachTableModifyPage :disFlag='disFlag' :rowEachPerEachTableModifyDataObj="rowEachPerEachTableModifyDataObj" :rowEachPerEachTableModifyype="rowEachPerEachTableModifyype" @changeShow="showLookOrUpdate" />
@@ -520,6 +520,40 @@
 				if(Data) {
 					paramsData["position"] = Data;
 				}
+			         //新会议申请 情况下的提交
+		                if(this.rowWAADataObj.selectData[0].classId == 'Meetingapplication') {
+		                    Object.assign(paramsData,this.$refs.child.searchForm);
+		                    paramsData['mailId'] = this.rowWAADataObj.selectData[0].foid;
+		                    this.$api.processSet.resubmitconfapplysubmit(paramsData).then(res => {
+		                        if(res.data) {
+		                            if(res.data.code == 0) {
+		                                if(this.uploadFiles != null) {
+		                                    this.uploadFile("WApplicantApproval", FoidS,fsrcoId);
+		                                }
+		                                if(this.delFileFoids != null) {
+		                                    this.delFile();
+		                                }
+		                                this.$message.success('保存成功');
+		                                loading.close();
+		                                this.ShowFinancVisible  =  false;
+		                                this.participator = "";
+		                                this.$emit('changeShow', false);
+		                                this.reload();
+		                            } else {
+		                                loading.close();
+		                                this.participator = "";
+		                                this.$message.error(res.data.msg);
+		                            }
+		                        } else {
+		                            loading.close();
+		                            this.participator = "";
+		                            this.$message.error('提交失败!');
+		                        }
+		                    }, error => {
+		                        console.log(error)
+		                    })
+		                } else {
+		                    //其余情况下的提交
 				this.$api.processSet.addWfsubmit(paramsData).then(res => {
 					if(res.data) {
 						if(res.data.code == 0) {
@@ -549,6 +583,7 @@
 					// loading.close();
 					console.log(error)
 				});
+			}
 			},
 			//选择岗位关闭
 			jobVisibleGW() {

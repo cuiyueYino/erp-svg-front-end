@@ -684,8 +684,6 @@
           fexternal: 0,
           internalmans:[],
           internalMansName:"",
-          // fcompanyid: "_DefaultCompanyOId",
-          // fcompanyname: "福佳集团",
           fcreator: localStorage.getItem('ms_userId'),
         },
         isDate: false,

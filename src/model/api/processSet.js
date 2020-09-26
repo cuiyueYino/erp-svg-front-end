@@ -221,6 +221,10 @@ const processSet = {
     addWfsubmit(params){
         return httpReqest.post('/api/wfInterfaces/workFlow/wfsubmit', params);
     },
+    //新会议申请（退回）-提交
+    resubmitconfapplysubmit(params){
+        return httpReqest.post('/api/interfaces/confApply/reSubmitConfApply', params);
+    },
     //根据 userid 获取到职位[包括兼职]
     getStaffAllFirmpositionname(params){
         return httpReqest.post('/api/interfaces/staffManage/getStaffAllFirmpositionname', params);
