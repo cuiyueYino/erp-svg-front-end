@@ -699,6 +699,7 @@ export default {
     },
     //关注点击事件
     basefollow() {
+      debugger;
       if (this.multipleSelection.length > 1) {
         this.$message.error("只能选择一个");
       } else if (this.multipleSelection.length == 0) {
@@ -732,6 +733,7 @@ export default {
         let fromdata = {};
         fromdata.fvoucherOid = selectData[0].fsrcoId;
         fromdata.fattentionOid = localStorage.getItem("ms_userId");
+        fromdata.fwfBizMailOid = selectData[0].foid;
         this.$api.processSet.addAttention(fromdata).then((response) => {
           let responsevalue = response;
           if (responsevalue) {
