@@ -12,10 +12,13 @@
                     <el-col :span="3" :offset="1">
                         {{ ReplyItemData.replyedName }}
                     </el-col>
-                    <el-col :span="10" :offset="1">
+                    <el-col :span="8" :offset="1">
                     {{ ReplyItemData.replyContent}}
                     </el-col>
-                    <el-col :span="2" :offset="1">
+                    <el-col :span="3" :offset="1">
+                        <el-link type="primary" @click="downLoadFile(ReplyItemData)">{{ ReplyItemData.fileName}}</el-link>
+                    </el-col>
+                    <el-col :span="1" :offset="1">
                         <el-button @click="onRowbuttonClick(ReplyItemData)" size="small" type="primary">回复</el-button>
                     </el-col>   
                 </el-row>
@@ -40,10 +43,13 @@
                     <el-col :span="3" :offset="1">
                         {{ ReplyItemData.replyedName }}
                     </el-col>
-                    <el-col :span="10" :offset="1">
+                    <el-col :span="8" :offset="1">
                     {{ ReplyItemData.replyContent }}
                     </el-col>
-                    <el-col :span="2" :offset="1">
+                    <el-col :span="3" :offset="1" >
+                        <el-link type="primary" @click="downLoadFile(ReplyItemData)">{{ ReplyItemData.fileName}}</el-link>
+                    </el-col>
+                    <el-col :span="1" :offset="1">
                         <el-button @click="onRowbuttonClick(ReplyItemData)" size="small" type="primary">回复</el-button>
                     </el-col>   
                 </el-row>
@@ -53,6 +59,7 @@
     </div>
 </template>
 <script>
+import axios from 'axios';
 import elreplyitem from './el-reply-main-item.vue';
 import replypage from './reply-main-page.vue';
 export default {
@@ -73,8 +80,66 @@ export default {
         fparentId:String
     },
     methods: {
-        selectRowData(){
-            
+        //附件查询
+        findAttachmentInfosList(data){
+            let formDataA ={};
+            let creator = localStorage.getItem('ms_userId');
+            formDataA.voucherId = data.foid;
+            formDataA.menuCode = this.fparentId;
+            if(creator){
+                formDataA.userCode =  creator;
+            } else {
+                formDataA.userCode =  'test';
+            }
+            return this.$api.documentManagement.findInfosList(formDataA);
+        },
+        async downLoadFile(data){
+            let fileData = await this.findAttachmentInfosList(data);
+            if(fileData.data){
+                if(fileData.data.data){
+                    let Fdata=fileData.data.data;
+                    console.log(Fdata[0])
+                    //拦截器放入token
+                    axios.interceptors.request.use(
+                    config => {
+                            if(localStorage.getItem('ms_tokenId')){
+                                config.headers.Authorization = 'bearer '+localStorage.getItem('ms_tokenId');
+                            }
+                            return config;
+                        },
+                        error => Promise.error(error)
+                    );
+                    axios({
+                        method: 'post',
+                        url: '/api/interfaces/attachment/downloadFile',
+                        params: {
+                            attachmentId: Fdata[0].id
+                        },
+                        responseType: 'blob'
+                    }).then(response => {
+                        this.download(response,Fdata[0].fileName);
+                    }).catch((error) => {
+                    })
+                }else{
+                    this.$message.error('查询附件失败!');
+                }
+            }else{
+                this.$message.error('查询附件失败!');
+            }
+        },
+        //下载文件
+        download (data,fileName) {
+            if (!data) {
+                return
+            }
+            let url = window.URL.createObjectURL(new Blob([data.data]))
+            let link = document.createElement('a')
+            link.style.display = 'none'
+            link.href = url
+            // let fileName = decodeURIComponent(data.headers.realname);
+            link.setAttribute('download', fileName)
+            document.body.appendChild(link)
+            link.click()
         },
         onRowbuttonClick(data){
             let rowdata=data;

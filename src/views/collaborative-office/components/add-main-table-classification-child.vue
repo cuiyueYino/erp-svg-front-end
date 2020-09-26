@@ -192,10 +192,6 @@
 							required: true,
 							message: "请输入字段显示名称",
 							trigger: "change"
-						},
-						{
-							pattern: "[\u4e00-\u9fa5]",
-							message: '请输入中文的字段显示名称'
 						}
 					],
 					fieldType: [{

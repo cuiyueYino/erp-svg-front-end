@@ -1,44 +1,34 @@
 <template>
-	<div style="height: 85vh; overflow-y:scroll">
-		<el-card class="box-card">
-			<el-row>
-				<el-col style="text-align: center;" :span="24" v-if="!todoFlag">工作事项</el-col>
-			</el-row>
-			<el-row style="margin-bottom: 10px;">
-				<el-col :span="6">
-					公司：
-					<el-select disabled size='mini' value-key="id" v-model="company" placeholder="公司">
-						<el-option v-for="item in CompanyData" :key="item.id" :label="item.name" :value="item">
-						</el-option>
-					</el-select>
-				</el-col>
-				<el-col style="text-align: right;" v-if="showSeeOrUpd == 3" :span="18">
-					<el-button @click="submitForm(2)" type="success" size="small" icon="el-icon-copy-document">提交</el-button>
-					<el-button @click="submitForm(1)" type="success" size="small" icon="el-icon-folder-remove">暂存</el-button>
-					<el-button @click="selectMainTable" type="success" size="small" icon="el-icon-s-promotion">选择模板</el-button>
-					<el-button type="danger" @click="$parent.toSelect()" size="small" icon="el-icon-close">返回</el-button>
-				</el-col>
-				<el-col style="text-align: right;" v-if="!todoFlag && showSeeOrUpd != 3" :span="18">
-					<el-button type="danger" @click="$parent.toSelect()" size="small" icon="el-icon-close">返回</el-button>
-				</el-col>
-			</el-row>
-			<formAndTable :files="context.files" :dis="showSeeOrUpd" showAdd="2" ref="child" :form-data="conData"></formAndTable>
-		</el-card>
-		<!--弹出框-->
-		<el-dialog title="工作事项模板主表" top="1vh" :destroy-on-close="true" v-if="dialogVisible" center :visible.sync="dialogVisible" width="80%">
-			<selectMainTable show="1" status="3" :userId="UserId" :company="companyID" ref="childMain"></selectMainTable>
-			<div slot="footer" class="dialog-footer">
-				<el-button type="success" icon="el-icon-check" size="small" @click="getDialogVisible">确定</el-button>
-				<el-button type="warning" icon="el-icon-close" size="small" @click="dialogVisible = false">取消</el-button>
-			</div>
-		</el-dialog>
+	<div>
+		<!--<el-row>
+		<el-col style="text-align: center;" :span="24" v-if="!todoFlag">工作事项</el-col>
+	</el-row>-->
+		<el-row style="margin-bottom: 10px;">
+			<!--<el-col :span="6">
+			公司：
+			<el-select disabled size='mini' value-key="id" v-model="company" placeholder="公司">
+				<el-option v-for="item in CompanyData" :key="item.id" :label="item.name" :value="item">
+				</el-option>
+			</el-select>
+		</el-col>-->
+			<el-col style="text-align: right;" v-if="showSeeOrUpd == 3" :span="24">
+				<el-button @click="submitForm(2)" type="success" size="small" icon="el-icon-copy-document">提交</el-button>
+				<!--<el-button @click="submitForm(1)" type="success" size="small" icon="el-icon-folder-remove">暂存</el-button>
+			<el-button @click="selectMainTable" type="success" size="small" icon="el-icon-s-promotion">选择模板</el-button>
+			<el-button type="danger" @click="$parent.toSelect()" size="small" icon="el-icon-close">返回</el-button>-->
+			</el-col>
+			<!--<el-col style="text-align: right;" v-if="!todoFlag && showSeeOrUpd != 3" :span="18">
+			<el-button type="danger" @click="$parent.toSelect()" size="small" icon="el-icon-close">返回</el-button>
+		</el-col>-->
+		</el-row>
+		<formAndTable :showChild="showChild" :files="context.files" :dis="showSeeOrUpd" showAdd="2" ref="child" :form-data="conData"></formAndTable>
 	</div>
 </template>
 <script>
 	//工作事项主表模板
 	import selectMainTable from './select-main-table';
 	//预览
-	import formAndTable from './form-and-table';
+	import formAndTable from './form-and-table-desk';
 	export default {
 		components: {
 			selectMainTable,
@@ -48,7 +38,8 @@
 			//值
 			context: Object,
 			showSeeOrUpd: String,
-			todoFlag: Boolean
+			todoFlag: Boolean,
+			showChild: String
 		},
 		data() {
 			return {
@@ -80,6 +71,7 @@
 			}
 		},
 		created() {
+			console.log(this.context)
 			//最上端公司选择
 			this.CompanyData.forEach(item => {
 				if(item.id == this.context.company) {
@@ -94,12 +86,13 @@
 //		watch: {
 //			context: { 
 //				handler(newVal, oldVal) {
+//					console.log(newVal)
 //					this.getDialogVisible()
 //				},
 //				deep:  true
 //			}
 //		},
-//		 
+		 
 		methods: {
 			//选择模板
 			selectMainTable() {
@@ -120,28 +113,32 @@
 					 * */
 					//单据编号
 					backData.voucherId = "";
+					backData.fsrcOid = this.$parent.rowWAADataObj.selectData[0].fsrcoId;
+					backData.fresult = '1';
+					backData.foponion = '提交人申请';
+					backData.mailId = this.$parent.rowWAADataObj.selectData[0].foid;
 					//标题
-					backData.title = JSON.parse(JSON.stringify(backData.jsonStr.title))
+					backData.title = ""
 					//经办人
-					backData.gestor = JSON.parse(JSON.stringify(backData.jsonStr.gestor))
+					backData.gestor = ""
 					//经办部门
-					backData.gestorDept = JSON.parse(JSON.stringify(backData.jsonStr.gestorDept))
+					backData.gestorDept = ""
 					//经办时间
 
-					backData.voucherTime = JSON.parse(JSON.stringify(backData.jsonStr.voucherTime))
+					backData.voucherTime = ""
 					//公司code
 
-					backData.companyCode = this.company.code
+					backData.companyCode = ""
 					//登陆人
-					backData.creator = localStorage.getItem('ms_userId')
+					backData.creator = localStorage.getItem("ms_userId")
 					//暂存1 提交2
-					backData.status = status
+					backData.status = 2
 					//主表名称
-					backData.tableName = this.tableName
+					backData.tableName = ""
 					//主表字段-业务活动ID
-					backData.activityId = this.activityId
+					backData.activityId = ""
 					//主表Id
-					backData.tempId = this.tempId
+					backData.tempId = ""
 					backData.srcId = JSON.parse(JSON.stringify(this.$refs.child.conData.id))
 					backData.oprStatus = 2
 
@@ -151,7 +148,7 @@
 					//状态
 					backData.jsonStr.status = status
 					//公司ID
-					backData.jsonStr.company = this.company.id
+					backData.jsonStr.company = ""
 					/*
 					 * 删除所有显示内容  _NameShow
 					 * */
@@ -181,7 +178,8 @@
 					}
 					//后台需要json格式的数据 
 					backData.jsonStr = JSON.stringify(con)
-					this.$api.collaborativeOffice.updateWorkItem(backData).then(data => {
+					console.log(backData)
+					this.$api.collaborativeOffice.dataToDataWorkItem(backData).then(data => {
 						if(this.dataBack(data, "修改成功")) {
 							this.$refs.child.toUpload(this.context.id)
 							this.$parent.toSelect()
@@ -193,6 +191,10 @@
 			},
 			//选择模板
 			getDialogVisible() {
+				console.log(this.context)
+				if(this.noNull(this.context)){
+					return
+				}
 				//获取模板详细数据
 				this.$api.collaborativeOffice.findById({
 					id: this.context.tempId

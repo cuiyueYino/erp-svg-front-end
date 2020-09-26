@@ -311,9 +311,6 @@
 						required: true,
 						message: '请输入显示名称',
 						trigger: 'change'
-					}, {
-						pattern: /^[a-z_A-Z0-9-\.!@#\$%\\\^&\*\)\(\+=\{\}\[\]\/",'<>~\·`\?:;|]+$/,
-						message: '可输入英文、数字、英文符号，限制长度50字节'
 					}],
 					type: [{
 						required: true,
@@ -1051,23 +1048,23 @@
 		color: red;
 		font-size: 20px;
 	}
-	
+
 	>>>.el-card {
 		margin-bottom: 10px;
 	}
-	
+
 	>>>.el-card__body {
 		padding: 10px;
 	}
-	
+
 	>>>.el-input.is-disabled .el-input__inner {
 		color: #000000 !important;
 	}
-	
+
 	>>>.el-textarea.is-disabled .el-textarea__inner {
 		color: #000000 !important;
 	}
-	
+
 	>>>.el-checkbox__input.is-disabled.is-checked .el-checkbox__inner::after {
 		border-color: #000000!important;
 	}
