@@ -455,13 +455,6 @@
       // 新增
       add() {
         this.searchForm = {
-          fcode: "",
-          fname: "",
-          fvolume: "",
-          fsite: "",
-          fdevice: "",
-          fremark: "",
-          fstatus: "",
           fcompany: "_DefaultCompanyOId",
           fcompanyname: "福佳集团",
           fcreator: localStorage.getItem('ms_userId'),
@@ -688,6 +681,7 @@
           this.$message.error("请选择一条数据查看详情");
           return;
         }
+        this.isSearch = true;
         this.isEdit = true;
         this.getTableData("foid");
         this.queryFormVisible = true;
