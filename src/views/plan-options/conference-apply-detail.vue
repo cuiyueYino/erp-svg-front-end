@@ -6,7 +6,7 @@
   <el-form :model="searchForm" :rules="rules" ref="searchForm" style="margin: 0px 20px;">
         <el-row :gutter="24">
           <el-col :span="11">
-            <el-form-item label="公司22：" :label-width="formLabelWidth" class="pop-select" prop="fcompanyid">
+            <el-form-item label="公司：" :label-width="formLabelWidth" class="pop-select" prop="fcompanyid">
               <el-select v-model="searchForm.fcompanyid" size="small" clearable placeholder="请选择" @focus="setCompany">
                 <el-option v-for="item in options" :key="item.id" :label="item.name" :value="item.id"></el-option>
               </el-select>
@@ -16,12 +16,12 @@
         <el-row :gutter="24">
           <el-col :span="11">
             <el-form-item label="编码：" :label-width="formLabelWidth" prop="fcode">
-              <el-input v-model="searchForm.fcode" size="small" autocomplete="off"></el-input>
+              <el-input v-model="searchForm.fcode" size="small" autocomplete="off" :disabled='true'></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="11" style="margin-left: 32px;">
             <el-form-item label="名称：" :label-width="formLabelWidth" prop="fname">
-              <el-input v-model="searchForm.fname" size="small" autocomplete="off"></el-input>
+              <el-input v-model="searchForm.fname" size="small" autocomplete="off" :disabled='true'></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="11">
