@@ -104,7 +104,7 @@
 </template>
 
 <script>
-	import enclosurefile from '../document-management/manage/enclosure-file.vue';
+	import enclosurefile from './enclosure-file.vue';
 	import DynamicTable from '../../components/common/dytable/dytable.vue';
 	import proData from '../../components/common/proData/proData';
 	import processnodelist from '../../views/comment/process-node-list.vue'; //流程相关
@@ -377,12 +377,8 @@
 					FoidS = this.rowWAADataObj.selectData[0].foid;
 				}
 				formDataA.voucherId = FoidS;
-				formDataA.menuCode = 'document';
-				if(creator) {
-					formDataA.userCode = creator;
-				} else {
-					formDataA.userCode = 'test';
-				}
+				formDataA.userCode =  FoidS;
+            	formDataA.menuCode = 'WApplicantApproval';
 				this.$api.documentManagement.findInfosList(formDataA).then(response => {
 					let responsevalue = response;
 					if(responsevalue.data.data) {
@@ -523,7 +519,7 @@
 					if(res.data) {
 						if(res.data.code == 0) {
 							if(this.uploadFiles != null) {
-								this.uploadFile("document", FoidS);
+								this.uploadFile("WApplicantApproval", FoidS);
 							}
 							if(this.delFileFoids != null) {
 								this.delFile();
@@ -874,7 +870,7 @@
 					layer.alert("请填写voucherId");
 					return;
 				}
-				let creator = localStorage.getItem('ms_userId');
+				let creator = voucherId;//按照邮件分别存附件
 				// formData.append('files', this.uploadFiles);
 				let length = this.uploadFiles.length;
 				let count = 0;
