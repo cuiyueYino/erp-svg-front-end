@@ -3,7 +3,7 @@
 		<el-dialog :title="title" @close="handleClose" :visible.sync="ShowFinancVisible" :append-to-body="true" v-if="ShowFinancVisible" :close-on-click-modal="false" width="60%">
 			<el-form label-width="110px" v-model="formdata" class="dataForm" size="mini" :model="formdata" :label-position="labelPosition" :rules="rules" ref="ruleForm">
 				<el-card>
-					<el-row v-if="showSeeOrUpd == 3 && isOa" :gutter="24" style="text-align: right">
+					<el-row v-if="showSeeOrUpd == 3 && functionType.indexOf('OA') != '-1'" :gutter="24" style="text-align: right">
 							<el-button type="success" icon="el-icon-position" size="small" @click="toSeve" >提交</el-button>
 					</el-row>
 					<el-row :gutter="24" style="text-align: right" v-else>
