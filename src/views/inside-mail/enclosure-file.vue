@@ -178,54 +178,76 @@ export default {
         /**
          * 上传
          */
-        async upload(){
+         upload(){
             let length = this.enclosureTableData.length;
+            let file = this.enclosureTableData;
             if(length==undefined||length==0){
                 return;
             }
             let creator = localStorage.getItem('ms_staffId');
+            let menuCode = this.enclosureConfig.menuCode;
+            let voucherId = this.enclosureConfig.voucherId;
 
-            // formData.append('files', this.uploadFiles);
-
-            for(let i=0; i < this.enclosureTableData.length; i++ ){
-                console.log("----"+this.enclosureTableData[i])
-                if(typeof(this.enclosureTableData[i].id)=="undefined"){
+            let fileList = [];
+            let filePath = [];
+            for(let i=0; i < file.length; i++){
+                if(file[i].id!=undefined){
+                    filePath.push(file[i]);
+                }else {
+                    fileList.push(file[i]);
+                }
+            }
+            console.log(filePath)
+            console.log(fileList)
+            console.log(this.enclosureConfig.haveAttachment)
+            debugger;
+            if(this.enclosureConfig.haveAttachment){
+                for(let i=0; i < filePath.length; i++ ){
                     let formData = new FormData();
-                    formData.append('file', this.enclosureTableData[i]);
-                    formData.append('menuCode',this.enclosureConfig.menuCode);
-                    if(creator){
-                        formData.append('userCode',creator);
-                    } else {
-                        formData.append('userCode','test');
-                    }
-                    formData.append('voucherId',this.enclosureConfig.voucherId);
-                    console.log(formData);
-                    // this.$api.insideMail.uploadFileBatch(formData).then((response) => {
-                    await this.$api.insideMail.uploadFile(formData).then((response) => {
-                         return new Promise(resolve => {
-                            //返回id和name 用于显示或者存储(服务10不出意外应该是input，无法显示和存储不同，暂时没法解决，只能显示id)
-                            resolve({
-
-                            });
-                            });
-                        if(response.data.code == 0 && response.data.data){
-                        }
-                    });
-                }else if(this.enclosureConfig.haveAttachment){
-                    formData.append('menuCode', this.enclosureConfig.menuCode);
-                    formData.append('voucherId',this.enclosureConfig.voucherId );
-                    formData.append('fileFullPath',this.enclosureTableData[i].fullPath );
-                    formData.append('fileSize',this.enclosureTableData[i].fileSize );
-                    formData.append('fileName', this.enclosureTableData[i].name);
+                    formData.append('menuCode', menuCode);
+                    formData.append('voucherId',voucherId);
+                    formData.append('fileFullPath',filePath[i].fullPath );
+                    formData.append('fileSize',filePath[i].fileSize );
+                    formData.append('fileName', filePath[i].name);
                     if(creator){
                         formData.append('userCode', creator);
                     } else {
                         formData.append('userCode','test');
                     }
-                    console.log(formData)
-                    await this.$api.insideMail.addAttachmentInfo(formData).then();
+                    this.$api.insideMail.addAttachmentInfo(formData).then();
                 }
+            }
+            this.uploadFiles(fileList);
+        },
 
+        async uploadFiles(fileList){
+            let length = fileList.length;
+            if(length==undefined||length==0){
+                return;
+            }
+            let creator = localStorage.getItem('ms_staffId');
+            let menuCode = this.enclosureConfig.menuCode;
+            let voucherId = this.enclosureConfig.voucherId;
+            for(let i=0; i < fileList.length; i++ ) {
+                debugger;
+                var formData = new FormData();
+                formData.append('file', fileList[i]);
+                formData.append('menuCode', menuCode);
+                if (creator) {
+                    formData.append('userCode', creator);
+                } else {
+                    formData.append('userCode', 'test');
+                }
+                formData.append('voucherId', voucherId);
+                // this.$api.insideMail.uploadFileBatch(formData).then((response) => {
+                await this.$api.insideMail.uploadFile(formData).then((response) => {
+                    return new Promise(resolve => {
+                        //返回id和name 用于显示或者存储(服务10不出意外应该是input，无法显示和存储不同，暂时没法解决，只能显示id)
+                        resolve({});
+                    });
+                    if (response.data.code == 0 && response.data.data) {
+                    }
+                })
             }
         },
 
