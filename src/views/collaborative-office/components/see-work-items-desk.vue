@@ -1,26 +1,5 @@
 <template>
 	<div>
-		<!--<el-row>
-		<el-col style="text-align: center;" :span="24" v-if="!todoFlag">工作事项</el-col>
-	</el-row>-->
-		<el-row style="margin-bottom: 10px;">
-			<!--<el-col :span="6">
-			公司：
-			<el-select disabled size='mini' value-key="id" v-model="company" placeholder="公司">
-				<el-option v-for="item in CompanyData" :key="item.id" :label="item.name" :value="item">
-				</el-option>
-			</el-select>
-		</el-col>-->
-			<!--<el-col style="text-align: right;" v-if="showSeeOrUpd1()" :span="24">-->
-			<!--<el-button @click="submitForm(2)" type="success" size="small" icon="el-icon-copy-document">提交</el-button>-->
-			<!--<el-button @click="submitForm(1)" type="success" size="small" icon="el-icon-folder-remove">暂存</el-button>
-			<el-button @click="selectMainTable" type="success" size="small" icon="el-icon-s-promotion">选择模板</el-button>
-			<el-button type="danger" @click="$parent.toSelect()" size="small" icon="el-icon-close">返回</el-button>-->
-			<!--</el-col>-->
-			<!--<el-col style="text-align: right;" v-if="!todoFlag && showSeeOrUpd != 3" :span="18">
-			<el-button type="danger" @click="$parent.toSelect()" size="small" icon="el-icon-close">返回</el-button>
-		</el-col>-->
-		</el-row>
 		<formAndTable :showChild="showChild" :files="context.files" :dis="showSeeOrUpd2()" showAdd="2" ref="child" :form-data="conData"></formAndTable>
 	</div>
 </template>
@@ -194,6 +173,7 @@
 					console.log(backData)
 					this.$api.collaborativeOffice.dataToDataWorkItem(backData).then(data => {
 						if(this.dataBack(data, "修改成功")) {
+							this.$refs.child.toUpload(this.context.id)
 							this.$parent.$parent.$parent.$parent.$parent.$parent.rowWAAtype = false
 						}
 					})
