@@ -302,6 +302,7 @@
 				this.$refs.childOher.$refs.childOtherChild.forEach(item =>{
 					if((item.context.gestor == localStorage.getItem('ms_staffId') || typeof(item.context.gestor) == 'undefined') && this.showSeeOrUpd == 3){
 						item.submitForm(2)
+						this.$emit('changeShow', false);
 					}
 				})
 			},

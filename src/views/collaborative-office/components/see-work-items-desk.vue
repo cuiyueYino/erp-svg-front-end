@@ -174,7 +174,6 @@
 					this.$api.collaborativeOffice.dataToDataWorkItem(backData).then(data => {
 						if(this.dataBack(data, "提交成功")) {
 							this.$refs.child.toUpload(this.context.id)
-							this.$parent.$parent.$parent.$parent.$parent.$parent.rowWAAtype = false
 						}
 					})
 				} else {
