@@ -14,7 +14,7 @@
                 stripe
                 style="width:100%;"
                 @selection-change='selectfileRow'>
-                <!-- <el-table-column type="selection" width="45" align="center"></el-table-column> -->
+                <el-table-column type="selection" width="45" align="center"></el-table-column>
                 <!-- <el-table-column label="文件类型" width="150px">
                     <template slot-scope="scope">
                         <el-select v-model="scope.row.filestyle" size="mini" value-key="value" v-bind:disabled="disabled">
@@ -41,7 +41,7 @@
                                     :on-change="imgSaveToUrl"
                                     :show-file-list="false"
                                     :auto-upload="false">
-                                    <el-button type="primary" slot="trigger" icon="el-icon-search"  size="mini" ></el-button>
+                                    <el-button type="primary" slot="trigger" @click="addFile(scope.row)" icon="el-icon-search"  size="mini" ></el-button>
                                 </el-upload>
                             </el-col>
                             <el-col :span="2" style="padding:5px">
@@ -154,6 +154,16 @@ export default {
     },
 
     methods: {
+        addFile(data){
+            if(data.filetype){
+                if(data.filetype ==='downLoad'){
+                    this.$message.error("非当前节点上传附件不能替换!");
+                    this.authenStatus=true;
+                }else{
+                    this.authenStatus=false;
+                }
+            }
+        },
         //附件预览
         getHtmlPreviewAttachment(row){
             //获取最后一个.的位置
@@ -254,6 +264,7 @@ export default {
         addfileRow () {
             var list = {
             rowNum:this.rowNum,
+            filetype:'new',
             filestyle:'',
             awardfile: '',
             remark:''
@@ -265,7 +276,9 @@ export default {
         delfileData () {
             if(this.selectfilelistRow.length < 1){
                 this.$message.error("请选择一行数据!");
+                return
             }
+            let downLoadS='';
             for (let i = 0; i < this.selectfilelistRow.length; i++) {
                 let val = this.selectfilelistRow;
                 if(val.id){
@@ -274,12 +287,23 @@ export default {
                 val.forEach((val, index) => {
                     this.enclosuretableData.forEach((v, i) => {
                         if (val.rowNum === v.rowNum) {
+                            if(v.filetype=='downLoad'){
+                                downLoadS+=v.fileName+','
+                            }else{
+                                // i 为选中的索引
+                                this.enclosuretableData.splice(i, 1);
+                                this.$emit('enclosureFile', v);
+                            }
                             // i 为选中的索引
-                            this.enclosuretableData.splice(i, 1);
-                            this.$emit('enclosureFile', v);
+                            //this.enclosuretableData.splice(i, 1);
+                            //this.$emit('enclosureFile', v);
                         }
                     })
                 })
+            }
+            if(downLoadS !=''){
+                downLoadS=downLoadS.slice(0,downLoadS.length-1);
+                this.$message.error(downLoadS+" 是非当前节点上传的附件,不能删除!");
             }
             // 删除完数据之后清除勾选框
             this.$refs.table.clearSelection();
@@ -331,7 +355,8 @@ export default {
                         var list = {
                             rowNum: this.rowNum,
                             fileName: attachment.fileName,
-                            fileFoid: attachment.id
+                            fileFoid: attachment.id,
+                            filetype:'downLoad'
                         };
                         this.enclosuretableData.unshift(list);
                         this.rowNum += 1;

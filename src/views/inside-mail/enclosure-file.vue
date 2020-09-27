@@ -187,9 +187,10 @@ export default {
 
             // formData.append('files', this.uploadFiles);
 
-            for(var i=0; i < length; i++ ){
-                var formData = new FormData();
-                if(this.enclosureTableData[i].id==null || this.enclosureTableData[i].id==''){
+            for(let i=0; i < this.enclosureTableData.length; i++ ){
+                console.log("----"+this.enclosureTableData[i])
+                if(typeof(this.enclosureTableData[i].id)=="undefined"){
+                    let formData = new FormData();
                     formData.append('file', this.enclosureTableData[i]);
                     formData.append('menuCode',this.enclosureConfig.menuCode);
                     if(creator){
@@ -222,7 +223,7 @@ export default {
                         formData.append('userCode','test');
                     }
                     console.log(formData)
-                    this.$api.insideMail.addAttachmentInfo(formData).then();
+                    await this.$api.insideMail.addAttachmentInfo(formData).then();
                 }
 
             }
