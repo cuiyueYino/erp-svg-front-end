@@ -115,7 +115,7 @@
 			},
 			//文件下载
 			downFiles(file) {
-				if(typeof(file.id) == "undefined"){
+				if(typeof(file.id) == "undefined") {
 					return
 				}
 				this.popup('是否下载文件<' + file.name + '>?').then(res => {
@@ -157,17 +157,21 @@
 				link.click()
 			},
 			//上传
-			toUpload(id) {   
-				this.fileList.forEach(item => {
-					if(typeof(item.id) == "undefined") {
+			async toUpload(id) {   
+				for(var i = 0; i < this.fileList.length; i++) {
+					if(typeof(this.fileList[i].id) == "undefined") {
 						var formData  = new  FormData();
 						formData.append('userCode', localStorage.getItem('ms_userId'));
 						formData.append('menuCode', "workItem");
 						formData.append('voucherId', id);
-						formData.append('file', item);
-						this.$api.collaborativeOffice.uploadFile(formData).then(data => {})
+						formData.append('file', this.fileList[i]);
+						await this.$api.collaborativeOffice.uploadFile(formData).then(data => {
+							return new Promise(resolve => {
+								resolve({})
+							});
+						})
 					}
-				})
+				}
 				//删除之前上传过,现在被删除的文件
 				this.delFiles.forEach(item => {
 					this.$api.collaborativeOffice.deleteInfo({
@@ -216,8 +220,8 @@
 
 <style>
 	.formWrapper {
-		height:750px;
-		overflow-y:scroll;
+		height: 750px;
+		overflow-y: scroll;
 	}
 </style>
 <style scoped>
