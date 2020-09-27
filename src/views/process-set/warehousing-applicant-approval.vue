@@ -531,7 +531,7 @@
 					paramsData["position"] = Data;
 				}
 			         //新会议申请 情况下的提交
-		                if(this.rowWAADataObj.selectData[0].classId == 'Meetingapplication') {
+		                if(this.rowWAADataObj.selectData[0].classId == 'Meetingapplication' && (this.disFlag)) {
 		                    Object.assign(paramsData,this.$refs.child.searchForm);
 		                    paramsData['mailId'] = this.rowWAADataObj.selectData[0].foid;
 		                    this.$api.processSet.resubmitconfapplysubmit(paramsData).then(res => {
