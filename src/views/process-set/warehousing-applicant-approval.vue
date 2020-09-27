@@ -722,6 +722,7 @@
 						this.rowEmpApprTabNumDetailtype = true;
 					} else if(dataType === 'Meetingapplication') {
 						this.rowConferenceApplytype = true;
+                        this.rowConferenceApplyDataObj = currentDatd;
 					} else if(dataType === 'OptionIndex') {
 						this.rowEconomicIndicatorstype = true;
 						this.rowEconomicIndicatorsDataObj = currentDatd;
