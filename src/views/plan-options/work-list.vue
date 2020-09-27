@@ -56,7 +56,6 @@
 								userCode: localStorage.getItem('ms_userId'),
 								menuCode: "workItem"
 							}).then(val => {
-								
 								var a = JSON.parse(data.data.data)
 								a.tempId = res.data.data[i].tempId;
 								a.tableName = res.data.data[i].tableName;
