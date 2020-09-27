@@ -166,6 +166,11 @@ export default {
         },
         //附件预览
         getHtmlPreviewAttachment(row){
+            if(row.filetype ==='downLoad'){
+            }else{
+                this.$message.error("新增文件不能预览!");
+                return;
+            }
             //获取最后一个.的位置
             var index = row.fileName.lastIndexOf(".");
             //获取后缀
@@ -208,6 +213,11 @@ export default {
         },
         //下载文件
         downLoadFile(row){
+            if(row.filetype ==='downLoad'){
+            }else{
+                this.$message.error("新增文件不能下载!");
+                return;
+            }
             //拦截器放入token
             axios.interceptors.request.use(
             config => {
