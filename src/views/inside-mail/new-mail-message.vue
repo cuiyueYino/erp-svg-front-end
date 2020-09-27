@@ -93,7 +93,7 @@
                 v-loading="loading"
                 :default-checked-keys="defaultsChecked"
                 @check-change="checkChange"
-		:default-expanded-keys="treeDataObject"
+		        :default-expanded-keys="treeDataObject"
                 :props="defaultProps">
                 </el-tree>
             </div>

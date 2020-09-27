@@ -197,10 +197,6 @@ export default {
                     fileList.push(file[i]);
                 }
             }
-            console.log(filePath)
-            console.log(fileList)
-            console.log(this.enclosureConfig.haveAttachment)
-            debugger;
             if(this.enclosureConfig.haveAttachment){
                 for(let i=0; i < filePath.length; i++ ){
                     let formData = new FormData();
@@ -229,7 +225,6 @@ export default {
             let menuCode = this.enclosureConfig.menuCode;
             let voucherId = this.enclosureConfig.voucherId;
             for(let i=0; i < fileList.length; i++ ) {
-                debugger;
                 var formData = new FormData();
                 formData.append('file', fileList[i]);
                 formData.append('menuCode', menuCode);
