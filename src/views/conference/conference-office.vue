@@ -455,6 +455,13 @@
       // 新增
       add() {
         this.searchForm = {
+          fcode: "",
+          fname: "",
+          fvolume: "",
+          fsite: "",
+          fdevice: "",
+          fremark: "",
+          fstatus: "",
           fcompany: "_DefaultCompanyOId",
           fcompanyname: "福佳集团",
           fcreator: localStorage.getItem('ms_userId'),
