@@ -433,11 +433,13 @@
 				let subject = "";
 				if(this.isOa) {
 					DataF.foid = this.rowWAADataObj.foid;
-					DataF.fcreator = this.rowWAADataObj.fcreator;
+					//DataF.fcreator = this.rowWAADataObj.fcreator;
+					DataF.fcreator = localStorage.getItem("ms_userId");
 					subject = this.rowWAADataObj.fsubject;
 				} else {
 					DataF.foid = this.rowWAADataObj.selectData[0].foid;
-					DataF.fcreator = this.rowWAADataObj.selectData[0].fcreator;
+					//DataF.fcreator = this.rowWAADataObj.selectData[0].fcreator;
+					DataF.fcreator = localStorage.getItem("ms_userId");
 					subject = this.rowWAADataObj.selectData[0].fsubject;
 				}
 				subject = subject.substring(0, 4);
