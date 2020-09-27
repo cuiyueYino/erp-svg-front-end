@@ -26,7 +26,7 @@
 							<el-col :span="6">
 								<el-form-item>
 									<el-button type="primary" icon='el-icon-search' size="small" @click="toSelect">搜索</el-button>
-									<el-button type="primary" icon='el-icon-refresh'  size="small" @click="toClear">重置</el-button>
+									<el-button type="primary" icon='el-icon-refresh' size="small" @click="toClear">重置</el-button>
 								</el-form-item>
 							</el-col>
 						</el-row>
@@ -36,7 +36,7 @@
 					<el-button @click="$parent.toAdd('1')" icon="el-icon-folder-add" type="success" size="small">新增</el-button>
 					<el-button @click="toUpd()" icon="el-icon-edit-outline" type="warning" size="small">修改</el-button>
 					<el-button @click="del()" icon="el-icon-delete" type="danger" size="small">删除</el-button>
-					<el-button @click="toSee()" icon="el-icon-view" type="info"   size="small">查看</el-button>
+					<el-button @click="toSee()" icon="el-icon-view" type="info" size="small">查看</el-button>
 				</el-col>
 			</el-row>
 		</el-card>
@@ -50,7 +50,7 @@
 				<el-table-column prop="voucherTime" label="经办时间" align="center"></el-table-column>
 				<el-table-column prop="tempName" label="工作事项模板" align="center"></el-table-column>
 			</el-table>
-			<pageNation :total="currentTotal"  ref="pageNation" @pageChange="pageChange"></pageNation>
+			<pageNation :total="currentTotal" ref="pageNation" @pageChange="pageChange"></pageNation>
 		</el-card>
 	</div>
 </template>
@@ -62,8 +62,8 @@
 		},
 		props: {
 			show: String,
-			status:String,
-			company:String,
+			status: String,
+			company: String,
 		},
 		data() {
 			return {
@@ -102,7 +102,8 @@
 				},
 				currentTotal: 0,
 				tableData: [],
-				rowClick: {}
+				rowClick: {},
+				context: []
 			}
 		},
 		created() {
@@ -117,46 +118,70 @@
 			//删除
 			del() {
 				if(this.getRowClickId('del')) {
-                    this.$confirm('此操作将永久删除该单据, 是否继续?', '提示', {
-                        confirmButtonText: '确定',
-                        cancelButtonText: '取消',
-                        type: 'warning'
-                    }).then( () => {
-                            this.$api.collaborativeOffice.apiUrl("workItem/delWorkItem", {
-                                srcId: this.rowClick.srcId,
-                                tempId: this.rowClick.tempId,
-                                tableName: this.rowClick.tableName
-                            }).then(data => {
-                                if(this.dataBack(data, "删除成功")) {
-                                    this.toSelect()
-                                }
-                            })
-                    }
-                    ).catch(() => {
-                        this.$message({
-                            type: 'info',
-                            message: '已取消删除'
-                        });
-                    });
+					this.$confirm('此操作将永久删除该单据, 是否继续?', '提示', {
+						confirmButtonText: '确定',
+						cancelButtonText: '取消',
+						type: 'warning'
+					}).then(() => {
+						this.$api.collaborativeOffice.apiUrl("workItem/delWorkItem", {
+							srcId: this.rowClick.srcId,
+							tempId: this.rowClick.tempId,
+							tableName: this.rowClick.tableName
+						}).then(data => {
+							if(this.dataBack(data, "删除成功")) {
+								this.toSelect()
+							}
+						})
+					}).catch(() => {
+						this.$message({
+							type: 'info',
+							message: '已取消删除'
+						});
+					});
 				}
 			},
 			//查看
 			toSee() {
 				if(this.getRowClickId('other')) {
-					this.$api.collaborativeOffice.findDataBySrcId({
+					if(this.rowClick.status == 1) {
+						this.$message.error("未提交数据请修改");
+						return;
+					}
+					this.$api.collaborativeOffice.findIds({
 						srcId: this.rowClick.srcId,
-						tempId: this.rowClick.tempId,
-						tableName: this.rowClick.tableName
+					}).then((res) => {
+						console.log(res)
+						this.getContext(res.data.data, '1')
+					})
+				}
+			},
+			async getContext(res, state) {
+				for(var i = 0; i < res.length; i++) {
+					console.log(res)
+					await this.$api.collaborativeOffice.findDataBySrcId({
+						srcId: res[i].idInProcess,
+						tempId: res[i].tempId,
+						tableName: res[i].tableName
 					}).then(data => {
-						if(this.dataBack(data)) {
+						console.log(data)
+						return new Promise(resolve => {
 							this.$api.collaborativeOffice.findlnfosList({
 								voucherId: JSON.parse(data.data.data).id,
 								userCode: localStorage.getItem('ms_userId'),
 								menuCode: "workItem"
 							}).then(val => {
-								this.$parent.toSee(JSON.parse(data.data.data), this.rowClick.tempId, "1", val.data.data)
+								var a = JSON.parse(data.data.data)
+								a.tempId = res[i].tempId;
+								a.tableName = res[i].tableName;
+								a.files = val.data.data;
+								a.aaaId = res[i].idInProcess;
+								this.context.push(a)
+								if(i == res.length - 1) {
+									this.$parent.toSee(this.context, this.rowClick.tempId, state, val.data.data)
+								}
+								resolve({})
 							})
-						}
+						});
 					})
 				}
 			},
@@ -186,47 +211,37 @@
 			//修改
 			toUpd() {
 				if(this.getRowClickId('other')) {
-                    if(this.rowClick.status==3||this.rowClick.status==2){
-                        this.$message.error("已提交的数据不可修改");
-                        return;
-                    }
-					this.$api.collaborativeOffice.findDataBySrcId({
-						srcId: this.rowClick.srcId,
+					if(this.rowClick.status == 3 || this.rowClick.status == 2) {
+						this.$message.error("已提交的数据不可修改");
+						return;
+					}
+					var a = [{
+						idInProcess: this.rowClick.srcId,
 						tempId: this.rowClick.tempId,
 						tableName: this.rowClick.tableName
-					}).then(data => {
-						this.$api.collaborativeOffice.findlnfosList({
-							voucherId: JSON.parse(data.data.data).id,
-							userCode: localStorage.getItem('ms_userId'),
-							menuCode: "workItem"
-						}).then(val => {
-							this.$parent.toSee(JSON.parse(data.data.data), this.rowClick.tempId, "3", val.data.data)
-						})
-
-					})
+					}]
+					this.getContext(a, '3')
 				}
 			},
-
-
 			//判断是否选中ROW
 			getRowClickId(flag) {
 				if(flag == 'del') {
 					if(this.rowClick.srcId) {
 						if(this.rowClick.status == 2) {
-						this.$message.error("已经提交的数据不可以被删除");
+							this.$message.error("已经提交的数据不可以被删除");
 						} else {
 							return true
 						}
 					} else {
-							this.$message.error("请选择数据");
-						}
-					} else {
-						if(this.rowClick.srcId) {
-							return true
-						} else {
-							this.$message.error("请选择数据");
-						}
+						this.$message.error("请选择数据");
 					}
+				} else {
+					if(this.rowClick.srcId) {
+						return true
+					} else {
+						this.$message.error("请选择数据");
+					}
+				}
 			},
 			//分页改变
 			pageChange(pageIndex) {
@@ -245,8 +260,8 @@
 					toGet.beginTime = this.value1[0]
 					toGet.endTime = this.value1[1]
 				}
-				if(this.status){
-					toGet.status=this.status;
+				if(this.status) {
+					toGet.status = this.status;
 				}
 				this.$api.collaborativeOffice.findPage(toGet).then(data => {
 					this.tableData = data.data.data.rows

@@ -188,7 +188,7 @@
 						this.gestorDeptName = localStorage.getItem('ms_userDepartName')
 
 						//这面写的是固定值，后期需要改
-						this.$set(this.ruleForm, "gestor", localStorage.getItem('ms_userId'))
+						this.$set(this.ruleForm, "gestor", localStorage.getItem('ms_staffId'))
 						this.$set(this.ruleForm, "gestorDept", localStorage.getItem('ms_userDepartId'))
 						//this.$set(this.ruleForm, "gestor", "BFPID000000LSN01ZA")
 						//this.$set(this.ruleForm, "gestorDept", "BFPID000000LRS001C")
@@ -225,7 +225,7 @@
 							this.$set(this.ruleForm, "voucherTime", this.conversionTime(this.formData.wholeData.voucherTime))
 
 							//要改！！！！
-							this.$set(this.ruleForm, "gestor", localStorage.getItem('ms_userId'))
+							this.$set(this.ruleForm, "gestor", localStorage.getItem('ms_staffId'))
 							this.$set(this.ruleForm, "gestorDept", localStorage.getItem('ms_userDepartId'))
 							//this.$set(this.ruleForm, "gestor", "BFPID000000LSN01ZA")
 							//this.$set(this.ruleForm, "gestorDept", "BFPID000000LRS001C")

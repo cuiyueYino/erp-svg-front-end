@@ -182,7 +182,7 @@
 			</el-dialog>
 		</div>
 		<div v-if="showFigForm">
-			<formAndTable :files="files" dis="2" showAdd="2" :form-data="conData">
+			<formAndTable stateIndex="0" :files="files" dis="2" showAdd="2" :form-data="conData">
 				<el-card class="box-card">
 					<el-row>
 						<el-col :span="18">

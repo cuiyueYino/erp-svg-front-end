@@ -212,7 +212,7 @@
 			</el-dialog>
 		</div>
 		<div v-if="showFigForm">
-			<formAndTable :files="files" dis="2" showAdd="1" :form-data="conData">
+			<formAndTable stateIndex="0" :files="files" dis="2" showAdd="1" :form-data="conData">
 				<el-row style="text-align: right;margin-bottom: 10px;">
 					<el-button icon="el-icon-arrow-left" size="small" type="danger"   @click="showFigForm = false">返回</el-button>
 				</el-row>

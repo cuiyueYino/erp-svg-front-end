@@ -1,6 +1,6 @@
 <template>
 	<div class="formWrapper">
-		<el-card>
+		<el-card v-if="stateIndex == 0">
 			<formIcon :dis="dis" :showAdd="showAdd" :key="count" ref="mainTableChild" show="1" :form-data="formData.top">
 				<slot></slot>
 			</formIcon>
@@ -45,6 +45,10 @@
 			},
 			files: {
 				type: Array,
+				required: true
+			},
+			stateIndex: {
+				type: String,
 				required: true
 			}
 		},
@@ -220,8 +224,9 @@
 
 <style>
 	.formWrapper {
-		height: 750px;
+		max-height: 750px;
 		overflow-y: scroll;
+		margin-bottom: 20px;
 	}
 </style>
 <style scoped>

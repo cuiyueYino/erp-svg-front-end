@@ -22,7 +22,8 @@
 					<el-button type="danger" @click="$parent.toSelect()" size="small" icon="el-icon-close">返回</el-button>
 				</el-col>
 			</el-row>
-			<formAndTable :files="context.files" :dis="showSeeOrUpd" showAdd="2" ref="child" :form-data="conData"></formAndTable>
+			<!--<formAndTable :files="context.files" :dis="showSeeOrUpd" showAdd="2" ref="child" :form-data="conData"></formAndTable>-->
+			<formAndTable v-for="(item,index) in contextList" :stateIndex="index.toString()" :key="index" :files="context[index].files" :dis="showSeeOrUpd" showAdd="2" ref="child" :form-data="item"></formAndTable>
 		</el-card>
 		<!--弹出框-->
 		<el-dialog title="工作事项模板主表" top="1vh" :destroy-on-close="true" v-if="dialogVisible" center :visible.sync="dialogVisible" width="80%">
@@ -46,7 +47,7 @@
 		},
 		props: {
 			//值
-			context: Object,
+			context: Array,
 			showSeeOrUpd: String,
 			todoFlag: Boolean
 		},
@@ -77,12 +78,13 @@
 				fieldBrowseList: JSON.parse(localStorage.getItem('fieldBrowseList')),
 				//公司部门职位的合集
 				allOrganizationInfo: JSON.parse(localStorage.getItem('allOrganizationInfo')),
+				contextList:[]
 			}
 		},
 		created() {
 			//最上端公司选择
 			this.CompanyData.forEach(item => {
-				if(item.id == this.context.company) {
+				if(item.id == this.context[0].company) {
 					this.company = item
 				}
 			})
@@ -91,15 +93,15 @@
 				this.getDialogVisible()
 			})
 		},
-//		watch: {
-//			context: { 
-//				handler(newVal, oldVal) {
-//					this.getDialogVisible()
-//				},
-//				deep:  true
-//			}
-//		},
-//		 
+		//		watch: {
+		//			context: { 
+		//				handler(newVal, oldVal) {
+		//					this.getDialogVisible()
+		//				},
+		//				deep:  true
+		//			}
+		//		},
+		//		 
 		methods: {
 			//选择模板
 			selectMainTable() {
@@ -110,10 +112,10 @@
 			//提交/暂存
 			submitForm(status) {
 				//校验所有必填字段
-				if(this.$refs.child.onSubmit()) {
+				if(this.$refs.child[0].onSubmit()) {
 					//获取返回字段的合集
 					var backData = {
-						jsonStr: this.$refs.child.conData
+						jsonStr: this.$refs.child[0].conData
 					}
 					/*
 					 * 存入外层信息
@@ -142,14 +144,14 @@
 					backData.activityId = this.activityId
 					//主表Id
 					backData.tempId = this.tempId
-					backData.srcId = JSON.parse(JSON.stringify(this.$refs.child.conData.id))
+					backData.srcId = JSON.parse(JSON.stringify(this.$refs.child[0].conData.id))
 					backData.oprStatus = 2
-
 					/*
 					 * 存入里层信息
 					 * */
 					//状态
 					backData.jsonStr.status = status
+					backData.id = this.aaaId
 					//公司ID
 					backData.jsonStr.company = this.company.id
 					/*
@@ -183,7 +185,7 @@
 					backData.jsonStr = JSON.stringify(con)
 					this.$api.collaborativeOffice.updateWorkItem(backData).then(data => {
 						if(this.dataBack(data, "修改成功")) {
-							this.$refs.child.toUpload(this.context.id)
+							this.$refs.child[0].toUpload(this.context.id)
 							this.$parent.toSelect()
 						}
 					})
@@ -192,37 +194,49 @@
 				}
 			},
 			//选择模板
-			getDialogVisible() {
-				//获取模板详细数据
-				this.$api.collaborativeOffice.findById({
-					id: this.context.tempId
-				}).then(data => {
-					console.log(data)
-					this.activityId = data.data.data.workItemTemp.activityId
-					//整理传入子组件的数据top 主表  bottom 子表
-					this.tempId = this.context.tempId
-					this.tableName = data.data.data.workItemTemp.tableName
-					this.conData.top = data.data.data.workItemTemp
-					this.$set(this.conData.top, "wholeData", this.context)
-					this.conData.bottom = data.data.data.workItemTempSub
-					this.preview(this.conData.top.lines, "", 1)
-					this.conData.bottom.forEach((val, index) => {
-						this.$set(val, "wholeData", this.context)
-						this.preview(val.lines, index, 2)
+			async getDialogVisible() {
+				this.contextList = []
+				for(var i = 0; i < this.context.length; i++) {
+					//获取模板详细数据
+					await this.$api.collaborativeOffice.findById({
+						id: this.context[i].tempId
+					}).then(data => {
+						return new Promise(resolve => {
+							if(i == 0) {
+								this.activityId = data.data.data.workItemTemp.activityId
+								this.tempId = this.context[i].tempId
+								this.tableName = data.data.data.workItemTemp.tableName
+								this.aaaId = this.context[i].aaaId
+							}
+							var b = {}
+							//this.conData.top = data.data.data.workItemTemp
+							b.top = data.data.data.workItemTemp
+							//this.$set(this.conData.top, "wholeData", this.context)
+							this.$set(b.top, "wholeData", this.context[i])
+							//this.conData.bottom = data.data.data.workItemTempSub
+							b.bottom = data.data.data.workItemTempSub
+							this.preview(b.top.lines, "", 1,b)
+							b.bottom.forEach((val, index) => {
+								this.$set(val, "wholeData", this.context[i])
+								this.preview(val.lines, index, 2,b)
+							})
+							//子表模板排序
+							b.bottom.sort((a1, b1) => {
+								//return a1.orderNum - b1.orderNum
+								return Number(a1.orderNum) - Number(b1.orderNum)
+							})
+							this.contextList.push(b)
+							//关闭弹出框
+							this.dialogVisible = false
+							//显示提交按钮
+							this.showFig = true
+							resolve({})
+						})
 					})
-					//子表模板排序
-					this.conData.bottom.sort((a1, b1) => {
-						//return a1.orderNum - b1.orderNum
-						return Number(a1.orderNum) - Number(b1.orderNum)
-					})
-					//关闭弹出框
-					this.dialogVisible = false
-					//显示提交按钮
-					this.showFig = true
-				})
+				}
 			},
 			//数据整理
-			preview(rowConList, rowIndex, state) {
+			preview(rowConList, rowIndex, state,b) {
 				var cur = []
 				let obj = {};
 				//循环判断是否有添加服务的字段名
@@ -298,21 +312,21 @@
 				})
 				//如果是主表，直接存入数据，如果是子表，输入全部存入conList里，并且排序
 				if(state == 1) {
-					this.$set(this.conData.top, "rowList", cur)
+					this.$set(b.top, "rowList", cur)
 				} else {
-					if(this.conData.bottom[rowIndex].type == 2) {
-						this.$set(this.conData.bottom[rowIndex], "conList", [])
+					if(b.bottom[rowIndex].type == 2) {
+						this.$set(b.bottom[rowIndex], "conList", [])
 						cur.forEach(val1 => {
 							val1.colList.forEach(val2 => {
-								this.conData.bottom[rowIndex].conList.push(val2)
+								b.bottom[rowIndex].conList.push(val2)
 							})
 						})
-						this.conData.bottom[rowIndex].conList.sort((a1, b1) => {
+						b.bottom[rowIndex].conList.sort((a1, b1) => {
 							//return a1.orderNum - b1.orderNum
 							return Number(a1.orderNum) - Number(b1.orderNum)
 						})
 					}
-					this.conData.bottom[rowIndex].rowList = cur
+					b.bottom[rowIndex].rowList = cur
 				}
 			},
 			maketree(data, type) {

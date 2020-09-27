@@ -36,8 +36,8 @@
 			toSee(context,tempId,state,files){
 				this.context = context
 				this.dis = state
-				this.context.tempId = tempId
-				this.context.files = files
+//				this.context.tempId = tempId
+//				this.context.files = files
 				this.tabViews = "seeWorkItem"
 			}
 		}

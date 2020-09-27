@@ -19,7 +19,7 @@
 					<el-button type="danger" @click="$parent.toSelect()" size="small" icon="el-icon-close">返回</el-button>
 				</el-col>
 			</el-row>
-			<formAndTable :files="files" dis="2" showAdd="1" ref="child" :form-data="conData"></formAndTable>
+			<formAndTable stateIndex='0' :files="files" dis="2" showAdd="1" ref="child" :form-data="conData"></formAndTable>
 		</el-card>
 		<!--弹出框-->
 		<el-dialog title="工作事项模板主表" top="1vh" :destroy-on-close="true" v-if="dialogVisible" center :visible.sync="dialogVisible" width="80%">
@@ -40,10 +40,6 @@
 		components: {
 			selectMainTable,
 			formAndTable
-		},
-		props: {
-			//值
-			context: Object
 		},
 		data() {
 			return {
