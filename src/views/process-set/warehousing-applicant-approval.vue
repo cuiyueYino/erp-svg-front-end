@@ -388,7 +388,7 @@
 					FoidS = this.rowWAADataObj.selectData[0].foid;
 					fsrcoId=this.rowWAADataObj.selectData[0].fsrcoId;
 				}
-				formDataA.voucherId = FoidS;
+				formDataA.voucherId = fsrcoId;
 				formDataA.userCode =  fsrcoId;
             	formDataA.menuCode = 'WApplicantApproval';
 				this.$api.documentManagement.findInfosList(formDataA).then(response => {
@@ -933,7 +933,7 @@
 					} else {
 						formData.append('userCode', 'test');
 					}
-					formData.append('voucherId', voucherId);
+					formData.append('voucherId', fsrcoId);
 					// this.$api.documentManagement.uploadFileBatch(formData).then((response) => {
 					await this.$api.documentManagement.uploadFile(formData).then((response) => {
 						return new Promise(resolve => {
