@@ -855,10 +855,10 @@ export default {
                 this.$message.error("保存失败,请选择审核工作!");
                 return;
             }
-            if(this.checkedCities.length ==0){
+            /*if(this.checkedCities.length ==0){
                 this.$message.error("保存失败,请选择参与者-控制权限!");
                 return;
-            }
+            }*/
             if(this.decisionSelection.length ==0){
                 this.$message.error("保存失败,请选择决策类型!");
                 return;
