@@ -1255,7 +1255,7 @@ export default {
     rowConferenceApplytype(oldVal) {
       this.ShowFinancVisible = this.rowConferenceApplytype;
       let conferenceApplySelected = {
-        foid: this.rowConferenceApplyDataObj.fsrcoId,
+        foid: this.rowConferenceApplyDataObj,
         page: 1,
         size: 999,
       };
