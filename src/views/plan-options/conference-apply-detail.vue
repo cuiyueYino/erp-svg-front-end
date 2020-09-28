@@ -815,7 +815,7 @@
         :title="baseInputTitle"
         :fcompanyid="fcompanyid"
         :transStaffRelUserIds='transStaffRelUserIds'
-        :internalMansName='internalMansName'
+        internalMansName='internalMansName'
         @closeDialog="closeBaseInfo"
       ></staff-tree-search>
     </el-form>
@@ -847,7 +847,7 @@ export default {
       conferenceOfficeSearch,
     },
   props: {
-    rowConferenceApplyDataObj: Object,
+    rowConferenceApplyDataObj:String,
     rowConferenceApplytype: Boolean,
     disFlag:Boolean
   },

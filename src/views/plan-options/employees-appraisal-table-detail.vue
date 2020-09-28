@@ -167,7 +167,7 @@ import proData from '../../components/common/proData/proData';
 import DynamicTable from '../../components/common/dytable/dytable.vue';
 export default {
     props: {
-        rowEmpApprTabDetailDataObj: Object,
+        rowEmpApprTabDetailDataObj: String,
         rowEmpApprTabDetailtype:Boolean,
         disFlag:Boolean
     },

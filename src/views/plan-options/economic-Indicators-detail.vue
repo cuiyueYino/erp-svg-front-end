@@ -132,8 +132,12 @@ export default {
       })
       .then((res) => {
             if(res.data.code == 0){
-              this.formdata = res.data.data;
-              this.tableData = res.data.data.optionIndexLine;
+                if(res.data.data){
+                    this.formdata = res.data.data;
+                    if(res.data.data.optionIndexLine){
+                        this.tableData = res.data.data.optionIndexLine;
+                    }
+                }
             }
         }),error => {
           console.log(error);
@@ -146,7 +150,7 @@ export default {
             let economicIndicatorsSelected = {};
             economicIndicatorsSelected.id = this.rowEconomicIndicatorsDataObj;
             this.getEconomicIndicatorsDetail(economicIndicatorsSelected);
-            },
+        },
     }
 }
 </script>

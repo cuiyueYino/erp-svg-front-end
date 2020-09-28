@@ -203,7 +203,7 @@ import proData from '../../components/common/proData/proData';
 import DynamicTable from '../../components/common/dytable/dytable.vue';
 export default {
     props: {
-        rowEachPerEachTablePersonDataObj: Object,
+        rowEachPerEachTablePersonDataObj:String,
         rowEachPerEachTablePersontype:Boolean,
         disFlag:Boolean
     },
@@ -410,7 +410,7 @@ export default {
     watch:{
         rowEachPerEachTablePersontype(oldVal,newVal){
             this.ShowFinancVisible=this.rowEachPerEachTablePersontype;
-             let personSelected = {};
+            let personSelected = {};
             personSelected.id = this.rowEachPerEachTablePersonDataObj;
             this.getPersonDetail(personSelected);
         }
