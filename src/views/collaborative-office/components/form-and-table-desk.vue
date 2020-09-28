@@ -21,7 +21,7 @@
 
 <script>
 	//预览
-	import formIcon from '../../../views/collaborative-office/components/encapsulation/form-dynamic';
+	import formIcon from '../../../views/collaborative-office/components/encapsulation/form-dynamic-desk';
 	import tableDynamic from '../../../views/collaborative-office/components/encapsulation/table-dynamic';
 	import axios from 'axios';
 	export default {

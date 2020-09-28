@@ -59,6 +59,7 @@
 			this.$api.collaborativeOffice.findList({}).then(data => {
 				this.selectList = data.data.data
 				this.getDialogVisible()
+				console.log(this.conData)
 			})
 		},
 		//		watch: {
@@ -140,7 +141,7 @@
 					//状态
 					backData.jsonStr.status = status
 					//公司ID
-					backData.jsonStr.company = ""
+					backData.jsonStr.company = this.company.id
 					/*
 					 * 删除所有显示内容  _NameShow
 					 * */
@@ -194,6 +195,7 @@
 					this.tempId = this.context.tempId
 					this.tableName = data.data.data.workItemTemp.tableName
 					this.conData.top = data.data.data.workItemTemp
+					this.conData.top.fsubjectName = this.$parent.rowWAADataObj.selectData[0].fsubject
 					this.$set(this.conData.top, "wholeData", this.context)
 					this.conData.bottom = data.data.data.workItemTempSub
 					this.preview(this.conData.top.lines, "", 1)
@@ -244,13 +246,17 @@
 									right: right,
 									child: item.field
 								}
-								itemChild.parameterList = []
+								if(typeof(itemChild.parameterList) == "undefined"){
+									itemChild.parameterList = []
+								}
 								itemChild.parameterList.push(a)
 							}
 						}
 						//发现被添加服务的字段后，绑定双方
 						if(itemChild.parameter == item.field) {
-							item.parameterList = []
+							if(typeof(item.parameterList) == "undefined") {
+								item.parameterList = []
+							}
 							item.parameterList.push(itemChild.field)
 						}
 					})

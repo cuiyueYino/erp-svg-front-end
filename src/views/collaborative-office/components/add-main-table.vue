@@ -15,7 +15,7 @@
 				<el-col :span="6" style="text-align: right;">
 					<el-button @click="submitForm(2)" type="success" size="small" icon="el-icon-copy-document">提交</el-button>
 					<el-button @click="submitForm(1)" type="success" size="small" icon="el-icon-folder-remove">暂存</el-button>
-					<el-button @click="preview()" type="primary"   size="small" icon="el-icon-view">预览</el-button>
+					<el-button @click="preview()" type="primary" size="small" icon="el-icon-view">预览</el-button>
 					<el-button type="danger" @click="$parent.toSelect()" size="small" icon="el-icon-close">返回</el-button>
 				</el-col>
 			</el-row>
@@ -172,7 +172,7 @@
 		<div v-if="showFigForm">
 			<formAndTable stateIndex="0" :files="files" dis="2" showAdd="1" :form-data="conData">
 				<el-row style="text-align: right;margin-bottom: 10px;">
-					<el-button icon="el-icon-arrow-left" size="small" type="danger"   @click="showFigForm = false">返回</el-button>
+					<el-button icon="el-icon-arrow-left" size="small" type="danger" @click="showFigForm = false">返回</el-button>
 				</el-row>
 			</formAndTable>
 		</div>
@@ -524,7 +524,6 @@
 							let obj = {};
 							//循环判断是否有添加服务的字段名
 							this.ruleForm.lines.forEach((item, index1) => {
-								item.parameterList = []
 								//时间控件计算差值
 								this.ruleForm.lines.forEach(itemChild => {
 									//通过‘-’符号确定需要计算的两边
@@ -540,13 +539,17 @@
 												right: right,
 												child: item.field
 											}
-											itemChild.parameterList = []
+											if(typeof(itemChild.parameterList) == "undefined") {
+												itemChild.parameterList = []
+											}
 											itemChild.parameterList.push(a)
 										}
 									}
 									//发现被添加服务的字段后，绑定双方
 									if(itemChild.parameter == item.field) {
-										item.parameterList = []
+										if(typeof(item.parameterList) == "undefined") {
+											item.parameterList = []
+										}
 										item.parameterList.push(itemChild.field)
 									}
 								})

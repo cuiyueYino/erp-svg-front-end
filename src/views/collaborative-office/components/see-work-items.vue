@@ -267,13 +267,17 @@
 									right: right,
 									child: item.field
 								}
-								itemChild.parameterList = []
+								if(typeof(itemChild.parameterList) == "undefined"){
+									itemChild.parameterList = []
+								}
 								itemChild.parameterList.push(a)
 							}
 						}
 						//发现被添加服务的字段后，绑定双方
 						if(itemChild.parameter == item.field) {
-							item.parameterList = []
+							if(typeof(item.parameterList) == "undefined") {
+								item.parameterList = []
+							}
 							item.parameterList.push(itemChild.field)
 						}
 					})

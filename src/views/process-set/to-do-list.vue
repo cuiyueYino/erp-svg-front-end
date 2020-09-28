@@ -776,6 +776,7 @@ export default {
         finandata.finanrowname = "人员缺省查询方案";
         finandata.finanrowId = "QS_0056";
         finandata.nametitle = this.multipleSelection[0].fsrcCompany;
+        finandata.fsubjectName = this.multipleSelection[0].fsubject;
         let subject = selectData[0].fsubject;
         subject= subject.substring(0,4);
         if (subject.indexOf("加签") > -1) {

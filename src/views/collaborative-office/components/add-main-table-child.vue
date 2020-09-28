@@ -15,7 +15,7 @@
 				<el-col :span="6" style="text-align: right;">
 					<el-button @click="submitForm(2)" type="success" size="small" icon="el-icon-copy-document">提交</el-button>
 					<el-button @click="submitForm(1)" type="success" size="small" icon="el-icon-folder-remove">暂存</el-button>
-					<el-button @click="preview()" type="primary"   size="small" icon="el-icon-view">预览</el-button>
+					<el-button @click="preview()" type="primary" size="small" icon="el-icon-view">预览</el-button>
 					<el-button type="danger" size="small" icon="el-icon-close" @click="$parent.toSelect()">返回</el-button>
 				</el-col>
 			</el-row>
@@ -214,7 +214,7 @@
 		<div v-if="showFigForm">
 			<formAndTable stateIndex="0" :files="files" dis="2" showAdd="1" :form-data="conData">
 				<el-row style="text-align: right;margin-bottom: 10px;">
-					<el-button icon="el-icon-arrow-left" size="small" type="danger"   @click="showFigForm = false">返回</el-button>
+					<el-button icon="el-icon-arrow-left" size="small" type="danger" @click="showFigForm = false">返回</el-button>
 				</el-row>
 			</formAndTable>
 		</div>
@@ -650,13 +650,17 @@
 									right: right,
 									child: item.field
 								}
-								itemChild.parameterList = []
+								if(typeof(itemChild.parameterList) == "undefined") {
+									itemChild.parameterList = []
+								}
 								itemChild.parameterList.push(a)
 							}
 						}
 						//发现被添加服务的字段后，绑定双方
 						if(itemChild.parameter == item.field) {
-							item.parameterList = []
+							if(typeof(item.parameterList) == "undefined") {
+								item.parameterList = []
+							}
 							item.parameterList.push(itemChild.field)
 						}
 
@@ -862,13 +866,17 @@
 												right: right,
 												child: item.field
 											}
-											itemChild.parameterList = []
+											if(typeof(itemChild.parameterList) == "undefined") {
+												itemChild.parameterList = []
+											}
 											itemChild.parameterList.push(a)
 										}
 									} else {
 										//发现被添加服务的字段后，绑定双方
 										if(itemChild.parameter == item.field) {
-											item.parameterList = []
+											if(typeof(item.parameterList) == "undefined") {
+												item.parameterList = []
+											}
 											item.parameterList.push(itemChild.field)
 										}
 									}
@@ -1048,23 +1056,23 @@
 		color: red;
 		font-size: 20px;
 	}
-
+	
 	>>>.el-card {
 		margin-bottom: 10px;
 	}
-
+	
 	>>>.el-card__body {
 		padding: 10px;
 	}
-
+	
 	>>>.el-input.is-disabled .el-input__inner {
 		color: #000000 !important;
 	}
-
+	
 	>>>.el-textarea.is-disabled .el-textarea__inner {
 		color: #000000 !important;
 	}
-
+	
 	>>>.el-checkbox__input.is-disabled.is-checked .el-checkbox__inner::after {
 		border-color: #000000!important;
 	}

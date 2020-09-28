@@ -12,7 +12,7 @@
 					</el-col>
 					<el-col :span="16">
 						<el-form-item label="标题" prop="title">
-							<el-input style="width: 100%;" v-model="ruleForm.title"></el-input>
+							<el-input disabled style="width: 100%;" v-model="ruleForm.title"></el-input>
 						</el-form-item>
 					</el-col>
 				</el-row>
@@ -173,6 +173,7 @@
 			}
 		},
 		created() {
+			console.log(this.formData)
 			//判断是否有模板数据
 			if(!this.noObject(this.formData) && typeof(this.formData.rowList) != "undefined") {
 				//服务10需要特殊对待，进入页面就查询出来并赋值
@@ -203,12 +204,12 @@
 						//整理主表数据
 						this.get_NameShow(1)
 						//这地方应该是动态的经办人和部门，后期要改
-						this.gestorName = localStorage.getItem('ms_username')
-						this.gestorDeptName = localStorage.getItem('ms_userDepartName')
+						this.gestorName = this.formData.wholeData.gestor
+						this.gestorDeptName = this.formData.wholeData.gestorDept
 						//展示单据编号，标题，经办时间
 						if(typeof(this.formData.wholeData) != "undefined") {
 							this.$set(this.ruleForm, "voucherId", this.formData.wholeData.voucherId)
-							this.$set(this.ruleForm, "title", this.formData.wholeData.title)
+							this.$set(this.ruleForm, "title", this.formData.fsubjectName)
 							this.$set(this.ruleForm, "voucherTime", this.conversionTime(this.formData.wholeData.voucherTime))
 						}
 					} else if(this.dis == 3) {
@@ -221,7 +222,8 @@
 						//展示单据编号，标题，经办时间
 						if(typeof(this.formData.wholeData) != "undefined") {
 							this.$set(this.ruleForm, "voucherId", this.formData.wholeData.voucherId)
-							this.$set(this.ruleForm, "title", this.formData.wholeData.title)
+							console.log(this.formData)
+							this.$set(this.ruleForm, "title", this.formData.fsubjectName)
 							this.$set(this.ruleForm, "voucherTime", this.conversionTime(this.formData.wholeData.voucherTime))
 
 							//要改！！！！
@@ -604,8 +606,6 @@
 			},
 			//计算时间差值
 			getDate(row) {
-				console.log(row)
-				console.log(this.formData)
 				//change写在所有的时间控件中，首先判断当前点击控件是否需要计算差值，且双方必须都有值
 				if(row.parameterList.length != 0) {
 					//同上（太长了，不想写一起，屏幕太小显示不下）noNull是非空的公共方法，详见base.js
