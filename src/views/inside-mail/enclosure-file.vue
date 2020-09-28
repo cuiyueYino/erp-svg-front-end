@@ -66,7 +66,7 @@ export default {
             selectRow:[],
             rowNMMtype:false,
             rowNMMDataObj:{},
-
+            rowFlag:0,
             isShowButton:this.enclosureConfig.isShowButton,
             authStatus:this.enclosureConfig.authStatus,
             isDownload:this.enclosureConfig.isDownload,
@@ -165,11 +165,12 @@ export default {
 
             let tableLen = this.enclosureTableData.length;
             let localFile = event.raw; //选中的File对象
+            localFile.rowFlag = this.rowFlag;
             this.enclosureTableData.splice(tableLen - 1, 1);
             this.enclosureTableData.push(localFile);
             console.log(this.enclosureTableData)
             console.log(localFile)
-
+            this.rowFlag++;
             //选中的文件传给父组件
 
             // this.$emit('enclosureFile', event.raw);
@@ -285,14 +286,12 @@ export default {
                 let val = this.selectRow;
                 val.forEach((val) => {
                     this.enclosureTableData.forEach((v, i) => {
-                        if (val.rowNum === v.rowNum) {
+                        if (val.rowFlag === v.rowFlag) {
                             // i 为选中的索引
                             this.enclosureTableData.splice(i, 1);
                             let ids = '';
                             ids = ids + '\'' + v.id +'\','
-                            console.log(ids+"+++"+i);
-                            this.$api.insideMail.deleteInfoByIds(ids).then((response) => {
-                            });
+                            this.$api.insideMail.deleteInfoByIds(ids).then((response) => {});
                         }
                     })
                 })
