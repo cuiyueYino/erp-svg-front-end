@@ -537,70 +537,70 @@
 				if(Data) {
 					paramsData["position"] = Data;
 				}
-			         //新会议申请 情况下的提交
-		                if(this.rowWAADataObj.selectData[0].classId == 'Meetingapplication' && (this.disFlag)) {
-		                    Object.assign(paramsData,this.$refs.child.searchForm);
-		                    paramsData['mailId'] = this.rowWAADataObj.selectData[0].foid;
-		                    this.$api.processSet.resubmitconfapplysubmit(paramsData).then(res => {
-		                        if(res.data) {
-		                            if(res.data.code == 0) {
-		                                if(this.uploadFiles != null) {
-		                                    this.uploadFile("WApplicantApproval", FoidS,fsrcoId);
-		                                }
-		                                if(this.delFileFoids != null) {
-		                                    this.delFile();
-		                                }
-		                                this.$message.success('保存成功');
-		                                loading.close();
-		                                this.ShowFinancVisible  =  false;
-		                                this.participator = "";
-		                                this.$emit('changeShow', false);
-		                                this.reload();
-		                            } else {
-		                                loading.close();
-		                                this.participator = "";
-		                                this.$message.error(res.data.msg);
-		                            }
-		                        } else {
-		                            loading.close();
-		                            this.participator = "";
-		                            this.$message.error('提交失败!');
-		                        }
-		                    }, error => {
-		                        console.log(error)
-		                    })
-		                } else {
-		                    //其余情况下的提交
-				this.$api.processSet.addWfsubmit(paramsData).then(res => {
-					if(res.data) {
-						if(res.data.code == 0) {
-							if(this.uploadFiles != null) {
-								this.uploadFile("WApplicantApproval", FoidS,fsrcoId);
+				//新会议申请 情况下的提交
+				if(this.rowWAADataObj.selectData[0].classId == 'Meetingapplication' && (this.disFlag)) {
+					Object.assign(paramsData,this.$refs.child.searchForm);
+					paramsData['mailId'] = this.rowWAADataObj.selectData[0].foid;
+					this.$api.processSet.resubmitconfapplysubmit(paramsData).then(res => {
+						if(res.data) {
+							if(res.data.code == 0) {
+								if(this.uploadFiles != null) {
+									this.uploadFile("WApplicantApproval", FoidS,fsrcoId);
+								}
+								if(this.delFileFoids != null) {
+									this.delFile();
+								}
+								this.$message.success('保存成功');
+								loading.close();
+								this.ShowFinancVisible  =  false;
+								this.participator = "";
+								this.$emit('changeShow', false);
+								this.reload();
+							} else {
+								loading.close();
+								this.participator = "";
+								this.$message.error(res.data.msg);
 							}
-							if(this.delFileFoids != null) {
-								this.delFile();
-							}
-							this.$message.success('保存成功');
-							loading.close();
-							this.ShowFinancVisible  =  false;
-							this.participator = "";
-							this.$emit('changeShow', false);
-							this.reload();
 						} else {
 							loading.close();
 							this.participator = "";
-							this.$message.error(res.data.msg);
+							this.$message.error('提交失败!');
 						}
-					} else {
-						loading.close();
-						this.participator = "";
-						this.$message.error('提交失败!');
-					}
-				}, error => {
-					// loading.close();
-					console.log(error)
-				});
-			}
+					}, error => {
+						console.log(error)
+					})
+				} else {
+		            //其余情况下的提交
+					this.$api.processSet.addWfsubmit(paramsData).then(res => {
+						if(res.data) {
+							if(res.data.code == 0) {
+								if(this.uploadFiles != null) {
+									this.uploadFile("WApplicantApproval", FoidS,fsrcoId);
+								}
+								if(this.delFileFoids != null) {
+									this.delFile();
+								}
+								this.$message.success('保存成功');
+								loading.close();
+								this.ShowFinancVisible  =  false;
+								this.participator = "";
+								this.$emit('changeShow', false);
+								this.reload();
+							} else {
+								loading.close();
+								this.participator = "";
+								this.$message.error(res.data.msg);
+							}
+						} else {
+							loading.close();
+							this.participator = "";
+							this.$message.error('提交失败!');
+						}
+					}, error => {
+						// loading.close();
+						console.log(error)
+					});
+				}
 			},
 			//选择岗位关闭
 			jobVisibleGW() {

@@ -272,6 +272,12 @@ export default {
         },
         // 增加附件行
         addfileRow () {
+            if(this.rowNum >1){
+               if(!this.enclosuretableData[this.rowNum-2].fileName){
+                   this.$message.error("请先添加附件");
+                   return;
+               }
+            }
             var list = {
             rowNum:this.rowNum,
             filetype:'new',
@@ -302,6 +308,8 @@ export default {
                             }else{
                                 // i 为选中的索引
                                 this.enclosuretableData.splice(i, 1);
+                                let rowNum=this.rowNum;
+                                this.rowNum = rowNum-1;
                                 this.$emit('enclosureFile', v);
                             }
                             // i 为选中的索引
