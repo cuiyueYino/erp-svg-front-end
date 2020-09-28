@@ -233,6 +233,7 @@
 				formCode: "",
 				filterText: '',
 				treeData: [],
+				treeSelect:{},
 				defaultProps: {
 					children: 'children',
 					label: 'name'
@@ -515,12 +516,7 @@
 				}
 			},
 			handleNodeClick(data) {
-				this.form.fstaffName = data.fname;
-				if(this.form.fname === ""){	//没有填写名称时，可以自动带出
-					this.form.fname = data.fname;
-				}
-				this.form.departmentname = data.fdepartmentName;
-				this.form.fstaffId = data.foid;
+				this.treeSelect=data;
 			},
 			//多选
 			onSelectionChange(val) {
@@ -597,7 +593,20 @@
 				this.tableData2 = [];
 			},
 			sureDepart() {
-				this.userVisible = false
+				let TreeData=this.treeSelect;
+				if(TreeData.fdepartmentName){
+					this.form.fstaffName = TreeData.fname;
+					if(this.form.fname === ""){	//没有填写名称时，可以自动带出
+						this.form.fname = TreeData.fname;
+					}
+					this.form.departmentname = TreeData.fdepartmentName;
+					this.form.fstaffId = TreeData.foid;
+					this.userVisible = false
+				}else{
+					this.treeSelect={};
+					this.$message.error("使用者请选人员！");
+					return;
+				}
 			},
 			addPeopleData(data) {
 				this.$api.jobUserManagement.addPeopleData(data).then(res => {
@@ -656,6 +665,7 @@
 			// 人员-树状图
 			addDepart() {
 				this.loading = true;
+				this.treeSelect={};
 				this.userVisible = true;
 				let data = {
 					"id": this.form.fcompanyoid
@@ -784,6 +794,7 @@
 								};
 						}
 					} else {
+						this.$message.error("请填写所有必填项!");
 						console.log("error submit!!");
 						return false;
 					}
