@@ -19,19 +19,19 @@
                 <el-option v-for="item in options" :key="item.id" :label="item.name" :value="item.id"></el-option>
               </el-select>
             </el-form-item>
-<!--            <el-form-item-->
-<!--              label="公司："-->
-<!--              :label-width="formLabelWidth"-->
-<!--              style="position:relative;"-->
-<!--              prop="fcompany"-->
-<!--            >-->
-<!--              <el-input-->
-<!--                v-model="searchForm.fcompanyname"-->
-<!--                autocomplete="off"-->
-<!--                size="small"-->
-<!--                @focus="baseInputTable('1','组织机构查询')"-->
-<!--              ></el-input>-->
-<!--            </el-form-item>-->
+            <!-- <el-form-item-->
+            <!--label="公司："-->
+            <!--:label-width="formLabelWidth"-->
+            <!--style="position:relative;"-->
+            <!--  prop="fcompany"-->
+            <!-- >-->
+            <!--<el-input-->
+            <!-- v-model="searchForm.fcompanyname"-->
+            <!--autocomplete="off"-->
+            <!--size="small"-->
+            <!--@focus="baseInputTable('1','组织机构查询')"-->
+            <!-- ></el-input>-->
+            <!-- </el-form-item>-->
           </el-col>
         </el-row>
         <el-row :gutter="24">
@@ -220,7 +220,7 @@
               style="padding:7px 8px"
               @click="baseInputTable('4','用户查询')"
             ></el-button>
-	    <el-button
+	          <el-button
               type="primary"
               size="mini"
               icon="el-icon-close"
@@ -721,7 +721,8 @@
           fcpmcount: [
             {required: true, message: "请输入参会人数（人）", trigger: "blur"},
             {
-							pattern: "^[0-9]*[1-9][0-9]*$",
+              pattern: '^[0-9]*[1-9][0-9]*$',
+              type:"number",
               message: '请输入正整数',
               trigger: "blur"
 						}
@@ -854,6 +855,7 @@
       },
       // 提交
       submitConfApply(formName) {
+        console.log(this.$refs)
         this.$refs[formName].validate((valid) => {
           if (valid) {
             this.check();
