@@ -633,6 +633,7 @@
                 this.searchForm = resData;
                 this.searchForm.internalMansName = internalMansName;
                 this.searchForm.internalMans = internalMans;
+                this.searchForm.fcpmcount = resData.fcpmcount+'';//vue 提交验证正则pattern 数字型报错
                 this.$set(this.searchForm,"fcompany",resData.fcompanyid)
                 for(var i=0;i<res.data.data.rows[0].internalmans.length;i++) {
                   this.transStaffRelUserIds.push(res.data.data.rows[0].internalmans[i].foid);
@@ -722,7 +723,6 @@
             {required: true, message: "请输入参会人数（人）", trigger: "blur"},
             {
               pattern: '^[0-9]*[1-9][0-9]*$',
-              type:"number",
               message: '请输入正整数',
               trigger: "blur"
 						}
