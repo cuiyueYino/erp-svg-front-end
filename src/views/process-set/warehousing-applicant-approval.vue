@@ -458,7 +458,11 @@
 								if(res.data.data) {
 									//手工指定下一节点
 									if(res.data.data.fmntnextjoin === 1) {
-										this.baseInputTable("手工指定下一节点");
+										if(this.formdata.fresult===2){
+											this.submitMethod('', '');
+										}else{
+											this.baseInputTable("手工指定下一节点");
+										}
 									} else {
 										//正常提交
 										this.submitMethod('', '');
