@@ -186,12 +186,14 @@
 				var state = true
 				if(this.showChild == 1 && this.dis == 3) {
 					if(!this.$refs.mainTableChild.onSubmit()) {
+						console.log(1)
 						state = false
 					}
 				}
 				if(typeof(this.$refs.refCon) != "undefined") {
 					this.$refs.refCon.forEach(item => {
 						if(!item.onSubmit()) {
+							console.log(item)
 							state = false
 						}
 					})
@@ -212,7 +214,11 @@
 						this.$refs.refCon.forEach(item => {
 							//form表单样式的子表
 							if(item.formData.type == 1) {
-								item.ruleForm.oprStatus = 1
+								if(this.dis == 3){
+									item.ruleForm.oprStatus = 2
+								}else{
+									item.ruleForm.oprStatus = 1
+								}
 								//格式统一,用子表ID做为数组的名称,表单样式数组只有一条数据
 								this.$set(this.conData, item.formData.id, [])
 								this.conData[item.formData.id].push(item.ruleForm)
