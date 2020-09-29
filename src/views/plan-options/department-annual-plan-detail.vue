@@ -191,24 +191,8 @@
                         </el-table-column>
                     </el-table>
                 </el-tab-pane>
-                <el-tab-pane label="附件" name="fourth">
-                     <el-table :data="attachData" border>
-                        <el-table-column
-                            prop="index"
-                            label="序号"
-                            >
-                        </el-table-column>
-                        <el-table-column
-                            prop="name"
-                            label="名称"
-                            >
-                        </el-table-column>
-                        <el-table-column
-                            prop="caozuo"
-                            label="操作"
-                            >
-                        </el-table-column>
-                    </el-table>
+                <el-tab-pane label="附件" name="second">
+                    <enclosureFile ref="child" :enclosureConfig="enclosureConfig"/>
                 </el-tab-pane>
             </el-tabs> 
         </el-form>
@@ -218,6 +202,7 @@
 <script>
 import proData from '../../components/common/proData/proData';
 import DynamicTable from '../../components/common/dytable/dytable.vue';
+import enclosureFile from '../inside-mail/enclosure-file.vue';
 export default {
     props: {
         rowDepartAnnPlanDetDataObj: "",
@@ -226,9 +211,20 @@ export default {
     },
     components: {
         DynamicTable,
+        enclosureFile
     },
     data(){
         return{
+             // 附件
+            enclosureConfig:{
+                voucherId: '',
+                isShowButton: false,
+                menuCode: 'insideMail',
+                isDownload:true,
+                isSearch:false,
+                haveAttachment:false,
+                authStatus:false
+            },
             formLabelWidth: "120px",
             ShowFinancVisible:false,
             disabled:false,
@@ -278,6 +274,7 @@ export default {
                     } else {
                         tableObj[i].periodicityMonth = "否"
                     }
+                    this.enclosureConfig.voucherId = JSON.parse(data).id;
                     // tableObj[i]['num'] = i + 1;
                 //     switch(taskTypeParams) {
                 //         case 1: 
