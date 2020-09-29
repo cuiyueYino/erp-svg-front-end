@@ -59,10 +59,10 @@
 						</el-row>
 						<el-tabs v-model="atctiveName" @tab-click="handleClick">
 							<el-tab-pane label="审批意见" name="first" v-if="!seeFlag && (rowFstatus == 4?false:true)">
-								<el-row>
+								<el-row >
 									<el-col :span="12">
 										<!-- prop="code" -->
-										<el-form-item label="决策类型">
+										<el-form-item label="决策类型" v-if="!fresultFlag">
 											<el-radio-group v-model="formdata.fresult">
 
 												<el-radio :label="1" v-if="fresultArray.indexOf('1') !=-1">{{fresultObject['1']}}</el-radio>
@@ -235,6 +235,7 @@
 				delFileFoids: [],
 				rowFstatus: 0,
 				rowUTStype: false,
+				fresultFlag: false,
 				rowCOOTasktype: false,
 				rowComPanDetaitype: false,
 				financingEFListtype: false,
@@ -539,6 +540,12 @@
 				paramsData["processCode"] = "schedule";
 				paramsData["twfbizmailReqVo"] = twfbizmailReqVoObj;
 				let twfauditObj = {};
+				//加签的直接默认同意
+				if(this.fresultFlag){
+					twfauditObj["fresult"] = 1;
+				}else{
+					twfauditObj["fresult"] = this.formdata.fresult;
+				}
 				twfauditObj["fresult"] = this.formdata.fresult;
 				twfauditObj["fopinion"] = this.formdata.remark;
 				paramsData["twfaudit"] = twfauditObj;
@@ -984,6 +991,11 @@
 						this.rowDataprocessOid = rowData;
 						formDataA.oid = finandata[0].foid;
 						formDataA.userId = localStorage.getItem("ms_userId");
+						let subject =finandata[0].fsubject;
+          				subject= subject.substring(0,2);
+						if (subject.indexOf("加签") > -1) {
+							this.fresultFlag=true;
+						}
 					} else {
 						let rowData = {};
 						rowData.finanrowname = this.rowWAADataObj.fsrcCompany + "/" + this.rowWAADataObj.factivityName;
@@ -993,6 +1005,11 @@
 						formDataA.oid = this.rowWAADataObj.fsrcoId;
 						formDataA.userId = localStorage.getItem("ms_userId");
 						this.title = "入库申请申请人审批";
+						let subject =this.rowWAADataObj.fsubject;
+          				subject= subject.substring(0,2);
+						if (subject.indexOf("加签") > -1) {
+							this.fresultFlag=true;
+						}
 					}
 					this.$api.processSet.getunhandledTask(formDataA).then(response => {
 						let responsevalue = response;
