@@ -663,6 +663,7 @@ export default {
             this.$message.error('当前邮件是正在加签邮件，不能进行委托!');
             return;
           }else{
+            subject= subject.substring(0,2);
             if (subject.indexOf("加签") > -1) {
               this.$message.error('当前邮件是加签邮件，不能进行委托!');
               return;
@@ -673,6 +674,7 @@ export default {
           let subject1 =selectData[0].fsubject;
           subject1= subject1.substring(0,4);
           if (subject1.indexOf("正在加签") > -1) {}else{
+            subject1= subject1.substring(0,2);
             if (subject1.indexOf("加签") > -1) {
               this.$message.error('当前邮件是加签邮件，不能进行加签!');
               return;
