@@ -264,7 +264,7 @@ export default {
             this.enclosuretableData.splice(tableLen - 1, 1);
             this.enclosuretableData.push(tval);
             //选中的文件传给父组件
-            this.$emit('enclosureFile', event.raw);
+            this.$emit('enclosureFile', event.raw,'add');
         },
         // 获取附件表格选中时的数据
         selectfileRow (val) {
@@ -310,7 +310,7 @@ export default {
                                 this.enclosuretableData.splice(i, 1);
                                 let rowNum=this.rowNum;
                                 this.rowNum = rowNum-1;
-                                this.$emit('enclosureFile', v);
+                                this.$emit('enclosureFile', v,'remove');
                             }
                             // i 为选中的索引
                             //this.enclosuretableData.splice(i, 1);

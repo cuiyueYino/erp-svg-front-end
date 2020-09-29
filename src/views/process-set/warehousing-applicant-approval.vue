@@ -333,12 +333,23 @@
 				//this.reload();
 				this.$emit('changeShow', false);
 			},
-			enclosureFile: function(event) {
+			enclosureFile: function(event,type) {
 				//子组件传来的event中，fileFoid存在，代表要删除该文件。否则，为上传该文件
-				if(event.fileFoid) {
+				/*if(event.fileFoid) {
 					this.delFileFoids.push(event.fileFoid);
 				} else {
 					this.uploadFiles.push(event);
+				}*/
+				
+				if(type=='add'){
+					this.uploadFiles.push(event);
+				}else{
+					for (let i = 0; i < this.uploadFiles.length; i++) {
+						let val = this.uploadFiles[i];
+						if(event.fileName==val.name && event.rowNum==i+1){
+							this.uploadFiles.splice(i, 1);
+						}
+					}
 				}
 			},
 			//删除附件

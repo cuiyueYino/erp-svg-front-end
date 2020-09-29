@@ -634,6 +634,7 @@
                 this.searchForm.internalMansName = internalMansName;
                 this.searchForm.internalMans = internalMans;
                 this.searchForm.fcpmcount = resData.fcpmcount+'';//vue 提交验证正则pattern 数字型报错
+                console.log(resData)
                 this.$set(this.searchForm,"fcompany",resData.fcompanyid)
                 for(var i=0;i<res.data.data.rows[0].internalmans.length;i++) {
                   this.transStaffRelUserIds.push(res.data.data.rows[0].internalmans[i].foid);
