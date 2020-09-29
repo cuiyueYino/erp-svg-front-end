@@ -152,6 +152,11 @@
 						if(typeof(con[key]) == "object") {
 							//循环删除里层的显示数据
 							con[key].forEach(item => {
+								if(typeof(item.id) == "undefined"){
+									item.oprStatus = 1
+								}else{
+									item.oprStatus = 2
+								}
 								//后台要的子表ID
 								this.$set(item, "tempSubId", key)
 								for(var keyItem in item) {
