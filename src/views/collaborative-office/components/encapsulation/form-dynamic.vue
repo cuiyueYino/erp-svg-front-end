@@ -38,7 +38,7 @@
 			<el-row v-for="(val, index) in formData.rowList" :key="index">
 				<el-col v-for="(item,indexOther) in val.colList" :key="indexOther" :span="item.lengthType * 8">
 					<div v-if="item.show">
-						<el-form-item v-if="item.fieldTypeName == 'browseBox'" :label="item.fieldName" :prop="item.field+'_NameShow'">
+						<el-form-item v-if="item.fieldTypeName == 'browseBox'" :label="item.fieldName" :prop="item.field+'_NameShow'" class="form-label-wrapper">
 							<!-- 浏览框 -->
 							<a @click="toNew(ruleForm[item.field])" v-if="dis == '1' && item.toSelect.id == '7'" href="javascript:void(0)">{{ruleForm[item.field+'_NameShow']}}</a>
 							<el-input v-else style="width: 100%;" v-model="ruleForm[item.field+'_NameShow']" disabled>
@@ -845,12 +845,14 @@
 	};
 </script>
 
-<style scoped>
+<style>
 	.treeDivClass {
 		height: 300px;
 		overflow: auto;
 	}
-	
+	.form-label-wrapper .el-form-item__label {
+		word-break: break-all;
+	}
 	>>>.el-dialog__body {
 		border-bottom: 1px solid #dcdfe6;
 		min-height: calc(100vh - 300px);
