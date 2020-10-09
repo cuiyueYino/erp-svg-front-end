@@ -239,6 +239,7 @@ export default {
         data: {
             handler (obj) {
                 if(obj.name === "Line"){
+                    console.log(obj)
                     if(!obj.oid && (obj.isSaveFlag==undefined)){
                         this.formData={};
                         this.formData.otherwise ="0";
@@ -256,9 +257,17 @@ export default {
                         this.formData.fremark = this.editData.lineremark;
                         this.formData.name = this.editData.displayName;
                         //条件判断
-                        if(this.editData.lineexpression && !this.editData.service){
-                            this.baseActiveName ='2';
-                            this.formData.conditional = this.editData.lineexpression?this.editData.lineexpression:'';
+                        if(this.editData.lineexpression){
+                            if(!this.editData.service){
+                                this.baseActiveName ='2';
+                                this.formData.conditional = this.editData.lineexpression?this.editData.lineexpression:'';
+                            }else if(this.editData.service.name==''){
+                                this.baseActiveName ='2';
+                                this.formData.conditional = this.editData.lineexpression?this.editData.lineexpression:'';
+                            }else{
+                                this.baseActiveName ='4';
+                                this.formData.conditional = '';
+                            }
                         }else if(this.editData.lineotherwise =="1"){
                             this.baseActiveName ='3';
                             this.formData.conditional = '';
