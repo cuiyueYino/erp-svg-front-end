@@ -1,6 +1,6 @@
 <template>
     <div>
-        <el-dialog title="工作流监控"  
+        <el-dialog title="消息回复"  
             :visible.sync="ShowFinancVisible" 
             :append-to-body="true" 
             v-if="ShowFinancVisible" 
@@ -128,7 +128,7 @@ export default {
             let SaveRes= await this.saveNewAndEdit();
             if(SaveRes){
                 if(SaveRes.data.data){
-                    if(this.uploadFiles != null){
+                    if(this.uploadFiles && this.uploadFiles.length >0){
                         let FileData= await this.uploadSectionFile(SaveRes.data.data);
                         if(FileData){
                             if(FileData.data.data){
