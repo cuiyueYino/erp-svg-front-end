@@ -984,6 +984,7 @@
 					if(!this.isOa) {
 						this.title = this.rowWAADataObj.nametitle;
 						let finandata = this.rowWAADataObj.selectData;
+						this.rowWAADataObj.fsrcoId=finandata[0].fsrcoId;
 						let rowData = {};
 						rowData.finanrowname = finandata[0].fsrcCompany + "/" + finandata[0].factivityName;
 						rowData.finanrowId = finandata[0].foid;
