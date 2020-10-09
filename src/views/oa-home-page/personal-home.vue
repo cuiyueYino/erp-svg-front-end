@@ -245,6 +245,7 @@ export default {
         quillEditor,
         enclosurefile
     },
+    inject: ["reload"],
     data() {
         return{
             labelPosition: 'left',
@@ -346,6 +347,7 @@ export default {
         },
         showORhideForWAA(data){
             if(data == false){
+                this.reload();
                 this.rowWAAtype = false
             }else{
                 this.rowWAAtype = true
@@ -414,6 +416,9 @@ export default {
                 finandata.trust = false;
                 finandata.NewOrEditFlag = 'SHOW';
             }
+            let selectData=[];
+            selectData.push(val);
+            finandata.selectData=selectData;
             this.rowWAADataObj = finandata;
             this.rowWAAtype=true;
             let localKey = localStorage.getItem('ms_userId') + "_" + val.foid;
