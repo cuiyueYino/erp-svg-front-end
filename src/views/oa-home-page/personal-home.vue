@@ -356,7 +356,8 @@ export default {
             //finandata.selectData = val;
             finandata.finanrowname="人员缺省查询方案";
             finandata.finanrowId="QS_0056";
-            finandata.nametitle = "入库申请申请人审批";
+            finandata.nametitle = val.fsrcCompany;
+            finandata.fsubjectName = val.fsubject;
             finandata.foid = val.foid;
             this.functionType = val.classId;
             this.isOa = true;

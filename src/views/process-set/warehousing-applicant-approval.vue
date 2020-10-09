@@ -1004,7 +1004,7 @@
 						this.rowDataprocessOid = rowData;
 						formDataA.oid = this.rowWAADataObj.fsrcoId;
 						formDataA.userId = localStorage.getItem("ms_userId");
-						this.title = "入库申请申请人审批";
+						this.title = this.rowWAADataObj.nametitle;
 						let subject =this.rowWAADataObj.fsubject;
           				subject= subject.substring(0,2);
 						if (subject.indexOf("加签") > -1) {
