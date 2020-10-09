@@ -52,14 +52,17 @@
 					}).then(data => {
 						return new Promise(resolve => {
 							this.$api.collaborativeOffice.findlnfosList({
-								voucherId: JSON.parse(data.data.data).id,
-								userCode: localStorage.getItem('ms_userId'),
+								//voucherId: JSON.parse(data.data.data).id,
+								//userCode: localStorage.getItem('ms_userId'),
+								voucherId: this.rowWAADataObj.fsrcoId,
+								userCode: JSON.parse(data.data.data).id,
 								menuCode: "workItem"
 							}).then(val => {
 								var a = JSON.parse(data.data.data)
 								a.tempId = res.data.data[i].tempId;
 								a.tableName = res.data.data[i].tableName;
 								a.files = val.data.data;
+								a.fsrcoId=this.rowWAADataObj.fsrcoId;
 								this.context.push(a)
 								resolve({})
 							})

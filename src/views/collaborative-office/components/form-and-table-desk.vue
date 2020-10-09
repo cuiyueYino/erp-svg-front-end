@@ -162,13 +162,15 @@
 				link.click()
 			},
 			//上传
-			toUpload(id) {   
+			toUpload(id,fid) {   
 				this.fileList.forEach(item => {
 					if(typeof(item.id) == "undefined") {
 						var formData  = new  FormData();
-						formData.append('userCode', localStorage.getItem('ms_userId'));
+						//formData.append('userCode', localStorage.getItem('ms_userId'));
+						formData.append('userCode', id);
 						formData.append('menuCode', "workItem");
-						formData.append('voucherId', id);
+						//formData.append('voucherId', id);
+						formData.append('voucherId', fid);
 						formData.append('file', item);
 						this.$api.collaborativeOffice.uploadFile(formData).then(data => {})
 					}
@@ -204,7 +206,7 @@
 						this.conData = this.$refs.mainTableChild.ruleForm
 					} else {
 						this.conData.id = this.formData.top.wholeData.id
-//						this.conData.creator = localStorage.getItem("ms_userId")
+						//this.conData.creator = localStorage.getItem("ms_userId")
 						this.conData.gestor = localStorage.getItem('ms_staffId')
 						this.conData.gestorDept = localStorage.getItem('ms_userDepartId')
 						this.conData.oprStatus = 2
