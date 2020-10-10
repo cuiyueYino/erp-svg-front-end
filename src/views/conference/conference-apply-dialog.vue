@@ -860,6 +860,10 @@
         this.$refs[formName].validate((valid) => {
           if (valid) {
             this.check();
+            //提交前起始结束日期校验
+            if( 1 == this.dateCheck() ){
+              return;
+            }
             this.$api.confMangement
               .submitConfApply(this.searchForm)
               .then((res) => {
@@ -910,6 +914,25 @@
             break;
           default:
             break;
+        }
+      },
+      // 起始结束时间校验
+      dateCheck() {
+        var fstartdate = this.searchForm.fstartdate;//选择的起始时间
+        var startdatestr = fstartdate.toString();        // toString
+        startdatestr = startdatestr.replace('/-/g', '/');         //去空格字符等
+        var startTime = new Date(startdatestr).getTime();  //装date
+
+        var fenddate = this.searchForm.fenddate;//选择的结束时间
+        var enddatestr = fenddate.toString();        // toString
+        enddatestr = enddatestr.replace('/-/g', '/');         //去空格字符等
+        var endTime = new Date(enddatestr).getTime();  //装date
+        //    进行比较
+        if ( startTime > endTime) {
+          this.$message.error('起始时间应小于结束时间');
+          return 1;
+        } else {
+          return 0;
         }
       },
       // 打开组织架构弹窗
