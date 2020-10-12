@@ -67,7 +67,7 @@
 		</el-form>
 		<!--弹出框-->
 		<div v-if="dialogVisible">
-			<erpDialog :title="titleShow" erpDialogwidth="false" :dialogShow="dialogVisible">
+			<erpDialog :title="titleShow" v-if="dialogVisible" erpDialogwidth="false" :dialogShow="dialogVisible">
 				<formIconComponents ref="child" :showFig="showCon" :dataCon="dataCon"></formIconComponents>
 				<div slot="footer">
 					<el-button type="success" icon='el-icon-check' size="small" @click="getDialogVisible">确定</el-button>
