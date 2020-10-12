@@ -308,6 +308,22 @@
 				})
 			},
 			saveWLata(data){
+				//单据推单据提交附件
+				let FoidS = '';
+				let fsrcoId= '';
+				if(this.isOa) {
+					FoidS = this.rowWAADataObj.foid;
+					fsrcoId=this.rowWAADataObj.fsrcoId;
+				} else {
+					FoidS = this.rowWAADataObj.selectData[0].foid;
+					fsrcoId=this.rowWAADataObj.selectData[0].fsrcoId;
+				}
+				if(this.uploadFiles != null) {
+					this.uploadFile("WApplicantApproval", FoidS,fsrcoId);
+				}
+				if(this.delFileFoids != null) {
+					this.delFile();
+				}
 				this.$emit('changeShow', false);
 			},
 			//关闭当前dialog时给父组件传值
