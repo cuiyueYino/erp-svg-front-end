@@ -5,7 +5,7 @@
 -->
 
 <template>
-	<el-dialog :title="title?title:'工作事项模板主表'" top="1vh" destroy-on-close="true" append-to-body="true" center :visible.sync="dialogVisible" width="80%">
+	<el-dialog :title="title?title:'工作事项模板主表'" top="1vh" :destroy-on-close="true" :append-to-body="true" center :visible.sync="dialogVisible" width="80%">
 		<selectWorkItems show="1" :status="status" ref="childMain"></selectWorkItems>
 		<div slot="footer" class="dialog-footer">
 			<el-button type="success" icon='el-icon-check' size="small" @click="getDialogVisible">确定</el-button>
