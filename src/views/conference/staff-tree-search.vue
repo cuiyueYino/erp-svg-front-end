@@ -38,12 +38,12 @@
           <el-tree
             :data="treeData"
             ref="tree"
-            node-key="foid"
+            node-key="fcode"
             :props="defaultProps"
             :check-strictly="checkStrictly"
             show-checkbox
             check-on-click-node
-            @check-change="handleNodeClick"
+            @change="handleNodeClick"
             :default-checked-keys="defautChecked"
             :default-expanded-keys="treeDataObject"
           ></el-tree>
@@ -309,6 +309,7 @@
         }
       },
       handleNodeClick(data, checked) {
+        // debugger
         console.log(data)
         if (checked) {
           if (this.type != "4") {
