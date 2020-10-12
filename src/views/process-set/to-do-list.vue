@@ -805,8 +805,8 @@ export default {
     },
     showORhideForWAA(data) {
       if (data === false) {
-        this.reload();
         this.rowWAAtype = false;
+        this.reload();
       } else {
         this.rowWAAtype = true;
       }

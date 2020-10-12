@@ -176,12 +176,12 @@
 					}
 					//后台需要json格式的数据 
 					backData.jsonStr = JSON.stringify(con)
-					console.log(backData)
+					this.$refs.child.toUpload(this.context.id,this.context.fsrcoId)
 					this.$api.collaborativeOffice.dataToDataWorkItem(backData).then(data => {
-						if(this.dataBack(data, "提交成功")) {
+						//if(this.dataBack(data, "提交成功")) {
 							//this.$refs.child.toUpload(this.context.id)
-							this.$refs.child.toUpload(this.context.id,this.context.fsrcoId)
-						}
+							//this.$refs.child.toUpload(this.context.id,this.context.fsrcoId)
+						//}
 					})
 				} else {
 					this.goOut("请填写必填的数据")

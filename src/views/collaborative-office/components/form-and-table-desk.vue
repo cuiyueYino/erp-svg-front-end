@@ -166,11 +166,11 @@
 				this.fileList.forEach(item => {
 					if(typeof(item.id) == "undefined") {
 						var formData  = new  FormData();
-						//formData.append('userCode', localStorage.getItem('ms_userId'));
-						formData.append('userCode', id);
+						formData.append('userCode', localStorage.getItem('ms_userId'));
+						//formData.append('userCode', id);
 						formData.append('menuCode', "workItem");
-						//formData.append('voucherId', id);
-						formData.append('voucherId', fid);
+						formData.append('voucherId', id);
+						//formData.append('voucherId', fid);
 						formData.append('file', item);
 						this.$api.collaborativeOffice.uploadFile(formData).then(data => {})
 					}

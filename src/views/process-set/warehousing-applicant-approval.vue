@@ -546,7 +546,7 @@
 				}else{
 					twfauditObj["fresult"] = this.formdata.fresult;
 				}
-				twfauditObj["fresult"] = this.formdata.fresult;
+				//twfauditObj["fresult"] = this.formdata.fresult;
 				twfauditObj["fopinion"] = this.formdata.remark;
 				paramsData["twfaudit"] = twfauditObj;
 				if(this.participator != '') {
