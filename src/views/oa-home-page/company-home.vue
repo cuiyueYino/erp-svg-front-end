@@ -12,7 +12,7 @@
             :name="index.toString()"
           >
             <span v-for="(childListItems,indx) in childrenItem.children" class="li-box">
-              <ul :class="{'subjectStyle':(childListItems.fisread=='0')}" @click="toLook(childListItems)">
+              <ul :class="{'subjectStyle':(childListItems.fisread=='0')}" @click="toLook(childListItems)" style='width:50%'>
                 <li>
                   {{childListItems.fname}}
                   <span class="li-after" v-if="childListItems.fisread=='0'"></span>
