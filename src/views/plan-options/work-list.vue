@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<WorkItemPage ref="childOtherChild" @getSrcId="getSrcId" v-for="(item,key) in context" :key="key" style="display: block;" :showChild="key == 0 ? '1' : '2'" :context="item" :showSeeOrUpd="showSeeOrUpd1(item)" :todoFlag="todoFlag"></WorkItemPage>
+		<WorkItemPage ref="childOtherChild" @getSrcId="getSrcId" v-for="(item,key) in context" :key="key" style="display: block;" @changeShow="saveSWIDData" :showChild="key == 0 ? '1' : '2'" :context="item" :showSeeOrUpd="showSeeOrUpd1(item)" :todoFlag="todoFlag"></WorkItemPage>
 	</div>
 </template>
 
@@ -42,6 +42,9 @@
 				}else{
 					return '1'
 				}
+			},
+			saveSWIDData(data){
+				this.$emit('changeShow', false);
 			},
 			async getContext(res) {
 				for(var i = 0; i < res.data.data.length; i++) {

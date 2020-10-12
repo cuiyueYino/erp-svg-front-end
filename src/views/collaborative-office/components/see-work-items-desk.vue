@@ -178,6 +178,7 @@
 					backData.jsonStr = JSON.stringify(con)
 					this.$refs.child.toUpload(this.context.id,this.context.fsrcoId)
 					this.$api.collaborativeOffice.dataToDataWorkItem(backData).then(data => {
+						this.$emit('changeShow', false);
 						//if(this.dataBack(data, "提交成功")) {
 							//this.$refs.child.toUpload(this.context.id)
 							//this.$refs.child.toUpload(this.context.id,this.context.fsrcoId)

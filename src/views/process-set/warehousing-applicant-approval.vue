@@ -48,7 +48,7 @@
 							<EachPerEachTableAdjPage :disFlag='disFlag' :rowEachPerEachTableAdjDataObj="rowEachPerEachTableAdjDataObj" :rowEachPerEachTableAdjtype="rowEachPerEachTableAdjtype" @changeShow="showLookOrUpdate" />
 							<ConferenceApplyPage ref='child' :disFlag='disFlag'   :rowConferenceApplyDataObj="rowConferenceApplyDataObj" :rowConferenceApplytype="rowConferenceApplytype" @changeShow="showLookOrUpdate" />
 							<EconomicIndicatorsPage :disFlag='disFlag' :rowEconomicIndicatorsDataObj="rowEconomicIndicatorsDataObj" :rowEconomicIndicatorstype="rowEconomicIndicatorstype" @changeShow="showLookOrUpdate" />
-							<workList ref="childOher" :formdata="formdata" :rowWAADataObj="rowWAADataObj" :currentDatd="currentDatd" v-if="itemsFlag" :context="context" :showSeeOrUpd="showSeeOrUpd" :todoFlag="todoFlag" />
+							<workList ref="childOher" :formdata="formdata" :rowWAADataObj="rowWAADataObj" :currentDatd="currentDatd" v-if="itemsFlag" :context="context" @changeShow="saveWLata" :showSeeOrUpd="showSeeOrUpd" :todoFlag="todoFlag" />
 							<EachPerEachTableModifyPage :disFlag='disFlag' :rowEachPerEachTableModifyDataObj="rowEachPerEachTableModifyDataObj" :rowEachPerEachTableModifyype="rowEachPerEachTableModifyype" @changeShow="showLookOrUpdate" />
 						</el-row>
 
@@ -303,9 +303,12 @@
 				this.$refs.childOher.$refs.childOtherChild.forEach(item =>{
 					if((item.context.gestor == localStorage.getItem('ms_staffId') || typeof(item.context.gestor) == 'undefined') && this.showSeeOrUpd == 3){
 						item.submitForm(2)
-						this.$emit('changeShow', false);
+						//this.$emit('changeShow', false);
 					}
 				})
+			},
+			saveWLata(data){
+				this.$emit('changeShow', false);
 			},
 			//关闭当前dialog时给父组件传值
 			handleClose() {
