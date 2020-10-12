@@ -335,7 +335,8 @@
 			},
 			maketree(data, type) {
 				let parent = [];
-				for(var i = data[0].children.length - 1; i >= 0; i--) {
+				//for(var i = data[0].children.length - 1; i >= 0; i--) {
+				for(var i = 0; i <data[0].children.length; i++) {
 					if(type == "公司") {
 						if(data[0].children[i].ftype == 1) {
 							parent.push(data[0].children[i]);
@@ -350,11 +351,13 @@
 
 				function children(parent, type) {
 					if(parent) {
-						for(var i = parent.length - 1; i >= 0; i--) {
+						//for(var i = parent.length - 1; i >= 0; i--) {
+						for(var i = 0; i <parent.length; i++) {
 							if(parent[i].children) {
 								let obj = parent[i];
 								obj.childrenList = [];
-								for(var j = parent[i].children.length - 1; j >= 0; j--) {
+								//for(var j = parent[i].children.length - 1; j >= 0; j--) {
+								for(var j = 0; j <parent[i].children.length; j++) {
 									if(type == "公司") {
 										if(parent[i].children[j].ftype == 1) {
 											obj.childrenList.push(parent[i].children[j]);
