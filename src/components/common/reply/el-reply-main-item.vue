@@ -12,13 +12,22 @@
                     <el-col :span="3" :offset="1">
                         {{ ReplyItemData.replyedName }}
                     </el-col>
-                    <el-col :span="8" :offset="1">
-                    {{ ReplyItemData.replyContent}}
+                    <el-col :span="9" :offset="1">
+                        <div v-if="ReplyItemData.replyContent.length > 15">
+                            <template>
+                                <el-tooltip class="item" effect="dark" :content="ReplyItemData.replyContent" placement="top">
+                                    <div>{{ReplyItemData.replyContent.substr(0, 15)}} ...</div>
+                                </el-tooltip>
+                            </template>
+                        </div>
+                        <div v-else>
+                            {{ReplyItemData.replyContent}}
+                        </div>
                     </el-col>
-                    <el-col :span="3" :offset="1">
-                        <el-link type="primary" @click="downLoadFile(ReplyItemData)">{{ ReplyItemData.fileName}}</el-link>
+                    <el-col :span="2" :offset="1">
+                        <el-link type="primary" @click="downLoadFile(ReplyItemData)">下载附件</el-link>
                     </el-col>
-                    <el-col :span="1" :offset="1">
+                    <el-col :span="1">
                         <el-button @click="onRowbuttonClick(ReplyItemData)" size="small" type="primary">回复</el-button>
                     </el-col>   
                 </el-row>
@@ -43,13 +52,22 @@
                     <el-col :span="3" :offset="1">
                         {{ ReplyItemData.replyedName }}
                     </el-col>
-                    <el-col :span="8" :offset="1">
-                    {{ ReplyItemData.replyContent }}
+                    <el-col :span="9" :offset="1">
+                        <div v-if="ReplyItemData.replyContent.length > 15">
+                            <template>
+                                <el-tooltip class="item" effect="dark" :content="ReplyItemData.replyContent" placement="top">
+                                    <div>{{ReplyItemData.replyContent.substr(0, 15)}} ...</div>
+                                </el-tooltip>
+                            </template>
+                        </div>
+                        <div v-else>
+                            {{ReplyItemData.replyContent}}
+                        </div>
                     </el-col>
-                    <el-col :span="3" :offset="1" >
-                        <el-link type="primary" @click="downLoadFile(ReplyItemData)">{{ ReplyItemData.fileName}}</el-link>
+                    <el-col :span="2" :offset="1" >
+                        <el-link type="primary" @click="downLoadFile(ReplyItemData)">下载附件</el-link>
                     </el-col>
-                    <el-col :span="1" :offset="1">
+                    <el-col :span="1">
                         <el-button @click="onRowbuttonClick(ReplyItemData)" size="small" type="primary">回复</el-button>
                     </el-col>   
                 </el-row>
@@ -72,6 +90,7 @@ export default {
         return {
             rowRMPDataObj:{},
             accordion:false,
+            showFullName:false,
             rowRMPtype:false
         };
     },             
