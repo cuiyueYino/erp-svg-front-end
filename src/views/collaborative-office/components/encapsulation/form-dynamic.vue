@@ -678,6 +678,31 @@
 						return
 					}
 				}
+				//判定公司部门职务
+				if(this.showCon==='organization'){
+					if(dataBack && dataBack.length >0){
+						for(var i=0;i<dataBack.length;i++){
+							if(this.titleShow ==='公司'){
+								if(dataBack[i].ftype !='1'){
+									this.goOut("请选择公司")
+									return
+								}
+							}
+							if(this.titleShow ==='部门'){
+								if(dataBack[i].ftype !='2'){
+									this.goOut("请选择部门")
+									return
+								}
+							}
+							if(this.titleShow ==='职位'){
+								if(dataBack[i].ftype !='3'){
+									this.goOut("请选择职位")
+									return
+								}
+							}
+						}
+					}
+				}
 				var label = ""
 				var value = ""
 				dataBack.forEach((item, index) => {
