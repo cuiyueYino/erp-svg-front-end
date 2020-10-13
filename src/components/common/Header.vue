@@ -189,6 +189,17 @@
 					let resDataArr = eval("(" + resData + ")");
 					localStorage.setItem('conf_staffTree', JSON.stringify(resDataArr));
 				})
+				//公司 部门 职位
+				this.$api.management.selectAllOrganizationInfo().then(data => {
+					localStorage.setItem('allOrganizationInfo', JSON.stringify(eval('(' + data.data.data + ')')));
+				})
+				//人员
+				this.$api.collaborativeOffice.findConList("staffManage/findStaffByPage", {
+					page: 1,
+					size: 100000
+				}).then(data => {
+					localStorage.setItem('staffList', JSON.stringify(data.data.data.rows));
+				})
 			},
 			// 用户名下拉菜单选择事件
 			handleCommand(command) {

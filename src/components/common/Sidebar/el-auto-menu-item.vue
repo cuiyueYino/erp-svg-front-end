@@ -13,7 +13,7 @@
 		</el-menu-item>
 	</div>
 	<div v-else>
-		 <el-menu-item  :index="menuItemData.index">
+		<el-menu-item @click="getContext()" :index="menuItemData.index">
 			<!-- <i :class="menuItemData.icon"></i> -->
 			<span slot="title">{{ menuItemData.title }}</span>
 		</el-menu-item>
@@ -32,13 +32,26 @@
 		},
 		props: {
 			menuItemData: Object,
-			isOa:Boolean
+			isOa: Boolean
 		},
-		methods:{
-			showUrl(){
-				if(typeof(this.menuItemData.url) == 'undefined' || this.menuItemData.url == ''){
+		methods: {
+			getContext() {
+				//公司 部门 职位
+				this.$api.management.selectAllOrganizationInfo().then(data => {
+					localStorage.setItem('allOrganizationInfo', JSON.stringify(eval('(' + data.data.data + ')')));
+				})
+				//人员
+				this.$api.collaborativeOffice.findConList("staffManage/findStaffByPage", {
+					page: 1,
+					size: 100000
+				}).then(data => {
+					localStorage.setItem('staffList', JSON.stringify(data.data.data.rows));
+				})
+			},
+			showUrl() {
+				if(typeof(this.menuItemData.url) == 'undefined' || this.menuItemData.url == '') {
 					return 'none' + Math.random().toString()
-				}else{
+				} else {
 					return this.menuItemData.url
 				}
 			}
