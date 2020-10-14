@@ -786,7 +786,6 @@ export default {
       } else if (this.multipleSelection.length == 0) {
         this.$message.error("请选择一项");
       } else {
-        debugger
         if(this.multipleSelection[0].classId == 'StaffAppraisals') {
           this.toast('页面不存在，请联系系统管理员！')
         } else {
