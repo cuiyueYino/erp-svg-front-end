@@ -13,7 +13,8 @@
                         {{ ReplyItemData.replyedName }}
                     </el-col>
                     <el-col :span="9" :offset="1">
-                        <div v-if="ReplyItemData.replyContent.length > 15">
+                        <div v-if="ReplyItemData.replyContent ==null"></div>
+                        <div v-else-if="ReplyItemData.replyContent.length > 15">
                             <template>
                                 <el-tooltip class="item" effect="dark" :content="ReplyItemData.replyContent" placement="top">
                                     <div>{{ReplyItemData.replyContent.substr(0, 15)}} ...</div>
@@ -53,7 +54,8 @@
                         {{ ReplyItemData.replyedName }}
                     </el-col>
                     <el-col :span="9" :offset="1">
-                        <div v-if="ReplyItemData.replyContent.length > 15">
+                        <div v-if="ReplyItemData.replyContent ==null"></div>
+                        <div v-else-if="ReplyItemData.replyContent.length > 15">
                             <template>
                                 <el-tooltip class="item" effect="dark" :content="ReplyItemData.replyContent" placement="top">
                                     <div>{{ReplyItemData.replyContent.substr(0, 15)}} ...</div>
@@ -186,3 +188,9 @@ export default {
     }
 }
 </script>
+<style lang="less" scoped>
+ /deep/ .el-row{
+    display:flex;
+    flex-wrap: wrap;
+}
+</style>

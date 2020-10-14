@@ -175,7 +175,7 @@ export default {
                 fcreator:this.formdata.senduserId,
                 freplyedpesron:this.formdata.staffId,
                 fpublish:this.formdata.checked == undefined || this.formdata.checked == false ? 0 : 1,
-                freplycontent:this.formdata.freplycontent,
+                freplycontent:this.formdata.freplycontent== undefined || this.formdata.freplycontent== ''?'':this.formdata.freplycontent,
             }
             if(this.formdata.fparentreply){
                 data.fparentreply=this.formdata.foid;
@@ -191,6 +191,7 @@ export default {
             if(this.rowRMPtype){
                 this.ShowFinancVisible=this.rowRMPtype;
                 this.formdata=this.rowRMPDataObj;
+                his.formdata.freplycontent='';
                 this.authenStatus = false;
                 this.fileName ='';
                 this.uploadFiles=[];
