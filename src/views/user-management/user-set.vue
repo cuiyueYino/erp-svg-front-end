@@ -773,6 +773,7 @@
 							console.log(this.form);
 							this.form.fcode=this.form.fcodeStr;
 							this.form.fpassword=this.form.fpasswordStr;
+							this.form.fstaff=this.form.fstaffId;
 							if(this.form.fpasswordStr.length > 6){
 								this.$message.error("密码长度不能超过6个字符！");
 								return;
