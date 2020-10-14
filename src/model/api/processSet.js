@@ -123,6 +123,10 @@ const processSet = {
         }
         return httpReqest.post('/api/scha/optionIndex/findById'+valueS);
     },
+    // 获取待办事项的popForm表单数据(员工考评表)
+    getTempApprDetail(params){
+        return httpReqest2.post('/api/scha/staffAppraisals/findInfoById', params);
+    },
     // 获取待办事项的popForm表单数据(一岗一表)
     getPostBidDetail(params){
         var valueS='?';
