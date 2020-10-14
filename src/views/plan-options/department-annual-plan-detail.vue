@@ -58,9 +58,9 @@
                     <el-date-picker
                         clearable
                         v-model="formdata.editDate"
-                        format="yyyy-MM-dd HH:mm"
-                        value-format="yyyy-MM-dd HH:mm"
-                        type="datetime"
+                        format="yyyy-MM-dd"
+                        value-format="yyyy-MM-dd"
+                        type="date"
                         size="small"
                         placeholder="选择日期"
                         style="width: 100%;"
