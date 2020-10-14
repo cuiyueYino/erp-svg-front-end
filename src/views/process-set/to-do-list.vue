@@ -387,6 +387,9 @@
       :rowFCDtype="rowFCDtype"
       @changeShow="closeflowchart"
     />
+    <div class="toast" v-show="toastShow">
+		{{toastText}}
+		</div>
   </div>
 </template>
 <style>
@@ -429,6 +432,9 @@ export default {
   inject: ["reload"],
   data() {
     return {
+      toastText:'',
+      toastShow:false,
+      tableData: [],
       seeFlag:false,
       functionType:'',
       detail: false,
@@ -539,6 +545,15 @@ export default {
   },
   computed: {},
   methods: {
+    //不走工作流程的数据，点击‘处理’按钮，弹出toast的提示
+			toast (e) {
+				let self = this
+				self.toastText = e
+				self.toastShow = true
+				setTimeout(function(){
+				self.toastShow = false
+				}, 1500)
+			},
     selectCom(){
       this.$api.jobUserManagement.getCompanyData().then((res) => {
         if (res.status == "200") {
@@ -771,36 +786,42 @@ export default {
       } else if (this.multipleSelection.length == 0) {
         this.$message.error("请选择一项");
       } else {
-        let selectData = this.multipleSelection;
-        this.functionType = this.multipleSelection[0].classId;
-        let finandata = {};
-        finandata.selectData = selectData;
-        finandata.finanrowname = "人员缺省查询方案";
-        finandata.finanrowId = "QS_0056";
-        finandata.nametitle = this.multipleSelection[0].fsrcCompany;
-        finandata.fsubjectName = this.multipleSelection[0].fsubject;
-        let subject = selectData[0].fsubject;
-        subject= subject.substring(0,4);
-        if (subject.indexOf("加签") > -1) {
-          finandata.relay = false;
-          finandata.attention = false;
-          finandata.sign = false;
-          finandata.commit = true;
-          finandata.read = false;
-          finandata.trust = false;
-          finandata.NewOrEditFlag = 'NEW';
-        }else{
-          finandata.relay = true;
-          finandata.attention = true;
-          finandata.sign = true;
-          finandata.commit = true;
-          finandata.read = true;
-          finandata.trust = true;
-          finandata.NewOrEditFlag = 'NEW';
+        debugger
+        if(this.multipleSelection[0].classId == 'StaffAppraisals') {
+          this.toast('页面不存在，请联系系统管理员！')
+        } else {
+          let selectData = this.multipleSelection;
+          this.functionType = this.multipleSelection[0].classId;
+          let finandata = {};
+          finandata.selectData = selectData;
+          finandata.finanrowname = "人员缺省查询方案";
+          finandata.finanrowId = "QS_0056";
+          finandata.nametitle = this.multipleSelection[0].fsrcCompany;
+          finandata.fsubjectName = this.multipleSelection[0].fsubject;
+          let subject = selectData[0].fsubject;
+          subject= subject.substring(0,4);
+          if (subject.indexOf("加签") > -1) {
+            finandata.relay = false;
+            finandata.attention = false;
+            finandata.sign = false;
+            finandata.commit = true;
+            finandata.read = false;
+            finandata.trust = false;
+            finandata.NewOrEditFlag = 'NEW';
+          }else{
+            finandata.relay = true;
+            finandata.attention = true;
+            finandata.sign = true;
+            finandata.commit = true;
+            finandata.read = true;
+            finandata.trust = true;
+            finandata.NewOrEditFlag = 'NEW';
+          }
+          this.rowWAADataObj = finandata;
+          this.rowWAAtype = true;
+          this.financingLFCAtype = true;
         }
-        this.rowWAADataObj = finandata;
-        this.rowWAAtype = true;
-        this.financingLFCAtype = true;
+        
       }
     },
     showORhideForWAA(data) {
@@ -962,4 +983,24 @@ export default {
 .el-card__header {
   padding: 10px 20px;
 }
+.toast{
+    position: fixed;
+    z-index: 2000;
+    left: 50%;
+    top:45%;
+    transition:all .5s;
+    -webkit-transform: translateX(-50%) translateY(-50%);
+       -moz-transform: translateX(-50%) translateY(-50%);
+        -ms-transform: translateX(-50%) translateY(-50%);
+         -o-transform: translateX(-50%) translateY(-50%);
+            transform: translateX(-50%) translateY(-50%);
+    text-align: center;
+    border-radius: 5px;
+    color:#FFF;
+    background: rgba(17, 17, 17, 0.7);
+    height: 45px;
+    line-height: 45px;
+    padding: 0 15px;
+    max-width: 300px;
+  }
 </style>
