@@ -228,6 +228,7 @@
 					}],
 				},
 				rowDataFileObj: {},
+				rowDataFileType:'',
 				attachmentData: [],
 				uploadFiles: [],
 				NewOrEditFlag: '',
@@ -431,6 +432,7 @@
 						rowObj.operateFlag = 'QUERY';
 						//主表单的操作 //show标志传到附件中，控制 新增/删除 button隐藏
 						rowObj.masterOperateFlag = this.rowWAADataObj.NewOrEditFlag;
+						rowObj.NewOrEditFlag = this.rowWAADataObj.NewOrEditFlag;
 						rowObj.values = values;
 						this.rowDataFileObj = rowObj;
 					} else {
@@ -451,6 +453,7 @@
 						//附件列表:附件查询
 						this.findAttachmentInfosList();
 						this.rowDataFileObj.operateFlag = "QUERY";
+						this.rowDataFileObj.NewOrEditFlag = this.rowWAADataObj.NewOrEditFlag;
 						this.rowDataFileObj.values = this.attachmentData;
 					} else {
 						//附件列表
@@ -920,6 +923,7 @@
 							this.atctiveName = "second";
 							this.findAttachmentInfosList();
 							this.rowDataFileObj.operateFlag = "QUERY";
+							this.rowDataFileObj.NewOrEditFlag = this.rowWAADataObj.NewOrEditFlag;
 							this.rowDataFileObj.values = this.attachmentData;
 						}
 					}
