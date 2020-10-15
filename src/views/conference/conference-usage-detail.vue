@@ -292,13 +292,14 @@ export default {
     },
     //公司
     getCompany() {
-      this.$api.jobUserManagement.getCompanyData().then(res => {
-        if(res.status == '200') {
-          this.options = res.data.data.rows;
-        }
-      }), error => {
-        console.log(error);
-      }
+      // this.$api.jobUserManagement.getCompanyData().then(res => {
+      //   if(res.status == '200') {
+      //     this.options = res.data.data.rows;
+      //   }
+      // }), error => {
+      //   console.log(error);
+      // }
+       this.options = JSON.parse(localStorage.getItem('CompanyData'));
     },
     //公司下拉选择
     // selectChange(value){
