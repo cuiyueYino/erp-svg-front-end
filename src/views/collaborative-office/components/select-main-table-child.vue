@@ -26,7 +26,7 @@
                             </el-col>
 							<el-col :span="6">
 								<el-form-item>
-									<el-button type="primary" @click="$refs.pageNation.toBegin()" size="small">搜索</el-button>
+									<el-button type="primary" @click="formInTypeChange('YES');$refs.pageNation.toBegin()" size="small">搜索</el-button>
 									<el-button type="primary" icon='el-icon-refresh' size="small" @click="toClear()">重置</el-button>
 								</el-form-item>
 							</el-col>
@@ -132,6 +132,7 @@
 				currentTotal: 0,
 				tableData: [],
 				rowClickId: "",
+				formInType:false,
 				rowClick: {}
 			}
 		},
@@ -139,6 +140,13 @@
 			this.toSelect()
 		},
 		methods: {
+			formInTypeChange(data){
+				if(data=='YES'){
+					this.formInType=true;
+				}else{
+					this.formInType=false;
+				}
+			},
 			selectChange(data) {
 				this.selectCon = data.id
 				this.toSelectData = JSON.parse(JSON.stringify(this.formInline))
@@ -241,8 +249,14 @@
 			},
 			//搜索
 			toSelect() {
-				if(typeof(this.toSelectData[this.selectCon]) != "undefined") {
-					this.toSelectData[this.selectCon] = this.selectData
+				if(this.formInType){
+					if(typeof(this.toSelectData[this.selectCon]) != "undefined") {
+						this.toSelectData[this.selectCon] = this.selectData
+					}
+				}else{
+					if(typeof(this.toSelectData[this.selectCon]) != "undefined") {
+						this.toSelectData[this.selectCon] = ''
+					}
 				}
 				this.$api.collaborativeOffice.apiUrl("workItemTempSub/findWorkItemTempSubPage", this.toSelectData).then(data => {
 					this.tableData = data.data.data.rows
@@ -255,8 +269,9 @@
 				this.rowClick = row
 			},
 			toClear() {
-				this.selectData = ""
-				this.value = ""
+				this.selectData = "";
+				this.value = "";
+				this.formInType=false;
 				this.toSelect()
 			}
 		}

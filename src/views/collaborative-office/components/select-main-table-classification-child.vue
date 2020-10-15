@@ -35,8 +35,8 @@
 							</el-col>
 							<el-col :span="6">
 								<el-form-item>
-									<el-button type="primary" size="small" icon='el-icon-search' @click="$refs.pageNation.toBegin()">搜索</el-button>
-									<el-button type="primary" icon='el-icon-refresh' size="small" @click="$refs.formInline.resetFields();toSelect()">重置</el-button>
+									<el-button type="primary" size="small" icon='el-icon-search' @click="formInTypeChange('YES');$refs.pageNation.toBegin()">搜索</el-button>
+									<el-button type="primary" icon='el-icon-refresh' size="small" @click="$refs.formInline.resetFields();formInTypeChange('NO');toSelect()">重置</el-button>
 								</el-form-item>
 							</el-col>
 						</el-row>
@@ -109,6 +109,7 @@
 				tableData: [],
 				rowClickId: "",
 				rowClick: {},
+				formInType:false,
 				parent: this.$parent.$parent.$parent
 			}
 		},
@@ -116,6 +117,13 @@
 			this.toSelect()
 		},
 		methods: {
+			formInTypeChange(data){
+				if(data=='YES'){
+					this.formInType=true;
+				}else{
+					this.formInType=false;
+				}
+			},
 			//双击选中
 			rowDblClick(row) {
 				if(row.status == 3) {
@@ -218,7 +226,24 @@
                     this.formInline.status = 3;
                 }
 				this.formInline.company = this.company;
-				this.$api.collaborativeOffice.apiUrl("workItemTypeSub/findWorkItemTypeSubPage", this.formInline).then(data => {
+				let formData={};
+				if(this.formInType){
+					formData=this.formInline;
+				}else{
+					formData.code='';
+					formData.name='';
+					formData.tableName='';
+					formData.remark='';
+					formData.company = this.company;
+					if (this.show == 1){
+						formData.status = '3';
+					}else{
+						formData.status = '';
+					}
+					formData.page=this.formInline.page;
+					formData.size=this.formInline.size;
+				}
+				this.$api.collaborativeOffice.apiUrl("workItemTypeSub/findWorkItemTypeSubPage", formData).then(data => {
 					this.tableData = data.data.data.rows
 					this.currentTotal = data.data.data.total
 				})

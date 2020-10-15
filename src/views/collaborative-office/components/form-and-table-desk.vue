@@ -149,7 +149,6 @@
 			},
 			//下载文件
 			download(data, fileName) {
-				debugger;
 				if(!data) {
 					return
 				}

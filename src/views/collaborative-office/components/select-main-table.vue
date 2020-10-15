@@ -26,7 +26,7 @@
                             </el-col>
 							<el-col :span="6">
 								<el-form-item>
-									<el-button icon='el-icon-search' type="primary" size="small" @click="$refs.pageNation.toBegin()">搜索</el-button>
+									<el-button icon='el-icon-search' type="primary" size="small" @click="formInTypeChange('YES');$refs.pageNation.toBegin()">搜索</el-button>
 									<el-button icon='el-icon-refresh' type="primary" size="small" @click="toClear()">重置</el-button>
 								</el-form-item>
 							</el-col>
@@ -112,6 +112,7 @@
 					size: 10,
 					company:''
 				},
+				formInType:false,
 			}
 		},
 		created() {
@@ -136,6 +137,13 @@
 			this.toSelect()
 		},
 		methods: {
+			formInTypeChange(data){
+				if(data=='YES'){
+					this.formInType=true;
+				}else{
+					this.formInType=false;
+				}
+			},
 			rowDblClick(row) {
 				if(row.status == 3) {
 					if(typeof(this.$parent.$parent.getDialogVisible) == "function") {
@@ -256,9 +264,15 @@
 			toSelect() {
 			    if(this.show==1){
                     this.toSelectData.status = 3
-                }
-				if(typeof(this.toSelectData[this.selectCon]) != "undefined") {
-					this.toSelectData[this.selectCon] = this.selectData
+				}
+				if(this.formInType){
+					if(typeof(this.toSelectData[this.selectCon]) != "undefined") {
+						this.toSelectData[this.selectCon] = this.selectData
+					}
+				}else{
+					if(typeof(this.toSelectData[this.selectCon]) != "undefined") {
+						this.toSelectData[this.selectCon] = ''
+					}
 				}
 				if(this.company){
 					if(this.company.id){
@@ -282,8 +296,10 @@
 				this.rowClick = row
 			},
 			toClear() {
-				this.selectData = ""
-				this.value = ""
+				this.selectData = "";
+				this.value = "";
+				this.toSelectData.page=1;
+				this.formInType=false;
 				this.toSelect()
 			}
 		}

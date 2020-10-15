@@ -25,7 +25,7 @@
 							</el-col>
 							<el-col :span="6">
 								<el-form-item>
-									<el-button type="primary" icon='el-icon-search' size="small" @click="toSelect">搜索</el-button>
+									<el-button type="primary" icon='el-icon-search' size="small" @click="formInTypeChange('YES');toSelect()">搜索</el-button>
 									<el-button type="primary" icon='el-icon-refresh' size="small" @click="toClear">重置</el-button>
 								</el-form-item>
 							</el-col>
@@ -103,6 +103,7 @@
 				currentTotal: 0,
 				tableData: [],
 				rowClick: {},
+				formInType:false,
 				context: []
 			}
 		},
@@ -110,6 +111,13 @@
 			this.toSelect()
 		},
 		methods: {
+			formInTypeChange(data){
+				if(data=='YES'){
+					this.formInType=true;
+				}else{
+					this.formInType=false;
+				}
+			},
 			rowDblClick(row) {
 				if(typeof(this.$parent.$parent.getDialogVisible) == "function") {
 					this.$parent.$parent.getDialogVisible()
@@ -250,15 +258,25 @@
 			},
 			//搜索
 			toSelect() {
-
 				var toGet = JSON.parse(JSON.stringify(this.formInline))
-				if(this.value != 'time') {
-					if(!this.noNull(this.value)) {
-						toGet[this.value] = this.selectData
+				if(this.formInType){
+					if(this.value != 'time') {
+						if(!this.noNull(this.value)) {
+							toGet[this.value] = this.selectData
+						}
+					} else {
+						toGet.beginTime = this.value1[0]
+						toGet.endTime = this.value1[1]
 					}
-				} else {
-					toGet.beginTime = this.value1[0]
-					toGet.endTime = this.value1[1]
+				}else{
+					if(this.value != 'time') {
+						if(!this.noNull(this.value)) {
+							toGet[this.value] = '';
+						}
+					} else {
+						toGet.beginTime = '';
+						toGet.endTime = '';
+					}
 				}
 				if(this.status) {
 					toGet.status = this.status;
@@ -273,8 +291,10 @@
 				this.rowClick = row
 			},
 			toClear() {
-				this.selectData = ""
-				this.value = ""
+				this.selectData = "";
+				this.value = "";
+				this.formInline.page =1;
+				this.formInType=false;
 				this.toSelect()
 			}
 		}

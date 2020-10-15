@@ -35,8 +35,8 @@
 							</el-col>
 							<el-col :span="5">
 								<el-form-item>
-									<el-button type="primary" icon='el-icon-search' size="small" @click="$refs.pageNation.toBegin()">搜索</el-button>
-									<el-button type="primary" icon='el-icon-refresh' size="small" @click="$refs.formInline.resetFields();toSelect()">重置</el-button>
+									<el-button type="primary" icon='el-icon-search' size="small" @click="formInTypeChange('YES');$refs.pageNation.toBegin();">搜索</el-button>
+									<el-button type="primary" icon='el-icon-refresh' size="small" @click="$refs.formInline.resetFields();formInTypeChange('NO');toSelect()">重置</el-button>
 								</el-form-item>
 							</el-col>
 						</el-row>
@@ -97,7 +97,7 @@
 					value: "关闭/结清"
 				}*/],
 				formInline: {
-    				        company:'',
+    				company:'',
 					code: "",
 					name: "",
 					remark: "",
@@ -109,6 +109,7 @@
 				currentTotal: 0,
 				tableData: [],
 				rowClickId: "",
+				formInType:false,
 				rowClick: {},
 				parent: this.$parent.$parent.$parent
 			}
@@ -117,6 +118,13 @@
 			this.toSelect()
 		},
 		methods: {
+			formInTypeChange(data){
+				if(data=='YES'){
+					this.formInType=true;
+				}else{
+					this.formInType=false;
+				}
+			},
 			//双击选中
 			rowDblClick(row) {
 				if(row.status == 3) {
@@ -221,8 +229,25 @@
 				if (this.show == 1){
 					this.formInline.status = '3';
 				}
-                this.formInline.company = this.company;
-				this.$api.collaborativeOffice.findWorkItemTypePage(this.formInline).then(data => {
+				this.formInline.company = this.company;
+				let formData={};
+				if(this.formInType){
+					formData=this.formInline;
+				}else{
+					formData.code='';
+					formData.name='';
+					formData.tableName='';
+					formData.remark='';
+					formData.company = this.company;
+					if (this.show == 1){
+						formData.status = '3';
+					}else{
+						formData.status = '';
+					}
+					formData.page=this.formInline.page;
+					formData.size=this.formInline.size;
+				}
+				this.$api.collaborativeOffice.findWorkItemTypePage(formData).then(data => {
 					let resultList =  data.data.data.rows;
 					this.tableData=resultList;
 					this.currentTotal = data.data.data.total;
