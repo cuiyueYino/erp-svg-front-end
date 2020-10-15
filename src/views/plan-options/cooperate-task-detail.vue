@@ -95,7 +95,7 @@
             <el-row>
                 <el-col :span="6">
                     <el-form-item label="秘书：">
-                        <el-input v-model="formdata.secretary" :disabled="true"></el-input>
+                        <el-input v-model="formdata.secretaryName" :disabled="true"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="10" :offset="2">
