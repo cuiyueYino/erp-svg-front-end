@@ -742,6 +742,7 @@
 						this.rowEACHPerEachJobDetDataObj = currentDatd;
 					} else if(dataType === 'TaskReport') {
 						this.rowEachPerEachTableReporttype = true;
+						this.rowEachPerEachTableReportDataObj = currentDatd;
 					} else if(dataType === 'TaskSelfEvaluateApply') {
 						this.rowEachPerEachTableAsstype = true;
 						this.rowEachPerEachTableAssDataObj = currentDatd;
