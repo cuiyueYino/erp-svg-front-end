@@ -222,6 +222,7 @@ export default {
     },
     components: {
         DynamicTable,
+        enclosureFile
     },
     data(){
         return{
@@ -344,24 +345,6 @@ export default {
                 }
                 //页面返回的值得赋值
                 let tableDataObj = {};
-                this.tableFirstData[0].num = res.data.data.planFinish;
-                this.tableFirstData[0].unit = res.data.data.unit;
-                this.tableFirstData[1].num = res.data.data.fvalue;
-                this.tableFirstData[1].unit = res.data.data.funit;
-                this.tableFirstData[2].num = res.data.data.jvalue;
-                this.tableFirstData[2].unit = res.data.data.junit;
-                this.tableFirstData[3].num = res.data.data.hvalue;
-                this.tableFirstData[3].unit = res.data.data.hunit;
-                this.tableFirstData[4].num = res.data.data.nvalue;
-                this.tableFirstData[4].unit = res.data.data.nvalue;
-                this.tableFirstData[5].num = res.data.data.ovalue;
-                this.tableFirstData[5].unit = res.data.data.ounit;
-                this.tableFirstData[6].num = res.data.data.pvalue;
-                this.tableFirstData[6].unit = res.data.data.punit;
-                this.tableFirstData[7].num = res.data.data.xvalue;
-                this.tableFirstData[7].unit = res.data.data.xunit;
-                this.tableFirstData[8].num = res.data.data.yvalue;
-                this.tableFirstData[8].unit = res.data.data.yunit;
                 this.enclosureConfig.voucherId = data.id;
                 }
             }),error => {
