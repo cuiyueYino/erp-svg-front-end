@@ -4,10 +4,10 @@
             <template slot="title">
                 <el-row>
                     <el-col :span="3">
-                        <div v-if="ReplyItemData.userName.length > 5">
+                        <div v-if="ReplyItemData.userName.length > 8">
                             <template>
                                 <el-tooltip class="item" effect="dark" :content="ReplyItemData.userName" placement="top">
-                                    <div>{{ReplyItemData.userName.substr(0, 5)}} ...</div>
+                                    <div>{{ReplyItemData.userName.substr(0, 8)}} ...</div>
                                 </el-tooltip>
                             </template>
                         </div>
@@ -19,10 +19,10 @@
                         回复:
                     </el-col>
                     <el-col :span="3" :offset="1">
-                        <div v-if="ReplyItemData.replyedName.length > 5">
+                        <div v-if="ReplyItemData.replyedName.length > 8">
                             <template>
                                 <el-tooltip class="item" effect="dark" :content="ReplyItemData.replyedName" placement="top">
-                                    <div>{{ReplyItemData.replyedName.substr(0, 5)}} ...</div>
+                                    <div>{{ReplyItemData.replyedName.substr(0, 8)}} ...</div>
                                 </el-tooltip>
                             </template>
                         </div>
@@ -63,10 +63,10 @@
             <template  slot="title">
                 <el-row>
                     <el-col :span="3">
-                        <div v-if="ReplyItemData.userName.length > 5">
+                        <div v-if="ReplyItemData.userName.length > 8">
                             <template>
                                 <el-tooltip class="item" effect="dark" :content="ReplyItemData.userName" placement="top">
-                                    <div>{{ReplyItemData.userName.substr(0, 5)}} ...</div>
+                                    <div>{{ReplyItemData.userName.substr(0, 8)}} ...</div>
                                 </el-tooltip>
                             </template>
                         </div>
@@ -78,10 +78,10 @@
                         回复:
                     </el-col>
                     <el-col :span="3" :offset="1">
-                        <div v-if="ReplyItemData.replyedName.length > 5">
+                        <div v-if="ReplyItemData.replyedName.length > 8">
                             <template>
                                 <el-tooltip class="item" effect="dark" :content="ReplyItemData.replyedName" placement="top">
-                                    <div>{{ReplyItemData.replyedName.substr(0, 5)}} ...</div>
+                                    <div>{{ReplyItemData.replyedName.substr(0, 8)}} ...</div>
                                 </el-tooltip>
                             </template>
                         </div>
