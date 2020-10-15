@@ -4,13 +4,31 @@
             <template slot="title">
                 <el-row>
                     <el-col :span="3">
-                        {{ ReplyItemData.userName }}
+                        <div v-if="ReplyItemData.userName.length > 5">
+                            <template>
+                                <el-tooltip class="item" effect="dark" :content="ReplyItemData.userName" placement="top">
+                                    <div>{{ReplyItemData.userName.substr(0, 5)}} ...</div>
+                                </el-tooltip>
+                            </template>
+                        </div>
+                        <div v-else>
+                            {{ReplyItemData.userName}}
+                        </div>
                     </el-col>
                     <el-col :span="1" :offset="1">
                         回复:
                     </el-col>
                     <el-col :span="3" :offset="1">
-                        {{ ReplyItemData.replyedName }}
+                        <div v-if="ReplyItemData.replyedName.length > 5">
+                            <template>
+                                <el-tooltip class="item" effect="dark" :content="ReplyItemData.replyedName" placement="top">
+                                    <div>{{ReplyItemData.replyedName.substr(0, 5)}} ...</div>
+                                </el-tooltip>
+                            </template>
+                        </div>
+                        <div v-else>
+                            {{ReplyItemData.replyedName}}
+                        </div>
                     </el-col>
                     <el-col :span="9" :offset="1">
                         <div v-if="ReplyItemData.replyContent ==null"></div>
@@ -45,13 +63,31 @@
             <template  slot="title">
                 <el-row>
                     <el-col :span="3">
-                        {{ ReplyItemData.userName }}
+                        <div v-if="ReplyItemData.userName.length > 5">
+                            <template>
+                                <el-tooltip class="item" effect="dark" :content="ReplyItemData.userName" placement="top">
+                                    <div>{{ReplyItemData.userName.substr(0, 5)}} ...</div>
+                                </el-tooltip>
+                            </template>
+                        </div>
+                        <div v-else>
+                            {{ReplyItemData.userName}}
+                        </div>
                     </el-col>
                     <el-col :span="1" :offset="1">
                         回复:
                     </el-col>
                     <el-col :span="3" :offset="1">
-                        {{ ReplyItemData.replyedName }}
+                        <div v-if="ReplyItemData.replyedName.length > 5">
+                            <template>
+                                <el-tooltip class="item" effect="dark" :content="ReplyItemData.replyedName" placement="top">
+                                    <div>{{ReplyItemData.replyedName.substr(0, 5)}} ...</div>
+                                </el-tooltip>
+                            </template>
+                        </div>
+                        <div v-else>
+                            {{ReplyItemData.replyedName}}
+                        </div>
                     </el-col>
                     <el-col :span="9" :offset="1">
                         <div v-if="ReplyItemData.replyContent ==null"></div>
