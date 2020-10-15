@@ -857,6 +857,7 @@
 				let fromdata = {};
 				fromdata.fvoucherOid = selectData[0].fsrcoId;
 				fromdata.fattentionOid = localStorage.getItem("ms_userId");
+				fromdata.fwfBizMailOid = selectData[0].foid;
 				this.$api.processSet.addAttention(fromdata).then(response => {
 					let responsevalue = response;
 					if(responsevalue) {

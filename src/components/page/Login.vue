@@ -127,9 +127,9 @@
 			 * */
 			getContext() {
 				//最上端公司选择
-				this.$api.collaborativeOffice.getCompanyData().then(data => {
+				/*this.$api.collaborativeOffice.getCompanyData().then(data => {
 					localStorage.setItem('CompanyData', JSON.stringify(data.data));
-				})
+				})*/
 				//全部服务
 				this.$api.collaborativeOffice.findTServiceByParams({}).then(data => {
 					localStorage.setItem('tServiceByParams', JSON.stringify(data.data.data));

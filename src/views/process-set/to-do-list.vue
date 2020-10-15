@@ -720,7 +720,6 @@ export default {
     },
     //关注点击事件
     basefollow() {
-      debugger;
       if (this.multipleSelection.length > 1) {
         this.$message.error("只能选择一个");
       } else if (this.multipleSelection.length == 0) {
