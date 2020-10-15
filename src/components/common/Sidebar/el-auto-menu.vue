@@ -1,5 +1,5 @@
 <template>
-	<el-menu :default-active="nowUrl" :default-openeds="urlShow" class="sidebar-el-menu" :collapse="collapse" background-color="#fff" text-color="#000" active-text-color="#2d72c9" unique-opened router>
+	<el-menu :default-active="nowUrl" :default-openeds="urlShow" class="sidebar-el-menu" :collapse="collapse" background-color="#fff" text-color="#000" active-text-color="#2d72c9" unique-opened>
 		<el-auto-menu-item v-for="(menuItem,index) in innerData" :key="index" :menu-item-data="menuItem" :isOa="isOa"></el-auto-menu-item>
 	</el-menu>
 </template>

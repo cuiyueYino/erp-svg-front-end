@@ -7,7 +7,7 @@
 			</template>
 			<el-auto-menu-item v-for="(menuChildrenItem,index) in menuItemData.subs" :key="index" :menuItemData="menuChildrenItem"></el-auto-menu-item>
 		</el-submenu>
-		<el-menu-item v-else :index="showUrl()">
+		<el-menu-item  @click="aaa(menuItemData)" v-else :index="showUrl()">
 			<i :class="menuItemData.pictureUrl"></i>
 			<span slot="title">{{ menuItemData.name }}</span>
 		</el-menu-item>
@@ -46,6 +46,11 @@
 					size: 100000
 				}).then(data => {
 					localStorage.setItem('staffList', JSON.stringify(data.data.data.rows));
+				})
+			},
+			aaa(aaa){
+				this.$router.push({
+					name : aaa.url
 				})
 			},
 			showUrl() {
