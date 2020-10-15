@@ -486,14 +486,15 @@ export default {
 
     // 获取公司方法
     getCompany() {
-      this.$api.jobUserManagement.getCompanyData().then((res) => {
+      /*this.$api.jobUserManagement.getCompanyData().then((res) => {
         if (res.status == "200") {
           this.options = res.data.data.rows;
         }
       }),
         (error) => {
           console.log(error);
-        };
+        };*/
+        this.options = JSON.parse(localStorage.getItem('CompanyData'));
     },
     //树结构点击事件
     nodeClick(data) {
