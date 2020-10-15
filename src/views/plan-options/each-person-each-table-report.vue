@@ -300,12 +300,11 @@ export default {
         },
         //获取任务报备详情
         getReportDetail(data) {
-            this.$api.processSet.getPersonalTableReportDetail({
+            this.$api.processSet.getPersonalTableTaskDetail({
                 id: data.id,
                 userId: localStorage.getItem("ms_userId")
             })
         .then((res) => {
-            debugger
                 if(res.data.code == 0){
                 this.formdata = res.data.data;
                 let taskStateParams = res.data.data.taskStatus;
