@@ -13,7 +13,7 @@
 		</el-menu-item>
 	</div>
 	<div v-else>
-		<el-menu-item @click="getContext()" :index="menuItemData.index">
+		<el-menu-item @click="getContext(menuItemData.index)" :index="menuItemData.index">
 			<!-- <i :class="menuItemData.icon"></i> -->
 			<span slot="title">{{ menuItemData.title }}</span>
 		</el-menu-item>
@@ -35,7 +35,10 @@
 			isOa: Boolean
 		},
 		methods: {
-			getContext() {
+			getContext(aaa) {
+				this.$router.push({
+					name : aaa
+				})
 				//公司 部门 职位
 				this.$api.management.selectAllOrganizationInfo().then(data => {
 					localStorage.setItem('allOrganizationInfo', JSON.stringify(eval('(' + data.data.data + ')')));
