@@ -697,10 +697,8 @@ export default {
           }
         }
         if((selectData[0].fsubject.substring(0, 3) == '退回：' && selectData[0].fcreator == localStorage.getItem("ms_userId")) || selectData[0].fcode == 'manpower') {
-          if(data.indexOf('OA') != -1){
-            this.$message.error('编辑节点不可加签，不可委托，不可转发!');
-            return;
-          }
+          this.$message.error('编辑节点不可加签，不可委托，不可转发!');
+          return;
         }
         this.rowUTStype = true;
         let finandata = {};
