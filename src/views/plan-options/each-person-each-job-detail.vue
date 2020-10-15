@@ -86,19 +86,8 @@
                         element-loading-text="加载中"
                     ></dynamic-table>
                 </el-tab-pane>
-                <el-tab-pane label="附件" name="third">
-                    <dynamic-table
-                        :columns="attachColumns"
-                        :table-data="attachData"
-                        :total="total"
-                        size="mini"
-                        :isShowPager="false"
-                        ref="multipleTable"
-                        :page-num="pageNum"
-                        :page-size="pageSize"
-                        v-loading="false"
-                        element-loading-text="加载中"
-                    ></dynamic-table>
+                    <el-tab-pane label="附件" name="third">
+                    <enclosureFile ref="child" :enclosureConfig="enclosureConfig"/>
                 </el-tab-pane>
             </el-tabs> 
         </el-form>
@@ -108,6 +97,7 @@
 <script>
 import proData from '../../components/common/proData/proData';
 import DynamicTable from '../../components/common/dytable/dytable.vue';
+import enclosureFile from '../inside-mail/enclosure-file.vue';
 export default {
     props: {
         rowEACHPerEachJobDetDataObj: "",
@@ -116,9 +106,20 @@ export default {
     },
     components: {
         DynamicTable,
+        enclosureFile
     },
     data(){
         return{
+            // 附件
+            enclosureConfig:{
+                voucherId: '',
+                isShowButton: false,
+                menuCode: 'insideMail',
+                isDownload:true,
+                isSearch:false,
+                haveAttachment:false,
+                authStatus:false
+            },
             isDeartPopVisible:false,
             formLabelWidth: "120px",
             ShowFinancVisible:false,
@@ -230,7 +231,6 @@ export default {
             xiuding:data.xiuding,
         })
         .then((res) => {
-            debugger;
                 if(res.data.code == 0){
                 this.formdata = res.data.data;
                 var tableDataObj = res.data.data.lines;
@@ -243,6 +243,7 @@ export default {
                 }
                 this.tableData = tableDataObj;
                 this.comIndicatorsData = comIndicatorsDataObj;
+                this.enclosureConfig.voucherId = data.id;
                 }
             }),error => {
             console.log(error);
