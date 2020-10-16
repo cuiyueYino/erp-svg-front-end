@@ -1,5 +1,5 @@
 <template>
-    <div>     
+    <div>
         <!-- 搜索框 -->
         <el-card class="box-card">
            <el-row :gutter="24">
@@ -20,6 +20,8 @@
                 @selection-change="onSelectionChange"
                 v-loading="false"
                 element-loading-text="加载中"
+                ref="dataTable"
+                @Row-Click="clickRow"
             ></dynamic-table>
         </el-card>
     </div>
@@ -102,13 +104,13 @@ export default {
                     key: 'completeTime',
                     title: '移除时间'
                 },
-            
+
             ],
             tableData:[],
             multipleSelection: []
             };
     },
-    
+
     created(){
         let fromdata={};
         //fromdata.infosBeginNum=1;
@@ -119,7 +121,7 @@ export default {
         this.getrecycleBin(fromdata);
     },
     computed:{
-        
+
     },
     methods:{
         //查询回收站数据
@@ -176,12 +178,16 @@ export default {
                         this.$message.success('数据还原成功!');
                         this.reload();
                     }else{
-                        this.$message.error('还原数据失败!');    
+                        this.$message.error('还原数据失败!');
                     }
                 });
             }else{
                 this.$message.error('请选择一行你要还原的数据!');
             }
+        },
+        //  选中点击
+        clickRow(val) {
+            this.$refs.dataTable.toggleRowSelection(val);
         },
     },
 }
@@ -224,9 +230,9 @@ export default {
          margin-bottom: 10px;
      }
      /deep/ .el-button+.el-button{
-         margin-left: 0; 
+         margin-left: 0;
      }
  }
- 
+
 
 </style>

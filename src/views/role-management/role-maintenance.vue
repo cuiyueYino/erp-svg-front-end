@@ -60,6 +60,8 @@
                         :tableRowClassName="tableRowClassName"
                         v-loading="false"
                         element-loading-text="加载中"
+                        ref="dataTable"
+                        @Row-Click="clickRow"
                     ></dynamic-table>
                 </el-col>
             </el-row>
@@ -376,6 +378,10 @@ export default {
             for(let key of Object.keys(this.reqParam)){
                 delete this.reqParam[key];
             }
+        },
+        //  选中点击
+        clickRow(val) {
+            this.$refs.dataTable.toggleRowSelection(val);
         },
     }
 }

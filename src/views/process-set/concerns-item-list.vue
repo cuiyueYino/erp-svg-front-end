@@ -16,6 +16,7 @@
         <!-- 表格 -->
         <el-card class="box-card">
             <dynamic-table
+                ref="dataTable"
                 :columns="columns"
                 :table-data="tableData"
                 :total="total"
@@ -26,6 +27,7 @@
                 :tableRowClassName="tableRowClassName"
                 v-loading="false"
                 element-loading-text="加载中"
+                @Row-Click="clickRow"
             ></dynamic-table>
         </el-card>
         <!-- 查询 -->
@@ -592,6 +594,10 @@ export default {
                 this.DataForm.displaystartManId=data.selectOptionID;
                 this.DataForm.displaystartMancode=data.selectOptionCode;
             }
+        },
+        //  选中点击
+        clickRow(val) {
+            this.$refs.dataTable.toggleRowSelection(val);
         },
     },
 }

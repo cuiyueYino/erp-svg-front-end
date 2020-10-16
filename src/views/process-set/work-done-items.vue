@@ -27,6 +27,8 @@
                 :tableRowClassName="tableRowClassName"
                 v-loading="false"
                 element-loading-text="加载中"
+                ref="dataTable"
+                @Row-Click="clickRow"
             ></dynamic-table>
         </el-card>
         <!-- 弹出框 查询 -->
@@ -630,6 +632,10 @@ export default {
                     }
                 });
             }
+        },
+        //  选中点击
+        clickRow(val) {
+            this.$refs.dataTable.toggleRowSelection(val);
         },
     },
 }
