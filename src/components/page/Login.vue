@@ -2,7 +2,7 @@
 	<div class="login-wrap">
 		<iframe :src="$GLOBAL.htmlUrl + 'login' " style="width:100%;height:764px;border:0px;padding:0px;display:none" class="taskStructure" ref="iframe"></iframe>
 		<div class="ms-login">
-			<div class="ms-title01"><img src="../../assets/img/logo-bg.png" height="45" width="350" /></div>
+			<div class="ms-title01"><img src="../../assets/img/logo-new.png" height="50" width="200"/></div>
 			<div class="ms-content01">
 				<div class="ms-title">用户登录</div>
 				<el-form :model="param" :rules="rules" ref="login" label-width="0px" class="ms-content">
@@ -205,8 +205,8 @@
 
 	.ms-title01 {
 		margin-bottom: 50px;
+		margin-left: 50px;
 	}
-
 	.login-tips {
 		font-size: 12px;
 		line-height: 30px;

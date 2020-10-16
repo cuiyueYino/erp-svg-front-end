@@ -59,20 +59,16 @@
 						</el-row>
 						<el-tabs v-model="atctiveName" @tab-click="handleClick">
 							<el-tab-pane label="审批意见" name="first" v-if="!seeFlag && (rowFstatus == 4?false:true)">
-								<el-row >
-									<el-col :span="12">
+								<el-row v-if="!fresultFlag">
+									<el-col :span="24">
 										<!-- prop="code" -->
-										<el-form-item label="决策类型" v-if="!fresultFlag">
+										<el-form-item label="决策类型">
 											<el-radio-group v-model="formdata.fresult">
-
 												<el-radio :label="1" v-if="fresultArray.indexOf('1') !=-1">{{fresultObject['1']}}</el-radio>
-
-													<el-radio :label="2" v-if="fresultArray.indexOf('2') !=-1">{{fresultObject['2']}}</el-radio>
-
-														<el-radio :label="3" v-if="fresultArray.indexOf('3') !=-1">{{fresultObject['3']}}</el-radio>
-
-															<el-radio :label="4" v-if="fresultArray.indexOf('4') !=-1">{{fresultObject['4']}}</el-radio>
-																</el-radio-group>
+												<el-radio :label="2" v-if="fresultArray.indexOf('2') !=-1">{{fresultObject['2']}}</el-radio>
+												<el-radio :label="3" v-if="fresultArray.indexOf('3') !=-1">{{fresultObject['3']}}</el-radio>
+												<el-radio :label="4" v-if="fresultArray.indexOf('4') !=-1">{{fresultObject['4']}}</el-radio>
+											</el-radio-group>
 										</el-form-item>
 									</el-col>
 								</el-row>

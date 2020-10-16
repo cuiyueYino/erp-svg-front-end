@@ -90,7 +90,8 @@ const fieldTypeList = [{
 	label: '复选框'
 }]
 const tableHeight = 550
-const htmlUrl = 'http://localhost:6013/'
+//const htmlUrl = 'http://localhost:6013/'
+const htmlUrl = 'http://10.1.6.49:6013/'
 export default {
 	//富文本
 	editorOption,

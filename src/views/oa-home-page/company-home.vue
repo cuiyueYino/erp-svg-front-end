@@ -28,16 +28,16 @@
     </el-main>
     <el-aside width="530px">
       <div class="img1" @click="toWebsite">
-        <div class="website">
-          <img src="../../assets/img/oa2.png" />
-          <img src="../../assets/img/oa5.png" class="img5" />
-        </div>
+        <!--<div >
+            <img src="../../assets/img/oa2.png">
+            <img src="../../assets/img/oa5.png" class="img5">
+        </div>-->
       </div>
       <div class="img2" @click="toTel">
-        <div class="website">
+        <!--<div class="website">
           <img src="../../assets/img/oa4.png" />
           <span>通讯录</span>
-        </div>
+        </div>-->
       </div>
       <el-card class="box-card-right">
         <span class="tab-title">日历</span>
@@ -222,7 +222,7 @@ export default {
       window.open("http://www.fujiagroup.com/");
     },
     toTel() {
-      window.open("http://192.168.85.96:8093/file/txl.htm");
+      window.open("http://10.1.6.49:8093/file/txl.htm");
     },
     //是否展示dialog弹窗
       showAddMenu(type){
@@ -359,10 +359,14 @@ export default {
   margin-left: 10px;
 }
 .img1 {
-  background-image: url("../../assets/img/oa1.png");
+  background-image: url("../../assets/img/oa6.png");
+  background-size:cover;
+  background-repeat:no-repeat;
+  width:520px;
+  height:240px;
   max-width: 520px;
   cursor: pointer;
-  height: 20vh;
+  //height: 20vh;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -381,10 +385,14 @@ export default {
   }
 }
 .img2 {
-  background-image: url("../../assets/img/oa3.png");
+  background-image: url("../../assets/img/oa7.png");
+  background-size:cover;
+  background-repeat:no-repeat;
+  width:520px;
+  height:240px;
   cursor: pointer;
   max-width: 520px;
-  height: 20vh;
+  //height: 20vh;
   margin: 15px 0;
   object-fit: cover;
   object-position: center top;

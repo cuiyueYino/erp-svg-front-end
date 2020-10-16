@@ -210,6 +210,10 @@
 						title: "名称"
 					},
 					{
+						key: "tcompanyname",
+						title: "公司"
+					},
+					{
 						key: "tdepartmentname",
 						title: "部门"
 					},

@@ -142,16 +142,16 @@
             </el-main>
             <el-aside  width="530px">
                 <div class="img1 website"  @click="toWebsite">
-                    <div  >
+                    <!--<div >
                         <img src="../../assets/img/oa2.png">
                         <img src="../../assets/img/oa5.png" class="img5">
-                    </div>
+                    </div>-->
                 </div>
                 <div class="img2 website" @click="toTel">
-                    <div  >
+                    <!--<div>
                         <img src="../../assets/img/oa4.png">
                         <span>通讯录</span>
-                    </div>
+                    </div>-->
                 </div>
                 <el-card class="box-card-right">
                     <span class="tab-title">日历</span>
@@ -679,7 +679,7 @@ export default {
             window.open("http://www.fujiagroup.com/");
         },
         toTel() {
-            window.open("http://192.168.85.96:8093/file/txl.html");
+            window.open("http://10.1.6.49:8093/file/txl.html");
         },
     }
 }
@@ -758,9 +758,13 @@ export default {
         margin-right: 10px;
     }
     .img1{
-      background-image: url("../../assets/img/oa1.png");
+      background-image: url("../../assets/img/oa6.png");
+        background-size:cover;
+        background-repeat:no-repeat;
+        width:520px;
+        height:220px;
         max-width: 520px;
-        height: 20vh;
+        //height: 20vh;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -779,9 +783,13 @@ export default {
         }
     }
     .img2{
-      background-image: url("../../assets/img/oa3.png");
+        background-image: url("../../assets/img/oa7.png");
+        background-size:cover;
+        background-repeat:no-repeat;
+        width:520px;
+        height:240px;
         max-width: 520px;
-        height: 20vh;
+        //height: 20vh;
         margin: 15px 0;
         object-fit: cover;
         object-position: center top;
