@@ -82,6 +82,9 @@
                         @selection-change="onSelectionChange"
                         v-loading="false"
                         element-loading-text="加载中"
+                        @Row-Click="clickRow"
+        ref="dataTable"
+
                     ></dynamic-table>
                 </el-col>
             </el-row>
@@ -205,6 +208,10 @@ export default {
         this.maketree();
     },
     methods:{
+    	clickRow(val) {
+    //  选中点击
+    this.$refs.dataTable.toggleRowSelection(val);
+   },
         //查询按钮
         findData(){
             this.isFind = true;

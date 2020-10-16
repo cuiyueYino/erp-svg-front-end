@@ -82,7 +82,9 @@
                             border
                             style="width: 100%"
                             @select-all="onSelectionChange"
-                            @select="onSelectionChange">
+                            @select="onSelectionChange"
+                            @row-click="clickRow"
+>
                             <el-table-column type="selection" min-width="5%"></el-table-column>
                             <el-table-column prop="code" size="small" label="角色编码" ></el-table-column>
                             <el-table-column prop="name" size="small" label="角色名称" ></el-table-column>
@@ -182,6 +184,10 @@ auth:"",
         this.$refs.roleTable.toggleRowSelection(this.tableData[2],true);
     },
     methods:{
+    	clickRow(val) {
+    //  选中点击
+    this.$refs.roleTable.toggleRowSelection(val);
+   },
         //查询按钮
         findData(param){
             let field = this.formInline.auth;

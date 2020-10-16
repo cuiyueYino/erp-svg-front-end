@@ -40,7 +40,8 @@
 		</el-card>
 		<!-- 表格 -->
 		<el-card class="box-card">
-			<dynamic-table :columns="columns" :table-data="tableData" :total="total" :page-num="pageNum" :page-size="pageSize" @current-change="onCurrentChange" @selection-change="onSelectionChange" v-loading="false" element-loading-text="加载中"></dynamic-table>
+			<dynamic-table @Row-Click="clickRow"
+        ref="dataTable" :columns="columns" :table-data="tableData" :total="total" :page-num="pageNum" :page-size="pageSize" @current-change="onCurrentChange" @selection-change="onSelectionChange" v-loading="false" element-loading-text="加载中"></dynamic-table>
 		</el-card>
 		<!-- 弹出框 -->
 		<el-dialog :title="isEdit?'编辑用户':'新建用户'" class="add-user" center top="20px" v-if="dialogFormVisible" :visible.sync="dialogFormVisible" :close-on-click-modal="false">
@@ -415,6 +416,10 @@
 		},
 
 		methods: {
+			clickRow(val) {
+    //  选中点击
+    this.$refs.dataTable.toggleRowSelection(val);
+   },
 			closUserVisible(){
 				this.filterText='';
 				this.userVisible=false;

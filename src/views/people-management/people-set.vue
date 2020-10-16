@@ -39,7 +39,8 @@
 		</el-card>
 		<!-- 表格 -->
 		<el-card class="box-card">
-			<dynamic-table :columns="columns" :table-data="tableData" :total="total" :page-num="pageNum" :page-size="pageSize" @current-change="onCurrentChange" @selection-change="onSelectionChange" v-loading="false" element-loading-text="加载中"></dynamic-table>
+			<dynamic-table @Row-Click="clickRow"
+        ref="dataTable" :columns="columns" :table-data="tableData" :total="total" :page-num="pageNum" :page-size="pageSize" @current-change="onCurrentChange" @selection-change="onSelectionChange" v-loading="false" element-loading-text="加载中"></dynamic-table>
 		</el-card>
 		<!-- 弹出框 -->
 		<erpDialog erpDialogwidth="false" :title="isEdit?'编辑人员':'新建人员'" :dialogShow="dialogFormVisible">
@@ -353,6 +354,10 @@
 			},
 		},
 		methods: {
+			clickRow(val) {
+    //  选中点击
+    this.$refs.dataTable.toggleRowSelection(val);
+   },
 			addRow() {
 				this.peopleForm.tableData3.push({
 					fdepartmentoid: "",

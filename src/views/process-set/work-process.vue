@@ -38,6 +38,9 @@
                 @selection-change="onSelectionChange"
                 v-loading="false"
                 element-loading-text="加载中"
+                @Row-Click="clickRow"
+        ref="dataTable"
+
             ></dynamic-table>
         </el-card>
     <!-- 弹出框 -->
@@ -196,6 +199,10 @@ export default {
         }
     },
     methods:{
+    	clickRow(val) {
+    //  选中点击
+    this.$refs.dataTable.toggleRowSelection(val);
+   },
         closeDialog(formName){
             this.dialogFormVisible = false;
             this.$refs[formName].resetFields();
