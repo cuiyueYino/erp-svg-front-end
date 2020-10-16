@@ -25,6 +25,9 @@
                 @selection-change="onSelectionChange"
                 v-loading="false"
                 element-loading-text="加载中"
+                @Row-Click="clickRow"
+        ref="dataTable"
+
             ></dynamic-table>
         </el-card>
         <!-- 查询 -->
@@ -348,7 +351,10 @@ export default {
         
     },
     methods:{
-        
+        clickRow(val) {
+    //  选中点击
+    this.$refs.dataTable.toggleRowSelection(val);
+   },
         //多选
         onSelectionChange(val) {
             this.multipleSelection = val;

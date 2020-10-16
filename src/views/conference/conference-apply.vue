@@ -66,6 +66,8 @@
         @selection-change="onSelectionChange"
         v-loading="false"
         element-loading-text="加载中"
+        @Row-Click="clickRow"
+        ref="dataTable"
       ></dynamic-table>
     </el-card>
     <!-- 新增，修改，修订，查看模态框 -->
@@ -220,6 +222,10 @@
       },
     },
     methods: {
+    	clickRow(val) {
+    //  选中点击
+    this.$refs.dataTable.toggleRowSelection(val);
+   },
       //公司
       getCompany() {
         this.$api.jobUserManagement.getCompanyData().then(res => {

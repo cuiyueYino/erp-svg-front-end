@@ -45,6 +45,8 @@
         @selection-change="onSelectionChange"
         v-loading="false"
         element-loading-text="加载中"
+        @Row-Click="clickRow"
+        ref="dataTable"
       ></dynamic-table>
     </el-card>
     <!-- 新增弹出框 -->
@@ -303,6 +305,11 @@ export default {
     }
   },
   methods: {
+  	
+clickRow(val) {
+    //  选中点击
+    this.$refs.dataTable.toggleRowSelection(val);
+   },
     filterNode(value, data) {
       if (!value) return true;
       return data.label.indexOf(value) !== -1;

@@ -86,7 +86,8 @@
 				</el-col>
 				<el-col :span="11" :offset="1">
 					<div v-if="dimension" class="CheckTable">
-						<el-table ref="roleTable" :data="RoletableData" tooltip-effect="dark" size="small" border style="width: 100%" @select-all="onRoleSelectionALLChange" @select="onRoleSelectionChange">
+						<el-table ref="roleTable" :data="RoletableData" tooltip-effect="dark" size="small" border style="width: 100%" @select-all="onRoleSelectionALLChange" @select="onRoleSelectionChange"
+							@row-click="clickRow1">
 							<el-table-column type="selection" min-width="5%"></el-table-column>
 							<el-table-column prop="code" size="small" label="角色编码"></el-table-column>
 							<el-table-column prop="name" size="small" label="角色名称"></el-table-column>
@@ -98,7 +99,7 @@
 						</div>
 					</div>
 					<div v-else class="CheckTable">
-						<el-table ref="UserLTable" :data="UserLtableData" tooltip-effect="dark" size="small" border style="width: 100%" @select-all="onUserLSelectionALLChange"  @select="onUserLSelectionChange">
+						<el-table ref="UserLTable" :data="UserLtableData" tooltip-effect="dark" size="small" border style="width: 100%" @select-all="onUserLSelectionALLChange"  @select="onUserLSelectionChange"@row-click="clickRow2">
 							<el-table-column type="selection" min-width="5%"></el-table-column>
 							<el-table-column prop="fcode" size="small" label="登录账户"></el-table-column>
 							<el-table-column prop="fname" size="small" label="用户名称"></el-table-column>
@@ -208,6 +209,15 @@
 			this.selectCom();
 		},
 		methods: {
+clickRow1(val) {
+    //  选中点击
+    this.$refs.roleTable.toggleRowSelection(val);
+   },
+   
+clickRow2(val) {
+    //  选中点击
+    this.$refs.UserLTable.toggleRowSelection(val);
+   },
 			selectCom(){
 				this.$api.jobUserManagement.getCompanyData().then((res) => {
 					if (res.status == "200") {

@@ -59,6 +59,8 @@
         @selection-change="onSelectionChange"
         v-loading="false"
         element-loading-text="加载中"
+        @Row-Click="clickRow"
+        ref="dataTable"
       ></dynamic-table>
     </el-card>
     <!-- 提交弹出框 -->
@@ -419,6 +421,10 @@
     computed: {},
     watch: {},
     methods: {
+    	clickRow(val) {
+    //  选中点击
+    this.$refs.dataTable.toggleRowSelection(val);
+   },
       //公司下拉选择
       // selectChange(value){
       //   this.options.forEach(item => {
