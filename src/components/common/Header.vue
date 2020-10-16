@@ -112,10 +112,10 @@
 		},
 		inject: ['bus'],
 		mounted() {
-			if(document.body.clientWidth < 1500) {
-				this.collapse = true
+//			if(document.body.clientWidth < 1500) {
+//				this.collapse = true
 				this.bus.$emit('collapse', this.collapse);
-			}
+//			}
 		},
 		created() {
 			if(this.$route.name == "oaCompanyHome" || this.$route.name == "oaPersonalHome") {
