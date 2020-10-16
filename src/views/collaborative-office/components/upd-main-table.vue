@@ -717,6 +717,16 @@
 					if(valid) {
 						this.$refs.ruleFormTable.validate((valid) => {
 							if(valid) {
+								let RFcode= this.ruleForm.code;
+								if(RFcode.indexOf("OA") != 0){
+									this.$message.error("主表编码必须以字母OA开头!");
+									return
+								}
+								let RFname= this.ruleForm.name;
+								if(RFname.indexOf("OA") != 0){
+									this.$message.error("主表名称必须以字母OA开头!");
+									return
+								}
 								this.ruleForm.oprStatus = 2
 								this.ruleForm.lines.forEach(item => {
 									item.oprStatus = 2
