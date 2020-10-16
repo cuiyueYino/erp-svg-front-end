@@ -4,7 +4,7 @@ import router from './router'
 import api from './model/api/collaborative-office'
 // 使用钩子函数对路由进行权限跳转
 router.beforeEach((to, from, next) => {
-	document.title = `福佳集团 | ${to.meta.title} `;
+	document.title = `${to.meta.title} `;
 	const token = localStorage.getItem('ms_tokenId');
 	if(token) {
 		//跳转页面的url是否存在
