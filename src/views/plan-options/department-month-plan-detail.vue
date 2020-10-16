@@ -91,7 +91,7 @@
                     <el-form-item label="经办日期：" :label-width="formLabelWidth">
                         <el-date-picker
                             clearable
-                            v-model="formdata.handleDate"
+                            v-model="formdata.voucherDate"
                             format="yyyy-MM-dd HH:mm"
                             value-format="yyyy-MM-dd HH:mm"
                             type="datetime"
@@ -277,7 +277,6 @@ export default {
                 if(res.data.code == 0){
                 this.formdata = res.data.data;
                 this.formdata.companyName = res.data.data.departmentMonthPlanLine[0].companyName;
-                
                 var tableObj = res.data.data.departmentMonthPlanLine;
                 // this.tableAttachData.push(tableObj);
                 let taskTypeParams = "";
