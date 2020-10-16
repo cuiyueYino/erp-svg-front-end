@@ -124,7 +124,6 @@ export default {
                         prop={props.key}
                         formatter={props.formatter}
                         width={props.width}
-                        fixed="right"
                         scopedSlots={scopedSlots}
                         show-overflow-tooltip
                     ></ElTableColumn>
