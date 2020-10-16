@@ -141,8 +141,9 @@
                 </el-card>
             </el-main>
             <el-aside  width="530px">
-                <div class="img1 website"  @click="toWebsite">
-                    <!--<div >
+                <div class="img1 website">
+                <!--<div class="img1 website"  @click="toWebsite">
+                    <div >
                         <img src="../../assets/img/oa2.png">
                         <img src="../../assets/img/oa5.png" class="img5">
                     </div>-->
@@ -680,6 +681,7 @@ export default {
         },
         toTel() {
             window.open("http://10.1.6.49:8093/file/txl.html");
+            //window.open("http://192.168.85.96:8093/file/txl.html");
         },
     }
 }
