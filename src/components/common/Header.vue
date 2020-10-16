@@ -9,6 +9,9 @@
 		<div class="header-right">
 			<div class="header-user-con">
 				<!-- 进入系统 -->
+				<div v-if="!showFig" class="el-icon-back to-oa" @click="toBack">
+					<span>返回门户</span>
+				</div>
 				<div v-if="showFig" class="el-icon-monitor to-oa" @click="toOa">
 					<span>进入系统</span>
 				</div>
@@ -122,6 +125,11 @@
 			}
 		},
 		methods: {
+			toBack(){
+				this.$router.push({
+					name:"oaCompanyHome"
+				})
+			},
 			handleClose() {
 				this.$refs.ruleFormTable.resetFields();
 				this.dialogVisible = false;
