@@ -4,7 +4,7 @@
 		<v-sidebar :navselected="navselected" v-if="showFig"></v-sidebar>
 		<div class="content-box" :class="{'content-collapse':collapse}">
 			<v-tags  @toName="toName"></v-tags>
-			<div class="content">
+			<div class="content" id="divStyle">
 				<transition name="move" mode="out-in">
 					<keep-alive :include="tagsList">
 						<router-view></router-view>
@@ -62,3 +62,8 @@
 		}
 	};
 </script>
+<style>
+#divStyle{
+	overflow: scroll;
+}
+</style>

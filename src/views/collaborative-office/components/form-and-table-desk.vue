@@ -200,7 +200,6 @@
 					})
 				}
 				if(state) {
-					debugger
 					//整理主表返回数据
 					if(this.showChild == 1 && this.dis == 3) {
 						this.conData = this.$refs.mainTableChild.ruleForm

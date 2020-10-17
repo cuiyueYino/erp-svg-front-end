@@ -20,7 +20,7 @@
                 <el-col :span="18" :offset="1">
                     <el-card class="box-card">
                         <el-row :gutter="24">
-                            <el-col :span="22">
+                            <el-col :span="20">
                                 <el-form :inline="true"  class="demo-form-inline">
                                     <el-col :span="3">
                                         <el-select v-model="formInline.document" @change="selectChange" placeholder="-请选择-" clearable>
@@ -60,7 +60,7 @@
                                     </el-col>
                                 </el-form>
                             </el-col>
-                            <el-col :span="2" >
+                            <el-col :span="4" >
                                 <el-button type="info"  icon="el-icon-view" size="small" @click="showDocumentCategory" >查看</el-button>
                             </el-col>
                         </el-row>
@@ -79,8 +79,7 @@
                         v-loading="false"
                         element-loading-text="加载中"
                         @Row-Click="clickRow"
-        ref="dataTable"
-
+                        ref="dataTable"
                     ></dynamic-table>
                 </el-col>
             </el-row>
