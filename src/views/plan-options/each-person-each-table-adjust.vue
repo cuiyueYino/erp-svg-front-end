@@ -452,7 +452,7 @@ export default {
                 this.tableFirstData[3].num = res.data.data.hvalue;
                 this.tableFirstData[3].unit = res.data.data.hunit;
                 this.tableFirstData[4].num = res.data.data.nvalue;
-                this.tableFirstData[4].unit = res.data.data.nvalue;
+                this.tableFirstData[4].unit = res.data.data.nunit;
                 this.tableFirstData[5].num = res.data.data.ovalue;
                 this.tableFirstData[5].unit = res.data.data.ounit;
                 this.tableFirstData[6].num = res.data.data.pvalue;
