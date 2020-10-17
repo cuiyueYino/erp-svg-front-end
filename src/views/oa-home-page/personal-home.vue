@@ -680,8 +680,8 @@ export default {
             window.open("http://www.fujiagroup.com/");
         },
         toTel() {
-            window.open("http://10.1.6.49:8093/file/txl.html");
-            //window.open("http://192.168.85.96:8093/file/txl.html");
+            //window.open("http://10.1.6.49:8093/file/txl.html");
+            window.open("http://192.168.85.96:8093/file/txl.html");
         },
     }
 }
