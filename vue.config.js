@@ -36,7 +36,7 @@ module.exports = {
         }
     },
     devServer: {
-        port: 9004,
+        port: 8092,
         open: true,
         proxy: {
             '/api': {
