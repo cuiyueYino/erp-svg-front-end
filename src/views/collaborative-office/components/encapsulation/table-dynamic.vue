@@ -117,9 +117,9 @@
 		created() {
 			if(typeof(this.formData.conList) != "undefined" && this.formData.conList.length != 0) {
 				//查看1  新增2  修改3
-				this.$api.collaborativeOffice.findWorkItemList({
-					gestorOid: this.formData.wholeData.gestor
-				}).then(data => {
+				let DAtas={};
+				DAtas.gestorOid = this.formData.wholeData.gestor;
+				this.$api.collaborativeOffice.findWorkItemList(DAtas).then(data => {
 					this.get_NameShow(data.data.data)
 				})
 				this.formData.conList.forEach(item => {
