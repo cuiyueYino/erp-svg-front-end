@@ -31,6 +31,8 @@ const taskUpdateApply = () => import('./task-update-apply.vue');
 const taskEvaluate = () => import('./task-evaluate.vue'); 
 const personalTableResult = () => import('./personal-table-result.vue'); 
 const changeResponsible = () => import('./change-responsible.vue');
+const taskEvaluationRecord = () => import('./task-evaluation-record.vue');
+const taskChangeRecord = () => import('./taskChange-record.vue');
 const taskForceChangeRequest = () => import('./task-force-changeRequest.vue');
 const taskOverTime = () => import('./task-over-time.vue');
 const companyMonth = () => import('./company-month.vue');
@@ -310,6 +312,22 @@ const PROJECT = [
         component: changeResponsible,
         meta: {
             title: '责任人变更'
+        }
+    },
+    {
+        path: 'taskEvaluationRecord',
+        name: 'taskEvaluationRecord',
+        component: taskEvaluationRecord,
+        meta: {
+            title: '任务自评情况查询表'
+        }
+    },
+    {
+        path: 'taskChangeRecord',
+        name: 'taskChangeRecord',
+        component: taskChangeRecord,
+        meta: {
+            title: '任务变更情况查询表'
         }
     },
     {
