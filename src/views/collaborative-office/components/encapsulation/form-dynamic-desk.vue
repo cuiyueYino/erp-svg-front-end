@@ -49,7 +49,7 @@
 							<!-- 字符型 / 文本框 / 整型 / 浮点型 -->
 							<el-input @focus="fuwu(item)" v-if="item.fieldTypeName=='character' || item.fieldTypeName=='textType' || item.fieldTypeName=='integers' || item.fieldTypeName=='floatingPoint' && item.show" style="width: 100%;" v-model="ruleForm[item.field]" :disabled="!item.edit" />
 							<!--富文本-->
-							<editor v-if="item.fieldTypeName == 'richText' && item.show" :value="ruleForm[item.field]" @contentData="change($event,item.field)"></editor>
+							<quill-editor v-if="item.fieldTypeName == 'richText' && item.show" :value="ruleForm[item.field]" @contentData="change($event,item.field)"></quill-editor>
 							<!-- 日期选择器 -->
 							<el-date-picker v-if="item.fieldTypeName == 'dateControl' && item.show" @change="getDate(item)" style="width: 100%;" :disabled="!item.edit" v-model="ruleForm[item.field]" type="date" value-format="yyyy-MM-dd" placeholder="选择日期" />
 							<!--时间控件-->
@@ -173,7 +173,6 @@
 			}
 		},
 		created() {
-			console.log(this.formData)
 			//判断是否有模板数据
 			if(!this.noObject(this.formData) && typeof(this.formData.rowList) != "undefined") {
 				//服务10需要特殊对待，进入页面就查询出来并赋值
@@ -222,7 +221,6 @@
 						//展示单据编号，标题，经办时间
 						if(typeof(this.formData.wholeData) != "undefined") {
 							this.$set(this.ruleForm, "voucherId", this.formData.wholeData.voucherId)
-							console.log(this.formData)
 							this.$set(this.ruleForm, "title", this.formData.fsubjectName)
 							this.$set(this.ruleForm, "voucherTime", this.conversionTime(this.formData.wholeData.voucherTime))
 
