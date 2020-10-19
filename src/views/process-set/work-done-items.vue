@@ -504,6 +504,7 @@ export default {
         showORhideForWAA(data){
             if(data === false){
                 this.rowWAAtype = false
+                this.reload();
             }else{
                 this.rowWAAtype = true
             }
