@@ -135,9 +135,15 @@ const collaborativeOffice = {
 	updateWorkItemTempSubModel(params) {
 		return httpReqest.post('/api/interfaces/workItemTempSub/updateWorkItemTempSubModel', params);
 	},
+	findWorkItemList(params) {
+		return httpReqest.post('/api/interfaces/workItem/findWorkItemList', params);
+	},
 	//分页查询工作事项，必填参数creator
 	findPage(params) {
 		return httpReqest.post('/api/interfaces/workItem/findPage', params);
+	},
+	findPageBySrcId(params) {
+		return httpReqest.post('/api/interfaces/workItem/findPageBySrcId', params);
 	},
 	//工作事项修改   必填字段：srcId、oprStatus（主表、明细行都需要）
 	updateWorkItem(params) {

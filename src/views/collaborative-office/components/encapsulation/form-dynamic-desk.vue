@@ -477,20 +477,27 @@
 											break;
 											//工作流
 										case "7":
-											await this.$api.collaborativeOffice.findPage({
-												size: 1000000,
-												page: 1,
-												creator: localStorage.getItem('ms_userId')
+											await this.$api.collaborativeOffice.findPageBySrcId({
+												srcId: valObject[key]
 											}).then(data => {
-												data.data.data.rows.forEach(itemChild => {
-													if(itemChild.srcId == valObject[key]) {
-														this.itemChildOther = itemChild
-														return new Promise(resolve => {
-															this.$set(this.ruleForm, key + "_NameShow", itemChild.title)
-															resolve({})
-														});
+												if(data.data.data && data.data.data.length > 0){
+													let ReturnData=data.data.data;
+													for(let i=0;i<ReturnData.length;i++){
+														if(ReturnData[i].srcId == valObject[key]) {
+															this.itemChildOther = ReturnData[i]
+															return new Promise(resolve => {
+																this.$set(this.ruleForm, key + "_NameShow", ReturnData[i].title)
+																resolve({})
+															});
+														}
 													}
-												})
+												}else{
+													this.itemChildOther = {}
+													return new Promise(resolve => {
+														this.$set(this.ruleForm, key + "_NameShow", '')
+														resolve({})
+													});
+												}
 											})
 											break;
 									}

@@ -165,13 +165,11 @@
 			},
 			async getContext(res, state) {
 				for(var i = 0; i < res.length; i++) {
-					console.log(res)
 					await this.$api.collaborativeOffice.findDataBySrcId({
 						srcId: res[i].idInProcess,
 						tempId: res[i].tempId,
 						tableName: res[i].tableName
 					}).then(data => {
-						console.log(data)
 						return new Promise(resolve => {
 							this.$api.collaborativeOffice.findlnfosList({
 								voucherId: JSON.parse(data.data.data).id,

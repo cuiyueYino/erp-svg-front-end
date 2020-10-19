@@ -2,7 +2,7 @@
 	<div>
 		<el-form :model="ruleForm" :disabled="dis == '1'" :rules="rules" ref="ruleFormTable">
 			<el-table size="small" height="400" :data="ruleForm.lines.filter(v => v.oprStatus != 3)" border style="width: 100%">
-				<el-table-column v-for="(item,index) in formData.conList" :key="index" prop="field" :label="item.fieldName" align="center">
+				<el-table-column v-for="(item,index) in formData.conList" :key="index" prop="field" :label="item.fieldName" align="center" width="200">
 					<template slot-scope="scope">
 						<el-form-item v-if="item.fieldTypeName == 'browseBox' && item.show" :prop="'lines[' + scope.$index + '].' + item.field +'_NameShow'" :rules="rules[item.field + '_NameShow']">
 							<!-- 浏览框 -->
@@ -21,7 +21,7 @@
 							<!-- 日期选择器 -->
 							<el-date-picker v-if="item.fieldTypeName=='dateControl' && item.show" @change="getDate(item)" style="width: 100%;" :disabled="!item.edit" v-model="scope.row[item.field]" type="date" value-format="yyyy-MM-dd" placeholder="选择日期" />
 							<!--时间控件-->
-							<el-date-picker value-format="yyyy-MM-dd HH:mm:ss" format="yyyy-MM-dd HH:mm:ss" placeholder="请选择日期时间" type="datetime" v-if="item.fieldTypeName == 'timeControl' && item.show" style="width: 100%;" v-model="ruleForm[item.field]"></el-date-picker>
+							<el-date-picker value-format="yyyy-MM-dd HH:mm:ss" format="yyyy-MM-dd HH:mm:ss" placeholder="请选择日期时间" type="datetime" v-if="item.fieldTypeName == 'timeControl' && item.show" style="width: 100%;" v-model="scope.row[item.field]"></el-date-picker>
 							<!-- 下拉框 -->
 							<el-select v-if="item.fieldTypeName=='select' && item.show" style="width: 100%;" v-model="scope.row[item.field]" clearable :disabled="!item.edit" :placeholder="item.placeholder">
 								<el-option v-for="itemSelect in item.resList" :key="itemSelect.id" :label="itemSelect.name" :value="itemSelect.id" />
@@ -117,12 +117,10 @@
 		created() {
 			if(typeof(this.formData.conList) != "undefined" && this.formData.conList.length != 0) {
 				//查看1  新增2  修改3
-				this.$api.collaborativeOffice.findPage({
-					size: 1000000,
-					page: 1,
-					creator: localStorage.getItem('ms_userId')
+				this.$api.collaborativeOffice.findWorkItemList({
+					gestorOid: this.formData.wholeData.gestor
 				}).then(data => {
-					this.get_NameShow(data.data.data.rows)
+					this.get_NameShow(data.data.data)
 				})
 				this.formData.conList.forEach(item => {
 					this.$set(this.rowNow, item.field, "")

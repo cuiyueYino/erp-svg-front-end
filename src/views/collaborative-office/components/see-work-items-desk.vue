@@ -59,7 +59,6 @@
 			this.$api.collaborativeOffice.findList({}).then(data => {
 				this.selectList = data.data.data
 				this.getDialogVisible()
-				console.log(this.conData)
 			})
 		},
 		//		watch: {
