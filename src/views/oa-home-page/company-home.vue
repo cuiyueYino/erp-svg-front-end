@@ -224,7 +224,13 @@ export default {
     },
     toTel() {
       //window.open("http://10.1.6.49:8093/file/txl.htm");
-      window.open("http://192.168.85.96:8093/file/txl.htm");
+      if(document.domain){
+        if(document.domain =="localhost"){
+          window.open("http://192.168.85.96:8093/file/txl.htm");
+        }else{
+          window.open("http://"+document.domain+":8093/file/txl.htm");
+        }
+      }
     },
     //是否展示dialog弹窗
       showAddMenu(type){
