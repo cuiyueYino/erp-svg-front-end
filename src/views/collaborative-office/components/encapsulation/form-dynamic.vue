@@ -203,8 +203,10 @@
 						//整理主表数据
 						this.get_NameShow(1)
 						//这地方应该是动态的经办人和部门，后期要改
-						this.gestorName = localStorage.getItem('ms_username')
-						this.gestorDeptName = localStorage.getItem('ms_userDepartName')
+						//this.gestorName = localStorage.getItem('ms_username')
+						//this.gestorDeptName = localStorage.getItem('ms_userDepartName')
+						this.gestorName = this.formData.wholeData.GESTORNAME
+						this.gestorDeptName = this.formData.wholeData.GESTORDEPTNAME
 						//展示单据编号，标题，经办时间
 						if(typeof(this.formData.wholeData) != "undefined") {
 							this.$set(this.ruleForm, "voucherId", this.formData.wholeData.voucherId)
@@ -215,11 +217,13 @@
 						//整理主表数据
 						this.get_NameShow(1)
 						//这地方应该是动态的经办人和部门，后期要改
-						this.gestorName = localStorage.getItem('ms_username')
-						this.gestorDeptName = localStorage.getItem('ms_userDepartName')
-
+						//this.gestorName = localStorage.getItem('ms_username')
+						//this.gestorDeptName = localStorage.getItem('ms_userDepartName')
 						//展示单据编号，标题，经办时间
 						if(typeof(this.formData.wholeData) != "undefined") {
+							this.gestorName = this.formData.wholeData.GESTORNAME
+							this.gestorDeptName = this.formData.wholeData.GESTORDEPTNAME
+
 							this.$set(this.ruleForm, "voucherId", this.formData.wholeData.voucherId)
 							this.$set(this.ruleForm, "title", this.formData.wholeData.title)
 							this.$set(this.ruleForm, "voucherTime", this.conversionTime(this.formData.wholeData.voucherTime))
@@ -229,6 +233,9 @@
 							this.$set(this.ruleForm, "gestorDept", localStorage.getItem('ms_userDepartId'))
 							//this.$set(this.ruleForm, "gestor", "BFPID000000LSN01ZA")
 							//this.$set(this.ruleForm, "gestorDept", "BFPID000000LRS001C")
+						}else{
+							this.gestorName = localStorage.getItem('ms_username')
+							this.gestorDeptName = localStorage.getItem('ms_userDepartName')
 						}
 						this.$set(this.ruleForm, "oprStatus", 2)
 						this.$set(this.ruleForm, "id", this.formData.wholeData.id)
