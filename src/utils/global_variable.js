@@ -90,8 +90,16 @@ const fieldTypeList = [{
 	label: '复选框'
 }]
 const tableHeight = 550;
-//测试环境
-const htmlUrl = 'http://192.168.85.96:6013/';
+let htmlUrl=''
+if(document.domain){
+	if(document.domain =="localhost"){
+		htmlUrl ="http://192.168.85.96:6013/";
+	}else{
+		htmlUrl ="http://"+document.domain+":6013/";
+	}
+}else{
+	htmlUrl = 'http://10.1.6.49:6013/';
+}
 //正式环境
 //const htmlUrl = 'http://10.1.6.49:6013/';
 export default {
