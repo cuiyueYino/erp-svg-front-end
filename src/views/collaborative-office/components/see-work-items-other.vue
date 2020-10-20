@@ -44,7 +44,6 @@
 				//主表tableName
 				tableName: "",
 				//主表ID
-				tempId: "",
 				//全部服务
 				tServiceByParams: JSON.parse(localStorage.getItem('tServiceByParams')),
 				//全部公司
@@ -59,15 +58,28 @@
 		},
 		created() {
 			if(this.$route.query.tempId) {
-				this.context = JSON.parse(this.$route.query.context)
-				this.context.tempId = this.$route.query.tempId
-			}
-			//最上端公司选择
-			this.CompanyData.forEach(item => {
-				if(item.name == "福佳集团") {
-					this.company = item
+				this.context = JSON.parse(this.$route.query.context);
+				this.context.tempId = this.$route.query.tempId;
+				this.$api.jobUserManagement.getCompanyData().then(res => {
+					if(res.status == '200') {
+						this.CompanyData = res.data.data.rows;
+						this.CompanyData.forEach(item => {
+							if(item.id == this.context.company) {
+								this.company = item
+							}
+						})
+					}
+				}), error => {
+					console.log(error);
 				}
-			})
+			}else{
+				//最上端公司选择
+				this.CompanyData.forEach(item => {
+					if(item.name == "福佳集团") {
+						this.company = item
+					}
+				})
+			}
 			this.$api.collaborativeOffice.findList({}).then(data => {
 				this.selectList = data.data.data
 				this.getDialogVisible()
