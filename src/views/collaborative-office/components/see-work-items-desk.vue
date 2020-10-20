@@ -152,9 +152,19 @@
 							//循环删除里层的显示数据
 							con[key].forEach(item => {
 								if(typeof(item.id) == "undefined"){
+									//新增
 									item.oprStatus = 1
 								}else{
-									item.oprStatus = 2
+									if(item.id ==''){
+										//默认没有值得空行
+										item.oprStatus = 1
+										this.$delete(item,'id');
+										this.$delete(item,'parentId');
+										this.$delete(item,'lastUpdTime');
+									}else{
+										//更新
+										item.oprStatus = 2
+									}
 								}
 								//后台要的子表ID
 								this.$set(item, "tempSubId", key)
