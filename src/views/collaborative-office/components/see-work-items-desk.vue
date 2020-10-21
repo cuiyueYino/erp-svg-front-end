@@ -51,11 +51,13 @@
 		},
 		created() {
 			//最上端公司选择
-			this.CompanyData.forEach(item => {
-				if(item.id == this.context.company) {
+			if(this.CompanyData){
+				this.CompanyData.forEach(item => {
+					if(item.id == this.context.company) {
 					this.company = item
-				}
-			})
+					}
+				})
+			}
 			this.$api.collaborativeOffice.findList({}).then(data => {
 				this.selectList = data.data.data
 				this.getDialogVisible()
