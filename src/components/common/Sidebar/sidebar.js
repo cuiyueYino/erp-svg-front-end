@@ -255,18 +255,18 @@ class ITEMData {
 		];
 		this.ITEMoa = [{
 				index: 'oaCompanyHome',
-				name: '集团门户',
+				title: '集团门户',
 			},
 			{
 				index: 'oaPersonalHome',
-				name: '个人门户',
+				title: '个人门户',
 			},
 			{
 				index: 'oaPersonalHome',
-				name: '财务迁移',
+				title: '财务迁移',
 				subs: [{
 					index: 'financialCollection',
-					name: '财务收款',
+					title: '财务收款',
 				}]
 			}
 		];
