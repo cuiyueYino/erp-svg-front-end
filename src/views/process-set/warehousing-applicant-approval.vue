@@ -58,7 +58,7 @@
 							</el-col>
 						</el-row>
 						<el-tabs v-model="atctiveName" @tab-click="handleClick">
-							<el-tab-pane label="审批意见" name="first" v-if="(!seeFlag && (rowFstatus == 4?false:true))&&((showSeeOrUpd == 3 && functionType.indexOf('OA') != '-1')?false:true)">-->
+							<el-tab-pane label="审批意见" name="first" v-if="(!seeFlag && (rowFstatus == 4?false:true))&&((showSeeOrUpd == 3 && functionType.indexOf('OA') != '-1')?false:true)">
 							<!-- 970<el-tab-pane label="审批意见" name="first" v-if="!seeFlag && (rowFstatus == 4?false:true)">	-->
 								<el-row v-if="!fresultFlag">
 									<el-col :span="24">
