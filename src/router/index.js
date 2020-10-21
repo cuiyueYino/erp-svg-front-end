@@ -14,7 +14,7 @@ import collaborativeOffice from '../views/collaborative-office/route';
 import OaHome from '../views/oa-home-page/route';
 import url404 from '../components/page/404';
 import index from '../components/page/index';
-import financial from '../views/financial-migration/page/route'
+
 Vue.use(Router);
 
 export const constantRouterMap = [{
@@ -49,7 +49,6 @@ export const constantRouterMap = [{
 			...confMangement,
 			...collaborativeOffice,
 			...OaHome,
-			...financial,
 			{
 				path: 'index',
 				name: 'index',
