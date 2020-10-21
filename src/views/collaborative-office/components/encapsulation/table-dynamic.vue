@@ -52,7 +52,7 @@
 			</el-dialog>
 		</div>
 		<!--弹出框-工作流-->
-		<workflowDialog ref="childWork" :status="status"></workflowDialog>
+		<workflowDialog ref="childWork"></workflowDialog>
 	</div>
 </template>
 
@@ -86,7 +86,6 @@
 		},
 		data() {
 			return {
-				status : "3",
 				rules: {}, //表单
 				ruleForm: {
 					lines: [],
