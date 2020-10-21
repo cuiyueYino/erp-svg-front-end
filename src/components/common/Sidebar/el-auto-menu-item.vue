@@ -7,15 +7,25 @@
 			</template>
 			<el-auto-menu-item v-for="(menuChildrenItem,index) in menuItemData.subs" :key="index" :menuItemData="menuChildrenItem"></el-auto-menu-item>
 		</el-submenu>
-		<el-menu-item  @click="aaa(menuItemData)" v-else :index="showUrl()">
+		<el-menu-item @click="aaa(menuItemData)" v-else :index="showUrl()">
 			<i :class="menuItemData.pictureUrl"></i>
 			<span slot="title">{{ menuItemData.name }}</span>
 		</el-menu-item>
 	</div>
 	<div v-else>
-		<el-menu-item @click="getContext(menuItemData.index)" :index="menuItemData.index">
-			<!-- <i :class="menuItemData.icon"></i> -->
-			<span slot="title">{{ menuItemData.title }}</span>
+		<!--<el-menu-item @click="getContext(menuItemData.index)" :index="menuItemData.index">
+			<span slot="title">{{ menuItemData.name }}</span>
+		</el-menu-item>-->
+		<el-submenu v-if="menuItemData.subs" :index="showUrl()">
+			<template slot="title">
+				<i :class="menuItemData.pictureUrl"></i>
+				<span>{{ menuItemData.name }}</span>
+			</template>
+			<el-auto-menu-item v-for="(menuChildrenItem,index) in menuItemData.subs" :key="index" :menuItemData="menuChildrenItem" :isOa="a"></el-auto-menu-item>
+		</el-submenu>
+		<el-menu-item @click="getContext(menuItemData.index)" v-else :index="showUrl()">
+			<i :class="menuItemData.pictureUrl"></i>
+			<span slot="title">{{ menuItemData.name }}</span>
 		</el-menu-item>
 	</div>
 </template>
@@ -28,7 +38,9 @@
 			ElAutoMenuItem
 		},
 		data() {
-			return {};
+			return {
+				a : true
+			};
 		},
 		props: {
 			menuItemData: Object,
@@ -36,8 +48,9 @@
 		},
 		methods: {
 			getContext(aaa) {
+				console.log(aaa)
 				this.$router.push({
-					name : aaa
+					name: aaa
 				})
 				//公司 部门 职位
 				this.$api.management.selectAllOrganizationInfo().then(data => {
@@ -51,9 +64,10 @@
 					localStorage.setItem('staffList', JSON.stringify(data.data.data.rows));
 				})
 			},
-			aaa(aaa){
+			aaa(aaa) {
+				console.log(aaa)
 				this.$router.push({
-					name : aaa.url
+					name: aaa.url
 				})
 			},
 			showUrl() {

@@ -27,7 +27,6 @@
 				this.isOa = true
 				this.innerData = new ITEM().ITEMoa;
 			} else {
-				
 				this.innerData = JSON.parse(sessionStorage.getItem("menuList"));
 			}
 		},

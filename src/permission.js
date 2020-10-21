@@ -13,22 +13,23 @@ router.beforeEach((to, from, next) => {
 		} else {
 			if(to.path.indexOf("none") == "-1") {
 				if(JSON.parse(sessionStorage.getItem("menuList")) != null && JSON.parse(sessionStorage.getItem("menuList")).length > 0) {
-					var con = ""
-					var listAll = JSON.parse(sessionStorage.getItem("menuList"))[0].subs
-					getCon(listAll)
-					function getCon(list) {
-						list.forEach(item => {
-							if(typeof(item.url) != 'undefined') {
-								if(item.url == to.name) {
-									con = item.activityId
-								}
-							} else {
-								getCon(item.subs)
-							}
-						})
-					}
+//					var con = ""
+//					var listAll = JSON.parse(sessionStorage.getItem("menuList"))[0].subs
+//					getCon(listAll)
+//					function getCon(list) {
+//						list.forEach(item => {
+//							if(typeof(item.url) != 'undefined') {
+//								if(item.url == to.name) {
+//									con = item.activityId
+//								}
+//							} else {
+//								getCon(item.subs)
+//							}
+//						})
+//					}
 					api.getCompanyData({
-						fmactivity: con
+//						fmactivity: con
+						fmactivity: "OAERP000000OID0013"
 					}).then(data => {
 						localStorage.setItem('CompanyData', JSON.stringify(data.data));
 						next()
