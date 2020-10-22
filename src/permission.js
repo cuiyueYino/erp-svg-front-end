@@ -17,15 +17,17 @@ router.beforeEach((to, from, next) => {
 					var listAll = JSON.parse(sessionStorage.getItem("menuList"))[0].subs
 					getCon(listAll)
 					function getCon(list) {
-						list.forEach(item => {
-							if(typeof(item.url) != 'undefined') {
-								if(item.url == to.name) {
-									con = item.activityId
+						if(list){
+							list.forEach(item => {
+								if(typeof(item.url) != 'undefined') {
+									if(item.url == to.name) {
+										con = item.activityId
+									}
+								} else {
+									getCon(item.subs)
 								}
-							} else {
-								getCon(item.subs)
-							}
-						})
+							})
+						}
 					}
 					api.getCompanyData({
 						fmactivity: con
