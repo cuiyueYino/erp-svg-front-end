@@ -315,16 +315,16 @@ const PROJECT = [
         }
     },
     {
-        path: 'taskEvaluationRecord',
-        name: 'taskEvaluationRecord',
+        path: 'taskChangeRecord',
+        name: 'taskChangeRecord',
         component: taskEvaluationRecord,
         meta: {
             title: '任务自评情况查询表'
         }
     },
     {
-        path: 'taskChangeRecord',
-        name: 'taskChangeRecord',
+        path: 'taskEvaluationRecord',
+        name: 'taskEvaluationRecord',
         component: taskChangeRecord,
         meta: {
             title: '任务变更情况查询表'
