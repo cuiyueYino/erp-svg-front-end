@@ -437,6 +437,7 @@ export default {
                                                 creator: this.dataObj.nodes.wfProcessor[i].creator,
                                                 name:'Join',
                                                 displayName: this.dataObj.nodes.wfProcessor[i].name,
+                                                fmAuditlocation: this.dataObj.nodes.wfProcessor[i].data.fmAuditlocation,
                                             },
                                             type: 'Join',
                                             name: this.dataObj.nodes.wfProcessor[i].name,
