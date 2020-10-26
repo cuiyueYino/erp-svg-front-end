@@ -29,6 +29,9 @@
                 <el-form-item label="业务数据" :label-width="formLabelWidth" >
                     <el-input v-model="formData.fmclassName" autocomplete="off" :disabled="true"></el-input>
                 </el-form-item>
+                <el-form-item label="显示审核位置" :label-width="formLabelWidth" >
+                    <el-input v-model="formData.fmAuditlocation" autocomplete="off" ></el-input>
+                </el-form-item>
                 <!-- <el-form-item label="组织结构" :label-width="formLabelWidth" >
                 <el-input v-model="formData.structure" autocomplete="off"></el-input>
                 <img class="icon-search" @click="baseInputTable('用户','组织结构查询')" src="../../../assets/img/search.svg">
@@ -387,6 +390,7 @@ export default {
                 work:'',
                 workData:'',
                 fmclassName:'',
+                fmAuditlocation:'',
                 fremark:'',
                 wfAuditType:'',
                 maxWorkTime:'',
@@ -534,6 +538,7 @@ export default {
                         this.decisionSelData=[];
                         this.checkedCities = ['由权限控制'];
                         this.formData.name = obj.displayName;
+                        this.formData.fmAuditlocation ='';
                         this.formData.work == '';
                         if(this.$refs.decisionTableReF){
                             this.$refs.decisionTableReF.clearSelection();
@@ -553,6 +558,7 @@ export default {
                         this.formData.fmclassOid = this.editData.dataType.oid;
                         this.formData.fmclassCode = this.editData.dataType.code;
                         this.formData.fmclassName = this.editData.dataType.name;
+                        this.formData.fmAuditlocation =this.editData.fmAuditlocation?this.editData.fmAuditlocation:'';
                         this.formData.fremark = this.editData.fremark;
                         this.formData.maxWorkTime = this.editData.maxWorkTime;
                         //this.formData.timeUnit = this.editData.timeUnit
@@ -868,6 +874,14 @@ export default {
                 var ret1= /^[1-9]\d*$/;
                 if(ret1.test(time)){}else{
                     this.$message.error("保存失败,最大工作时间请填写正整数!");
+                    return; 
+                }
+            }
+            let Auditlocation=this.formData.fmAuditlocation;
+            if(Auditlocation && Auditlocation !=''){
+                var ret1= /^[1-9]\d*$/;
+                if(ret1.test(Auditlocation)){}else{
+                    this.$message.error("保存失败,显示审核位置请填写正整数!");
                     return; 
                 }
             }

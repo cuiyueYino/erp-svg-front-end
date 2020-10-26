@@ -366,6 +366,7 @@ export default {
             }else{
                 this.data.oid = e.oid;
                 this.data.displayName = e.name;
+                this.data.fmAuditlocation=e.fmAuditlocation;
                 //业务工作
                 this.data.mactivity = {
                     "code": e.workCode,
