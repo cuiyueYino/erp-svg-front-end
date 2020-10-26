@@ -29,7 +29,7 @@
                 <el-form-item label="业务数据" :label-width="formLabelWidth" >
                     <el-input v-model="formData.fmclassName" autocomplete="off" :disabled="true"></el-input>
                 </el-form-item>
-                <el-form-item label="显示审核位置" :label-width="formLabelWidth" >
+                <el-form-item label="审批意见位置" :label-width="formLabelWidth" >
                     <el-input v-model="formData.fmAuditlocation" autocomplete="off" ></el-input>
                 </el-form-item>
                 <!-- <el-form-item label="组织结构" :label-width="formLabelWidth" >
