@@ -2,13 +2,13 @@
 	<div>
 		<WorkItemPage ref="childOtherChild" @getSrcId="getSrcId" v-for="(item,key) in context" :key="key" style="display: block;" @changeShow="saveSWIDData" :showChild="key == 0 ? '1' : '2'" :context="item" :showSeeOrUpd="showSeeOrUpd1(item)" :todoFlag="todoFlag">
 			<table class="aaa" v-if="tableList.length > 0" style="margin-top: 10px;margin-bottom: 10px;width: 100%;">
-				<tr v-for="val in tableList" style="min-height: 100px;">
+				<tr v-for="(val,key) in tableList" :key="key" style="min-height: 100px;">
 					<td style="width: 100px;text-align: center;">
 						{{val.fname}}
 					</td>
 					<td>
-						<el-row v-for="valChild in val.list">
-							<el-col v-for='item in valChild' style="border: 1px dashed #000;margin: 10px;padding: 10px;" :span="7">
+						<el-row v-for="(valChild,keyC) in val.list" :key="keyC">
+							<el-col v-for='(item,keyiT) in valChild' :key="keyiT" style="border: 1px dashed #000;margin: 10px;padding: 10px;" :span="7">
 								<el-row style="margin-bottom: 10px;">
 									{{item.approvalComment}}
 								</el-row>
