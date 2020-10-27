@@ -10,6 +10,7 @@
         >
             <el-table-column label="流程节点" prop="nodName"></el-table-column>
             <el-table-column label="审批人" prop="staffName"></el-table-column>
+            <el-table-column label="审批人部门" prop="auditDeptMent"></el-table-column>
             <el-table-column label="审批结论" prop="auditResult"></el-table-column>
             <el-table-column label="审批说明" prop="fopinion"></el-table-column>
             <el-table-column label="审批时间" prop="fcreatetime"></el-table-column>
