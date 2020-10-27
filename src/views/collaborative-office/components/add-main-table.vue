@@ -22,14 +22,14 @@
 			<el-card style="margin-top: 10px;">
 				<el-form size="mini" label-width="80px" :inline="true" :rules="rules" ref="ruleForm" :model="ruleForm" class="demo-form-inline">
 					<el-row>
-						<el-col :span="6">
+						<el-col :span="5">
 							<el-form-item prop="code" label="主表编码">
-								<el-input style="width: 150%;" clearable v-model="ruleForm.code" maxlength="50" placeholder="主表编码"></el-input>
+								<el-input style="width: 100%;" clearable v-model="ruleForm.code" maxlength="50" placeholder="主表编码"></el-input>
 							</el-form-item>
 						</el-col>
-						<el-col :span="6">
+						<el-col :span="5">
 							<el-form-item prop="name" label="主表名称">
-								<el-input style="width: 150%;" clearable v-model="ruleForm.name" maxlength="50" placeholder="主表名称"></el-input>
+								<el-input style="width: 100%;" clearable v-model="ruleForm.name" maxlength="50" placeholder="主表名称"></el-input>
 							</el-form-item>
 						</el-col>
 						<el-col :span="6">
@@ -39,9 +39,15 @@
 								</el-input>
 							</el-form-item>
 						</el-col>
-						<el-col :span="6">
+						<el-col :span="4">
 							<el-form-item label="描述">
-								<el-input clearable style="width: 150%;" type="textarea" :rows="1" maxlength="1500" v-model="ruleForm.remark" placeholder="描述"></el-input>
+								<el-input clearable style="width: 100%;" type="textarea" :rows="1" maxlength="1500" v-model="ruleForm.remark" placeholder="描述"></el-input>
+							</el-form-item>
+						</el-col>
+						<el-col :span="4" class="aaa">
+							<el-form-item label="是否显示审批意见">
+								<el-checkbox @change="updCheck" v-model="ruleForm.checked"></el-checkbox>
+								<el-button style='margin-left: 10px;' v-if="ruleForm.checked" @click="showVisible = true">展示</el-button>
 							</el-form-item>
 						</el-col>
 					</el-row>
@@ -176,6 +182,27 @@
 				</el-row>
 			</formAndTable>
 		</div>
+		<erpDialog erpDialogwidth="30%" title="展示内容" :dialogShow="showVisible">
+			<el-table size="small" height="550" :data="ruleForm.comments" border style="width: 100%">
+				<el-table-column prop="fno" label="序号" align="center"></el-table-column>
+				<el-table-column prop="name" label="名称" align="center">
+					<template slot-scope="scope">
+						<el-input v-model="scope.row.fname" placeholder="名称"></el-input>
+					</template>
+				</el-table-column>
+				<el-table-column prop="date" label="操作" width="120" align="center">
+					<template slot="header" slot-scope="scope">
+						<el-button @click="toAddTable" icon="el-icon-folder-add" type="success" size="small">新增</el-button>
+					</template>
+					<template slot-scope="scope">
+						<el-button @click="toDelTable(scope.$index)" type="danger" icon='el-icon-delete' size="small">删除</el-button>
+					</template>
+				</el-table-column>
+			</el-table>
+			<div slot="footer">
+				<el-button @click="showVisible = false">关闭</el-button>
+			</div>
+		</erpDialog>
 	</el-card>
 </template>
 <script>
@@ -195,6 +222,23 @@
 		},
 		data() {
 			return {
+				options: [{
+					value: '选项1',
+					label: '黄金糕'
+				}, {
+					value: '选项2',
+					label: '双皮奶'
+				}, {
+					value: '选项3',
+					label: '蚵仔煎'
+				}, {
+					value: '选项4',
+					label: '龙须面'
+				}, {
+					value: '选项5',
+					label: '北京烤鸭'
+				}],
+				showVisible: false,
 				files: [],
 				//字段长度类型
 				lengthTypeList: [{
@@ -301,6 +345,7 @@
 				},
 				//输入框整体内容
 				ruleForm: {
+					checked: true,
 					code: "",
 					name: "",
 					tableName: "",
@@ -311,6 +356,8 @@
 					company: "",
 					workItemTypeName: "",
 					lines: [],
+					comments: [],
+					isShowComments : 1,
 				},
 				//传入子组件的值
 				conData: {
@@ -353,6 +400,27 @@
 			})
 		},
 		methods: {
+			toAddTable() {
+				this.ruleForm.comments.push({
+					fname: "",
+					fno: this.ruleForm.comments.length + 1,
+				})
+			},
+			toDelTable(index) {
+				this.ruleForm.comments.splice(index, 1)
+				this.ruleForm.comments.forEach((item, index) => {
+					item.fno = index + 1
+				})
+			},
+			updCheck(ss) {
+				this.ruleForm.comments = []
+				if(ss) {
+					this.ruleForm.isShowComments = 1
+				} else {
+					this.ruleForm.isShowComments = 0
+				}
+
+			},
 			//不是显示状态时,不加check
 			rulesShow(row, con) {
 				if(row.show) {
@@ -367,6 +435,7 @@
 					this.ruleForm.workItemTypeSubName = '';
 					this.ruleForm.workItemTempName = '';
 					this.ruleForm = {
+						checked: true,
 						code: "",
 						name: "",
 						tableName: "",
@@ -377,6 +446,8 @@
 						company: val,
 						workItemTypeName: "",
 						lines: [],
+						comments: [],
+						isShowComments : 1,
 					}
 				}).catch(() => {
 
@@ -396,7 +467,7 @@
 			maketree(data, type) {
 				let parent = [];
 				//for(var i = data[0].children.length - 1; i >= 0; i--) {
-				for(var i = 0; i <data[0].children.length; i++) {
+				for(var i = 0; i < data[0].children.length; i++) {
 					if(type == "公司") {
 						if(data[0].children[i].ftype == 1) {
 							parent.push(data[0].children[i]);
@@ -412,12 +483,12 @@
 				function children(parent, type) {
 					if(parent) {
 						//for(var i = parent.length - 1; i >= 0; i--) {
-						for(var i = 0; i <parent.length; i++) {
+						for(var i = 0; i < parent.length; i++) {
 							if(parent[i].children) {
 								let obj = parent[i];
 								obj.childrenList = [];
 								//for(var j = parent[i].children.length - 1; j >= 0; j--) {
-								for(var j = 0; j <parent[i].children.length; j++) {
+								for(var j = 0; j < parent[i].children.length; j++) {
 									if(type == "公司") {
 										if(parent[i].children[j].ftype == 1) {
 											obj.childrenList.push(parent[i].children[j]);
@@ -615,6 +686,7 @@
 				//判断是否选中
 				if(this.$refs.child.rowClick.id) {
 					//调用查看详情接口
+					this.ruleForm.comments = []
 					this.$api.collaborativeOffice.getWorkItemTypeModel({
 						id: this.$refs.child.rowClick.id
 					}).then(data => {
@@ -702,13 +774,13 @@
 					if(valid) {
 						this.$refs.ruleFormTable.validate((valid) => {
 							if(valid) {
-								let RFcode= this.ruleForm.code;
-								if(RFcode.indexOf("OA") != 0){
+								let RFcode = this.ruleForm.code;
+								if(RFcode.indexOf("OA") != 0) {
 									this.$message.error("主表编码必须以字母OA开头!");
 									return
 								}
-								let RFname= this.ruleForm.name;
-								if(RFname.indexOf("OA") != 0){
+								let RFname = this.ruleForm.name;
+								if(RFname.indexOf("OA") != 0) {
 									this.$message.error("主表名称必须以字母OA开头!");
 									return
 								}
@@ -716,6 +788,7 @@
 								this.ruleForm.lines.forEach(item => {
 									item.oprStatus = 1
 								})
+								console.log(this.ruleForm)
 								this.$api.collaborativeOffice.insertWorkItemTempModel(this.ruleForm).then(data => {
 									if(this.dataBack(data, msg)) {
 										this.$parent.toSelect()
@@ -759,5 +832,10 @@
 	
 	>>>.el-checkbox__input.is-disabled.is-checked .el-checkbox__inner::after {
 		border-color: #000000!important;
+	}
+</style>
+<style>
+	.aaa .el-form-item__label {
+		width: 130px!important;
 	}
 </style>

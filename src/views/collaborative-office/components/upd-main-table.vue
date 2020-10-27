@@ -25,28 +25,34 @@
 				</el-row>
 			</el-card>
 			<el-card class="box-card">
-				<el-form size="mini" :disabled=" showFigNum == 1" label-width="80px" :inline="true" :rules="rules" ref="ruleForm" :model="ruleForm" class="demo-form-inline">
+				<el-form size="mini" label-width="80px" :inline="true" :rules="rules" ref="ruleForm" :model="ruleForm" class="demo-form-inline">
 					<el-row>
-						<el-col :span="6">
+						<el-col :span="5">
 							<el-form-item prop="code" label="主表编码">
-								<el-input style="width: 110%;" clearable v-model="ruleForm.code" maxlength="50" placeholder="主表编码"></el-input>
+								<el-input :disabled="showFigNum == 1" style="width: 100%;" clearable v-model="ruleForm.code" maxlength="50" placeholder="主表编码"></el-input>
 							</el-form-item>
 						</el-col>
-						<el-col :span="6">
+						<el-col :span="5">
 							<el-form-item prop="name" label="主表名称">
-								<el-input style="width: 110%;" clearable v-model="ruleForm.name" maxlength="50" placeholder="主表名称"></el-input>
+								<el-input :disabled="showFigNum == 1" style="width: 100%;" clearable v-model="ruleForm.name" maxlength="50" placeholder="主表名称"></el-input>
 							</el-form-item>
 						</el-col>
 						<el-col :span="6">
 							<el-form-item prop="workItemTypeName" label="主表分类">
-								<el-input style="width: 110%;" disabled placeholder="主表分类" v-model="ruleForm.workItemTypeName">
+								<el-input style="width: 100%;" disabled placeholder="主表分类" v-model="ruleForm.workItemTypeName">
 									<el-button disabled @click="dialogVisible = true" slot="append" icon="el-icon-search"></el-button>
 								</el-input>
 							</el-form-item>
 						</el-col>
-						<el-col :span="6">
+						<el-col :span="4">
 							<el-form-item label="描述">
-								<el-input clearable style="width: 130%;" type="textarea" :rows="1" maxlength="1500" v-model="ruleForm.remark" placeholder="描述"></el-input>
+								<el-input :disabled="showFigNum == 1" clearable style="width: 100%;" type="textarea" :rows="1" maxlength="1500" v-model="ruleForm.remark" placeholder="描述"></el-input>
+							</el-form-item>
+						</el-col>
+						<el-col :span="4" class="aaa">
+							<el-form-item label="是否显示审批意见">
+								<el-checkbox :disabled="showFigNum == 1" @change="updCheck" v-model="ruleForm.checked"></el-checkbox>
+								<el-button style='margin-left: 10px;' v-if="ruleForm.checked" @click="showVisible = true">展示</el-button>
 							</el-form-item>
 						</el-col>
 					</el-row>
@@ -199,6 +205,27 @@
 				</el-card>
 			</formAndTable>
 		</div>
+		<erpDialog erpDialogwidth="30%" title="展示内容" :dialogShow="showVisible">
+			<el-table size="small" height="550" :data="ruleForm.comments" border style="width: 100%">
+				<el-table-column prop="fno" label="序号" align="center"></el-table-column>
+				<el-table-column prop="name" label="名称" align="center">
+					<template slot-scope="scope">
+						<el-input :disabled="showFigNum == 1" v-model="scope.row.fname" placeholder="名称"></el-input>
+					</template>
+				</el-table-column>
+				<el-table-column v-if="showFigNum != 1" prop="date" label="操作" width="120" align="center">
+					<template slot="header" slot-scope="scope">
+						<el-button  @click="toAddTable" icon="el-icon-folder-add" type="success" size="small">新增</el-button>
+					</template>
+					<template slot-scope="scope">
+						<el-button @click="toDelTable(scope.$index)" type="danger" icon='el-icon-delete' size="small">删除</el-button>
+					</template>
+				</el-table-column>
+			</el-table>
+			<div slot="footer">
+				<el-button @click="showVisible = false">关闭</el-button>
+			</div>
+		</erpDialog>
 	</div>
 </template>
 <script>
@@ -216,6 +243,7 @@
 		},
 		data() {
 			return {
+				showVisible : false,
 				files: [],
 				//字段长度类型
 				lengthTypeList: [{
@@ -326,6 +354,9 @@
 					company: "",
 					workItemTypeName: "",
 					lines: [],
+					checked:false,
+					comments: [],
+					isShowComments : 1,
 				},
 				//传入子组件的值
 				conData: {
@@ -357,6 +388,11 @@
 		},
 		created() {
 			this.ruleForm = this.context
+			if(this.ruleForm.isShowComments == 1){
+				this.$set(this.ruleForm,'checked',true)
+			}else{
+				this.$set(this.ruleForm,'checked',false)
+			}
 			/*this.CompanyData.forEach(item => {
 				if(item.name == "福佳集团") {
 					this.ruleForm.company = item.id
@@ -381,6 +417,26 @@
 			})
 		},
 		methods: {
+			toAddTable() {
+				this.ruleForm.comments.push({
+					fname: "",
+					fno: this.ruleForm.comments.length + 1,
+				})
+			},
+			toDelTable(index) {
+				this.ruleForm.comments.splice(index, 1)
+				this.ruleForm.comments.forEach((item, index) => {
+					item.fno = index + 1
+				})
+			},
+			updCheck(ss) {
+				this.ruleForm.comments = []
+				if(ss) {
+					this.ruleForm.isShowComments = 1
+				} else {
+					this.ruleForm.isShowComments = 0
+				}
+			},
 			//不是显示状态时,不加check
 			rulesShow(row, con) {
 				if(row.show) {
@@ -777,5 +833,10 @@
 	
 	>>>.el-checkbox__input.is-disabled.is-checked .el-checkbox__inner::after {
 		border-color: #000000!important;
+	}
+</style>
+<style>
+	.aaa .el-form-item__label {
+		width: 130px!important;
 	}
 </style>

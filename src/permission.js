@@ -38,7 +38,6 @@ router.beforeEach((to, from, next) => {
 				} else {
 					next()
 				}
-
 			} else {
 				next("/erp/404")
 			}

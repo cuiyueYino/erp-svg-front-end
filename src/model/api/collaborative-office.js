@@ -19,6 +19,16 @@ const collaborativeOffice = {
 		}
 		return httpReqest.get('/api/interfaces/workItem/findIds' + valueS);
 	},
+	getShowApprovalCommentsMsg(params) {
+		var valueS = '?';
+		for(var item in params) {
+			valueS += item + "=" + params[item] + "&";
+		}
+		if(valueS.slice(valueS.length - 1, valueS.length) === "&") {
+			valueS = valueS.slice(0, valueS.length - 1);
+		}
+		return httpReqest.get('/api/wfInterfaces/workFlow/processMonitor/getShowApprovalCommentsMsg' + valueS);
+	},
 	// 修改状态主表分类，7禁用、3有效
 	updateStatus(params) {
 		return httpReqest.post('/api/interfaces/workItemType/updateStatus', params);

@@ -1,6 +1,8 @@
 <template>
 	<div>
-		<formAndTable :showChild="showChild" :files="context.files" :dis="showSeeOrUpd2()" showAdd="2" ref="child" :form-data="conData"></formAndTable>
+		<formAndTable :showChild="showChild" :files="context.files" :dis="showSeeOrUpd2()" showAdd="2" ref="child" :form-data="conData">
+			<slot slot="aaa"></slot>
+		</formAndTable>
 	</div>
 </template>
 <script>
@@ -153,17 +155,17 @@
 						if(typeof(con[key]) == "object") {
 							//循环删除里层的显示数据
 							con[key].forEach(item => {
-								if(typeof(item.id) == "undefined"){
+								if(typeof(item.id) == "undefined") {
 									//新增
 									item.oprStatus = 1
-								}else{
-									if(item.id ==''){
+								} else {
+									if(item.id == '') {
 										//默认没有值得空行
 										item.oprStatus = 1
-										this.$delete(item,'id');
-										this.$delete(item,'parentId');
-										this.$delete(item,'lastUpdTime');
-									}else{
+										this.$delete(item, 'id');
+										this.$delete(item, 'parentId');
+										this.$delete(item, 'lastUpdTime');
+									} else {
 										//更新
 										item.oprStatus = 2
 									}
@@ -187,12 +189,12 @@
 					}
 					//后台需要json格式的数据 
 					backData.jsonStr = JSON.stringify(con)
-					this.$refs.child.toUpload(this.context.id,this.context.fsrcoId)
+					this.$refs.child.toUpload(this.context.id, this.context.fsrcoId)
 					this.$api.collaborativeOffice.dataToDataWorkItem(backData).then(data => {
 						this.$emit('changeShow', false);
 						//if(this.dataBack(data, "提交成功")) {
-							//this.$refs.child.toUpload(this.context.id)
-							//this.$refs.child.toUpload(this.context.id,this.context.fsrcoId)
+						//this.$refs.child.toUpload(this.context.id)
+						//this.$refs.child.toUpload(this.context.id,this.context.fsrcoId)
 						//}
 					})
 				} else {
@@ -264,7 +266,7 @@
 									right: right,
 									child: item.field
 								}
-								if(typeof(itemChild.parameterList) == "undefined"){
+								if(typeof(itemChild.parameterList) == "undefined") {
 									itemChild.parameterList = []
 								}
 								itemChild.parameterList.push(a)
@@ -333,7 +335,7 @@
 			maketree(data, type) {
 				let parent = [];
 				//for(var i = data[0].children.length - 1; i >= 0; i--) {
-				for(var i = 0; i <data[0].children.length; i++) {
+				for(var i = 0; i < data[0].children.length; i++) {
 					if(type == "公司") {
 						if(data[0].children[i].ftype == 1) {
 							parent.push(data[0].children[i]);
@@ -349,12 +351,12 @@
 				function children(parent, type) {
 					if(parent) {
 						//for(var i = parent.length - 1; i >= 0; i--) {
-						for(var i = 0; i <parent.length; i++) {
+						for(var i = 0; i < parent.length; i++) {
 							if(parent[i].children) {
 								let obj = parent[i];
 								obj.childrenList = [];
 								//for(var j = parent[i].children.length - 1; j >= 0; j--) {
-								for(var j = 0; j <parent[i].children.length; j++) {
+								for(var j = 0; j < parent[i].children.length; j++) {
 									if(type == "公司") {
 										if(parent[i].children[j].ftype == 1) {
 											obj.childrenList.push(parent[i].children[j]);

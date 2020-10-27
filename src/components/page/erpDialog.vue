@@ -21,7 +21,7 @@
 -->
 
 <template>
-	<el-dialog :title="title" :show-close="showClose" :destroy-on-close="true" :append-to-body="true" center :visible.sync="show" :width="erpDialogwidth == 'true' ? '80%' : '50%'">
+	<el-dialog :title="title" :show-close="showClose" :destroy-on-close="true" :append-to-body="true" center :visible.sync="show" :width="widthShow()">
 		<slot></slot>
 		<div slot="footer" style="text-align: center;">
 			<slot name="footer"></slot>
@@ -49,7 +49,17 @@
 				set() {}
 			}
 		},
-		methods: {}
+		methods: {
+			widthShow(){
+				if(this.erpDialogwidth == 'true'){
+					return '80%'
+				}else if(this.erpDialogwidth == 'false'){
+					return '50%'
+				}else{
+					return this.erpDialogwidth
+				}
+			}
+		}
 	};
 </script>
 

@@ -5,6 +5,7 @@
 				<slot></slot>
 			</formIcon>
 		</el-card>
+		<slot v-if="showChild == 1" name="aaa"></slot>
 		<el-tabs v-model="activeName" type="border-card">
 			<el-tab-pane :label="item.showName" v-for="(item,index) in formData.bottom" :name="item.id" :key="index">
 				<formIcon :dis="dis" :showAdd="showAdd" :key="count" ref="refCon" show="2" v-if="item.type == 1" :form-data="item"></formIcon>
@@ -161,7 +162,7 @@
 				link.click()
 			},
 			//上传
-			toUpload(id,fid) {   
+			toUpload(id, fid) {   
 				this.fileList.forEach(item => {
 					if(typeof(item.id) == "undefined") {
 						var formData  = new  FormData();
@@ -215,9 +216,9 @@
 						this.$refs.refCon.forEach(item => {
 							//form表单样式的子表
 							if(item.formData.type == 1) {
-								if(this.dis == 3){
+								if(this.dis == 3) {
 									item.ruleForm.oprStatus = 2
-								}else{
+								} else {
 									item.ruleForm.oprStatus = 1
 								}
 								//格式统一,用子表ID做为数组的名称,表单样式数组只有一条数据
