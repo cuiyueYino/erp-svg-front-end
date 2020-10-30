@@ -211,7 +211,6 @@
 		methods: {
 			clickRow1(val) {
 				//选中点击
-				this.$refs.roleTable.toggleRowSelection(val);
 				//判断新增还是删除
 				let hasIdS = false;
 				if(this.RoleselectData.length >0){
@@ -227,10 +226,10 @@
 				if(!hasIdS) {
 					this.RoleselectData[this.RoleselectData.length] = val.id;
 				}
+				this.$refs.roleTable.toggleRowSelection(val);
 			},
 			clickRow2(val) {
-				//  选中点击
-				this.$refs.UserLTable.toggleRowSelection(val);
+				//选中点击
 				//判断新增还是删除
 				let hasIdS = false;
 				if(this.RUserLselectData.length > 0){
@@ -246,6 +245,7 @@
 				if(!hasIdS) {
 					this.RUserLselectData[this.RUserLselectData.length] = val.foid;
 				}
+				this.$refs.UserLTable.toggleRowSelection(val);
 			},
 			selectCom(){
 				this.$api.jobUserManagement.getCompanyData().then((res) => {
@@ -551,7 +551,11 @@
 			//右侧角色选中事件
 			onRoleSelectionChange(data, val) {
 				if(data.length ==1){
-					this.getRRoleSelectedList(val.id,"add");
+					if(this.RoleselectData.length>1){
+						this.getRRoleSelectedList(val.id,"remove");
+					}else{
+						this.getRRoleSelectedList(val.id,"add");
+					}	
 				}else{
 					if(data.length ==10){
 						this.getRRoleSelectedList(val.id,'add');
@@ -674,7 +678,11 @@
 			//右侧人员选中事件
 			onUserLSelectionChange(data, val) {
 				if(data.length ==1){
-					this.getRUserSelectedList(val.foid,"add");
+					if(this.RUserLselectData.length>1){
+						this.getRUserSelectedList(val.foid,"remove");
+					}else{
+						this.getRUserSelectedList(val.foid,"add");
+					}
 				}else{
 					if(data.length ==10){
 						this.getRUserSelectedList(val.foid,"add");
@@ -731,7 +739,7 @@
 					let UserSelect = this.UserselectedList;
 					let RoleRSelect = this.RoleselectData;
 					if(UserSelect.length > 0) {
-						if(RoleRSelect.length > 0) {
+						//if(RoleRSelect.length > 0) {
 							let UserID = UserSelect[0].foid;
 							let RoleID = [];
 							for(var i = 0; i < RoleRSelect.length; i++) {
@@ -751,9 +759,9 @@
 									this.$message.error(responsevalue.data.msg);
 								}
 							});
-						} else {
-							this.$message.error('请选择角色数据!');
-						}
+						//} else {
+							//this.$message.error('请选择角色数据!');
+						//}
 					} else {
 						this.$message.error('请选择一行人员数据!');
 					}
@@ -762,7 +770,7 @@
 					let RoleSelect = this.roleLselectedList;
 					let UserRSelect = this.RUserLselectData;
 					if(RoleSelect.length > 0) {
-						if(UserRSelect.length > 0) {
+						//if(UserRSelect.length > 0) {
 							let roleID = RoleSelect[0].id;
 							let UserID = [];
 							for(var i = 0; i < UserRSelect.length; i++) {
@@ -782,9 +790,9 @@
 									this.$message.error(responsevalue.data.msg);
 								}
 							});
-						} else {
-							this.$message.error('请选择人员数据!');
-						}
+						//} else {
+							//this.$message.error('请选择人员数据!');
+						//}
 					} else {
 						this.$message.error('请选择一行角色数据!');
 					}
