@@ -762,7 +762,7 @@
 					let RoleSelect = this.roleLselectedList;
 					let UserRSelect = this.RUserLselectData;
 					if(RoleSelect.length > 0) {
-						if(UserRSelect.length > 0) {
+						// if(UserRSelect.length > 0) {
 							let roleID = RoleSelect[0].id;
 							let UserID = [];
 							for(var i = 0; i < UserRSelect.length; i++) {
@@ -782,9 +782,10 @@
 									this.$message.error(responsevalue.data.msg);
 								}
 							});
-						} else {
-							this.$message.error('请选择人员数据!');
-						}
+						// } 
+						// else {
+						// 	this.$message.error('请选择人员数据!');
+						// }
 					} else {
 						this.$message.error('请选择一行角色数据!');
 					}
