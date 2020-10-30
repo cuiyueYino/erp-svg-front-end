@@ -209,15 +209,44 @@
 			this.selectCom();
 		},
 		methods: {
-clickRow1(val) {
-    //  选中点击
-    this.$refs.roleTable.toggleRowSelection(val);
-   },
-   
-clickRow2(val) {
-    //  选中点击
-    this.$refs.UserLTable.toggleRowSelection(val);
-   },
+			clickRow1(val) {
+				//选中点击
+				this.$refs.roleTable.toggleRowSelection(val);
+				//判断新增还是删除
+				let data = this.RoleselectData;
+				let hasIdS = false;
+				if(data.length >0){
+					for(var i = 0; i < data.length; i++) {
+						let item = data[i];
+						if(val.id == item.id) {
+							this.RoleselectData.splice(i, 1);
+							hasIdS = true;
+						}
+					}
+				}
+				if(!hasIdS) {
+					this.RoleselectData[this.RoleselectData.length] = val.id;
+				}
+			},
+			clickRow2(val) {
+				//  选中点击
+				this.$refs.UserLTable.toggleRowSelection(val);
+				//判断新增还是删除
+				let hasIdS = false;
+				let data = this.RUserLselectData;
+				if(data.length>0){
+					for(var i = 0; i < data.length; i++) {
+						var item = data[i];
+						if(val.foid == item.foid) {
+							this.RUserLselectData.splice(i, 1);
+							hasIdS = true;
+						}
+					}
+				}
+				if(!hasIdS) {
+					this.RUserLselectData[this.RUserLselectData.length] = val.foid;
+				}
+			},
 			selectCom(){
 				this.$api.jobUserManagement.getCompanyData().then((res) => {
 					if (res.status == "200") {
