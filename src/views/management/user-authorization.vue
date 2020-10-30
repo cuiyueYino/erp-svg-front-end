@@ -213,14 +213,14 @@
 				//选中点击
 				this.$refs.roleTable.toggleRowSelection(val);
 				//判断新增还是删除
-				let data = this.RoleselectData;
 				let hasIdS = false;
-				if(data.length >0){
-					for(var i = 0; i < data.length; i++) {
-						let item = data[i];
-						if(val.id == item.id) {
+				if(this.RoleselectData.length >0){
+					for(var i = 0; i < this.RoleselectData.length; i++) {
+						let item = this.RoleselectData[i];
+						if(val.id == item) {
 							this.RoleselectData.splice(i, 1);
 							hasIdS = true;
+							break;
 						}
 					}
 				}
@@ -233,13 +233,13 @@
 				this.$refs.UserLTable.toggleRowSelection(val);
 				//判断新增还是删除
 				let hasIdS = false;
-				let data = this.RUserLselectData;
-				if(data.length>0){
-					for(var i = 0; i < data.length; i++) {
-						var item = data[i];
-						if(val.foid == item.foid) {
+				if(this.RUserLselectData.length > 0){
+					for(let i = 0; i < this.RUserLselectData.length; i++) {
+						let item = this.RUserLselectData[i];
+						if(val.foid == item) {
 							this.RUserLselectData.splice(i, 1);
 							hasIdS = true;
+							break
 						}
 					}
 				}
