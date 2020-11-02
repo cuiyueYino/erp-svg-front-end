@@ -753,16 +753,26 @@
 						if(this.isEdit) {
 							this.newIndex = null;
 							if(this.tableData2[0] != undefined) {
+								//启用状态也上传
 								if(this.tableData2[0].foperationcontent == '禁用' || this.tableData2[0].foperationcause == '封号') {
-								this.form.tuseroperationrecordReqVo = {
-									'foperationcontent':1,
-									'foperationcause':1,
-									'fcreator':localStorage.getItem('ms_userId'),
-									'fcompanyoid':localStorage.getItem('ms_companyId'),
-									'foperationtime':this.tableData2[0].foperationtime,
-									'foperDescription':this.tableData2[0].foperationreason
+									this.form.tuseroperationrecordReqVo = {
+										'foperationcontent':1,
+										'foperationcause':1,
+										'fcreator':localStorage.getItem('ms_userId'),
+										'fcompanyoid':localStorage.getItem('ms_companyId'),
+										'foperationtime':this.tableData2[0].foperationtime,
+										'foperDescription':this.tableData2[0].foperationreason
+									}
+								}else if(this.tableData2[0].foperationcontent == '启用' || this.tableData2[0].foperationcause == '解封') {
+									this.form.tuseroperationrecordReqVo = {
+										'foperationcontent':2,
+										'foperationcause':2,
+										'fcreator':localStorage.getItem('ms_userId'),
+										'fcompanyoid':localStorage.getItem('ms_companyId'),
+										'foperationtime':this.tableData2[0].foperationtime,
+										'foperDescription':this.tableData2[0].foperationreason
+									}
 								}
-							}
 							}
 							
 							if(this.form.fpassword != this.form.fpasswordStr && this.form.fpasswordStr.length > 6){
