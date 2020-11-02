@@ -40,8 +40,7 @@
 		</el-card>
 		<!-- 表格 -->
 		<el-card class="box-card">
-			<dynamic-table @Row-Click="clickRow"
-        ref="dataTable" :columns="columns" :table-data="tableData" :total="total" :page-num="pageNum" :page-size="pageSize" @current-change="onCurrentChange" @selection-change="onSelectionChange" v-loading="false" element-loading-text="加载中"></dynamic-table>
+			<dynamic-table @Row-Click="clickRow" ref="dataTable" :columns="columns" :table-data="tableData" :total="total" :page-num="pageNum" :page-size="pageSize" @current-change="onCurrentChange" @selection-change="onSelectionChange" v-loading="false" element-loading-text="加载中"></dynamic-table>
 		</el-card>
 		<!-- 弹出框 -->
 		<el-dialog :title="isEdit?'编辑用户':'新建用户'" class="add-user" center top="20px" v-if="dialogFormVisible" :visible.sync="dialogFormVisible" :close-on-click-modal="false">
@@ -50,7 +49,7 @@
 					<el-col :span="11">
 						<el-form-item label="公司：" :label-width="formLabelWidth" class="pop-select" prop="fcompanyoid">
 							<el-select disabled v-model="form.fcompanyoid" size="small" clearable placeholder="请选择">
-								<el-option label="和谐健康" value="_DefaultCompanyOId"></el-option>
+								<el-option label="集团总部" value="_DefaultCompanyOId"></el-option>
 							</el-select>
 						</el-form-item>
 					</el-col>
@@ -93,13 +92,20 @@
 						</el-form-item>
 					</el-col>
 				</el-row>
-				<el-row :gutter="24">
+				<el-row :gutter="24" v-if="isEdit">
 					<el-col :span="11">
-						<el-form-item v-show="isEdit" label="重置：" :label-width="formLabelWidth">
+						<el-form-item  label="重置：" :label-width="formLabelWidth">
 							<el-checkbox v-model="resetCheck" size="small"></el-checkbox>
 						</el-form-item>
 					</el-col>
 					<el-col :span="11" :offset="2">
+						<el-form-item label="禁用：" prop="fforbid" :label-width="formLabelWidth">
+							<el-checkbox v-model="checked" size="small" @change="checkFun"></el-checkbox>
+						</el-form-item>
+					</el-col>
+				</el-row>
+				<el-row :gutter="24" v-else>
+					<el-col :span="11">
 						<el-form-item label="禁用：" prop="fforbid" :label-width="formLabelWidth">
 							<el-checkbox v-model="checked" size="small" @change="checkFun"></el-checkbox>
 						</el-form-item>
@@ -150,7 +156,7 @@
 					</el-select>
 				</el-form-item>
 				<el-form-item label="操作原因：" :span="10" :label-width="formLabelWidth" class="pop-select">
-					<el-input :disabled=true size="small" v-model="formForbidenRes"></el-input>
+					<el-input  size="small" v-model="formForbidenRes"></el-input>
 				</el-form-item>
 			</el-form>
 			<div slot="footer" class="dialog-footer">
@@ -284,6 +290,10 @@
 					},
 					{
 						key: "foperationcause",
+						title: "操作结果",
+					},
+					{
+						key: "foperationreason",
 						title: "操作原因",
 					},
 					{
@@ -417,9 +427,9 @@
 
 		methods: {
 			clickRow(val) {
-    //  选中点击
-    this.$refs.dataTable.toggleRowSelection(val);
-   },
+				//  选中点击
+				this.$refs.dataTable.toggleRowSelection(val);
+			},
 			closUserVisible(){
 				this.filterText='';
 				this.userVisible=false;
@@ -433,14 +443,16 @@
 						if(this.tableData2[getTrueIndex] !== undefined) {
 							this.tableData2[getTrueIndex].foperationtime = newData;
 							this.tableData2[getTrueIndex].foperationcontent = '禁用';
-							this.tableData2[getTrueIndex].foperationcause = 'OA封号';
+							this.tableData2[getTrueIndex].foperationcause = '封号';
+							this.tableData2[getTrueIndex].foperationreason='';
 							return
 						}
 						this.newIndex = 0;
 						data = {
 							foperationtime: newData,
 							foperationcontent: '禁用',
-							foperationcause: 'OA封号',
+							foperationcause: '封号',
+							foperationreason:'',
 							index:this.newIndex,
 						}
 						this.tableData2.unshift(data); 
@@ -450,7 +462,8 @@
 						if(this.tableData2[getTrueIndex2] !== undefined) {
 							this.tableData2[getTrueIndex2].foperationtime = newData;
 							this.tableData2[getTrueIndex2].foperationcontent = '启用';
-							this.tableData2[getTrueIndex2].foperationcause = 'OA解封';
+							this.tableData2[getTrueIndex2].foperationcause = '解封';
+							this.tableData2[getTrueIndex2].foperationreason='';
 							return
 						}
 						this.newIndex = this.tableData2.length == 0 ? 0 : (this.tableData2.length + 1);
@@ -458,13 +471,12 @@
 						data = {
 							foperationtime: newData,
 							foperationcontent: '启用',
-							foperationcause: 'OA解封',
+							foperationcause: '解封',
+							foperationreason:'',
 							index:this.newIndex,
 						}
 						this.tableData2.unshift(data); 
-						
 						break;
-
 					default:
 						break;
 				}
@@ -730,7 +742,7 @@
 									foperationtime: newTableRow.foperationtime,
 									foperationcontent: newTableRow.content,
 									foperationcause: newTableRow.cause,
-
+									foperDescription:newTableRow.foperationreason
 								}
 							}
 
@@ -741,13 +753,14 @@
 						if(this.isEdit) {
 							this.newIndex = null;
 							if(this.tableData2[0] != undefined) {
-								if(this.tableData2[0].foperationcontent == '禁用' || this.tableData2[0].foperationcause == 'OA封号') {
+								if(this.tableData2[0].foperationcontent == '禁用' || this.tableData2[0].foperationcause == '封号') {
 								this.form.tuseroperationrecordReqVo = {
 									'foperationcontent':1,
 									'foperationcause':1,
 									'fcreator':localStorage.getItem('ms_userId'),
 									'fcompanyoid':localStorage.getItem('ms_companyId'),
 									'foperationtime':this.tableData2[0].foperationtime,
+									'foperDescription':this.tableData2[0].foperationreason
 								}
 							}
 							}
@@ -830,16 +843,17 @@
 					case "1":
 						// this.tableData2[this.newIndex - 1].foperationcontent = 1;
 						// this.tableData2[this.newIndex - 1].foperationcause = 1;
-						this.tableData2[0].foperationcause = 'OA封号';
+						this.tableData2[0].foperationcause = '封号';
 						this.tableData2[0].foperationcontent = '禁用';
+						this.tableData2[0].foperationreason = this.formForbidenRes;
 						break;
 					case "2":
 						// this.tableData2[this.newIndex - 1].foperationcontent = 2;
 						// this.tableData2[this.newIndex - 1].foperationcause = 2;
-						this.tableData2[0].foperationcause = 'OA解封';
+						this.tableData2[0].foperationcause = '解封';
 						this.tableData2[0].foperationcontent = '启用';
+						this.tableData2[0].foperationreason = this.formForbidenRes;
 						break;
-
 					default:
 						break;
 				}
@@ -848,12 +862,11 @@
 			aaa(e) {
 				switch(e) {
 					case '1':
-						this.formForbidenRes = 'OA封号'
+						this.formForbidenRes = '封号'
 						break;
 					case '2':
-						this.formForbidenRes = 'OA解封'
+						this.formForbidenRes = '解封'
 						break;
-
 					default:
 						break;
 				}
@@ -888,9 +901,8 @@
 				}
 				ret.push(
 					<div>
-         <el-button  disabled={nowIndexF?false:true}  type="text" onClick={() => onRowProjectnameClick(V.row)}  >编辑</el-button>
-             
-         </div>
+					<el-button  disabled={nowIndexF?false:true}  type="text" onClick={() => onRowProjectnameClick(V.row)}  >编辑</el-button>
+					</div>
 				);
 				return <div>{ret}</div>;
 			},
@@ -924,15 +936,18 @@
 									switch(item.foperationcause) {
 										case 2:
 											item.foperationcontent = "启用";
-											item.foperationcause = "OA解封";
+											item.foperationcause = "解封";
+											item.foperationreason=item.foperDescription;
 											break;
 										case 1:
 											item.foperationcontent = "封号";
-											item.foperationcause = "OA封号";
+											item.foperationcause = "封号";
+											item.foperationreason=item.foperDescription;
 											break;
 										case 3:
 											item.foperationcontent = "其他";
 											item.foperationcause = "其他";
+											item.foperationreason=item.foperDescription;
 											break;
 
 										default:
