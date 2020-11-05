@@ -1,7 +1,7 @@
 <template>
     
     <div class="most-warapper">     
-       <iframe :src="$GLOBAL.htmlUrl + 'taskChangeRecord' " style="width:100%;height:764px;border:0px;padding:0px;"  class="taskEvaluationRecord"></iframe>
+       <iframe :src="$GLOBAL.htmlUrl + 'taskChangeRecord' " style="width:100%;height:764px;border:0px;padding:0px;"  class="taskChangeRecord"></iframe>
     </div>
 </template>
 
@@ -24,14 +24,14 @@ export default {
     .sidebar {
         z-index:999;
     }
-    .taskEvaluationRecord {
+    .taskChangeRecord {
         z-index: 0;
         position: absolute;
     }
+    .taskChangeRecord .page-heading  {
+        padding-top:0px !important;
+    }
     .tags {
         z-index:999;
-    }
-    .taskEvaluationRecord .page-heading  {
-        padding-top:0px !important;
     }
 </style>
