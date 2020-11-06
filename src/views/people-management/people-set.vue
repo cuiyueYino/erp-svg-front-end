@@ -48,7 +48,8 @@
 				<el-row :gutter="22">
 					<el-col :span="11">
 						<el-form-item label="公司：" :label-width="formLabelWidth" class="pop-select" prop="tcompanyoid">
-							<el-select v-model="peopleForm.tcompanyoid" @change="getTcompanyo" size="small" clearable placeholder="请选择" :disabled='editDis'>
+							<!--<el-select v-model="peopleForm.tcompanyoid" @change="getTcompanyo" size="small" clearable placeholder="请选择" :disabled='editDis'>-->
+							<el-select v-model="peopleForm.tcompanyoid" @change="getTcompanyo" size="small" clearable placeholder="请选择">
 								<el-option v-for="item in options" :key="item.id" :label="item.name" :value="item.id"></el-option>
 							</el-select>
 						</el-form-item>
@@ -132,7 +133,7 @@
 						</template>
 					</el-table-column>
 					<el-table-column align="right" width="100">
-						<template slot="header" slot-scope="scope">
+						<template slot="header" >
 							<el-button type="success" icon="el-icon-folder-add" size="small"  @click="addRow()">新增</el-button>
 						</template>
 						<template slot-scope="scope">
@@ -674,7 +675,7 @@
 							if(valid1) {
 								this.peopleForm.pluralismModels = this.peopleForm.tableData3
 								if(this.isEdit) {
-									this.peopleForm.tcompanyoid = this.editFormData.tcompanyoid
+									//this.peopleForm.tcompanyoid = this.editFormData.tcompanyoid
 									this.$api.jobUserManagement.updatePeopleData(this.peopleForm).then(res => {
 										if(res.data.code == 0) {
 											this.dialogFormVisible = false;

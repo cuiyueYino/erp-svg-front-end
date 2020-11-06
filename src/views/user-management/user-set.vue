@@ -49,7 +49,7 @@
 					<el-col :span="11">
 						<el-form-item label="公司：" :label-width="formLabelWidth" class="pop-select" prop="fcompanyoid">
 							<el-select disabled v-model="form.fcompanyoid" size="small" clearable placeholder="请选择">
-								<el-option label="集团总部" value="_DefaultCompanyOId"></el-option>
+								<el-option label="和谐健康" value="_DefaultCompanyOId"></el-option>
 							</el-select>
 						</el-form-item>
 					</el-col>
