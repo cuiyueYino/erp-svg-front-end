@@ -48,7 +48,7 @@ const quantificationOfPlannedTasks = () => import('./quantification-ofPlannedTas
 const taskStatus = () => import('./task-status.vue');
 const taskExtensionApproval = () => import('./task-extensionApproval.vue');
 const temporaryTaskEstablishment = () => import('./temporary-taskEstablishment.vue');
-
+const changeTemporaryMission = () => import('./task-temporary-change.vue');
 const PROJECT = [
     {
         path: 'workProcess',
@@ -88,6 +88,14 @@ const PROJECT = [
         component: temporaryMission,
         meta: {
             title: '临时任务派发'
+        }
+    },
+    {
+        path: 'changeTemporaryMission',
+        name: 'changeTemporaryMission',
+        component: changeTemporaryMission,
+        meta: {
+            title: '临时任务变更'
         }
     },
     {
