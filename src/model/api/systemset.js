@@ -38,6 +38,14 @@ const systemSet = {
     deleteMenuModel(params){
         return httpReqest.post('/api/interfaces/menu/deleteMenuModel', params);
     },
+    //设置系统参数
+    setSystemParam(params){
+        return httpReqest.post('/api/interfaces/system/setparam', params);
+    },
+    //查询系统参数
+    getparamById(params){
+        return httpReqest.get('/api/interfaces/system/getparamById'+params);
+    },
 
 }
 export default systemSet;

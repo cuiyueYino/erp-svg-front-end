@@ -16,6 +16,8 @@ const templateAuthorizationPersonnel = () =>
 	import('./template-authorization-personnel.vue');
 const seeWorkItem = () =>
 	import('../../views/collaborative-office/components/see-work-items-other.vue');
+const systemParam = () =>
+	import('../../views/system-setting/system-param.vue');
 
 const InsideMail = [{
 		path: 'templateMainTableClassification',
@@ -39,6 +41,14 @@ const InsideMail = [{
 		component: enumerationList,
 		meta: {
 			title: '枚举内容'
+		}
+	},
+	{
+		path: 'systemParam',
+		name: 'systemParam',
+		component: systemParam,
+		meta: {
+			title: '系统参数'
 		}
 	},
 	{
