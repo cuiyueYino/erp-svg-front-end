@@ -50,6 +50,7 @@
 							<EconomicIndicatorsPage :disFlag='disFlag' :rowEconomicIndicatorsDataObj="rowEconomicIndicatorsDataObj" :rowEconomicIndicatorstype="rowEconomicIndicatorstype" @changeShow="showLookOrUpdate" />
 							<workList ref="childOher" :formdata="formdata" :rowWAADataObj="rowWAADataObj" :currentDatd="currentDatd" v-if="itemsFlag" :context="context" @changeShow="saveWLata" :showSeeOrUpd="showSeeOrUpd" :todoFlag="todoFlag" />
 							<EachPerEachTableModifyPage :disFlag='disFlag' :rowEachPerEachTableModifyDataObj="rowEachPerEachTableModifyDataObj" :rowEachPerEachTableModifyype="rowEachPerEachTableModifyype" @changeShow="showLookOrUpdate" />
+							<EachPerEachTableAComPage :disFlag='disFlag' :rowEachPerEachTableACOMDataObj="rowEachPerEachTableACOMDataObj" :rowEachPerEachTableACOMtype="rowEachPerEachTableACOMtype" @changeShow="showLookOrUpdate" />
 						</el-row>
 
 						<el-row>
@@ -131,7 +132,7 @@
 	import EconomicIndicatorsPage from '../plan-options/economic-Indicators-detail.vue'; // 经济指标
 	//import WorkItemPage from '../../views/collaborative-office/components/see-work-items.vue';// 工作事项的详情
 	import workList from '../plan-options/work-list.vue'; // 工作事项的详情
-
+	import EachPerEachTableAComPage from '../plan-options/each-person-each-table-actually-completed.vue'
 	export default {
 		props: {
 			//判断上个页面跳转过来的类型
@@ -174,9 +175,10 @@
 			CooTaskDetailPage,
 			ConferenceApplyPage,
 			EconomicIndicatorsPage,
-			//      WorkItemPage,
+			//WorkItemPage,
 			workList,
-			EachPerEachTableModifyPage
+			EachPerEachTableModifyPage,
+			EachPerEachTableAComPage
 		},
 		inject: ['reload'],
 		data: function() {
@@ -256,6 +258,7 @@
 				rowEachPerEachTableAdjtype: false,
 				rowConferenceApplytype: false,
 				rowEconomicIndicatorstype: false,
+				rowEachPerEachTableACOMtype: false,
 				rowUTSDataObj: {},
 				rowDataprocessObj: [],
 				rowDataprocessOid: {},
@@ -269,6 +272,7 @@
 				rowEachPerEachTableInvalidDataObj: '',
 				rowEachPerEachTablePersonDataObj: '',
 				rowEachPerEachTableAssDataObj: "",
+				rowEachPerEachTableACOMDataObj: "",
 				rowEachPerEachTableEntrustDataObj: "",
 				rowEachPerEachTableModifyDataObj: '',
 				rowEachPerEachTableDetailDataObj: "",
@@ -333,6 +337,7 @@
 				this.rowEACHPerEachJobDettype = false;
 				this.rowEachPerEachTableDelaytype = false;
 				this.rowEachPerEachTableAsstype = false;
+				this.rowEachPerEachTableACOMtype = false;
 				this.rowEachPerEachTableReporttype = false;
 				this.disFlag = false;
 				this.rowEachPerEachTableInvalidtype = false;
@@ -767,13 +772,16 @@
 						this.rowEmpApprTabNumDetailtype = true;
 					} else if(dataType === 'Meetingapplication') {
 						this.rowConferenceApplytype = true;
-                        this.rowConferenceApplyDataObj = currentDatd;
+						this.rowConferenceApplyDataObj = currentDatd;
 					} else if(dataType === 'OptionIndex') {
 						this.rowEconomicIndicatorstype = true;
 						this.rowEconomicIndicatorsDataObj = currentDatd;
 					} else if(dataType === 'TaskSelfUpdateApply') {
 						this.rowEachPerEachTableModifyype = true;
 						this.rowEachPerEachTableModifyDataObj = currentDatd;
+					} else if(dataType === 'ActualFinish') {
+						this.rowEachPerEachTableACOMtype = true;
+						this.rowEachPerEachTableACOMDataObj = currentDatd;
 					}
 					return;
 				}

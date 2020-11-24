@@ -136,6 +136,13 @@
                 </el-col>
             </el-row>
             <el-row>
+                <el-col :span="22">
+                    <el-form-item label="完成情况说明：">
+                        <el-input v-model="formdata.finishDescription" :disabled="true"></el-input>
+                    </el-form-item>
+                </el-col>
+            </el-row>
+            <el-row>
                 <el-table
                     :span-method="objectSpanMethod"
                     :data="tableFirstData"
@@ -191,8 +198,8 @@ import DynamicTable from '../../components/common/dytable/dytable.vue';
 import enclosureFile from '../inside-mail/enclosure-file.vue';
 export default {
     props: {
-        rowEachPerEachTableAssDataObj: String,
-        rowEachPerEachTableAsstype:Boolean,
+        rowEachPerEachTableACOMDataObj: String,
+        rowEachPerEachTableACOMtype:Boolean,
         disFlag:Boolean
     },
     components: {
@@ -349,13 +356,14 @@ export default {
                 }
             }
         },
-        //获取任务自评详情
-        getAsstDetail(data) {
+        //获取任务实际完成详情
+        getfinishDescription(data) {
         this.$api.processSet.getPersonalTableTaskDetail({
             id: data.id,
         })
         .then((res) => {
                 if(res.data.code == 0){
+                    console.log("SDSD",res.data.data)
                 this.formdata = res.data.data;
                 let taskStateParams = res.data.data.taskStatus;
                 switch(taskStateParams) {
@@ -420,11 +428,11 @@ export default {
         },
     },
     watch:{
-        rowEachPerEachTableAsstype(oldVal,newVal){
-            this.ShowFinancVisible=this.rowEachPerEachTableAsstype;
-             let asstSelected = {};
-             asstSelected.id = this.rowEachPerEachTableAssDataObj;
-             this.getAsstDetail(asstSelected);
+        rowEachPerEachTableACOMtype(oldVal,newVal){
+            this.ShowFinancVisible=this.rowEachPerEachTableACOMtype;
+            let asstSelected = {};
+            asstSelected.id = this.rowEachPerEachTableACOMDataObj;
+            this.getfinishDescription(asstSelected);
         }
     }
 }
